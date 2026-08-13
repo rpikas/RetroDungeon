@@ -101,10 +101,22 @@ namespace WizardryViewer.Unity
         /// <summary>
         /// Three walls and a wide doorway, plus a window band on one side. Open topped, so the
         /// party inside is visible from above and through the door from the front.
+        ///
+        /// The FRONT wall is cut down to a sill, which is how a model building meant to be looked into is
+        /// built -- the open-fronted dolls' house, the wargaming ruin with one wall missing. Roofless was
+        /// only half the problem: this camera sits 38 degrees above the table, not overhead, so a full-height
+        /// front wall stood between it and everyone inside. The party read from the knees up.
+        ///
+        /// The height follows from that angle rather than from taste. The front row stands about 0.6 cells
+        /// behind the wall, and a ray grazing the wall's top drops 0.78 of a cell for every cell it travels,
+        /// so a wall of h hides everything below h - 0.47c. At the old 0.62c that was the bottom 0.15c of
+        /// every figure; at 0.40c it is nothing at all, with a little to spare. Back and sides keep their
+        /// full height, so it still reads as a room with a wall cut away.
         /// </summary>
         private void BuildTavern(Transform root, float c)
         {
             var h = c * 0.62f;         // ~16mm, near the dungeon wall height
+            var front = c * 0.40f;     // the cutaway: see the note above for where this comes from
             var t = c * 0.08f;
             var half = c * 0.85f;
 
@@ -117,10 +129,11 @@ namespace WizardryViewer.Unity
             Box(root, new Vector3(half, h * 0.92f, 0), new Vector3(t, h * 0.16f, c * 1.78f), darkWood, "Wall_East_Lintel");
             Box(root, new Vector3(half, h * 0.66f, -c * 0.62f), new Vector3(t, h * 0.36f, c * 0.5f), darkWood, "Wall_East_Mullion");
 
-            // Front wall in two pieces, leaving a doorway in the middle facing the camera.
-            Box(root, new Vector3(-c * 0.62f, h * 0.5f, -half), new Vector3(c * 0.56f, h, t), darkWood, "Wall_Front_L");
-            Box(root, new Vector3( c * 0.62f, h * 0.5f, -half), new Vector3(c * 0.56f, h, t), darkWood, "Wall_Front_R");
-            Box(root, new Vector3(0, h * 0.90f, -half), new Vector3(c * 0.70f, h * 0.20f, t), darkWood, "Door_Lintel");
+            // Front wall in two pieces at sill height, leaving a doorway in the middle facing the camera.
+            // No lintel over it any more: there is nothing left above the door to carry, and the old one hung
+            // at exactly head height in front of whoever stood in the middle of the room.
+            Box(root, new Vector3(-c * 0.62f, front * 0.5f, -half), new Vector3(c * 0.56f, front, t), darkWood, "Wall_Front_L");
+            Box(root, new Vector3( c * 0.62f, front * 0.5f, -half), new Vector3(c * 0.56f, front, t), darkWood, "Wall_Front_R");
 
             // A bench and a table inside, tucked to the back so they do not crowd the figures.
             Cylinder(root, new Vector3(-c * 0.45f, c * 0.12f, c * 0.45f), c * 0.34f, c * 0.24f, wood, "Table");
@@ -136,14 +149,36 @@ namespace WizardryViewer.Unity
         /// A market stall: counter at the front, awning over it, stock behind. Open on every side,
         /// so nothing is hidden at all.
         /// </summary>
+        /// <summary>
+        /// Boltac's shelves, in cells. Public because the renderer stands the stock on them and the two must
+        /// agree about where they are -- though it finds them by name rather than recomputing these, so only the
+        /// COUNT and the usable width are really shared knowledge.
+        /// </summary>
+        /// <summary>
+        /// Three shelves, and they start high. The stall only has a narrow band where a shelf can be SEEN from
+        /// the front: its own counter top stands at 0.34 of a cell and hides anything lower, and the canted
+        /// awning comes down at 0.83. Everything has to live between those two, which is 12mm of wall -- hence
+        /// three shelves of very small goods rather than five of comfortable ones.
+        /// </summary>
+        public const int ShelfCount = 3;
+
+        public const float ShelfLowest = 0.40f;   // height of the bottom shelf
+        public const float ShelfPitch = 0.12f;    // gap up to the next one
+        public const float ShelfWidth = 1.8f;     // usable length of a shelf
+
         private void BuildShop(Transform root, float c)
         {
             var postH = c * 0.78f;
             var half = c * 0.8f;
 
-            // Counter across the front, with a gap at one end to step through.
-            Box(root, new Vector3(-c * 0.28f, c * 0.16f, -half), new Vector3(c * 1.1f, c * 0.32f, c * 0.16f), wood, "Counter");
-            Box(root, new Vector3(-c * 0.28f, c * 0.34f, -half), new Vector3(c * 1.18f, c * 0.04f, c * 0.22f), darkWood, "CounterTop");
+            // The counter, set BACK from the front of the stall rather than across its mouth.
+            //
+            // It carries what the customer is selling, and the wall behind it carries what Boltac is: the closer
+            // together those two are, the more of the trade fits in one close-up. At the stall's front edge they
+            // were a cell and a half apart, which at reading distance meant one or the other.
+            var counterZ = -half * 0.34f;
+            Box(root, new Vector3(-c * 0.28f, c * 0.16f, counterZ), new Vector3(c * 1.1f, c * 0.32f, c * 0.16f), wood, "Counter");
+            Box(root, new Vector3(-c * 0.28f, c * 0.34f, counterZ), new Vector3(c * 1.18f, c * 0.04f, c * 0.22f), darkWood, "CounterTop");
 
             // Four posts and a canted awning above them.
             foreach (var sx in new[] { -1f, 1f })
@@ -154,14 +189,34 @@ namespace WizardryViewer.Unity
 
             // The awning only oversails the counter. A wider one looked better in isolation but
             // covered the middle of the pad, and the party standing there vanished under it.
-            var awning = Box(root, new Vector3(0, postH + c * 0.05f, -half * 0.78f),
-                             new Vector3(c * 1.8f, c * 0.035f, c * 0.55f), cloth, "Awning");
+            //
+            // Narrowed again once the party stood in two rows on the middle of the pad: reaching back to
+            // -0.36c it still hung over them from the town camera's angle, and measured 7 to 19 samples in 25
+            // of every figure. It now stops at -0.58c, which still covers the counter at -0.80c -- the only
+            // thing it is for -- and nothing else.
+            var awning = Box(root, new Vector3(0, postH + c * 0.05f, -half * 0.92f),
+                             new Vector3(c * 1.8f, c * 0.035f, c * 0.42f), cloth, "Awning");
             awning.transform.localRotation = Quaternion.Euler(-22f, 0f, 0f);
 
-            // Stock at the back: crates and a barrel.
-            Box(root, new Vector3(-c * 0.55f, c * 0.16f, half * 0.75f), new Vector3(c * 0.32f, c * 0.32f, c * 0.32f), wood, "Crate_A");
-            Box(root, new Vector3(-c * 0.2f, c * 0.12f, half * 0.8f), new Vector3(c * 0.26f, c * 0.24f, c * 0.26f), darkWood, "Crate_B");
-            Cylinder(root, new Vector3(c * 0.55f, c * 0.19f, half * 0.75f), c * 0.3f, c * 0.38f, darkWood, "Barrel");
+            // The back wall, and the shelves the stock stands on.
+            //
+            // A stall with its goods spread over the table in front of it is a stall with nothing IN it. Shelved
+            // and upright, the stock stays in the shop and is read by going in to look at it -- which is what the
+            // zoom is for. The shelves are named so the renderer can stand its cards on them without a second copy
+            // of these measurements: see TableRenderer.LayCounter.
+            Box(root, new Vector3(0f, c * 0.48f, half * 0.98f), new Vector3(c * 1.92f, c * 0.96f, c * 0.05f), wood, "BackWall");
+
+            for (int i = 0; i < ShelfCount; i++)
+            {
+                Box(root,
+                    new Vector3(0f, c * (ShelfLowest + i * ShelfPitch), half * 0.86f),
+                    new Vector3(c * (ShelfWidth + 0.08f), c * 0.03f, c * 0.2f),
+                    darkWood, "Shelf_" + i);
+            }
+
+            // A crate and a barrel still, at the ends, so the floor of the stall is not bare.
+            Box(root, new Vector3(-c * 0.72f, c * 0.14f, half * 0.55f), new Vector3(c * 0.24f, c * 0.28f, c * 0.24f), wood, "Crate_A");
+            Cylinder(root, new Vector3(c * 0.7f, c * 0.17f, half * 0.55f), c * 0.26f, c * 0.34f, darkWood, "Barrel");
 
             // A rack of blades, since this is where the armour comes from.
             Box(root, new Vector3(c * 0.75f, c * 0.4f, half * 0.1f), new Vector3(c * 0.05f, c * 0.8f, c * 0.05f), wood, "Rack");
@@ -218,6 +273,13 @@ namespace WizardryViewer.Unity
         /// <summary>
         /// The way out: a stone arch, a signpost, and the dark stair the party descends. Nothing
         /// encloses the pad, so the whole party stays in plain sight.
+        ///
+        /// The arch stands at the BACK of the pad, over the head of the stair, which is both the sense of it
+        /// -- you pass under the arch and go down -- and the only place it can stand. Built at the front it
+        /// was the one thing on this board between the camera and the party: the posts flanked them and the
+        /// lintel, higher than their heads and nearer the camera, hung down across their bodies at this
+        /// camera's 38 degrees and left six figures reading as one dark mass under a beam. Now they stand in
+        /// front of it, in the open, with the arch behind them as the way they are about to leave.
         /// </summary>
         private void BuildGate(Transform root, float c)
         {
@@ -225,10 +287,10 @@ namespace WizardryViewer.Unity
             var half = c * 0.8f;
 
             foreach (var sx in new[] { -1f, 1f })
-                Box(root, new Vector3(sx * half, postH * 0.5f, -half), new Vector3(c * 0.2f, postH, c * 0.2f), stone, $"GatePost{sx}");
+                Box(root, new Vector3(sx * half, postH * 0.5f, half), new Vector3(c * 0.2f, postH, c * 0.2f), stone, $"GatePost{sx}");
 
-            Box(root, new Vector3(0, postH + c * 0.07f, -half), new Vector3(half * 2f + c * 0.2f, c * 0.14f, c * 0.22f), stone, "Lintel");
-            Box(root, new Vector3(0, postH + c * 0.2f, -half), new Vector3(c * 0.7f, c * 0.12f, c * 0.26f), slate, "Keystone");
+            Box(root, new Vector3(0, postH + c * 0.07f, half), new Vector3(half * 2f + c * 0.2f, c * 0.14f, c * 0.22f), stone, "Lintel");
+            Box(root, new Vector3(0, postH + c * 0.2f, half), new Vector3(c * 0.7f, c * 0.12f, c * 0.26f), slate, "Keystone");
 
             // The stair down, at the back: a dark recess rather than a hole, since the pad is solid.
             Box(root, new Vector3(0, c * 0.012f, half * 0.7f), new Vector3(c * 0.9f, c * 0.02f, c * 0.6f), slate, "StairMouth");
@@ -236,9 +298,12 @@ namespace WizardryViewer.Unity
                 Box(root, new Vector3(0, c * (0.03f + i * 0.02f), half * (0.52f + i * 0.11f)),
                     new Vector3(c * 0.82f, c * 0.02f, c * 0.12f), stone, "Step_" + i);
 
-            // Signpost leaning out toward the viewer.
-            Cylinder(root, new Vector3(-half * 1.05f, c * 0.42f, -half * 0.1f), c * 0.07f, c * 0.84f, darkWood, "SignPost");
-            var board = Box(root, new Vector3(-half * 1.05f + c * 0.22f, c * 0.72f, -half * 0.1f),
+            // Signpost by the arch, board angled out toward the viewer. Set BEHIND where the party stands,
+            // not in front: the board sits at head height, and a board at head height nearer the camera
+            // hangs over the figures behind it exactly the way the lintel used to. Measured at the gate it
+            // was taking a third of the party's silhouette on its own.
+            Cylinder(root, new Vector3(-half * 1.05f, c * 0.42f, half * 0.45f), c * 0.07f, c * 0.84f, darkWood, "SignPost");
+            var board = Box(root, new Vector3(-half * 1.05f + c * 0.22f, c * 0.72f, half * 0.45f),
                             new Vector3(c * 0.46f, c * 0.2f, c * 0.03f), wood, "SignBoard");
             board.transform.localRotation = Quaternion.Euler(0f, -18f, 0f);
         }

@@ -81,9 +81,12 @@ public class PartyMenu
             Console.WriteLine("R)emove Member");
             Console.WriteLine("I)nspect Member");
             Console.WriteLine("C)hange order of Member");
+            Console.WriteLine("T)avern on the tabletop");
             Console.WriteLine("L<-eave");
 
             var key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.T) { TabletopTavern(); continue; }
 
             // Check for number keys 1-6 to inspect party member directly
             if (key >= ConsoleKey.D1 && key <= ConsoleKey.D6)
@@ -735,6 +738,51 @@ public class PartyMenu
     {
         Console.WriteLine("\n[Identify action not yet implemented]");
         Console.ReadKey(true);
+    }
+
+    /// <summary>
+    /// Hands the party over to the viewer and takes instructions back until the player leaves.
+    ///
+    /// Additive on purpose: the console menu above still does everything it did, so this can be wrong or
+    /// absent without stranding anyone. The loop is deliberately dumb -- publish, wait for a command,
+    /// apply it, publish again -- because <see cref="TavernSession"/> holds all the decisions and this
+    /// only has to keep the two ends talking.
+    /// </summary>
+    private void TabletopTavern()
+    {
+        var bridge = new Adnd.Game.Viewer.TabletopViewerBridge();
+        var session = new Adnd.Game.Viewer.TavernSession(_repo, _partyRepo, _partyRepo.Load());
+
+        Console.Clear();
+        Console.WriteLine("=== TAVERN (tabletop) ===\n");
+        Console.WriteLine("The tavern is laid out in the viewer.");
+        Console.WriteLine("Click a figurine to move them between the bench and the party.");
+        Console.WriteLine("\nPress Esc here, or Leave on the table, to come back.");
+
+        if (!bridge.Enabled)
+        {
+            Console.WriteLine("\nThe viewer is not running, so there is nothing to click.");
+            Console.WriteLine("Press any key.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        bridge.PublishTavern(session.Party(), session.Bench(), session.Prompt());
+
+        while (true)
+        {
+            // The console keeps its own way out, so a viewer that has crashed or been closed cannot trap
+            // the player in a menu that is waiting for a click nobody can make.
+            if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) return;
+
+            var command = bridge.TryTakeCommand();
+            if (command == null) { System.Threading.Thread.Sleep(60); continue; }
+
+            if (command == "back") return;
+
+            if (session.Apply(command))
+                bridge.PublishTavern(session.Party(), session.Bench(), session.Prompt());
+        }
     }
 
     private void AddMember(System.Collections.Generic.List<Character> roster, Party party)

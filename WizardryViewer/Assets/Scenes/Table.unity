@@ -212,6 +212,7 @@ MonoBehaviour:
   revealEntireLevel: 1
   fileSpacing: 0.27
   rankSpacing: 0.28
+  standeeYaw: 180
   slideCellsPerSecond: 2
   turnDegreesPerSecond: 540
   snapBeyondCells: 2.5
@@ -818,6 +819,69 @@ Transform:
   - {fileID: 602132142}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1874265850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1874265852}
+  - component: {fileID: 1874265851}
+  m_Layer: 0
+  m_Name: TablePrompt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1874265851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874265850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac1e1eba3446108408f8cf397b10e84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WizardryViewer.Unity.TablePrompt
+  receiver: {fileID: 930637020}
+  table: {fileID: 255907673}
+  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  panelMaterial: {fileID: 2100000, guid: 2802c931f319dc14bbdcf520c6365df0, type: 2}
+  buttonMaterial: {fileID: 2100000, guid: 805f2832479aeec4d93a1d76c7e2194e, type: 2}
+  buttonHotMaterial: {fileID: 2100000, guid: 52240ffbe21fa6d4bad3e94afc891ab8, type: 2}
+  cellSize: 0.0254
+  buttonWidthCells: 1.75
+  buttonHeightCells: 0.62
+  gapCells: 0.1
+  paddingCells: 0.16
+  headerCells: 0.42
+  columns: 3
+  standoffCells: 0.9
+  minStandoffCells: 0.35
+  hoverCells: 0.8
+  headerColour: {r: 0.94, g: 0.91, b: 0.84, a: 1}
+  labelColour: {r: 0.96, g: 0.94, b: 0.88, a: 1}
+  keyColour: {r: 0.92, g: 0.78, b: 0.36, a: 1}
+--- !u!4 &1874265852
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874265850}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1932341963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,3 +1145,4 @@ SceneRoots:
   - {fileID: 930637021}
   - {fileID: 2010671166}
   - {fileID: 1044148918}
+  - {fileID: 1874265852}

@@ -9,6 +9,7 @@ using Adnd.Core.Spells.Casting.Handlers;
 using Adnd.Data.Characters;
 using Adnd.Data.Party;
 using Adnd.Data.Spells;
+using Adnd.Game.Viewer;
 
 namespace Adnd.Game;
 
@@ -23,10 +24,21 @@ public sealed class CampCharacterInspectForm : Form
 
     private readonly TextBox _detailsBox;
 
-    public CampCharacterInspectForm(string characterName, List<string> partyMembers)
+    /// <summary>
+    /// Where this screen puts its questions so the tabletop can answer them. Null when nobody is watching the
+    /// table, in which case everything here behaves exactly as it did: keyboard and mouse only.
+    /// </summary>
+    private readonly Action<ViewerPrompt?>? _publish;
+
+    /// <summary>Live while this screen is open, so the table's clicks reach these buttons.</summary>
+    private ViewerControlPump? _tableMenu;
+
+    public CampCharacterInspectForm(string characterName, List<string> partyMembers,
+                                    Action<ViewerPrompt?>? publish = null)
     {
         _characterName = characterName;
         _partyMembers = partyMembers;
+        _publish = publish;
 
         var resolver = new SpellResolver(new ISpellEffectHandler[]
         {
@@ -86,7 +98,76 @@ public sealed class CampCharacterInspectForm : Form
         Controls.Add(buttons);
 
         RefreshView();
+
+        // The whole camp screen was unreachable from the table: you could not open it, and once open you could
+        // not press any of these buttons. The pump starts on Shown so it is the newest one -- the maze is
+        // underneath -- and every action republishes the menu afterwards, because whatever the action asked
+        // will have replaced the question on the table with its own.
+        Shown += (_, _) => StartTableMenu();
+        FormClosed += (_, _) => _tableMenu?.Dispose();
     }
+
+    /// <summary>What the table may press here. Read and Identify are left out: they are not implemented.</summary>
+    private static readonly (string Id, string Label)[] MenuActions =
+    {
+        ("equip", "Equip an item"),
+        ("unequip", "Unequip"),
+        ("trade", "Trade"),
+        ("drop", "Drop an item"),
+        ("pool", "Pool gold"),
+        ("memorize", "Memorize a spell"),
+        ("cast", "Cast a spell"),
+        ("close", "Done"),
+    };
+
+    private void StartTableMenu()
+    {
+        if (_publish is null)
+            return;
+
+        PublishMenu();
+        _tableMenu = ViewerControlPump.Start(this, NoKeys, _ => { }, command =>
+        {
+            switch (command)
+            {
+                case "equip": EquipAction(); break;
+                case "unequip": UnequipAction(); break;
+                case "trade": TradeAction(); break;
+                case "drop": DropAction(); break;
+                case "pool": PoolGoldAction(); break;
+                case "memorize": MemorizeSpellAction(); break;
+                case "cast": CastSpellAction(); break;
+                case "close": Close(); return;
+                default: return;
+            }
+
+            RefreshView();
+            PublishMenu();
+        });
+    }
+
+    /// <summary>Puts this screen's own menu back on the table.</summary>
+    private void PublishMenu()
+    {
+        if (_publish is null)
+            return;
+
+        var options = new List<ViewerPromptOption>(MenuActions.Length);
+        foreach (var (id, label) in MenuActions)
+            options.Add(new ViewerPromptOption(id, label));
+
+        _publish(new ViewerPrompt("choice", $"Camp -- {_characterName}", ViewerIds.Character(_characterName), options));
+    }
+
+    /// <summary>Says something on both surfaces, then puts this screen's menu back up.</summary>
+    private void SayOnBoth(string title, string text)
+    {
+        ViewerMessage.Say(this, title, text, _publish);
+        PublishMenu();
+    }
+
+    /// <summary>A pump needs a key map; this screen answers through commands only.</summary>
+    private static readonly IReadOnlyDictionary<string, Keys> NoKeys = new Dictionary<string, Keys>();
 
     private Button MakeButton(string text, EventHandler onClick)
     {
@@ -176,7 +257,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (equipable.Count == 0)
         {
-            MessageBox.Show(this, "No equipable items in inventory.", "Equip", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Equip", "No equipable items in inventory.");
             return;
         }
 
@@ -221,7 +302,7 @@ public sealed class CampCharacterInspectForm : Form
         }
         else
         {
-            MessageBox.Show(this, $"{c.Name} cannot equip {item.Name}.", "Equip", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Equip", $"{c.Name} cannot equip {item.Name}.");
         }
     }
 
@@ -245,7 +326,7 @@ public sealed class CampCharacterInspectForm : Form
         var equipped = c.Equipment.Where(kv => kv.Value != null).Select(kv => kv.Key).ToList();
         if (equipped.Count == 0)
         {
-            MessageBox.Show(this, "No equipped items.", "Unequip", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Unequip", "No equipped items.");
             return;
         }
 
@@ -268,7 +349,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (c.Inventory.Count == 0)
         {
-            MessageBox.Show(this, "Inventory empty.", "Drop", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Drop", "Inventory empty.");
             return;
         }
 
@@ -302,7 +383,7 @@ public sealed class CampCharacterInspectForm : Form
         receiver.GoldPieces += pooled;
         _characterRepository.Save(receiver);
         RefreshView();
-        MessageBox.Show(this, $"Pooled {pooled} gp to {receiver.Name}.", "Pool Gold", MessageBoxButtons.OK, MessageBoxIcon.None);
+        SayOnBoth("Pool Gold", $"Pooled {pooled} gp to {receiver.Name}.");
     }
 
     private void MemorizeSpellAction()
@@ -313,7 +394,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (!CanUseMemorizeAction(c))
         {
-            MessageBox.Show(this, "This character cannot memorize spells.", "Memorize", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Memorize", "This character cannot memorize spells.");
             return;
         }
 
@@ -436,7 +517,7 @@ public sealed class CampCharacterInspectForm : Form
         }
         else
         {
-            MessageBox.Show(this, "Enemy-target spells require combat.", "Cast Spell", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Cast Spell", "Enemy-target spells require combat.");
             return;
         }
 
@@ -450,7 +531,9 @@ public sealed class CampCharacterInspectForm : Form
             MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
         });
 
-        MessageBox.Show(this, string.Join(Environment.NewLine, result.Events), "Cast Spell", MessageBoxButtons.OK, result.Success ? MessageBoxIcon.None : MessageBoxIcon.Warning);
+        // The icon told success from failure; the events themselves already say which it was, and the table has
+        // no icons to show anyway.
+        SayOnBoth("Cast Spell", string.Join(Environment.NewLine, result.Events));
 
         if (result.Success)
         {
@@ -517,7 +600,7 @@ public sealed class CampCharacterInspectForm : Form
 
     private static void NotImplemented(string actionName)
     {
-        MessageBox.Show($"[{actionName} action not yet implemented]", actionName, MessageBoxButtons.OK, MessageBoxIcon.None);
+        ViewerMessage.Say(null, actionName, $"[{actionName} action not yet implemented]", null);
     }
 
     private int? PromptChoice(string title, List<string> options)
@@ -551,7 +634,14 @@ public sealed class CampCharacterInspectForm : Form
         form.AcceptButton = ok;
         form.CancelButton = cancel;
 
-        if (form.ShowDialog(this) != DialogResult.OK)
+        // Nine callers come through here -- equip, unequip, drop, trade, which spell, which target -- so this is
+        // the one place that has to know about the table, and all nine become answerable from it at once.
+        var outcome = ViewerDialog.RunPick(form, this, title, ViewerIds.Character(_characterName), options, _publish);
+
+        if (outcome.Picked.HasValue)
+            return outcome.Picked;
+
+        if (outcome.Result != DialogResult.OK)
             return null;
 
         return list.SelectedIndex >= 0 ? list.SelectedIndex : null;
@@ -565,7 +655,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (giver.Inventory.Count == 0)
         {
-            MessageBox.Show(this, "No items to trade.", "Trade", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Trade", "No items to trade.");
             return;
         }
 
@@ -576,7 +666,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (recipients.Count == 0)
         {
-            MessageBox.Show(this, "No other party member to trade with.", "Trade", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Trade", "No other party member to trade with.");
             return;
         }
 
@@ -594,11 +684,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (!receiver.CanCarry(item))
         {
-            MessageBox.Show(this,
-                $"{receiver.Name} cannot carry more weight ({receiver.CurrentCarryWeight}/{receiver.MaxCarryWeight}).",
-                "Trade",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.None);
+            SayOnBoth("Trade", $"{receiver.Name} cannot carry more weight ({receiver.CurrentCarryWeight}/{receiver.MaxCarryWeight}).");
             return;
         }
 
@@ -610,10 +696,6 @@ public sealed class CampCharacterInspectForm : Form
 
         RefreshView();
 
-        MessageBox.Show(this,
-            $"Traded {item.Name} from {giver.Name} to {receiver.Name}.",
-            "Trade",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.None);
+        SayOnBoth("Trade", $"Traded {item.Name} from {giver.Name} to {receiver.Name}.");
     }
 }

@@ -159,6 +159,61 @@ namespace WizardryViewer.EditorTools
             public Material Cardboard, CardboardDark, Table, Plastic, PlasticFoe, Paper;
             public Material Stone, Steel, Gold, Skin, Slate;
             public Material Fighter, Thief, Priest, MagicUser, Bishop;
+            public Material Glass, GlassButton, GlassButtonHot;
+        }
+
+        /// <summary>
+        /// A see-through material for the prompt dialog.
+        ///
+        /// URP ignores the alpha in _BaseColor until the material is switched to a transparent surface,
+        /// and switching it means all of this: the _Surface float the inspector drives, the blend factors
+        /// the shader actually samples, ZWrite off so panels do not punch holes in each other, the
+        /// keyword the shader branches on, and the render queue. Set only the colour and you get a fully
+        /// opaque slab with a meaningless alpha -- which is the failure this method exists to prevent.
+        /// </summary>
+        private static Material MakeGlass(string name, Color colour, float smoothness)
+        {
+            var path = $"{Root}/Materials/{name}.mat";
+
+            // Unlike the opaque materials, an existing glass asset is UPDATED rather than left alone.
+            // Transparency here is six properties, a keyword and a queue that must agree; a glass material
+            // saved before any of that was right renders as an opaque slab, and silently keeping it would
+            // make re-running this menu item look like it had no effect. A plain colour material has
+            // nothing that can go stale, so those still early-return.
+            var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+            var isNew = m == null;
+
+            // UNLIT, unlike every other material here. The dialog is the one thing on the table that must
+            // stay readable wherever the party wanders, and a lit panel takes its brightness from the lamp
+            // -- which pools on the room, not on the dialog beside it. Lit looked like a black slab with
+            // invisible labels two cells outside the light. Unlit also costs less per eye in a headset.
+            var shader = Shader.Find("Universal Render Pipeline/Unlit")
+                      ?? Shader.Find("Universal Render Pipeline/Lit")
+                      ?? Shader.Find("Standard");
+
+            if (isNew) m = new Material(shader) { name = name };
+            else m.shader = shader;
+
+            m.SetColor("_BaseColor", colour);
+            m.SetColor("_Color", colour);
+            if (m.HasProperty("_Smoothness")) m.SetFloat("_Smoothness", smoothness);
+            if (m.HasProperty("_Glossiness")) m.SetFloat("_Glossiness", smoothness);
+
+            if (m.HasProperty("_Surface")) m.SetFloat("_Surface", 1f);   // 0 opaque, 1 transparent
+            if (m.HasProperty("_Blend")) m.SetFloat("_Blend", 0f);       // alpha blend
+            if (m.HasProperty("_AlphaClip")) m.SetFloat("_AlphaClip", 0f);
+            if (m.HasProperty("_ZWrite")) m.SetFloat("_ZWrite", 0f);
+            if (m.HasProperty("_SrcBlend")) m.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            if (m.HasProperty("_DstBlend")) m.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+
+            m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            m.DisableKeyword("_ALPHATEST_ON");
+            m.renderQueue = (int)RenderQueue.Transparent;
+
+            if (isNew) AssetDatabase.CreateAsset(m, path);
+            else EditorUtility.SetDirty(m);
+            return m;
         }
 
         private static Material MakeMaterial(string name, Color colour, float smoothness, float metallic = 0f)
@@ -196,6 +251,14 @@ namespace WizardryViewer.EditorTools
             Skin          = MakeMaterial("Skin",           new Color(0.80f, 0.64f, 0.50f), 0.20f),
             // Bases were near-white Paper, and six of them merged into one bright blob up close.
             Slate         = MakeMaterial("Slate",          new Color(0.19f, 0.19f, 0.21f), 0.15f),
+
+            // The prompt dialog: dark smoked glass over the tabletop. Dark rather than pale because the
+            // lamp puts a bright pool exactly where the dialog sits, and the labels are light -- a pale
+            // panel gave light text on a light glow. The buttons sit a shade lighter than the panel so
+            // they read as raised, and the hot one goes gold to match the lamp rather than fight it.
+            Glass         = MakeGlass("Glass",             new Color(0.07f, 0.07f, 0.10f, 0.72f), 0.55f),
+            GlassButton   = MakeGlass("GlassButton",       new Color(0.22f, 0.21f, 0.26f, 0.86f), 0.60f),
+            GlassButtonHot = MakeGlass("GlassButtonHot",   new Color(0.64f, 0.48f, 0.16f, 0.95f), 0.70f),
 
             // One colour per class, so six minis in a huddle are still six people.
             Fighter       = MakeMaterial("MiniFighter",    new Color(0.62f, 0.16f, 0.14f), 0.35f),
@@ -526,6 +589,28 @@ namespace WizardryViewer.EditorTools
             var viewer = viewerGo.AddComponent<ViewerReceiver>();
             SetPrivate(viewer, "table", renderer);
             SetPrivate(viewer, "subtitle", subtitle);
+
+            // --- the choice cards, laid beside the party ----------------------------------
+            // Rebuilt here rather than left to be added by hand, because this menu item recreates the
+            // scene from scratch: anything only ever wired manually is silently lost the next time it
+            // runs, and the symptom is a table that simply stops offering choices.
+            //
+            // The font comes off the subtitle's label, so a project without TMP Essentials imported
+            // ends up with no font here either -- and TablePrompt says so rather than drawing blanks.
+            var promptGo = new GameObject("TablePrompt");
+            var tablePrompt = promptGo.AddComponent<TablePrompt>();
+            SetPrivate(tablePrompt, "receiver", viewer);
+            SetPrivate(tablePrompt, "table", renderer);
+            SetPrivate(tablePrompt, "cellSize", CellSize);
+            SetPrivate(tablePrompt, "panelMaterial", mats.Glass);
+            SetPrivate(tablePrompt, "buttonMaterial", mats.GlassButton);
+            SetPrivate(tablePrompt, "buttonHotMaterial", mats.GlassButtonHot);
+
+            if (subtitle != null)
+            {
+                var subtitleLabel = subtitle.GetComponent<TMP_Text>();
+                if (subtitleLabel != null) SetPrivate(tablePrompt, "font", subtitleLabel.font);
+            }
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             EditorSceneManager.OpenScene(ScenePath);

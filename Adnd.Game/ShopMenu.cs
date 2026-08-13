@@ -14,6 +14,68 @@ public class ShopMenu
     private readonly PartyRepository _partyRepo = new("Data/Party");
     private readonly CharacterRepository _charRepo = new("Data/Characters");
 
+    private readonly Adnd.Game.Viewer.TabletopViewerBridge _viewer = new();
+    private Adnd.Game.Viewer.ShopSession? _session;
+
+    /// <summary>
+    /// The table's view of the shop. Held on the menu rather than made per call, because Show() calls itself to
+    /// page the console's list and a fresh session each time would throw away which page the TABLE was on.
+    /// </summary>
+    private Adnd.Game.Viewer.ShopSession Session =>
+        _session ??= new Adnd.Game.Viewer.ShopSession(_itemRepo, _charRepo, _partyRepo);
+
+    /// <summary>
+    /// What is on the shelves right now, for the hub to draw while the party is merely standing outside.
+    ///
+    /// The same list the shop itself publishes, from the same session, so the goods do not change the moment
+    /// somebody walks in -- which is exactly the kind of difference two separate lists would eventually grow.
+    /// </summary>
+    public System.Collections.Generic.List<object> DisplayWares() => Session.Wares();
+
+    private void PublishShop()
+    {
+        if (!_viewer.Enabled)
+            return;
+
+        _viewer.PublishTown("Shop", Session.Members(), Session.Prompt(), Session.Wares());
+    }
+
+    /// <summary>Says what just happened on both surfaces, and waits to be acknowledged on either.</summary>
+    private void Report()
+    {
+        var events = Session.TakeEvents();
+        if (events.Count == 0)
+            return;
+
+        foreach (var line in events)
+            Console.WriteLine(line);
+
+        var text = string.Join(Environment.NewLine, events);
+        // The counter stays laid out while the message is up: what just changed hands is the thing worth seeing.
+        _viewer.PublishTown("Shop", Session.Members(), Adnd.Game.Viewer.ViewerMessage.Prompt(text), Session.Wares());
+
+        while (true)
+        {
+            var (_, command) = AwaitChoice();
+            if (command == null || command == "continue" || command == "back")
+                return;
+        }
+    }
+
+    /// <summary>A key at the console or a click on the table, whichever comes first.</summary>
+    private (ConsoleKey Key, string? Command) AwaitChoice()
+    {
+        while (true)
+        {
+            if (Console.KeyAvailable) return (Console.ReadKey(true).Key, null);
+
+            var command = _viewer.TryTakeCommand();
+            if (command != null) return (default, command);
+
+            System.Threading.Thread.Sleep(60);
+        }
+    }
+
     private Character? GetCurrentShopper(Adnd.Data.Party.Party party)
     {
         if (party == null) return null;
@@ -74,10 +136,7 @@ public class ShopMenu
             else
                 Console.WriteLine("No party members.\n");
 
-            var items = _itemRepo.LoadAll()
-                .Where(i => i.IsShopBuyable || (i.StockQuantity.HasValue && i.StockQuantity.Value > 0))
-                .Where(i => !i.StockQuantity.HasValue || i.StockQuantity.Value > 0)
-                .Take(52).ToList();
+            var items = Shop.Stock(_itemRepo);
 
             Console.WriteLine("Items available for purchase:\n");
 
@@ -102,7 +161,27 @@ public class ShopMenu
             Console.WriteLine("F)ilter items in shop");
             Console.WriteLine("L<-eave");
 
-            var key = Console.ReadKey(true).Key;
+            if (_viewer.Enabled)
+                Console.WriteLine("(or trade from the table)");
+
+            PublishShop();
+
+            // Both surfaces live at once, as in the maze, a fight and the temple. The console keeps its own way
+            // out, so a viewer that has been closed cannot trap the party at the counter.
+            var (key, command) = AwaitChoice();
+
+            if (command != null)
+            {
+                if (command == "back") break;
+
+                if (Session.Apply(command))
+                {
+                    PublishShop();
+                    Report();
+                }
+
+                continue;
+            }
 
             if (key == ConsoleKey.B) BuyItems(startIndex, numberOfItems);
             else if (key == ConsoleKey.S) SellItems();
@@ -540,23 +619,8 @@ public class ShopMenu
         }
     }
 
-    private static bool IsEquipableBy(Character character, Item item)
-    {
-        var canGoInSlot = item.Type == ItemType.Weapon
-            || item.Type == ItemType.Shield
-            || item.Slot.HasValue;
+    /// <summary>See <see cref="Shop.IsEquipableBy"/> -- kept as a local name for the call sites here.</summary>
+    private static bool IsEquipableBy(Character character, Item item) => Shop.IsEquipableBy(character, item);
 
-        if (!canGoInSlot)
-            return false;
-
-        if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
-            return true;
-
-        return character.Classes != null && character.Classes.Any(cls => item.AllowedClasses.Contains(cls));
-    }
-
-    private static string GetStockDisplay(Item item)
-    {
-        return item.StockQuantity.HasValue ? item.StockQuantity.Value.ToString() : "-";
-    }
+    private static string GetStockDisplay(Item item) => Shop.StockDisplay(item);
 }

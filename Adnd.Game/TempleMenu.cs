@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Data.Party;
 using Adnd.Data.Characters;
@@ -10,8 +11,12 @@ public class TempleMenu
     private readonly PartyRepository _partyRepo = new("Data/Party");
     private readonly CharacterRepository _charRepo = new("Data/Characters");
 
+    private readonly Adnd.Game.Viewer.TabletopViewerBridge _viewer = new();
+
     public void Show()
     {
+        var session = new Adnd.Game.Viewer.TempleSession(_charRepo, _partyRepo);
+
         while (true)
         {
             var party = _partyRepo.Load();
@@ -21,8 +26,28 @@ public class TempleMenu
             Console.WriteLine("H)eal Party");
             Console.WriteLine("R)aise Dead");
             Console.WriteLine("L>-eave");
+            if (_viewer.Enabled)
+                Console.WriteLine("(or click whoever needs tending on the table)");
 
-            var key = Console.ReadKey(true).Key;
+            PublishTemple(session);
+
+            // Both ends live at once, exactly as in the maze and in a fight: whichever answers first is acted
+            // on. The console keeps its own way out, so a viewer that has been closed cannot trap the party in
+            // a temple waiting for a click nobody can make.
+            var (key, command) = AwaitChoice();
+
+            if (command != null)
+            {
+                if (command == "back") break;
+
+                if (session.Apply(command))
+                {
+                    PublishTemple(session);
+                    Report(session);
+                }
+
+                continue;
+            }
 
             if (key == ConsoleKey.H) HealParty(party);
             else if (key == ConsoleKey.R) RaiseDead(party);
@@ -30,15 +55,63 @@ public class TempleMenu
         }
     }
 
+    /// <summary>
+    /// Lay the party out in the temple with the priests' offer on top.
+    ///
+    /// Reuses the town publish rather than inventing a temple layout: the party is ALREADY standing on the
+    /// temple pad, because that is where walking there put them, and the building is already drawn around them.
+    /// </summary>
+    private void PublishTemple(Adnd.Game.Viewer.TempleSession session)
+    {
+        if (!_viewer.Enabled)
+            return;
+
+        _viewer.PublishTown("Temple", session.Party(), session.Prompt());
+    }
+
+    /// <summary>
+    /// Says what the temple just did, on both surfaces. The roll and its consequences are the whole drama of a
+    /// raise, so they are not left to a figure quietly standing up.
+    /// </summary>
+    private void Report(Adnd.Game.Viewer.TempleSession session)
+    {
+        var events = session.TakeEvents();
+        if (events.Count == 0)
+            return;
+
+        foreach (var line in events)
+            Console.WriteLine(line);
+
+        var text = string.Join(Environment.NewLine, events);
+        _viewer.PublishTown("Temple", session.Party(), Adnd.Game.Viewer.ViewerMessage.Prompt(text));
+
+        // Wait for the acknowledgement from either end, so a resurrection cannot flash past unread. Any key at
+        // the console does it, as every other Console.ReadKey here does; from the table it takes Continue.
+        while (true)
+        {
+            var (_, command) = AwaitChoice();
+            if (command == null || command == "continue" || command == "back")
+                return;
+        }
+    }
+
+    /// <summary>A key at the console or a click on the table, whichever comes first.</summary>
+    private (ConsoleKey Key, string? Command) AwaitChoice()
+    {
+        while (true)
+        {
+            if (Console.KeyAvailable) return (Console.ReadKey(true).Key, null);
+
+            var command = _viewer.TryTakeCommand();
+            if (command != null) return (default, command);
+
+            System.Threading.Thread.Sleep(60);
+        }
+    }
+
     private void HealParty(Party party)
     {
-        const int healCostPerCharacter = 10;
-
-        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, c => c);
-        var partyCharacters = party.Members
-            .Where(name => roster.ContainsKey(name))
-            .Select(name => roster[name])
-            .ToList();
+        var partyCharacters = PartyCharacters(party);
 
         if (partyCharacters.Count == 0)
         {
@@ -47,9 +120,7 @@ public class TempleMenu
             return;
         }
 
-        var needHealing = partyCharacters
-            .Where(c => c.CurrentHitPoints < c.MaxHitPoints)
-            .ToList();
+        var needHealing = partyCharacters.Where(Temple.NeedsHealing).ToList();
 
         if (needHealing.Count == 0)
         {
@@ -58,23 +129,15 @@ public class TempleMenu
             return;
         }
 
-        Console.WriteLine($"Healing costs {healCostPerCharacter} gp per character who needs healing.");
+        Console.WriteLine($"Healing costs {Temple.HealCost} gp per character who needs healing.");
 
         var healedCount = 0;
         var skipped = new List<string>();
 
         foreach (var c in needHealing)
         {
-            if (c.GoldPieces < healCostPerCharacter)
-            {
-                skipped.Add(c.Name);
-                continue;
-            }
-
-            c.GoldPieces -= healCostPerCharacter;
-            c.CurrentHitPoints = c.MaxHitPoints;
-            _charRepo.Save(c);
-            healedCount++;
+            if (Temple.Heal(c, _charRepo)) healedCount++;
+            else skipped.Add(c.Name);
         }
 
         Console.WriteLine($"Healed {healedCount} character(s).");
@@ -85,16 +148,16 @@ public class TempleMenu
         Console.ReadKey(true);
     }
 
+    /// <summary>The party as characters, dropping names the roster no longer knows.</summary>
+    private List<Character> PartyCharacters(Party party)
+    {
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, c => c, StringComparer.OrdinalIgnoreCase);
+        return party.Members.Where(roster.ContainsKey).Select(name => roster[name]).ToList();
+    }
+
     private void RaiseDead(Party party)
     {
-        const int raiseDeadCost = 100;
-        const int raiseFromAshesCost = 500;
-
-        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, c => c);
-        var partyCharacters = party.Members
-            .Where(name => roster.ContainsKey(name))
-            .Select(name => roster[name])
-            .ToList();
+        var partyCharacters = PartyCharacters(party);
 
         if (partyCharacters.Count == 0)
         {
@@ -103,10 +166,7 @@ public class TempleMenu
             return;
         }
 
-        var revivableMembers = partyCharacters
-            .Where(c => (c.HasStatus(CharacterStatus.Dead) || c.HasStatus(CharacterStatus.Ashes) || c.CurrentHitPoints <= 0)
-                        && !c.HasStatus(CharacterStatus.Lost))
-            .ToList();
+        var revivableMembers = partyCharacters.Where(Temple.CanBeRaised).ToList();
 
         if (revivableMembers.Count == 0)
         {
@@ -116,14 +176,14 @@ public class TempleMenu
         }
 
         Console.Clear();
-        Console.WriteLine("=== RAISE DEAD ===\n");
+        Console.WriteLine("=== RAISE DEAD ===");
+        Console.WriteLine();
         Console.WriteLine("Who wants to be raised?");
         for (int i = 0; i < revivableMembers.Count; i++)
         {
             var c = revivableMembers[i];
             var state = c.HasStatus(CharacterStatus.Ashes) ? "Ashes" : "Dead";
-            var cost = c.HasStatus(CharacterStatus.Ashes) ? raiseFromAshesCost : raiseDeadCost;
-            Console.WriteLine($"{i + 1}. {c.Name} ({state}, HP {c.CurrentHitPoints}/{c.MaxHitPoints}, Cost {cost} gp)");
+            Console.WriteLine($"{i + 1}. {c.Name} ({state}, HP {c.CurrentHitPoints}/{c.MaxHitPoints}, Cost {Temple.CostToRaise(c)} gp)");
         }
 
         Console.Write("Choose #: ");
@@ -136,10 +196,10 @@ public class TempleMenu
         }
 
         var target = revivableMembers[targetSelection.Value - 1];
-        var isAshesTarget = target.HasStatus(CharacterStatus.Ashes);
-        var revivalCost = isAshesTarget ? raiseFromAshesCost : raiseDeadCost;
+        var revivalCost = Temple.CostToRaise(target);
 
-        Console.WriteLine($"\nWho will pay {revivalCost} gp?");
+        Console.WriteLine();
+        Console.WriteLine($"Who will pay {revivalCost} gp?");
         for (int i = 0; i < partyCharacters.Count; i++)
         {
             var payer = partyCharacters[i];
@@ -156,104 +216,11 @@ public class TempleMenu
             return;
         }
 
-        var payingCharacter = partyCharacters[payerSelection.Value - 1];
-        if (payingCharacter.GoldPieces < revivalCost)
-        {
-            Console.WriteLine($"{payingCharacter.Name} does not have enough gold.");
-            Console.ReadKey(true);
-            return;
-        }
-
-        payingCharacter.GoldPieces -= revivalCost;
-
-        if (target.Abilities.Constitution <= 0)
-        {
-            target.RemoveStatus(CharacterStatus.Dead);
-            target.RemoveStatus(CharacterStatus.Ashes);
-            target.AddStatus(CharacterStatus.Lost);
-            target.CurrentHitPoints = 0;
-
-            _charRepo.Save(target);
-            if (!string.Equals(target.Name, payingCharacter.Name, StringComparison.OrdinalIgnoreCase))
-                _charRepo.Save(payingCharacter);
-
-            Console.WriteLine($"{target.Name} has Constitution 0 and is automatically Lost.");
-            Console.WriteLine($"{payingCharacter.Name} paid {revivalCost} gp.");
-            Console.ReadKey(true);
-            return;
-        }
-
-        var systemShockChance = GetSystemShockSurvivalChance(target.Abilities.Constitution);
-        var roll = Random.Shared.Next(1, 101);
-
         Console.WriteLine();
-        Console.WriteLine($"System Shock roll for {target.Name}: {roll} (needs {systemShockChance} or less)");
+        foreach (var line in Temple.Raise(target, partyCharacters[payerSelection.Value - 1], _charRepo))
+            Console.WriteLine(line);
 
-        if (roll <= systemShockChance)
-        {
-            target.RemoveStatus(CharacterStatus.Dead);
-            target.RemoveStatus(CharacterStatus.Ashes);
-            target.RemoveStatus(CharacterStatus.Lost);
-
-            if (target.CurrentHitPoints <= 0)
-                target.CurrentHitPoints = 1;
-
-            target.Abilities.Constitution = Math.Max(0, target.Abilities.Constitution - 1);
-
-            Console.WriteLine($"{target.Name} has been raised.");
-            Console.WriteLine($"{target.Name} loses 1 Constitution (now {target.Abilities.Constitution}).");
-        }
-        else
-        {
-            if (isAshesTarget)
-            {
-                target.RemoveStatus(CharacterStatus.Dead);
-                target.RemoveStatus(CharacterStatus.Ashes);
-                target.AddStatus(CharacterStatus.Lost);
-                target.CurrentHitPoints = 0;
-
-                Console.WriteLine($"Revival failed. {target.Name} is now Lost and can never be revived again.");
-            }
-            else
-            {
-                target.RemoveStatus(CharacterStatus.Dead);
-                target.AddStatus(CharacterStatus.Ashes);
-                target.CurrentHitPoints = 0;
-
-                Console.WriteLine($"Raise Dead failed. {target.Name} is now ashes.");
-            }
-        }
-
-        _charRepo.Save(target);
-        if (!string.Equals(target.Name, payingCharacter.Name, StringComparison.OrdinalIgnoreCase))
-            _charRepo.Save(payingCharacter);
-
-        Console.WriteLine($"{payingCharacter.Name} paid {revivalCost} gp.");
         Console.ReadKey(true);
     }
 
-    private static int GetSystemShockSurvivalChance(int constitution)
-    {
-        return constitution switch//not 1e adnd tabel but I think this is better.
-        {
-            <= 1 => 30,
-            <= 3 => 35,
-            <= 5 => 40,
-            <= 7 => 45,
-            <= 9 => 50,
-            <= 11 => 55,
-            <= 13 => 60,
-            <= 15 => 65,
-            16 => 70,
-            17 => 75,
-            18 => 80,
-            19 => 85,
-            20 => 90,
-            21 => 95,
-            22 => 97,
-            23 => 98,
-            24 => 99,
-            _ => 100
-        };
-    }
 }

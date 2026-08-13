@@ -10,6 +10,7 @@ using Adnd.Core.Config;
 using Adnd.Core.Dices;
 using Adnd.Core.Items;
 using Adnd.Core.Spells.Casting;
+using Adnd.Game.Viewer;
 using Adnd.Core.Spells.Casting.Handlers;
 using Adnd.Core.Treasure;
 using Adnd.Data.Characters;
@@ -50,6 +51,13 @@ public sealed class CombatCoordinator
     /// </summary>
     public event Action<CombatSession>? RoundResolved;
 
+    /// <summary>
+    /// Raised when the open choice inside a fight changes -- a different character is up, or the legal
+    /// actions differ. Forwarded straight from the encounter dialog, so whoever publishes snapshots
+    /// never needs a reference to that dialog. Null means there is nothing left to ask.
+    /// </summary>
+    public event Action<CombatSession, ViewerPrompt?>? ViewerPromptChanged;
+
     public CombatCoordinator()
     {
         var spellRepo = new SpellRepository("Data/Spells");
@@ -89,7 +97,8 @@ public sealed class CombatCoordinator
             var aliveMonsters = session.AliveMonsters.ToList();
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
-            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate);
+            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
+            encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)
             {
@@ -102,7 +111,7 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             RoundResolved?.Invoke(session);
-            ShowRoundEvents(owner, roundEvents);
+            ShowRoundEvents(owner, roundEvents, session);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
@@ -118,7 +127,7 @@ public sealed class CombatCoordinator
             characterRepository.Save(character);
 
         MoveDeadPartyMembersToEnd(session.Party);
-        ShowFinalOutcome(owner, session.Outcome);
+        ShowFinalOutcome(owner, session.Outcome, session);
         return session.Outcome;
     }
 
@@ -153,6 +162,7 @@ public sealed class CombatCoordinator
             }
 
             using var encounterForm = new EncounterForm(session, dungeonLevel);
+            encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)
             {
@@ -164,7 +174,7 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             RoundResolved?.Invoke(session);
-            ShowRoundEvents(owner, roundEvents);
+            ShowRoundEvents(owner, roundEvents, session);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
@@ -180,7 +190,7 @@ public sealed class CombatCoordinator
             characterRepository.Save(character);
 
         MoveDeadPartyMembersToEnd(session.Party);
-        ShowFinalOutcome(owner, session.Outcome);
+        ShowFinalOutcome(owner, session.Outcome, session);
         return session.Outcome;
     }
 
@@ -336,7 +346,7 @@ public sealed class CombatCoordinator
             }
         }
 
-        MessageBox.Show(owner, sb.ToString(), "Combat Rewards", MessageBoxButtons.OK, MessageBoxIcon.None);
+        Say(owner, "Combat Rewards", sb.ToString(), session);
     }
 
     private MagicAwardResult AwardMagicItemsFromPlaceholders(List<Character> survivors, List<TreasureMagicPlaceholderResult> placeholders)
@@ -587,16 +597,17 @@ public sealed class CombatCoordinator
         }
     }
 
-    private static void ShowRoundEvents(IWin32Window owner, IEnumerable<Adnd.Core.Combat.Events.CombatEvent> events)
+    private void ShowRoundEvents(IWin32Window owner, IEnumerable<Adnd.Core.Combat.Events.CombatEvent> events,
+                                 CombatSession session)
     {
         var sb = new StringBuilder();
         foreach (var e in events)
             sb.AppendLine(e.Message);
 
-        MessageBox.Show(owner, sb.ToString(), "Combat Round", MessageBoxButtons.OK, MessageBoxIcon.None);
+        Say(owner, "Combat Round", sb.ToString(), session);
     }
 
-    private static void ShowFinalOutcome(IWin32Window owner, CombatOutcome outcome)
+    private void ShowFinalOutcome(IWin32Window owner, CombatOutcome outcome, CombatSession session)
     {
         var text = outcome switch
         {
@@ -606,7 +617,38 @@ public sealed class CombatCoordinator
             _ => "Combat ended."
         };
 
-        MessageBox.Show(owner, text, "Combat Result", MessageBoxButtons.OK, MessageBoxIcon.None);
+        Say(owner, "Combat Result", text, session);
+    }
+
+    /// <summary>
+    /// Says something and waits, on both surfaces at once: a dialog in the game's window and a Continue
+    /// button on the table, either of which dismisses it.
+    ///
+    /// Published through the same <see cref="ViewerPromptChanged"/> event as a fight's own choices, so this
+    /// still needs no reference to a bridge or a snapshot -- whoever is publishing decides how a prompt
+    /// reaches the table, exactly as before. Cleared afterwards, or the table would go on offering Continue
+    /// for a message that has already been answered.
+    /// </summary>
+    private void Say(IWin32Window owner, string title, string text, CombatSession session)
+    {
+        ViewerPromptChanged?.Invoke(session, ViewerMessage.Prompt(Summarise(text)));
+        ViewerMessage.Show(owner, title, text);
+        ViewerPromptChanged?.Invoke(session, null);
+    }
+
+    /// <summary>
+    /// The one line the table can carry. The blow-by-blow reaches the viewer as beats, which it narrates
+    /// and animates as they play; the dialog's own header has room for a line, not for a round.
+    /// </summary>
+    private static string Summarise(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return "Continue.";
+
+        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        if (lines.Length == 0) return "Continue.";
+
+        var last = lines[lines.Length - 1].Trim();
+        return lines.Length == 1 ? last : $"{last}  (+{lines.Length - 1} more)";
     }
 
     private static void DistributeCoin(List<Character> survivors, int totalAmount, Action<Character, int> add)

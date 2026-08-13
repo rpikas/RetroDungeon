@@ -58,6 +58,10 @@ public sealed class MazeForm : Form
     private int _currentDungeonLevel = 1;
     private readonly TabletopViewerBridge _viewer = new();
 
+    // Lets the viewer send moves back. Null when no viewer is configured, and idle when none is
+    // running; the keyboard is unaffected either way.
+    private ViewerControlPump? _viewerControl;
+
     private void BuildMazeForLevel(int level)
     {
         _maze = new CellType[22, 22];
@@ -719,6 +723,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         _combatCoordinator.ActionsChosen += (session, actions) => PublishCombatToViewer(session, actions);
         _combatCoordinator.RoundResolved += session => PublishCombatToViewer(session);
 
+        // Whose turn it is, and what they may legally do. Republished as its own snapshot because the
+        // choice moves from character to character between rounds, so the round events are too coarse.
+        _combatCoordinator.ViewerPromptChanged += (session, prompt) =>
+            PublishCombatToViewer(session, prompt: prompt);
+
         Shown += (_, _) =>
         {
             if (_position.X == 1 && _position.Y == 2)
@@ -730,7 +739,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             // Lay the party out as soon as the maze is on screen, so the table is not empty until
             // the first step. After the elevator dialog, so it reflects the level actually chosen.
             PublishToViewer();
+
+            // From here the table can also be played FROM. Started after the first publish so the
+            // viewer has something drawn before it can be clicked.
+            _viewerControl = ViewerControlPump.Start(this, ViewerCommands.Maze, InjectViewerKey, _viewer);
         };
+
+        FormClosed += (_, _) => _viewerControl?.Dispose();
     }
 
     private void PruneUnavailablePartyMembers()
@@ -765,7 +780,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (activeMembers.Count == 0)
         {
-            MessageBox.Show(this, "No party members to camp with.", "Camp", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Camp", "No party members to camp with.");
             return;
         }
 
@@ -839,7 +854,24 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.Controls.Add(cancelBtn);
         form.CancelButton = cancelBtn;
 
-        var choice = form.ShowDialog(this);
+        // The camp menu on the table as well: pressing Camp from the viewer used to open this and stop dead,
+        // which made the whole of camp -- reordering, inspecting, equipping, memorising -- unreachable from
+        // there. Same three answers, same results, either surface.
+        var campPrompt = new ViewerPrompt("choice", "The party camps.", null, new[]
+        {
+            new ViewerPromptOption("reorder", "Reorder the party"),
+            new ViewerPromptOption("inspect", "Inspect a member"),
+            new ViewerPromptOption("leave", "Leave camp"),
+        });
+
+        var campAnswers = new Dictionary<string, DialogResult>
+        {
+            ["reorder"] = DialogResult.No,
+            ["inspect"] = DialogResult.Yes,
+            ["leave"] = DialogResult.Cancel,
+        };
+
+        var choice = ViewerDialog.RunModal(form, this, campPrompt, campAnswers, PublishTable);
 
         if (choice == DialogResult.Yes)
         {
@@ -857,7 +889,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         if (activeMembers.Count < 2)
         {
-            MessageBox.Show(this, "Need at least two party members to reorder.", "Camp", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Camp", "Need at least two party members to reorder.");
             return;
         }
 
@@ -1007,7 +1039,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             if (picked.Count != activeMembers.Count)
             {
-                MessageBox.Show(form, "Move all members into New order before confirming.", "Reorder Party", MessageBoxButtons.OK, MessageBoxIcon.None);
+                ViewerMessage.Say(form, "Reorder Party", "Move all members into New order before confirming.", PublishTable);
                 return;
             }
 
@@ -1050,7 +1082,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         RefreshLists();
 
-        var result = form.ShowDialog(this);
+        // Dragging names between two lists is not a thing the table can offer, so it says where to do it and
+        // holds the table's commands until this closes -- otherwise they would fall through and walk the party
+        // around underneath an open dialog.
+        var result = ViewerDialog.RunBlocked(form, this, "Reordering the party", PublishTable);
+        PublishToViewer();
+
         if (result != DialogResult.OK || reorderedResult == null)
             return;
 
@@ -1059,7 +1096,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         party.Members = reorderedResult;
         _partyRepository.Save(party);
-        MessageBox.Show(this, "Party order updated.", "Camp", MessageBoxButtons.OK, MessageBoxIcon.None);
+        SayOnBoth("Camp", "Party order updated.");
         Invalidate();
     }
 
@@ -1082,14 +1119,23 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         var selectedCharacter = roster[activeMembers[selected.Value - 1]];
 
-        using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers);
-inspect.ShowDialog(this);
+        // Handed the maze's publisher, so the whole screen -- menu, item lists, spell lists -- is answerable from
+        // the table too.
+        using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable);
+        inspect.ShowDialog(this);
+        PublishToViewer();   // back to the maze's own question
 //        MessageBox.Show(this, selectedCharacter.ToString(), $"Inspect - {selectedCharacter.Name}", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
     private int? PromptForNumber(string title, string text, int min, int max)
     {
-        var input = PromptForText(title, text);
+        // One option per number for the table. Both callers -- choosing who to inspect in camp, choosing a floor
+        // in the elevator -- already list the choices numbered in the text, so the labels come from there.
+        var labels = new List<string>();
+        for (var n = min; n <= max; n++)
+            labels.Add(ViewerDialog.LabelFor(text, n));
+
+        var input = PromptForText(title, text, labels, min);
         if (string.IsNullOrWhiteSpace(input))
             return null;
 
@@ -1102,7 +1148,14 @@ inspect.ShowDialog(this);
         return value;
     }
 
-    private string? PromptForText(string title, string text)
+    /// <param name="tableOptions">
+    /// The answers to offer on the table, when this prompt is really a numbered choice. Null for genuinely free
+    /// text -- naming something -- where the table has nothing sensible to click and the keyboard is the only
+    /// way; the player is told that rather than left looking at a board that appears hung.
+    /// </param>
+    /// <param name="firstNumber">What <paramref name="tableOptions"/>[0] is called, usually 1.</param>
+    private string? PromptForText(string title, string text, IReadOnlyList<string>? tableOptions = null,
+                                  int firstNumber = 1)
     {
         using var form = new Form();
         form.Text = title;
@@ -1154,8 +1207,31 @@ inspect.ShowDialog(this);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
 
-        return form.ShowDialog(this) == DialogResult.OK ? input.Text : null;
+        if (tableOptions is null)
+        {
+            // Genuinely free text. Nothing for the table to click, so it is told where to type.
+            var typed = ViewerDialog.RunBlocked(form, this, title, PublishTable) == DialogResult.OK
+                ? input.Text
+                : null;
+            PublishToViewer();
+            return typed;
+        }
+
+        var outcome = ViewerDialog.RunPick(form, this, title, null, tableOptions, PublishTable);
+        PublishToViewer();
+
+        if (outcome.Picked.HasValue)
+            return (firstNumber + outcome.Picked.Value).ToString();
+
+        return outcome.Result == DialogResult.OK ? input.Text : null;
     }
+
+    /// <summary>
+    /// A command from the tabletop viewer, replayed as the key it stands for. Deliberately the same
+    /// entry point the keyboard uses, so moving, turning, the overlay and the snapshot publish below
+    /// all take the ordinary path and nothing downstream knows where the input came from.
+    /// </summary>
+    internal void InjectViewerKey(Keys key) => MazeForm_KeyDown(this, new KeyEventArgs(key));
 
     private void MazeForm_KeyDown(object? sender, KeyEventArgs e)
     {
@@ -1544,7 +1620,7 @@ inspect.ShowDialog(this);
         foreach (var line in GetPartyLines())
             sb.AppendLine(line);
 
-        MessageBox.Show(this, sb.ToString(), title, MessageBoxButtons.OK, MessageBoxIcon.None);
+        SayOnBoth(title, sb.ToString());
     }
 
     private static RectangleF[] BuildFrames(RectangleF viewport, int maxDepth)
@@ -1578,10 +1654,84 @@ inspect.ShowDialog(this);
     }
 
     /// <summary>
+    /// Where a dialog sends its question so the table can answer it. Handed to the camp screens, which have no
+    /// business knowing about snapshots or bridges -- they just need somewhere to put a question.
+    /// </summary>
+    private void PublishTable(ViewerPrompt? prompt) => PublishToViewer(prompt: prompt);
+
+    /// <summary>
+    /// Says something the player must acknowledge, on the keyboard AND on the table, then puts the maze's own
+    /// question back up. These were plain MessageBoxes, which a viewer can neither read nor dismiss.
+    /// </summary>
+    private void SayOnBoth(string title, string text)
+    {
+        ViewerMessage.Say(this, title, text, PublishTable);
+        PublishToViewer();
+    }
+
+    /// <summary>
+    /// Asks a yes/no question on the keyboard AND on the table.
+    ///
+    /// Built rather than borrowed from MessageBox because a MessageBox cannot be answered from the viewer at
+    /// all: "Stairs up, take them?" is the last thing between a party and the surface, and from the table it
+    /// was an unanswerable stop right at the exit.
+    /// </summary>
+    private DialogResult AskOnBoth(string title, string question)
+    {
+        using var form = new Form
+        {
+            Text = title,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            ClientSize = new Size(360, 120),
+        };
+
+        var label = new Label { Left = 16, Top = 16, Width = 328, Height = 40, Text = question };
+        var yes = new System.Windows.Forms.Button
+        {
+            Text = "Yes", Left = 176, Top = 68, Width = 80, DialogResult = DialogResult.Yes
+        };
+        var no = new System.Windows.Forms.Button
+        {
+            Text = "No", Left = 264, Top = 68, Width = 80, DialogResult = DialogResult.No
+        };
+
+        form.Controls.Add(label);
+        form.Controls.Add(yes);
+        form.Controls.Add(no);
+        form.AcceptButton = yes;
+        form.CancelButton = no;
+
+        var prompt = new ViewerPrompt("choice", question, null, new[]
+        {
+            new ViewerPromptOption("yes", "Yes"),
+            new ViewerPromptOption("no", "No"),
+        });
+
+        var answers = new Dictionary<string, DialogResult>
+        {
+            ["yes"] = DialogResult.Yes,
+            ["no"] = DialogResult.No,
+        };
+
+        var result = ViewerDialog.RunModal(form, this, prompt, answers, PublishTable);
+        PublishToViewer();
+        return result;
+    }
+
+    /// <summary>
     /// Hand the current state to the tabletop viewer. Safe to call as often as we like: the
     /// viewer takes a whole snapshot each time and works out the difference itself.
     /// </summary>
-    private void PublishToViewer(IReadOnlyList<TabletopViewerBridge.MonsterGroupView>? groups = null)
+    /// <param name="prompt">
+    /// A question to show INSTEAD of the maze's own -- a camp menu, a message, a numbered list. The snapshot is
+    /// still the maze, so the table keeps showing where the party is standing while it asks.
+    /// </param>
+    private void PublishToViewer(IReadOnlyList<TabletopViewerBridge.MonsterGroupView>? groups = null,
+                                 ViewerPrompt? prompt = null)
     {
         if (_maze is null)
             return;
@@ -1605,7 +1755,37 @@ inspect.ShowDialog(this);
             _position.Y,
             heading,
             GetViewerParty(),
-            groups);
+            groups,
+            // A fight states its own choice, per character; the maze's is the party's.
+            prompt: prompt ?? (groups is null ? MazePrompt() : null));
+    }
+
+    /// <summary>
+    /// What the viewer may offer right now. Legality comes from the same predicates the keyboard path
+    /// uses -- <see cref="IsOpen"/> for the wall ahead, the overlay flag for the overlay-only choices
+    /// -- so a button can never be drawn for something the game would then refuse. Walking into a
+    /// wall is a no-op from the keyboard; from a table it should simply not be offered.
+    /// </summary>
+    private ViewerPrompt MazePrompt()
+    {
+        var options = new List<ViewerPromptOption>();
+
+        var ahead = GetForwardVector(_direction);
+        if (IsOpen(new Point(_position.X + ahead.X, _position.Y + ahead.Y)))
+            options.Add(new ViewerPromptOption("forward", "Forward"));
+
+        options.Add(new ViewerPromptOption("turnLeft", "Turn left"));
+        options.Add(new ViewerPromptOption("turnRight", "Turn right"));
+        options.Add(new ViewerPromptOption("party", _partyOverlayVisible ? "Hide party" : "Show party"));
+
+        if (_partyOverlayVisible)
+        {
+            options.Add(new ViewerPromptOption("camp", "Camp"));
+            options.Add(new ViewerPromptOption("status", "Party status"));
+            options.Add(new ViewerPromptOption("inspect", "Inspect"));
+        }
+
+        return new ViewerPrompt("maze", "The party waits in the maze.", For: null, options);
     }
 
     /// <summary>
@@ -1614,7 +1794,8 @@ inspect.ShowDialog(this);
     /// </summary>
     private void PublishCombatToViewer(
         CombatSession session,
-        IReadOnlyDictionary<string, CombatAction>? actions = null)
+        IReadOnlyDictionary<string, CombatAction>? actions = null,
+        ViewerPrompt? prompt = null)
     {
         if (_maze is null || session is null)
             return;
@@ -1640,7 +1821,8 @@ inspect.ShowDialog(this);
             session.Party,
             session.Monsters,
             session.RoundNumber,
-            actions);
+            actions,
+            prompt);
     }
 
     /// <summary>The party in marching order, skipping names the roster no longer knows.</summary>
@@ -1674,12 +1856,7 @@ inspect.ShowDialog(this);
 
             if (_currentDungeonLevel == 1 && _position.X == 0 && _position.Y == 0)
             {
-                var result = MessageBox.Show(
-                    this,
-                    "Stairs up, take them?",
-                    "Stairs",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
+                var result = AskOnBoth("Stairs", "Stairs up, take them?");
 
                 if (result == DialogResult.Yes)
                 {
@@ -1720,12 +1897,7 @@ inspect.ShowDialog(this);
         var party = LoadEncounterParty();
         if (party.Count == 0)
         {
-            MessageBox.Show(
-                this,
-                $"Encounter!\n\n{monsterName}\n\n(No active party members found)",
-                "Monsters",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.None);
+            SayOnBoth("Monsters", $"Encounter!\n\n{monsterName}\n\n(No active party members found)");
             return;
         }
 

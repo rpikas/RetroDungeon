@@ -255,10 +255,35 @@ public sealed class CombatResolver
 
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
-        // Determine target from the specified group or default to first alive monster
+        // Determine target: the named monster first, then a spread, then the group, then whoever is first.
         Combat.Sessions.MonsterInstance? target = null;
 
-        if (!string.IsNullOrEmpty(action.TargetGroupId))
+        // A monster the player picked out. Falls through when it is already dead -- initiative means an
+        // earlier attacker may have finished it, and the swing should land somewhere rather than be lost.
+        if (!string.IsNullOrEmpty(action.TargetMonsterId))
+        {
+            var named = session.FindMonster(action.TargetMonsterId);
+            if (named != null && named.IsAlive) target = named;
+        }
+
+        // Spread: take the next monster along, within the chosen group if one was named. The cursor is on the
+        // session, so consecutive attackers asking to spread walk along the line instead of stacking up.
+        if (target is null && action.SpreadTargets)
+        {
+            var spreadable = (string.IsNullOrEmpty(action.TargetGroupId)
+                    ? session.AliveMonsters
+                    : session.GetAliveMonstersByGroup(action.TargetGroupId))
+                .ToList();
+
+            if (spreadable.Count > 0)
+            {
+                var at = ((session.SpreadCursor % spreadable.Count) + spreadable.Count) % spreadable.Count;
+                target = spreadable[at];
+                session.SpreadCursor = at + 1;
+            }
+        }
+
+        if (target is null && !string.IsNullOrEmpty(action.TargetGroupId))
         {
             // Attack a monster from the specified group
             var groupMonsters = session.GetAliveMonstersByGroup(action.TargetGroupId).ToList();
@@ -267,7 +292,8 @@ public sealed class CombatResolver
                 target = groupMonsters.First();
             }
         }
-        else
+
+        if (target is null)
         {
             // Default to first alive monster (backward compatibility)
             target = session.AliveMonsters.FirstOrDefault();

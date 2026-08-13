@@ -24,7 +24,10 @@ namespace WizardryViewer.Unity
         public event Action<string> Received;
 
         public string Endpoint => _prefix + "state";
+        public string CommandEndpoint => _prefix + "command";
         public bool IsListening => _running;
+
+        public Func<string> NextCommand { get; set; }
 
         public HttpSnapshotTransport(int port, bool loopbackOnly = true)
         {
@@ -59,6 +62,14 @@ namespace WizardryViewer.Unity
                     return; // stopped
                 }
 
+                // The game polls for queued commands on a sibling path. Answered here rather than
+                // through Received, because this one owes the caller a body.
+                if (IsCommandPoll(ctx.Request))
+                {
+                    ServeCommand(ctx);
+                    continue;
+                }
+
                 string body = null;
                 try
                 {
@@ -82,6 +93,56 @@ namespace WizardryViewer.Unity
 
                 if (!string.IsNullOrEmpty(body))
                     Received?.Invoke(body);
+            }
+        }
+
+        private static bool IsCommandPoll(HttpListenerRequest request)
+        {
+            return request != null
+                && request.Url != null
+                && string.Equals(request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase)
+                && request.Url.AbsolutePath.EndsWith("/command", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Hands over one queued command, or 204 when there is nothing to do -- which is the answer
+        /// most of the time, since the game polls far faster than a player clicks.
+        ///
+        /// The command is taken from the queue before the response is known to have arrived, so a
+        /// game that dies mid-poll loses it. That is the same cost as a keypress landing as the
+        /// window closes, and cheaper than the bookkeeping to make it exactly-once.
+        /// </summary>
+        private void ServeCommand(HttpListenerContext ctx)
+        {
+            string payload = null;
+
+            var supplier = NextCommand;
+            if (supplier != null)
+            {
+                try { payload = supplier(); }
+                catch { /* the host's queue is not allowed to break the listener */ }
+            }
+
+            try
+            {
+                if (string.IsNullOrEmpty(payload))
+                {
+                    ctx.Response.StatusCode = 204;
+                }
+                else
+                {
+                    var bytes = Encoding.UTF8.GetBytes(payload);
+                    ctx.Response.StatusCode = 200;
+                    ctx.Response.ContentType = "application/json";
+                    ctx.Response.ContentLength64 = bytes.Length;
+                    ctx.Response.OutputStream.Write(bytes, 0, bytes.Length);
+                }
+
+                ctx.Response.Close();
+            }
+            catch
+            {
+                // Caller gave up, or the socket died. Allowed, same as for snapshots.
             }
         }
 

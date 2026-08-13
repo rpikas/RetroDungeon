@@ -20,6 +20,19 @@ namespace WizardryViewer.Unity
         /// <summary>Human-readable endpoint for logging, e.g. "http://127.0.0.1:8787/state".</summary>
         string Endpoint { get; }
 
+        /// <summary>
+        /// Supplies the next player command the game should act on, as JSON
+        /// (<c>{"seq":3,"option":"forward"}</c>), or null when nothing is waiting.
+        ///
+        /// This is the return path: snapshots come in, commands go back out. The game asks for
+        /// these; the viewer never pushes them, which is what keeps the viewer a server and the
+        /// game a client in both directions.
+        ///
+        /// Called on the transport's own thread, so whatever is assigned here must be thread-safe.
+        /// Leaving it unset simply means this transport cannot drive the game.
+        /// </summary>
+        Func<string> NextCommand { get; set; }
+
         bool IsListening { get; }
 
         void Start();

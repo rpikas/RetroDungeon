@@ -40,6 +40,9 @@ namespace WizardryViewer.Playback
         public Snapshot? Showing { get; private set; }
         public long LastSeqReceived { get; private set; } = -1;
 
+        /// <summary>Which run the sequence numbers above belong to. See <see cref="Snapshot.Run"/>.</summary>
+        private string? _run;
+
         public int PendingCount { get { lock (_gate) return _pending.Count; } }
 
         /// <summary>Called from the network thread. Never blocks the caller for long.</summary>
@@ -48,6 +51,14 @@ namespace WizardryViewer.Playback
             if (snapshot == null) throw new ArgumentNullException(nameof(snapshot));
             lock (_gate)
             {
+                // A different run means the game restarted and started counting again, so its sequence
+                // numbers say nothing about ours: take it and start following the new run's count.
+                if (snapshot.Run != _run)
+                {
+                    _run = snapshot.Run;
+                    LastSeqReceived = -1;
+                }
+
                 // Out-of-order arrivals are dropped; the newer one already supersedes them.
                 if (snapshot.Seq <= LastSeqReceived && LastSeqReceived >= 0)
                     return;

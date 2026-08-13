@@ -9,6 +9,7 @@ using Adnd.Core.Monsters;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Data.Spells;
+using Adnd.Game.Viewer;
 using ImageSharpImage = SixLabors.ImageSharp.Image;
 using ImageSharpRgba32 = SixLabors.ImageSharp.PixelFormats.Rgba32;
 using ImageSharpPngEncoder = SixLabors.ImageSharp.Formats.Png.PngEncoder;
@@ -25,6 +26,10 @@ public sealed class EncounterForm : Form
     private readonly CombatSession? _session;
     private readonly bool _multipleGroups;
     private readonly Dictionary<string, CombatAction> _actions = new(StringComparer.OrdinalIgnoreCase);
+
+    // Lets the fight be fought from the tabletop as well as the keyboard. While this form is up it
+    // is the newest pump, so viewer commands come here and not to the maze underneath.
+    private ViewerControlPump? _viewerControl;
     private readonly Image? _monsterImage;
     private readonly List<(string Name, Image? Image)> _monsterImages = new();
     private readonly SpellRepository _spellRepo = new("Data/Spells");
@@ -40,13 +45,21 @@ public sealed class EncounterForm : Form
     private readonly ListView _partyList;
 
     // Constructor for single group encounters (backward compatibility)
-    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null)
+    /// <param name="session">
+    /// The fight itself, when the caller has one. Optional and NOT the same thing as
+    /// <c>_multipleGroups</c>: a single-group encounter still wants the session, because that is where the
+    /// individual monsters live and the table offers them one by one as things to aim at. Without it the
+    /// ordinary one-group fight -- which is most fights -- could only offer "Fight" and let the resolver
+    /// pick, which is exactly the choice being added.
+    /// </param>
+    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
     {
         _monsterName = monsterName;
         _monsterCount = monsterCount;
         _asleepMonsterCount = asleepMonsterCount;
         _roundNumber = roundNumber;
         _party = party;
+        _session = session;
 
         // Check if we should use Wizardry suffix
         bool useWizSuffix = monsterTemplate != null && ShouldUseWizardrySuffix(monsterTemplate);
@@ -270,6 +283,128 @@ public sealed class EncounterForm : Form
         UpdatePartyList();
     }
 
+    /// <summary>
+    /// A command from the tabletop viewer, replayed as the key it stands for -- including the rank
+    /// rules below, so choosing Fight for a back-rank character is refused the same way and with the
+    /// same dialog as it is from the keyboard.
+    /// </summary>
+    internal void InjectViewerKey(Keys key) => EncounterForm_KeyDown(this, new KeyEventArgs(key));
+
+    /// <summary>
+    /// Viewer hooks live here rather than in a constructor for two reasons: this form has two
+    /// constructors and both need them, and the first prompt has to go out AFTER whoever opened the
+    /// dialog has had a chance to subscribe -- UpdateHeader already ran during construction, when
+    /// there was still nobody listening.
+    /// </summary>
+    protected override void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+
+        _viewerControl = ViewerControlPump.Start(this, ViewerCommands.Combat, InjectViewerKey, HandleViewerCommand);
+        ViewerPromptChanged?.Invoke(BuildViewerPrompt());
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        _viewerControl?.Dispose();
+        base.OnFormClosed(e);
+    }
+
+    /// <summary>
+    /// Raised whenever the fight starts waiting on a different choice, so the table can redraw. An
+    /// observer, like the other viewer hooks: nothing here waits for it and nothing changes course if
+    /// no one is listening. Null means there is nothing to ask -- every character is down.
+    /// </summary>
+    internal event Action<ViewerPrompt?>? ViewerPromptChanged;
+
+    /// <summary>
+    /// The open choice, as the viewer should present it. Uses the same rank test the on-screen legend
+    /// uses, so the table offers exactly what this form would accept and no more.
+    ///
+    /// Enter and Escape are left out on purpose: Enter only duplicates Fight or Parry depending on
+    /// rank, and Escape abandons the encounter, which is not something to put under a stray click.
+    /// Both still work if a viewer sends them.
+    /// </summary>
+    /// <summary>Marks a command that names the monster to hit, e.g. "fightAt:default#3".</summary>
+    private const string FightAtPrefix = "fightAt:";
+
+    /// <summary>
+    /// Commands the viewer sends that are not keys: aiming at a particular monster, and spreading the
+    /// party's blows about. Reached through the pump's raw handler -- see the note on its `handle`
+    /// parameter for why a target cannot be a keystroke.
+    ///
+    /// Unknown words are ignored, exactly as the key map ignores them, so a newer viewer offering something
+    /// this build has never heard of does nothing rather than throwing.
+    /// </summary>
+    internal void HandleViewerCommand(string command)
+    {
+        if (string.IsNullOrEmpty(command)) return;
+
+        if (command == "fightSpread")
+        {
+            ChooseFight(spread: true);
+            return;
+        }
+
+        if (command.StartsWith(FightAtPrefix, StringComparison.Ordinal))
+            ChooseFight(monsterKey: command.Substring(FightAtPrefix.Length));
+    }
+
+    private ViewerPrompt? BuildViewerPrompt()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count)
+            return null;
+
+        var character = _party[_currentIndex];
+        var rank = GetActionableRank(_currentIndex);
+        var options = new List<ViewerPromptOption>();
+
+        // The back three may not swing; the keyboard refuses it with a dialog, so it is simply not
+        // offered here rather than being offered and then denied.
+        if (rank is >= 1 and <= 3)
+        {
+            options.Add(new ViewerPromptOption("fight", "Fight"));
+
+            // Every living monster, as something to POINT AT rather than a button to read. An option with a
+            // Target makes the viewer light that figure up and take the click there, so choosing who to hit
+            // is done by touching them -- which is how it works on a table and needs no key. The keyboard
+            // keeps plain Fight, which leaves the choice to the resolver as it always did.
+            //
+            // Only offered where the id can be honoured: a monster named here is looked up when the round
+            // resolves, and the swing falls on the group if it has died in the meantime.
+            if (_session != null)
+            {
+                foreach (var monster in _session.AliveMonsters)
+                {
+                    options.Add(new ViewerPromptOption(
+                        FightAtPrefix + CombatAction.MonsterKey(monster.GroupId, monster.Index),
+                        "Attack " + monster.DisplayName,
+                        ViewerIds.Monster(monster.GroupId, monster.Index)));
+                }
+
+                // Worth a button of its own: it changes how the fight goes, not just who this one hits.
+                if (_session.AliveMonsters.Count() > 1)
+                    options.Add(new ViewerPromptOption("fightSpread", "Fight, spread out"));
+            }
+        }
+
+        options.Add(new ViewerPromptOption("parry", "Parry"));
+        options.Add(new ViewerPromptOption("spell", "Cast a spell"));
+        options.Add(new ViewerPromptOption("useItem", "Use an item"));
+        options.Add(new ViewerPromptOption("run", "Run"));
+
+        if (_multipleGroups && _session != null)
+            options.Add(new ViewerPromptOption("targetGroup", "Choose target group"));
+
+        options.Add(new ViewerPromptOption("undo", "Back one character"));
+
+        return new ViewerPrompt(
+            "combat",
+            $"{character.Name} is choosing.",
+            ViewerIds.Character(character.Name),
+            options);
+    }
+
     private void EncounterForm_KeyDown(object? sender, KeyEventArgs e)
     {
         switch (e.KeyCode)
@@ -298,7 +433,7 @@ public sealed class EncounterForm : Form
                 if (rank is >= 1 and <= 3)
                     ChooseAction(CombatActionType.Fight);
                 else
-                    MessageBox.Show(this, "Only the first three living characters may choose Fight.", "Action not allowed", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    SayOnBoth("Action not allowed", "Only the first three living characters may choose Fight.");
                 break;
             }
             case Keys.P:
@@ -321,6 +456,48 @@ public sealed class EncounterForm : Form
                     ChooseTargetGroup();
                 break;
         }
+    }
+
+    /// <summary>
+    /// Fight, with a monster named or the blows spread about.
+    ///
+    /// Deliberately NOT routed through <see cref="ChooseAction"/>, which for a fight against several groups
+    /// stops and asks which group with a modal dialog. That question is already answered here: pointing at a
+    /// monster says which group as surely as naming it does, and spreading means all of them on purpose. Going
+    /// through ChooseAction put a picker on screen that the table cannot answer, so an attack sent from the
+    /// viewer hung the fight behind a dialog -- the exact trap this whole exercise is about.
+    ///
+    /// What it does keep is the rank rule and the two lines that matter: store the action under the
+    /// character's name, then move to the next actor.
+    /// </summary>
+    private void ChooseFight(string? monsterKey = null, bool spread = false)
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count) return;
+
+        var character = _party[_currentIndex];
+        if (!IsActionable(character)) return;
+
+        var rank = GetActionableRank(_currentIndex);
+        if (rank is < 1 or > 3) return;   // the back three may not swing; the prompt never offered it
+
+        var action = CombatAction.OfType(CombatActionType.Fight);
+        action.SpreadTargets = spread;
+
+        if (!string.IsNullOrEmpty(monsterKey))
+        {
+            action.TargetMonsterId = monsterKey;
+
+            // Keep the group in step with the monster, since the group is what the resolver falls back to if
+            // this one is dead by the time the round plays out.
+            var monster = _session?.FindMonster(monsterKey);
+            if (monster != null) action.TargetGroupId = monster.GroupId;
+        }
+
+        // Spread leaves the group unset on purpose: the point is to share the blows around everything that
+        // is still standing, not to share them around inside one group.
+
+        _actions[character.Name] = action;
+        AdvanceActor();
     }
 
     private void ChooseAction(CombatActionType action)
@@ -382,7 +559,7 @@ public sealed class EncounterForm : Form
         var castable = GetCastableCombatSpells(caster);
         if (castable.Count == 0)
         {
-            MessageBox.Show(this, $"{caster.Name} has no castable spells.", "Spell", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Spell", $"{caster.Name} has no castable spells.");
             return;
         }
 
@@ -547,7 +724,7 @@ public sealed class EncounterForm : Form
 
         if (groups.Count <= 1)
         {
-            MessageBox.Show(this, "Only one group remains.", "Group Selection", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Group Selection", "Only one group remains.");
             return;
         }
 
@@ -568,7 +745,7 @@ public sealed class EncounterForm : Form
         if (selected.HasValue)
         {
             var selectedGroupId = groups[selected.Value - 1];
-            MessageBox.Show(this, $"{character.Name} will target {selectedGroupId}", "Group Selected", MessageBoxButtons.OK, MessageBoxIcon.None);
+            SayOnBoth("Group Selected", $"{character.Name} will target {selectedGroupId}");
             // Store group preference (for now, just show message - actual targeting handled in combat resolver)
         }
     }
@@ -617,7 +794,49 @@ public sealed class EncounterForm : Form
             .ToList();
     }
 
+    /// <summary>
+    /// Asks for a number, on the keyboard and on the table at once.
+    ///
+    /// Every choice inside a fight that is not one of the six action keys funnels through here -- which spell,
+    /// which ally, which enemy, which group -- so making THIS answerable from the viewer makes all of them
+    /// answerable, and doing it anywhere else would have meant four near-identical dialogs. Casting a spell
+    /// from the table used to open this box and stop: the table had nothing to click and the game would not go
+    /// on until someone typed a number into a window they might not even be looking at.
+    ///
+    /// The numbered lines are already in the prompt text, so the options are those numbers. The typed box
+    /// stays exactly as it was -- both ends live, whichever answers first -- and Cancel still means cancel.
+    /// </summary>
+
+    /// <summary>
+    /// Says something the player has to acknowledge, on the keyboard AND on the table.
+    ///
+    /// These were plain MessageBoxes, which the viewer can neither read nor dismiss: a fight driven from the
+    /// table simply stopped -- most easily on "Only the first three may choose Fight", which is a thing a
+    /// player does by accident several times a fight. Afterwards the fight's own question goes back up, so the
+    /// table never sits showing a message that has already been answered.
+    /// </summary>
+    private void SayOnBoth(string title, string text)
+    {
+        ViewerPromptChanged?.Invoke(ViewerMessage.Prompt(text));
+        ViewerMessage.Show(this, title, text);
+        UpdateHeader();
+    }
+
     private int? PromptForNumber(string title, string prompt, int min, int max)
+    {
+        try
+        {
+            return AskForNumber(title, prompt, min, max);
+        }
+        finally
+        {
+            // However it ended, the fight's own question is the one on the table again -- never a choice that
+            // has already been made.
+            UpdateHeader();
+        }
+    }
+
+    private int? AskForNumber(string title, string prompt, int min, int max)
     {
         using var form = new Form();
         form.Text = title;
@@ -654,7 +873,14 @@ public sealed class EncounterForm : Form
         form.AcceptButton = ok;
         form.CancelButton = cancel;
 
-        if (form.ShowDialog(this) != DialogResult.OK)
+        // The table's copy of this question, and its answer. One implementation of "publish the options, take an
+        // answer from either end" lives in ViewerDialog and every dialog in the game now goes through it.
+        var outcome = ViewerDialog.RunPick(form, this, title, Asking(), Labels(prompt, min, max), Publish);
+
+        if (outcome.Picked.HasValue)
+            return min + outcome.Picked.Value;
+
+        if (outcome.Result != DialogResult.OK)
             return null;
 
         if (!int.TryParse(input.Text.Trim(), out var selected))
@@ -664,6 +890,27 @@ public sealed class EncounterForm : Form
             return null;
 
         return selected;
+    }
+
+    /// <summary>Where this fight's questions go so the table can answer them.</summary>
+    private void Publish(ViewerPrompt? prompt) => ViewerPromptChanged?.Invoke(prompt);
+
+    /// <summary>
+    /// Whoever is acting, so the table asks over that figure as a bubble rather than laying a panel flat across
+    /// the board -- at the fight camera a flat panel is sheared and half of it hangs off the screen.
+    /// </summary>
+    private string? Asking() => _currentIndex >= 0 && _currentIndex < _party.Count
+        ? ViewerIds.Character(_party[_currentIndex].Name)
+        : null;
+
+    /// <summary>One label per number, read out of the list the dialog is already showing.</summary>
+    private static List<string> Labels(string prompt, int min, int max)
+    {
+        var labels = new List<string>();
+        for (var n = min; n <= max; n++)
+            labels.Add(ViewerDialog.LabelFor(prompt, n));
+
+        return labels;
     }
 
     private void StepBack()
@@ -707,6 +954,10 @@ public sealed class EncounterForm : Form
         {
             _optionsTitleLabel.Text = "NO ACTIONS (ALL CHARACTERS DOWN)";
         }
+
+        // The header changes exactly when the open choice changes, so this is the one place that has
+        // to tell the table. Fire-and-forget, like every other viewer hook here.
+        ViewerPromptChanged?.Invoke(BuildViewerPrompt());
     }
 
     private void UpdateOptionsLegend()
@@ -979,82 +1230,16 @@ public sealed class EncounterForm : Form
         g.DrawImage(image, new Rectangle(drawX, drawY, drawWidth, drawHeight));
     }
 
+    /// <summary>
+    /// The old UI's artwork for a monster, or null when there is none.
+    ///
+    /// Finding the file is now <see cref="MonsterArt"/>'s job, because the tabletop viewer needs the same
+    /// answer and two searches of the same folders would drift apart. This still does the loading, since
+    /// only this window wants a System.Drawing bitmap.
+    /// </summary>
     private static System.Drawing.Image? TryLoadMonsterImage(string monsterName, int? dungeonLevel = null, bool useWizardrySuffix = false)
     {
-        var slug = monsterName.Trim().ToLowerInvariant().Replace(" ", "_");
-        var camelCase = monsterName.Trim().Replace(" ", "");
-        var exts = new[] { ".webp", ".png", ".bmp", ".gif", ".jpg", ".jpeg" };
-
-        var baseDir = AppContext.BaseDirectory;
-        var candidates = new List<string>();
-
-        // Helper function to add candidates with optional _Wiz suffix
-        void AddCandidates(string folder, string baseName, bool tryWizFirst)
-        {
-            foreach (var ext in exts)
-            {
-                // If Wizardry suffix should be used, try _Wiz version first
-                if (tryWizFirst)
-                {
-                    candidates.Add(Path.Combine(folder, baseName + "_Wiz" + ext));
-                }
-                candidates.Add(Path.Combine(folder, baseName + ext));
-            }
-        }
-
-        // If dungeonLevel is provided, search in level-specific folder first
-        if (dungeonLevel.HasValue)
-        {
-            var levelFolder = $"Level{dungeonLevel.Value}";
-            var baseFolder = Path.Combine(baseDir, "Assets", "Monsters", levelFolder);
-
-            AddCandidates(baseFolder, slug, useWizardrySuffix);
-            AddCandidates(baseFolder, camelCase, useWizardrySuffix);
-            AddCandidates(baseFolder, monsterName, useWizardrySuffix);
-
-            // Source paths
-            var sourceFolder1 = Path.Combine("Adnd.Game", "Assets", "Monsters", levelFolder);
-            var sourceFolder2 = Path.Combine("Assets", "Monsters", levelFolder);
-
-            AddCandidates(sourceFolder1, slug, useWizardrySuffix);
-            AddCandidates(sourceFolder1, camelCase, useWizardrySuffix);
-            AddCandidates(sourceFolder2, slug, useWizardrySuffix);
-            AddCandidates(sourceFolder2, camelCase, useWizardrySuffix);
-        }
-
-        // Also search in all level folders (Level1-Level10) if not found yet
-        for (int level = 1; level <= 10; level++)
-        {
-            var levelFolder = $"Level{level}";
-            var baseFolder = Path.Combine(baseDir, "Assets", "Monsters", levelFolder);
-
-            AddCandidates(baseFolder, slug, useWizardrySuffix);
-            AddCandidates(baseFolder, camelCase, useWizardrySuffix);
-            AddCandidates(baseFolder, monsterName, useWizardrySuffix);
-
-            // Source paths
-            var sourceFolder1 = Path.Combine("Adnd.Game", "Assets", "Monsters", levelFolder);
-            var sourceFolder2 = Path.Combine("Assets", "Monsters", levelFolder);
-
-            AddCandidates(sourceFolder1, slug, useWizardrySuffix);
-            AddCandidates(sourceFolder1, camelCase, useWizardrySuffix);
-            AddCandidates(sourceFolder2, slug, useWizardrySuffix);
-            AddCandidates(sourceFolder2, camelCase, useWizardrySuffix);
-        }
-
-        // Fallback: search in root Monsters folder
-        var rootFolder = Path.Combine(baseDir, "Assets", "Monsters");
-        AddCandidates(rootFolder, slug, useWizardrySuffix);
-        AddCandidates(rootFolder, camelCase, useWizardrySuffix);
-        AddCandidates(rootFolder, monsterName, useWizardrySuffix);
-
-        // Source root paths
-        AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), slug, useWizardrySuffix);
-        AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), camelCase, useWizardrySuffix);
-        AddCandidates(Path.Combine("Assets", "Monsters"), slug, useWizardrySuffix);
-        AddCandidates(Path.Combine("Assets", "Monsters"), camelCase, useWizardrySuffix);
-
-        var path = candidates.FirstOrDefault(File.Exists);
+        var path = MonsterArt.FindPath(monsterName, dungeonLevel, useWizardrySuffix);
         if (path is null)
             return null;
 
@@ -1101,14 +1286,8 @@ public sealed class EncounterForm : Form
         g.DrawLine(pen, cx - 36, cy - 8, cx - 72, cy - 24);
     }
 
-    private static bool ShouldUseWizardrySuffix(Monster monster)
-    {
-        // Use Wizardry suffix when:
-        // 1. The monster source is WizardryAndAdnd
-        // 2. AND the game is set to OnlyWizardry mode
-        var sourceOption = GameRulesProvider.Current.MonsterSourceOptions;
-        return monster.Source == Sources.WizardryAndAdnd && sourceOption == SourceOptions.OnlyWizardry;
-    }
+    /// <summary>See <see cref="MonsterArt.WizardryFirst"/> -- kept as a local name for the call sites.</summary>
+    private static bool ShouldUseWizardrySuffix(Monster monster) => MonsterArt.WizardryFirst(monster);
 
     protected override void Dispose(bool disposing)
     {
