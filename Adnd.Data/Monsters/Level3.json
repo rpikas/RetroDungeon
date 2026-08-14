@@ -46,7 +46,8 @@
                 }
             ],
             "XPValue": 65,
-            "TreasureType": "B"
+            "TreasureType": "B",
+            "Source": "Adnd"
         },
         {
             "Name": "Wight",
@@ -88,7 +89,8 @@
                 }
             ],
             "XPValue": 175,
-            "TreasureType": "D"
+            "TreasureType": "D",
+            "Source": "Adnd"
         },
         {
             "Name": "Giant Centipede",
@@ -126,7 +128,8 @@
                 }
             ],
             "XPValue": 35,
-            "TreasureType": "None"
+            "TreasureType": "None",
+            "Source": "Adnd"
         },
         {
             "Name": "Giant Toad",
@@ -164,7 +167,8 @@
                 }
             ],
             "XPValue": 40,
-            "TreasureType": "None"
+            "TreasureType": "None",
+            "Source": "Adnd"
         },
         {
             "Name": "Hobgoblin Captain",
@@ -202,7 +206,8 @@
                 }
             ],
             "XPValue": 45,
-            "TreasureType": "B"
+            "TreasureType": "B",
+            "Source": "Adnd"
         },
         {
             "Name": "Giant Bat",
@@ -239,7 +244,8 @@
                 }
             ],
             "XPValue": 30,
-            "TreasureType": "None"
+            "TreasureType": "None",
+            "Source": "Adnd"
         },
         {
             "Name": "Troll",
@@ -284,7 +290,414 @@
                 }
             ],
             "XPValue": 600,
-            "TreasureType": "D"
+            "TreasureType": "D",
+            "Source": "Adnd"
+        },
+        {
+            "Name": "Vorpal Bunny",
+            "Type": "Animal",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 5,
+            "ArmorClass": 6,
+            "HitDice": 2,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Decapitation",
+                    "Description": "Can instantly kill with a successful bite attack."
+                }
+            ],
+            "XPValue": 735,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Capybara",
+            "Type": "Animal",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 3,
+            "NumberOfAppearancesMax": 9,
+            "ArmorClass": 8,
+            "HitDice": 2,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d10"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "Can poison its target with a successful claw attack."
+                }
+            ],
+            "XPValue": 520,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Rotting Corpse",
+            "Type": "Undead",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 5,
+            "ArmorClass": 6,
+            "HitDice": 2,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 2,
+                    "Damage": "1d3"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Paralyze",
+                    "Description": "Can paralyze its target with a successful claw attack."
+                }
+            ],
+            "XPValue": 680,
+            "TreasureType": "D",
+            "Source": "Adnd"
+        },
+        {
+            "Name": "Dragon Fly",
+            "Type": "Dragon",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 4,
+            "HitDice": 6,
+            "HitPoints": 33,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 2,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Breath (Fire)",
+                    "Description": "Can exhale a cone of fire causing damage to all creatures in its path."
+                }
+            ],
+            "XPValue": 1275,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Highwayman",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+
+            "ArmorClass": 6,
+            "HitDice": 2,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 2,
+                    "Damage": "1d5"
+                },
+                {
+                    "Name": "Dagger",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d3"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Decapitate",
+                    "Description": "Can attempt to decapitate its target with a successful sword attack."
+                }
+            ],
+            "XPValue": 840,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 5 Mage",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 7,
+            "HitDice": 2,
+            "HitPoints": 33,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Dagger",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Lvl 5 Mage Spell",
+                    "Description": "Can cast a level 5 mage spell."
+                }
+            ],
+            "XPValue": 1400,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Huge Spider",
+            "Type": "Animal",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 8,
+            "ArmorClass": 6,
+            "HitDice": 3,
+            "HitPoints": 33,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "Can inject poison with its bite."
+                }
+            ],
+            "XPValue": 600,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Champ Samurai",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 8,
+            "ArmorClass": 2,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d15"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Mage level 1",
+                    "Description": "Can cast a level 1 mage spell."
+                }
+            ],
+            "XPValue": 795,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Bushwacker",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 8,
+            "ArmorClass": 8,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Morale": {
+                "Value": 10
+            },
+            "Attacks": [
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d7"
+                },
+                {
+                    "Name": "Long Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d9"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "None",
+                    "Description": "No special abilities."
+                }
+            ],
+            "XPValue": 380,
+            "TreasureType": "D",
+            "Source": "Wizardry"
         }
+
+
+
+
     ]
 }

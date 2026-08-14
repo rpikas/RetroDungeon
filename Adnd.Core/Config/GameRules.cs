@@ -35,7 +35,7 @@ public class GameRules
     public int NumberOfItemsThatCouldBeFound { get; set; } = 5;
     public float ProbabilityFindingEachItem { get; set; } = 0.0f;
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
-    public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.All;
+    public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
 
 
 }

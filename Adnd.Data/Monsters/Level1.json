@@ -219,6 +219,13 @@
         "NumberOfAppearancesMax": 24,
         "ArmorClass": 10,
         "HitDice": 1,
+        "SavingThrows": {
+            "ParalyzationPoisonDeath": 13,
+            "RodStaffWand": 14,
+            "PetrificationPolymorph": 15,
+            "BreathWeapon": 16,
+            "Spell": 16
+        },
         "Attacks": [
             {
                 "Name": "Breath",
@@ -239,6 +246,13 @@
         "NumberOfAppearancesMax": 6,
         "ArmorClass": 12,
         "HitDice": 1,
+        "SavingThrows": {
+            "ParalyzationPoisonDeath": 13,
+            "RodStaffWand": 14,
+            "PetrificationPolymorph": 15,
+            "BreathWeapon": 16,
+            "Spell": 16
+        },
         "Attacks": [
             {
                 "Name": "Slime",
@@ -313,6 +327,13 @@
         "NumberOfAppearancesMax": 6,
         "ArmorClass": 10,
         "HitDice": 1,
+        "SavingThrows": {
+            "ParalyzationPoisonDeath": 13,
+            "RodStaffWand": 14,
+            "PetrificationPolymorph": 15,
+            "BreathWeapon": 16,
+            "Spell": 16
+        },
         "Attacks": [
             {
                 "Name": "Bite",
