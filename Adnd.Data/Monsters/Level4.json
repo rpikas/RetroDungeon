@@ -36,7 +36,8 @@
                 }
             ],
             "XPValue": 135,
-            "TreasureType": "D"
+            "TreasureType": "D",
+            "Source": "Adnd"
         },
         {
             "Name": "Ghast",
@@ -82,7 +83,8 @@
                 }
             ],
             "XPValue": 200,
-            "TreasureType": "C"
+            "TreasureType": "C",
+            "Source": "Adnd"
         },
         {
             "Name": "Giant Lizard",
@@ -114,7 +116,8 @@
             ],
             "SpecialAbilities": [],
             "XPValue": 80,
-            "TreasureType": "None"
+            "TreasureType": "None",
+            "Source": "Adnd"
         },
         {
             "Name": "Bugbear",
@@ -151,7 +154,8 @@
                 }
             ],
             "XPValue": 75,
-            "TreasureType": "B"
+            "TreasureType": "B",
+            "Source": "Adnd"
         },
         {
             "Name": "Giant Scorpion",
@@ -193,7 +197,8 @@
                 }
             ],
             "XPValue": 175,
-            "TreasureType": "None"
+            "TreasureType": "None",
+            "Source": "Adnd"
         },
         {
             "Name": "Wererat",
@@ -230,7 +235,8 @@
                 }
             ],
             "XPValue": 90,
-            "TreasureType": "C"
+            "TreasureType": "C",
+            "Source": "Adnd"
         },
         {
             "Name": "Harpy",
@@ -272,7 +278,412 @@
                 }
             ],
             "XPValue": 120,
-            "TreasureType": "D"
+            "TreasureType": "D",
+            "Source": "Adnd"
+        },
+        {
+            "Name": "Giant Toad",
+            "Type": "Animal",
+            "ArmorClass": 7,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 2,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                },
+                {
+                    "Name": "Swallow",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d11"
+                }
+
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "Poisonous attack."
+                }
+            ],
+            "XPValue": 795,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Coyote",
+            "Type": "Animal",
+            "NumberOfAppearancesMin": 4,
+            "NumberOfAppearancesMax": 8,
+            "ArmorClass": 8,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 2,
+                    "Damage": "4d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "None",
+                    "Description": "None"
+                }
+            ],
+            "XPValue": 780,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 3 Ninja",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 4,
+            "NumberOfAppearancesMax": 8,
+            "ArmorClass": 3,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Sai",
+                    "NumberOfAttacks": 5,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Decapitation",
+                    "Description": "Decapitation attack."
+                }
+            ],
+            "XPValue": 1360,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Master Thief",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 2,
+            "HitDice": 6,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Short Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                },
+                {
+                    "Name": "Backstab",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "None",
+                    "Description": "None"
+                }
+            ],
+            "XPValue": 1400,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Spirit",
+            "Type": "Spirit",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 2,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 2,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Lvl 3 Mage Spells, Poison",
+                    "Description": "Lvl 3 Mage Spells, Poison."
+                }
+            ],
+            "XPValue": 1245,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Wererat",
+            "Type": "Were",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 6,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "None",
+                    "Description": "None"
+                }
+            ],
+            "XPValue": 755,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Priestess",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 4,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Mace",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Lvl 2 Priest Spells",
+                    "Description": "Lvl 2 Priest Spells"
+                }
+            ],
+            "XPValue": 870,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 3 Priest",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 4,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Mace",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d9"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Lvl 3 Priest Spells",
+                    "Description": "Lvl 3 Priest Spells"
+                }
+            ],
+            "XPValue": 1220,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 3 Samurai",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 4,
+            "HitDice": 3,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 3,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Lvl 1 Mage Spells",
+                    "Description": "Lvl 1 Mage Spells"
+                }
+            ],
+            "XPValue": 1400,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 7 Mage",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": 8,
+            "HitDice": 4,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 40,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": { "Value": 9 },
+            "Attacks": [
+                {
+                    "Name": "Dagger",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Lvl 4 Mage Spells",
+                    "Description": "Lvl 4 Mage Spells"
+                }
+            ],
+            "XPValue": 1400,
+            "TreasureType": "D",
+            "Source": "Wizardry"
         }
     ]
 }
