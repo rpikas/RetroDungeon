@@ -1,350 +1,350 @@
 {
   "Level": 1,
-  "Monsters": [
-    {
-        "Name": "Goblin",
-        "Type": "Humanoid",
-        "ClimateTerain": "Temperate",
-        "Frequency": "Rare",
-        "ActivityCycle": "Nocturnal",
-        "Intelligence": "Low",
-        "Alignment": "Chaotic Evil",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 4,
-        "ArmorClass": 6,
-        "MovementRate": "Slow",
-        "HitDice": 1,
-        "THAC0": 19,
-        "NumberOfAttacks": 1,
-        "MagicResistance": "None",
-        "Size": "Small",
-        "HitPoints": 4,
-        "Movement": {
-            "Walk": 20,
-            "Fly": 0,
-            "Swim": 0,
-            "Burrow": 0,
-            "Climb": 0
-        },
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 14,
-            "RodStaffWand": 15,
-            "PetrificationPolymorph": 16,
-            "BreathWeapon": 17,
-            "Spell": 17
-        },
-        "Morale": {
-            "Value": 7
-        },
-        "Attacks": [
-            {
-                "Name": "Short Sword",
-                "NumberOfAttacks": 1,
-                "Damage": "1d6"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 15,
-        "TreasureType": "C",
-        "Source": "Adnd"
-    },
-    {
-        "Name": "Orc",
-        "Type": "Humanoid",
-        "Frequency": "Uncommon",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 6,
-        "ArmorClass": 6,
-        "HitDice": 1,
-        "Movement": {
-            "Walk": 30,
-            "Fly": 0,
-            "Swim": 0,
-            "Burrow": 0,
-            "Climb": 0
-        },
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 13,
-            "RodStaffWand": 14,
-            "PetrificationPolymorph": 15,
-            "BreathWeapon": 16,
-            "Spell": 16
-        },
-        "Morale": {
-            "Value": 8
-        },
-        "Attacks": [
-            {
-                "Name": "Battle Axe",
-                "NumberOfAttacks": 1,
-                "Damage": "1d8"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 20,
-        "TreasureType": "D",
-        "Source": "WizardryAndAdnd"
-    },
-    {
-        "Name": "Giant Rat",
-        "Type": "Animal",
-        "Frequency": "Common",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 6,
-        "ArmorClass": 7,
-        "HitDice": 1,
-        "Movement": {
-            "Walk": 30,
-            "Fly": 0,
-            "Swim": 0,
-            "Burrow": 0,
-            "Climb": 0
-        },
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 14,
-            "RodStaffWand": 15,
-            "PetrificationPolymorph": 16,
-            "BreathWeapon": 17,
-            "Spell": 17
-        },
-        "Morale": {
-            "Value": 8
-        },
-        "Attacks": [
-            {
-                "Name": "Bite",
-                "NumberOfAttacks": 1,
-                "Damage": "1d3"
-            }
-        ],
-        "SpecialAbilities": [
-            {
-                "Name": "Poison",
-                "Description": "Bite may poison the target."
-            }
-        ],
-        "XPValue": 10,
-        "TreasureType": "C",
-        "Source": "Adnd"
-    },
-    {
-        "Name": "Skeleton",
-        "Type": "Undead",
-        "Frequency": "Very Rare",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 5,
-        "ArmorClass": 9,
-        "HitDice": 1,
-        "Movement": {
-            "Walk": 10,
-            "Fly": 0,
-            "Swim": 0,
-            "Burrow": 0,
-            "Climb": 0
-        },
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 14,
-            "RodStaffWand": 15,
-            "PetrificationPolymorph": 16,
-            "BreathWeapon": 17,
-            "Spell": 17
-        },
-        "Morale": {
-            "Value": 9
-        },
-        "Attacks": [
-            {
-                "Name": "Short Sword",
-                "NumberOfAttacks": 1,
-                "Damage": "1d6"
-            }
-        ],
-        "SpecialAbilities": [
-            {
-                "Name": "Paralyze",
-                "Description": "On hit, target may be paralyzed."
-            }
-        ],
-        "XPValue": 25,
-        "TreasureType": "None",
-        "Source": "Adnd"
-    },
-    {
-        "Name": "Kobold",
-        "Type": "Humanoid",
-        "Frequency": "Legendary",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 6,
-        "ArmorClass": 7,
-        "HitDice": 1,
-        "Movement": {
-            "Walk": 20,
-            "Fly": 0,
-            "Swim": 0,
-            "Burrow": 0,
-            "Climb": 0
-        },
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 14,
-            "RodStaffWand": 15,
-            "PetrificationPolymorph": 16,
-            "BreathWeapon": 17,
-            "Spell": 17
-        },
-        "Morale": {
-            "Value": 6
-        },
-        "Attacks": [
-            {
-                "Name": "Claw",
-                "NumberOfAttacks": 1,
-                "Damage": "1d2"
+    "Monsters": [
+        {
+            "Name": "Goblin",
+            "Type": "Humanoid",
+            "ClimateTerain": "Temperate",
+            "Frequency": "Rare",
+            "ActivityCycle": "Nocturnal",
+            "Intelligence": "Low",
+            "Alignment": "Chaotic Evil",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 6,
+            "MovementRate": "Slow",
+            "HitDice": 1,
+            "THAC0": 19,
+            "NumberOfAttacks": 1,
+            "MagicResistance": "None",
+            "Size": "Small",
+            "HitPoints": 4,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
             },
-            {
-                "Name": "Claw",
-                "NumberOfAttacks": 1,
-                "Damage": "1d2"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 10,
-        "TreasureType": "J",
-        "Source": "AdndAndWizardry"
-    },
-    {
-        "Name": "Creeping Coin",
-        "Type": "Other",
-        "Frequency": "Legendary",
-        "NumberOfAppearancesMin": 4,
-        "NumberOfAppearancesMax": 24,
-        "ArmorClass": 10,
-        "HitDice": 1,
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 13,
-            "RodStaffWand": 14,
-            "PetrificationPolymorph": 15,
-            "BreathWeapon": 16,
-            "Spell": 16
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 14,
+                "RodStaffWand": 15,
+                "PetrificationPolymorph": 16,
+                "BreathWeapon": 17,
+                "Spell": 17
+            },
+            "Morale": {
+                "Value": 7
+            },
+            "Attacks": [
+                {
+                    "Name": "Short Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 15,
+            "TreasureType": "C",
+            "Source": "Adnd"
         },
-        "Attacks": [
-            {
-                "Name": "Breath",
-                "NumberOfAttacks": 1,
-                "Damage": "1d2"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 5,
-        "TreasureType": "J",
-        "Source": "Wizardry"
-    },
-    {
-        "Name": "Bubbly Slime",
-        "Type": "Other",
-        "Frequency": "Common",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 6,
-        "ArmorClass": 12,
-        "HitDice": 1,
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 13,
-            "RodStaffWand": 14,
-            "PetrificationPolymorph": 15,
-            "BreathWeapon": 16,
-            "Spell": 16
+        {
+            "Name": "Orc",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 6,
+            "HitDice": 1,
+            "Movement": {
+                "Walk": 30,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Morale": {
+                "Value": 8
+            },
+            "Attacks": [
+                {
+                    "Name": "Battle Axe",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 20,
+            "TreasureType": "D",
+            "Source": "WizardryAndAdnd"
         },
-        "Attacks": [
-            {
-                "Name": "Slime",
-                "NumberOfAttacks": 1,
-                "Damage": "1d2"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 5,
-        "TreasureType": "J",
-        "Source": "Wizardry"
-    },
-    {
-        "Name": "Lvl 1 Mage",
-        "Type": "Humanoid",
-        "Frequency": "Uncommon",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 1,
-        "ArmorClass": 4,
-        "HitDice": 1,
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 13,
-            "RodStaffWand": 14,
-            "PetrificationPolymorph": 15,
-            "BreathWeapon": 16,
-            "Spell": 16
+        {
+            "Name": "Giant Rat",
+            "Type": "Animal",
+            "Frequency": "Common",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 7,
+            "HitDice": 1,
+            "Movement": {
+                "Walk": 30,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 14,
+                "RodStaffWand": 15,
+                "PetrificationPolymorph": 16,
+                "BreathWeapon": 17,
+                "Spell": 17
+            },
+            "Morale": {
+                "Value": 8
+            },
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d3"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "Bite may poison the target."
+                }
+            ],
+            "XPValue": 10,
+            "TreasureType": "C",
+            "Source": "Adnd"
         },
-        "Attacks": [
-            {
-                "Name": "Magic Missile",
-                "NumberOfAttacks": 1,
-                "Damage": "2d2"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 10,
-        "TreasureType": "J",
-        "Source": "Wizardry"
-    },
-    {
-        "Name": "Lvl 1 Priest",
-        "Type": "Humanoid",
-        "Frequency": "Uncommon",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 2,
-        "ArmorClass": 4,
-        "HitDice": 1,
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 13,
-            "RodStaffWand": 14,
-            "PetrificationPolymorph": 15,
-            "BreathWeapon": 16,
-            "Spell": 16
+        {
+            "Name": "Skeleton",
+            "Type": "Undead",
+            "Frequency": "Very Rare",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 5,
+            "ArmorClass": 9,
+            "HitDice": 1,
+            "Movement": {
+                "Walk": 10,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 14,
+                "RodStaffWand": 15,
+                "PetrificationPolymorph": 16,
+                "BreathWeapon": 17,
+                "Spell": 17
+            },
+            "Morale": {
+                "Value": 9
+            },
+            "Attacks": [
+                {
+                    "Name": "Short Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Paralyze",
+                    "Description": "On hit, target may be paralyzed."
+                }
+            ],
+            "XPValue": 25,
+            "TreasureType": "None",
+            "Source": "Adnd"
         },
-        "Attacks": [
-            {
-                "Name": "Cause Light Wounds",
-                "NumberOfAttacks": 1,
-                "Damage": "1d8"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 15,
-        "TreasureType": "J",
-        "Source": "Wizardry"
-    },
-    {
-        "Name": "Undead Kobold",
-        "Type": "Undead",
-        "Frequency": "Uncommon",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 6,
-        "ArmorClass": 10,
-        "HitDice": 1,
-        "SavingThrows": {
-            "ParalyzationPoisonDeath": 13,
-            "RodStaffWand": 14,
-            "PetrificationPolymorph": 15,
-            "BreathWeapon": 16,
-            "Spell": 16
+        {
+            "Name": "Kobold",
+            "Type": "Humanoid",
+            "Frequency": "Legendary",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 7,
+            "HitDice": 1,
+            "Movement": {
+                "Walk": 20,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 14,
+                "RodStaffWand": 15,
+                "PetrificationPolymorph": 16,
+                "BreathWeapon": 17,
+                "Spell": 17
+            },
+            "Morale": {
+                "Value": 6
+            },
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d2"
+                },
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d2"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 10,
+            "TreasureType": "J",
+            "Source": "AdndAndWizardry"
         },
-        "Attacks": [
-            {
-                "Name": "Bite",
-                "NumberOfAttacks": 1,
-                "Damage": "1d4"
-            }
-        ],
-        "SpecialAbilities": [],
-        "XPValue": 15,
-        "TreasureType": "J",
-        "Source": "Wizardry"
-    }
-  ]
+        {
+            "Name": "Creeping Coin",
+            "Type": "Other",
+            "Frequency": "Legendary",
+            "NumberOfAppearancesMin": 4,
+            "NumberOfAppearancesMax": 24,
+            "ArmorClass": 10,
+            "HitDice": 1,
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Attacks": [
+                {
+                    "Name": "Breath",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d2"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 5,
+            "TreasureType": "J",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Bubbly Slime",
+            "Type": "Other",
+            "Frequency": "Common",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 12,
+            "HitDice": 1,
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Attacks": [
+                {
+                    "Name": "Slime",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d2"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 5,
+            "TreasureType": "J",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 1 Mage",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": 4,
+            "HitDice": 1,
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Attacks": [
+                {
+                    "Name": "Magic Missile",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d2"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 10,
+            "TreasureType": "J",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 1 Priest",
+            "Type": "Humanoid",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 5,
+            "ArmorClass": 4,
+            "HitDice": 1,
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Attacks": [
+                {
+                    "Name": "Cause Light Wounds",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 15,
+            "TreasureType": "J",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Undead Kobold",
+            "Type": "Undead",
+            "Frequency": "Uncommon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 7,
+            "ArmorClass": 10,
+            "HitDice": 1,
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 13,
+                "RodStaffWand": 14,
+                "PetrificationPolymorph": 15,
+                "BreathWeapon": 16,
+                "Spell": 16
+            },
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 15,
+            "TreasureType": "J",
+            "Source": "Wizardry"
+        }
+    ]
 }

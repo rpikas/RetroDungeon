@@ -284,6 +284,8 @@
         {
             "Name": "Giant Toad",
             "Type": "Animal",
+            "NumberOfAppearancesMin": 4,
+            "NumberOfAppearancesMax": 8,
             "ArmorClass": 7,
             "HitDice": 3,
             "Movement": {

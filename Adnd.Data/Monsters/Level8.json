@@ -282,6 +282,458 @@
             ],
             "XPValue": 2000,
             "TreasureType": "K"
-        }
+        },
+        
+            {
+                "Name": "Hatamoto",
+                "Type": "Humanoid",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 1,
+                "ArmorClass": -1,
+                "HitDice": 12,
+                "Movement": {
+                    "Walk": 40,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 20
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 10,
+                    "RodStaffWand": 11,
+                    "PetrificationPolymorph": 12,
+                    "BreathWeapon": 13,
+                    "Spell": 13
+                },
+                "Attacks": [
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    },
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    },
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    }
+                ],
+                "SpecialAbilities": [
+                    {
+                        "Name": "Autokill",
+                        "Description": "May instantly kill on a successful strike."
+                    }
+                ],
+                "XPValue": 1600,
+                "TreasureType": "C",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "High Ninja",
+                "Type": "Humanoid",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 1,
+                "ArmorClass": -1,
+                "HitDice": 12,
+                "Movement": {
+                    "Walk": 40,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 20
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 10,
+                    "RodStaffWand": 11,
+                    "PetrificationPolymorph": 12,
+                    "BreathWeapon": 13,
+                    "Spell": 13
+                },
+                "Attacks": [
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    },
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    },
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    }
+                ],
+                "SpecialAbilities": [
+                    {
+                        "Name": "Autokill",
+                        "Description": "May instantly kill on a successful strike."
+                    }
+                ],
+                "XPValue": 1600,
+                "TreasureType": "C",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "Dragon Puppy",
+                "Type": "Dragon",
+                "NumberOfAppearancesMin": 2,
+                "NumberOfAppearancesMax": 4,
+                "ArmorClass": 4,
+                "HitDice": 5,
+                "Movement": {
+                    "Walk": 30,
+                    "Fly": 20,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 0
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 12,
+                    "RodStaffWand": 13,
+                    "PetrificationPolymorph": 14,
+                    "BreathWeapon": 15,
+                    "Spell": 15
+                },
+                "Attacks": [
+                    {
+                        "Name": "Bite",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d10"
+                    }
+                ],
+                "SpecialAbilities": [],
+                "XPValue": 400,
+                "TreasureType": "B",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "Chimera",
+                "Type": "Monster",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 4,
+                "ArmorClass": 2,
+                "HitDice": 9,
+                "Movement": {
+                    "Walk": 30,
+                    "Fly": 40,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 0
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 11,
+                    "RodStaffWand": 12,
+                    "PetrificationPolymorph": 13,
+                    "BreathWeapon": 14,
+                    "Spell": 14
+                },
+                "Attacks": [
+                    {
+                        "Name": "Claw",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d3"
+                    },
+                    {
+                        "Name": "Claw",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d3"
+                    },
+                    {
+                        "Name": "Bite",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d4"
+                    },
+                    {
+                        "Name": "Bite",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d4"
+                    },
+                    {
+                        "Name": "Horn",
+                        "NumberOfAttacks": 1,
+                        "Damage": "2d4"
+                    },
+                    {
+                        "Name": "Tail",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d4"
+                    }
+                ],
+                "SpecialAbilities": [
+                    {
+                        "Name": "Breath",
+                        "Description": "Fire breath attack."
+                    }
+                ],
+                "XPValue": 1200,
+                "TreasureType": "D",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "Thief",
+                "Type": "Humanoid",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 5,
+                "ArmorClass": 4,
+                "HitDice": 9,
+                "Movement": {
+                    "Walk": 40,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 20
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 12,
+                    "RodStaffWand": 13,
+                    "PetrificationPolymorph": 14,
+                    "BreathWeapon": 15,
+                    "Spell": 15
+                },
+                "Attacks": [
+                    {
+                        "Name": "Dagger",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d8"
+                    },
+                    {
+                        "Name": "Punch",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d3"
+                    },
+                    {
+                        "Name": "Backstab",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d8"
+                    },
+                    {
+                        "Name": "Kick",
+                        "NumberOfAttacks": 1,
+                        "Damage": "2d10"
+                    }
+                ],
+                "SpecialAbilities": [
+                    {
+                        "Name": "Run",
+                        "Description": "May flee from combat."
+                    }
+                ],
+                "XPValue": 700,
+                "TreasureType": "A",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "Lvl 8 Priest",
+                "Type": "Humanoid",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 5,
+                "ArmorClass": 3,
+                "HitDice": 7,
+                "Movement": {
+                    "Walk": 30,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 0
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 11,
+                    "RodStaffWand": 12,
+                    "PetrificationPolymorph": 13,
+                    "BreathWeapon": 14,
+                    "Spell": 14
+                },
+                "Attacks": [
+                    {
+                        "Name": "Mace",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d8"
+                    }
+                ],
+                "SpecialAbilities": [],
+                "XPValue": 900,
+                "TreasureType": "B",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "Troll",
+                "Type": "Giant",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 3,
+                "ArmorClass": 4,
+                "HitDice": 6,
+                "Movement": {
+                    "Walk": 30,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 0
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 12,
+                    "RodStaffWand": 13,
+                    "PetrificationPolymorph": 14,
+                    "BreathWeapon": 15,
+                    "Spell": 15
+                },
+                "Attacks": [
+                    {
+                        "Name": "Claw",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d4"
+                    },
+                    {
+                        "Name": "Claw",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d4"
+                    },
+                    {
+                        "Name": "Bite",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d4"
+                    }
+                ],
+                "SpecialAbilities": [],
+                "XPValue": 600,
+                "TreasureType": "A",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "Lvl 6 Ninja",
+                "Type": "Humanoid",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 5,
+                "ArmorClass": 6,
+                "HitDice": 6,
+                "Movement": {
+                    "Walk": 40,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 20
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 12,
+                    "RodStaffWand": 13,
+                    "PetrificationPolymorph": 14,
+                    "BreathWeapon": 15,
+                    "Spell": 15
+                },
+                "Attacks": [
+                    {
+                        "Name": "Katana",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d6"
+                    },
+                    {
+                        "Name": "Kick",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d6"
+                    },
+                    {
+                        "Name": "Punch",
+                        "NumberOfAttacks": 1,
+                        "Damage": "1d6"
+                    }
+                ],
+                "SpecialAbilities": [
+                    {
+                        "Name": "Autokill",
+                        "Description": "May instantly kill on a successful strike."
+                    }
+                ],
+                "XPValue": 800,
+                "TreasureType": "B",
+                "Source": "Wizardry"
+            },
+
+            {
+                "Name": "The High Master",
+                "Type": "Humanoid",
+                "NumberOfAppearancesMin": 1,
+                "NumberOfAppearancesMax": 1,
+                "ArmorClass": -2,
+                "HitDice": 15,
+                "Movement": {
+                    "Walk": 40,
+                    "Fly": 0,
+                    "Swim": 0,
+                    "Burrow": 0,
+                    "Climb": 20
+                },
+                "SavingThrows": {
+                    "ParalyzationPoisonDeath": 9,
+                    "RodStaffWand": 10,
+                    "PetrificationPolymorph": 11,
+                    "BreathWeapon": 12,
+                    "Spell": 12
+                },
+                "Attacks": [
+                    {
+                        "Name": "Strike",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d12"
+                    },
+                    {
+                        "Name": "Strike",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d12"
+                    },
+                    {
+                        "Name": "Kick",
+                        "NumberOfAttacks": 1,
+                        "Damage": "3d6"
+                    }
+                ],
+                "SpecialAbilities": [
+                    {
+                        "Name": "Fire Resistance",
+                        "Description": "Resistant to fire."
+                    },
+                    {
+                        "Name": "Cold Resistance",
+                        "Description": "Resistant to cold."
+                    },
+                    {
+                        "Name": "Poison Resistance",
+                        "Description": "Resistant to poison."
+                    },
+                    {
+                        "Name": "LvlDrain",
+                        "Description": "May drain levels."
+                    },
+                    {
+                        "Name": "Stoning",
+                        "Description": "May petrify."
+                    },
+                    {
+                        "Name": "Magic Resistance",
+                        "Description": "Resistant to magic."
+                    },
+                    {
+                        "Name": "Autokill",
+                        "Description": "May instantly kill on a successful strike."
+                    }
+                ],
+                "XPValue": 3000,
+                "TreasureType": "E",
+                "Source": "Wizardry"
+            }
+        
+
     ]
 }

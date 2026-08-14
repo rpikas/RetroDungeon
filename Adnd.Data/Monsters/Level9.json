@@ -279,6 +279,380 @@
             ],
             "XPValue": 2200,
             "TreasureType": "None"
+        },
+
+        {
+            "Name": "High Priest",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 3,
+            "HitDice": 8,
+            "Attacks": [
+                {
+                    "Name": "Mace",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8+2"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 900,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Ogre Lord",
+            "Type": "Giant",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 5,
+            "ArmorClass": 4,
+            "HitDice": 8,
+            "Attacks": [
+                {
+                    "Name": "Club",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 700,
+            "TreasureType": "A",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Gorgon",
+            "Type": "Monster",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": 2,
+            "HitDice": 8,
+            "Attacks": [
+                {
+                    "Name": "Hoof",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Breath",
+                    "Description": "Petrifying breath attack."
+                }
+            ],
+            "XPValue": 1200,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 8 Bishop",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 2,
+            "HitDice": 8,
+            "Attacks": [
+                {
+                    "Name": "Staff",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8+4"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 950,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "High Priest",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 2,
+            "ArmorClass": 2,
+            "HitDice": 8,
+            "Attacks": [
+                {
+                    "Name": "Mace",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8+4"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 1000,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Wyvern",
+            "Type": "Dragon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 3,
+            "HitDice": 7,
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d8"
+                },
+                {
+                    "Name": "Sting",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "Sting may poison."
+                }
+            ],
+            "XPValue": 1100,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 7 Fighter",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 2,
+            "ArmorClass": 0,
+            "HitDice": 7,
+            "Attacks": [
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12"
+                },
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 850,
+            "TreasureType": "A",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 10 Fighter",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 0,
+            "HitDice": 7,
+            "Attacks": [
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12"
+                },
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 1200,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Master Thief",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 2,
+            "HitDice": 12,
+            "Attacks": [
+                {
+                    "Name": "Dagger",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                },
+                {
+                    "Name": "Backstab",
+                    "NumberOfAttacks": 1,
+                    "Damage": "5d8"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "May poison."
+                },
+                {
+                    "Name": "Run",
+                    "Description": "May flee from combat."
+                }
+            ],
+            "XPValue": 1400,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Arch Mage",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": 0,
+            "HitDice": 20,
+            "Attacks": [
+                {
+                    "Name": "Touch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 2000,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Will O' Wisp",
+            "Type": "Monster",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -8,
+            "HitDice": 10,
+            "Attacks": [
+                {
+                    "Name": "Shock",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d8"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 1500,
+            "TreasureType": "None",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Bleeb",
+            "Type": "Monster",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 8,
+            "ArmorClass": 0,
+            "HitDice": 10,
+            "Attacks": [
+                {
+                    "Name": "Punch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8+1"
+                },
+                {
+                    "Name": "Punch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8+1"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Fire Resistance",
+                    "Description": "Resistant to fire."
+                },
+                {
+                    "Name": "Cold Resistance",
+                    "Description": "Resistant to cold."
+                },
+                {
+                    "Name": "Poison Resistance",
+                    "Description": "Resistant to poison."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                },
+                {
+                    "Name": "Stoning",
+                    "Description": "May petrify."
+                },
+                {
+                    "Name": "Magic Resistance",
+                    "Description": "Resistant to magic."
+                },
+                {
+                    "Name": "Run",
+                    "Description": "May flee from combat."
+                }
+            ],
+            "XPValue": 2000,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lvl 8 Fighter",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": -1,
+            "HitDice": 8,
+            "Attacks": [
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12+2"
+                },
+                {
+                    "Name": "Sword",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d12+2"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 1300,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Lesser Demon",
+            "Type": "Demon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": 4,
+            "HitDice": 10,
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d6"
+                },
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d6"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d3"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d3"
+                },
+                {
+                    "Name": "Tail",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4+4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Help",
+                    "Description": "May call reinforcements."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                }
+            ],
+            "XPValue": 1800,
+            "TreasureType": "E",
+            "Source": "Wizardry"
         }
     ]
 }

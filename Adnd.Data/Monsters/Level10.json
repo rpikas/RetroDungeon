@@ -287,6 +287,572 @@
             ],
             "XPValue": 2600,
             "TreasureType": "D"
+        },
+
+        {
+            "Name": "Earth Giant",
+            "Type": "Giant",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 9,
+            "HitDice": 40,
+            "Attacks": [
+                {
+                    "Name": "Fist",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d8"
+                },
+                {
+                    "Name": "Fist",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d8"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 1500,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Major Daimyo",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 5,
+            "ArmorClass": 0,
+            "HitDice": 7,
+            "Attacks": [
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d10"
+                },
+                {
+                    "Name": "Punch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Help",
+                    "Description": "May call reinforcements."
+                }
+            ],
+            "XPValue": 1200,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "High Priest",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": 2,
+            "HitDice": 11,
+            "Attacks": [
+                {
+                    "Name": "Mace",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                },
+                {
+                    "Name": "Mace",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 1400,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Vampire",
+            "Type": "Undead",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": -1,
+            "HitDice": 11,
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d8"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "May poison."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                },
+                {
+                    "Name": "Stoning",
+                    "Description": "May petrify."
+                },
+                {
+                    "Name": "Paralyze",
+                    "Description": "May paralyze."
+                }
+            ],
+            "XPValue": 1600,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Greater Demon",
+            "Type": "Demon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 6,
+            "ArmorClass": -3,
+            "HitDice": 11,
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "2d12"
+                },
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d6"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Tail",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "May poison."
+                },
+                {
+                    "Name": "Help",
+                    "Description": "May call reinforcements."
+                },
+                {
+                    "Name": "Paralyze",
+                    "Description": "May paralyze."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                }
+            ],
+            "XPValue": 2200,
+            "TreasureType": "E",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Fire Dragon",
+            "Type": "Dragon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": -1,
+            "HitDice": 12,
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Breath",
+                    "NumberOfAttacks": 1,
+                    "Damage": "4d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Breath",
+                    "Description": "Fire breath attack."
+                }
+            ],
+            "XPValue": 2500,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Fire Giant",
+            "Type": "Giant",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 3,
+            "HitDice": 11,
+            "Attacks": [
+                {
+                    "Name": "Fist",
+                    "NumberOfAttacks": 1,
+                    "Damage": "5d6"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Fire Resistance",
+                    "Description": "Resistant to fire."
+                }
+            ],
+            "XPValue": 1800,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Dragon Zombie",
+            "Type": "Undead",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": -2,
+            "HitDice": 12,
+            "Attacks": [
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                },
+                {
+                    "Name": "Claw",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d8"
+                },
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d12"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 2400,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Maelific",
+            "Type": "Monster",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -5,
+            "HitDice": 25,
+            "Attacks": [
+                {
+                    "Name": "Touch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                },
+                {
+                    "Name": "Touch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d0+1"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Poison",
+                    "Description": "May poison."
+                },
+                {
+                    "Name": "Paralyze",
+                    "Description": "May paralyze."
+                }
+            ],
+            "XPValue": 3000,
+            "TreasureType": "E",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Frost Giant",
+            "Type": "Giant",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 6,
+            "HitDice": 50,
+            "Attacks": [
+                {
+                    "Name": "Fist",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d10"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Cold Resistance",
+                    "Description": "Resistant to cold."
+                }
+            ],
+            "XPValue": 2000,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Murphy's Ghost",
+            "Type": "Undead",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -3,
+            "HitDice": 10,
+            "Attacks": [
+                {
+                    "Name": "Touch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d1+1"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Fire Resistance",
+                    "Description": "Resistant to fire."
+                },
+                {
+                    "Name": "Cold Resistance",
+                    "Description": "Resistant to cold."
+                },
+                {
+                    "Name": "Poison Resistance",
+                    "Description": "Resistant to poison."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                },
+                {
+                    "Name": "Stoning",
+                    "Description": "May petrify."
+                },
+                {
+                    "Name": "Magic Resistance",
+                    "Description": "Resistant to magic."
+                },
+                {
+                    "Name": "Slept",
+                    "Description": "Can be affected by sleep effects."
+                }
+            ],
+            "XPValue": 3000,
+            "TreasureType": "None",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Raver Lord",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": 10,
+            "HitDice": 15,
+            "Attacks": [
+                {
+                    "Name": "Strike",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d12"
+                },
+                {
+                    "Name": "Strike",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d12"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Fire Resistance",
+                    "Description": "Resistant to fire."
+                }
+            ],
+            "XPValue": 3500,
+            "TreasureType": "E",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Vampire Lord",
+            "Type": "Undead",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -5,
+            "HitDice": 20,
+            "Attacks": [
+                {
+                    "Name": "Touch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d4"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Paralyze",
+                    "Description": "May paralyze."
+                }
+            ],
+            "XPValue": 4000,
+            "TreasureType": "E",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Poison Giant",
+            "Type": "Giant",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 3,
+            "HitDice": 80,
+            "Attacks": [
+                {
+                    "Name": "Fist",
+                    "NumberOfAttacks": 1,
+                    "Damage": "4d10"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Breath",
+                    "Description": "Poison breath attack."
+                }
+            ],
+            "XPValue": 3000,
+            "TreasureType": "D",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "Flack",
+            "Type": "Monster",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": -3,
+            "HitDice": 15,
+            "Attacks": [
+                {
+                    "Name": "Punch",
+                    "NumberOfAttacks": 1,
+                    "Damage": "4d8+3"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Fire Resistance",
+                    "Description": "Resistant to fire."
+                },
+                {
+                    "Name": "Cold Resistance",
+                    "Description": "Resistant to cold."
+                },
+                {
+                    "Name": "Poison Resistance",
+                    "Description": "Resistant to poison."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                },
+                {
+                    "Name": "Stoning",
+                    "Description": "May petrify."
+                },
+                {
+                    "Name": "Magic Resistance",
+                    "Description": "Resistant to magic."
+                },
+                {
+                    "Name": "Stone",
+                    "Description": "May petrify."
+                },
+                {
+                    "Name": "Poison",
+                    "Description": "May poison."
+                },
+                {
+                    "Name": "Paralyze",
+                    "Description": "May paralyze."
+                },
+                {
+                    "Name": "Autokill",
+                    "Description": "May instantly kill."
+                }
+            ],
+            "XPValue": 5000,
+            "TreasureType": "E",
+            "Source": "Wizardry"
+        },
+        {
+            "Name": "W E R D N A",
+            "Type": "Demon",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -7,
+            "HitDice": 10,
+            "Attacks": [
+                {
+                    "Name": "Spell",
+                    "NumberOfAttacks": 1,
+                    "Damage": "8d5"
+                },
+                {
+                    "Name": "Spell",
+                    "NumberOfAttacks": 1,
+                    "Damage": "8d5"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Fire Resistance",
+                    "Description": "Resistant to fire."
+                },
+                {
+                    "Name": "Cold Resistance",
+                    "Description": "Resistant to cold."
+                },
+                {
+                    "Name": "Poison Resistance",
+                    "Description": "Resistant to poison."
+                },
+                {
+                    "Name": "Stone",
+                    "Description": "May petrify."
+                },
+                {
+                    "Name": "Poison",
+                    "Description": "May poison."
+                },
+                {
+                    "Name": "Paralyze",
+                    "Description": "May paralyze."
+                },
+                {
+                    "Name": "LvlDrain",
+                    "Description": "May drain levels."
+                },
+                {
+                    "Name": "Autokill",
+                    "Description": "May instantly kill."
+                }
+            ],
+            "XPValue": 10000,
+            "TreasureType": "F",
+            "Source": "Wizardry"
         }
     ]
 }
