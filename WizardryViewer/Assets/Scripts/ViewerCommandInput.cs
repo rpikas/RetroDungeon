@@ -51,8 +51,10 @@ namespace WizardryViewer.Unity
             (KeyCode.N, "next"),         // walk on to the next place
             (KeyCode.M, "maze"),         // down through the gate
 
-            // Dismissing something the game has stopped to say. Return already means "confirm" in a fight;
-            // both ids go out and each end drops the one it has never heard of, as with S below.
+            // Dismissing something the game has stopped to say. Return also means "confirm" in a fight, so
+            // both ids are listed -- but they only BOTH go out for a question that does not name Return
+            // itself. A message does name it, which is what keeps the pair apart; see the note on claimed
+            // keys in Poll for why that matters.
             (KeyCode.Return, "continue"), (KeyCode.KeypadEnter, "continue"),
             (KeyCode.Space, "continue"),
 
@@ -64,12 +66,16 @@ namespace WizardryViewer.Unity
         // allocated per frame, since Poll runs every frame and this is otherwise garbage for the collector.
         private static readonly HashSet<string> SentThisFrame = new HashSet<string>();
 
+        // Keys the question on the table has already answered this frame. Same reuse, same reason.
+        private static readonly HashSet<KeyCode> ClaimedThisFrame = new HashSet<KeyCode>();
+
         /// <summary>Main thread, once per frame. Queues a command per key pressed this frame.</summary>
         public static void Poll(ViewerCommandQueue queue, Prompt prompt = null)
         {
             if (queue == null) return;
 
             SentThisFrame.Clear();
+            ClaimedThisFrame.Clear();
 
             // What the GAME says answers this question, first. Every option it sends may carry the key it also
             // responds to, so honouring those needs no table here at all -- a new screen with new keys works in
@@ -82,15 +88,30 @@ namespace WizardryViewer.Unity
 
                     KeyCode code;
                     if (KeyFor(option.Key, out code) && Input.GetKeyDown(code))
+                    {
                         Send(queue, option.Id);
+                        ClaimedThisFrame.Add(code);
+                    }
                 }
             }
 
             // Then the standing bindings, for the keys the old UI answers to whether or not the current prompt
             // mentions them -- and for the two ids that share a key, where sending both and letting each end
             // drop what it does not know is simpler than guessing which screen is up.
+            //
+            // EXCEPT for a key the question above has just answered. Sending both was safe only while the
+            // spare id was one nothing on screen had heard of; it is not safe when the id lands on the NEXT
+            // question instead. Return is the case that bit: a round's message names Return, so dismissing it
+            // sent "continue" AND "confirm", the queue handed them out one poll apart, and the "confirm"
+            // arrived after the message had gone and the first character's choice was up -- spending that
+            // character's turn on the default before the player could choose. Sixty-six messages, sixty-six
+            // stray confirms, and the front-rank leader lost his turn in every round after the first.
+            //
+            // A key the table has answered is therefore spent. What the question names, the question owns.
             foreach (var binding in Bindings)
             {
+                if (ClaimedThisFrame.Contains(binding.Key)) continue;
+
                 if (Input.GetKeyDown(binding.Key))
                     Send(queue, binding.Option);
             }

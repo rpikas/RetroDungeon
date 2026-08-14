@@ -495,6 +495,13 @@ namespace WizardryViewer.Unity
             foreach (var kv in _townProps)
                 if (kv.Value != null) Destroy(kv.Value);
 
+            // The stock goes with the stall that held it. The cards hang off this renderer rather than off the
+            // shop prop -- they are positioned onto its shelves, not parented to them -- so destroying the prop
+            // on its own left thirty of them floating in the air over the dungeon, the stall gone from around
+            // them. Nothing else can sweep them: underground the counter is never laid, so LayCounter, which
+            // owns them the rest of the time, does not run at all.
+            ClearCounter();
+
             _tiles.Clear();
             _walls.Clear();
             _townLabels.Clear();
@@ -654,9 +661,10 @@ namespace WizardryViewer.Unity
 
             var signature = CounterSignature(wares, s.Location);
             if (signature == _wareSignature) return;
-            _wareSignature = signature;
 
+            // Recorded AFTER the teardown, because tearing down deliberately forgets it.
             ClearCounter();
+            _wareSignature = signature;
             if (wares.Count == 0) return;
 
             // The shop's own prop, wherever the party is standing. Keyed on the place the SHELVES are rather than
@@ -854,12 +862,18 @@ namespace WizardryViewer.Unity
         private Vector3? _wareFocus;
         private bool _wareFocusIsHere;
 
+        /// <summary>
+        /// Take the stock off the stall. Forgets the signature too, so that after this nothing is laid and
+        /// nothing is remembered as laid -- otherwise a stall torn down with its stock unchanged would match
+        /// its own old signature next time and be left bare.
+        /// </summary>
         private void ClearCounter()
         {
             foreach (var kv in _wareCards)
                 if (kv.Value != null) Destroy(kv.Value);
 
             _wareCards.Clear();
+            _wareSignature = "";
             _wareFocus = null;
         }
 

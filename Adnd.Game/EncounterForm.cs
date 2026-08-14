@@ -329,8 +329,8 @@ public sealed class EncounterForm : Form
     private const string FightAtPrefix = "fightAt:";
 
     /// <summary>
-    /// Commands the viewer sends that are not keys: aiming at a particular monster, and spreading the
-    /// party's blows about. Reached through the pump's raw handler -- see the note on its `handle`
+    /// Commands the viewer sends that are not keys: aiming at a particular monster, and answering for this
+    /// character automatically. Reached through the pump's raw handler -- see the note on its `handle`
     /// parameter for why a target cannot be a keystroke.
     ///
     /// Unknown words are ignored, exactly as the key map ignores them, so a newer viewer offering something
@@ -340,11 +340,10 @@ public sealed class EncounterForm : Form
     {
         if (string.IsNullOrEmpty(command)) return;
 
-        if (command == "fightSpread")
-        {
-            ChooseFight(spread: true);
-            return;
-        }
+        // Auto has no branch here on purpose: it answers to Enter, which this form's own key handler already
+        // understands, so the pump injects the key and the game decides. See the note on Enter in
+        // EncounterForm_KeyDown -- one path for both surfaces, rather than a table-only shortcut that could
+        // drift away from what the keyboard does.
 
         if (command.StartsWith(FightAtPrefix, StringComparison.Ordinal))
             ChooseFight(monsterKey: command.Substring(FightAtPrefix.Length));
@@ -382,13 +381,27 @@ public sealed class EncounterForm : Form
                         ViewerIds.Monster(monster.GroupId, monster.Index)));
                 }
 
-                // Worth a button of its own: it changes how the fight goes, not just who this one hits.
-                if (_session.AliveMonsters.Count() > 1)
-                    options.Add(new ViewerPromptOption("fightSpread", "Fight, spread out"));
+                // Auto, as a thing to point at rather than a key you have to know. It is the id the keyboard
+                // already answers on Enter, so pressing the button and pressing the key are the same event.
+                //
+                // Offered whenever anything is alive, NOT only when there are several: gating the one key you
+                // can lean on made it die in exactly the round you most want it -- the mop-up -- which is what
+                // made it look broken rather than finished. The label says which of the two it will be, since
+                // "spread the blows" is a promise that cannot be kept to a single survivor.
+                if (_session.AliveMonsters.Any())
+                    options.Add(new ViewerPromptOption(
+                        "confirm",
+                        _session.AliveMonsters.Count() > 1 ? "Auto: spread the blows" : "Auto: fight"));
             }
         }
 
         options.Add(new ViewerPromptOption("parry", "Parry"));
+
+        // The same button for the back three, so Auto answers for EVERY character rather than three of six.
+        // For them it parries, which is all they can do without spending something.
+        if (rank is < 1 or > 3)
+            options.Add(new ViewerPromptOption("confirm", "Auto: parry"));
+
         options.Add(new ViewerPromptOption("spell", "Cast a spell"));
         options.Add(new ViewerPromptOption("useItem", "Use an item"));
         options.Add(new ViewerPromptOption("run", "Run"));
@@ -415,11 +428,21 @@ public sealed class EncounterForm : Form
                 break;
             case Keys.Enter:
             {
-                // Enter means Fight for chars 1-3, Parry for chars 4-6
+                // Enter means Fight for chars 1-3, Parry for chars 4-6 -- the one key that always answers,
+                // so a fight the party is winning can be played by holding it. It spends nothing: never an
+                // item, never a memorised spell, since a spell held back is often why a party survives the
+                // next round.
+                //
+                // Swinging goes through ChooseFight rather than ChooseAction so that Enter never STOPS TO
+                // ASK. ChooseAction puts up a modal group picker in a fight against several groups, which
+                // turned "the obvious action" into a question -- and a question the table could only answer
+                // by accident, since the picker arrived unbidden at the start of a round. Spread rather than
+                // plain, because sharing the blows around is what "get on with it" should mean with several
+                // monsters standing; with one left there is nothing to spread and it simply hits that one.
                 var rank = GetActionableRank(_currentIndex);
                 if (rank is >= 1 and <= 3)
                 {
-                    ChooseAction(CombatActionType.Fight);
+                    ChooseFight(spread: true);
                 }
                 else if (rank is >= 4 and <= 6)
                 {

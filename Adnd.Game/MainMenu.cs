@@ -279,10 +279,11 @@ public class MainMenu
                 ordered.Add(c);
         }
 
-        // Boltac's shelves are stocked from anywhere in town, not just from inside the shop. They are scenery
-        // that happens to be made of the real stock, and a shop whose shelves are bare until you walk in looks
-        // broken rather than closed -- which is exactly how it looked from the square.
-        var wares = _shopMenu.DisplayWares();
+        // Stocked from INSIDE the shop only. Putting the stock out from anywhere in town made the stall look
+        // open from the square, but it meant the whole of Boltac's inventory was on the table wherever the
+        // party happened to be standing -- and a stall's worth of goods is a lot of table for scenery. Bare
+        // shelves seen from outside are the cheaper of the two prices.
+        var wares = locationId == "Shop" ? _shopMenu.DisplayWares() : null;
 
         _viewer.PublishTown(locationId, ordered, TownPrompt(locationId, ordered.Count > 0), wares);
     }

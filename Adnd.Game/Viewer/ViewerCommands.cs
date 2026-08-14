@@ -137,17 +137,20 @@ public static class ViewerCommands
     ///
     /// The maps are not just labels: the pump answers a command it finds in one by INJECTING that key into the
     /// form, on the assumption that the form's own handler knows it. That holds for the maze and a fight, whose
-    /// maps mirror real key handlers. "Fight, spread out" has no key in the fight's window -- it is a choice the
+    /// maps mirror real key handlers. "Auto" has no key in the fight's window -- it is a choice the
     /// table offers -- so listing it in <see cref="Combat"/> would have the pump press A at a form that ignores
     /// A, and the command would vanish on the way in. Here it is a label and a viewer accelerator instead: the
     /// viewer turns the key into the id and the id travels the route it already took.
     ///
     /// Ids in here have to be unambiguous across every kind, since there is no kind to tell them apart by.
     /// </summary>
-    private static readonly IReadOnlyDictionary<string, Keys> TableOnly = new Dictionary<string, Keys>
-    {
-        ["fightSpread"] = Keys.A,    // A<-ll of them, and the digits next to it aim at one
-    };
+    /// <remarks>
+    /// EMPTY, and that is the point: Auto used to live here on A, and moving it onto Enter -- a key the
+    /// fight's own handler already answers -- retired the only entry. A stayed a turn key in the maze and
+    /// nothing in a fight now claims it. The mechanism is kept for the next choice that genuinely has no
+    /// key in the game's own window.
+    /// </remarks>
+    private static readonly IReadOnlyDictionary<string, Keys> TableOnly = new Dictionary<string, Keys>();
 
     /// <summary>The vocabulary a prompt kind draws on, so one place decides which map is in play.</summary>
     public static IReadOnlyDictionary<string, Keys>? MapFor(string? kind) => kind switch
