@@ -14,8 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\Monsters\Level4\" />
-    <Folder Include="Assets\Monsters\Level4\" />
     <Folder Include="Input\" />
     <Folder Include="Entities\" />
     <Folder Include="UI\" />

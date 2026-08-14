@@ -234,9 +234,9 @@
                     "Description": "Bite may transmit lycanthropy (DM’s option)."
                 }
             ],
-            "XPValue": 90,
+            "XPValue": 900,
             "TreasureType": "C",
-            "Source": "Adnd"
+            "Source": "AdndAndWizardry"
         },
         {
             "Name": "Harpy",
@@ -487,45 +487,6 @@
                 }
             ],
             "XPValue": 1245,
-            "TreasureType": "D",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Wererat",
-            "Type": "Were",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 6,
-            "HitDice": 3,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 40,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "None",
-                    "Description": "None"
-                }
-            ],
-            "XPValue": 755,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
