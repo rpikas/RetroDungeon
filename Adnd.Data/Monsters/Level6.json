@@ -276,6 +276,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 9,
             "HitDice": 8,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 2,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -311,6 +313,8 @@
             "NumberOfAppearancesMax": 4,
             "ArmorClass": 5,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -356,6 +360,8 @@
             "NumberOfAppearancesMax": 3,
             "ArmorClass": 10,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -436,6 +442,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 10,
             "HitDice": 10,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -458,7 +466,12 @@
                     "Damage": "1d4"
                 }
             ],
-            "SpecialAbilities": [],
+            "SpecialAbilities": [
+                {
+                    "Name": "Level 5 Mage Spells",
+                    "Description": "Level 5 Mage Spells"
+                }
+            ],
             "XPValue": 1200,
             "TreasureType": "C",
             "Source": "Wizardry"
@@ -471,6 +484,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 4,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 4,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -511,6 +526,8 @@
             "NumberOfAppearancesMax": 2,
             "ArmorClass": 4,
             "HitDice": 5,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -546,6 +563,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 2,
             "HitDice": 4,
+            "HitDiceType": 10,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -590,6 +609,8 @@
             "NumberOfAppearancesMax": 3,
             "ArmorClass": 5,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 4,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -840,6 +861,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 3,
             "HitDice": 10,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -889,6 +912,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 8,
             "HitDice": 7,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -929,6 +954,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmororClass": 7,
             "HitDice": 3,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 30,
                 "Fly": 20,
@@ -969,6 +996,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 3,
             "HitDice": 3,
+            "HitDiceType": 10,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -1009,6 +1038,8 @@
             "NumberOfAppearancesMax": 5,
             "ArmorClass": -1,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -1246,6 +1277,8 @@
             "NumberOfAppearancesMax": 8,
             "ArmorClass": 5,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 1,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -1290,6 +1323,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 9,
             "HitDice": 8,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 2,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -1325,6 +1360,8 @@
             "NumberOfAppearancesMax": 4,
             "ArmorClass": 5,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -1370,6 +1407,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 10,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -1450,6 +1489,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 10,
             "HitDice": 10,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,

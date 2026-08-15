@@ -283,138 +283,144 @@
             "XPValue": 2000,
             "TreasureType": "K"
         },
-        
-            {
-                "Name": "Hatamoto",
-                "Type": "Humanoid",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 1,
-                "ArmorClass": -1,
-                "HitDice": 12,
-                "Movement": {
-                    "Walk": 40,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 20
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 10,
-                    "RodStaffWand": 11,
-                    "PetrificationPolymorph": 12,
-                    "BreathWeapon": 13,
-                    "Spell": 13
-                },
-                "Attacks": [
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    },
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    },
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    }
-                ],
-                "SpecialAbilities": [
-                    {
-                        "Name": "Autokill",
-                        "Description": "May instantly kill on a successful strike."
-                    }
-                ],
-                "XPValue": 1600,
-                "TreasureType": "C",
-                "Source": "Wizardry"
-            },
 
-            {
-                "Name": "High Ninja",
-                "Type": "Humanoid",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 1,
-                "ArmorClass": -1,
-                "HitDice": 12,
-                "Movement": {
-                    "Walk": 40,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 20
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 10,
-                    "RodStaffWand": 11,
-                    "PetrificationPolymorph": 12,
-                    "BreathWeapon": 13,
-                    "Spell": 13
-                },
-                "Attacks": [
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    },
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    },
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    }
-                ],
-                "SpecialAbilities": [
-                    {
-                        "Name": "Autokill",
-                        "Description": "May instantly kill on a successful strike."
-                    }
-                ],
-                "XPValue": 1600,
-                "TreasureType": "C",
-                "Source": "Wizardry"
+        {
+            "Name": "Hatamoto",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -1,
+            "HitDice": 12,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 20
             },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Attacks": [
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                },
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                },
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Autokill",
+                    "Description": "May instantly kill on a successful strike."
+                }
+            ],
+            "XPValue": 1600,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
 
-            {
-                "Name": "Dragon Puppy",
-                "Type": "Dragon",
-                "NumberOfAppearancesMin": 2,
-                "NumberOfAppearancesMax": 4,
-                "ArmorClass": 4,
-                "HitDice": 5,
-                "Movement": {
-                    "Walk": 30,
-                    "Fly": 20,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 0
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 12,
-                    "RodStaffWand": 13,
-                    "PetrificationPolymorph": 14,
-                    "BreathWeapon": 15,
-                    "Spell": 15
-                },
-                "Attacks": [
-                    {
-                        "Name": "Bite",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d10"
-                    }
-                ],
-                "SpecialAbilities": [],
-                "XPValue": 400,
-                "TreasureType": "B",
-                "Source": "Wizardry"
+        {
+            "Name": "High Ninja",
+            "Type": "Humanoid",
+            "NumberOfAppearancesMin": 1,
+            "NumberOfAppearancesMax": 1,
+            "ArmorClass": -1,
+            "HitDice": 12,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
+            "Movement": {
+                "Walk": 40,
+                "Fly": 0,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 20
             },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 10,
+                "RodStaffWand": 11,
+                "PetrificationPolymorph": 12,
+                "BreathWeapon": 13,
+                "Spell": 13
+            },
+            "Attacks": [
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                },
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                },
+                {
+                    "Name": "Katana",
+                    "NumberOfAttacks": 1,
+                    "Damage": "3d8"
+                }
+            ],
+            "SpecialAbilities": [
+                {
+                    "Name": "Autokill",
+                    "Description": "May instantly kill on a successful strike."
+                }
+            ],
+            "XPValue": 1600,
+            "TreasureType": "C",
+            "Source": "Wizardry"
+        },
+
+        {
+            "Name": "Dragon Puppy",
+            "Type": "Dragon",
+            "NumberOfAppearancesMin": 2,
+            "NumberOfAppearancesMax": 4,
+            "ArmorClass": 4,
+            "HitDice": 5,
+            "HitDiceType": 10,
+            "ExtraHitPoints": 0,
+            "Movement": {
+                "Walk": 30,
+                "Fly": 20,
+                "Swim": 0,
+                "Burrow": 0,
+                "Climb": 0
+            },
+            "SavingThrows": {
+                "ParalyzationPoisonDeath": 12,
+                "RodStaffWand": 13,
+                "PetrificationPolymorph": 14,
+                "BreathWeapon": 15,
+                "Spell": 15
+            },
+            "Attacks": [
+                {
+                    "Name": "Bite",
+                    "NumberOfAttacks": 1,
+                    "Damage": "1d10"
+                }
+            ],
+            "SpecialAbilities": [],
+            "XPValue": 400,
+            "TreasureType": "B",
+            "Source": "Wizardry"
+        },
 
             {
                 "Name": "Chimera",

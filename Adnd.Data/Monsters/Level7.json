@@ -300,6 +300,8 @@
             "NumberOfAppearancesMax": 5,
             "ArmorClass": 3,
             "HitDice": 10,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -350,6 +352,8 @@
             "NumberOfAppearancesMax": 5,
             "ArmorClass": 4,
             "HitDice": 7,
+            "HitDiceType": 6,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -395,6 +399,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 3,
             "HitDice": 5,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 30,
                 "Fly": 20,
@@ -447,6 +453,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 4,
             "HitDice": 5,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 30,
                 "Fly": 20,
@@ -491,6 +499,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 4,
             "HitDice": 12,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,

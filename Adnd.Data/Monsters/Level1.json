@@ -183,7 +183,7 @@
             "Frequency": "Legendary",
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 6,
-            "ArmorClass": 7,
+            "ArmorClass": 8,
             "HitDice": 1,
             "HitDiceType": 4,
             "ExtraHitPoints": 0,
@@ -288,7 +288,7 @@
             "ArmorClass": 4,
             "HitDice": 1,
             "HitDiceType": 4,
-            "ExtraHitPoints": 0,
+            "ExtraHitPoints": 1,
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 13,
                 "RodStaffWand": 14,

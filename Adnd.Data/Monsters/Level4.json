@@ -287,7 +287,9 @@
             "NumberOfAppearancesMin": 4,
             "NumberOfAppearancesMax": 8,
             "ArmorClass": 7,
-            "HitDice": 3,
+            "HitDice": 4,
+            "HitDiceType": 5,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -337,7 +339,9 @@
             "NumberOfAppearancesMin": 4,
             "NumberOfAppearancesMax": 8,
             "ArmorClass": 8,
-            "HitDice": 3,
+            "HitDice": 4,
+            "HitDiceType": 6,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -377,6 +381,8 @@
             "NumberOfAppearancesMax": 8,
             "ArmorClass": 3,
             "HitDice": 3,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -415,7 +421,9 @@
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 2,
-            "HitDice": 6,
+            "HitDice": 4,
+            "HitDiceType": 6,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -459,7 +467,9 @@
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 2,
-            "HitDice": 3,
+            "HitDice": 7,
+            "HitDiceType": 3,
+            "ExtraHitPoints": 2,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -498,7 +508,9 @@
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 4,
-            "HitDice": 3,
+            "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 1,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -538,6 +550,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 4,
             "HitDice": 3,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 1,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -577,6 +591,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 4,
             "HitDice": 3,
+            "HitDiceType": 6,
+            "ExtraHitPoints": 4,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,
@@ -609,13 +625,16 @@
             "TreasureType": "D",
             "Source": "Wizardry"
         },
+
         {
             "Name": "Lvl 7 Mage",
             "Type": "Humanoid",
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 8,
-            "HitDice": 4,
+            "HitDice": 7,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 20,
                 "Fly": 40,

@@ -286,6 +286,8 @@
             "NumberOfAppearancesMax": 2,
             "ArmorClass": 8,
             "HitDice": 7,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -303,7 +305,7 @@
             "Morale": { "Value": 8 },
             "Attacks": [
                 {
-                    "Name": "Touch",
+                    "Name": "Dagger",
                     "NumberOfAttacks": 1,
                     "Damage": "1d4"
                 }
@@ -326,6 +328,8 @@
             "NumberOfAppearancesMax": 3,
             "ArmorClass": 7,
             "HitDice": 3,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 3,
             "Movement": {
                 "Walk": 30,
                 "Fly": 20,
@@ -366,6 +370,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 3,
             "HitDice": 3,
+            "HitDiceType": 10,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -598,6 +604,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 4,
             "HitDice": 8,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 40,
                 "Fly": 0,
@@ -643,6 +651,8 @@
             "NumberOfAppearancesMax": 3,
             "ArmorClass": 5,
             "HitDice": 4,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 1,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,

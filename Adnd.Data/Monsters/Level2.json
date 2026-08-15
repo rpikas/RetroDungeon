@@ -193,76 +193,80 @@
 
     },
     {
-      "Name": "Gas Cloud",
-      "Type": "Enchant",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
-      "ArmorClass": 10,
-      "HitDice": 2,
-      "Movement": {
-        "Walk": 0,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Poison attack",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [],
-      "XPValue": 350,
-      "TreasureType": "None",
-      "Source": "Wizardry"
+        "Name": "Gas Cloud",
+        "Type": "Enchant",
+        "Frequency": "Uncommon",
+        "NumberOfAppearancesMin": 1,
+        "NumberOfAppearancesMax": 6,
+        "ArmorClass": 10,
+        "HitDice": 2,
+        "HitDiceType": 5,
+        "ExtraHitPoints": 1,
+        "Movement": {
+            "Walk": 0,
+            "Fly": 40,
+            "Swim": 0,
+            "Burrow": 0,
+            "Climb": 0
+        },
+        "SavingThrows": {
+            "ParalyzationPoisonDeath": 13,
+            "RodStaffWand": 14,
+            "PetrificationPolymorph": 15,
+            "BreathWeapon": 16,
+            "Spell": 16
+        },
+        "Morale": {
+            "Value": 8
+        },
+        "Attacks": [
+            {
+                "Name": "Poison attack",
+                "NumberOfAttacks": 1,
+                "Damage": "1d4"
+            }
+        ],
+        "SpecialAbilities": [],
+        "XPValue": 350,
+        "TreasureType": "None",
+        "Source": "Wizardry"
     },
     {
-      "Name": "Creeping Crud",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "ArmorClass": 6,
-      "HitDice": 2,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Poison",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3+1"
-        }
-      ],
-      "SpecialAbilities": [],
-      "XPValue": 550,
-      "TreasureType": "None",
-      "Source": "Wizardry"
+        "Name": "Creeping Crud",
+        "Type": "Animal",
+        "Frequency": "Uncommon",
+        "ArmorClass": 6,
+        "HitDice": 3,
+        "HitDiceType": 4,
+        "ExtraHitPoints": 0,
+        "Movement": {
+            "Walk": 40,
+            "Fly": 0,
+            "Swim": 0,
+            "Burrow": 0,
+            "Climb": 0
+        },
+        "SavingThrows": {
+            "ParalyzationPoisonDeath": 13,
+            "RodStaffWand": 14,
+            "PetrificationPolymorph": 15,
+            "BreathWeapon": 16,
+            "Spell": 16
+        },
+        "Morale": {
+            "Value": 8
+        },
+        "Attacks": [
+            {
+                "Name": "Poison",
+                "NumberOfAttacks": 1,
+                "Damage": "1d3+1"
+            }
+        ],
+        "SpecialAbilities": [],
+        "XPValue": 550,
+        "TreasureType": "None",
+        "Source": "Wizardry"
     },
 
     {
@@ -273,7 +277,8 @@
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 7,
       "HitDice": 2,
-      "HitPoints": 9,
+      "HitDiceType": 5,
+      "ExtraHitPoints": 1,
       "Movement": {
         "Walk": 40,
         "Fly": 0,
@@ -310,51 +315,53 @@
     },
 
     {
-      "Name": "Lvl 1 Ninja",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
-      "ArmorClass": 5,
-      "HitDice": 2,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Throwing star",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
+        "Name": "Lvl 1 Ninja",
+        "Type": "Animal",
+        "Frequency": "Uncommon",
+        "NumberOfAppearancesMin": 1,
+        "NumberOfAppearancesMax": 6,
+        "ArmorClass": 5,
+        "HitDice": 2,
+        "HitDiceType": 4,
+        "ExtraHitPoints": 2,
+        "Movement": {
+            "Walk": 40,
+            "Fly": 0,
+            "Swim": 0,
+            "Burrow": 0,
+            "Climb": 0
         },
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
+        "SavingThrows": {
+            "ParalyzationPoisonDeath": 13,
+            "RodStaffWand": 14,
+            "PetrificationPolymorph": 15,
+            "BreathWeapon": 16,
+            "Spell": 16
         },
-        {
-          "Name": "Nunchaku",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [],
-      "XPValue": 600,
-      "TreasureType": "None",
-      "Source": "Wizardry"
+        "Morale": {
+            "Value": 8
+        },
+        "Attacks": [
+            {
+                "Name": "Throwing star",
+                "NumberOfAttacks": 1,
+                "Damage": "1d4"
+            },
+            {
+                "Name": "Dagger",
+                "NumberOfAttacks": 1,
+                "Damage": "1d4"
+            },
+            {
+                "Name": "Nunchaku",
+                "NumberOfAttacks": 1,
+                "Damage": "1d4"
+            }
+        ],
+        "SpecialAbilities": [],
+        "XPValue": 600,
+        "TreasureType": "None",
+        "Source": "Wizardry"
     }
   ]
 }
