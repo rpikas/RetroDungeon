@@ -13,24 +13,30 @@ public sealed class MonsterInstance
         Index = index;
         GroupId = groupId;
         Name = template.Name;
+        InstanceMonsterType = template.Type;
 
         // Roll HP based on HitDice (1d8 per hit die)
-        CurrentHitPoints = RollHitPoints(template.HitDice);
+        CurrentHitPoints = RollHitPoints(template.HitDice, template.HitDiceType,template.ExtraHitPoints);
         ArmorClass = template.ArmorClass;
     }
 
-    private static int RollHitPoints(int hitDice)
+    private static int RollHitPoints(int hitDice, int hitDiceType = 8, int extraHitPoints = 0)
     {
         if (hitDice <= 0)
             return 1; // Minimum 1 HP
 
-        return DiceRoller.Roll(hitDice, 8);
+        // Default to d8 if hitDiceType is not specified or is 0
+        if (hitDiceType <= 0)
+            hitDiceType = 8;
+
+        return DiceRoller.Roll(hitDice, hitDiceType) + extraHitPoints;
     }
 
     public Monster Template { get; }
     public int Index { get; }
     public string GroupId { get; }
     public string Name { get; }
+    public MonsterType InstanceMonsterType { get; }
     public int CurrentHitPoints { get; set; }
     public int ArmorClass { get; }
     public bool IsAlive => CurrentHitPoints > 0;

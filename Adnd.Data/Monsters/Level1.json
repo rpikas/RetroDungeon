@@ -5,7 +5,7 @@
             "Name": "Goblin",
             "Type": "Humanoid",
             "ClimateTerain": "Temperate",
-            "Frequency": "Rare",
+            "Frequency": "Uncommon",
             "ActivityCycle": "Nocturnal",
             "Intelligence": "Low",
             "Alignment": "Chaotic Evil",
@@ -14,6 +14,8 @@
             "ArmorClass": 6,
             "MovementRate": "Slow",
             "HitDice": 1,
+            "HitDiceType": 7,
+            "ExtraHitPoints": 0,
             "THAC0": 19,
             "NumberOfAttacks": 1,
             "MagicResistance": "None",
@@ -56,6 +58,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 6,
             "HitDice": 1,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -91,8 +95,10 @@
             "Frequency": "Common",
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 6,
-            "ArmorClass": 7,
+            "ArmorClass": 12,
             "HitDice": 1,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 30,
                 "Fly": 0,
@@ -133,8 +139,10 @@
             "Frequency": "Very Rare",
             "NumberOfAppearancesMin": 1,
             "NumberOfAppearancesMax": 5,
-            "ArmorClass": 9,
+            "ArmorClass": 13,
             "HitDice": 1,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 4,
             "Movement": {
                 "Walk": 10,
                 "Fly": 0,
@@ -156,7 +164,7 @@
                 {
                     "Name": "Short Sword",
                     "NumberOfAttacks": 1,
-                    "Damage": "1d6"
+                    "Damage": "1d6+2"
                 }
             ],
             "SpecialAbilities": [
@@ -165,7 +173,7 @@
                     "Description": "On hit, target may be paralyzed."
                 }
             ],
-            "XPValue": 25,
+            "XPValue": 50,
             "TreasureType": "None",
             "Source": "Adnd"
         },
@@ -177,6 +185,8 @@
             "NumberOfAppearancesMax": 6,
             "ArmorClass": 7,
             "HitDice": 1,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "Movement": {
                 "Walk": 20,
                 "Fly": 0,
@@ -219,6 +229,8 @@
             "NumberOfAppearancesMax": 24,
             "ArmorClass": 10,
             "HitDice": 1,
+            "HitDiceType": 1,
+            "ExtraHitPoints": 0,
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 13,
                 "RodStaffWand": 14,
@@ -246,6 +258,8 @@
             "NumberOfAppearancesMax": 4,
             "ArmorClass": 12,
             "HitDice": 1,
+            "HitDiceType": 3,
+            "ExtraHitPoints": 1,
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 13,
                 "RodStaffWand": 14,
@@ -273,6 +287,8 @@
             "NumberOfAppearancesMax": 1,
             "ArmorClass": 4,
             "HitDice": 1,
+            "HitDiceType": 4,
+            "ExtraHitPoints": 0,
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 13,
                 "RodStaffWand": 14,
@@ -300,6 +316,8 @@
             "NumberOfAppearancesMax": 5,
             "ArmorClass": 4,
             "HitDice": 1,
+            "HitDiceType": 8,
+            "ExtraHitPoints": 0,
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 13,
                 "RodStaffWand": 14,
@@ -326,7 +344,10 @@
             "NumberOfAppearancesMin": 2,
             "NumberOfAppearancesMax": 7,
             "ArmorClass": 10,
-            "HitDice": 1,
+            "HitDice": 2,
+            "HitDiceType": 3,
+            "ExtraHitPoints": 2,
+
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 13,
                 "RodStaffWand": 14,

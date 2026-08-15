@@ -16,6 +16,8 @@ public class MonsterJsonModel
     public int ArmorClass { get; set; }
     public string MovementRate { get; set; } = "";
     public int HitDice { get; set; }
+    public int HitDiceType { get; set; }
+    public int ExtraHitPoints { get; set; }
     public int THAC0 { get; set; }
     public int NumberOfAttacks { get; set; }
     public string MagicResistance { get; set; } = "";

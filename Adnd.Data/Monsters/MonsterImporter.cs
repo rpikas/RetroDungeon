@@ -24,6 +24,8 @@ public static class MonsterImporter
             ArmorClass = json.ArmorClass,
             MovementRate = json.MovementRate,
             HitDice = json.HitDice,
+            HitDiceType = json.HitDiceType,
+            ExtraHitPoints = json.ExtraHitPoints,
             THAC0 = json.THAC0,
             NumberOfAttacks = json.NumberOfAttacks,
             MagicResistance = json.MagicResistance,

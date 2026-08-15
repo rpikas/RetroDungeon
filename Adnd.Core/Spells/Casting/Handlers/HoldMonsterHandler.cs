@@ -1,10 +1,11 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Monsters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
-public sealed class HoldPersonHandler : ISpellEffectHandler
+public sealed class HoldMonsterHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "hold_person", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId) => string.Equals(spellId, "hold_monster", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -13,7 +14,7 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
             return SpellCastResult.Failure("Missing spell definition.");
 
         if (request.Context != SpellUseContext.Combat)
-            return SpellCastResult.Failure("Hold Person can only be cast in combat.");
+            return SpellCastResult.Failure("Hold Monster can only be cast in combat.");
 
         var session = request.CombatSession;
         var rng = request.Rng ?? Random.Shared;
@@ -25,7 +26,7 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
         if (firstTarget?.TargetGroupId != null && session != null)
         {
             var groupTargets = session.GetAliveMonstersByGroup(firstTarget.TargetGroupId)
-                .Where(m => IsHumanoid(m.Name))
+                .Where(m => IsUndead(m.InstanceMonsterType))
                 .ToList();
 
             if (groupTargets.Count > 0)
@@ -37,18 +38,19 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
         // Fallback to old behavior
         if (target == null)
         {
-            var humanoidTargets = request.MonsterTargets
-                .Where(m => m.IsAlive && IsHumanoid(m.Name))
+            var monsterTargets = request.MonsterTargets
+                .Where(m => m.IsAlive && !IsUndead(m.InstanceMonsterType))
+                .Where(m => m.IsAlive )
                 .ToList();
 
-            if (humanoidTargets.Count > 0)
+            if (monsterTargets.Count > 0)
             {
-                target = humanoidTargets[rng.Next(humanoidTargets.Count)];
+                target = monsterTargets[rng.Next(monsterTargets.Count)];
             }
         }
 
         if (target == null)
-            return SpellCastResult.Failure("No valid humanoid targets for Hold Person.");
+            return SpellCastResult.Failure("No valid targets for Hold Monster.");
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}!");
@@ -62,18 +64,18 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
             return result;
         }
 
-    //    var rounds = rng.Next(2, 7); // 2-6 rounds, original adnd rules 4 rounds + 1/level
-        var rounds = rng.Next(4, 4+request.Caster.Level); //  original adnd rules 4 rounds + 1/level
+        var rounds = rng.Next(2, 7); // 2-6 rounds
         target.SetStatus(MonsterStatus.Paralyzed, rounds);
         result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is paralyzed for {rounds} round(s)!");
 
         return result;
     }
-
-    private static bool IsHumanoid(string monsterName)
+    
+    private static bool IsUndead(MonsterType monsterType)
     {
-        var humanoids = new[] { "human", "elf", "dwarf", "halfling", "gnome", "orc", "goblin", "hobgoblin", "kobold", "bugbear", "gnoll" };
-        var nameLower = monsterName.ToLowerInvariant();
-        return humanoids.Any(h => nameLower.Contains(h));
+       // var humanoids = new[] { MonsterType.Human, MonsterType.Elf, MonsterType.Dwarf, MonsterType.Halfling, MonsterType.Gnome, MonsterType.Orc, MonsterType.Goblin, MonsterType.Hobgoblin, MonsterType.Kobold, MonsterType.Bugbear, MonsterType.Gnoll };
+      //  return humanoids.Contains(monsterName);
+      return monsterType == MonsterType.Undead;
     }
+    
 }
