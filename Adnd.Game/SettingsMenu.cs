@@ -57,6 +57,9 @@ public class SettingsMenu
         if (value == null)
             return "(null)";
 
+        if (value is bool b)
+            return b ? "yes" : "no";
+
         if (value is IFormattable formattable)
             return formattable.ToString(null, CultureInfo.InvariantCulture);
 
@@ -107,6 +110,20 @@ public class SettingsMenu
             if (bool.TryParse(input, out var b))
             {
                 value = b;
+                return true;
+            }
+
+            if (string.Equals(input, "yes", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(input, "y", StringComparison.OrdinalIgnoreCase))
+            {
+                value = true;
+                return true;
+            }
+
+            if (string.Equals(input, "no", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(input, "n", StringComparison.OrdinalIgnoreCase))
+            {
+                value = false;
                 return true;
             }
 

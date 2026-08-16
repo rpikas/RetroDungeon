@@ -23,6 +23,8 @@ public sealed class CampCharacterInspectForm : Form
     private readonly SpellCastingService _spellCastingService;
 
     private readonly TextBox _detailsBox;
+    private readonly FlowLayoutPanel _buttonsPanel;
+    private readonly Label _oldStyleFooterLabel;
 
     /// <summary>
     /// Where this screen puts its questions so the tabletop can answer them. Null when nobody is watching the
@@ -73,7 +75,7 @@ public sealed class CampCharacterInspectForm : Form
             ForeColor = Color.White
         };
 
-        var buttons = new FlowLayoutPanel
+        _buttonsPanel = new FlowLayoutPanel
         {
             Left = 12,
             Top = 584,
@@ -83,22 +85,39 @@ public sealed class CampCharacterInspectForm : Form
             WrapContents = true
         };
 
-        buttons.Controls.Add(MakeButton("Read", (_, _) => NotImplemented("Read")));
-        buttons.Controls.Add(MakeButton("Equip", (_, _) => EquipAction()));
-        buttons.Controls.Add(MakeButton("Unequip", (_, _) => UnequipAction()));
-        buttons.Controls.Add(MakeButton("Trade", (_, _) => TradeAction()));
-        buttons.Controls.Add(MakeButton("Drop", (_, _) => DropAction()));
-        buttons.Controls.Add(MakeButton("Pool Gold", (_, _) => PoolGoldAction()));
-        buttons.Controls.Add(MakeButton("Identify", (_, _) => NotImplemented("Identify")));
-        buttons.Controls.Add(MakeButton("Memorize", (_, _) => MemorizeSpellAction()));
-        buttons.Controls.Add(MakeButton("Cast Spell", (_, _) => CastSpellAction()));
-        buttons.Controls.Add(MakeButton("Refresh", (_, _) => RefreshView()));
-        buttons.Controls.Add(MakeButton("Close", (_, _) => Close()));
+        _buttonsPanel.Controls.Add(MakeButton("R)ead", (_, _) => MemorizeSpellAction()));
+        _buttonsPanel.Controls.Add(MakeButton("E)quip", (_, _) => EquipAction()));
+        _buttonsPanel.Controls.Add(MakeButton("T)rade", (_, _) => TradeAction()));
+        _buttonsPanel.Controls.Add(MakeButton("D)rop", (_, _) => DropAction()));
+        _buttonsPanel.Controls.Add(MakeButton("P)ool Gold", (_, _) => PoolGoldAction()));
+        _buttonsPanel.Controls.Add(MakeButton("I)dentify", (_, _) => NotImplemented("Identify")));
+        _buttonsPanel.Controls.Add(MakeButton("S)pell", (_, _) => CastSpellAction()));
+        _buttonsPanel.Controls.Add(MakeButton("L<-eave", (_, _) => Close()));
+
+        _oldStyleFooterLabel = new Label
+        {
+            Left = 12,
+            Top = 600,
+            Width = 996,
+            Height = 84,
+            BackColor = Color.Black,
+            ForeColor = Color.White,
+            BorderStyle = BorderStyle.FixedSingle,
+            Font = new Font("Consolas", 24f, FontStyle.Bold),
+            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L<-EAVE\nE)QUIP  D)ROP   I)DENTIFY",
+            TextAlign = ContentAlignment.MiddleLeft,
+            Visible = false
+        };
 
         Controls.Add(_detailsBox);
-        Controls.Add(buttons);
+        Controls.Add(_buttonsPanel);
+        Controls.Add(_oldStyleFooterLabel);
 
+        ApplyUiStyleMode();
         RefreshView();
+
+        KeyPreview = true;
+        KeyDown += CampCharacterInspectForm_KeyDown;
 
         // The whole camp screen was unreachable from the table: you could not open it, and once open you could
         // not press any of these buttons. The pump starts on Shown so it is the newest one -- the maze is
@@ -111,14 +130,14 @@ public sealed class CampCharacterInspectForm : Form
     /// <summary>What the table may press here. Read and Identify are left out: they are not implemented.</summary>
     private static readonly (string Id, string Label)[] MenuActions =
     {
+        ("read", "Read (memorize)"),
         ("equip", "Equip an item"),
-        ("unequip", "Unequip"),
         ("trade", "Trade"),
         ("drop", "Drop an item"),
         ("pool", "Pool gold"),
-        ("memorize", "Memorize a spell"),
-        ("cast", "Cast a spell"),
-        ("close", "Done"),
+        ("identify", "Identify"),
+        ("spell", "Spell"),
+        ("leave", "Leave"),
     };
 
     private void StartTableMenu()
@@ -131,14 +150,14 @@ public sealed class CampCharacterInspectForm : Form
         {
             switch (command)
             {
+                case "read": MemorizeSpellAction(); break;
                 case "equip": EquipAction(); break;
-                case "unequip": UnequipAction(); break;
                 case "trade": TradeAction(); break;
                 case "drop": DropAction(); break;
                 case "pool": PoolGoldAction(); break;
-                case "memorize": MemorizeSpellAction(); break;
-                case "cast": CastSpellAction(); break;
-                case "close": Close(); return;
+                case "identify": NotImplemented("Identify"); break;
+                case "spell": CastSpellAction(); break;
+                case "leave": Close(); return;
                 default: return;
             }
 
@@ -158,6 +177,61 @@ public sealed class CampCharacterInspectForm : Form
             options.Add(new ViewerPromptOption(id, label));
 
         _publish(new ViewerPrompt("choice", $"Camp -- {_characterName}", ViewerIds.Character(_characterName), options));
+    }
+
+    private void CampCharacterInspectForm_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!GameRulesProvider.Current.UIOldStyle)
+            return;
+
+        switch (e.KeyCode)
+        {
+            case Keys.R:
+                MemorizeSpellAction();
+                break;
+            case Keys.T:
+                TradeAction();
+                break;
+            case Keys.P:
+                PoolGoldAction();
+                break;
+            case Keys.S:
+                CastSpellAction();
+                break;
+            case Keys.E:
+                EquipAction();
+                break;
+            case Keys.D:
+                DropAction();
+                break;
+            case Keys.I:
+                NotImplemented("Identify");
+                break;
+            case Keys.L:
+            case Keys.Enter:
+            case Keys.Escape:
+                Close();
+                return;
+            default:
+                return;
+        }
+
+        RefreshView();
+        PublishMenu();
+    }
+
+    private void ApplyUiStyleMode()
+    {
+        var useOldStyle = GameRulesProvider.Current.UIOldStyle;
+
+        _buttonsPanel.Visible = !useOldStyle;
+        _oldStyleFooterLabel.Visible = useOldStyle;
+
+        _detailsBox.BorderStyle = useOldStyle ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
+        _detailsBox.Font = useOldStyle
+            ? new Font("Consolas", 20f, FontStyle.Bold)
+            : new Font("Consolas", 10f, FontStyle.Regular);
+        _detailsBox.Height = useOldStyle ? 576 : 560;
     }
 
     /// <summary>Says something on both surfaces, then puts this screen's menu back up.</summary>
@@ -191,6 +265,12 @@ public sealed class CampCharacterInspectForm : Form
         if (c == null)
         {
             _detailsBox.Text = "Character no longer exists.";
+            return;
+        }
+
+        if (GameRulesProvider.Current.UIOldStyle)
+        {
+            _detailsBox.Text = BuildOldStyleInspectView(c);
             return;
         }
 
@@ -243,6 +323,61 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         _detailsBox.Text = string.Join(Environment.NewLine, lines);
+    }
+
+    private static string BuildOldStyleInspectView(Character c)
+    {
+        var classText = c.Classes.Count > 0 ? string.Join("/", c.Classes.Select(cls => cls.ToDisplayString().ToUpperInvariant())) : c.Class.ToDisplayString().ToUpperInvariant();
+        var raceText = c.Race.ToDisplayString().ToUpperInvariant();
+        var statusText = c.Status == CharacterStatus.None ? "OK" : c.Status.ToString().ToUpperInvariant();
+        var levelText = c.Classes.Count > 1
+            ? string.Join("/", c.Classes.Select(c.GetClassLevel))
+            : c.Level.ToString();
+
+        var sb = new System.Text.StringBuilder();
+        var age = Math.Max(14, c.Level + 13);
+        static string RowWithRightColumn(string left, string middle, string rightLabel, string rightValue)
+            => $"{left,-20}{middle,-26}{rightLabel,-5}{rightValue,4}";
+
+        sb.AppendLine($"{c.Name.ToUpperInvariant(),-8} L {levelText,-3} {classText,-14} {raceText}");
+        sb.AppendLine();
+        sb.AppendLine(RowWithRightColumn(
+            $"STRENGTH     {c.Abilities.Strength,2}",
+            $"GOLD      {c.GoldPieces,6}",
+            "LEVEL",
+            levelText));
+        sb.AppendLine(RowWithRightColumn(
+            $"INTELLIGENCE {c.Abilities.Intelligence,2}",
+            $"XP        {c.Experience,6}",
+            "AGE",
+            age.ToString()));
+        sb.AppendLine($"WISDOM       {c.Abilities.Wisdom,2}");
+        sb.AppendLine(RowWithRightColumn(
+            $"DEXTERITY    {c.Abilities.Dexterity,2}",
+            $"H.P.   {c.CurrentHitPoints,3}/{c.MaxHitPoints,-3}",
+            "A.C.",
+            c.ArmorClass.ToString()));
+        sb.AppendLine($"CONSTITUTION {c.Abilities.Constitution,2}");
+        sb.AppendLine($"CHARISMA     {c.Abilities.Charisma,2}    STATUS {statusText}");
+        sb.AppendLine();
+
+        if (c.Spellcasting != null && c.Spellcasting.Count > 0)
+        {
+            foreach (var state in c.Spellcasting)
+            {
+                var slots = new List<string>();
+                for (int i = 0; i < state.SlotsPerDay.Count; i++)
+                {
+                    var max = state.SlotsPerDay[i];
+                    var used = i < state.SlotsUsed.Count ? state.SlotsUsed[i] : 0;
+                    slots.Add(Math.Max(0, max - used).ToString());
+                }
+
+                sb.AppendLine($"{state.SpellClass.ToString().ToUpperInvariant(),-12} {string.Join("/", slots)}");
+            }
+        }
+
+        return sb.ToString().TrimEnd();
     }
 
     private void EquipAction()

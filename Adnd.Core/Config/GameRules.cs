@@ -36,6 +36,7 @@ public class GameRules
     public float ProbabilityFindingEachItem { get; set; } = 0.0f;
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
     public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
+    public bool UIOldStyle { get; set; } = true;
 
 
 }

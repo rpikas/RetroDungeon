@@ -835,11 +835,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Top = 10,
             Width = 232,
             Height = 110,
-            Text = "I)INSPECT\nR)REORDER\nL<-EAVE",
+            Text = "#)INSPECT\nR)EORDER\nL<-EAVE",
             BackColor = Color.Black,
             ForeColor = Color.White,
             Font = new Font("Consolas", 20f, FontStyle.Bold)
         };
+
+        int? quickInspectIndex = null;
 
         form.KeyDown += (_, e) =>
         {
@@ -848,8 +850,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 form.DialogResult = DialogResult.No;
                 form.Close();
             }
-            else if (e.KeyCode == Keys.I)
+
+            var selectedIndex = GetCampInspectIndexFromKey(e.KeyCode);
+            if (selectedIndex > 0 && selectedIndex <= activeMembers.Count)
             {
+                quickInspectIndex = selectedIndex - 1;
                 form.DialogResult = DialogResult.Yes;
                 form.Close();
             }
@@ -886,7 +891,18 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (choice == DialogResult.Yes)
         {
-            InspectPartyMemberFromCamp(activeMembers, roster);
+            if (quickInspectIndex.HasValue
+                && quickInspectIndex.Value >= 0
+                && quickInspectIndex.Value < activeMembers.Count)
+            {
+                var selectedCharacter = roster[activeMembers[quickInspectIndex.Value]];
+                OpenCampInspectDialog(selectedCharacter, activeMembers);
+            }
+            else
+            {
+                InspectPartyMemberFromCamp(activeMembers, roster);
+            }
+
             return;
         }
 
@@ -1130,12 +1146,32 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         var selectedCharacter = roster[activeMembers[selected.Value - 1]];
 
+        OpenCampInspectDialog(selectedCharacter, activeMembers);
+    }
+
+    private void OpenCampInspectDialog(Character selectedCharacter, List<string> activeMembers)
+    {
+
         // Handed the maze's publisher, so the whole screen -- menu, item lists, spell lists -- is answerable from
         // the table too.
         using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable);
         inspect.ShowDialog(this);
         PublishToViewer();   // back to the maze's own question
 //        MessageBox.Show(this, selectedCharacter.ToString(), $"Inspect - {selectedCharacter.Name}", MessageBoxButtons.OK, MessageBoxIcon.None);
+    }
+
+    private static int GetCampInspectIndexFromKey(Keys key)
+    {
+        return key switch
+        {
+            Keys.D1 or Keys.NumPad1 => 1,
+            Keys.D2 or Keys.NumPad2 => 2,
+            Keys.D3 or Keys.NumPad3 => 3,
+            Keys.D4 or Keys.NumPad4 => 4,
+            Keys.D5 or Keys.NumPad5 => 5,
+            Keys.D6 or Keys.NumPad6 => 6,
+            _ => 0
+        };
     }
 
     private int? PromptForNumber(string title, string text, int min, int max)
@@ -1537,14 +1573,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         float y = viewport.Bottom + 8f;
         float x = 16f;
+        const float numberColWidth = 24f;
 
         // Headings
-        graphics.DrawString("Name", Font, Brushes.White, new PointF(x, y));
-        graphics.DrawString("Class", Font, Brushes.White, new PointF(x + 190f, y));
-        graphics.DrawString("Lvl", Font, Brushes.White, new PointF(x + 360f, y));
-        graphics.DrawString("HP", Font, Brushes.White, new PointF(x + 420f, y));
-        graphics.DrawString("AC", Font, Brushes.White, new PointF(x + 520f, y));
-        graphics.DrawString("Status", Font, Brushes.White, new PointF(x + 600f, y));
+        graphics.DrawString("#", Font, Brushes.White, new PointF(x, y));
+        graphics.DrawString("Name", Font, Brushes.White, new PointF(x + numberColWidth, y));
+        graphics.DrawString("Class", Font, Brushes.White, new PointF(x + numberColWidth + 190f, y));
+        graphics.DrawString("Lvl", Font, Brushes.White, new PointF(x + numberColWidth + 360f, y));
+        graphics.DrawString("HP", Font, Brushes.White, new PointF(x + numberColWidth + 420f, y));
+        graphics.DrawString("AC", Font, Brushes.White, new PointF(x + numberColWidth + 520f, y));
+        graphics.DrawString("Status", Font, Brushes.White, new PointF(x + numberColWidth + 600f, y));
 
         y += 18f;
         graphics.DrawLine(Pens.White, x, y - 2f, viewport.Right - 8f, y - 2f);
@@ -1558,12 +1596,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return;
         }
 
-        foreach (var memberName in party.Members)
+        for (int i = 0; i < party.Members.Count; i++)
         {
+            var memberName = party.Members[i];
             if (!roster.TryGetValue(memberName, out var c))
             {
-                graphics.DrawString(memberName, Font, Brushes.White, new PointF(x, y));
-                graphics.DrawString("(missing)", Font, Brushes.White, new PointF(x + 190f, y));
+                graphics.DrawString((i + 1).ToString(), Font, Brushes.White, new PointF(x, y));
+                graphics.DrawString(memberName, Font, Brushes.White, new PointF(x + numberColWidth, y));
+                graphics.DrawString("(missing)", Font, Brushes.White, new PointF(x + numberColWidth + 190f, y));
                 y += 18f;
                 continue;
             }
@@ -1574,12 +1614,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
 
-            graphics.DrawString(c.Name, Font, Brushes.White, new PointF(x, y));
-            graphics.DrawString(classes, Font, Brushes.White, new PointF(x + 190f, y));
-            graphics.DrawString(GetLevelDisplay(c), Font, Brushes.White, new PointF(x + 360f, y));
-            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, Brushes.White, new PointF(x + 420f, y));
-            graphics.DrawString(c.ArmorClass.ToString(), Font, Brushes.White, new PointF(x + 520f, y));
-            graphics.DrawString(status, Font, Brushes.White, new PointF(x + 600f, y));
+            graphics.DrawString((i + 1).ToString(), Font, Brushes.White, new PointF(x, y));
+            graphics.DrawString(c.Name, Font, Brushes.White, new PointF(x + numberColWidth, y));
+            graphics.DrawString(classes, Font, Brushes.White, new PointF(x + numberColWidth + 190f, y));
+            graphics.DrawString(GetLevelDisplay(c), Font, Brushes.White, new PointF(x + numberColWidth + 360f, y));
+            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, Brushes.White, new PointF(x + numberColWidth + 420f, y));
+            graphics.DrawString(c.ArmorClass.ToString(), Font, Brushes.White, new PointF(x + numberColWidth + 520f, y));
+            graphics.DrawString(status, Font, Brushes.White, new PointF(x + numberColWidth + 600f, y));
 
             y += 18f;
         }
