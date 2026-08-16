@@ -197,3 +197,16 @@ the same spell should be possible to cast several times the same day only the nu
 create .md doc for Treasure
 when casting invisibilty the selected friendly targets ac should be lowered with 4.
 add a status to the charater class: invisible that the target should be after hit by an invisibilty spell. aftter the battle the invisibility should be removed. Ihe insisibilty does not stack, so when cast twice ac does not go down further. Add a new level 4 spell for magic users: Impoved invisibility that when cast, lowers the friendly target ac until as long as the party stays in the maze
+
+ai instructions 260815
+Jag har skrivit en HoldMonsterHandler använd den när du introducerar en Magic-User Hold monster spell
+ai instructions 260816
+Bugfix: when enoutering mulitiple groups casting sleep on the first group and killing the 2nd groupthe (asleep) message appear twice in the enounter dialog, I only expect it to appear once
+when taret an ally with a fiendly spell and a dialog asking what ally to target, also inform the user in the dialog what spell that is cast
+When enoutering multiple Groups of monsters and casting a spell that target a Group of monsters, the Group of monsters selected should be affected by the spell, currenly only the first Group is affected by the spell even if Another Group has been selected.
+the hold person spell should not be single target, but affect one group and maximum 3 opponents in that group should be affected by the spell. The number of opponents held should be displayed in a similar was as the number of asleep opponetes are displayed.
+Bugfix:monsters that are held or assleep should not be able to attack
+Bugfix:I enountered two groups 1. slimes and Priests. I selected group 1 when i casted hold person, but group 2 was targeted. I expected group 1 to be targeted
+The dialog that asks I want to take the stair up, remove the buttons, make Y/N keys select yes and no and stye the dialog like this.
+Bugfix:Now it looks like this, I like it, but can you please make sure the lines to the left and right are not broken
+also make the enter key to be shortcut for leave
