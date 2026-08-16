@@ -45,6 +45,7 @@ public sealed class CampCharacterInspectForm : Form
             new CureLightWoundsHandler(),
             new CureSeriousWoundsHandler(),
             new MagicMissileHandler(),
+            new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
             new InvisibilityHandler()

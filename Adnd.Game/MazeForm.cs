@@ -786,47 +786,59 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         using var form = new Form();
         form.Text = "Camp";
-        form.FormBorderStyle = FormBorderStyle.FixedDialog;
+        form.FormBorderStyle = FormBorderStyle.None;
         form.StartPosition = FormStartPosition.CenterParent;
-        form.ClientSize = new Size(420, 170);
+        form.ClientSize = new Size(420, 250);
         form.MinimizeBox = false;
         form.MaximizeBox = false;
+        form.ShowInTaskbar = false;
+        form.BackColor = Color.Black;
+        form.ForeColor = Color.White;
         form.KeyPreview = true;
 
-        var label = new Label
+        var titlePanel = new Panel
         {
-            Left = 12,
-            Top = 12,
-            Width = 396,
-            Height = 90,
-            Text = "The party camps.\n\nR)eorder   I)nspect   L<-eave"
+            Left = (form.ClientSize.Width - 140) / 2,
+            Top = 0,
+            Width = 140,
+            Height = 52,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
         };
 
-        var reorderBtn = new System.Windows.Forms.Button
+        var titleLabel = new Label
         {
-            Text = "Reorder",
-            Left = 12,
-            Top = 106,
-            Width = 120,
-            DialogResult = DialogResult.No
+            Left = 0,
+            Top = 10,
+            Width = titlePanel.ClientSize.Width,
+            Height = 30,
+            Text = "CAMP",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = Color.White,
+            Font = new Font("Consolas", 20f, FontStyle.Bold)
         };
 
-        var inspectBtn = new System.Windows.Forms.Button
+        var menuPanel = new Panel
         {
-            Text = "Inspect",
-            Left = 148,
-            Top = 106,
-            Width = 120,
-            DialogResult = DialogResult.Yes
+            Left = (form.ClientSize.Width - 260) / 2,
+            Top = 74,
+            Width = 260,
+            Height = 132,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
         };
 
-        var cancelBtn = new System.Windows.Forms.Button
+        var menuLabel = new Label
         {
-            Text = "Cancel",
-            Left = 284,
-            Top = 106,
-            Width = 120,
-            DialogResult = DialogResult.Cancel
+            Left = 14,
+            Top = 10,
+            Width = 232,
+            Height = 110,
+            Text = "I)INSPECT\nR)REORDER\nL<-EAVE",
+            BackColor = Color.Black,
+            ForeColor = Color.White,
+            Font = new Font("Consolas", 20f, FontStyle.Bold)
         };
 
         form.KeyDown += (_, e) =>
@@ -841,18 +853,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 form.DialogResult = DialogResult.Yes;
                 form.Close();
             }
-            else if (e.KeyCode == Keys.L || e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.L || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
             {
                 form.DialogResult = DialogResult.Cancel;
                 form.Close();
             }
         };
 
-        form.Controls.Add(label);
-        form.Controls.Add(reorderBtn);
-        form.Controls.Add(inspectBtn);
-        form.Controls.Add(cancelBtn);
-        form.CancelButton = cancelBtn;
+        titlePanel.Controls.Add(titleLabel);
+        menuPanel.Controls.Add(menuLabel);
+        form.Controls.Add(titlePanel);
+        form.Controls.Add(menuPanel);
 
         // The camp menu on the table as well: pressing Camp from the viewer used to open this and stop dead,
         // which made the whole of camp -- reordering, inspecting, equipping, memorising -- unreachable from
@@ -1681,29 +1692,70 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         using var form = new Form
         {
             Text = title,
-            FormBorderStyle = FormBorderStyle.FixedDialog,
+            FormBorderStyle = FormBorderStyle.None,
             StartPosition = FormStartPosition.CenterParent,
             MinimizeBox = false,
             MaximizeBox = false,
             ShowInTaskbar = false,
-            ClientSize = new Size(360, 120),
+            BackColor = Color.Black,
+            ForeColor = Color.White,
+            KeyPreview = true,
+            ClientSize = new Size(430, 110),
         };
 
-        var label = new Label { Left = 16, Top = 16, Width = 328, Height = 40, Text = question };
-        var yes = new System.Windows.Forms.Button
+        var framePanel = new Panel
         {
-            Text = "Yes", Left = 176, Top = 68, Width = 80, DialogResult = DialogResult.Yes
-        };
-        var no = new System.Windows.Forms.Button
-        {
-            Text = "No", Left = 264, Top = 68, Width = 80, DialogResult = DialogResult.No
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
         };
 
-        form.Controls.Add(label);
-        form.Controls.Add(yes);
-        form.Controls.Add(no);
-        form.AcceptButton = yes;
-        form.CancelButton = no;
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = "STAIRS UP",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = Color.White,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var questionLabel = new Label
+        {
+            Left = 0,
+            Top = 48,
+            Width = framePanel.ClientSize.Width,
+            Height = 34,
+            Text = "TAKE THEM (Y/N) ?",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = Color.White,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Y)
+            {
+                form.DialogResult = DialogResult.Yes;
+                form.Close();
+            }
+            else if (e.KeyCode == Keys.N || e.KeyCode == Keys.Escape)
+            {
+                form.DialogResult = DialogResult.No;
+                form.Close();
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(questionLabel);
+        form.Controls.Add(framePanel);
 
         var prompt = new ViewerPrompt("choice", question, null, new[]
         {

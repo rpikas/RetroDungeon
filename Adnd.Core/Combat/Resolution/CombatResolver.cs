@@ -151,6 +151,17 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (monster.HasStatus(MonsterStatus.Paralyzed))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Paralyzed);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is held ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} breaks free."));
+
+                continue;
+            }
+
             var attacks = monster.Template.Attacks.Count > 0 ? monster.Template.Attacks : new List<Adnd.Core.Monsters.MonsterAttack> { new() { NumberOfAttacks = 1, Damage = "1d4", Name = "Claw" } };
 
             foreach (var attack in attacks)

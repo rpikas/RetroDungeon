@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Monsters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -18,62 +19,72 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
         var session = request.CombatSession;
         var rng = request.Rng ?? Random.Shared;
 
-        // Determine target - pick a random humanoid from the specified group
-        MonsterInstance? target = null;
+        string? targetGroupId = request.Targets
+            .Select(t => t.TargetGroupId)
+            .FirstOrDefault(g => !string.IsNullOrWhiteSpace(g));
 
-        var firstTarget = request.Targets.FirstOrDefault();
-        if (firstTarget?.TargetGroupId != null && session != null)
+        var hasExplicitGroupTarget = !string.IsNullOrWhiteSpace(targetGroupId);
+
+        var humanoidCandidates = session != null
+            ? session.GetAliveMonstersByGroup(targetGroupId ?? "default")
+                .Where(m => IsHumanoid(m.InstanceMonsterType))
+                .ToList()
+            : new List<MonsterInstance>();
+
+        // If a specific group was selected, do not fall back to other groups.
+        if (humanoidCandidates.Count == 0 && hasExplicitGroupTarget)
+            return SpellCastResult.Failure("No valid humanoid targets in the selected group for Hold Person.");
+
+        if (humanoidCandidates.Count == 0)
         {
-            var groupTargets = session.GetAliveMonstersByGroup(firstTarget.TargetGroupId)
-                .Where(m => IsHumanoid(m.Name))
+            humanoidCandidates = request.MonsterTargets
+                .Where(m => m.IsAlive && IsHumanoid(m.InstanceMonsterType))
                 .ToList();
-
-            if (groupTargets.Count > 0)
-            {
-                target = groupTargets[rng.Next(groupTargets.Count)];
-            }
         }
 
-        // Fallback to old behavior
-        if (target == null)
-        {
-            var humanoidTargets = request.MonsterTargets
-                .Where(m => m.IsAlive && IsHumanoid(m.Name))
-                .ToList();
-
-            if (humanoidTargets.Count > 0)
-            {
-                target = humanoidTargets[rng.Next(humanoidTargets.Count)];
-            }
-        }
-
-        if (target == null)
+        if (humanoidCandidates.Count == 0)
             return SpellCastResult.Failure("No valid humanoid targets for Hold Person.");
+
+        var targets = humanoidCandidates
+            .OrderBy(_ => rng.Next())
+            .Take(3)
+            .ToList();
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}!");
+        result.Events.Add($"Hold Person targets up to 3 foes in one group ({targets.Count} selected).");
 
-        var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
-        var saveRoll = rng.Next(1, 21);
+        var heldCount = 0;
 
-        if (saveRoll >= saveTarget)
+        foreach (var target in targets)
         {
-            result.Events.Add($"{target.DisplayName} resists the spell (save {saveRoll} vs {saveTarget}).");
-            return result;
+            var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+            var saveRoll = rng.Next(1, 21);
+
+            if (saveRoll >= saveTarget)
+            {
+                result.Events.Add($"{target.DisplayName} resists the spell (save {saveRoll} vs {saveTarget}).");
+                continue;
+            }
+
+            var rounds = rng.Next(4, 4 + request.Caster.Level); // original adnd rules 4 rounds + 1/level
+            target.SetStatus(MonsterStatus.Paralyzed, rounds);
+            heldCount++;
+            result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is paralyzed for {rounds} round(s)!");
         }
 
-    //    var rounds = rng.Next(2, 7); // 2-6 rounds, original adnd rules 4 rounds + 1/level
-        var rounds = rng.Next(4, 4+request.Caster.Level); //  original adnd rules 4 rounds + 1/level
-        target.SetStatus(MonsterStatus.Paralyzed, rounds);
-        result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is paralyzed for {rounds} round(s)!");
+        result.Events.Add($"Hold Person held {heldCount} target(s).");
 
         return result;
     }
 
-    private static bool IsHumanoid(string monsterName)
+    private static bool IsHumanoid(MonsterType monsterType)
     {
-        var humanoids = new[] { "human", "elf", "dwarf", "halfling", "gnome", "orc", "goblin", "hobgoblin", "kobold", "bugbear", "gnoll" };
-        var nameLower = monsterName.ToLowerInvariant();
-        return humanoids.Any(h => nameLower.Contains(h));
+     //   var humanoids = new[] { "human", "elf", "dwarf", "halfling", "gnome", "orc", "goblin", "hobgoblin", "kobold", "bugbear", "gnoll" };
+       // var nameLower = monsterName.ToLowerInvariant();
+       //return humanoids.Any(h => nameLower.Contains(h));
+       return monsterType == MonsterType.Humanoid;
     }
+
+
 }

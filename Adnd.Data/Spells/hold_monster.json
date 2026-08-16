@@ -1,0 +1,13 @@
+{
+  "Id": "hold_monster",
+  "Name": "Hold Monster",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "Paralyzes one monster target if it fails a saving throw.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Arcane force attempts to paralyze one monster for several rounds."
+}

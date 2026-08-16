@@ -21,6 +21,7 @@ public sealed class EncounterForm : Form
     private readonly string _monsterName;
     private readonly int _monsterCount;
     private readonly int _asleepMonsterCount;
+    private readonly int _heldMonsterCount;
     private readonly int _roundNumber;
     private readonly List<Character> _party;
     private readonly CombatSession? _session;
@@ -52,11 +53,12 @@ public sealed class EncounterForm : Form
     /// ordinary one-group fight -- which is most fights -- could only offer "Fight" and let the resolver
     /// pick, which is exactly the choice being added.
     /// </param>
-    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
+    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
     {
         _monsterName = monsterName;
         _monsterCount = monsterCount;
         _asleepMonsterCount = asleepMonsterCount;
+        _heldMonsterCount = heldMonsterCount;
         _roundNumber = roundNumber;
         _party = party;
         _session = session;
@@ -175,6 +177,7 @@ public sealed class EncounterForm : Form
             var name = monstersInGroup.First().Name;
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
+            var heldCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
 
             // Check if we should use Wizardry suffix
             bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
@@ -183,12 +186,20 @@ public sealed class EncounterForm : Form
             var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
             _monsterImages.Add((name, image));
 
-            return $"{count} {name}" + (asleepCount > 0 ? $" ({asleepCount} asleep)" : "");
+            var statusBits = new List<string>();
+            if (asleepCount > 0)
+                statusBits.Add($"{asleepCount} asleep");
+            if (heldCount > 0)
+                statusBits.Add($"{heldCount} held");
+
+            var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
+            return $"{count} {name}{statusText}";
         }).Where(d => d != null).ToList();
 
         _monsterName = string.Join(" and ", groupDescriptions);
         _monsterCount = session.AliveMonsters.Count();
         _asleepMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
+        _heldMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
 
         Text = "Encounter";
         StartPosition = FormStartPosition.CenterParent;
@@ -597,7 +608,7 @@ public sealed class EncounterForm : Form
         }
         else if (spell.RangeType == SpellRangeType.Ally)
         {
-            var ally = PromptAllyTarget();
+            var ally = PromptAllyTarget(spell);
             if (ally == null)
                 return;
             target = SpellCastTarget.Ally(ally);
@@ -683,14 +694,15 @@ public sealed class EncounterForm : Form
         return castable[selected.Value - 1];
     }
 
-    private Character? PromptAllyTarget()
+    private Character? PromptAllyTarget(Spell spell)
     {
         var allies = _party.Where(IsActionable).ToList();
         if (allies.Count == 0)
             return null;
 
         var allyLines = string.Join(Environment.NewLine, allies.Select((a, i) => $"{i + 1}. {a.Name} (HP {a.CurrentHitPoints}/{a.MaxHitPoints})"));
-        var selected = PromptForNumber("Choose Ally Target", allyLines, 1, allies.Count);
+        var prompt = $"Casting: {spell.Name}{Environment.NewLine}{Environment.NewLine}{allyLines}";
+        var selected = PromptForNumber("Choose Ally Target", prompt, 1, allies.Count);
         return selected.HasValue ? allies[selected.Value - 1] : null;
     }
 
@@ -965,8 +977,13 @@ public sealed class EncounterForm : Form
 
     private void UpdateHeader()
     {
-        var asleepText = _asleepMonsterCount > 0 ? $"  ({_asleepMonsterCount} ASLEEP)" : string.Empty;
-        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}";
+        var asleepText = !_multipleGroups && _asleepMonsterCount > 0
+            ? $"  ({_asleepMonsterCount} ASLEEP)"
+            : string.Empty;
+        var heldText = !_multipleGroups && _heldMonsterCount > 0
+            ? $"  ({_heldMonsterCount} HELD)"
+            : string.Empty;
+        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

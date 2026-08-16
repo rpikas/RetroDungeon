@@ -3,11 +3,11 @@
   "Name": "Hold Person",
   "Class": "Cleric",
   "Level": 2,
-  "Description": "Paralyzes one humanoid target.",
+  "Description": "Paralyzes up to three humanoid targets in one group.",
   "RangeType": "Enemy",
-  "Targeting": "Single",
-  "TargetingScope": "SingleTarget",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
   "CastContext": "Combat",
   "EffectType": "Damage",
-  "EffectDescription": "Divine force locks a humanoid target in place."
+  "EffectDescription": "Divine force locks up to three humanoid targets in the chosen group in place."
 }

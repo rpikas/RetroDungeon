@@ -67,6 +67,7 @@ public sealed class CombatCoordinator
             new CureSeriousWoundsHandler(),
             new MagicMissileHandler(),
             new HoldPersonHandler(),
+            new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
             new InvisibilityHandler(),
@@ -96,8 +97,9 @@ public sealed class CombatCoordinator
 
             var aliveMonsters = session.AliveMonsters.ToList();
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
+            var heldMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
-            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
+            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
             encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)

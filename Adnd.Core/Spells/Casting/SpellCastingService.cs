@@ -129,7 +129,7 @@ public sealed class SpellCastingService
                 case SpellRangeType.Enemy:
                     if (t.Type != SpellCastTargetType.Enemy)
                         return SpellCastResult.Failure("This spell must target enemies.");
-                    if (t.MonsterIndex is not int idx || !request.MonsterTargets.Any(m => m.Index == idx && m.IsAlive))
+                    if (!IsValidEnemyTarget(t, request))
                         return SpellCastResult.Failure("Invalid enemy target.");
                     break;
             }
@@ -156,8 +156,15 @@ public sealed class SpellCastingService
                 return;
 
             var hasAnyValidEnemy = request.Targets.Any(t => t.Type == SpellCastTargetType.Enemy
-                                                             && t.MonsterIndex.HasValue
-                                                             && alive.Any(m => m.Index == t.MonsterIndex.Value));
+                                                             && IsValidEnemyTarget(t, request));
+
+            var hasValidGroupTarget = request.Targets.Any(t => t.Type == SpellCastTargetType.Enemy
+                                                                && !string.IsNullOrWhiteSpace(t.TargetGroupId)
+                                                                && alive.Any(m => string.Equals(m.GroupId, t.TargetGroupId, StringComparison.OrdinalIgnoreCase)));
+
+            // Respect explicit group targeting for single-group AoE spells (e.g. Sleep/Fireball in multi-group encounters).
+            if (hasValidGroupTarget)
+                return;
 
             if (!hasAnyValidEnemy)
                 request.Targets.RemoveAll(t => t.Type == SpellCastTargetType.Enemy);
@@ -175,8 +182,7 @@ public sealed class SpellCastingService
             return;
 
         var hasValidEnemy = request.Targets.Any(t => t.Type == SpellCastTargetType.Enemy
-                                                     && t.MonsterIndex.HasValue
-                                                     && request.MonsterTargets.Any(m => m.Index == t.MonsterIndex.Value && m.IsAlive));
+                                                     && IsValidEnemyTarget(t, request));
 
         if (hasValidEnemy)
             return;
@@ -187,5 +193,16 @@ public sealed class SpellCastingService
 
         request.Targets.RemoveAll(t => t.Type == SpellCastTargetType.Enemy);
         request.Targets.Add(SpellCastTarget.Enemy(fallback.Index));
+    }
+
+    private static bool IsValidEnemyTarget(SpellCastTarget target, SpellCastRequest request)
+    {
+        if (target.MonsterIndex is int idx)
+            return request.MonsterTargets.Any(m => m.Index == idx && m.IsAlive);
+
+        if (!string.IsNullOrWhiteSpace(target.TargetGroupId))
+            return request.MonsterTargets.Any(m => m.IsAlive && string.Equals(m.GroupId, target.TargetGroupId, StringComparison.OrdinalIgnoreCase));
+
+        return false;
     }
 }
