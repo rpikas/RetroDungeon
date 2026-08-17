@@ -26,7 +26,9 @@ public class PartyMenu
             new CureLightWoundsHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
+            new HealHandler(),
             new RaiseDeadHandler(),
+            new ResurrectionHandler(),
             new SpiritualHammerHandler(),
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
@@ -832,7 +834,7 @@ public class PartyMenu
         }
 
         Console.Write("\nChoose #: ");
-        var sel = InputHelper.ReadNumber(1, roster.Count);
+        var sel = InputHelper.ReadNumber(1, roster.Count, 2);
         if (sel.HasValue)
         {
             var chosen = roster[sel.Value - 1];

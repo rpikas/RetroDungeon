@@ -696,7 +696,12 @@ public sealed class EncounterForm : Form
 
     private Character? PromptAllyTarget(Spell spell)
     {
-        var allies = _party.Where(IsActionable).ToList();
+        var allies = string.Equals(spell.Id, "raise_dead", StringComparison.OrdinalIgnoreCase)
+            ? _party.Where(c => c.HasStatus(CharacterStatus.Dead) || c.CurrentHitPoints <= 0).ToList()
+            : string.Equals(spell.Id, "resurrection", StringComparison.OrdinalIgnoreCase)
+                ? _party.Where(c => c.HasStatus(CharacterStatus.Ashes)).ToList()
+                : _party.Where(IsActionable).ToList();
+
         if (allies.Count == 0)
             return null;
 

@@ -243,7 +243,8 @@ public class CityMenu
             Alignment = alignment,
             ExceptionalStrengthPercentile = exceptionalStrengthPercentile,
             NumberOfAttacks = 1,  // Base 1 attack per round at level 1
-            Damage = "1d2"  // Default unarmed or no-weapon damage; will be replaced when weapon equipped
+            Damage = "1d2",  // Default unarmed or no-weapon damage; will be replaced when weapon equipped
+            Age = Random.Shared.Next(17, 29)
         };
 
         character.EnsureClassProgressions();
@@ -341,7 +342,7 @@ public class CityMenu
     private void InspectCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, all.Count);
+        var sel = InputHelper.ReadNumber(1, all.Count, 2);
         if (sel.HasValue)
         {
             Console.Clear();

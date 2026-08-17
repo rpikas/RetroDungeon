@@ -1,0 +1,13 @@
+{
+  "Id": "resurrection",
+  "Name": "Resurrection",
+  "Class": "Cleric",
+  "Level": 7,
+  "Description": "Calls divine power to restore one ally from ashes.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Restores one ally from ashes to full HP and reduces Constitution by 1. If system shock save fails, the target becomes Lost."
+}

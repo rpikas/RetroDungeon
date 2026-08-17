@@ -1,0 +1,13 @@
+{
+  "Id": "heal",
+  "Name": "Heal",
+  "Class": "Cleric",
+  "Level": 6,
+  "Description": "Divine healing that fully restores one ally and cures major afflictions.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Restores all HP and removes blindness, disease, feeblemind, poison, and slow."
+}

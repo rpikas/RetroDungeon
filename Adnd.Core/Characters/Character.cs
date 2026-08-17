@@ -46,6 +46,7 @@ public class Character
     public int ArmorClass { get; set; }
     public Gender Gender { get; set; }
     public Alignment Alignment { get; set; }
+    public int Age { get; set; }
     public List<Item> Inventory { get; set; } = new();
     public Dictionary<EquipmentSlot, Item?> Equipment { get; set; } = new();
     public int? ExceptionalStrengthPercentile { get; set; }

@@ -4,40 +4,29 @@ namespace Adnd.Game;
 
 public static class InputHelper
 {
-    // Read a selection number using a single keypress when possible.
-    // Falls back to reading the rest of the line if needed (for multi-digit input).
-    public static int? ReadNumber(int min, int max)
+    // Read a selection number using keypress input.
+    // Auto-submits after the specified number of typed characters,
+    // or when Enter is pressed.
+    public static int? ReadNumber(int min, int max, int autoSubmitAfterCharacters = 1)
     {
-        var first = Console.ReadKey(true);
+        if (autoSubmitAfterCharacters < 1)
+            autoSubmitAfterCharacters = 1;
 
-        // If user pressed Enter immediately, treat as no input
-        if (first.Key == ConsoleKey.Enter)
-            return null;
-        // If the key produced a printable character, collect it and any immediately
-        // available additional characters without blocking. This lets a single
-        // keypress be accepted immediately while still allowing quick multi-digit
-        // input if the user types several digits in rapid succession.
         string combined = string.Empty;
-
-        if (first.KeyChar != '\0')
+        while (true)
         {
-            combined += first.KeyChar;
+            var key = Console.ReadKey(true);
 
-            // Pull in any buffered keystrokes immediately available
-            while (Console.KeyAvailable)
-            {
-                var k = Console.ReadKey(true);
-                if (k.Key == ConsoleKey.Enter)
-                    break;
-                if (k.KeyChar != '\0')
-                    combined += k.KeyChar;
-            }
-        }
-        else
-        {
-            // Non-printable key pressed; attempt to read the rest of the line
-            var line = Console.ReadLine();
-            combined = line ?? string.Empty;
+            if (key.Key == ConsoleKey.Enter)
+                break;
+
+            if (key.KeyChar == '\0')
+                continue;
+
+            combined += key.KeyChar;
+
+            if (combined.Length >= autoSubmitAfterCharacters)
+                break;
         }
 
         if (int.TryParse(combined.Trim(), out int val))

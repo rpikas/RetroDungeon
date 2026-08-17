@@ -302,7 +302,8 @@ public class CharacterCreator
             Gender = Gender.Male,
             Alignment = Alignment.TrueNeutral,
             NumberOfAttacks = 1,
-            Damage = "1d2"
+            Damage = "1d2",
+            Age = Random.Shared.Next(17, 29)
         };
     }
 }

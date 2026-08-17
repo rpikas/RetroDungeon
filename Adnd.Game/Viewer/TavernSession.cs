@@ -159,9 +159,11 @@ public sealed class TavernSession
         return true;
     }
 
-    /// <summary>Dead or otherwise out of action: never auto-picked, though they may be added by hand.</summary>
-    private static bool IsUnfitForDuty(Character c) =>
-        c.Status != CharacterStatus.None && c.Status != CharacterStatus.Poisoned;
+    /// <summary>
+    /// Exclude only permanently lost characters from auto-pick.
+    /// Dead and ashes can still be added to the party.
+    /// </summary>
+    private static bool IsUnfitForDuty(Character c) => c.HasStatus(CharacterStatus.Lost);
 
     private static readonly CharacterClass[] FrontRankClasses =
     {
