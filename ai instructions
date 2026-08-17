@@ -210,3 +210,16 @@ Bugfix:I enountered two groups 1. slimes and Priests. I selected group 1 when i 
 The dialog that asks I want to take the stair up, remove the buttons, make Y/N keys select yes and no and stye the dialog like this.
 Bugfix:Now it looks like this, I like it, but can you please make sure the lines to the left and right are not broken
 also make the enter key to be shortcut for leave
+
+introduce a setting UIOldStyle that could be yes or no where default is yes
+in the maze dialog; show a number 1-6 in a new column the most to the left in the party. One number in front of each charater
+Update the camp dialog from I)Inspect to #)Inspect and From R)Reorder to R)eorder. Also remove I as a shortcut and if a number is pressed show the charter with that number inspect view.
+
+in the inspect charater dialog:
+rename Close to L<-eave 
+rename Cast Spell to Spell
+Remove Refresh button
+Remove the Memorize button, but when Read button is pressed, memorize dialog should be shown.
+introduce shortcuts and rename the buttons R)ead T)rade P)ool gold S)pell E)quip D)rop I)dentify 
+
+maintain two versions of the inspect charater view the current one with clickable buttons should be shoen if setting UIOldStyle=No but if setting UIOldStyle=Yes then no buttons, only keyboard short Cuts should be avaliable and the style should be simliar to this attached example, but for exmple with Wisdom instead of Piety, Intellligence instead of I.Q. etc 
