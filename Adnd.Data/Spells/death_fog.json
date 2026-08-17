@@ -1,0 +1,13 @@
+{
+  "Id": "death_fog",
+  "Name": "Death Fog",
+  "Class": "MagicUser",
+  "Level": 6,
+  "Description": "A lethal fog blankets all enemies.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 1d10 damage per round to all monsters in all groups for 1 round per caster level."
+}

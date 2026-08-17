@@ -1,0 +1,13 @@
+{
+  "Id": "finger_of_death",
+  "Name": "Finger of Death",
+  "Class": "MagicUser",
+  "Level": 7,
+  "Description": "A killing ray that can slay one foe outright.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Target must save vs spell or die instantly."
+}

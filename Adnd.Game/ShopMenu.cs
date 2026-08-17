@@ -569,7 +569,7 @@ public class ShopMenu
 
             Console.WriteLine("\nE)quip from inventory");
             Console.WriteLine("U)nequip item");
-            Console.WriteLine("L<-eave");
+                Console.WriteLine("L<-eave");
 
             var key = Console.ReadKey(true).Key;
 

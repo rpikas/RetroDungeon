@@ -1,0 +1,13 @@
+{
+  "Id": "power_word_stun",
+  "Name": "Power Word: Stun",
+  "Class": "MagicUser",
+  "Level": 8,
+  "Description": "A single word of power stuns one vulnerable monster with no saving throw.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "No damage. One target with fewer than 51 HP is stunned and incapacitated without a saving throw."
+}

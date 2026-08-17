@@ -36,6 +36,7 @@ public class SpellRepository
                 Description = model.Description,
                 RangeType = ParseOrDefault(model.RangeType, SpellRangeType.Enemy),
                 Targeting = ParseOrDefault(model.Targeting, SpellTargeting.Single),
+                TargetingScope = ParseOrDefault(model.TargetingScope, SpellTargetingScope.SingleTarget),
                 CastContext = ParseOrDefault(model.CastContext, SpellCastContext.Both),
                 EffectType = ParseOrDefault(model.EffectType, SpellEffectType.Damage),
                 EffectDescription = model.EffectDescription

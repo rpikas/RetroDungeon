@@ -1,0 +1,13 @@
+{
+  "Id": "ice_storm",
+  "Name": "Ice Storm",
+  "Class": "MagicUser",
+  "Level": 4,
+  "Description": "A freezing storm blasts every enemy in sight.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 3d10 cold damage to all monsters in all groups."
+}

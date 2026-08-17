@@ -1,0 +1,13 @@
+{
+  "Id": "shocking_grasp",
+  "Name": "Shocking Grasp",
+  "Class": "MagicUser",
+  "Level": 1,
+  "Description": "A touch of electrical energy shocks one enemy.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 1d8 +1 damage per caster level to a single target."
+}

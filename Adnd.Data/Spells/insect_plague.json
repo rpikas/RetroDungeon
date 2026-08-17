@@ -1,0 +1,13 @@
+{
+  "Id": "insect_plague",
+  "Name": "Insect Plague",
+  "Class": "Cleric",
+  "Level": 5,
+  "Description": "A roiling swarm of biting insects overwhelms one enemy with terror.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "No direct damage. The target panics and may flee."
+}

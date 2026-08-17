@@ -66,8 +66,7 @@ public sealed class FireballHandler : ISpellEffectHandler
 
             if (actualDamage > 0)
             {
-               // result.Events.Add($"{monster.DisplayName} takes {actualDamage} fire damage!");
-                result.Events.Add($"{monster.DisplayName} takes {totalDamage} fire damage!");
+                result.Events.Add($"{monster.DisplayName} takes {actualDamage} fire damage (rolled {totalDamage}). HP {before}->{monster.CurrentHitPoints}.");
                 if (monster.CurrentHitPoints <= 0)
                 {
                     result.Events.Add($"{monster.DisplayName} is incinerated!");

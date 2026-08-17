@@ -6,5 +6,10 @@ public enum MonsterStatus
     Poisoned,
     Paralyzed,
     Confused,
-    Cursed
+    Cursed,
+    AcidArrow,
+    WallOfFire,
+    DeathFog,
+    IncendiaryCloud,
+    Panicked
 }

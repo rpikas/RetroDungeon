@@ -1,0 +1,13 @@
+{
+  "Id": "meteor_swarm",
+  "Name": "Meteor Swarm",
+  "Class": "MagicUser",
+  "Level": 9,
+  "Description": "Four blazing meteors rain down across the battlefield.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 4×10d6 fire damage to all monsters in all groups."
+}

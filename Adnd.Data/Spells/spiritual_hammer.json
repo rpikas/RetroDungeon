@@ -1,0 +1,13 @@
+{
+  "Id": "spiritual_hammer",
+  "Name": "Spiritual Hammer",
+  "Class": "Cleric",
+  "Level": 2,
+  "Description": "A force hammer strikes one enemy target.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 1d6 damage to one enemy target."
+}

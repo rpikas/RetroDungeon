@@ -1,0 +1,13 @@
+{
+  "Id": "lightning_bolt",
+  "Name": "Lightning Bolt",
+  "Class": "MagicUser",
+  "Level": 3,
+  "Description": "A powerful bolt of lightning arcs through enemies.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 1d6 lightning damage per caster level to all monsters in the chosen group."
+}

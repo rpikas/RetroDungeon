@@ -25,11 +25,29 @@ public class PartyMenu
         {
             new CureLightWoundsHandler(),
             new CureSeriousWoundsHandler(),
+            new SpiritualHammerHandler(),
+            new GlyphOfWardingHandler(),
+            new FlameStrikeHandler(),
+            new InsectPlagueHandler(),
             new MagicMissileHandler(),
+            new ShockingGraspHandler(),
+            new MelfsAcidArrowHandler(),
             new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
-            new InvisibilityHandler()
+            new InvisibilityHandler(),
+            new IceStormHandler(),
+            new LightningBoltHandler(),
+            new WallOfFireHandler(),
+            new CloudkillHandler(),
+            new DisintegrateHandler(),
+            new DeathFogHandler(),
+            new DelayedBlastFireballHandler(),
+            new FingerOfDeathHandler(),
+            new IncendiaryCloudHandler(),
+            new MeteorSwarmHandler(),
+            new PowerWordStunHandler(),
+            new PowerWordKillHandler()
         });
 
         _spellCastingService = new SpellCastingService(resolver, _spellRepo.LoadAll());
@@ -239,7 +257,7 @@ public class PartyMenu
             if (CanUseMemorizeAction(c))
                 Console.WriteLine("M)emorize Spells");
             Console.WriteLine("C)ast Spell");
-            Console.WriteLine("L<-eave");
+        Console.WriteLine("L<-eave");
 
             var key = Console.ReadKey(true).Key;
 

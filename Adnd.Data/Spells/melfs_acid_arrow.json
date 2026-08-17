@@ -1,0 +1,13 @@
+{
+  "Id": "melfs_acid_arrow",
+  "Name": "Melf's Acid Arrow",
+  "Class": "MagicUser",
+  "Level": 2,
+  "Description": "A sizzling arrow of acid burns a single target over time.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 2d4 acid damage per round for 1-3 rounds to one target."
+}

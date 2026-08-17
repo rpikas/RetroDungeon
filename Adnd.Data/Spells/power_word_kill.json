@@ -1,0 +1,13 @@
+{
+  "Id": "power_word_kill",
+  "Name": "Power Word Kill",
+  "Class": "MagicUser",
+  "Level": 9,
+  "Description": "A deadly word of power that can instantly slay a vulnerable foe.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "No saving throw. Instantly kills one monster target with fewer than 51 HP."
+}

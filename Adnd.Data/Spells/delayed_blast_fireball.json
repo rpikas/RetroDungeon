@@ -1,0 +1,13 @@
+{
+  "Id": "delayed_blast_fireball",
+  "Name": "Delayed Blast Fireball",
+  "Class": "MagicUser",
+  "Level": 7,
+  "Description": "A devastating delayed fireball erupts across the battlefield.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 1d6 +1 per caster level die to all monsters in all groups."
+}

@@ -46,11 +46,29 @@ public sealed class CampCharacterInspectForm : Form
         {
             new CureLightWoundsHandler(),
             new CureSeriousWoundsHandler(),
+            new SpiritualHammerHandler(),
+            new GlyphOfWardingHandler(),
+            new FlameStrikeHandler(),
+            new InsectPlagueHandler(),
             new MagicMissileHandler(),
+            new ShockingGraspHandler(),
+            new MelfsAcidArrowHandler(),
             new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
-            new InvisibilityHandler()
+            new InvisibilityHandler(),
+            new IceStormHandler(),
+            new LightningBoltHandler(),
+            new WallOfFireHandler(),
+            new CloudkillHandler(),
+            new DisintegrateHandler(),
+            new DeathFogHandler(),
+            new DelayedBlastFireballHandler(),
+            new FingerOfDeathHandler(),
+            new IncendiaryCloudHandler(),
+            new MeteorSwarmHandler(),
+            new PowerWordStunHandler(),
+            new PowerWordKillHandler()
         });
         _spellCastingService = new SpellCastingService(resolver, _spellRepository.LoadAll());
 
@@ -93,7 +111,7 @@ public sealed class CampCharacterInspectForm : Form
         _buttonsPanel.Controls.Add(MakeButton("P)ool Gold", (_, _) => PoolGoldAction()));
         _buttonsPanel.Controls.Add(MakeButton("I)dentify", (_, _) => NotImplemented("Identify")));
         _buttonsPanel.Controls.Add(MakeButton("S)pell", (_, _) => CastSpellAction()));
-        _buttonsPanel.Controls.Add(MakeButton("L<-eave", (_, _) => Close()));
+        _buttonsPanel.Controls.Add(MakeButton("L↵eave", (_, _) => Close()));
 
         _oldStyleFooterLabel = new Label
         {
@@ -105,7 +123,7 @@ public sealed class CampCharacterInspectForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BorderStyle = BorderStyle.FixedSingle,
             Font = new Font("Consolas", 24f, FontStyle.Bold),
-            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L<-EAVE\nE)QUIP  D)ROP   I)DENTIFY",
+            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY",
             TextAlign = ContentAlignment.MiddleLeft,
             Visible = false
         };

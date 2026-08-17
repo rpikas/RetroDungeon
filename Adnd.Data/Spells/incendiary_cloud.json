@@ -1,0 +1,13 @@
+{
+  "Id": "incendiary_cloud",
+  "Name": "Incendiary Cloud",
+  "Class": "MagicUser",
+  "Level": 8,
+  "Description": "A rolling inferno engulfs enemies everywhere.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 4d6 fire damage per round to all monsters in all groups for 1 round per caster level."
+}

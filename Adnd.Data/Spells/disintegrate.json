@@ -1,0 +1,13 @@
+{
+  "Id": "disintegrate",
+  "Name": "Disintegrate",
+  "Class": "MagicUser",
+  "Level": 6,
+  "Description": "A ray of annihilation destroys one enemy instantly.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Instantly kills one target."
+}

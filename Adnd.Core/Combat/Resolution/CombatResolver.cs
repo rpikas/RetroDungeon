@@ -140,6 +140,90 @@ public sealed class CombatResolver
 
         foreach (var monster in session.AliveMonsters.ToList())
         {
+            if (monster.HasStatus(MonsterStatus.IncendiaryCloud))
+            {
+                var rolledDamage = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
+                var beforeHp = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
+                var actualDamage = beforeHp - monster.CurrentHitPoints;
+                var remaining = monster.TickStatus(MonsterStatus.IncendiaryCloud);
+
+                events.Add(new CombatEvent($"Incendiary cloud burns {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} remains inside the incendiary cloud ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"The incendiary cloud around {monster.DisplayName} dissipates."));
+
+                if (!monster.IsAlive)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is consumed by flames."));
+                    continue;
+                }
+            }
+
+            if (monster.HasStatus(MonsterStatus.DeathFog))
+            {
+                var rolledDamage = _dice.Roll(10);
+                var beforeHp = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
+                var actualDamage = beforeHp - monster.CurrentHitPoints;
+                var remaining = monster.TickStatus(MonsterStatus.DeathFog);
+
+                events.Add(new CombatEvent($"Death fog engulfs {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} remains in the death fog ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"The death fog around {monster.DisplayName} dissipates."));
+
+                if (!monster.IsAlive)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} dies in the death fog."));
+                    continue;
+                }
+            }
+
+            if (monster.HasStatus(MonsterStatus.WallOfFire))
+            {
+                var rolledDamage = _dice.Roll(4) + _dice.Roll(4);
+                var beforeHp = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
+                var actualDamage = beforeHp - monster.CurrentHitPoints;
+                var remaining = monster.TickStatus(MonsterStatus.WallOfFire);
+
+                events.Add(new CombatEvent($"Flames burn {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} remains inside the wall of fire ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"The wall of fire around {monster.DisplayName} fades."));
+
+                if (!monster.IsAlive)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is burned to ashes."));
+                    continue;
+                }
+            }
+
+            if (monster.HasStatus(MonsterStatus.AcidArrow))
+            {
+                var rolledDamage = _dice.Roll(4) + _dice.Roll(4);
+                var beforeHp = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
+                var actualDamage = beforeHp - monster.CurrentHitPoints;
+                var remaining = monster.TickStatus(MonsterStatus.AcidArrow);
+
+                events.Add(new CombatEvent($"Acid burns {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is still corroding ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"The acid on {monster.DisplayName} dissipates."));
+
+                if (!monster.IsAlive)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is destroyed."));
+                    continue;
+                }
+            }
+
             if (monster.HasStatus(MonsterStatus.Asleep))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Asleep);
@@ -158,6 +242,25 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{monster.DisplayName} is held ({remaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{monster.DisplayName} breaks free."));
+
+                continue;
+            }
+
+            if (monster.HasStatus(MonsterStatus.Panicked))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Panicked);
+                var fleeRoll = _dice.Roll(100);
+                if (fleeRoll <= 50)
+                {
+                    monster.CurrentHitPoints = 0;
+                    events.Add(new CombatEvent($"{monster.DisplayName} flees in panic!"));
+                    continue;
+                }
+
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} panics and cannot act ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} regains its nerve."));
 
                 continue;
             }
@@ -328,12 +431,13 @@ public sealed class CombatResolver
             if (roll >= needed)
             {
                 int damage = RollDamage(string.IsNullOrWhiteSpace(member.Damage) ? "1d2" : member.Damage);
-                target.CurrentHitPoints -= damage;
-                events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} for {damage}."));
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+                var actualDamage = before - target.CurrentHitPoints;
+                events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} for {actualDamage} (rolled {damage}). HP {before}->{target.CurrentHitPoints}."));
 
                 if (target.CurrentHitPoints <= 0)
                 {
-                    target.CurrentHitPoints = 0;
                     events.Add(new CombatEvent($"{target.DisplayName} is destroyed."));
                     break;
                 }

@@ -877,7 +877,10 @@ public sealed class EncounterForm : Form
         form.Text = title;
         form.FormBorderStyle = FormBorderStyle.FixedDialog;
         form.StartPosition = FormStartPosition.CenterParent;
-        form.ClientSize = new Size(520, 340);
+        var isChooseSpellDialog = string.Equals(title, "Choose Spell", StringComparison.OrdinalIgnoreCase);
+        form.ClientSize = isChooseSpellDialog
+            ? new Size(760, 980)
+            : new Size(520, 340);
         form.MinimizeBox = false;
         form.MaximizeBox = false;
 
@@ -885,8 +888,8 @@ public sealed class EncounterForm : Form
         {
             Left = 12,
             Top = 12,
-            Width = 496,
-            Height = 250,
+            Width = isChooseSpellDialog ? 736 : 496,
+            Height = isChooseSpellDialog ? 890 : 250,
             AutoSize = false,
             Text = prompt
         };
@@ -894,12 +897,26 @@ public sealed class EncounterForm : Form
         var input = new TextBox
         {
             Left = 12,
-            Top = 270,
-            Width = 320
+            Top = isChooseSpellDialog ? 910 : 270,
+            Width = isChooseSpellDialog ? 480 : 320
         };
 
-        var ok = new Button { Text = "OK", Left = 352, Width = 75, Top = 268, DialogResult = DialogResult.OK };
-        var cancel = new Button { Text = "Cancel", Left = 433, Width = 75, Top = 268, DialogResult = DialogResult.Cancel };
+        var ok = new Button
+        {
+            Text = "OK",
+            Left = isChooseSpellDialog ? 576 : 352,
+            Width = 75,
+            Top = isChooseSpellDialog ? 908 : 268,
+            DialogResult = DialogResult.OK
+        };
+        var cancel = new Button
+        {
+            Text = "Cancel",
+            Left = isChooseSpellDialog ? 657 : 433,
+            Width = 75,
+            Top = isChooseSpellDialog ? 908 : 268,
+            DialogResult = DialogResult.Cancel
+        };
 
         form.Controls.Add(label);
         form.Controls.Add(input);
@@ -1008,13 +1025,13 @@ public sealed class EncounterForm : Form
         string fightText, parryText;
         if (rank is >= 1 and <= 3)
         {
-            fightText = "F<-IGHT";  // Enter for Fight
+            fightText = "F↵IGHT";  // Enter for Fight
             parryText = "P)ARRY";
         }
         else if (rank is >= 4 and <= 6)
         {
             fightText = "F)IGHT";
-            parryText = "P<-ARRY";  // Enter for Parry
+            parryText = "P↵ARRY";  // Enter for Parry
         }
         else
         {

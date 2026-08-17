@@ -835,7 +835,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Top = 10,
             Width = 232,
             Height = 110,
-            Text = "#)INSPECT\nR)EORDER\nL<-EAVE",
+            Text = "#)INSPECT\nR)EORDER\nL↵EAVE",
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             Font = new Font("Consolas", 20f, FontStyle.Bold)

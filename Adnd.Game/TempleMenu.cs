@@ -25,7 +25,7 @@ public class TempleMenu
             Console.WriteLine("=== Church of Chant ===");
             Console.WriteLine("H)eal Party");
             Console.WriteLine("R)aise Dead");
-            Console.WriteLine("L>-eave");
+            Console.WriteLine("L<-eave");
             if (_viewer.Enabled)
                 Console.WriteLine("(or click whoever needs tending on the table)");
 

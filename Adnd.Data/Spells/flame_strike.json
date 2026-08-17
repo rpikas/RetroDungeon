@@ -1,0 +1,13 @@
+{
+  "Id": "flame_strike",
+  "Name": "Flame Strike",
+  "Class": "Cleric",
+  "Level": 5,
+  "Description": "A column of divine fire engulfs one enemy target.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 6d8 damage to one enemy target."
+}

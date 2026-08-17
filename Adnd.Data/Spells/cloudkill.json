@@ -1,0 +1,13 @@
+{
+  "Id": "cloudkill",
+  "Name": "Cloudkill",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "A deadly poisonous cloud rolls over one enemy group.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Instantly slays all monsters with 3 HD or lower in the chosen group."
+}
