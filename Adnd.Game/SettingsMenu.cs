@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -48,6 +49,7 @@ public class SettingsMenu
         return typeof(GameRules)
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Where(p => p.CanRead && p.CanWrite)
+            .Where(p => !string.Equals(p.Name, nameof(GameRules.DefaultColor), StringComparison.Ordinal))
             .OrderBy(p => p.Name)
             .ToArray();
     }
@@ -70,6 +72,13 @@ public class SettingsMenu
     {
         Console.WriteLine();
         Console.WriteLine($"Editing {property.Name}");
+
+        if (property.PropertyType == typeof(Color)
+            && string.Equals(property.Name, nameof(GameRules.ForegroundColor), StringComparison.Ordinal))
+        {
+            EditForegroundColor(rules, property);
+            return;
+        }
 
         var type = property.PropertyType;
         var currentValue = property.GetValue(rules);
@@ -95,6 +104,31 @@ public class SettingsMenu
 
         if (TryConvert(input.Trim(), type, out var converted))
             property.SetValue(rules, converted);
+    }
+
+    private static void EditForegroundColor(GameRules rules, PropertyInfo property)
+    {
+        var choices = new[]
+        {
+            Color.Green,
+            Color.Red,
+            Color.Blue,
+            Color.Yellow,
+            Color.Cyan,
+            Color.Magenta,
+            Color.White
+        };
+
+        var current = property.GetValue(rules);
+        Console.WriteLine($"Current: {FormatValue(current)}");
+
+        for (int i = 0; i < choices.Length; i++)
+            Console.WriteLine($"{i + 1}. {choices[i].Name}");
+
+        Console.Write("Choose #: ");
+        var selected = InputHelper.ReadNumber(1, choices.Length);
+        if (selected.HasValue)
+            property.SetValue(rules, choices[selected.Value - 1]);
     }
 
     private static bool TryConvert(string input, Type type, out object? value)

@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Text.Json.Serialization;
 
 namespace Adnd.Core.Config;
 
@@ -8,6 +9,20 @@ public enum AbilityRollMethod
     FourD6DropLowest,
     BestOfSixSets
 }
+
+public enum PossibleForegroupdColors
+{
+    /*
+    Color.Green,
+    Color.Red,
+    Color.Blue,
+    Color.Yellow,
+    Color.Cyan,
+    Color.Magenta,
+    Color.White*/
+    //    Color.Black//will be an option when background color is not black, or when foreground color is not black
+}
+
 
 public enum Sources
 {
@@ -40,7 +55,13 @@ public class GameRules
     public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
     public bool UIOldStyle { get; set; } = true;
     public int DelayInbetweenActions { get; set; } =0;
-    public Color DefaultColor { get; set; } = Color.Green;
+    public Color ForegroundColor { get; set; } = Color.Green;
+    [JsonIgnore]
+    public Color DefaultColor
+    {
+        get => ForegroundColor;
+        set => ForegroundColor = value;
+    }
 
 
 }

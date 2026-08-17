@@ -36,6 +36,7 @@ public static class GameRulesProvider
     public static void Load(string? path = null)
     {
         var resolved = ResolvePath(path);
+        var options = CreateSerializerOptions();
 
         if (!File.Exists(resolved))
         {
@@ -47,7 +48,7 @@ public static class GameRulesProvider
         try
         {
             var json = File.ReadAllText(resolved);
-            var loaded = JsonSerializer.Deserialize<GameRules>(json);
+            var loaded = JsonSerializer.Deserialize<GameRules>(json, options);
             Current = loaded ?? new GameRules();
         }
         catch
@@ -60,14 +61,12 @@ public static class GameRulesProvider
     {
         var resolved = ResolvePath(path);
         var folder = Path.GetDirectoryName(resolved);
+        var options = CreateSerializerOptions();
 
         if (!string.IsNullOrWhiteSpace(folder) && !Directory.Exists(folder))
             Directory.CreateDirectory(folder);
 
-        var json = JsonSerializer.Serialize(Current, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
+        var json = JsonSerializer.Serialize(Current, options);
 
         File.WriteAllText(resolved, json);
     }
@@ -81,6 +80,9 @@ public static class GameRulesProvider
     {
         if (rules == null)
             return new GameRules();
+
+        if (rules.ForegroundColor.IsEmpty)
+            rules.ForegroundColor = System.Drawing.Color.Green;
 
         rules.TreasureFindChance = ClampChance(rules.TreasureFindChance);
         rules.MonsterEncounterChance = ClampChance(rules.MonsterEncounterChance);
@@ -102,5 +104,15 @@ public static class GameRulesProvider
         }
 
         return rules;
+    }
+
+    private static JsonSerializerOptions CreateSerializerOptions()
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
+        options.Converters.Add(new ColorJsonConverter());
+        return options;
     }
 }
