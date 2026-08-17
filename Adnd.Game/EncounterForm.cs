@@ -71,7 +71,7 @@ public sealed class EncounterForm : Form
         StartPosition = FormStartPosition.CenterParent;
         ClientSize = new Size(980, 620);
         BackColor = Color.Black;
-        ForeColor = Color.White;
+        ForeColor = GameRulesProvider.Current.DefaultColor;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
@@ -83,7 +83,7 @@ public sealed class EncounterForm : Form
             Top = 12,
             Width = 940,
             Height = 40,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 18f, FontStyle.Bold),
             TextAlign = ContentAlignment.MiddleLeft
@@ -95,7 +95,7 @@ public sealed class EncounterForm : Form
             Top = 64,
             Width = 940,
             Height = 40,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 18f, FontStyle.Bold),
             TextAlign = ContentAlignment.MiddleCenter
@@ -107,7 +107,7 @@ public sealed class EncounterForm : Form
             Top = 108,
             Width = 940,
             Height = 56,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 16f, FontStyle.Bold),
             Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK",
@@ -132,7 +132,7 @@ public sealed class EncounterForm : Form
             Width = 940,
             Height = 236,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             View = View.Details,
             FullRowSelect = true,
             GridLines = true,
@@ -205,7 +205,7 @@ public sealed class EncounterForm : Form
         StartPosition = FormStartPosition.CenterParent;
         ClientSize = new Size(980, 620);
         BackColor = Color.Black;
-        ForeColor = Color.White;
+        ForeColor = GameRulesProvider.Current.DefaultColor;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
@@ -217,7 +217,7 @@ public sealed class EncounterForm : Form
             Top = 12,
             Width = 940,
             Height = 40,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 18f, FontStyle.Bold),
             TextAlign = ContentAlignment.MiddleLeft
@@ -229,7 +229,7 @@ public sealed class EncounterForm : Form
             Top = 64,
             Width = 940,
             Height = 40,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 18f, FontStyle.Bold),
             TextAlign = ContentAlignment.MiddleCenter
@@ -241,7 +241,7 @@ public sealed class EncounterForm : Form
             Top = 108,
             Width = 940,
             Height = 56,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 16f, FontStyle.Bold),
             Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK\nG)ROUP   (Select Target Group)",
@@ -266,7 +266,7 @@ public sealed class EncounterForm : Form
             Width = 940,
             Height = 236,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             View = View.Details,
             FullRowSelect = true,
             GridLines = true,
@@ -1174,7 +1174,7 @@ public sealed class EncounterForm : Form
             return;
         }
 
-        using var pen = new Pen(Color.White, 2f);
+        using var pen = new Pen(GameRulesProvider.Current.DefaultColor, 2f);
         var cx = rect.Width / 2f;
         var cy = rect.Height / 2f + 8f;
 
@@ -1231,7 +1231,7 @@ public sealed class EncounterForm : Form
             else
             {
                 // Draw simple placeholder if no image
-                using var pen = new Pen(Color.White, 2f);
+                using var pen = new Pen(GameRulesProvider.Current.DefaultColor, 2f);
                 var cx = slotBounds.X + (slotBounds.Width / 2f);
                 var cy = slotBounds.Y + (slotBounds.Height / 2f);
 
@@ -1246,7 +1246,7 @@ public sealed class EncounterForm : Form
 
             // Draw monster name label below
             using var font = new Font("Consolas", 10f, FontStyle.Bold);
-            using var brush = new SolidBrush(Color.White);
+            using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
             var textSize = g.MeasureString(name, font);
             var textX = slotBounds.X + ((slotBounds.Width - textSize.Width) / 2);
             var textY = slotBounds.Bottom - textSize.Height;

@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace Adnd.Core.Config;
 
 public enum AbilityRollMethod
@@ -37,6 +39,8 @@ public class GameRules
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
     public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
     public bool UIOldStyle { get; set; } = true;
+    public int DelayInbetweenActions { get; set; } =0;
+    public Color DefaultColor { get; set; } = Color.Green;
 
 
 }

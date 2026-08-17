@@ -706,7 +706,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         ClientSize = new Size(1200, 820);
         KeyPreview = true;
         BackColor = Color.Black;
-        ForeColor = Color.White;
+        ForeColor = GameRulesProvider.Current.DefaultColor;
 
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
 
@@ -793,7 +793,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.MaximizeBox = false;
         form.ShowInTaskbar = false;
         form.BackColor = Color.Black;
-        form.ForeColor = Color.White;
+        form.ForeColor = GameRulesProvider.Current.DefaultColor;
         form.KeyPreview = true;
 
         var titlePanel = new Panel
@@ -815,7 +815,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Text = "CAMP",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             Font = new Font("Consolas", 20f, FontStyle.Bold)
         };
 
@@ -837,7 +837,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Height = 110,
             Text = "#)INSPECT\nR)EORDER\nL<-EAVE",
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             Font = new Font("Consolas", 20f, FontStyle.Bold)
         };
 
@@ -1344,7 +1344,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         e.Graphics.Clear(Color.Black);
         e.Graphics.SmoothingMode = SmoothingMode.None;
 
-        using var pen = new Pen(Color.White, 2f);
+        using var pen = new Pen(GameRulesProvider.Current.DefaultColor, 2f);
         var topHudSpace = _partyOverlayVisible ? 34f : 12f;
         var footerSpace = _partyOverlayVisible ? 220f : 80f;
         var viewport = new RectangleF(12f, topHudSpace, ClientSize.Width - 24f, ClientSize.Height - footerSpace - (topHudSpace - 12f));
@@ -1552,7 +1552,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         };
 
         var status = $"A/D or ←/→: Turn   W or ↑: Move   Esc: Toggle full dungeon view   Level: {_currentDungeonLevel}   Pos: ({_position.X},{_position.Y})   Facing: {heading}";
-        graphics.DrawString(status, Font, Brushes.White, new PointF(16f, ClientSize.Height - 54f));
+        graphics.DrawString(status, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(16f, ClientSize.Height - 54f));
     }
 
     private void DrawOverlayLegend(Graphics graphics)
@@ -1566,7 +1566,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         };
 
         var legend = $"A/D or ←/→: Turn   W or ↑: Move   C: Camp   K: Kick   Esc: Toggle full dungeon view   Level: {_currentDungeonLevel}   Pos: ({_position.X},{_position.Y})   Facing: {heading}";
-        graphics.DrawString(legend, Font, Brushes.White, new PointF(16f, 8f));
+        graphics.DrawString(legend, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(16f, 8f));
     }
 
     private void DrawPartyInfo(Graphics graphics, RectangleF viewport)
@@ -1576,23 +1576,23 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         const float numberColWidth = 24f;
 
         // Headings
-        graphics.DrawString("#", Font, Brushes.White, new PointF(x, y));
-        graphics.DrawString("Name", Font, Brushes.White, new PointF(x + numberColWidth, y));
-        graphics.DrawString("Class", Font, Brushes.White, new PointF(x + numberColWidth + 190f, y));
-        graphics.DrawString("Lvl", Font, Brushes.White, new PointF(x + numberColWidth + 360f, y));
-        graphics.DrawString("HP", Font, Brushes.White, new PointF(x + numberColWidth + 420f, y));
-        graphics.DrawString("AC", Font, Brushes.White, new PointF(x + numberColWidth + 520f, y));
-        graphics.DrawString("Status", Font, Brushes.White, new PointF(x + numberColWidth + 600f, y));
+        graphics.DrawString("#", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
+        graphics.DrawString("Name", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
+        graphics.DrawString("Class", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 190f, y));
+        graphics.DrawString("Lvl", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 360f, y));
+        graphics.DrawString("HP", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 420f, y));
+        graphics.DrawString("AC", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 520f, y));
+        graphics.DrawString("Status", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 600f, y));
 
         y += 18f;
-        graphics.DrawLine(Pens.White, x, y - 2f, viewport.Right - 8f, y - 2f);
+        graphics.DrawLine(new Pen(GameRulesProvider.Current.DefaultColor), x, y - 2f, viewport.Right - 8f, y - 2f);
 
         var party = _partyRepository.Load();
         var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
 
         if (party.Members.Count == 0)
         {
-            graphics.DrawString("No party members.", Font, Brushes.White, new PointF(x, y));
+            graphics.DrawString("No party members.", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
             return;
         }
 
@@ -1601,9 +1601,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             var memberName = party.Members[i];
             if (!roster.TryGetValue(memberName, out var c))
             {
-                graphics.DrawString((i + 1).ToString(), Font, Brushes.White, new PointF(x, y));
-                graphics.DrawString(memberName, Font, Brushes.White, new PointF(x + numberColWidth, y));
-                graphics.DrawString("(missing)", Font, Brushes.White, new PointF(x + numberColWidth + 190f, y));
+                graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
+                graphics.DrawString(memberName, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
+                graphics.DrawString("(missing)", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 190f, y));
                 y += 18f;
                 continue;
             }
@@ -1614,13 +1614,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
 
-            graphics.DrawString((i + 1).ToString(), Font, Brushes.White, new PointF(x, y));
-            graphics.DrawString(c.Name, Font, Brushes.White, new PointF(x + numberColWidth, y));
-            graphics.DrawString(classes, Font, Brushes.White, new PointF(x + numberColWidth + 190f, y));
-            graphics.DrawString(GetLevelDisplay(c), Font, Brushes.White, new PointF(x + numberColWidth + 360f, y));
-            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, Brushes.White, new PointF(x + numberColWidth + 420f, y));
-            graphics.DrawString(c.ArmorClass.ToString(), Font, Brushes.White, new PointF(x + numberColWidth + 520f, y));
-            graphics.DrawString(status, Font, Brushes.White, new PointF(x + numberColWidth + 600f, y));
+            graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
+            graphics.DrawString(c.Name, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
+            graphics.DrawString(classes, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 190f, y));
+            graphics.DrawString(GetLevelDisplay(c), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 360f, y));
+            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 420f, y));
+            graphics.DrawString(c.ArmorClass.ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 520f, y));
+            graphics.DrawString(status, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 600f, y));
 
             y += 18f;
         }
@@ -1739,7 +1739,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             MaximizeBox = false,
             ShowInTaskbar = false,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             KeyPreview = true,
             ClientSize = new Size(430, 110),
         };
@@ -1763,7 +1763,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Text = "STAIRS UP",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             Font = new Font("Consolas", 22f, FontStyle.Bold)
         };
 
@@ -1776,7 +1776,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Text = "TAKE THEM (Y/N) ?",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             Font = new Font("Consolas", 22f, FontStyle.Bold)
         };
 

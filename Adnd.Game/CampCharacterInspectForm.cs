@@ -72,7 +72,8 @@ public sealed class CampCharacterInspectForm : Form
             ScrollBars = ScrollBars.Vertical,
             Font = new Font("Consolas", 10f),
             BackColor = Color.Black,
-            ForeColor = Color.White
+            // ForeColor = Color.White
+            ForeColor = GameRulesProvider.Current.DefaultColor
         };
 
         _buttonsPanel = new FlowLayoutPanel
@@ -101,7 +102,7 @@ public sealed class CampCharacterInspectForm : Form
             Width = 996,
             Height = 84,
             BackColor = Color.Black,
-            ForeColor = Color.White,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
             BorderStyle = BorderStyle.FixedSingle,
             Font = new Font("Consolas", 24f, FontStyle.Bold),
             Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L<-EAVE\nE)QUIP  D)ROP   I)DENTIFY",
