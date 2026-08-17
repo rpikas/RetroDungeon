@@ -1,0 +1,13 @@
+{
+  "Id": "blade_barrier",
+  "Name": "Blade Barrier",
+  "Class": "Cleric",
+  "Level": 6,
+  "Description": "A wall of whirling blades tears through a group of enemies.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 8d8 slashing damage to all monsters in the targeted group."
+}

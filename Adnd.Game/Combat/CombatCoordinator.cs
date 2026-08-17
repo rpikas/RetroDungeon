@@ -65,10 +65,13 @@ public sealed class CombatCoordinator
         {
             new CureLightWoundsHandler(),
             new CureSeriousWoundsHandler(),
+            new CureCriticalWoundsHandler(),
+            new RaiseDeadHandler(),
             new SpiritualHammerHandler(),
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
+            new BladeBarrierHandler(),
             new MagicMissileHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),

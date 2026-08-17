@@ -1,0 +1,13 @@
+{
+  "Id": "raise_dead",
+  "Name": "Raise Dead",
+  "Class": "Cleric",
+  "Level": 5,
+  "Description": "Calls divine power to restore life to one dead ally.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Revives one dead character with 1 HP. Target loses 1 Constitution. If system shock save fails, the target becomes ashes."
+}
