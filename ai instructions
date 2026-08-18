@@ -223,3 +223,46 @@ Remove the Memorize button, but when Read button is pressed, memorize dialog sho
 introduce shortcuts and rename the buttons R)ead T)rade P)ool gold S)pell E)quip D)rop I)dentify 
 
 maintain two versions of the inspect charater view the current one with clickable buttons should be shoen if setting UIOldStyle=No but if setting UIOldStyle=Yes then no buttons, only keyboard short Cuts should be avaliable and the style should be simliar to this attached example, but for exmple with Wisdom instead of Piety, Intellligence instead of I.Q. etc 
+ai instructions 26-08-17
+Implemented Cleric level 5 spell: Raise Dead
+Återupplivar en död karaktär med 1 HP. -1 con på den som blir till liv. ifall saven misslyckas blir han ashes
+when casting raise dead spell and selecting target, dead charaters should be possible to select
+implement a level 7 cleric spell Resurrection  
+Återupplivar en död karaktär med full HP from ashes. -1 con. ifall save misslyckas blir han Lost
+When selecting what character in deleting charaters in  TRAINING GROUNDS, let the user type in two charaters before enter is automatically triggered
+implementera cleric level 6 spell: Heal som funkar på de som inte är dead, ashes eller lost  
+Healar ALL HP och tar bort:
+blindness
+disease
+feeblemind
+poison
+slow
+allow adding members that are dead or ashes to the party
+
+if saving throw fails when raise dead is cast, the dead person becomes ashes.
+if saving throw fails when reserect is cast, the dead person becomes lost. Inform the user what the 20 side dice shows and how much he has to roll to be saved
+
+if a charater is poisoned, hp has 50% chanse to be reduces by 1-3 every round fighting. and for every step taken out of combat 30% chanse to get hp reduces by 1-2. 
+A monster with SpecialAbilities Poison has 70% chanse of poisoning the target every time it hits.
+
+Implement a level 4 cleric spell called Neutralize poison. when cast on a charater poison disapears
+Druid get Neutralize Poison as level 3
+Bug fix: Bubbly Slime hit charaters very many times but nobody got poisoned
+Bug fix: when a charater is poisoned I expected the charater to loose hp while walking an while fighting but that did not happen
+when party is healed in the church, poison is removed also, it cost 100  gp per person that is cured from poison, paralyze is also removed, it cost 200 gp per person who is cured from paralyze
+
+manuellt lagt till deadly poisoned i status
+if a monster with special ability Paralyze hits a charater, ther is a 60% chasne that the charater is paralyzed. 
+While paralyzed the charater can not do anything. Implement a level 3 cleric spell Remove Paralysis that remove paralyze from the person tageted.
+Bug fix: undead kobold hit the party many times but nobody got paralyzed, how come?
+
+in the choose allay target also show status, for example dead, poisoned, paralyzed
+in encounter view, when selecting action for the players, show status if dead, ashes, lost or paralyzed
+Bugfix: in choose ally target also paralyzed targets should be possible to select
+
+If the enouter got SpecialAbilities: Level 1 Mage spells then the first round instead of attacking with normal damage, 
+it is 50% chanse that the enounter casts a magic missile causing 2-5 dammage on a random target in the group, not only the first 3.
+it is 50% chanse the enouter cast a sleep spell. then all the charaters have to throw a save thorw against spell, if that fails he will be asleep between 2-4 rounds and can do nothing while asleep.
+
+in the encounter view in the status column show if the charater has a status thats stops him from fighting. if assleep, show for how many more rounds he is asleep
+
