@@ -48,7 +48,9 @@ public sealed class CampCharacterInspectForm : Form
             new BarkskinHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
+            new RemoveParalysisHandler(),
             new HealHandler(),
+            new NeutralizePoisonHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
             new SpiritualHammerHandler(),
@@ -672,7 +674,11 @@ public sealed class CampCharacterInspectForm : Form
         }
         else if (spell.RangeType == SpellRangeType.Ally)
         {
-            var targetIdx = PromptChoice("Choose Ally Target", partyMembers.Select(p => $"{p.Name} (HP {p.CurrentHitPoints}/{p.MaxHitPoints})").ToList());
+            var targetIdx = PromptChoice("Choose Ally Target", partyMembers.Select(p =>
+            {
+                var status = FormatStatus(p);
+                return $"{p.Name} (HP {p.CurrentHitPoints}/{p.MaxHitPoints}, Status: {status})";
+            }).ToList());
             if (!targetIdx.HasValue)
                 return;
 
@@ -705,6 +711,25 @@ public sealed class CampCharacterInspectForm : Form
             _characterRepository.Save(caster);
             RefreshView();
         }
+    }
+
+    private static string FormatStatus(Character c)
+    {
+        var statuses = new List<string>();
+        if (c.HasStatus(CharacterStatus.Dead)) statuses.Add("Dead");
+        if (c.HasStatus(CharacterStatus.Poisoned)) statuses.Add("Poisoned");
+        if (c.HasStatus(CharacterStatus.Paralyzed)) statuses.Add("Paralyzed");
+        if (c.HasStatus(CharacterStatus.Petrified)) statuses.Add("Petrified");
+        if (c.HasStatus(CharacterStatus.Asleep)) statuses.Add("Asleep");
+        if (c.HasStatus(CharacterStatus.Ashes)) statuses.Add("Ashes");
+        if (c.HasStatus(CharacterStatus.Lost)) statuses.Add("Lost");
+        if (c.HasStatus(CharacterStatus.Invisible)) statuses.Add("Invisible");
+        if (c.HasStatus(CharacterStatus.Blind)) statuses.Add("Blind");
+        if (c.HasStatus(CharacterStatus.Diseased)) statuses.Add("Diseased");
+        if (c.HasStatus(CharacterStatus.Feeblemind)) statuses.Add("Feeblemind");
+        if (c.HasStatus(CharacterStatus.Slowed)) statuses.Add("Slowed");
+
+        return statuses.Count == 0 ? "-" : string.Join(", ", statuses);
     }
 
     private void SyncAutoKnownSpells(Character c, SpellcastingState state)

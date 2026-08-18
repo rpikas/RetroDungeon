@@ -700,15 +700,38 @@ public sealed class EncounterForm : Form
             ? _party.Where(c => c.HasStatus(CharacterStatus.Dead) || c.CurrentHitPoints <= 0).ToList()
             : string.Equals(spell.Id, "resurrection", StringComparison.OrdinalIgnoreCase)
                 ? _party.Where(c => c.HasStatus(CharacterStatus.Ashes)).ToList()
-                : _party.Where(IsActionable).ToList();
+                : _party.Where(c => c.CurrentHitPoints > 0
+                                    && !c.HasStatus(CharacterStatus.Dead)
+                                    && !c.HasStatus(CharacterStatus.Ashes)
+                                    && !c.HasStatus(CharacterStatus.Lost)).ToList();
 
         if (allies.Count == 0)
             return null;
 
-        var allyLines = string.Join(Environment.NewLine, allies.Select((a, i) => $"{i + 1}. {a.Name} (HP {a.CurrentHitPoints}/{a.MaxHitPoints})"));
+        var allyLines = string.Join(Environment.NewLine, allies.Select((a, i) =>
+            $"{i + 1}. {a.Name} (HP {a.CurrentHitPoints}/{a.MaxHitPoints}, Status: {FormatStatus(a)})"));
         var prompt = $"Casting: {spell.Name}{Environment.NewLine}{Environment.NewLine}{allyLines}";
         var selected = PromptForNumber("Choose Ally Target", prompt, 1, allies.Count);
         return selected.HasValue ? allies[selected.Value - 1] : null;
+    }
+
+    private static string FormatStatus(Character c)
+    {
+        var statuses = new List<string>();
+        if (c.HasStatus(CharacterStatus.Dead)) statuses.Add("Dead");
+        if (c.HasStatus(CharacterStatus.Poisoned)) statuses.Add("Poisoned");
+        if (c.HasStatus(CharacterStatus.Paralyzed)) statuses.Add("Paralyzed");
+        if (c.HasStatus(CharacterStatus.Petrified)) statuses.Add("Petrified");
+        if (c.HasStatus(CharacterStatus.Asleep)) statuses.Add("Asleep");
+        if (c.HasStatus(CharacterStatus.Ashes)) statuses.Add("Ashes");
+        if (c.HasStatus(CharacterStatus.Lost)) statuses.Add("Lost");
+        if (c.HasStatus(CharacterStatus.Invisible)) statuses.Add("Invisible");
+        if (c.HasStatus(CharacterStatus.Blind)) statuses.Add("Blind");
+        if (c.HasStatus(CharacterStatus.Diseased)) statuses.Add("Diseased");
+        if (c.HasStatus(CharacterStatus.Feeblemind)) statuses.Add("Feeblemind");
+        if (c.HasStatus(CharacterStatus.Slowed)) statuses.Add("Slowed");
+
+        return statuses.Count == 0 ? "-" : string.Join(", ", statuses);
     }
 
     private int? PromptEnemyTarget()
@@ -1062,10 +1085,11 @@ public sealed class EncounterForm : Form
         {
             var c = _party[i];
             string action;
+            var status = GetEncounterStatusLabel(c);
 
-            if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead))
+            if (!string.IsNullOrEmpty(status))
             {
-                action = "DEAD";
+                action = status;
             }
             else if (_actions.TryGetValue(c.Name, out var a))
             {
@@ -1088,6 +1112,23 @@ public sealed class EncounterForm : Form
 
         if (_currentIndex >= 0 && _currentIndex < _partyList.Items.Count)
             _partyList.Items[_currentIndex].Selected = true;
+    }
+
+    private string? GetEncounterStatusLabel(Character c)
+    {
+        var statuses = new List<string>();
+
+        if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead)) statuses.Add("DEAD");
+        if (c.HasStatus(CharacterStatus.Ashes)) statuses.Add("ASHES");
+        if (c.HasStatus(CharacterStatus.Lost)) statuses.Add("LOST");
+        if (c.HasStatus(CharacterStatus.Paralyzed)) statuses.Add("PARALYZED");
+        if (c.HasStatus(CharacterStatus.Asleep))
+        {
+            var rounds = _session?.GetPartyAsleepRounds(c.Name) ?? 0;
+            statuses.Add(rounds > 0 ? $"ASLEEP ({rounds} rounds)" : "ASLEEP");
+        }
+
+        return statuses.Count == 0 ? null : string.Join(", ", statuses);
     }
 
     private string GetDetailedActionStatus(CombatAction action)
@@ -1145,7 +1186,11 @@ public sealed class EncounterForm : Form
         return -1;
     }
 
-    private static bool IsActionable(Character c) => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead);
+    private static bool IsActionable(Character c) =>
+        c.CurrentHitPoints > 0
+        && !c.HasStatus(CharacterStatus.Dead)
+        && !c.HasStatus(CharacterStatus.Paralyzed)
+        && !c.HasStatus(CharacterStatus.Asleep);
 
     private int GetActionableRank(int partyIndex)
     {

@@ -20,6 +20,7 @@ public enum CharacterStatus
     Blind = 1 << 9,        // Character is blind
     Diseased = 1 << 10 ,       // Character is diseased
     Feeblemind = 1 << 11,        // Character is feebleminded
-    Slowed = 1 << 12  // Character is slowed
+    Slowed = 1 << 12,  // Character is slowed
+    DeadlyPoisoned = 1 << 13  // Character is deadly poisoned
 
 }

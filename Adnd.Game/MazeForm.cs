@@ -1941,6 +1941,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (IsOpen(candidate))
         {
             _position = candidate;
+            ApplyPoisonDamageForStep();
 
             if (_position.X == 1 && _position.Y == 2)
             {
@@ -1960,6 +1961,52 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             TryRandomEncounter();
         }
+    }
+
+    private void ApplyPoisonDamageForStep()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+        var changed = false;
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead) || !c.HasStatus(CharacterStatus.Poisoned))
+                continue;
+
+            var roll = _random.Next(1, 101);
+            if (roll > 30)
+                continue;
+
+            var damage = _random.Next(1, 3);
+            var before = c.CurrentHitPoints;
+            c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - damage);
+            var actual = before - c.CurrentHitPoints;
+
+            if (actual <= 0)
+                continue;
+
+            changed = true;
+            messages.Add($"{c.Name} takes {actual} poison damage while walking. HP {before}->{c.CurrentHitPoints}.");
+
+            if (c.CurrentHitPoints <= 0)
+            {
+                c.AddStatus(CharacterStatus.Dead);
+                messages.Add($"{c.Name} dies from poison.");
+            }
+        }
+
+        if (!changed)
+            return;
+
+        foreach (var c in roster.Values)
+            _characterRepository.Save(c);
+
+        SayOnBoth("Poison", string.Join(Environment.NewLine, messages));
     }
 
     private void TryRandomEncounter()

@@ -16,11 +16,32 @@ public static class Temple
 {
     /// <summary>Per character who needs it, paid out of that character's own purse.</summary>
     public const int HealCost = 10;
+    public const int CurePoisonCost = 100;
+    public const int CureParalysisCost = 200;
 
     public const int RaiseDeadCost = 100;
     public const int RaiseFromAshesCost = 500;
 
-    public static bool NeedsHealing(Character c) => c.CurrentHitPoints < c.MaxHitPoints;
+    public static bool NeedsHealing(Character c) =>
+        c.CurrentHitPoints < c.MaxHitPoints
+        || c.HasStatus(CharacterStatus.Poisoned)
+        || c.HasStatus(CharacterStatus.Paralyzed);
+
+    public static int CostToHeal(Character c)
+    {
+        var cost = 0;
+
+        if (c.CurrentHitPoints < c.MaxHitPoints)
+            cost += HealCost;
+
+        if (c.HasStatus(CharacterStatus.Poisoned))
+            cost += CurePoisonCost;
+
+        if (c.HasStatus(CharacterStatus.Paralyzed))
+            cost += CureParalysisCost;
+
+        return cost;
+    }
 
     /// <summary>
     /// Whether the temple will attempt a raise. Ashes still count -- expensively, and at the risk of Lost --
@@ -39,11 +60,14 @@ public static class Temple
     /// </summary>
     public static bool Heal(Character c, CharacterRepository repo)
     {
-        if (!NeedsHealing(c) || c.GoldPieces < HealCost)
+        var cost = CostToHeal(c);
+        if (cost <= 0 || c.GoldPieces < cost)
             return false;
 
-        c.GoldPieces -= HealCost;
+        c.GoldPieces -= cost;
         c.CurrentHitPoints = c.MaxHitPoints;
+        c.RemoveStatus(CharacterStatus.Poisoned);
+        c.RemoveStatus(CharacterStatus.Paralyzed);
         repo.Save(c);
         return true;
     }

@@ -129,7 +129,7 @@ public class TempleMenu
             return;
         }
 
-        Console.WriteLine($"Healing costs {Temple.HealCost} gp per character who needs healing.");
+        Console.WriteLine($"Healing costs: {Temple.HealCost} gp (HP), +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis).");
 
         var healedCount = 0;
         var skipped = new List<string>();

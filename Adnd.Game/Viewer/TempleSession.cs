@@ -107,10 +107,11 @@ public sealed class TempleSession
                 continue;
             }
 
-            if (Temple.NeedsHealing(c) && c.GoldPieces >= Temple.HealCost)
+            if (Temple.NeedsHealing(c) && c.GoldPieces >= Temple.CostToHeal(c))
             {
+                var cost = Temple.CostToHeal(c);
                 options.Add(new ViewerPromptOption("heal:" + c.Name,
-                    $"Heal {c.Name} ({c.CurrentHitPoints}/{c.MaxHitPoints}, {Temple.HealCost} gp)",
+                    $"Heal {c.Name} ({c.CurrentHitPoints}/{c.MaxHitPoints}, {cost} gp)",
                     Target: ViewerIds.Character(c.Name)));
             }
         }
@@ -143,18 +144,19 @@ public sealed class TempleSession
         {
             var c = Find(command.Substring(5));
             if (c == null) return false;
+            var cost = Temple.CostToHeal(c);
 
             if (!Temple.Heal(c, _characters))
             {
                 // Two different refusals, and saying the wrong one is worse than saying nothing. Reachable from
                 // a board that has gone stale -- clicking a ring for someone another click already healed.
                 _events.Add(Temple.NeedsHealing(c)
-                    ? $"{c.Name} cannot afford the {Temple.HealCost} gp."
+                    ? $"{c.Name} cannot afford the {cost} gp."
                     : $"{c.Name} is already well.");
                 return true;
             }
 
-            _events.Add($"{c.Name} is healed to {c.MaxHitPoints} and pays {Temple.HealCost} gp.");
+            _events.Add($"{c.Name} is treated and pays {cost} gp.");
             return true;
         }
 

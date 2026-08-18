@@ -18,8 +18,41 @@ public sealed class CombatSession
     // Temporary round-combat effects only (not persisted).
     public HashSet<string> BlessedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> InvisiblyBuffedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public bool IsBlessed(string characterName) => BlessedPartyMembers.Contains(characterName);
+
+    public void SetPartyAsleep(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+        {
+            AsleepPartyRounds.Remove(characterName);
+            return;
+        }
+
+        AsleepPartyRounds[characterName] = rounds;
+    }
+
+    public int GetPartyAsleepRounds(string characterName)
+    {
+        return AsleepPartyRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickPartyAsleep(string characterName)
+    {
+        if (!AsleepPartyRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            AsleepPartyRounds.Remove(characterName);
+            return 0;
+        }
+
+        AsleepPartyRounds[characterName] = rounds;
+        return rounds;
+    }
 
     public IEnumerable<Character> AliveParty => Party.Where(p => p.CurrentHitPoints > 0 && !p.HasStatus(CharacterStatus.Dead));
     public IEnumerable<MonsterInstance> AliveMonsters => Monsters.Where(m => m.IsAlive);

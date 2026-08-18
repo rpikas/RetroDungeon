@@ -1,0 +1,13 @@
+{
+  "Id": "neutralize_poison",
+  "Name": "Neutralize Poison",
+  "Class": "Cleric",
+  "Level": 4,
+  "Description": "Purges toxins from one ally.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Removes poison from one ally."
+}

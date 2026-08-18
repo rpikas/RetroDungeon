@@ -1,0 +1,13 @@
+{
+  "Id": "remove_paralysis",
+  "Name": "Remove Paralysis",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "Restores movement to one paralyzed ally.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Removes paralysis from one ally."
+}

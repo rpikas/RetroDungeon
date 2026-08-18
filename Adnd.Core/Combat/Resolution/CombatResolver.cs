@@ -92,6 +92,29 @@ public sealed class CombatResolver
             if (!IsAlive(member))
                 continue;
 
+            if (member.HasStatus(CharacterStatus.Asleep))
+            {
+                var roundsRemaining = session.GetPartyAsleepRounds(member.Name);
+                events.Add(new CombatEvent(roundsRemaining > 0
+                    ? $"{member.Name} is asleep and cannot act ({roundsRemaining} round(s) remaining)."
+                    : $"{member.Name} is asleep and cannot act."));
+
+                var afterTick = session.TickPartyAsleep(member.Name);
+                if (afterTick <= 0)
+                {
+                    member.RemoveStatus(CharacterStatus.Asleep);
+                    events.Add(new CombatEvent($"{member.Name} wakes up."));
+                }
+
+                continue;
+            }
+
+            if (member.HasStatus(CharacterStatus.Paralyzed))
+            {
+                events.Add(new CombatEvent($"{member.Name} is paralyzed and cannot act."));
+                continue;
+            }
+
             if (!partyActions.TryGetValue(member.Name, out var action))
                 action = CombatAction.OfType(CombatActionType.Parry);
 
@@ -140,6 +163,12 @@ public sealed class CombatResolver
 
         foreach (var monster in session.AliveMonsters.ToList())
         {
+            if (session.RoundNumber == 1 && HasSpecialAbility(monster, "Level 1 Mage spells"))
+            {
+                ResolveLevel1MageSpells(monster, session, events);
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.IncendiaryCloud))
             {
                 var rolledDamage = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
@@ -298,6 +327,38 @@ public sealed class CombatResolver
                             target.AddStatus(CharacterStatus.Dead);
                             events.Add(new CombatEvent($"{target.Name} is slain!"));
                         }
+                        else
+                        {
+                            if (HasSpecialAbility(monster, "Poison"))
+                            {
+                                var poisonRoll = _dice.Roll(100);
+                                if (poisonRoll <= 70)
+                                {
+                                    if (!target.HasStatus(CharacterStatus.Poisoned))
+                                    {
+                                        target.AddStatus(CharacterStatus.Poisoned);
+                                        events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}!"));
+                                    }
+                                }
+                            }
+
+                            if (HasAnySpecialAbility(monster, "Paralyze", "Paralyzation", "Paralysis"))
+                            {
+                                var paralyzeRoll = _dice.Roll(100);
+                                if (paralyzeRoll <= 60)
+                                {
+                                    if (!target.HasStatus(CharacterStatus.Paralyzed))
+                                    {
+                                        target.AddStatus(CharacterStatus.Paralyzed);
+                                        events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName}!"));
+                                    }
+                                    else
+                                    {
+                                        events.Add(new CombatEvent($"{target.Name} resists further paralysis from {monster.DisplayName}."));
+                                    }
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -306,6 +367,8 @@ public sealed class CombatResolver
                 }
             }
         }
+
+        ApplyPoisonDamageDuringCombat(session, events);
 
         if (!session.AliveParty.Any())
         {
@@ -484,6 +547,102 @@ public sealed class CombatResolver
 
         int value = _dice.RollMany(sides, Math.Max(1, count)) + mod;
         return Math.Max(1, value);
+    }
+
+    private void ResolveLevel1MageSpells(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+            var damage = _dice.Roll(4) + 1;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Magic Missile! {target.Name} takes {actual} damage (rolled {damage})."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+
+            return;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Sleep!"));
+        foreach (var target in aliveParty)
+        {
+            var saveTarget = GetCharacterSpellSaveTarget(target);
+            var saveRoll = _dice.Roll(20);
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists Sleep (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            var rounds = _dice.Roll(3) + 1; // 2-4 rounds
+            target.AddStatus(CharacterStatus.Asleep);
+            session.SetPartyAsleep(target.Name, rounds);
+            events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s)."));
+        }
+    }
+
+    private static int GetCharacterSpellSaveTarget(Character c)
+    {
+        var level = Math.Max(1, c.Level);
+        return level switch
+        {
+            <= 3 => 16,
+            <= 6 => 14,
+            <= 9 => 12,
+            <= 12 => 10,
+            _ => 8
+        };
+    }
+
+    private static bool HasSpecialAbility(MonsterInstance monster, string abilityName)
+    {
+        return monster.Template.SpecialAbilities.Any(a =>
+            string.Equals(a.Name, abilityName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool HasAnySpecialAbility(MonsterInstance monster, params string[] abilityNames)
+    {
+        return monster.Template.SpecialAbilities.Any(a =>
+            abilityNames.Any(n => string.Equals(a.Name, n, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)
+    {
+        foreach (var member in session.Party)
+        {
+            if (!IsAlive(member) || !member.HasStatus(CharacterStatus.Poisoned))
+                continue;
+
+            var poisonTickRoll = _dice.Roll(100);
+            if (poisonTickRoll > 50)
+                continue;
+
+            var damage = _dice.Roll(3);
+            var before = member.CurrentHitPoints;
+            member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - damage);
+            var actual = before - member.CurrentHitPoints;
+
+            events.Add(new CombatEvent($"Poison harms {member.Name} for {actual} (rolled {damage}). HP {before}->{member.CurrentHitPoints}."));
+
+            if (member.CurrentHitPoints <= 0)
+            {
+                member.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{member.Name} dies from poison!"));
+            }
+        }
     }
 
     private static bool IsAlive(Character c) => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead);

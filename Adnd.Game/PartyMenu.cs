@@ -27,7 +27,9 @@ public class PartyMenu
             new BarkskinHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
+            new RemoveParalysisHandler(),
             new HealHandler(),
+            new NeutralizePoisonHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
             new SpiritualHammerHandler(),
@@ -508,7 +510,10 @@ public class PartyMenu
         {
             Console.WriteLine("\nChoose ally target:");
             for (int i = 0; i < partyMembers.Count; i++)
-                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} (HP {partyMembers[i].CurrentHitPoints}/{partyMembers[i].MaxHitPoints})");
+            {
+                var status = partyMembers[i].Status != CharacterStatus.None ? GetStatusDisplay(partyMembers[i]) : "-";
+                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} (HP {partyMembers[i].CurrentHitPoints}/{partyMembers[i].MaxHitPoints}, Status: {status})");
+            }
 
             Console.Write("Choose #: ");
             var targetSel = InputHelper.ReadNumber(1, partyMembers.Count);
