@@ -1,0 +1,13 @@
+{
+  "Id": "call_lightning",
+  "Name": "Call Lightning",
+  "Class": "Druid",
+  "Level": 3,
+  "Description": "A summoned lightning strike crashes into one enemy.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 3d6 lightning damage to one enemy target."
+}

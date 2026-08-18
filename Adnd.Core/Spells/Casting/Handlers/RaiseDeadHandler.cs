@@ -35,12 +35,13 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
 
         var constitution = target.Abilities.Constitution;
         var chance = SystemShockSurvivalChance(constitution);
+        var saveTarget = ChanceToD20SaveTarget(chance);
         var rng = request.Rng ?? Random.Shared;
-        var roll = rng.Next(1, 101);
+        var roll = rng.Next(1, 21);
 
-        result.Events.Add($"System Shock roll for {target.Name}: {roll} (needs {chance} or less).");
+        result.Events.Add($"Saving throw (d20) for {target.Name}: CON {constitution} gives {chance}% survival (needs {saveTarget} or less). Rolled {roll}.");
 
-        if (roll <= chance)
+        if (roll <= saveTarget)
         {
             var beforeHp = target.CurrentHitPoints;
             target.RemoveStatus(CharacterStatus.Dead);
@@ -87,4 +88,6 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
             _ => 100
         };
     }
+
+    private static int ChanceToD20SaveTarget(int chancePercent) => Math.Clamp((int)Math.Ceiling(chancePercent / 5.0), 1, 20);
 }

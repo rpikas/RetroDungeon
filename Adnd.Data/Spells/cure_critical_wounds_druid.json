@@ -1,0 +1,12 @@
+{
+  "Id": "cure_critical_wounds_druid",
+  "Name": "Cure Critical Wounds",
+  "Class": "Druid",
+  "Level": 6,
+  "Description": "Heals critical wounds.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Restores a large amount of hit points (3d6+3) to one ally."
+}

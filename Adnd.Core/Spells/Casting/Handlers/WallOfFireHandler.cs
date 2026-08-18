@@ -4,7 +4,9 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class WallOfFireHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "wall_of_fire", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId) =>
+        string.Equals(spellId, "wall_of_fire", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(spellId, "wall_of_fire_druid", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {

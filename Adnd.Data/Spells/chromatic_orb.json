@@ -1,0 +1,13 @@
+{
+  "Id": "chromatic_orb",
+  "Name": "Chromatic Orb",
+  "Class": "Illusionist",
+  "Level": 1,
+  "Description": "A colored orb of energy strikes one enemy.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Damage and orb color scale by caster level: 1 White 1d4, 2 Red 1d6, 3 Orange 2d4, 4 Yellow 2d6, 5 Green 4d4, 6+ Blue 4d6."
+}

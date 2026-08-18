@@ -24,6 +24,7 @@ public class PartyMenu
         var resolver = new SpellResolver(new ISpellEffectHandler[]
         {
             new CureLightWoundsHandler(),
+            new BarkskinHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
             new HealHandler(),
@@ -33,8 +34,10 @@ public class PartyMenu
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
+            new CallLightningHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
+            new ChromaticOrbHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),
             new HoldMonsterHandler(),

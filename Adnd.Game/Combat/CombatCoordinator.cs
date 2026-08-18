@@ -64,6 +64,7 @@ public sealed class CombatCoordinator
         var resolver = new SpellResolver(new ISpellEffectHandler[]
         {
             new CureLightWoundsHandler(),
+            new BarkskinHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
             new HealHandler(),
@@ -73,8 +74,10 @@ public sealed class CombatCoordinator
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
+            new CallLightningHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
+            new ChromaticOrbHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),
             new HoldPersonHandler(),

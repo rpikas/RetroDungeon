@@ -4,7 +4,9 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class CureCriticalWoundsHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "cure_critical_wounds", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId) =>
+        string.Equals(spellId, "cure_critical_wounds", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(spellId, "cure_critical_wounds_druid", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -30,7 +32,11 @@ public sealed class CureCriticalWoundsHandler : ISpellEffectHandler
 
         var rng = request.Rng ?? Random.Shared;
         var before = target.CurrentHitPoints;
-        var heal = rng.Next(1, 9) + rng.Next(1, 9) + rng.Next(1, 9) + 3;
+        var isDruidVersion = string.Equals(spell.Id, "cure_critical_wounds_druid", StringComparison.OrdinalIgnoreCase);
+        // Cleric: 3d8+3, Druid: 3d6+3
+        var heal = isDruidVersion
+            ? rng.Next(1, 7) + rng.Next(1, 7) + rng.Next(1, 7) + 3
+            : rng.Next(1, 9) + rng.Next(1, 9) + rng.Next(1, 9) + 3;
         target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + heal);
         var actual = Math.Max(0, target.CurrentHitPoints - before);
 

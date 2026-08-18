@@ -1,0 +1,12 @@
+{
+  "Id": "cure_serious_wounds_druid",
+  "Name": "Cure Serious Wounds",
+  "Class": "Druid",
+  "Level": 4,
+  "Description": "Heals serious wounds.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Restores a significant amount of hit points (2d6+1) to one ally."
+}
