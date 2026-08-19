@@ -2,13 +2,13 @@
   "Category": "Shield",
   "Items": [
     {
-      "Name": "Shield",
+      "Name": "Small Shield",
       "Type": "Shield",
       "Slot": "OffHand",
       "Cost": 20,
       "Weight": 5,
       "IsShopBuyable": true,
-      "ArmorClassBonus": 2,
+      "ArmorClassBonus": 1,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
       "Rarity": "Common",
@@ -23,7 +23,7 @@
       "Cost": 40,
       "Weight": 10,
       "IsShopBuyable": true,
-      "ArmorClassBonus": 3,
+      "ArmorClassBonus": 2,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Cleric" ],
       "Rarity": "Common",
@@ -44,7 +44,7 @@
       "Rarity": "Uncommon",
       "Description": "A sturdy iron shield reinforced with magic. / Iron Shield",
       "Source": "Wizardry",
-      "StockQuantity": 3
+      "StockQuantity": 0
     },
     {
       "Name": "Shield +2",
@@ -59,7 +59,7 @@
       "Rarity": "Rare",
       "Description": "A magically enhanced shield offering excellent protection. / Shield of Support",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Evil Shield +3",
@@ -74,7 +74,7 @@
       "Rarity": "Rare",
       "Description": "A cursed shield infused with evil power. / Shield of Evil",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Shield +3",
@@ -89,7 +89,7 @@
       "Rarity": "Very Rare",
       "Description": "A powerful enchanted shield offering superior defense. / Shield of Defense",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     }
     ]
 }

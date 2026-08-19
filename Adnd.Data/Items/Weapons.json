@@ -332,7 +332,7 @@
       "Description": "A magically enhanced staff. / Studly Staff ",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -357,7 +357,7 @@
       "Description": "A staff that casts Mogref. / Rod of Iron",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -382,7 +382,7 @@
       "Description": "A finely crafted enchanted short sword. / Epee of Exelence",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -407,7 +407,7 @@
       "Description": "A powerful enchanted mace. / Mace of Power",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -432,7 +432,7 @@
       "Description": "A deadly enchanted long sword. / Sword of Slashing",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -457,7 +457,7 @@
       "Description": "A cursed short sword. / Epee of Disaster",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
 
     {
@@ -482,7 +482,7 @@
       "Description": "A magically enhanced dagger. / Dagger of Slicing",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -507,7 +507,7 @@
       "Description": "A venomous mace. / Mace of Snakes",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -532,7 +532,7 @@
       "Description": "A blade designed to kill mages.",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -582,7 +582,7 @@
       "Description": "A sword deadly to were-creatures.",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
     {
@@ -607,11 +607,11 @@
       "Description": "A sword deadly to dragons.",
       "Source": "Wizardry",
       "Version": "1e",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
 
       {
-        "Name": "Mace +1",
+        "Name": "Mace +3",
         "Type": "Weapon",
         "Cost": 12500,
         "Weight": 5,
@@ -656,7 +656,7 @@
         "Description": "A staff that radiates silence. / Rod of Silence",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 2
+        "StockQuantity": 0
       },
       {
         "Name": "Short Sword +1",
@@ -680,7 +680,7 @@
         "Description": "A sharp enchanted short sword. / Blade of Bitting",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 2
+        "StockQuantity": 0
       },
       {
         "Name": "Vorpal Blade +1",
@@ -704,7 +704,7 @@
         "Description": "A deadly vorpal blade. / Blade Cusinart",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 1
+        "StockQuantity": 0
       },
       {
         "Name": "Dagger of Speed",
@@ -728,7 +728,7 @@
         "Description": "A dagger that grants extra speed.",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 1
+        "StockQuantity": 0
       },
       {
         "Name": "Evil S-Sword +3",
@@ -752,7 +752,7 @@
         "Description": "A cursed blade that drains souls. / Soul Slayer",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 1
+        "StockQuantity": 0
       },
       {
         "Name": "Thieves Dagger",
@@ -776,7 +776,7 @@
         "Description": "A dagger favored by thieves.",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 2
+        "StockQuantity": 0
       },
       {
         "Name": "Evil Sword +3",
@@ -800,7 +800,7 @@
         "Description": "A cursed saber infused with evil. / Saber of Evil",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 1
+        "StockQuantity": 0
       },
       {
         "Name": "Shuriken",
@@ -824,7 +824,7 @@
         "Description": "A deadly enchanted shuriken.",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 5
+        "StockQuantity": 0
       },
       {
         "Name": "Muramasa Blade",
@@ -848,7 +848,7 @@
         "Description": "The legendary Muramasa Blade.",
         "Source": "Wizardry",
         "Version": "1e",
-        "StockQuantity": 1
+        "StockQuantity": 0
       }
     ]
 }

@@ -1,15 +1,15 @@
 {
   "Name": "Treasure Type J",
   "Coins": {
-    "CopperPieces": { "Amount": "2d6*1000", "Chance": 100 },
-    "SilverPieces": { "Amount": "2d6*1000", "Chance": 100 },
+    "CopperPieces": { "Amount": "0", "Chance": 0 },
+    "SilverPieces": { "Amount": "0", "Chance": 0 },
     "ElectrumPieces": { "Amount": "0", "Chance": 0 },
-    "GoldPieces": { "Amount": "0", "Chance": 0 },
+    "GoldPieces": { "Amount": "1d6*10", "Chance": 40 },
     "PlatinumPieces": { "Amount": "0", "Chance": 0 }
   },
   "Gems": {
     "Amount": "1d4",
-    "Chance": 0,
+    "Chance": 5,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },
@@ -27,7 +27,7 @@
   },
   "Magic": {
     "Rolls": [
-      { "Table": "Potion", "Amount": "1", "Chance": 0 }
+      { "Table": "Potion", "Amount": "1", "Chance": 5 }
     ]
   }
 }

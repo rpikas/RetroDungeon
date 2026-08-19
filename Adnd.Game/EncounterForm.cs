@@ -22,6 +22,7 @@ public sealed class EncounterForm : Form
     private readonly int _monsterCount;
     private readonly int _asleepMonsterCount;
     private readonly int _heldMonsterCount;
+    private readonly int _entangledMonsterCount;
     private readonly int _roundNumber;
     private readonly List<Character> _party;
     private readonly CombatSession? _session;
@@ -53,12 +54,13 @@ public sealed class EncounterForm : Form
     /// ordinary one-group fight -- which is most fights -- could only offer "Fight" and let the resolver
     /// pick, which is exactly the choice being added.
     /// </param>
-    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
+    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
     {
         _monsterName = monsterName;
         _monsterCount = monsterCount;
         _asleepMonsterCount = asleepMonsterCount;
         _heldMonsterCount = heldMonsterCount;
+        _entangledMonsterCount = entangledMonsterCount;
         _roundNumber = roundNumber;
         _party = party;
         _session = session;
@@ -414,6 +416,8 @@ public sealed class EncounterForm : Form
             options.Add(new ViewerPromptOption("confirm", "Auto: parry"));
 
         options.Add(new ViewerPromptOption("spell", "Cast a spell"));
+        if (character.IsPaladin())
+            options.Add(new ViewerPromptOption("layOnHands", character.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
         options.Add(new ViewerPromptOption("useItem", "Use an item"));
         options.Add(new ViewerPromptOption("run", "Run"));
 
@@ -477,13 +481,16 @@ public sealed class EncounterForm : Form
                 StepBack();
                 break;
             case Keys.U:
-                ChooseAction(CombatActionType.UseItem);
+                ChooseUseItemAction();
                 break;
             case Keys.R:
                 ChooseAction(CombatActionType.Run);
                 break;
             case Keys.S:
                 ChooseSpellAction();
+                break;
+            case Keys.L:
+                ChooseLayOnHandsAction();
                 break;
             case Keys.G:
                 if (_multipleGroups && _session != null)
@@ -532,6 +539,141 @@ public sealed class EncounterForm : Form
 
         _actions[character.Name] = action;
         AdvanceActor();
+    }
+
+    private void ChooseUseItemAction()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count)
+            return;
+
+        var user = _party[_currentIndex];
+        if (!IsActionable(user))
+            return;
+
+        var allSpells = _spellRepo.LoadAll();
+        var usable = user.Inventory
+            .Select((item, index) => new { item, index, spell = ResolveItemSpell(item, allSpells) })
+            .Where(x => x.spell != null)
+            .ToList();
+
+        if (usable.Count == 0)
+        {
+            SayOnBoth("Use Item", $"{user.Name} has no usable magical item.");
+            return;
+        }
+
+        var lines = string.Join(Environment.NewLine, usable.Select((x, i) =>
+            $"{i + 1}. {x.item.Name} (casts {x.spell!.Name})"));
+        var selected = PromptForNumber("Use Item", $"{user.Name} - choose item:{Environment.NewLine}{Environment.NewLine}{lines}", 1, usable.Count);
+        if (!selected.HasValue)
+            return;
+
+        var chosen = usable[selected.Value - 1];
+        var spell = chosen.spell!;
+
+        SpellCastTarget? target;
+        if (spell.RangeType == SpellRangeType.Self)
+        {
+            target = SpellCastTarget.Ally(user);
+        }
+        else if (spell.RangeType == SpellRangeType.Ally)
+        {
+            var ally = PromptAllyTarget(spell);
+            if (ally == null)
+                return;
+            target = SpellCastTarget.Ally(ally);
+        }
+        else
+        {
+            if (spell.TargetingScope == SpellTargetingScope.SingleTarget)
+            {
+                if (_multipleGroups && _session != null)
+                {
+                    var targetGroupId = PromptGroupSelection(user);
+                    if (targetGroupId == null)
+                        return;
+                    target = SpellCastTarget.EnemyGroup(targetGroupId);
+                }
+                else
+                {
+                    target = SpellCastTarget.EnemyGroup("default");
+                }
+            }
+            else if (spell.TargetingScope == SpellTargetingScope.SingleGroup)
+            {
+                if (_multipleGroups && _session != null)
+                {
+                    var groups = _session.GetDistinctGroupIds()
+                        .Where(g => _session.GetAliveCountByGroup(g) > 0)
+                        .ToList();
+
+                    if (groups.Count > 1)
+                    {
+                        var targetGroupId = PromptGroupSelection(user);
+                        if (targetGroupId == null)
+                            return;
+                        target = SpellCastTarget.EnemyGroup(targetGroupId);
+                    }
+                    else
+                    {
+                        target = SpellCastTarget.EnemyGroup(groups.FirstOrDefault() ?? "default");
+                    }
+                }
+                else
+                {
+                    target = SpellCastTarget.EnemyGroup("default");
+                }
+            }
+            else
+            {
+                target = null;
+            }
+        }
+
+        _actions[user.Name] = new CombatAction
+        {
+            Type = CombatActionType.UseItem,
+            ItemInventoryIndex = chosen.index,
+            SpellId = spell.Id,
+            Target = target
+        };
+
+        AdvanceActor();
+    }
+
+    private static Spell? ResolveItemSpell(Adnd.Core.Items.Item item, List<Spell> allSpells)
+    {
+        if (!Adnd.Core.Items.ItemSpecialAbilityParser.TryGetCastedSpellName(item, out var spellName))
+        {
+            spellName = InferSpellNameFromItemName(item);
+            if (string.IsNullOrWhiteSpace(spellName))
+                return null;
+        }
+
+        return allSpells.FirstOrDefault(s => string.Equals(s.Name, spellName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string InferSpellNameFromItemName(Adnd.Core.Items.Item item)
+    {
+        if (item == null || string.IsNullOrWhiteSpace(item.Name))
+            return string.Empty;
+
+        if (string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase))
+            return "Cure Light Wounds";
+
+        if (string.Equals(item.Name, "Potion of Extra Healing", StringComparison.OrdinalIgnoreCase))
+            return "Cure Serious Wounds";
+
+        if (string.Equals(item.Name, "Potion of Cure Poison", StringComparison.OrdinalIgnoreCase))
+            return "Neutralize Poison";
+
+        if (item.Name.StartsWith("Potion of ", StringComparison.OrdinalIgnoreCase))
+            return item.Name[10..].Trim();
+
+        if (item.Name.StartsWith("Scroll of ", StringComparison.OrdinalIgnoreCase))
+            return item.Name[10..].Trim();
+
+        return string.Empty;
     }
 
     private void ChooseAction(CombatActionType action)
@@ -714,6 +856,59 @@ public sealed class EncounterForm : Form
         var selected = PromptForNumber("Choose Ally Target", prompt, 1, allies.Count);
         return selected.HasValue ? allies[selected.Value - 1] : null;
     }
+
+    private void ChooseLayOnHandsAction()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count)
+            return;
+
+        var paladin = _party[_currentIndex];
+        if (!IsActionable(paladin))
+            return;
+
+        if (!paladin.IsPaladin())
+        {
+            SayOnBoth("Lay on Hands", $"{paladin.Name} is not a paladin.");
+            return;
+        }
+
+        if (paladin.LayOnHandsUsedToday)
+        {
+            SayOnBoth("Lay on Hands", $"{paladin.Name} has already used Lay on Hands today.");
+            return;
+        }
+
+        var target = PromptLayOnHandsTarget(paladin);
+        if (target == null)
+            return;
+
+        _actions[paladin.Name] = new CombatAction
+        {
+            Type = CombatActionType.LayOnHands,
+            Target = SpellCastTarget.Ally(target)
+        };
+
+        AdvanceActor();
+    }
+
+    private Character? PromptLayOnHandsTarget(Character paladin)
+    {
+        var allies = _party.Where(c => !c.HasStatus(CharacterStatus.Dead)
+                                       && !c.HasStatus(CharacterStatus.Ashes)
+                                       && !c.HasStatus(CharacterStatus.Lost))
+            .ToList();
+
+        if (allies.Count == 0)
+            return null;
+
+        var allyLines = string.Join(Environment.NewLine, allies.Select((a, i) =>
+            $"{i + 1}. {a.Name} (HP {a.CurrentHitPoints}/{a.MaxHitPoints}, Status: {FormatStatus(a)})"));
+        var prompt = $"Lay on Hands ({Math.Max(0, paladin.GetPaladinLevel()) * 2} HP){Environment.NewLine}{Environment.NewLine}{allyLines}";
+        var selected = PromptForNumber("Choose Lay on Hands Target", prompt, 1, allies.Count);
+        return selected.HasValue ? allies[selected.Value - 1] : null;
+    }
+
+    private static bool CanUseLayOnHands(Character c) => c.IsPaladin() && !c.LayOnHandsUsedToday;
 
     private static string FormatStatus(Character c)
     {
@@ -1022,13 +1217,21 @@ public sealed class EncounterForm : Form
 
     private void UpdateHeader()
     {
-        var asleepText = !_multipleGroups && _asleepMonsterCount > 0
-            ? $"  ({_asleepMonsterCount} ASLEEP)"
+        var aliveMonsters = _session?.AliveMonsters.ToList();
+        var asleepCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Asleep)) ?? _asleepMonsterCount;
+        var heldCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Paralyzed)) ?? _heldMonsterCount;
+        var entangledCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Entangled)) ?? _entangledMonsterCount;
+
+        var asleepText = !_multipleGroups && asleepCount > 0
+            ? $"  ({asleepCount} ASLEEP)"
             : string.Empty;
-        var heldText = !_multipleGroups && _heldMonsterCount > 0
-            ? $"  ({_heldMonsterCount} HELD)"
+        var heldText = !_multipleGroups && heldCount > 0
+            ? $"  ({heldCount} HELD)"
             : string.Empty;
-        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}";
+        var entangledText = !_multipleGroups && entangledCount > 0
+            ? $"  ({entangledCount} ENTANGLED)"
+            : string.Empty;
+        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}{entangledText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {
@@ -1048,6 +1251,9 @@ public sealed class EncounterForm : Form
     private void UpdateOptionsLegend()
     {
         var rank = GetActionableRank(_currentIndex);
+        var showLayOnHands = _currentIndex >= 0
+                             && _currentIndex < _party.Count
+                             && _party[_currentIndex].IsPaladin();
 
         // Determine which action is mapped to Enter
         string fightText, parryText;
@@ -1067,13 +1273,17 @@ public sealed class EncounterForm : Form
             parryText = "P)ARRY";
         }
 
+        var secondLine = showLayOnHands
+            ? $"S)PELL   L)AY HANDS  {parryText}      T)AKE BACK"
+            : $"S)PELL   {parryText}      T)AKE BACK";
+
         if (_multipleGroups)
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\nS)PELL   {parryText}      T)AKE BACK\nG)ROUP   (Select Target Group)";
+            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}\nG)ROUP   (Select Target Group)";
         }
         else
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\nS)PELL   {parryText}      T)AKE BACK";
+            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}";
         }
     }
 
@@ -1134,6 +1344,24 @@ public sealed class EncounterForm : Form
     private string GetDetailedActionStatus(CombatAction action)
     {
         var baseAction = action.Type.ToString();
+
+        if (action.Type == CombatActionType.LayOnHands && !string.IsNullOrWhiteSpace(action.Target?.CharacterName))
+            baseAction = $"LayOnHands: {action.Target.CharacterName}";
+
+        if (action.Type == CombatActionType.UseItem)
+        {
+            if (!string.IsNullOrWhiteSpace(action.SpellId))
+            {
+                var allSpells = _spellRepo.LoadAll();
+                var spell = allSpells.FirstOrDefault(s => s.Id == action.SpellId);
+                if (spell != null)
+                    baseAction = $"UseItem: {spell.Name}";
+            }
+            else
+            {
+                baseAction = "UseItem";
+            }
+        }
 
         // If casting a spell, show the spell name
         if ((action.Type == CombatActionType.Spell || action.Type == CombatActionType.CastSpell) && !string.IsNullOrEmpty(action.SpellId))

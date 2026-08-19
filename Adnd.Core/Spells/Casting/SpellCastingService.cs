@@ -1,4 +1,5 @@
 using Adnd.Core.Characters;
+using Adnd.Core.Items;
 
 namespace Adnd.Core.Spells.Casting;
 
@@ -20,6 +21,67 @@ public sealed class SpellCastingService
             .OrderBy(spell => spell.Level)
             .ThenBy(spell => spell.Name)
             .FirstOrDefault(spell => CanCast(caster, spell));
+    }
+
+    public Spell? FindSpellByName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return null;
+
+        return _spellsById.Values.FirstOrDefault(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public SpellCastResult CastFromItem(SpellCastRequest request)
+    {
+        if (!_spellsById.TryGetValue(request.SpellId, out var spell))
+            return SpellCastResult.Failure($"Unknown spell: {request.SpellId}");
+
+        request.Spell = spell;
+
+        if (!IsContextAllowed(spell, request.Context))
+            return SpellCastResult.Failure($"{spell.Name} cannot be cast in this context.");
+
+        NormalizeTargetsForCombat(request, spell);
+
+        var targetValidation = ValidateTargets(spell, request);
+        if (!targetValidation.Success)
+            return targetValidation;
+
+        return _resolver.Resolve(request);
+    }
+
+    public Spell? FindSpellFromItem(Item item)
+    {
+        if (!ItemSpecialAbilityParser.TryGetCastedSpellName(item, out var spellName))
+            spellName = InferSpellNameFromItemName(item);
+
+        if (string.IsNullOrWhiteSpace(spellName))
+            return null;
+
+        return FindSpellByName(spellName);
+    }
+
+    private static string InferSpellNameFromItemName(Item item)
+    {
+        if (item == null || string.IsNullOrWhiteSpace(item.Name))
+            return string.Empty;
+
+        if (string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase))
+            return "Cure Light Wounds";
+
+        if (string.Equals(item.Name, "Potion of Extra Healing", StringComparison.OrdinalIgnoreCase))
+            return "Cure Serious Wounds";
+
+        if (string.Equals(item.Name, "Potion of Cure Poison", StringComparison.OrdinalIgnoreCase))
+            return "Neutralize Poison";
+
+        if (item.Name.StartsWith("Potion of ", StringComparison.OrdinalIgnoreCase))
+            return item.Name[10..].Trim();
+
+        if (item.Name.StartsWith("Scroll of ", StringComparison.OrdinalIgnoreCase))
+            return item.Name[10..].Trim();
+
+        return string.Empty;
     }
 
     public SpellCastResult Cast(SpellCastRequest request)

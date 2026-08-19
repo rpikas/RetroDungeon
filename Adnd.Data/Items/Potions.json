@@ -10,43 +10,50 @@
       "StockQuantity": 5,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": ["All"]
+      "AllowedClasses": ["All"],
+      "SpecialAbilities": [ "Casts Cure Light Wounds" ]
     },
     {
-        "Name": "Potion of Extra Healing",
-        "Type": "Potion",
-        "Slot": "",
-        "Cost": 150,
-        "Weight": 1,
-        "StockQuantity": 0,
-        "ArmorClassBonus": 0,
-        "IsShopBuyable": false,
-        "Damage": "",
-        "AllowedClasses": [ "All" ]
+      "Name": "Potion of Extra Healing",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 150,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Cure Serious Wounds" ]
+
     },
     {
-        "Name": "Potion of Cure Poison",
-        "Type": "Potion",
-        "Slot": "",
-        "Cost": 75,
-        "Weight": 1,
-        "StockQuantity": 0,
-        "ArmorClassBonus": 0,
-        "IsShopBuyable": false,
-        "Damage": "",
-        "AllowedClasses": []
+      "Name": "Potion of Cure Poison",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 75,
+      "Weight": 1,
+      "StockQuantity": 5,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Cure Poison" ]
+
     },
     {
-        "Name": "Potion of Invisibility",
-        "Type": "Potion",
-        "Slot": "",
-        "Cost": 250,
-        "Weight": 1,
-        "StockQuantity": 0,
-        "ArmorClassBonus": 0,
-        "IsShopBuyable": false,
-        "Damage": "",
-        "AllowedClasses": [ "All" ]
+      "Name": "Potion of Invisibility",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 250,
+      "Weight": 1,
+      "StockQuantity": 5,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Invisibility" ]
+
     }
   ]
 }

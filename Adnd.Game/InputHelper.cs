@@ -7,7 +7,7 @@ public static class InputHelper
     // Read a selection number using keypress input.
     // Auto-submits after the specified number of typed characters,
     // or when Enter is pressed.
-    public static int? ReadNumber(int min, int max, int autoSubmitAfterCharacters = 1)
+    public static int? ReadNumber(int min, int max, int autoSubmitAfterCharacters = 1, bool echoTypedCharacters = false)
     {
         if (autoSubmitAfterCharacters < 1)
             autoSubmitAfterCharacters = 1;
@@ -22,6 +22,9 @@ public static class InputHelper
 
             if (key.KeyChar == '\0')
                 continue;
+
+            if (echoTypedCharacters)
+                Console.Write(key.KeyChar);
 
             combined += key.KeyChar;
 

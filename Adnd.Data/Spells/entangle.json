@@ -6,7 +6,8 @@
   "Description": "Plants ensnare creatures in an area.",
   "RangeType": "Enemy",
   "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
   "CastContext": "Combat",
   "EffectType": "Damage",
-  "EffectDescription": "Twisting plants restrain enemies in the affected area."
+  "EffectDescription": "Twisting plants restrain one enemy group for 5 rounds on failed save vs. spell."
 }

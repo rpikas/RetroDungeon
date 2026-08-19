@@ -37,6 +37,7 @@ public class PartyMenu
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
             new CallLightningHandler(),
+            new EntangleHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
             new ChromaticOrbHandler(),
@@ -181,6 +182,7 @@ public class PartyMenu
                 Console.WriteLine("Character data not found.");
                 Console.ReadKey(true);
             }
+
             else
             {
                 ShowCharacterDetail(c, party);
@@ -259,7 +261,8 @@ public class PartyMenu
 
             Console.WriteLine("\nR)ead");
             Console.WriteLine("E)quip");
-            Console.WriteLine("U)nequip");
+            Console.WriteLine("N)unequip");
+            Console.WriteLine("U)se Item");
             Console.WriteLine("T)rade");
             Console.WriteLine("D)rop");
             Console.WriteLine("P)ool Gold");
@@ -267,21 +270,86 @@ public class PartyMenu
             if (CanUseMemorizeAction(c))
                 Console.WriteLine("M)emorize Spells");
             Console.WriteLine("C)ast Spell");
-        Console.WriteLine("L<-eave");
+            if (c.IsPaladin())
+                Console.WriteLine(c.LayOnHandsUsedToday ? "L)ay on Hands (used today)" : "L)ay on Hands");
+            Console.WriteLine(c.IsPaladin() ? "↵)Leave" : "L<-eave");
 
             var key = Console.ReadKey(true).Key;
 
             if (key == ConsoleKey.R) ReadAction(c);
             else if (key == ConsoleKey.E) EquipAction(c);
-            else if (key == ConsoleKey.U) UnequipAction(c);
+            else if (key == ConsoleKey.N) UnequipAction(c);
+            else if (key == ConsoleKey.U) UseItemAction(c, party);
             else if (key == ConsoleKey.T) TradeAction(c, party);
             else if (key == ConsoleKey.D) DropAction(c);
             else if (key == ConsoleKey.P) PoolGoldAction(c, party);
             else if (key == ConsoleKey.I) IdentifyAction(c);
             else if (key == ConsoleKey.M && CanUseMemorizeAction(c)) MemorizeSpellAction(c);
             else if (key == ConsoleKey.C) CastSpellAction(c, party);
-            else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
+            else if (key == ConsoleKey.L && c.IsPaladin()) LayOnHandsAction(c, party);
+            else if ((key == ConsoleKey.L && !c.IsPaladin()) || key == ConsoleKey.Enter || key == ConsoleKey.Escape) break;
         }
+    }
+
+    private void LayOnHandsAction(Character paladin, Party party)
+    {
+        if (!paladin.IsPaladin())
+            return;
+
+        if (paladin.LayOnHandsUsedToday)
+        {
+            Console.WriteLine("Lay on Hands has already been used today.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var roster = _repo.GetAll().ToDictionary(c => c.Name, c => c, StringComparer.OrdinalIgnoreCase);
+        var targets = party.Members
+            .Where(name => roster.ContainsKey(name))
+            .Select(name => roster[name])
+            .Where(t => !t.HasStatus(CharacterStatus.Dead)
+                        && !t.HasStatus(CharacterStatus.Ashes)
+                        && !t.HasStatus(CharacterStatus.Lost))
+            .ToList();
+
+        if (targets.Count == 0)
+        {
+            Console.WriteLine("No valid target for Lay on Hands.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.WriteLine("\n=== LAY ON HANDS ===");
+        for (int i = 0; i < targets.Count; i++)
+            Console.WriteLine($"{i + 1}. {targets[i].Name} ({targets[i].CurrentHitPoints}/{targets[i].MaxHitPoints} HP)");
+
+        Console.Write("Choose #: ");
+        var sel = InputHelper.ReadNumber(1, targets.Count);
+        if (!sel.HasValue)
+        {
+            Console.WriteLine("Invalid selection.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var target = targets[sel.Value - 1];
+        var healAmount = Math.Max(0, paladin.GetPaladinLevel()) * 2;
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healAmount);
+        var healed = target.CurrentHitPoints - before;
+
+        paladin.LayOnHandsUsedToday = true;
+
+        _repo.Save(target);
+        if (!string.Equals(target.Name, paladin.Name, StringComparison.OrdinalIgnoreCase))
+            _repo.Save(paladin);
+
+        if (healed > 0)
+            Console.WriteLine($"{paladin.Name} heals {target.Name} for {healed} HP.");
+        else
+            Console.WriteLine($"{target.Name} is already at full health.");
+
+        Console.ReadKey(true);
     }
 
     private static bool CanUseMemorizeAction(Character c)
@@ -548,6 +616,103 @@ public class PartyMenu
                 _repo.Save(member);
             _repo.Save(caster);
         }
+
+        Console.ReadKey(true);
+    }
+
+    private void UseItemAction(Character c, Party party)
+    {
+        var roster = _repo.GetAll().ToDictionary(x => x.Name, x => x, StringComparer.OrdinalIgnoreCase);
+        var partyMembers = party.Members
+            .Where(name => roster.ContainsKey(name))
+            .Select(name => roster[name])
+            .ToList();
+
+        if (partyMembers.Count == 0)
+        {
+            Console.WriteLine("\nNo valid party members found.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var user = partyMembers.FirstOrDefault(x => string.Equals(x.Name, c.Name, StringComparison.OrdinalIgnoreCase)) ?? c;
+
+        var usableItems = user.Inventory
+            .Select((item, index) => new { item, index, spell = _spellCastingService.FindSpellFromItem(item) })
+            .Where(x => x.spell != null)
+            .ToList();
+
+        if (usableItems.Count == 0)
+        {
+            Console.WriteLine("\nNo usable magical items.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.WriteLine("\nUse which item:");
+        for (int i = 0; i < usableItems.Count; i++)
+            Console.WriteLine($"{i + 1}. {usableItems[i].item.Name} (casts {usableItems[i].spell!.Name})");
+
+        Console.Write("Choose #: ");
+        var itemSel = InputHelper.ReadNumber(1, usableItems.Count);
+        if (!itemSel.HasValue)
+            return;
+
+        var selected = usableItems[itemSel.Value - 1];
+        var spell = selected.spell!;
+        var targets = new List<SpellCastTarget>();
+
+        if (spell.RangeType == SpellRangeType.Self)
+        {
+            targets.Add(SpellCastTarget.Ally(user));
+        }
+        else if (spell.RangeType == SpellRangeType.Ally)
+        {
+            Console.WriteLine("\nChoose ally target:");
+            for (int i = 0; i < partyMembers.Count; i++)
+            {
+                var status = partyMembers[i].Status != CharacterStatus.None ? GetStatusDisplay(partyMembers[i]) : "-";
+                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} (HP {partyMembers[i].CurrentHitPoints}/{partyMembers[i].MaxHitPoints}, Status: {status})");
+            }
+
+            Console.Write("Choose #: ");
+            var targetSel = InputHelper.ReadNumber(1, partyMembers.Count);
+            if (!targetSel.HasValue)
+                return;
+
+            targets.Add(SpellCastTarget.Ally(partyMembers[targetSel.Value - 1]));
+        }
+
+        var result = _spellCastingService.CastFromItem(new SpellCastRequest
+        {
+            Caster = user,
+            SpellId = spell.Id,
+            Context = SpellUseContext.Exploration,
+            Targets = targets,
+            PartyTargets = partyMembers,
+            MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
+        });
+
+        foreach (var line in result.Events)
+            Console.WriteLine($"\n{line}");
+
+        if (!result.Success)
+        {
+            Console.WriteLine($"\n{result.Error}");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var item = selected.item;
+        if (item.Type is ItemType.Potion or ItemType.Scroll)
+        {
+            user.Inventory.RemoveAt(selected.index);
+            Console.WriteLine($"\n{item.Name} is consumed.");
+        }
+
+        foreach (var member in partyMembers)
+            _repo.Save(member);
+        _repo.Save(user);
 
         Console.ReadKey(true);
     }
@@ -832,17 +997,27 @@ public class PartyMenu
 
         Console.Clear();
         Console.WriteLine("=== ADD MEMBER ===");
+        Console.WriteLine();
+        Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
+        Console.WriteLine(new string('-', 87));
 
         for (int i = 0; i < roster.Count; i++)
         {
             var c = roster[i];
-            var cls = c.Classes != null && c.Classes.Count > 0 ? string.Join("/", c.Classes) : c.Class.ToString();
-            var inParty = party.Members.Any(m => m == c.Name) ? " (Already in party)" : "";
-            Console.WriteLine($"{i + 1}. {c.Name} ({cls}){inParty}");
+            var cls = c.Classes != null && c.Classes.Count > 0
+                ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString()))
+                : c.Class.ToDisplayString();
+            var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
+            var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
+            if (party.Members.Any(m => m == c.Name))
+                statusInfo = statusInfo == "-" ? "Already in party" : $"{statusInfo}, In party";
+            var levelDisplay = GetLevelDisplay(c);
+
+            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }
 
         Console.Write("\nChoose #: ");
-        var sel = InputHelper.ReadNumber(1, roster.Count, 2);
+        var sel = InputHelper.ReadNumber(1, roster.Count, 2, echoTypedCharacters: true);
         if (sel.HasValue)
         {
             var chosen = roster[sel.Value - 1];

@@ -2,22 +2,22 @@
   "Name": "Treasure Type D",
   "Coins": {
     "CopperPieces": { "Amount": "0", "Chance": 0 },
-    "SilverPieces": { "Amount": "3d6*10", "Chance": 30 },
+    "SilverPieces": { "Amount": "0", "Chance": 0 },
     "ElectrumPieces": { "Amount": "0", "Chance": 0 },
-    "GoldPieces": { "Amount": "2d6*10", "Chance": 60 },
+    "GoldPieces": { "Amount": "2d6*100", "Chance": 60 },
     "PlatinumPieces": { "Amount": "0", "Chance": 0 }
   },
   "Gems": {
     "Amount": "1d4",
     "Chance": 20,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
+    "MinValueGp": 10,
+    "MaxValueGp": 100
   },
   "Jewelry": {
     "Amount": "1d3",
     "Chance": 10,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
+    "MinValueGp": 10,
+    "MaxValueGp": 100
   },
   "Art": {
     "Amount": "0",

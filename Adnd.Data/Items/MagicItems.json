@@ -8,7 +8,7 @@
       "Slot": "Ring1",
       "Cost": 500,
       "Weight": 0,
-      "StockQuantity": 1,
+      "StockQuantity": 0,
       "ArmorClassBonus": 1,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard", "MagicUser", "Illusionist", "Monk" ]
@@ -39,7 +39,7 @@
       "Description": "A jeweled amulet that casts DUMAPIC.",
       "SpecialAbilities": [ "Casts DUMAPIC" ],
       "Source": "Wizardry",
-      "StockQuantity": 4
+      "StockQuantity": 0
     },
     {
       "Name": "Ring of Shielding",
@@ -55,7 +55,7 @@
       "Description": "A protective ring that casts PORFIC./ ",
       "SpecialAbilities": [ "Casts PORFIC" ],
       "Source": "Wizardry",
-      "StockQuantity": 3
+      "StockQuantity": 0
     },
     {
       "Name": "Ring of Rigidity",
@@ -71,7 +71,7 @@
       "Description": "An amulet that casts MANIFO.",
       "SpecialAbilities": [ "Casts MANIFO" ],
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Ring of Suffocation",
@@ -87,7 +87,7 @@
       "Description": "A deadly ring that casts MAKANITO.",
       "SpecialAbilities": [ "Casts MAKANITO" ],
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Rod of Flame",
@@ -103,7 +103,7 @@
       "Description": "A fiery rod that protects against fire and casts MAHALITO.",
       "SpecialAbilities": [ "Protection: Fire", "Casts MAHALITO" ],
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Ring of Healing",
@@ -119,7 +119,7 @@
       "Description": "A ring that grants regeneration.",
       "SpecialAbilities": [ "Regeneration (1)" ],
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Ring Pro Undead",
@@ -135,7 +135,7 @@
       "Description": "A powerful ring that protects against undead.",
       "SpecialAbilities": [ "Protection: Undead" ],
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     }
   ]
 }

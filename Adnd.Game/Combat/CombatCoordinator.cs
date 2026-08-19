@@ -77,6 +77,7 @@ public sealed class CombatCoordinator
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
             new CallLightningHandler(),
+            new EntangleHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
             new ChromaticOrbHandler(),
@@ -126,8 +127,9 @@ public sealed class CombatCoordinator
             var aliveMonsters = session.AliveMonsters.ToList();
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var heldMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+            var entangledMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Entangled));
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
-            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
+            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, entangledMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
             encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)
@@ -148,7 +150,7 @@ public sealed class CombatCoordinator
 
         if (session.Outcome == CombatOutcome.Victory)
         {
-            ApplyVictoryRewards(owner, session);
+            ApplyVictoryRewards(owner, session, dungeonLevel);
         }
 
         RemoveTemporaryCombatEffects(session);
@@ -211,7 +213,7 @@ public sealed class CombatCoordinator
 
         if (session.Outcome == CombatOutcome.Victory)
         {
-            ApplyVictoryRewards(owner, session);
+            ApplyVictoryRewards(owner, session, dungeonLevel);
         }
 
         RemoveTemporaryCombatEffects(session);
@@ -258,7 +260,7 @@ public sealed class CombatCoordinator
         session.InvisiblyBuffedPartyMembers.Clear();
     }
 
-    private void ApplyVictoryRewards(IWin32Window owner, CombatSession session)
+    private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, int? dungeonLevel)
     {
         var survivors = session.Party
             .Where(c => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead))
@@ -297,10 +299,10 @@ public sealed class CombatCoordinator
         var valuablesValueGp = treasure.TotalGemValueGp + treasure.TotalJewelryValueGp + treasure.TotalArtValueGp;
         DistributeCoin(survivors, valuablesValueGp, (c, amount) => c.GoldPieces += amount);
 
-        var magicAward = AwardMagicItemsFromPlaceholders(survivors, treasure.MagicPlaceholders);
+        var magicAward = AwardMagicItemsFromPlaceholders(survivors, treasure.MagicPlaceholders, dungeonLevel);
 
         // Random item finding after killing monsters
-        var randomItemsAward = AwardRandomItemsAfterCombat(survivors);
+        var randomItemsAward = AwardRandomItemsAfterCombat(survivors, dungeonLevel);
 
         var sb = new StringBuilder();
         sb.AppendLine("Victory Rewards");
@@ -387,13 +389,13 @@ public sealed class CombatCoordinator
         Say(owner, "Combat Rewards", sb.ToString(), session);
     }
 
-    private MagicAwardResult AwardMagicItemsFromPlaceholders(List<Character> survivors, List<TreasureMagicPlaceholderResult> placeholders)
+    private MagicAwardResult AwardMagicItemsFromPlaceholders(List<Character> survivors, List<TreasureMagicPlaceholderResult> placeholders, int? dungeonLevel)
     {
         var result = new MagicAwardResult();
         if (survivors.Count == 0 || placeholders == null || placeholders.Count == 0)
             return result;
 
-        var allItems = _itemRepository.LoadAll().ToList();
+        var allItems = FilterItemsByDungeonLevelCostCap(_itemRepository.LoadAll().ToList(), dungeonLevel);
         if (allItems.Count == 0)
             return result;
 
@@ -443,7 +445,7 @@ public sealed class CombatCoordinator
         return result;
     }
 
-    private MagicAwardResult AwardRandomItemsAfterCombat(List<Character> survivors)
+    private MagicAwardResult AwardRandomItemsAfterCombat(List<Character> survivors, int? dungeonLevel)
     {
         var result = new MagicAwardResult();
 
@@ -458,7 +460,7 @@ public sealed class CombatCoordinator
         if (numberOfItems <= 0)
             return result;
 
-        var allItems = _itemRepository.LoadAll().Where(i => i.IsShopBuyable).ToList();
+        var allItems = FilterItemsByDungeonLevelCostCap(_itemRepository.LoadAll().Where(i => i.IsShopBuyable).ToList(), dungeonLevel);
         if (allItems.Count == 0)
             return result;
 
@@ -534,6 +536,35 @@ public sealed class CombatCoordinator
         return items[_random.Next(items.Count)];
     }
 
+    private static List<Item> FilterItemsByDungeonLevelCostCap(List<Item> items, int? dungeonLevel)
+    {
+        var maxCost = GetMaxFoundItemCostForDungeonLevel(dungeonLevel);
+        if (!maxCost.HasValue)
+            return items;
+
+        return items.Where(i => i.Cost <= maxCost.Value).ToList();
+    }
+
+    private static int? GetMaxFoundItemCostForDungeonLevel(int? dungeonLevel)
+    {
+        if (!dungeonLevel.HasValue)
+            return null;
+
+        return dungeonLevel.Value switch
+        {
+            <= 1 => 2000,
+            2 => 3000,
+            3 => 5000,
+            4 => 10000,
+            5 => 11000,
+            6 => 14000,
+            7 => 20000,
+            8 => 40000,
+            9 => 100000,
+            _ => null
+        };
+    }
+
     private static List<Item> GetItemPoolForMagicTable(List<Item> allItems, string table)
     {
         if (string.IsNullOrWhiteSpace(table))
@@ -565,7 +596,8 @@ public sealed class CombatCoordinator
             StockQuantity = source.StockQuantity,
             ArmorClassBonus = source.ArmorClassBonus,
             Damage = source.Damage,
-            AllowedClasses = new List<CharacterClass>(source.AllowedClasses)
+            AllowedClasses = new List<CharacterClass>(source.AllowedClasses),
+            SpecialAbilities = new List<string>(source.SpecialAbilities)
         };
     }
 

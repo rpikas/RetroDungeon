@@ -774,141 +774,147 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private void ShowCampDialog()
     {
-        var party = _partyRepository.Load();
-        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
-        var activeMembers = party.Members.Where(m => roster.ContainsKey(m)).ToList();
-
-        if (activeMembers.Count == 0)
+        while (true)
         {
-            SayOnBoth("Camp", "No party members to camp with.");
+            var party = _partyRepository.Load();
+            var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+            var activeMembers = party.Members.Where(m => roster.ContainsKey(m)).ToList();
+
+            if (activeMembers.Count == 0)
+            {
+                SayOnBoth("Camp", "No party members to camp with.");
+                return;
+            }
+
+            using var form = new Form();
+            form.Text = "Camp";
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ClientSize = new Size(420, 250);
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+            form.ShowInTaskbar = false;
+            form.BackColor = Color.Black;
+            form.ForeColor = GameRulesProvider.Current.DefaultColor;
+            form.KeyPreview = true;
+
+            var titlePanel = new Panel
+            {
+                Left = (form.ClientSize.Width - 140) / 2,
+                Top = 0,
+                Width = 140,
+                Height = 52,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.Black
+            };
+
+            var titleLabel = new Label
+            {
+                Left = 0,
+                Top = 10,
+                Width = titlePanel.ClientSize.Width,
+                Height = 30,
+                Text = "CAMP",
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Black,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 20f, FontStyle.Bold)
+            };
+
+            var menuPanel = new Panel
+            {
+                Left = (form.ClientSize.Width - 260) / 2,
+                Top = 74,
+                Width = 260,
+                Height = 132,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.Black
+            };
+
+            var menuLabel = new Label
+            {
+                Left = 14,
+                Top = 10,
+                Width = 232,
+                Height = 110,
+                Text = "#)INSPECT\nR)EORDER\nL↵EAVE",
+                BackColor = Color.Black,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 20f, FontStyle.Bold)
+            };
+
+            int? quickInspectIndex = null;
+
+            form.KeyDown += (_, e) =>
+            {
+                if (e.KeyCode == Keys.R)
+                {
+                    form.DialogResult = DialogResult.No;
+                    form.Close();
+                }
+
+                var selectedIndex = GetCampInspectIndexFromKey(e.KeyCode);
+                if (selectedIndex > 0 && selectedIndex <= activeMembers.Count)
+                {
+                    quickInspectIndex = selectedIndex - 1;
+                    form.DialogResult = DialogResult.Yes;
+                    form.Close();
+                }
+                else if (e.KeyCode == Keys.L || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+                {
+                    form.DialogResult = DialogResult.Cancel;
+                    form.Close();
+                }
+            };
+
+            titlePanel.Controls.Add(titleLabel);
+            menuPanel.Controls.Add(menuLabel);
+            form.Controls.Add(titlePanel);
+            form.Controls.Add(menuPanel);
+
+            // The camp menu on the table as well: pressing Camp from the viewer used to open this and stop dead,
+            // which made the whole of camp -- reordering, inspecting, equipping, memorising -- unreachable from
+            // there. Same three answers, same results, either surface.
+            var campPrompt = new ViewerPrompt("choice", "The party camps.", null, new[]
+            {
+                new ViewerPromptOption("reorder", "Reorder the party"),
+                new ViewerPromptOption("inspect", "Inspect a member"),
+                new ViewerPromptOption("leave", "Leave camp"),
+            });
+
+            var campAnswers = new Dictionary<string, DialogResult>
+            {
+                ["reorder"] = DialogResult.No,
+                ["inspect"] = DialogResult.Yes,
+                ["leave"] = DialogResult.Cancel,
+            };
+
+            var choice = ViewerDialog.RunModal(form, this, campPrompt, campAnswers, PublishTable);
+
+            if (choice == DialogResult.Yes)
+            {
+                if (quickInspectIndex.HasValue
+                    && quickInspectIndex.Value >= 0
+                    && quickInspectIndex.Value < activeMembers.Count)
+                {
+                    var selectedCharacter = roster[activeMembers[quickInspectIndex.Value]];
+                    OpenCampInspectDialog(selectedCharacter, activeMembers);
+                }
+                else
+                {
+                    InspectPartyMemberFromCamp(activeMembers, roster);
+                }
+
+                continue;
+            }
+
+            if (choice == DialogResult.No)
+            {
+                ShowReorderCampDialog(party, activeMembers, roster);
+                continue;
+            }
+
             return;
-        }
-
-        using var form = new Form();
-        form.Text = "Camp";
-        form.FormBorderStyle = FormBorderStyle.None;
-        form.StartPosition = FormStartPosition.CenterParent;
-        form.ClientSize = new Size(420, 250);
-        form.MinimizeBox = false;
-        form.MaximizeBox = false;
-        form.ShowInTaskbar = false;
-        form.BackColor = Color.Black;
-        form.ForeColor = GameRulesProvider.Current.DefaultColor;
-        form.KeyPreview = true;
-
-        var titlePanel = new Panel
-        {
-            Left = (form.ClientSize.Width - 140) / 2,
-            Top = 0,
-            Width = 140,
-            Height = 52,
-            BorderStyle = BorderStyle.FixedSingle,
-            BackColor = Color.Black
-        };
-
-        var titleLabel = new Label
-        {
-            Left = 0,
-            Top = 10,
-            Width = titlePanel.ClientSize.Width,
-            Height = 30,
-            Text = "CAMP",
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 20f, FontStyle.Bold)
-        };
-
-        var menuPanel = new Panel
-        {
-            Left = (form.ClientSize.Width - 260) / 2,
-            Top = 74,
-            Width = 260,
-            Height = 132,
-            BorderStyle = BorderStyle.FixedSingle,
-            BackColor = Color.Black
-        };
-
-        var menuLabel = new Label
-        {
-            Left = 14,
-            Top = 10,
-            Width = 232,
-            Height = 110,
-            Text = "#)INSPECT\nR)EORDER\nL↵EAVE",
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 20f, FontStyle.Bold)
-        };
-
-        int? quickInspectIndex = null;
-
-        form.KeyDown += (_, e) =>
-        {
-            if (e.KeyCode == Keys.R)
-            {
-                form.DialogResult = DialogResult.No;
-                form.Close();
-            }
-
-            var selectedIndex = GetCampInspectIndexFromKey(e.KeyCode);
-            if (selectedIndex > 0 && selectedIndex <= activeMembers.Count)
-            {
-                quickInspectIndex = selectedIndex - 1;
-                form.DialogResult = DialogResult.Yes;
-                form.Close();
-            }
-            else if (e.KeyCode == Keys.L || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
-            {
-                form.DialogResult = DialogResult.Cancel;
-                form.Close();
-            }
-        };
-
-        titlePanel.Controls.Add(titleLabel);
-        menuPanel.Controls.Add(menuLabel);
-        form.Controls.Add(titlePanel);
-        form.Controls.Add(menuPanel);
-
-        // The camp menu on the table as well: pressing Camp from the viewer used to open this and stop dead,
-        // which made the whole of camp -- reordering, inspecting, equipping, memorising -- unreachable from
-        // there. Same three answers, same results, either surface.
-        var campPrompt = new ViewerPrompt("choice", "The party camps.", null, new[]
-        {
-            new ViewerPromptOption("reorder", "Reorder the party"),
-            new ViewerPromptOption("inspect", "Inspect a member"),
-            new ViewerPromptOption("leave", "Leave camp"),
-        });
-
-        var campAnswers = new Dictionary<string, DialogResult>
-        {
-            ["reorder"] = DialogResult.No,
-            ["inspect"] = DialogResult.Yes,
-            ["leave"] = DialogResult.Cancel,
-        };
-
-        var choice = ViewerDialog.RunModal(form, this, campPrompt, campAnswers, PublishTable);
-
-        if (choice == DialogResult.Yes)
-        {
-            if (quickInspectIndex.HasValue
-                && quickInspectIndex.Value >= 0
-                && quickInspectIndex.Value < activeMembers.Count)
-            {
-                var selectedCharacter = roster[activeMembers[quickInspectIndex.Value]];
-                OpenCampInspectDialog(selectedCharacter, activeMembers);
-            }
-            else
-            {
-                InspectPartyMemberFromCamp(activeMembers, roster);
-            }
-
-            return;
-        }
-
-        if (choice == DialogResult.No)
-        {
-            ShowReorderCampDialog(party, activeMembers, roster);
         }
     }
 

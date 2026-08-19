@@ -25,6 +25,7 @@ public sealed class CampCharacterInspectForm : Form
     private readonly TextBox _detailsBox;
     private readonly FlowLayoutPanel _buttonsPanel;
     private readonly Label _oldStyleFooterLabel;
+    private readonly Button _layOnHandsButton;
 
     /// <summary>
     /// Where this screen puts its questions so the tabletop can answer them. Null when nobody is watching the
@@ -58,6 +59,7 @@ public sealed class CampCharacterInspectForm : Form
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
             new CallLightningHandler(),
+            new EntangleHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
             new ChromaticOrbHandler(),
@@ -121,6 +123,9 @@ public sealed class CampCharacterInspectForm : Form
         _buttonsPanel.Controls.Add(MakeButton("P)ool Gold", (_, _) => PoolGoldAction()));
         _buttonsPanel.Controls.Add(MakeButton("I)dentify", (_, _) => NotImplemented("Identify")));
         _buttonsPanel.Controls.Add(MakeButton("S)pell", (_, _) => CastSpellAction()));
+        _buttonsPanel.Controls.Add(MakeButton("U)se Item", (_, _) => UseItemAction()));
+        _layOnHandsButton = MakeButton("L)ay on Hands", (_, _) => LayOnHandsAction());
+        _buttonsPanel.Controls.Add(_layOnHandsButton);
         _buttonsPanel.Controls.Add(MakeButton("L↵eave", (_, _) => Close()));
 
         _oldStyleFooterLabel = new Label
@@ -133,7 +138,7 @@ public sealed class CampCharacterInspectForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BorderStyle = BorderStyle.FixedSingle,
             Font = new Font("Consolas", 24f, FontStyle.Bold),
-            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY",
+            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM",
             TextAlign = ContentAlignment.MiddleLeft,
             Visible = false
         };
@@ -157,17 +162,27 @@ public sealed class CampCharacterInspectForm : Form
     }
 
     /// <summary>What the table may press here. Read and Identify are left out: they are not implemented.</summary>
-    private static readonly (string Id, string Label)[] MenuActions =
+    private List<(string Id, string Label)> MenuActions()
     {
-        ("read", "Read (memorize)"),
-        ("equip", "Equip an item"),
-        ("trade", "Trade"),
-        ("drop", "Drop an item"),
-        ("pool", "Pool gold"),
-        ("identify", "Identify"),
-        ("spell", "Spell"),
-        ("leave", "Leave"),
-    };
+        var actions = new List<(string Id, string Label)>
+        {
+            ("read", "Read (memorize)"),
+            ("equip", "Equip an item"),
+            ("trade", "Trade"),
+            ("drop", "Drop an item"),
+            ("pool", "Pool gold"),
+            ("identify", "Identify"),
+            ("spell", "Spell"),
+            ("useItem", "Use item"),
+        };
+
+        var c = GetCharacter();
+        if (c?.IsPaladin() == true)
+            actions.Add(("layOnHands", c.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
+
+        actions.Add(("leave", "Leave"));
+        return actions;
+    }
 
     private void StartTableMenu()
     {
@@ -201,8 +216,9 @@ public sealed class CampCharacterInspectForm : Form
         if (_publish is null)
             return;
 
-        var options = new List<ViewerPromptOption>(MenuActions.Length);
-        foreach (var (id, label) in MenuActions)
+        var actions = MenuActions();
+        var options = new List<ViewerPromptOption>(actions.Count);
+        foreach (var (id, label) in actions)
             options.Add(new ViewerPromptOption(id, label));
 
         _publish(new ViewerPrompt("choice", $"Camp -- {_characterName}", ViewerIds.Character(_characterName), options));
@@ -236,7 +252,17 @@ public sealed class CampCharacterInspectForm : Form
             case Keys.I:
                 NotImplemented("Identify");
                 break;
+            case Keys.U:
+                UseItemAction();
+                break;
             case Keys.L:
+                if (GetCharacter()?.IsPaladin() == true)
+                {
+                    LayOnHandsAction();
+                    break;
+                }
+                Close();
+                return;
             case Keys.Enter:
             case Keys.Escape:
                 Close();
@@ -294,8 +320,15 @@ public sealed class CampCharacterInspectForm : Form
         if (c == null)
         {
             _detailsBox.Text = "Character no longer exists.";
+            _layOnHandsButton.Visible = false;
             return;
         }
+
+        _layOnHandsButton.Visible = c.IsPaladin();
+        _layOnHandsButton.Text = c.LayOnHandsUsedToday ? "L)ay Hands (used)" : "L)ay on Hands";
+        _oldStyleFooterLabel.Text = c.IsPaladin()
+            ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  ↵)LEAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  L)AY ON HANDS"
+            : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM";
 
         if (GameRulesProvider.Current.UIOldStyle)
         {
@@ -352,6 +385,58 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         _detailsBox.Text = string.Join(Environment.NewLine, lines);
+    }
+
+    private void LayOnHandsAction()
+    {
+        var paladin = GetCharacter();
+        if (paladin == null)
+            return;
+
+        if (!paladin.IsPaladin())
+        {
+            SayOnBoth("Lay on Hands", $"{paladin.Name} is not a paladin.");
+            return;
+        }
+
+        if (paladin.LayOnHandsUsedToday)
+        {
+            SayOnBoth("Lay on Hands", $"{paladin.Name} has already used Lay on Hands today.");
+            return;
+        }
+
+        var targets = GetPartyCharacters()
+            .Where(t => !t.HasStatus(CharacterStatus.Dead)
+                        && !t.HasStatus(CharacterStatus.Ashes)
+                        && !t.HasStatus(CharacterStatus.Lost))
+            .ToList();
+
+        if (targets.Count == 0)
+        {
+            SayOnBoth("Lay on Hands", "No valid target for Lay on Hands.");
+            return;
+        }
+
+        var targetIdx = PromptChoice("Lay on Hands Target", targets.Select(t => $"{t.Name} ({t.CurrentHitPoints}/{t.MaxHitPoints} HP)").ToList());
+        if (!targetIdx.HasValue)
+            return;
+
+        var target = targets[targetIdx.Value];
+        var healAmount = Math.Max(0, paladin.GetPaladinLevel()) * 2;
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healAmount);
+        var healed = target.CurrentHitPoints - before;
+
+        paladin.LayOnHandsUsedToday = true;
+
+        _characterRepository.Save(target);
+        if (!string.Equals(target.Name, paladin.Name, StringComparison.OrdinalIgnoreCase))
+            _characterRepository.Save(paladin);
+
+        RefreshView();
+        SayOnBoth("Lay on Hands", healed > 0
+            ? $"{paladin.Name} heals {target.Name} for {healed} HP."
+            : $"{target.Name} is already at full health.");
     }
 
     private static string BuildOldStyleInspectView(Character c)
@@ -711,6 +796,85 @@ public sealed class CampCharacterInspectForm : Form
             _characterRepository.Save(caster);
             RefreshView();
         }
+    }
+
+    private void UseItemAction()
+    {
+        var c = GetCharacter();
+        if (c == null)
+            return;
+
+        var partyMembers = GetPartyCharacters();
+        if (partyMembers.Count == 0)
+            return;
+
+        var user = partyMembers.FirstOrDefault(x => string.Equals(x.Name, c.Name, StringComparison.OrdinalIgnoreCase)) ?? c;
+
+        var usableItems = user.Inventory
+            .Select((item, index) => new { item, index, spell = _spellCastingService.FindSpellFromItem(item) })
+            .Where(x => x.spell != null)
+            .ToList();
+
+        if (usableItems.Count == 0)
+        {
+            SayOnBoth("Use Item", "No usable magical items.");
+            return;
+        }
+
+        var itemIdx = PromptChoice("Use Item", usableItems.Select(x => $"{x.item.Name} (casts {x.spell!.Name})").ToList());
+        if (!itemIdx.HasValue)
+            return;
+
+        var selected = usableItems[itemIdx.Value];
+        var spell = selected.spell!;
+        var targets = new List<SpellCastTarget>();
+
+        if (spell.RangeType == SpellRangeType.Self)
+        {
+            targets.Add(SpellCastTarget.Ally(user));
+        }
+        else if (spell.RangeType == SpellRangeType.Ally)
+        {
+            var targetIdx = PromptChoice("Choose Ally Target", partyMembers.Select(p =>
+            {
+                var status = FormatStatus(p);
+                return $"{p.Name} (HP {p.CurrentHitPoints}/{p.MaxHitPoints}, Status: {status})";
+            }).ToList());
+
+            if (!targetIdx.HasValue)
+                return;
+
+            targets.Add(SpellCastTarget.Ally(partyMembers[targetIdx.Value]));
+        }
+
+        var result = _spellCastingService.CastFromItem(new SpellCastRequest
+        {
+            Caster = user,
+            SpellId = spell.Id,
+            Context = SpellUseContext.Exploration,
+            Targets = targets,
+            PartyTargets = partyMembers,
+            MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
+        });
+
+        if (!result.Success)
+        {
+            SayOnBoth("Use Item", string.IsNullOrWhiteSpace(result.Error) ? "Could not use item." : result.Error);
+            return;
+        }
+
+        if (selected.item.Type is ItemType.Potion or ItemType.Scroll)
+        {
+            user.Inventory.RemoveAt(selected.index);
+            result.Events.Add($"{selected.item.Name} is consumed.");
+        }
+
+        foreach (var member in partyMembers)
+            _characterRepository.Save(member);
+        _characterRepository.Save(user);
+
+        RefreshView();
+        SayOnBoth("Use Item", string.Join(Environment.NewLine, result.Events));
     }
 
     private static string FormatStatus(Character c)

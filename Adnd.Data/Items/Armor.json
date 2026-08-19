@@ -50,7 +50,7 @@
       "IsShopBuyable": true,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric" ],
-      "StockQuantity": 3
+      "StockQuantity": 0
     },
     {
       "Name": "Scale Mail",
@@ -62,7 +62,7 @@
       "IsShopBuyable": true,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric" ],
-      "StockQuantity": 3
+      "StockQuantity": 0
     },
     {
       "Name": "Chain Mail",
@@ -129,10 +129,7 @@
         "Druid",
         "Thief",
         "Assassin",
-        "Bard",
-        "MagicUser",
-        "Illusionist",
-        "Monk"
+        "Bard"
       ],
       "Rarity": "Common",
       "Description": "A simple metal helmet offering basic head protection.",
@@ -140,7 +137,7 @@
       "StockQuantity": 6
     },
     {
-      "Name": "Iron Helm",
+      "Name": "Helm +1",
       "Type": "Armor",
       "Slot": "Head",
       "Cost": 1500,
@@ -156,15 +153,12 @@
         "Druid",
         "Thief",
         "Assassin",
-        "Bard",
-        "MagicUser",
-        "Illusionist",
-        "Monk"
+        "Bard"
       ],
       "Rarity": "Uncommon",
-      "Description": "A reinforced iron helm infused with minor protective magic./  Helm+1",
+      "Description": "A reinforced iron helm infused with minor protective magic./  Iron Helm",
       "Source": "Wizardry",
-      "StockQuantity": 3
+      "StockQuantity": 0
     },
     {
       "Name": "Helm +2",
@@ -183,15 +177,12 @@
         "Druid",
         "Thief",
         "Assassin",
-        "Bard",
-        "MagicUser",
-        "Illusionist",
-        "Monk"
+        "Bard"
       ],
       "Rarity": "Rare",
       "Description": "A magically enhanced helm that sharpens perception./ Helm of Sight",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Evil Helm +3",
@@ -206,7 +197,7 @@
       "Rarity": "Rare",
       "Description": "A cursed helm radiating malevolent force./ Helm of Evil",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Helm +3",
@@ -221,7 +212,7 @@
       "Rarity": "Very Rare",
       "Description": "A powerful enchanted helm offering superior protection./ Helm of Defense",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Reinforced Boots",
@@ -232,8 +223,8 @@
       "ArmorClassBonus": 1,
       "IsShopBuyable": true,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Thief", "Assassin", "Bard", "Monk" ],
-      "StockQuantity": 6
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Thief", "Assassin", "Bard" ],
+      "StockQuantity": 0
     },
     {
       "Name": "Copper Gloves",
@@ -244,11 +235,11 @@
       "ArmorClassBonus": 1,
       "IsShopBuyable": true,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Thief", "Assassin", "Bard", "Monk" ],
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Thief", "Assassin", "Bard" ],
       "Rarity": "Uncommon",
       "Description": "Simple copper gloves that offer minor protection.",
       "Source": "Wizardry",
-      "StockQuantity": 4
+      "StockQuantity": 0
     },
     {
       "Name": "Silver Gloves",
@@ -267,15 +258,12 @@
         "Druid",
         "Thief",
         "Assassin",
-        "Bard",
-        "MagicUser",
-        "Illusionist",
-        "Monk"
+        "Bard"
       ],
       "Rarity": "Rare",
       "Description": "Magically enhanced silver gloves that provide excellent protection.",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Steel Gorget",
@@ -287,7 +275,7 @@
       "IsShopBuyable": true,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric" ],
-      "StockQuantity": 6
+      "StockQuantity": 0
     },
     {
       "Name": "Cloak of Protection",
@@ -299,7 +287,7 @@
       "Damage": "",
       "AllowedClasses": [ "All" ],
       "IsShopBuyable": true,
-      "StockQuantity": 3
+      "StockQuantity": 0
     },
     {
       "Name": "War Belt",
@@ -311,7 +299,7 @@
       "IsShopBuyable": true,
       "Damage": "",
       "AllowedClasses": [ "All" ],
-      "StockQuantity": 6
+      "StockQuantity": 0
     },
     {
       "Name": "Robes",
@@ -357,7 +345,7 @@
       "Rarity": "Rare",
       "Description": "Polished chain mail reinforced with magic. / Shiny Chain",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Leather +1",
@@ -372,7 +360,7 @@
       "Rarity": "Rare",
       "Description": "Enhanced leather armor with extra padding. / Padded Leather",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Plate Mail +1",
@@ -387,7 +375,7 @@
       "Rarity": "Rare",
       "Description": "Reinforced plate mail offering superior defense. / Sturdy Plate",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Breast Plate +1",
@@ -402,7 +390,7 @@
       "Rarity": "Rare",
       "Description": "Magically strengthened breastplate. / Body Armor",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Leather +2",
@@ -417,7 +405,7 @@
       "Rarity": "Rare",
       "Description": "Leather armor treated with magical oils. / Treated Leather",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Chain +2",
@@ -428,11 +416,11 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 5,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Cleric", "MagicUser", "Illusionist" ],
+      "AllowedClasses": [ "Fighter", "Paladin", "Cleric" ],
       "Rarity": "Rare",
       "Description": "Lightweight enchanted chain mail crafted by elves. / Elven Chain",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Plate Mail +2",
@@ -447,7 +435,7 @@
       "Rarity": "Rare",
       "Description": "Elite plate armor of exceptional craftsmanship. / 1st Class Plate",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Evil Chain +2",
@@ -458,11 +446,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 5,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Cleric" ],
+      "AllowedClasses": [ "Fighter" ],
       "Rarity": "Rare",
       "Description": "A cursed chain mail infused with evil power. / Chain of Evil",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Neutral Plate +2",
@@ -473,11 +461,11 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 7,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin" ],
+      "AllowedClasses": [ "Fighter" ],
       "Rarity": "Rare",
       "Description": "A magically balanced plate mail for neutral warriors. / Neutral Plate",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Breast Plate +2",
@@ -492,7 +480,7 @@
       "Rarity": "Rare",
       "Description": "A breastplate blessed with protective magic. / B-Plate of Boons",
       "Source": "Wizardry",
-      "StockQuantity": 2
+      "StockQuantity": 0
     },
     {
       "Name": "Breast Plate +3",
@@ -507,10 +495,10 @@
       "Rarity": "Very Rare",
       "Description": "Legendary armor worn by heroic champions. / Armor of Heroes",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
-      "Name": "Chain Pro Fire +2",
+      "Name": "Chain Protection vs. Fire +2",
       "Type": "Armor",
       "Slot": "Body",
       "Cost": 150000,
@@ -522,7 +510,7 @@
       "Rarity": "Very Rare",
       "Description": "Fire-resistant chain mail imbued with elemental magic. / Chain Pro Fire",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Evil Plate +3",
@@ -533,11 +521,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 9,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin" ],
+      "AllowedClasses": [ "Fighter" ],
       "Rarity": "Very Rare",
       "Description": "A cursed plate mail radiating malevolent force. / Armor of Evil",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     },
     {
       "Name": "Lords Garb +3",
@@ -548,11 +536,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 10,
       "Damage": "",
-      "AllowedClasses": [ "Lord" ],
+      "AllowedClasses": [ "Paladin" ],
       "Rarity": "Legendary",
       "Description": "Mythical armor granting regeneration and protection vs dragons, were-creatures, demons and undead. / Armor of Lords",
       "Source": "Wizardry",
-      "StockQuantity": 1
+      "StockQuantity": 0
     }
   ]
 }

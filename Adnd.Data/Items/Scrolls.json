@@ -10,7 +10,9 @@
       "StockQuantity": 2,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ]
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts magic missile" ]
+
     },
     {
       "Name": "Scroll of Shield",
@@ -22,7 +24,9 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Illusionist" ]
+      "AllowedClasses": [ "MagicUser", "Illusionist" ],
+      "SpecialAbilities": [ "Casts shield" ]
+
     },
     {
       "Name": "Scroll of Bless",
@@ -34,7 +38,9 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Druid" ]
+      "AllowedClasses": [ "Cleric", "Druid" ],
+      "SpecialAbilities": [ "Casts bless" ]
+
     },
     {
       "Name": "Scroll of Sleep",
@@ -48,7 +54,7 @@
       "AllowedClasses": [ "All" ],
       "Rarity": "Common",
       "Description": "A scroll that casts Katino (Sleep).",
-      "SpecialAbilities": [ "Casts Katino" ],
+      "SpecialAbilities": [ "Casts sleep" ],
       "Source": "Wizardry",
       "StockQuantity": 6
     },
@@ -58,15 +64,15 @@
       "Slot": "",
       "Cost": 500,
       "Weight": 1,
-      "IsShopBuyable": true,
+      "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [ "All" ],
-      "Rarity": "Common",
+      "Rarity": "Very Rare",
       "Description": "A scroll that casts Badios (Pain).",
-      "SpecialAbilities": [ "Casts Badios" ],
+      "SpecialAbilities": [ "Casts magic missile" ],
       "Source": "Wizardry",
-      "StockQuantity": 6
+      "StockQuantity": 0
     },
     {
       "Name": "Scroll of Brighting",
@@ -74,15 +80,15 @@
       "Slot": "",
       "Cost": 2500,
       "Weight": 1,
-      "IsShopBuyable": true,
+      "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [ "All" ],
-      "Rarity": "Uncommon",
+      "Rarity": "Very Rare",
       "Description": "A scroll that casts Lomilwa (Brighting).",
-      "SpecialAbilities": [ "Casts Lomilwa" ],
+      "SpecialAbilities": [ "Casts magic missile" ],
       "Source": "Wizardry",
-      "StockQuantity": 4
+      "StockQuantity": 0
     },
     {
       "Name": "Scroll of Darkness",
@@ -90,18 +96,18 @@
       "Slot": "",
       "Cost": 2500,
       "Weight": 1,
-      "IsShopBuyable": true,
+      "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [ "All" ],
-      "Rarity": "Uncommon",
+      "Rarity": "Very Rare",
       "Description": "A scroll that casts Dilto (Darkness).",
-      "SpecialAbilities": [ "Casts Dilto" ],
+      "SpecialAbilities": [ "Casts magic missile" ],
       "Source": "Wizardry",
-      "StockQuantity": 4
+      "StockQuantity": 0
     },
     {
-      "Name": "Scroll of Affliction",
+      "Name": "Scroll of Fireball",
       "Type": "Scroll",
       "Slot": "",
       "Cost": 8000,
@@ -110,11 +116,11 @@
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [ "All" ],
-      "Rarity": "Rare",
-      "Description": "A scroll that casts Badial (Affliction).",
-      "SpecialAbilities": [ "Casts Badial" ],
+      "Rarity": "Very Rare",
+      "Description": "A scroll that casts Fireball.",
+      "SpecialAbilities": [ "Casts Fireball" ],
       "Source": "Wizardry",
-      "StockQuantity": 3
+      "StockQuantity": 0
     }
   ]
 }

@@ -239,7 +239,7 @@ public class ShopMenu
 
     private void BuyItems(int startIndex, int numberOfItems)
     {
-        var items = _itemRepo.LoadAll().Where(i => i.IsShopBuyable).Take(52).ToList();
+        var items = Shop.Stock(_itemRepo);
         var party = _partyRepo.Load();
 
         if (party.Members.Count == 0)
@@ -261,9 +261,8 @@ public class ShopMenu
             var it = items[i];
             var notEquipableTag = !IsEquipableBy(buyer, it) ? " (Not Equipable)" : string.Empty;
             var stockText = GetStockDisplay(it);
-            var soldOutText = it.StockQuantity.HasValue && it.StockQuantity.Value <= 0 ? " [Out of stock]" : string.Empty;
             var label = GetShopLabel(i - startIndex);
-            Console.WriteLine($"{label}. {it.Name}{notEquipableTag} ({it.Cost} gp) - Stock: {stockText}{soldOutText}");
+            Console.WriteLine($"{label}. {it.Name}{notEquipableTag} ({it.Cost} gp) - Stock: {stockText}");
         }
 
         Console.Write("\nChoose letter: ");
@@ -295,7 +294,8 @@ public class ShopMenu
                     StockQuantity = it.StockQuantity,
                     ArmorClassBonus = it.ArmorClassBonus,
                     Damage = it.Damage,
-                    AllowedClasses = new System.Collections.Generic.List<CharacterClass>(it.AllowedClasses)
+                    AllowedClasses = new System.Collections.Generic.List<CharacterClass>(it.AllowedClasses),
+                    SpecialAbilities = new System.Collections.Generic.List<string>(it.SpecialAbilities)
                 };
 
                 if (!buyer.CanCarry(purchased))

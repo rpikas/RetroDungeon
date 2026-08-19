@@ -38,6 +38,7 @@ public static class ViewerCommands
         ["fight"] = Keys.F,
         ["parry"] = Keys.P,
         ["spell"] = Keys.S,
+        ["layOnHands"] = Keys.L,
         ["useItem"] = Keys.U,
         ["run"] = Keys.R,
         ["targetGroup"] = Keys.G,

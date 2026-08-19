@@ -4,6 +4,7 @@ using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Dices;
+using Adnd.Core.Items;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 
@@ -129,7 +130,10 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{member.Name} parries."));
                     break;
                 case CombatActionType.UseItem:
-                    events.Add(new CombatEvent($"{member.Name} uses an item (not yet implemented)."));
+                    ResolvePartyUseItem(session, member, action, events);
+                    break;
+                case CombatActionType.LayOnHands:
+                    ResolveLayOnHands(session, member, action, events);
                     break;
                 case CombatActionType.Spell:
                 case CombatActionType.CastSpell:
@@ -268,6 +272,17 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{monster.DisplayName} is asleep ({remaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{monster.DisplayName} wakes up."));
+
+                continue;
+            }
+
+            if (monster.HasStatus(MonsterStatus.Entangled))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Entangled);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is entangled ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} breaks free of entangle."));
 
                 continue;
             }
@@ -441,6 +456,108 @@ public sealed class CombatResolver
 
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+    }
+
+    private void ResolvePartyUseItem(CombatSession session, Character user, CombatAction action, List<CombatEvent> events)
+    {
+        if (_spellCastingService == null)
+        {
+            events.Add(new CombatEvent($"{user.Name} cannot use magical items right now."));
+            return;
+        }
+
+        if (!action.ItemInventoryIndex.HasValue || action.ItemInventoryIndex.Value < 0 || action.ItemInventoryIndex.Value >= user.Inventory.Count)
+        {
+            events.Add(new CombatEvent($"{user.Name} has no valid item selected."));
+            return;
+        }
+
+        var item = user.Inventory[action.ItemInventoryIndex.Value];
+        var spellId = action.SpellId;
+
+        if (string.IsNullOrWhiteSpace(spellId))
+        {
+            var spell = _spellCastingService.FindSpellFromItem(item);
+            spellId = spell?.Id;
+        }
+
+        if (string.IsNullOrWhiteSpace(spellId))
+        {
+            events.Add(new CombatEvent($"{item.Name} has no usable spell effect."));
+            return;
+        }
+
+        var targets = action.Target != null ? new List<SpellCastTarget> { action.Target } : new List<SpellCastTarget>();
+        var result = _spellCastingService.CastFromItem(new SpellCastRequest
+        {
+            Caster = user,
+            SpellId = spellId,
+            Context = SpellUseContext.Combat,
+            PartyTargets = session.Party,
+            MonsterTargets = session.Monsters,
+            Targets = targets,
+            RoundNumber = session.RoundNumber,
+            CombatSession = session
+        });
+
+        if (!result.Success)
+        {
+            events.Add(new CombatEvent($"{user.Name} fails to use {item.Name}: {result.Error}"));
+            return;
+        }
+
+        if (item.Type is ItemType.Potion or ItemType.Scroll)
+            user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
+
+        events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
+        foreach (var message in result.Events)
+            events.Add(new CombatEvent(message));
+    }
+
+    private static void ResolveLayOnHands(CombatSession session, Character paladin, CombatAction action, List<CombatEvent> events)
+    {
+        if (!paladin.IsPaladin())
+        {
+            events.Add(new CombatEvent($"{paladin.Name} cannot use Lay on Hands."));
+            return;
+        }
+
+        if (paladin.LayOnHandsUsedToday)
+        {
+            events.Add(new CombatEvent($"{paladin.Name} has already used Lay on Hands today."));
+            return;
+        }
+
+        var targetName = action.Target?.CharacterName;
+        if (string.IsNullOrWhiteSpace(targetName))
+        {
+            events.Add(new CombatEvent($"{paladin.Name} has no Lay on Hands target."));
+            return;
+        }
+
+        var target = session.Party.FirstOrDefault(p => string.Equals(p.Name, targetName, StringComparison.OrdinalIgnoreCase));
+        if (target == null)
+        {
+            events.Add(new CombatEvent($"{paladin.Name}'s Lay on Hands target is no longer present."));
+            return;
+        }
+
+        if (target.HasStatus(CharacterStatus.Dead) || target.HasStatus(CharacterStatus.Ashes) || target.HasStatus(CharacterStatus.Lost))
+        {
+            events.Add(new CombatEvent($"{paladin.Name} cannot heal {target.Name} with Lay on Hands."));
+            return;
+        }
+
+        var healAmount = Math.Max(0, paladin.GetPaladinLevel()) * 2;
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healAmount);
+        var healed = target.CurrentHitPoints - before;
+
+        paladin.LayOnHandsUsedToday = true;
+
+        events.Add(new CombatEvent(healed > 0
+            ? $"{paladin.Name} lays on hands and heals {target.Name} for {healed} hit point(s)."
+            : $"{paladin.Name} lays on hands on {target.Name}, but no healing is needed."));
     }
 
     private List<CombatEvent> FinalizeRound(CombatSession session, List<CombatEvent> events)

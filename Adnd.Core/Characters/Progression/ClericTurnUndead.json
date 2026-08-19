@@ -1,0 +1,133 @@
+{
+  "Class": "Cleric",
+  "TurnUndeadTable": [
+    {
+      "LevelRange": "1-2",
+      "Results": {
+        "Skeleton": "10",
+        "Zombie": "13",
+        "Ghoul": "16",
+        "Shadow": "19",
+        "Wight": "-",
+        "Wraith": "-",
+        "Mummy": "-",
+        "Spectre": "-",
+        "Vampire": "-",
+        "Ghost": "-",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "3-4",
+      "Results": {
+        "Skeleton": "7",
+        "Zombie": "10",
+        "Ghoul": "13",
+        "Shadow": "16",
+        "Wight": "19",
+        "Wraith": "-",
+        "Mummy": "-",
+        "Spectre": "-",
+        "Vampire": "-",
+        "Ghost": "-",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "5-6",
+      "Results": {
+        "Skeleton": "T",
+        "Zombie": "T",
+        "Ghoul": "10",
+        "Shadow": "13",
+        "Wight": "16",
+        "Wraith": "19",
+        "Mummy": "-",
+        "Spectre": "-",
+        "Vampire": "-",
+        "Ghost": "-",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "7-8",
+      "Results": {
+        "Skeleton": "D",
+        "Zombie": "D",
+        "Ghoul": "T",
+        "Shadow": "10",
+        "Wight": "13",
+        "Wraith": "16",
+        "Mummy": "19",
+        "Spectre": "-",
+        "Vampire": "-",
+        "Ghost": "-",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "9-10",
+      "Results": {
+        "Skeleton": "D",
+        "Zombie": "D",
+        "Ghoul": "D",
+        "Shadow": "T",
+        "Wight": "10",
+        "Wraith": "13",
+        "Mummy": "16",
+        "Spectre": "19",
+        "Vampire": "-",
+        "Ghost": "-",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "11-12",
+      "Results": {
+        "Skeleton": "D",
+        "Zombie": "D",
+        "Ghoul": "D",
+        "Shadow": "D",
+        "Wight": "T",
+        "Wraith": "10",
+        "Mummy": "13",
+        "Spectre": "16",
+        "Vampire": "19",
+        "Ghost": "-",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "13-14",
+      "Results": {
+        "Skeleton": "D",
+        "Zombie": "D",
+        "Ghoul": "D",
+        "Shadow": "D",
+        "Wight": "D",
+        "Wraith": "T",
+        "Mummy": "10",
+        "Spectre": "13",
+        "Vampire": "16",
+        "Ghost": "19",
+        "Lich": "-"
+      }
+    },
+    {
+      "LevelRange": "15-16",
+      "Results": {
+        "Skeleton": "D",
+        "Zombie": "D",
+        "Ghoul": "D",
+        "Shadow": "D",
+        "Wight": "D",
+        "Wraith": "D",
+        "Mummy": "T",
+        "Spectre": "10",
+        "Vampire": "13",
+        "Ghost": "16",
+        "Lich": "19"
+      }
+    }
+  ]
+}

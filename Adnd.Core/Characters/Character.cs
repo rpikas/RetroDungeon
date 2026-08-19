@@ -32,6 +32,7 @@ public class Character
     public int DualClassOriginalLevel { get; set; } = 0;
     public AbilityScores Abilities { get; set; } = new();
     public int Level { get; set; } = 1;
+    public bool LayOnHandsUsedToday { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -120,6 +121,12 @@ public class Character
         var entry = ClassProgressions.FirstOrDefault(x => x.Class == cls);
         return entry?.Experience ?? Experience;
     }
+
+    public bool IsPaladin() => Classes.Contains(CharacterClass.Paladin);
+
+    public int GetPaladinLevel() => IsPaladin()
+        ? GetClassLevel(CharacterClass.Paladin)
+        : 0;
 
     public void EnsureClassProgressions()
     {

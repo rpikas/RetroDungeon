@@ -2,9 +2,9 @@
   "Name": "Treasure Type C",
   "Coins": {
     "CopperPieces": { "Amount": "0", "Chance": 0 },
-    "SilverPieces": { "Amount": "2d8*100", "Chance": 40 },
+    "SilverPieces": { "Amount": "0", "Chance": 0 },
     "ElectrumPieces": { "Amount": "0", "Chance": 0 },
-    "GoldPieces": { "Amount": "1d6*100", "Chance": 40 },
+    "GoldPieces": { "Amount": "1d6*10", "Chance": 40 },
     "PlatinumPieces": { "Amount": "0", "Chance": 0 }
   },
   "Gems": {

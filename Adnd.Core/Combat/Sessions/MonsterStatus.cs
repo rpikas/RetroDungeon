@@ -3,6 +3,7 @@ namespace Adnd.Core.Combat.Sessions;
 public enum MonsterStatus
 {
     Asleep,
+    Entangled,
     Poisoned,
     Paralyzed,
     Confused,

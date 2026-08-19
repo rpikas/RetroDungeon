@@ -261,6 +261,21 @@ public class MainMenu
     {
         Enter("EdgeOfTown");
         _dungeonMenu.Show();
+
+        // A new day starts only after the party leaves the maze.
+        var party = _partyRepo.Load();
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var member) || !member.IsPaladin())
+                continue;
+
+            if (!member.LayOnHandsUsedToday)
+                continue;
+
+            member.LayOnHandsUsedToday = false;
+            _charRepo.Save(member);
+        }
     }
 
     /// <summary>
