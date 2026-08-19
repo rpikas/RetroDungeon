@@ -266,3 +266,66 @@ it is 50% chanse the enouter cast a sleep spell. then all the charaters have to 
 
 in the encounter view in the status column show if the charater has a status thats stops him from fighting. if assleep, show for how many more rounds he is asleep
 
+260818-260819
+
+if encounter got special apilities Level 1 Priest spells, then the encounter with 50% chase attack normaly and with 50% chase cast a 
+cure light wounds that heals 1-8 hp if an other enouter is damaged. this can maximum be done 3 times during one battle.
+
+Encounter SpecialAbilities 1 hp damage breath, 20 hp damage breath, 50 hp damage breath, 60 hp damage breath, 
+80 hp damage breath, 100 hp damage breath, x hp damage breath, they should all do the same thing as 1 hp damage breath, 
+only difference is how much damage they give implement a common method for all SpecialAbilities that could be used.
+
+20 hp damage breath should give between 1-20 damage. 60 hp damage breash should give between 1-60 dmage etc. 
+All charaters should roll a saving throw aginst breah weapon. if they succeesd they should only get half the damage. 
+
+la till CharaterSavingThrows.json manuellt.
+there are different saving thows against for example ParalyzationPoisonDeath, BreathWeapon and spell. 
+What a charater nees to roll depends on class and level described in CharaterSavingThrows.json 
+make sure that when a charater is exposed to spells like sleep, poison, paralyzation, breath weapon 
+the correct saving thow is used depening on class and level.
+
+Bugfix: when adding members to the party, show the first charater typed on the screen
+when selecting members to the party show also   
+Race  Lvl          HP  AC Status in a table like when showing the party. use the same columns as when viewing the party
+
+manuellt uppdaterat treasure types, tagit bort cp, sp ect och minskat mängden ofta med faktor 100
+
+make the default XpMultiplier = 10
+in the shop do not show items that are out of stock
+
+when inspecting a charater that is a paladin or when a encountering monsters and it is a paladins turn, 
+show an option L)ay on hands. It could only be performed once per day. 
+It is assumed to be a new day every time a party enters a dungeon. 
+The paladin can select a party target to heal when doing lay on hands. Shortcut is L-key. healing amount is paladin level *2
+lay on hands should only be possible to do once per day, the party needs to leave the maze before it can be done again.
+make the default foreground color be White
+
+L)ay on hands should be an option shown in the encounter view when it is the paladin turn to select action.
+implement druid level 1 spell Entangle. den peåverkar en grupp och håller i 5 rounds om encounter misslyckas med save vs. spell. 
+visa i encounter vyn hur många mobs som är Engangled.
+
+
+
+level 10 obegränsat
+level 9: max 100000gp
+level 8: max 40000gp
+level 7: max 20000gp
+level 6: max 14000gp
+level 5: max 11000gp
+level 4: max 10000gp
+level 3: max 5000gp
+level 2: max 3000gp
+level 1: max 2000gp
+
+set default  ProbabilityFindingEachItem = 0.05
+
+when inspecting a charater or when encountering monsters introduce the option U)se short cut key:U asks what item that should be used.
+when an item is used the SpecialAbilities should cast the spell mentioned. 
+For example Potion of Extra Healing has  "SpecialAbilities": [ "Casts Cure Serious Wounds" ] that means that spell Cure Serious Wounds should be cast when that item is used.
+Potions and scroll disapears after used once. 
+Bug: I get the message No usable magical items. even when Potion of healing is in the inventory, i expected it to be usable
+Bug: in the encounter view a charater with both with scroll of sleep and potion of invisibility selected to use item i got the message 
+that the charater has no usable magical items
+after leaving inspec a charater in the maze, go back to the camp menu
+
+in the encounter dialog when a cleric level 1 or higher or a paladin level 3 or higher should select the option Dispell undead be avaliaböe
