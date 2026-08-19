@@ -13,6 +13,7 @@ public sealed class CombatResolver
 {
     private readonly IDice _dice;
     private readonly SpellCastingService? _spellCastingService;
+    private readonly CharacterSavingThrowService _savingThrowService = new();
 
     public CombatResolver(IDice? dice = null, SpellCastingService? spellCastingService = null)
     {
@@ -172,7 +173,8 @@ public sealed class CombatResolver
             if (HasSpecialAbility(monster, "Level 1 Priest spells") && ResolveLevel1PriestSpell(monster, session, events))
                 continue;
 
-            if (HasSpecialAbility(monster, "1 hp damage breath") && ResolveOneHpDamageBreath(monster, session, events))
+            if (TryGetHpDamageBreathDamage(monster, out var breathDamage)
+                && ResolveHpDamageBreath(monster, breathDamage, session, events))
                 continue;
 
             if (monster.HasStatus(MonsterStatus.IncendiaryCloud))
@@ -340,10 +342,16 @@ public sealed class CombatResolver
                                 var poisonRoll = _dice.Roll(100);
                                 if (poisonRoll <= 70)
                                 {
-                                    if (!target.HasStatus(CharacterStatus.Poisoned))
+                                    var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
+                                    var saveRoll = _dice.Roll(20);
+                                    if (saveRoll >= saveTarget)
+                                    {
+                                        events.Add(new CombatEvent($"{target.Name} resists poison (save {saveRoll} vs {saveTarget})."));
+                                    }
+                                    else if (!target.HasStatus(CharacterStatus.Poisoned))
                                     {
                                         target.AddStatus(CharacterStatus.Poisoned);
-                                        events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}!"));
+                                        events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
                                     }
                                 }
                             }
@@ -353,10 +361,17 @@ public sealed class CombatResolver
                                 var paralyzeRoll = _dice.Roll(100);
                                 if (paralyzeRoll <= 60)
                                 {
-                                    if (!target.HasStatus(CharacterStatus.Paralyzed))
+                                    var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
+                                    var saveRoll = _dice.Roll(20);
+
+                                    if (saveRoll >= saveTarget)
+                                    {
+                                        events.Add(new CombatEvent($"{target.Name} resists paralysis (save {saveRoll} vs {saveTarget})."));
+                                    }
+                                    else if (!target.HasStatus(CharacterStatus.Paralyzed))
                                     {
                                         target.AddStatus(CharacterStatus.Paralyzed);
-                                        events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName}!"));
+                                        events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
                                     }
                                     else
                                     {
@@ -584,7 +599,7 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{monster.DisplayName} casts Sleep!"));
         foreach (var target in aliveParty)
         {
-            var saveTarget = GetCharacterSpellSaveTarget(target);
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
             var saveRoll = _dice.Roll(20);
 
             if (saveRoll >= saveTarget)
@@ -627,19 +642,32 @@ public sealed class CombatResolver
         return true;
     }
 
-    private static bool ResolveOneHpDamageBreath(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    private bool ResolveHpDamageBreath(MonsterInstance monster, int maxDamage, CombatSession session, List<CombatEvent> events)
     {
+        if (maxDamage <= 0)
+            return false;
+
         var aliveParty = session.AliveParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
-        events.Add(new CombatEvent($"{monster.DisplayName} uses 1 HP damage breath!"));
+        var rolledDamage = _dice.Roll(maxDamage);
+        events.Add(new CombatEvent($"{monster.DisplayName} uses {maxDamage} HP damage breath (rolled {rolledDamage})!"));
 
         foreach (var target in aliveParty)
         {
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
+            var saveRoll = _dice.Roll(20);
+            var damage = saveRoll >= saveTarget ? rolledDamage / 2 : rolledDamage;
+
             var before = target.CurrentHitPoints;
-            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - 1);
-            events.Add(new CombatEvent($"{target.Name} takes 1 damage. HP {before}->{target.CurrentHitPoints}."));
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+
+            if (saveRoll >= saveTarget)
+                events.Add(new CombatEvent($"{target.Name} succeeds breath save ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
+            else
+                events.Add(new CombatEvent($"{target.Name} fails breath save ({saveRoll} vs {saveTarget}) and takes {actual} damage. HP {before}->{target.CurrentHitPoints}."));
 
             if (target.CurrentHitPoints <= 0)
             {
@@ -651,17 +679,21 @@ public sealed class CombatResolver
         return true;
     }
 
-    private static int GetCharacterSpellSaveTarget(Character c)
+    private static bool TryGetHpDamageBreathDamage(MonsterInstance monster, out int damage)
     {
-        var level = Math.Max(1, c.Level);
-        return level switch
+        foreach (var ability in monster.Template.SpecialAbilities)
         {
-            <= 3 => 16,
-            <= 6 => 14,
-            <= 9 => 12,
-            <= 12 => 10,
-            _ => 8
-        };
+            var name = ability.Name?.Trim() ?? string.Empty;
+            var m = Regex.Match(name, @"^(?<damage>\d+)\s*hp damage breath$", RegexOptions.IgnoreCase);
+            if (!m.Success)
+                continue;
+
+            if (int.TryParse(m.Groups["damage"].Value, out damage) && damage > 0)
+                return true;
+        }
+
+        damage = 0;
+        return false;
     }
 
     private static bool HasSpecialAbility(MonsterInstance monster, string abilityName)

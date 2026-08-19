@@ -476,10 +476,10 @@
                     }
                 ],
                 "SpecialAbilities": [
-                    {
-                        "Name": "Breath",
-                        "Description": "Fire breath attack."
-                    }
+                  {
+                    "Name": "70 hp damage breath",
+                    "Description": "Fire breath attack."
+                  }
                 ],
                 "XPValue": 1200,
                 "TreasureType": "D",

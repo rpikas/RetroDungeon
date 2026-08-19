@@ -334,10 +334,10 @@
                 }
             ],
             "SpecialAbilities": [
-                {
-                    "Name": "Breath",
-                    "Description": "Petrifying breath attack."
-                }
+              {
+                "Name": "80 hp damage breath",
+                "Description": "Petrifying breath attack."
+              }
             ],
             "XPValue": 1200,
             "TreasureType": "D",

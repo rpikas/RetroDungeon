@@ -487,16 +487,16 @@
                     "Damage": "1d4"
                 },
                 {
-                    "Name": "Breath",
+                    "Name": "Bite",
                     "NumberOfAttacks": 1,
                     "Damage": "4d4"
                 }
             ],
             "SpecialAbilities": [
-                {
-                    "Name": "Breath",
-                    "Description": "Fire breath attack."
-                }
+              {
+                "Name": "100 hp damage breath",
+                "Description": "Fire breath attack."
+              }
             ],
             "XPValue": 2500,
             "TreasureType": "D",
@@ -729,7 +729,7 @@
             ],
             "SpecialAbilities": [
                 {
-                    "Name": "Breath",
+                    "Name": "100 hp damage breath",
                     "Description": "Poison breath attack."
                 }
             ],

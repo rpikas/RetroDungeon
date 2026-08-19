@@ -220,40 +220,6 @@
             "TreasureType": "J",
             "Source": "AdndAndWizardry"
         },
-      {
-        "Name": "Creeping Coin",
-        "Type": "Other",
-        "Frequency": "Common",
-        "NumberOfAppearancesMin": 4,
-        "NumberOfAppearancesMax": 24,
-        "ArmorClass": 10,
-        "HitDice": 1,
-        "HitDiceType": 1,
-        "ExtraHitPoints": 0,
-        "SavingThrows": {
-          "ParalyzationPoisonDeath": 13,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 15,
-          "BreathWeapon": 16,
-          "Spell": 16
-        },
-        "Attacks": [
-          {
-            "Name": "Breath",
-            "NumberOfAttacks": 1,
-            "Damage": "1d1"
-          }
-        ],
-        "SpecialAbilities": [
-          {
-            "Name": "1 hp damage breath",
-            "Description": "1 hp damage breath on everybody in party"
-          }
-        ],
-        "XPValue": 25,
-        "TreasureType": "J",
-        "Source": "Wizardry"
-      },
         {
             "Name": "Bubbly Slime",
             "Type": "Other",

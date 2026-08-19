@@ -68,6 +68,9 @@
     <Content Include="..\Adnd.Data\Spells\*.json" Link="Data\Spells\%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Adnd.Data\CharaterSavingThrows.json" Link="Data\CharaterSavingThrows.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\Adnd.Data\Treasure\*.json" Link="Data\Treasure\%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

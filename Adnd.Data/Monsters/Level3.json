@@ -431,7 +431,7 @@
         {
             "Name": "Dragon Fly",
             "Type": "Dragon",
-            "Frequency": "Uncommon",
+            "Frequency": "Common",
             "NumberOfAppearancesMin": 2,
             "NumberOfAppearancesMax": 4,
             "ArmorClass": 4,
@@ -468,10 +468,10 @@
                 }
             ],
             "SpecialAbilities": [
-                {
-                    "Name": "Breath (Fire)",
-                    "Description": "Can exhale a cone of fire causing damage to all creatures in its path."
-                }
+              {
+                "Name": "20 hp damage breath",
+                "Description": "Can exhale a cone of fire causing damage to all creatures in its path."
+              }
             ],
             "XPValue": 1275,
             "TreasureType": "D",
@@ -707,9 +707,5 @@
             "TreasureType": "D",
             "Source": "Wizardry"
         }
-
-
-
-
     ]
 }
