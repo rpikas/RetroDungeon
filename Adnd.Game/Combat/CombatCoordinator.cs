@@ -226,6 +226,14 @@ public sealed class CombatCoordinator
 
     private static void RemoveTemporaryCombatEffects(CombatSession session)
     {
+        foreach (var c in session.Party)
+        {
+            if (c.HasStatus(CharacterStatus.Asleep))
+                c.RemoveStatus(CharacterStatus.Asleep);
+        }
+
+        session.AsleepPartyRounds.Clear();
+
         foreach (var name in session.BlessedPartyMembers)
         {
             var c = session.Party.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));

@@ -169,6 +169,12 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (HasSpecialAbility(monster, "Level 1 Priest spells") && ResolveLevel1PriestSpell(monster, session, events))
+                continue;
+
+            if (HasSpecialAbility(monster, "1 hp damage breath") && ResolveOneHpDamageBreath(monster, session, events))
+                continue;
+
             if (monster.HasStatus(MonsterStatus.IncendiaryCloud))
             {
                 var rolledDamage = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
@@ -592,6 +598,57 @@ public sealed class CombatResolver
             session.SetPartyAsleep(target.Name, rounds);
             events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s)."));
         }
+    }
+
+    private bool ResolveLevel1PriestSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        if (session.Level1PriestSpellCastsUsed >= 3)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+            return false; // Attack normally.
+
+        var damagedAllies = session.AliveMonsters
+            .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
+            .ToList();
+
+        if (damagedAllies.Count == 0)
+            return false;
+
+        var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
+        var healRoll = _dice.Roll(8);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+        var actual = target.CurrentHitPoints - before;
+
+        session.Level1PriestSpellCastsUsed += 1;
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Light Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
+        return true;
+    }
+
+    private static bool ResolveOneHpDamageBreath(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        events.Add(new CombatEvent($"{monster.DisplayName} uses 1 HP damage breath!"));
+
+        foreach (var target in aliveParty)
+        {
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - 1);
+            events.Add(new CombatEvent($"{target.Name} takes 1 damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+        }
+
+        return true;
     }
 
     private static int GetCharacterSpellSaveTarget(Character c)

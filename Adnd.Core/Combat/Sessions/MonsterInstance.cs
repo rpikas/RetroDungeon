@@ -16,7 +16,9 @@ public sealed class MonsterInstance
         InstanceMonsterType = template.Type;
 
         // Roll HP based on HitDice (1d8 per hit die)
-        CurrentHitPoints = RollHitPoints(template.HitDice, template.HitDiceType,template.ExtraHitPoints);
+        var rolledHitPoints = RollHitPoints(template.HitDice, template.HitDiceType, template.ExtraHitPoints);
+        MaxHitPoints = rolledHitPoints;
+        CurrentHitPoints = rolledHitPoints;
         ArmorClass = template.ArmorClass;
     }
 
@@ -37,6 +39,7 @@ public sealed class MonsterInstance
     public string GroupId { get; }
     public string Name { get; }
     public MonsterType InstanceMonsterType { get; }
+    public int MaxHitPoints { get; }
     public int CurrentHitPoints { get; set; }
     public int ArmorClass { get; }
     public bool IsAlive => CurrentHitPoints > 0;

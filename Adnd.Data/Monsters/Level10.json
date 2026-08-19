@@ -36,7 +36,7 @@
             ],
             "SpecialAbilities": [
                 {
-                    "Name": "Fire Breath",
+                    "Name": "100 hp damage Breath",
                     "Description": "Cone of fire, damage equal to current hp (save for half)."
                 },
                 {

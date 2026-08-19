@@ -220,35 +220,40 @@
             "TreasureType": "J",
             "Source": "AdndAndWizardry"
         },
-        {
-            "Name": "Creeping Coin",
-            "Type": "Other",
-            "Frequency": "Legendary",
-            "NumberOfAppearancesMin": 4,
-            "NumberOfAppearancesMax": 24,
-            "ArmorClass": 10,
-            "HitDice": 1,
-            "HitDiceType": 1,
-            "ExtraHitPoints": 0,
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Attacks": [
-                {
-                    "Name": "Breath",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d2"
-                }
-            ],
-            "SpecialAbilities": [],
-            "XPValue": 5,
-            "TreasureType": "J",
-            "Source": "Wizardry"
+      {
+        "Name": "Creeping Coin",
+        "Type": "Other",
+        "Frequency": "Common",
+        "NumberOfAppearancesMin": 4,
+        "NumberOfAppearancesMax": 24,
+        "ArmorClass": 10,
+        "HitDice": 1,
+        "HitDiceType": 1,
+        "ExtraHitPoints": 0,
+        "SavingThrows": {
+          "ParalyzationPoisonDeath": 13,
+          "RodStaffWand": 14,
+          "PetrificationPolymorph": 15,
+          "BreathWeapon": 16,
+          "Spell": 16
         },
+        "Attacks": [
+          {
+            "Name": "Breath",
+            "NumberOfAttacks": 1,
+            "Damage": "1d1"
+          }
+        ],
+        "SpecialAbilities": [
+          {
+            "Name": "1 hp damage breath",
+            "Description": "1 hp damage breath on everybody in party"
+          }
+        ],
+        "XPValue": 25,
+        "TreasureType": "J",
+        "Source": "Wizardry"
+      },
         {
             "Name": "Bubbly Slime",
             "Type": "Other",
@@ -273,12 +278,7 @@
                     "Damage": "1d2"
                 }
             ],
-            "SpecialAbilities": [
-              {
-                "Name": "Poison",
-                "Description": "Bite may poison the target."
-              }
-            ],
+            "SpecialAbilities": [ ],
              "XPValue": 5,
             "TreasureType": "J",
             "Source": "Wizardry"
@@ -313,39 +313,44 @@
             "Description": "Level 1 Mage spells"
           }
         ],
-        "XPValue": 10,
+        "XPValue": 25,
         "TreasureType": "J",
         "Source": "Wizardry"
       },
-        {
-            "Name": "Lvl 1 Priest",
-            "Type": "Humanoid",
-            "Frequency": "Uncommon",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 5,
-            "ArmorClass": 4,
-            "HitDice": 1,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 0,
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Attacks": [
-                {
-                    "Name": "Cause Light Wounds",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                }
-            ],
-            "SpecialAbilities": [],
-            "XPValue": 15,
-            "TreasureType": "J",
-            "Source": "Wizardry"
+      {
+        "Name": "Lvl 1 Priest",
+        "Type": "Humanoid",
+        "Frequency": "Uncommon",
+        "NumberOfAppearancesMin": 2,
+        "NumberOfAppearancesMax": 5,
+        "ArmorClass": 4,
+        "HitDice": 1,
+        "HitDiceType": 8,
+        "ExtraHitPoints": 0,
+        "SavingThrows": {
+          "ParalyzationPoisonDeath": 13,
+          "RodStaffWand": 14,
+          "PetrificationPolymorph": 15,
+          "BreathWeapon": 16,
+          "Spell": 16
         },
+        "Attacks": [
+          {
+            "Name": "Mace",
+            "NumberOfAttacks": 1,
+            "Damage": "1d8"
+          }
+        ],
+        "SpecialAbilities": [
+          {
+            "Name": "Level 1 Priest spells",
+            "Description": "Level 1 Priest spells"
+          }
+        ],
+        "XPValue": 25,
+        "TreasureType": "J",
+        "Source": "Wizardry"
+      },
       {
         "Name": "Undead Kobold",
         "Type": "Undead",
@@ -372,10 +377,6 @@
           }
         ],
         "SpecialAbilities": [
-          {
-            "Name": "Paralyzation",
-            "Description": "Bite forces save vs paralyzation"
-          }
         ],
         "XPValue": 15,
         "TreasureType": "J",
