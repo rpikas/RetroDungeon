@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Text.Json;
 using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
@@ -131,6 +132,9 @@ public sealed class CombatResolver
                     break;
                 case CombatActionType.UseItem:
                     ResolvePartyUseItem(session, member, action, events);
+                    break;
+                case CombatActionType.DispellUndead:
+                    ResolveDispellUndead(session, member, action, events);
                     break;
                 case CombatActionType.LayOnHands:
                     ResolveLayOnHands(session, member, action, events);
@@ -283,6 +287,17 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{monster.DisplayName} is entangled ({remaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{monster.DisplayName} breaks free of entangle."));
+
+                continue;
+            }
+
+            if (monster.HasStatus(MonsterStatus.TurnedUndead))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.TurnedUndead);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is turned and cannot attack ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} is no longer turned."));
 
                 continue;
             }
@@ -558,6 +573,167 @@ public sealed class CombatResolver
         events.Add(new CombatEvent(healed > 0
             ? $"{paladin.Name} lays on hands and heals {target.Name} for {healed} hit point(s)."
             : $"{paladin.Name} lays on hands on {target.Name}, but no healing is needed."));
+    }
+
+    private void ResolveDispellUndead(CombatSession session, Character actor, CombatAction action, List<CombatEvent> events)
+    {
+        var effectiveClericLevel = GetEffectiveTurnUndeadLevel(actor);
+        if (effectiveClericLevel < 1)
+        {
+            events.Add(new CombatEvent($"{actor.Name} cannot dispell undead."));
+            return;
+        }
+
+        var targetMonsters = string.IsNullOrWhiteSpace(action.TargetGroupId)
+            ? session.AliveMonsters.ToList()
+            : session.GetAliveMonstersByGroup(action.TargetGroupId).ToList();
+
+        var undead = targetMonsters.Where(m => m.InstanceMonsterType == Adnd.Core.Monsters.MonsterType.Undead).ToList();
+        if (undead.Count == 0)
+        {
+            events.Add(new CombatEvent($"{actor.Name} presents a holy symbol, but no undead are affected."));
+            return;
+        }
+
+        events.Add(new CombatEvent($"{actor.Name} uses Dispell Undead!"));
+
+        var table = LoadTurnUndeadTable();
+        var row = table.FirstOrDefault(r => effectiveClericLevel >= r.MinLevel && effectiveClericLevel <= r.MaxLevel)
+                  ?? table.OrderByDescending(r => r.MaxLevel).First();
+
+        foreach (var monster in undead)
+        {
+            var key = ResolveTurnUndeadKey(monster.Name);
+            if (!row.Results.TryGetValue(key, out var token) || string.IsNullOrWhiteSpace(token))
+                token = row.Results.TryGetValue("Skeleton", out var fallback) ? fallback : "-";
+
+            token = token.Trim();
+
+            if (token == "-")
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} resists the turning attempt."));
+                continue;
+            }
+
+            if (string.Equals(token, "D", StringComparison.OrdinalIgnoreCase))
+            {
+                monster.CurrentHitPoints = 0;
+                events.Add(new CombatEvent($"{monster.DisplayName} is disintegrated by holy power!"));
+                continue;
+            }
+
+            if (string.Equals(token, "T", StringComparison.OrdinalIgnoreCase))
+            {
+                var rounds = _dice.Roll(10) + 2;
+                monster.SetStatus(MonsterStatus.TurnedUndead, rounds);
+                events.Add(new CombatEvent($"{monster.DisplayName} is turned for {rounds} round(s)!"));
+                continue;
+            }
+
+            if (!int.TryParse(token, out var required))
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} is unaffected."));
+                continue;
+            }
+
+            var roll = _dice.Roll(20);
+            if (roll >= required)
+            {
+                var rounds = _dice.Roll(10) + 2;
+                monster.SetStatus(MonsterStatus.TurnedUndead, rounds);
+                events.Add(new CombatEvent($"{monster.DisplayName} is turned ({roll} vs {required}) for {rounds} round(s)!"));
+            }
+            else
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} resists turning ({roll} vs {required})."));
+            }
+        }
+    }
+
+    private static int GetEffectiveTurnUndeadLevel(Character actor)
+    {
+        var clericLevel = actor.Classes.Contains(CharacterClass.Cleric)
+            ? actor.GetClassLevel(CharacterClass.Cleric)
+            : 0;
+
+        var paladinLevel = actor.Classes.Contains(CharacterClass.Paladin)
+            ? Math.Max(0, actor.GetClassLevel(CharacterClass.Paladin) - 2)
+            : 0;
+
+        if (!actor.Classes.Contains(CharacterClass.Cleric) && paladinLevel < 1)
+            return 0;
+
+        if (actor.Classes.Contains(CharacterClass.Paladin) && actor.GetClassLevel(CharacterClass.Paladin) < 3)
+            paladinLevel = 0;
+
+        return Math.Max(clericLevel, paladinLevel);
+    }
+
+    private static string ResolveTurnUndeadKey(string monsterName)
+    {
+        if (string.IsNullOrWhiteSpace(monsterName))
+            return "Skeleton";
+
+        var n = monsterName.Trim().ToLowerInvariant();
+        if (n.Contains("skeleton")) return "Skeleton";
+        if (n.Contains("zombie")) return "Zombie";
+        if (n.Contains("ghoul")) return "Ghoul";
+        if (n.Contains("shadow")) return "Shadow";
+        if (n.Contains("wight")) return "Wight";
+        if (n.Contains("wraith")) return "Wraith";
+        if (n.Contains("mummy")) return "Mummy";
+        if (n.Contains("spectre") || n.Contains("specter")) return "Spectre";
+        if (n.Contains("vampire")) return "Vampire";
+        if (n.Contains("ghost")) return "Ghost";
+        if (n.Contains("lich")) return "Lich";
+        return "Skeleton";
+    }
+
+    private static List<TurnUndeadRow> LoadTurnUndeadTable()
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "Data", "Characters", "Progression", "ClericTurnUndead.json");
+        if (!File.Exists(path))
+            path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Core", "Characters", "Progression", "ClericTurnUndead.json"));
+
+        if (!File.Exists(path))
+            return new List<TurnUndeadRow>
+            {
+                new() { MinLevel = 1, MaxLevel = 2, Results = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["Skeleton"] = "10" } }
+            };
+
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        if (!doc.RootElement.TryGetProperty("TurnUndeadTable", out var tableEl) || tableEl.ValueKind != JsonValueKind.Array)
+            return new List<TurnUndeadRow>();
+
+        var rows = new List<TurnUndeadRow>();
+        foreach (var rowEl in tableEl.EnumerateArray())
+        {
+            var range = rowEl.GetProperty("LevelRange").GetString() ?? "1-1";
+            var parts = range.Split('-', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var min = 1;
+            var max = 1;
+            if (parts.Length >= 1) int.TryParse(parts[0], out min);
+            if (parts.Length >= 2) int.TryParse(parts[1], out max);
+            else max = min;
+
+            var results = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (rowEl.TryGetProperty("Results", out var resultsEl) && resultsEl.ValueKind == JsonValueKind.Object)
+            {
+                foreach (var p in resultsEl.EnumerateObject())
+                    results[p.Name] = p.Value.GetString() ?? "-";
+            }
+
+            rows.Add(new TurnUndeadRow { MinLevel = min, MaxLevel = max, Results = results });
+        }
+
+        return rows;
+    }
+
+    private sealed class TurnUndeadRow
+    {
+        public int MinLevel { get; set; }
+        public int MaxLevel { get; set; }
+        public Dictionary<string, string> Results { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     }
 
     private List<CombatEvent> FinalizeRound(CombatSession session, List<CombatEvent> events)

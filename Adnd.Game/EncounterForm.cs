@@ -416,6 +416,8 @@ public sealed class EncounterForm : Form
             options.Add(new ViewerPromptOption("confirm", "Auto: parry"));
 
         options.Add(new ViewerPromptOption("spell", "Cast a spell"));
+        if (CanUseDispellUndead(character))
+            options.Add(new ViewerPromptOption("dispellUndead", "Dispell undead"));
         if (character.IsPaladin())
             options.Add(new ViewerPromptOption("layOnHands", character.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
         options.Add(new ViewerPromptOption("useItem", "Use an item"));
@@ -489,6 +491,9 @@ public sealed class EncounterForm : Form
             case Keys.S:
                 ChooseSpellAction();
                 break;
+            case Keys.D:
+                ChooseDispellUndeadAction();
+                break;
             case Keys.L:
                 ChooseLayOnHandsAction();
                 break;
@@ -538,6 +543,47 @@ public sealed class EncounterForm : Form
         // is still standing, not to share them around inside one group.
 
         _actions[character.Name] = action;
+        AdvanceActor();
+    }
+
+    private void ChooseDispellUndeadAction()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count)
+            return;
+
+        var caster = _party[_currentIndex];
+        if (!IsActionable(caster))
+            return;
+
+        if (!CanUseDispellUndead(caster))
+        {
+            SayOnBoth("Dispell Undead", $"{caster.Name} cannot dispell undead.");
+            return;
+        }
+
+        var combatAction = CombatAction.OfType(CombatActionType.DispellUndead);
+
+        if (_multipleGroups && _session != null)
+        {
+            var groups = _session.GetDistinctGroupIds()
+                .Where(g => _session.GetAliveCountByGroup(g) > 0)
+                .ToList();
+
+            if (groups.Count > 1)
+            {
+                var targetGroupId = PromptGroupSelection(caster);
+                if (targetGroupId == null)
+                    return;
+
+                combatAction.TargetGroupId = targetGroupId;
+            }
+            else if (groups.Count == 1)
+            {
+                combatAction.TargetGroupId = groups[0];
+            }
+        }
+
+        _actions[caster.Name] = combatAction;
         AdvanceActor();
     }
 
@@ -910,6 +956,14 @@ public sealed class EncounterForm : Form
 
     private static bool CanUseLayOnHands(Character c) => c.IsPaladin() && !c.LayOnHandsUsedToday;
 
+    private static bool CanUseDispellUndead(Character c)
+    {
+        var clericLevel = c.Classes.Contains(CharacterClass.Cleric) ? c.GetClassLevel(CharacterClass.Cleric) : 0;
+        var paladinLevel = c.Classes.Contains(CharacterClass.Paladin) ? c.GetClassLevel(CharacterClass.Paladin) : 0;
+        var paladinAsCleric = paladinLevel >= 3 ? paladinLevel - 2 : 0;
+        return clericLevel >= 1 || paladinAsCleric >= 1;
+    }
+
     private static string FormatStatus(Character c)
     {
         var statuses = new List<string>();
@@ -1276,6 +1330,12 @@ public sealed class EncounterForm : Form
         var secondLine = showLayOnHands
             ? $"S)PELL   L)AY HANDS  {parryText}      T)AKE BACK"
             : $"S)PELL   {parryText}      T)AKE BACK";
+
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && CanUseDispellUndead(_party[_currentIndex]))
+            secondLine = $"S)PELL   D)ISPELL UNDEAD  {parryText}      T)AKE BACK";
+
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && showLayOnHands && CanUseDispellUndead(_party[_currentIndex]))
+            secondLine = $"S)PELL   D)ISPELL UNDEAD  L)AY HANDS  {parryText}";
 
         if (_multipleGroups)
         {

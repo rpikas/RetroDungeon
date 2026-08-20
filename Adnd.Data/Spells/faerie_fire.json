@@ -6,6 +6,7 @@
   "Description": "Outlines targets with pale light, negating concealment.",
   "RangeType": "Enemy",
   "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
   "CastContext": "Combat",
   "EffectType": "Damage",
   "EffectDescription": "Pale flames outline enemies, making them easier to strike."

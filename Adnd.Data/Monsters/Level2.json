@@ -9,6 +9,7 @@
       "NumberOfAppearancesMax": 4,
       "ArmorClass": 5,
       "HitDice": 1,
+      "Size": "Large",
       "Movement": {
         "Walk": 30,
         "Fly": 0,
@@ -46,6 +47,7 @@
       "Frequency": "Uncommon",
       "ArmorClass": 8,
       "HitDice": 2,
+      "Size": "Medium",
       "Movement": {
         "Walk": 10,
         "Fly": 0,
@@ -83,6 +85,7 @@
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 2,
+      "Size": "Large",
       "Movement": {
         "Walk": 30,
         "Fly": 0,
@@ -125,6 +128,7 @@
       "NumberOfAppearancesMax": 6,
       "ArmorClass": 7,
       "HitDice": 1,
+      "Size": "Medium",
       "Movement": {
         "Walk": 30,
         "Fly": 0,
@@ -162,6 +166,7 @@
       "NumberOfAppearancesMax": 6,
       "ArmorClass": 7,
       "HitDice": 2,
+      "Size": "Medium",
       "Movement": {
         "Walk": 40,
         "Fly": 0,
@@ -202,6 +207,7 @@
       "HitDice": 2,
       "HitDiceType": 5,
       "ExtraHitPoints": 1,
+      "Size": "Medium",
       "Movement": {
         "Walk": 0,
         "Fly": 40,
@@ -239,6 +245,7 @@
       "HitDice": 3,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
+      "Size": "Small",
       "Movement": {
         "Walk": 40,
         "Fly": 0,
@@ -279,6 +286,7 @@
       "HitDice": 2,
       "HitDiceType": 5,
       "ExtraHitPoints": 1,
+      "Size": "Medium",
       "Movement": {
         "Walk": 40,
         "Fly": 0,
@@ -324,6 +332,7 @@
       "HitDice": 2,
       "HitDiceType": 4,
       "ExtraHitPoints": 2,
+      "Size": "Medium",
       "Movement": {
         "Walk": 40,
         "Fly": 0,
@@ -373,6 +382,7 @@
       "HitDice": 1,
       "HitDiceType": 1,
       "ExtraHitPoints": 0,
+      "Size": "Small",
       "SavingThrows": {
         "ParalyzationPoisonDeath": 13,
         "RodStaffWand": 14,

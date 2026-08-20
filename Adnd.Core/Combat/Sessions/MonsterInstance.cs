@@ -19,7 +19,7 @@ public sealed class MonsterInstance
         var rolledHitPoints = RollHitPoints(template.HitDice, template.HitDiceType, template.ExtraHitPoints);
         MaxHitPoints = rolledHitPoints;
         CurrentHitPoints = rolledHitPoints;
-        ArmorClass = template.ArmorClass;
+        BaseArmorClass = template.ArmorClass;
     }
 
     private static int RollHitPoints(int hitDice, int hitDiceType = 8, int extraHitPoints = 0)
@@ -41,7 +41,9 @@ public sealed class MonsterInstance
     public MonsterType InstanceMonsterType { get; }
     public int MaxHitPoints { get; }
     public int CurrentHitPoints { get; set; }
-    public int ArmorClass { get; }
+    public int BaseArmorClass { get; }
+    public int ArmorClassModifier { get; private set; }
+    public int ArmorClass => BaseArmorClass + ArmorClassModifier;
     public bool IsAlive => CurrentHitPoints > 0;
 
     public string DisplayName => $"{Name} #{Index}";
@@ -82,5 +84,10 @@ public sealed class MonsterInstance
 
         _statusDurations[status] = rounds;
         return rounds;
+    }
+
+    public void AdjustArmorClass(int delta)
+    {
+        ArmorClassModifier += delta;
     }
 }

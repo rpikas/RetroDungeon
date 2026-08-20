@@ -5,6 +5,7 @@ public enum CombatActionType
     Fight,
     Parry,
     UseItem,
+    DispellUndead,
     LayOnHands,
     Run,
     Spell,

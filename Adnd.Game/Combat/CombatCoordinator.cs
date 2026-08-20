@@ -78,6 +78,7 @@ public sealed class CombatCoordinator
             new InsectPlagueHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
+            new FaerieFireHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
             new ChromaticOrbHandler(),
