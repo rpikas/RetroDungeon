@@ -342,7 +342,7 @@ public class CityMenu
     private void InspectCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacter: true);
+        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
         if (sel.HasValue)
         {
             Console.Clear();
