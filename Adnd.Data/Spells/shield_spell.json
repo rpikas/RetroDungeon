@@ -3,10 +3,10 @@
   "Name": "Shield",
   "Class": "MagicUser",
   "Level": 1,
-  "Description": "Invisible disc grants defensive protection against attacks.",
+  "Description": "Invisible disc grants defensive protection against attacks, that sets AC to 2",
   "RangeType": "Self",
   "Targeting": "Single",
   "CastContext": "Both",
   "EffectType": "Heal",
-  "EffectDescription": "Creates a protective magical barrier around the caster."
+  "EffectDescription": "Creates a protective magical barrier around the caster, that sets AC to 2"
 }

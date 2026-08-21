@@ -811,7 +811,11 @@ public sealed class CombatResolver
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
                 var actualDamage = before - target.CurrentHitPoints;
-                events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} for {actualDamage} (rolled {damage}). HP {before}->{target.CurrentHitPoints}."));
+                var weaponName = member.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.MainHand, out var weapon) && weapon != null
+                    ? weapon.Name
+                    : "bare hands";
+                //              events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} for {actualDamage} (rolled {damage}). HP {before}->{target.CurrentHitPoints}."));
+                events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} with {weaponName} for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
 
                 if (target.CurrentHitPoints <= 0)
                 {

@@ -376,12 +376,7 @@
       "SpecialAbilities": [""],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Fighter",
-        "Thief",
-        "Assassin",
-        "Mage"
-      ],
+      "AllowedClasses": ["All" ],
       "Rarity": "Common",
       "Description": "A simple dagger.",
       "Source": "PHB",
@@ -404,15 +399,10 @@
       "Range": "5/10/15",
       "ArmorClassBonus": 0,
       "MagicBonus": 0,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [ "" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Fighter",
-        "Cleric",
-        "Mage",
-        "Monk"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Common",
       "Description": "A wooden staff.",
       "Source": "PHB",
@@ -553,14 +543,10 @@
       "Range": "5/10/15",
       "ArmorClassBonus": 0,
       "MagicBonus": 2,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [ "" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Mage",
-        "Cleric",
-        "Monk"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Rare",
       "Description": "A powerful enchanted staff.",
       "Source": "PHB",
@@ -641,14 +627,10 @@
       "Range": "10/20/30",
       "ArmorClassBonus": 0,
       "MagicBonus": 2,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [ "" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Fighter",
-        "Thief",
-        "Assassin"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Rare",
       "Description": "A powerful enchanted dagger.",
       "Source": "PHB",
@@ -777,7 +759,7 @@
       "ToHitBonus": 0
     },
     {
-      "Name": "Staff of Montino",
+      "Name": "Staff of Silence",
       "Type": "Weapon",
       "Cost": 15000,
       "Weight": 4,
@@ -790,14 +772,10 @@
       "Range": "5/10/15",
       "ArmorClassBonus": 0,
       "MagicBonus": 0,
-      "SpecialAbilities": ["Silence Aura"],
+      "SpecialAbilities": [ "Silence Aura" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Mage",
-        "Cleric",
-        "Monk"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Rare",
       "Description": "A staff that radiates silence.",
       "Source": "Wizardry",
@@ -1000,7 +978,7 @@
       "IsCursed": false,
       "IsShopBuyable": true,
       "AllowedClasses": [
-        "Ninja",
+        "Assassin",
         "Thief"
       ],
       "Rarity": "Very Rare",
@@ -1033,7 +1011,7 @@
       "IsShopBuyable": false,
       "AllowedClasses": [
         "Fighter",
-        "Samurai"
+        "Assassin"
       ],
       "Rarity": "Legendary",
       "Description": "The legendary Muramasa Blade.",
@@ -1150,12 +1128,7 @@
       "SpecialAbilities": [""],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Fighter",
-        "Thief",
-        "Assassin",
-        "Mage"
-      ],
+      "AllowedClasses": [ "All"],
       "Rarity": "Rare",
       "Description": "A finely crafted enchanted dagger.",
       "Source": "PHB",
@@ -1178,15 +1151,10 @@
       "Range": "10/20/30",
       "ArmorClassBonus": 0,
       "MagicBonus": 3,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [ "" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Fighter",
-        "Thief",
-        "Assassin",
-        "Mage"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Very Rare",
       "Description": "An exceptionally rare enchanted dagger.",
       "Source": "PHB",
@@ -1209,14 +1177,10 @@
       "Range": "5/10/15",
       "ArmorClassBonus": 0,
       "MagicBonus": 1,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [ "" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Mage",
-        "Cleric",
-        "Monk"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Rare",
       "Description": "A magically enhanced staff.",
       "Source": "PHB",
@@ -1239,14 +1203,10 @@
       "Range": "5/10/15",
       "ArmorClassBonus": 0,
       "MagicBonus": 3,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [ "" ],
       "IsCursed": false,
       "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Mage",
-        "Cleric",
-        "Monk"
-      ],
+      "AllowedClasses": [ "All" ],
       "Rarity": "Very Rare",
       "Description": "An exceptionally rare enchanted staff.",
       "Source": "PHB",

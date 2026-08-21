@@ -89,6 +89,7 @@ public sealed class CombatCoordinator
             new BlessHandler(),
             new SleepHandler(),
             new InvisibilityHandler(),
+            new ShieldSpellHandler(),
             new FireballHandler(),
             new WallOfFireHandler(),
             new LightningBoltHandler(),
@@ -129,8 +130,16 @@ public sealed class CombatCoordinator
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var heldMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
             var entangledMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Entangled));
+            var panickedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Panicked));
+            var fearedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Feared));
+            var turnedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.TurnedUndead));
+            var blindedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Blinded));
+            var confusedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Confused));
+            var stunnedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Stunned));
+            var slowedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Slowed));
+            var paralyzedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
-            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, entangledMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
+            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, entangledMonsters, panickedMonsters, fearedMonsters, turnedMonsters, blindedMonsters, confusedMonsters, stunnedMonsters, slowedMonsters, paralyzedMonsters, session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
             encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)

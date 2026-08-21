@@ -23,6 +23,14 @@ public sealed class EncounterForm : Form
     private readonly int _asleepMonsterCount;
     private readonly int _heldMonsterCount;
     private readonly int _entangledMonsterCount;
+    private readonly int _panickedMonsterCount;
+    private readonly int _fearedMonsterCount;
+    private readonly int _turnedMonsterCount;
+    private readonly int _blindedMonsterCount;
+    private readonly int _confusedMonsterCount;
+    private readonly int _stunnedMonsterCount;
+    private readonly int _slowedMonsterCount;
+    private readonly int _paralyzedMonsterCount;
     private readonly int _roundNumber;
     private readonly List<Character> _party;
     private readonly CombatSession? _session;
@@ -54,13 +62,21 @@ public sealed class EncounterForm : Form
     /// ordinary one-group fight -- which is most fights -- could only offer "Fight" and let the resolver
     /// pick, which is exactly the choice being added.
     /// </param>
-    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
+    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount, int fearedMonsterCount, int turnedMonsterCount, int blindedMonsterCount, int confusedMonsterCount, int stunnedMonsterCount, int slowedMonsterCount, int paralyzedMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
     {
         _monsterName = monsterName;
         _monsterCount = monsterCount;
         _asleepMonsterCount = asleepMonsterCount;
         _heldMonsterCount = heldMonsterCount;
         _entangledMonsterCount = entangledMonsterCount;
+        _panickedMonsterCount = panickedMonsterCount;
+        _fearedMonsterCount = fearedMonsterCount;
+        _turnedMonsterCount = turnedMonsterCount;
+        _blindedMonsterCount = blindedMonsterCount;
+        _confusedMonsterCount = confusedMonsterCount;
+        _stunnedMonsterCount = stunnedMonsterCount;
+        _slowedMonsterCount = slowedMonsterCount;
+        _paralyzedMonsterCount = paralyzedMonsterCount;
         _roundNumber = roundNumber;
         _party = party;
         _session = session;
@@ -1275,6 +1291,14 @@ public sealed class EncounterForm : Form
         var asleepCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Asleep)) ?? _asleepMonsterCount;
         var heldCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Paralyzed)) ?? _heldMonsterCount;
         var entangledCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Entangled)) ?? _entangledMonsterCount;
+        var panickedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Panicked)) ?? _panickedMonsterCount;
+        var fearedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Feared)) ?? _fearedMonsterCount;
+        var turnedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.TurnedUndead)) ?? _turnedMonsterCount;
+        var blindedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Blinded)) ?? _blindedMonsterCount;
+        var confusedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Confused)) ?? _confusedMonsterCount;
+        var stunnedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Stunned)) ?? _stunnedMonsterCount;
+        var slowedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Slowed)) ?? _slowedMonsterCount;
+        var paralyzedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Paralyzed)) ?? _paralyzedMonsterCount;
 
         var asleepText = !_multipleGroups && asleepCount > 0
             ? $"  ({asleepCount} ASLEEP)"
@@ -1285,7 +1309,31 @@ public sealed class EncounterForm : Form
         var entangledText = !_multipleGroups && entangledCount > 0
             ? $"  ({entangledCount} ENTANGLED)"
             : string.Empty;
-        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}{entangledText}";
+        var panickedText = !_multipleGroups && panickedCount > 0
+            ? $"  ({panickedCount} PANICKED)"
+            : string.Empty;
+        var fearedText = !_multipleGroups && fearedCount > 0
+            ? $"  ({fearedCount} FEARED)"
+            : string.Empty;
+        var turnedText = !_multipleGroups && turnedCount > 0
+            ? $"  ({turnedCount} TURNED)"
+            : string.Empty;
+        var blindedText = !_multipleGroups && blindedCount > 0
+            ? $"  ({blindedCount} BLINDED)"
+            : string.Empty;
+        var confusedText = !_multipleGroups && confusedCount > 0
+            ? $"  ({confusedCount} CONFUSED)"
+            : string.Empty;
+        var stunnedText = !_multipleGroups && stunnedCount > 0
+            ? $"  ({stunnedCount} STUNNED)"
+            : string.Empty;
+        var slowedText = !_multipleGroups && slowedCount > 0
+            ? $"  ({slowedCount} SLOWED)"
+            : string.Empty;
+        var paralyzedText = !_multipleGroups && paralyzedCount > 0
+            ? $"  ({paralyzedCount} PARALYZED)"
+            : string.Empty;
+        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}{entangledText}{panickedText}{fearedText}{turnedText}{blindedText}{confusedText}{stunnedText}{slowedText}{paralyzedText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

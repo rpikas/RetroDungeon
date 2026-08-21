@@ -14,5 +14,11 @@ public enum MonsterStatus
     WallOfFire,
     DeathFog,
     IncendiaryCloud,
-    Panicked
+    Panicked,
+    Slowed,
+    Feared,
+    Blinded,
+    Petrified,
+    Stunned,
+
 }

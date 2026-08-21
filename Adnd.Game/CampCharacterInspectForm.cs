@@ -70,6 +70,7 @@ public sealed class CampCharacterInspectForm : Form
             new BlessHandler(),
             new SleepHandler(),
             new InvisibilityHandler(),
+            new ShieldSpellHandler(),
             new IceStormHandler(),
             new LightningBoltHandler(),
             new WallOfFireHandler(),
@@ -456,8 +457,12 @@ public sealed class CampCharacterInspectForm : Form
 
         sb.AppendLine($"{c.Name.ToUpperInvariant(),-8} L {levelText,-3} {classText,-14} {raceText}");
         sb.AppendLine();
+
+        var strDisplay = c.Abilities.Strength == 18 && c.ExceptionalStrengthPercentile.HasValue
+            ? $"18/{c.ExceptionalStrengthPercentile?.ToString() ?? "00"}"
+            : c.Abilities.Strength.ToString();
         sb.AppendLine(RowWithRightColumn(
-            $"STRENGTH     {c.Abilities.Strength,2}",
+            $"STRENGTH     {strDisplay,2}",
             $"GOLD      {c.GoldPieces,6}",
             "LEVEL",
             levelText));
