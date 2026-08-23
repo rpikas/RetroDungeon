@@ -20,5 +20,6 @@ public enum MonsterStatus
     Blinded,
     Petrified,
     Stunned,
+    Unconscious
 
 }

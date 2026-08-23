@@ -31,6 +31,7 @@ public sealed class EncounterForm : Form
     private readonly int _stunnedMonsterCount;
     private readonly int _slowedMonsterCount;
     private readonly int _paralyzedMonsterCount;
+    private readonly int _unconsciousMonsterCount;
     private readonly int _roundNumber;
     private readonly List<Character> _party;
     private readonly CombatSession? _session;
@@ -62,7 +63,9 @@ public sealed class EncounterForm : Form
     /// ordinary one-group fight -- which is most fights -- could only offer "Fight" and let the resolver
     /// pick, which is exactly the choice being added.
     /// </param>
-    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount, int fearedMonsterCount, int turnedMonsterCount, int blindedMonsterCount, int confusedMonsterCount, int stunnedMonsterCount, int slowedMonsterCount, int paralyzedMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
+    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount, int fearedMonsterCount, 
+        int turnedMonsterCount, int blindedMonsterCount, int confusedMonsterCount, int stunnedMonsterCount, int slowedMonsterCount, int paralyzedMonsterCount, int unconsciousMonsterCount,
+        List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
     {
         _monsterName = monsterName;
         _monsterCount = monsterCount;
@@ -77,6 +80,7 @@ public sealed class EncounterForm : Form
         _stunnedMonsterCount = stunnedMonsterCount;
         _slowedMonsterCount = slowedMonsterCount;
         _paralyzedMonsterCount = paralyzedMonsterCount;
+        _unconsciousMonsterCount = unconsciousMonsterCount;
         _roundNumber = roundNumber;
         _party = party;
         _session = session;
@@ -196,6 +200,16 @@ public sealed class EncounterForm : Form
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var heldCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+            var entangledCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Entangled));
+            var panickedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Panicked));
+            var fearedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Feared));
+            var turnedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.TurnedUndead));
+            var blindedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Blinded));
+            var confusedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Confused));
+            var stunnedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Stunned));
+            var slowedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Slowed));
+            var paralyzedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+            var unconsciousCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Unconscious));
 
             // Check if we should use Wizardry suffix
             bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
@@ -209,8 +223,28 @@ public sealed class EncounterForm : Form
                 statusBits.Add($"{asleepCount} asleep");
             if (heldCount > 0)
                 statusBits.Add($"{heldCount} held");
+            if (unconsciousCount > 0)
+                statusBits.Add($"{unconsciousCount} unconscious");
+            if (entangledCount > 0)
+                statusBits.Add($"{entangledCount} entangled");
+            if (panickedCount > 0)
+                statusBits.Add($"{panickedCount} panicked");
+            if (fearedCount > 0)
+                statusBits.Add($"{fearedCount} feared");
+            if (turnedCount > 0)
+                statusBits.Add($"{turnedCount} turned");
+            if (blindedCount > 0)
+                statusBits.Add($"{blindedCount} blinded");
+            if (confusedCount > 0)
+                statusBits.Add($"{confusedCount} confused");
+            if (stunnedCount > 0)
+                statusBits.Add($"{stunnedCount} stunned");
+            if (slowedCount > 0)
+                statusBits.Add($"{slowedCount} slowed");
+            if (paralyzedCount > 0)
+                statusBits.Add($"{paralyzedCount} paralyzed");
 
-            var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
+                var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
             return $"{count} {name}{statusText}";
         }).Where(d => d != null).ToList();
 
@@ -218,6 +252,7 @@ public sealed class EncounterForm : Form
         _monsterCount = session.AliveMonsters.Count();
         _asleepMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
         _heldMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+        //_unconsciousMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Unconscious));
 
         Text = "Encounter";
         StartPosition = FormStartPosition.CenterParent;
@@ -1294,11 +1329,12 @@ public sealed class EncounterForm : Form
         var panickedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Panicked)) ?? _panickedMonsterCount;
         var fearedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Feared)) ?? _fearedMonsterCount;
         var turnedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.TurnedUndead)) ?? _turnedMonsterCount;
-        var blindedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Blinded)) ?? _blindedMonsterCount;
+        var blindCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Blinded)) ?? _blindedMonsterCount;
         var confusedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Confused)) ?? _confusedMonsterCount;
         var stunnedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Stunned)) ?? _stunnedMonsterCount;
         var slowedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Slowed)) ?? _slowedMonsterCount;
         var paralyzedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Paralyzed)) ?? _paralyzedMonsterCount;
+        var unconsciousCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Unconscious)) ?? _unconsciousMonsterCount;
 
         var asleepText = !_multipleGroups && asleepCount > 0
             ? $"  ({asleepCount} ASLEEP)"
@@ -1318,8 +1354,8 @@ public sealed class EncounterForm : Form
         var turnedText = !_multipleGroups && turnedCount > 0
             ? $"  ({turnedCount} TURNED)"
             : string.Empty;
-        var blindedText = !_multipleGroups && blindedCount > 0
-            ? $"  ({blindedCount} BLINDED)"
+        var blindText = !_multipleGroups && blindCount > 0
+            ? $"  ({blindCount} BLINDED)"
             : string.Empty;
         var confusedText = !_multipleGroups && confusedCount > 0
             ? $"  ({confusedCount} CONFUSED)"
@@ -1333,7 +1369,7 @@ public sealed class EncounterForm : Form
         var paralyzedText = !_multipleGroups && paralyzedCount > 0
             ? $"  ({paralyzedCount} PARALYZED)"
             : string.Empty;
-        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}{entangledText}{panickedText}{fearedText}{turnedText}{blindedText}{confusedText}{stunnedText}{slowedText}{paralyzedText}";
+        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

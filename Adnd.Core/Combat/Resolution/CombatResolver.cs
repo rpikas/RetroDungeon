@@ -331,6 +331,16 @@ public sealed class CombatResolver
 
                 continue;
             }
+            if (monster.HasStatus(MonsterStatus.Unconscious))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Unconscious);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is unconscious ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} regains consciousness."));
+
+                continue;
+            }
 
             var attacks = monster.Template.Attacks.Count > 0 ? monster.Template.Attacks : new List<Adnd.Core.Monsters.MonsterAttack> { new() { NumberOfAttacks = 1, Damage = "1d4", Name = "Claw" } };
 
