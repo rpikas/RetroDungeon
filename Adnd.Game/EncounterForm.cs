@@ -15,6 +15,10 @@ using ImageSharpRgba32 = SixLabors.ImageSharp.PixelFormats.Rgba32;
 using ImageSharpPngEncoder = SixLabors.ImageSharp.Formats.Png.PngEncoder;
 
 namespace Adnd.Game;
+/// <summary>
+/// see https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiHclQZzWYd5CxC1GJxaMxUrUUiIO2QZhSUQn1LHhER3leQJye41fZH4Dz6J1RVNUjlPB9kA-RBGfxwTba8qBFwf8Ol6DadLgyeLhfvnuPW3YmJzaStIxvTLoeH-926-PwVKgzCn4-qZwtp/s400/dmg-appendix-c.jpg
+/// 
+/// </summary>
 
 public sealed class EncounterForm : Form
 {
