@@ -2051,19 +2051,19 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         // 60% = 1 group, 25% = 2 groups, 10% = 3 groups, 5% = 4 groups
         int numberOfGroups = 1;
         var roll = _random.NextDouble();
-        if (roll < 0.05) // 5%
+        if (roll < 0.01) // 1%
         {
             numberOfGroups = 4;
         }
-        else if (roll < 0.15) // 10% (0.05 + 0.10)
+        else if (roll < 0.06) // 5% (0.01 + 0.05)
         {
             numberOfGroups = 3;
         }
-        else if (roll < 0.40) // 25% (0.15 + 0.25)
+        else if (roll < 0.20) // 14% (0.06 + 0.14)
         {
             numberOfGroups = 2;
         }
-        // else: 60% (remaining) = 1 group
+        // else: 80% (remaining) = 1 group
 
         CombatOutcome outcome;
         if (numberOfGroups > 1)
@@ -2157,9 +2157,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             { "Uncommon", 30 },
             { "Rare", 15 },
             { "Very Rare", 4 },
-            { "Legendary", 1 }
-        };
+            { "Legendary", 1 },
+            { "Not Implemented", 0 }
 
+        };
+        //filter out monsters with "Not Implemented" frequency
+        monsters = monsters.Where(m => !string.Equals(m.Frequency, "Not Implemented", StringComparison.OrdinalIgnoreCase)).ToList();
+        if (monsters.Count == 0)
+            return null;
         // Calculate total weight
         var totalWeight = 0;
         var monsterWeights = new List<(Monster monster, int weight)>();

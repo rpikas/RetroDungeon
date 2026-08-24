@@ -2,7 +2,7 @@
   "Name": "Treasure Type A",
   "Coins": {
     "CopperPieces": { "Amount": "0", "Chance": 0 },
-    "SilverPieces": { "Amount": "0", "Chance": 30 },
+    "SilverPieces": { "Amount": "0", "Chance": 0 },
     "ElectrumPieces": { "Amount": "0", "Chance": 0 },
     "GoldPieces": { "Amount": "5d20*10", "Chance": 40 },
     "PlatinumPieces": { "Amount": "0", "Chance": 0 }

@@ -2,15 +2,369 @@
   "Level": 1,
   "Monsters": [
     {
+      "Name": "Bandit",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [],
+      "XPValue": 20,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Berserker",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Battle Frenzy",
+          "Description": "Never checks morale; fights to the death."
+        }
+      ],
+      "XPValue": 25,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Buccaneer",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Cutlass",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Seafaring",
+          "Description": "Expert sailors; may fight aboard ships or coastal caves."
+        }
+      ],
+      "XPValue": 25,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Nomad",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Scimitar",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Mounted Combat",
+          "Description": "Often encountered with horses or camels; gains advantage when mounted."
+        }
+      ],
+      "XPValue": 25,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Tribesmen",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Spear",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Primitive Weapons",
+          "Description": "Uses spears, clubs, and slings; may employ poison darts."
+        }
+      ],
+      "XPValue": 20,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Dervish",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Scimitar",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fanaticism",
+          "Description": "Lawful zealots; never retreat; may have cleric leaders."
+        }
+      ],
+      "XPValue": 30,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Merchant",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 8,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Caravan Guards",
+          "Description": "Usually accompanied by 2–12 guards; may carry valuable goods."
+        }
+      ],
+      "XPValue": 15,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Pilgrim",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 8,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Priest spells",
+          "Description": "Level 1 Priest spells"
+        }
+      ],
+      "XPValue": 25,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Adventurer",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Mixed Classes",
+          "Description": "Group may include fighters, clerics, thieves, and magic-users of levels 1–6."
+        },
+        {
+          "Name": "Tactical Cooperation",
+          "Description": "Adventurers fight intelligently, using spells and ranged weapons effectively."
+        }
+      ],
+      "XPValue": 35,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+    {
+      "Name": "Noble",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Retinue",
+          "Description": "Always accompanied by guards, servants, and possibly a magic-user or cleric advisor."
+        },
+        {
+          "Name": "Wealth and Influence",
+          "Description": "Possesses fine equipment, jewelry, and may command loyalty from other humans."
+        }
+      ],
+      "XPValue": 40,
+      "TreasureType": "A",
+      "Source": "AD&D"
+    },
+
+    {
       "Name": "Zombie",
       "Type": "Undead",
       "ClimateTerain": "Any",
-      "Frequency": "Common",
+      "Frequency": "Rare",
       "ActivityCycle": "Any",
       "Intelligence": "Non",
       "Alignment": "Neutral",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 24,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 8,
       "MovementRate": "Slow",
       "HitDice": 2,
@@ -65,13 +419,13 @@
     {
       "Name": "Rot Grub",
       "Type": "Insectoid",
-      "ClimateTerain": "Any (found in refuse, offal, filth)",
-      "Frequency": "Rare",
+      "ClimateTerain": "Any (found in refuse, offal, filth) Rare in dungeon",
+      "Frequency": "Not Implemented",
       "ActivityCycle": "Any",
       "Intelligence": "Non",
       "Alignment": "Neutral",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 20,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 9,
       "MovementRate": "Very Slow",
       "HitDice": 0,
@@ -117,12 +471,12 @@
       "Name": "Ear Seeker",
       "Type": "Insectoid",
       "ClimateTerain": "Any (lives in wood)",
-      "Frequency": "Very Rare",
+      "Frequency": "Not Implemented",
       "ActivityCycle": "Any",
       "Intelligence": "Non",
       "Alignment": "Neutral",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 9,
       "MovementRate": "Very Slow",
       "HitDice": 0,
@@ -174,12 +528,12 @@
       "Name": "Manes Deamon",
       "Type": "Demon",
       "ClimateTerain": "Temperate",
-      "Frequency": "Common",
+      "Frequency": "Very Rare",
       "ActivityCycle": "Nocturnal",
       "Intelligence": "Semi",
       "Alignment": "Chaotic Evil",
-      "NumberOfAppearancesMin": 4,
-      "NumberOfAppearancesMax": 16,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 7,
       "MovementRate": "Slow",
       "HitDice": 1,
@@ -231,7 +585,7 @@
       "Name": "Dwarf",
       "Type": "Humanoid",
       "ClimateTerain": "Temperate",
-      "Frequency": "Common",
+      "Frequency": "Rare",
       "ActivityCycle": "Nocturnal",
       "Intelligence": "Low",
       "Alignment": "Chaotic Good",
@@ -284,12 +638,12 @@
       "Name": "Elf",
       "Type": "Humanoid",
       "ClimateTerain": "Temperate",
-      "Frequency": "Common",
+      "Frequency": "Very Rare",
       "ActivityCycle": "Day",
       "Intelligence": "Average",
       "Alignment": "Chaotic Good",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 11,
       "ArmorClass": 5,
       "MovementRate": "Medium",
       "HitDice": 1,
@@ -334,10 +688,10 @@
     },
 
     {
-      "Name": "Giant Badger",
+      "Name": "Badger",
       "Type": "Animal",
       "ClimateTerain": "Temperate",
-      "Frequency": "Common",
+      "Frequency": "Rare",
       "ActivityCycle": "Nocturnal",
       "Intelligence": "Animal",
       "Alignment": "Neutral",
@@ -399,12 +753,12 @@
       "Name": "Fire Beetle",
       "Type": "Animal",
       "ClimateTerain": "Any",
-      "Frequency": "Uncommon",
+      "Frequency": "Common",
       "ActivityCycle": "Nocturnal",
       "Intelligence": "Non",
       "Alignment": "Neutral",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 4,
       "MovementRate": "Medium",
       "HitDice": 1,
@@ -457,12 +811,12 @@
       "Name": "Gnome",
       "Type": "Humanoid",
       "ClimateTerain": "Temperate",
-      "Frequency": "Uncommon",
+      "Frequency": "Rare",
       "ActivityCycle": "Day",
       "Intelligence": "Average",
       "Alignment": "Neutral Good",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 15,
       "ArmorClass": 5,
       "MovementRate": "Slow",
       "HitDice": 1,
@@ -510,12 +864,12 @@
       "Name": "Halfling",
       "Type": "Humanoid",
       "ClimateTerain": "Temperate",
-      "Frequency": "Common",
+      "Frequency": "Rare",
       "ActivityCycle": "Day",
       "Intelligence": "Average",
       "Alignment": "Lawful Good",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMin": 9,
+      "NumberOfAppearancesMax": 16,
       "ArmorClass": 6,
       "MovementRate": "Slow",
       "HitDice": 1,
@@ -563,7 +917,7 @@
       "Name": "Hobgoblin",
       "Type": "Humanoid",
       "ClimateTerain": "Temperate",
-      "Frequency": "Common",
+      "Frequency": "Uncommon",
       "ActivityCycle": "Day",
       "Intelligence": "Low",
       "Alignment": "Lawful Evil",
@@ -616,12 +970,12 @@
       "Name": "Piercer",
       "Type": "Monster",
       "ClimateTerain": "Underground",
-      "Frequency": "Uncommon",
+      "Frequency": "Not Implemented",
       "ActivityCycle": "Any",
       "Intelligence": "Non",
       "Alignment": "Neutral",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 3,
       "MovementRate": "None",
       "HitDice": 1,
@@ -678,8 +1032,8 @@
       "ActivityCycle": "Nocturnal",
       "Intelligence": "Low",
       "Alignment": "Chaotic Evil",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 15,
       "ArmorClass": 6,
       "MovementRate": "Slow",
       "HitDice": 1,
@@ -723,8 +1077,8 @@
       "Name": "Orc",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMin": 7,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 6,
       "HitDice": 1,
       "HitDiceType": 8,
@@ -767,8 +1121,8 @@
       "Name": "Giant Rat",
       "Type": "Animal",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 20,
       "ArmorClass": 12,
       "HitDice": 1,
       "HitDiceType": 4,
@@ -815,9 +1169,9 @@
     {
       "Name": "Skeleton",
       "Type": "Undead",
-      "Frequency": "Very Rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 5,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 13,
       "HitDice": 1,
       "HitDiceType": 8,
@@ -861,9 +1215,9 @@
     {
       "Name": "Kobold",
       "Type": "Humanoid",
-      "Frequency": "Legendary",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 6,
+      "NumberOfAppearancesMax": 18,
       "ArmorClass": 8,
       "HitDice": 1,
       "HitDiceType": 4,
@@ -969,6 +1323,42 @@
       "Source": "Wizardry"
     },
     {
+      "Name": "Lvl 1 Magic-User",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        }
+      ],
+      "XPValue": 25,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Lvl 1 Priest",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
@@ -1003,6 +1393,7 @@
       "TreasureType": "J",
       "Source": "Wizardry"
     },
+
     {
       "Name": "Undead Kobold",
       "Type": "Undead",

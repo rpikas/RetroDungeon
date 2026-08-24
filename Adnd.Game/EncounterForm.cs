@@ -95,7 +95,7 @@ public sealed class EncounterForm : Form
 
         Text = "Encounter";
         StartPosition = FormStartPosition.CenterParent;
-        ClientSize = new Size(980, 620);
+        ClientSize = new Size(980, 900);//This was 620, but I increased it to 900 to accommodate the new monster status counts and made the monster panel taller to fit the image.
         BackColor = Color.Black;
         ForeColor = GameRulesProvider.Current.DefaultColor;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -145,7 +145,7 @@ public sealed class EncounterForm : Form
             Left = 16,
             Top = 172,
             Width = 940,
-            Height = 180,
+            Height = 480,//This was 180, but I increased it to 480 to accommodate the monster image. This is single group
             BackColor = Color.Black,
             BorderStyle = BorderStyle.FixedSingle
         };
@@ -154,9 +154,9 @@ public sealed class EncounterForm : Form
         _partyList = new ListView
         {
             Left = 16,
-            Top = 362,
+            Top = 700,//This was 362, but I increased it to 700 to move it down below the monster panel.
             Width = 940,
-            Height = 236,
+            Height = 180,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             View = View.Details,
@@ -171,7 +171,7 @@ public sealed class EncounterForm : Form
         _partyList.Columns.Add("Class", 140);
         _partyList.Columns.Add("AC", 80);
         _partyList.Columns.Add("Hits", 100);
-        _partyList.Columns.Add("Status", 280);
+        _partyList.Columns.Add("Status", 320);//This was 280, but I increased it to 320 to accommodate the new status
 
         Controls.Add(_headerLabel);
         Controls.Add(_optionsTitleLabel);
@@ -194,6 +194,77 @@ public sealed class EncounterForm : Form
         _party = session.Party;
         _roundNumber = session.RoundNumber;
 
+        var groups = session.GetDistinctGroupIds().ToList();
+
+        // Första två grupper (eller färre)
+        var groupDescriptions = groups.Take(2).Select(groupId =>
+        {
+            var monstersInGroup = session.GetAliveMonstersByGroup(groupId).ToList();
+            if (monstersInGroup.Count == 0)
+                return null;
+
+            var name = monstersInGroup.First().Name;
+            var count = monstersInGroup.Count;
+            var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
+            var heldCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+            var entangledCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Entangled));
+            var panickedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Panicked));
+            var fearedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Feared));
+            var turnedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.TurnedUndead));
+            var blindedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Blinded));
+            var confusedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Confused));
+            var stunnedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Stunned));
+            var slowedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Slowed));
+            var paralyzedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+            var unconsciousCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Unconscious));
+
+            bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
+            var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
+            _monsterImages.Add((name, image));
+
+            var statusBits = new List<string>();
+            if (asleepCount > 0) statusBits.Add($"{asleepCount} asleep");
+            if (heldCount > 0) statusBits.Add($"{heldCount} held");
+            if (unconsciousCount > 0) statusBits.Add($"{unconsciousCount} unconscious");
+            if (entangledCount > 0) statusBits.Add($"{entangledCount} entangled");
+            if (panickedCount > 0) statusBits.Add($"{panickedCount} panicked");
+            if (fearedCount > 0) statusBits.Add($"{fearedCount} feared");
+            if (turnedCount > 0) statusBits.Add($"{turnedCount} turned");
+            if (blindedCount > 0) statusBits.Add($"{blindedCount} blinded");
+            if (confusedCount > 0) statusBits.Add($"{confusedCount} confused");
+            if (stunnedCount > 0) statusBits.Add($"{stunnedCount} stunned");
+            if (slowedCount > 0) statusBits.Add($"{slowedCount} slowed");
+            if (paralyzedCount > 0) statusBits.Add($"{paralyzedCount} paralyzed");
+
+            var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
+            return $"{count} {name}{statusText}";
+        }).Where(d => d != null).ToList();
+
+        // Om det finns 3 eller 4 grupper, skapa en separat lista för de senare
+        List<string> groupDescriptions2 = new();
+        if (groups.Count >= 3)
+        {
+            groupDescriptions2 = groups.Skip(2).Select(groupId =>
+            {
+                var monstersInGroup = session.GetAliveMonstersByGroup(groupId).ToList();
+                if (monstersInGroup.Count == 0)
+                    return null;
+
+                var name = monstersInGroup.First().Name;
+                var count = monstersInGroup.Count;
+                bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
+                var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
+                _monsterImages.Add((name, image));
+
+                var statusBits = new List<string>();
+                if (monstersInGroup.Any(m => m.HasStatus(MonsterStatus.Asleep))) statusBits.Add("asleep");
+                if (monstersInGroup.Any(m => m.HasStatus(MonsterStatus.Paralyzed))) statusBits.Add("paralyzed");
+
+                var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
+                return $"{count} {name}{statusText}";
+            }).Where(d => d != null).ToList();
+        }
+        /*
         var groups = session.GetDistinctGroupIds().ToList();
         var groupDescriptions = groups.Select(groupId =>
         {
@@ -251,8 +322,12 @@ public sealed class EncounterForm : Form
                 var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
             return $"{count} {name}{statusText}";
         }).Where(d => d != null).ToList();
-
-        _monsterName = string.Join(" and ", groupDescriptions);
+        */
+        var groupsLine1 = string.Join(" and ", groupDescriptions);
+        var groupsLine2 = string.Join(" and ", groupDescriptions2);
+        _monsterName = string.IsNullOrWhiteSpace(groupsLine2)
+            ? groupsLine1
+            : groupsLine1 + Environment.NewLine + groupsLine2;
         _monsterCount = session.AliveMonsters.Count();
         _asleepMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
         _heldMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
@@ -260,7 +335,7 @@ public sealed class EncounterForm : Form
 
         Text = "Encounter";
         StartPosition = FormStartPosition.CenterParent;
-        ClientSize = new Size(980, 620);
+        ClientSize = new Size(980, 900);//Multi encounter: This was 620, but I increased it to 900 to accommodate the new monster status counts and made the monster panel taller to fit the image.
         BackColor = Color.Black;
         ForeColor = GameRulesProvider.Current.DefaultColor;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -273,17 +348,17 @@ public sealed class EncounterForm : Form
             Left = 16,
             Top = 12,
             Width = 940,
-            Height = 40,
+            Height = 96,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 18f, FontStyle.Bold),
-            TextAlign = ContentAlignment.MiddleLeft
+            TextAlign = ContentAlignment.TopLeft
         };
 
-        _optionsTitleLabel = new Label
+        _optionsTitleLabel = new Label//For exmaple ROBERT'S OPTIONS
         {
             Left = 16,
-            Top = 64,
+            Top = 114,//Used to be 64 moving it down to make room for the new monster status counts
             Width = 940,
             Height = 40,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -292,10 +367,10 @@ public sealed class EncounterForm : Form
             TextAlign = ContentAlignment.MiddleCenter
         };
 
-        _optionsLegendLabel = new Label
+        _optionsLegendLabel = new Label//For example F)IGHT U)SE ITEM R)UN S)PELL P)ARRY T)AKE BACK G)ROUP (Select Target Group)
         {
             Left = 16,
-            Top = 108,
+            Top = 158,//Used to be 108, but I moved it down to make room for the new monster status counts
             Width = 940,
             Height = 56,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -305,6 +380,33 @@ public sealed class EncounterForm : Form
             TextAlign = ContentAlignment.MiddleLeft
         };
 
+        _monsterPanel = new Panel
+        {
+            Left = 16,
+            Top = 222,//Used to be 172, but I moved it down to make room for the new monster status counts
+            Width = 940,
+            Height = 480,//This was 180, but I increased it to 480 to accommodate the monster image. This is multiple group
+            BackColor = Color.Black,
+            BorderStyle = BorderStyle.FixedSingle
+        };
+        _monsterPanel.Paint += MonsterPanel_Paint;
+
+        _partyList = new ListView
+        {
+            Left = 16,
+            Top = 700,//This was 362, but I increased it to 700 to move it down below the monster panel.
+            Width = 940,
+            Height = 180,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            View = View.Details,
+            FullRowSelect = true,
+            GridLines = true,
+            HeaderStyle = ColumnHeaderStyle.Nonclickable,
+            Font = new Font("Consolas", 14f, FontStyle.Bold)
+        };
+
+        /*
         _monsterPanel = new Panel
         {
             Left = 16,
@@ -330,6 +432,7 @@ public sealed class EncounterForm : Form
             HeaderStyle = ColumnHeaderStyle.Nonclickable,
             Font = new Font("Consolas", 14f, FontStyle.Bold)
         };
+        */
 
         _partyList.Columns.Add("#", 50);
         _partyList.Columns.Add("Character Name", 220);
