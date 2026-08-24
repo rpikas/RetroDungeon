@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\ScenPictures\" />
     <Folder Include="Input\" />
     <Folder Include="Entities\" />
     <Folder Include="UI\" />
