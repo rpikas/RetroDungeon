@@ -882,13 +882,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 new ViewerPromptOption("leave", "Leave camp"),
             });
 
+            //TODO introduce ShowCharaterSheet as an option to the camp menu,
+
             var campAnswers = new Dictionary<string, DialogResult>
             {
                 ["reorder"] = DialogResult.No,
                 ["inspect"] = DialogResult.Yes,
                 ["leave"] = DialogResult.Cancel,
             };
-
             var choice = ViewerDialog.RunModal(form, this, campPrompt, campAnswers, PublishTable);
 
             if (choice == DialogResult.Yes)
@@ -1133,6 +1134,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         Invalidate();
     }
 
+    private void ShowCharaterSheet(Character character)
+    {
+        using var sheet = new Adnd.Game.Windows.CharacterForm(character);
+        sheet.ShowDialog(this);
+        PublishToViewer();
+    }
     private void InspectPartyMemberFromCamp(List<string> activeMembers, Dictionary<string, Character> roster)
     {
         var prompt = new StringBuilder();
@@ -1157,7 +1164,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private void OpenCampInspectDialog(Character selectedCharacter, List<string> activeMembers)
     {
-
+     /*   if (!GameRulesProvider.Current.UIOldStyle)
+        {
+            using var sheet = new Adnd.Game.Windows.CharacterForm(selectedCharacter);
+            sheet.ShowDialog(this);
+            PublishToViewer();
+            return;
+        }
+     */
         // Handed the maze's publisher, so the whole screen -- menu, item lists, spell lists -- is answerable from
         // the table too.
         using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable);
