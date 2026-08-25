@@ -1310,12 +1310,14 @@ public sealed class EncounterForm : Form
     {
         using var form = new Form();
         form.Text = title;
-        form.FormBorderStyle = FormBorderStyle.FixedDialog;
         form.StartPosition = FormStartPosition.CenterParent;
         var isChooseSpellDialog = string.Equals(title, "Choose Spell", StringComparison.OrdinalIgnoreCase);
+        form.FormBorderStyle = isChooseSpellDialog ? FormBorderStyle.Sizable : FormBorderStyle.FixedDialog;
         form.ClientSize = isChooseSpellDialog
             ? new Size(760, 980)
             : new Size(520, 340);
+        if (isChooseSpellDialog)
+            form.MinimumSize = new Size(640, 520);
         form.MinimizeBox = false;
         form.MaximizeBox = false;
 
@@ -1326,14 +1328,20 @@ public sealed class EncounterForm : Form
             Width = isChooseSpellDialog ? 736 : 496,
             Height = isChooseSpellDialog ? 890 : 250,
             AutoSize = false,
-            Text = prompt
+            Text = prompt,
+            Anchor = isChooseSpellDialog
+                ? AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+                : AnchorStyles.Top | AnchorStyles.Left
         };
 
         var input = new TextBox
         {
             Left = 12,
             Top = isChooseSpellDialog ? 910 : 270,
-            Width = isChooseSpellDialog ? 480 : 320
+            Width = isChooseSpellDialog ? 480 : 320,
+            Anchor = isChooseSpellDialog
+                ? AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom
+                : AnchorStyles.Top | AnchorStyles.Left
         };
 
         var ok = new Button
@@ -1342,7 +1350,10 @@ public sealed class EncounterForm : Form
             Left = isChooseSpellDialog ? 576 : 352,
             Width = 75,
             Top = isChooseSpellDialog ? 908 : 268,
-            DialogResult = DialogResult.OK
+            DialogResult = DialogResult.OK,
+            Anchor = isChooseSpellDialog
+                ? AnchorStyles.Right | AnchorStyles.Bottom
+                : AnchorStyles.Top | AnchorStyles.Left
         };
         var cancel = new Button
         {
@@ -1350,7 +1361,10 @@ public sealed class EncounterForm : Form
             Left = isChooseSpellDialog ? 657 : 433,
             Width = 75,
             Top = isChooseSpellDialog ? 908 : 268,
-            DialogResult = DialogResult.Cancel
+            DialogResult = DialogResult.Cancel,
+            Anchor = isChooseSpellDialog
+                ? AnchorStyles.Right | AnchorStyles.Bottom
+                : AnchorStyles.Top | AnchorStyles.Left
         };
 
         form.Controls.Add(label);
