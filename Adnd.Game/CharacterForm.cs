@@ -46,7 +46,7 @@ namespace Adnd.Game.Windows
             DrawInCircle(g, _character.Abilities.Dexterity.ToString(), new Rectangle(660, 300, 66, 66));
             DrawInCircle(g, _character.Abilities.Charisma.ToString(), new Rectangle(815, 300, 66, 66));
         }
-
+        /*
         private void DrawInBox(Graphics g, string text, Rectangle rect)
         {
             var format = new StringFormat
@@ -66,5 +66,74 @@ namespace Adnd.Game.Windows
             };
             g.DrawString(text, _handFont, _ink, circleBounds, format);
         }
+        */
+        private readonly Random _rnd = new Random();
+        private void DrawBoldString(Graphics g, string text, Font font, Brush brush, Rectangle rect, StringFormat format)
+        {
+            // Rita texten 3 gånger med små förskjutningar
+            g.DrawString(text, font, brush, new Rectangle(rect.X, rect.Y, rect.Width, rect.Height), format);
+            g.DrawString(text, font, brush, new Rectangle(rect.X + 1, rect.Y, rect.Width, rect.Height), format);
+            g.DrawString(text, font, brush, new Rectangle(rect.X, rect.Y + 1, rect.Width, rect.Height), format);
+        }
+        private void DrawInBox(Graphics g, string text, Rectangle rect)
+        {
+            var format = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+
+            float angle = (float)(_rnd.NextDouble() * 8 - 4);
+            int dx = _rnd.Next(-3, 4);
+            int dy = _rnd.Next(-3, 4);
+
+            var state = g.Save();
+
+            g.TranslateTransform(rect.X + rect.Width / 2 + dx,
+                                 rect.Y + rect.Height / 2 + dy);
+            g.RotateTransform(angle);
+
+            // Rita bold text centrerat i den roterade boxen
+            DrawBoldString(
+                g,
+                text,
+                _handFont,
+                _ink,
+                new Rectangle(-rect.Width / 2, -rect.Height / 2, rect.Width, rect.Height),
+                format);
+
+            g.Restore(state);
+        }
+
+        private void DrawInCircle(Graphics g, string text, Rectangle circleBounds)
+        {
+            var format = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+
+            float angle = (float)(_rnd.NextDouble() * 8 - 4);
+            int dx = _rnd.Next(-3, 4);
+            int dy = _rnd.Next(-3, 4);
+
+            var state = g.Save();
+
+            g.TranslateTransform(circleBounds.X + circleBounds.Width / 2 + dx,
+                                 circleBounds.Y + circleBounds.Height / 2 + dy);
+            g.RotateTransform(angle);
+
+            DrawBoldString(
+                g,
+                text,
+                _handFont,
+                _ink,
+                new Rectangle(-circleBounds.Width / 2, -circleBounds.Height / 2,
+                              circleBounds.Width, circleBounds.Height),
+                format);
+
+            g.Restore(state);
+        }
+
     }
 }

@@ -126,6 +126,8 @@ public sealed class CampCharacterInspectForm : Form
         _buttonsPanel.Controls.Add(MakeButton("I)dentify", (_, _) => NotImplemented("Identify")));
         _buttonsPanel.Controls.Add(MakeButton("S)pell", (_, _) => CastSpellAction()));
         _buttonsPanel.Controls.Add(MakeButton("U)se Item", (_, _) => UseItemAction()));
+        _buttonsPanel.Controls.Add(MakeButton("C)haracter Sheet", (_, _) => ShowCharacterSheetAction()));
+
         _layOnHandsButton = MakeButton("L)ay on Hands", (_, _) => LayOnHandsAction());
         _buttonsPanel.Controls.Add(_layOnHandsButton);
         _buttonsPanel.Controls.Add(MakeButton("L↵eave", (_, _) => Close()));
@@ -140,7 +142,7 @@ public sealed class CampCharacterInspectForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BorderStyle = BorderStyle.FixedSingle,
             Font = new Font("Consolas", 24f, FontStyle.Bold),
-            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM",
+            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM C)HARACTER SHEET",
             TextAlign = ContentAlignment.MiddleLeft,
             Visible = false
         };
@@ -176,6 +178,8 @@ public sealed class CampCharacterInspectForm : Form
             ("identify", "Identify"),
             ("spell", "Spell"),
             ("useItem", "Use item"),
+            ("characterSheet", "Character Sheet"),
+
         };
 
         var c = GetCharacter();
@@ -203,6 +207,8 @@ public sealed class CampCharacterInspectForm : Form
                 case "pool": PoolGoldAction(); break;
                 case "identify": NotImplemented("Identify"); break;
                 case "spell": CastSpellAction(); break;
+                case "useItem": UseItemAction(); break;
+                case "characterSheet": ShowCharacterSheetAction(); break;
                 case "leave": Close(); return;
                 default: return;
             }
@@ -253,6 +259,9 @@ public sealed class CampCharacterInspectForm : Form
                 break;
             case Keys.I:
                 NotImplemented("Identify");
+                break;
+            case Keys.C:
+                ShowCharacterSheetAction();
                 break;
             case Keys.U:
                 UseItemAction();
@@ -329,8 +338,8 @@ public sealed class CampCharacterInspectForm : Form
         _layOnHandsButton.Visible = c.IsPaladin();
         _layOnHandsButton.Text = c.LayOnHandsUsedToday ? "L)ay Hands (used)" : "L)ay on Hands";
         _oldStyleFooterLabel.Text = c.IsPaladin()
-            ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  ↵)LEAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  L)AY ON HANDS"
-            : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM";
+            ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER L)AY ON HANDS"
+            : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  C)HARACTER SHEET";
 
         if (GameRulesProvider.Current.UIOldStyle)
         {
@@ -802,6 +811,23 @@ public sealed class CampCharacterInspectForm : Form
             _characterRepository.Save(caster);
             RefreshView();
         }
+    }
+    /*
+    public void ShowCharaterSheet(Character character)
+    {
+        using var sheet = new Adnd.Game.Windows.CharacterForm(character);
+        sheet.ShowDialog(this);
+        PublishToViewer();
+    }
+    */
+    private void ShowCharacterSheetAction()
+    {
+        var c = GetCharacter();
+        if (c == null)
+            return;
+        //    using var sheetForm = new ShowCharaterSheet(c);
+        using var sheet = new Adnd.Game.Windows.CharacterForm(c);
+        sheet.ShowDialog(this);
     }
 
     private void UseItemAction()

@@ -882,7 +882,6 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 new ViewerPromptOption("leave", "Leave camp"),
             });
 
-            //TODO introduce ShowCharaterSheet as an option to the camp menu,
 
             var campAnswers = new Dictionary<string, DialogResult>
             {
@@ -1134,7 +1133,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         Invalidate();
     }
 
-    private void ShowCharaterSheet(Character character)
+    public void ShowCharaterSheet(Character character)
     {
         using var sheet = new Adnd.Game.Windows.CharacterForm(character);
         sheet.ShowDialog(this);
