@@ -9,6 +9,7 @@ namespace Adnd.Game.Windows
     {
         private readonly Character _character;
         private readonly Font _handFont = new Font("Bradley Hand ITC", 18, FontStyle.Regular);
+        private readonly Font _handFontSmall = new Font("Bradley Hand ITC", 14, FontStyle.Regular);
         private readonly Brush _ink = Brushes.Black;
         private readonly Image _sheetBackground;
 
@@ -16,8 +17,13 @@ namespace Adnd.Game.Windows
         {
             _character = character;
 
-            _sheetBackground = Image.FromFile(
-                @"C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\character_sheet.png");
+            //  _sheetBackground = Image.FromFile(
+            //       @"C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\character_sheet.png");
+            string relativePath = Path.GetFullPath(
+                Path.Combine("..", "..", "..", "Assets", "ScenPictures", "character_sheet.png")
+            );
+
+            _sheetBackground = Image.FromFile(relativePath);
 
             this.DoubleBuffered = true;
             this.ClientSize = new Size(_sheetBackground.Width, _sheetBackground.Height);
@@ -33,7 +39,8 @@ namespace Adnd.Game.Windows
 
             DrawInBox(g, _character.Name, new Rectangle(45, 80, 198, 40));
             DrawInBox(g, _character.Race.ToString(), new Rectangle(340, 80, 98, 40));
-            DrawInBox(g, _character.Class.ToString(), new Rectangle(500, 80, 86, 40));
+            // DrawInBox(g, _character.Class.ToString(), new Rectangle(500, 80, 86, 40));
+            DrawInBox(g, _character.Class.ToString(), new Rectangle(500, 80, 86, 40), _handFontSmall);
             DrawInBox(g, _character.Level.ToString(), new Rectangle(640, 80, 46, 40));
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
@@ -46,27 +53,7 @@ namespace Adnd.Game.Windows
             DrawInCircle(g, _character.Abilities.Dexterity.ToString(), new Rectangle(660, 300, 66, 66));
             DrawInCircle(g, _character.Abilities.Charisma.ToString(), new Rectangle(815, 300, 66, 66));
         }
-        /*
-        private void DrawInBox(Graphics g, string text, Rectangle rect)
-        {
-            var format = new StringFormat
-            {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
-            g.DrawString(text, _handFont, _ink, rect, format);
-        }
-
-        private void DrawInCircle(Graphics g, string text, Rectangle circleBounds)
-        {
-            var format = new StringFormat
-            {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
-            g.DrawString(text, _handFont, _ink, circleBounds, format);
-        }
-        */
+   
         private readonly Random _rnd = new Random();
         private void DrawBoldString(Graphics g, string text, Font font, Brush brush, Rectangle rect, StringFormat format)
         {
@@ -75,8 +62,10 @@ namespace Adnd.Game.Windows
             g.DrawString(text, font, brush, new Rectangle(rect.X + 1, rect.Y, rect.Width, rect.Height), format);
             g.DrawString(text, font, brush, new Rectangle(rect.X, rect.Y + 1, rect.Width, rect.Height), format);
         }
-        private void DrawInBox(Graphics g, string text, Rectangle rect)
+        private void DrawInBox(Graphics g, string text, Rectangle rect, Font font = null)
         {
+            font ??= _handFont; // default: stora fonten
+
             var format = new StringFormat
             {
                 Alignment = StringAlignment.Center,
@@ -93,11 +82,10 @@ namespace Adnd.Game.Windows
                                  rect.Y + rect.Height / 2 + dy);
             g.RotateTransform(angle);
 
-            // Rita bold text centrerat i den roterade boxen
             DrawBoldString(
                 g,
                 text,
-                _handFont,
+                font,
                 _ink,
                 new Rectangle(-rect.Width / 2, -rect.Height / 2, rect.Width, rect.Height),
                 format);
