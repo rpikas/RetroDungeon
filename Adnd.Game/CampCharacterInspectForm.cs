@@ -972,7 +972,8 @@ public sealed class CampCharacterInspectForm : Form
             return true;
 
         return GameRulesProvider.Current.AutoMemorizeArcaneSpellsDaily
-               && spellClass is SpellClass.MagicUser or SpellClass.Illusionist;
+               && spellClass is SpellClass.
+               or SpellClass.Illusionist;
     }
 
     private static bool CanUseMemorizeAction(Character c)

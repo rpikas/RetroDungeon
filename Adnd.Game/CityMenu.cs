@@ -189,7 +189,7 @@ public class CityMenu
         // Confirm class selection
         var clsDisplay = chosenClasses.Count == 1 ? chosenClasses[0].ToDisplayString() : string.Join("/", chosenClasses.Select(cc => cc.ToDisplayString()));
         Console.WriteLine($"Selected class: {clsDisplay}");
-
+       
         int? exceptionalStrengthPercentile = null;
         if (chosenClasses.Count == 1
             && abilities.Strength == 18
@@ -220,7 +220,7 @@ public class CityMenu
 
         // determine HP using the already-rolled constitution
         int hp = _creator.RollHitPoints(chosenClasses[0], abilities.Constitution);
-        int armorClass = 10 + _creator.DexterityACModifier(abilities.Dexterity);
+        int armorClass = 10 + AbilitiesTables.DexterityACModifier(abilities.Dexterity);
 
         var minGold = GameRulesProvider.Current.CharacterCreationMinGold;
         var maxGold = GameRulesProvider.Current.CharacterCreationMaxGold;

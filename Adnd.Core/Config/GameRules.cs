@@ -7,6 +7,7 @@ public enum AbilityRollMethod
 {
     ThreeD6InOrder,
     FourD6DropLowest,
+    FiveD6Drop2Lowest,
     BestOfSixSets
 }
 

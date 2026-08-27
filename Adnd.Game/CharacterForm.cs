@@ -46,7 +46,14 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
 
             // Ability circles: write only the value inside each circle, not labels.
-            DrawInCircle(g, _character.Abilities.Strength.ToString(), new Rectangle(40, 300, 66, 66));
+            if (_character.ExceptionalStrengthPercentile == null)
+            {
+                DrawInCircle(g, _character.Abilities.Strength.ToString(), new Rectangle(40, 300, 66, 66));
+            }
+            else
+            {
+                DrawInCircle(g, _character.Abilities.Strength.ToString() + "/" + _character.ExceptionalStrengthPercentile, new Rectangle(30, 300, 116, 66));
+            }
             DrawInCircle(g, _character.Abilities.Intelligence.ToString(), new Rectangle(200, 300, 66, 66));
             DrawInCircle(g, _character.Abilities.Wisdom.ToString(), new Rectangle(350, 300, 66, 66));
             DrawInCircle(g, _character.Abilities.Constitution.ToString(), new Rectangle(507, 300, 66, 66));
@@ -54,16 +61,54 @@ namespace Adnd.Game.Windows
             DrawInCircle(g, _character.Abilities.Charisma.ToString(), new Rectangle(815, 300, 66, 66));
 
             var creator = new CharacterCreator();
-            //DEXTERITY ARMOR CLASS ADJUSTMENT
-            DrawInBox(g, creator.DexterityACModifier(_character.Abilities.Dexterity).ToString(), new Rectangle(660, 450, 45, 40));
 
             //STRENGTH MODIFIER
-            DrawInBox(g, creator.StrengthTHModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 400, 45, 40));
-            DrawInBox(g, creator.StrengthDamageModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 450, 45, 40));
-            DrawInBox(g, creator.StrengthWeightAllowanceModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 500, 45, 40));
-            //DrawInBox(g, creator.StrengthOpenDoor(_character.Abilities.Strength).ToString(), new Rectangle(40, 550, 45, 40));
-            //DrawInBox(g, creator.StrengthBendBars(_character.Abilities.Strength).ToString(), new Rectangle(40, 600, 45, 40));
+            DrawInBox(g, AbilitiesTables.StrengthTHModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 390, 95, 66));
+            DrawInBox(g, AbilitiesTables.StrengthDamageModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 427, 95, 66));
+            DrawInBox(g, AbilitiesTables.StrengthWeightAllowanceModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 465, 95, 66));
+            DrawInBox(g, AbilitiesTables.StrengthOpenDoors(_character.Abilities.Strength, _character.ExceptionalStrengthPercentile).ToString(), new Rectangle(40, 507, 95, 66));
+            DrawInBox(g, AbilitiesTables.StrengthBendBars(_character.Abilities.Strength).ToString() + "%", new Rectangle(30, 542, 95, 66));
 
+            //INTELLIGENCE MODIFIER
+            if ((_character.Class != CharacterClass.MagicUser) && (_character.Class != CharacterClass.Illusionist) && (_character.Class != CharacterClass.Ranger))
+            {
+                DrawInBox(g, "NA", new Rectangle(190, 395, 95, 66));
+            }
+            else
+            {
+                DrawInBox(g, AbilitiesTables.IntelligenceChanceToLearn(_character.Abilities.Intelligence).ToString() + "%", new Rectangle(190, 395, 95, 66));
+                DrawInBox(g, AbilitiesTables.IntelligenceMinimumSpells(_character.Abilities.Intelligence).ToString(), new Rectangle(190, 442, 95, 66));
+                DrawInBox(g, AbilitiesTables.IntelligenceMaximumSpells(_character.Abilities.Intelligence).ToString(), new Rectangle(190, 490, 95, 66));
+            }
+
+            //WISDOM MODIFIER
+            if ((_character.Class != CharacterClass.Cleric) && (_character.Class != CharacterClass.Druid) && (_character.Class != CharacterClass.Paladin))
+            {
+                DrawInBox(g, "NA", new Rectangle(350, 395, 95, 66));
+            }
+            else 
+            {
+                DrawInBox(g, AbilitiesTables.WisdomBonus(_character.Abilities.Wisdom).ToString(), new Rectangle(350, 395, 95, 66));
+                DrawInBox(g, AbilitiesTables.WisdomSpellFailure(_character.Abilities.Wisdom).ToString(), new Rectangle(350, 427, 95, 66));
+                DrawInBox(g, AbilitiesTables.WisdomMagicAttackAdjustment(_character.Abilities.Wisdom).ToString(), new Rectangle(350, 460, 95, 66));
+
+            }
+
+            //CONSTITUTION MODIFIER
+            DrawInBox(g, AbilitiesTables.ConstitutionHpBonus(_character.Abilities.Constitution,true).ToString(), new Rectangle(507, 390, 95, 66));//todo: check if fighter or not
+            DrawInBox(g, AbilitiesTables.ConstitutionResurrectionSurvival(_character.Abilities.Constitution).ToString(), new Rectangle(507, 432, 95, 66));
+            DrawInBox(g, AbilitiesTables.ConstitutionSystemShock(_character.Abilities.Constitution).ToString(), new Rectangle(507, 470, 95, 66));
+
+            //DEXTERITY MODIFIER
+            DrawInBox(g, AbilitiesTables.DexterityAttackingAdjustment(_character.Abilities.Dexterity).ToString(), new Rectangle(660, 390, 95, 66));
+            //DEXTERITY ARMOR CLASS ADJUSTMENT
+            DrawInBox(g, AbilitiesTables.DexterityACModifier(_character.Abilities.Dexterity).ToString(), new Rectangle(660, 452, 45, 40));
+
+            //CHARISMA MODIFIER
+            DrawInBox(g, AbilitiesTables.CharismaReactionBonus(_character.Abilities.Charisma).ToString()+"%", new Rectangle(805, 390, 95, 66));
+            DrawInBox(g, AbilitiesTables.CharismaMaxHenchmen(_character.Abilities.Charisma).ToString() , new Rectangle(810, 447, 95, 66));
+            DrawInBox(g, AbilitiesTables.CharismaLoyaltyBonus(_character.Abilities.Charisma).ToString() + "%", new Rectangle(805, 505, 95, 66));
+            
         }
 
         private readonly Random _rnd = new Random();

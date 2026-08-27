@@ -6,184 +6,8 @@ namespace Adnd.Core.Characters;
 
 public class CharacterCreator
 {
-    // AD&D defensive adjustment from Dexterity.
-    // Returned value is added to AC (lower AC is better, so high DEX yields negative values).
-    /*
-    public int GetDexterityArmorClassAdjustment(int dexterity)
-    {
-        return dexterity switch
-        {
-            <= 3 => 4,
-            4 => 3,
-            5 => 2,
-            6 => 1,
-            <= 14 => 0,
-            15 => -1,
-            16 => -2,
-            17 => -3,
-            _ => -4
-        };
-    }
-    */
-    public int ConstitutionHPModifier(int constitution)
-    {
-        return constitution switch
-        {
-            <= 3 => -2,
-            <= 6 => -1,
-            <= 12 => 0,
-            <= 15 => 1,
-            <= 16 => 2,
-            <= 17 => 3,
-            <= 18 => 4,
-            <= 20 => 5,
-            <= 23 => 6,
-            _ => 7//24 or 25
-        };
-    }
-    public int DexterityACModifier(int dexterity)
-    {
-        return dexterity switch
-        {
-            <= 3 => 4,
-            <= 4 => 3,
-            <= 5 => 2,
-            <= 6 => 1,
-            <= 14 => 0,
-            <= 15 => -1,
-            <= 16 => -2,
-            <= 17 => -3,
-            <= 20 => -4,
-            <= 23 => -5,
-            _ => -6//24 or 25
-        };
-    }
-    public int StrengthDamageModifier(int strength)
-    {
-        return strength switch
-        {//TODO add 18/xx exceptional strength handling
-            <= 4 => -1,
-            <= 15 => 0,
-            <= 17 => 1,
-            <= 18 => 2,
-            <= 19 => 7,
-            <= 20 => 8,
-            <= 21 => 9,
-            <= 22 => 10,
-            <= 23 => 11,
-            <= 24 => 12,
-            _ => 14//25
-        };
-    }
-    public int StrengthTHModifier(int strength)
-    {
-        return strength switch
-        {//TODO add 18/xx exceptional strength handling
-            <= 3 => -3,
-            <= 5 => -2,
-            <= 7 => -1,
-            <= 15 => 0,
-            <= 17 => 1,
-            <= 18 => 1,
-            <= 19 => 3,
-            <= 20 => 3,
-            <= 21 => 4,
-            <= 22 => 4,
-            <= 23 => 5,
-            <= 24 => 6,
-            _ => 7//25
-        };
-    }
-    
-    public int StrengthWeightAllowanceModifier(int strength)
-    {
-        return strength switch
-        {//TODO add 18/xx exceptional strength handling
-            <= 3 => -350,
-            <= 5 => -250,
-            <= 7 => -150,
-            <= 13 => 100,
-            <= 15 => 200,
-            <= 16 => 350,
-            <= 17 => 500,
-            <= 18 => 750,
-            <= 19 => 4500,
-            <= 20 => 5000,
-            <= 21 => 6000,
-            <= 22 => 7500,
-            <= 23 => 9000,
-            <= 24 => 12000,
-            _ => 15000//
-                };
-    }
-                
-    public int StrengthOpenDoors(int strength)
-    {
-        return strength switch
-        {//TODO add 18/xx exceptional strength handling
-            <= 3 => -350,
-            <= 5 => -250,
-            <= 7 => -150,
-            <= 13 => 100,
-            <= 15 => 200,
-            <= 16 => 350,
-            <= 17 => 500,
-            <= 18 => 750,
-            <= 19 => 4500,
-            <= 20 => 5000,
-            <= 21 => 6000,
-            <= 22 => 7500,
-            <= 23 => 9000,
-            <= 24 => 12000,
-            _ => 15000//25
-        };
-    }
-                
-public int StrengthBendBars(int strength)
-    {
-        return strength switch
-        {//TODO add 18/xx exceptional strength handling
-            
-            <= 8 => 1,
-            <= 10 => 2,
-            <= 12 => 4,
-            <= 14 => 7,
-            <= 15 => 10,
-            <= 18 => 750,
-            <= 19 => 4500,
-            <= 20 => 5000,
-            <= 21 => 6000,
-            <= 22 => 7500,
-            <= 23 => 9000,
-            <= 24 => 12000,
-            _ => 15000//25
-        };
-    }
-
-public int StrengthOpenDoor(int strength)
-    {
-        return strength switch
-        {//TODO add 18/xx exceptional strength handling
-            <= 3 => -350,
-            <= 5 => -250,
-            <= 7 => -150,
-            <= 13 => 100,
-            <= 15 => 200,
-            <= 16 => 350,
-            <= 17 => 500,
-            <= 18 => 750,
-            <= 19 => 4500,
-            <= 20 => 5000,
-            <= 21 => 6000,
-            <= 22 => 7500,
-            <= 23 => 9000,
-            <= 24 => 12000,
-            _ => 15000//25
-        };
-    }
-
-                
-        public AbilityScores RollAbilities()
+   
+    public AbilityScores RollAbilities()
     {
         AbilityScores RollThreeD6InOrder()
         {
@@ -208,6 +32,21 @@ public int StrengthOpenDoor(int strength)
             return a + b + c + d - lowest;
         }
 
+        int Roll5d6Drop2Lowest()
+        {
+            var rolls = new int[]
+            {
+                DiceRoller.Roll(1, 6),
+                DiceRoller.Roll(1, 6),
+                DiceRoller.Roll(1, 6),
+                DiceRoller.Roll(1, 6),
+                DiceRoller.Roll(1, 6)
+            };
+
+            Array.Sort(rolls);        // Sorterar lägst → högst
+            return rolls[2] + rolls[3] + rolls[4]; // De tre högsta
+        }
+
         AbilityScores RollFourD6DropLowest()
         {
             return new AbilityScores
@@ -218,6 +57,19 @@ public int StrengthOpenDoor(int strength)
                 Dexterity = Roll4d6DropLowest(),
                 Constitution = Roll4d6DropLowest(),
                 Charisma = Roll4d6DropLowest()
+            };
+        }
+
+        AbilityScores RollFiveD6Drop2Lowest()
+        {
+            return new AbilityScores
+            {
+                Strength = Roll5d6Drop2Lowest(),
+                Intelligence = Roll5d6Drop2Lowest(),
+                Wisdom = Roll5d6Drop2Lowest(),
+                Dexterity = Roll5d6Drop2Lowest(),
+                Constitution = Roll5d6Drop2Lowest(),
+                Charisma = Roll5d6Drop2Lowest()
             };
         }
 
@@ -261,6 +113,7 @@ public int StrengthOpenDoor(int strength)
         {
             AbilityRollMethod.ThreeD6InOrder => RollThreeD6InOrder(),
             AbilityRollMethod.FourD6DropLowest => RollFourD6DropLowest(),
+            AbilityRollMethod.FiveD6Drop2Lowest => RollFiveD6Drop2Lowest(),
             AbilityRollMethod.BestOfSixSets => RollBestSix(),
             _ => RollBestSix()
         };
@@ -300,7 +153,7 @@ public int StrengthOpenDoor(int strength)
             }; 
         }
         else // For non-fighter classes, apply the same logic for Constitution modifier
-        {
+        {//TODO replace with a method from AbilitiesTables, to avoid duplication
             conMod = constitution switch
             {
                 <= 6 => -1,
@@ -373,7 +226,7 @@ public int StrengthOpenDoor(int strength)
         int avgDie = (int)Math.Round(sumDice / classes.Count, MidpointRounding.AwayFromZero);
 
         int conMod = constitution switch
-        {
+        {//TODO replace with a method from AbilitiesTables, to avoid duplication
             <= 6 => -1,
             7 or 8 or 9 or 10 or 11 or 12 => 0,
             13 or 14 => 1,
@@ -432,37 +285,5 @@ public int StrengthOpenDoor(int strength)
 
         return adjusted;
     }
-
-    public Character Create(string name, Race race, CharacterClass cls)
-    {
-        var abilities = RollAbilities();
-        abilities = ApplyRaceModifiers(abilities, race);
-        int hp = RollHitPoints(cls, abilities.Constitution);
-        int armorClass = 10 + DexterityACModifier(abilities.Dexterity);
-
-        var minGold = GameRulesProvider.Current.CharacterCreationMinGold;
-        var maxGold = GameRulesProvider.Current.CharacterCreationMaxGold;
-        var startingGold = minGold == maxGold
-            ? minGold
-            : Random.Shared.Next(minGold, maxGold + 1);
-
-        return new Character
-        {
-            Name = name,
-            Race = race,
-            Classes = new System.Collections.Generic.List<CharacterClass> { cls },
-            Abilities = abilities,
-            Level = 1,
-            MaxHitPoints = hp,
-            CurrentHitPoints = hp,
-            Experience = 0,
-            GoldPieces = startingGold,
-            ArmorClass = armorClass,
-            Gender = Gender.Male,
-            Alignment = Alignment.TrueNeutral,
-            NumberOfAttacks = 1,
-            Damage = "1d2",
-            Age = Random.Shared.Next(17, 29)
-        };
-    }
+ 
 }
