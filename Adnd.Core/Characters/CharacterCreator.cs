@@ -94,7 +94,73 @@ public class CharacterCreator
             _ => 7//25
         };
     }
+    
     public int StrengthWeightAllowanceModifier(int strength)
+    {
+        return strength switch
+        {//TODO add 18/xx exceptional strength handling
+            <= 3 => -350,
+            <= 5 => -250,
+            <= 7 => -150,
+            <= 13 => 100,
+            <= 15 => 200,
+            <= 16 => 350,
+            <= 17 => 500,
+            <= 18 => 750,
+            <= 19 => 4500,
+            <= 20 => 5000,
+            <= 21 => 6000,
+            <= 22 => 7500,
+            <= 23 => 9000,
+            <= 24 => 12000,
+            _ => 15000//
+                };
+    }
+                
+    public int StrengthOpenDoors(int strength)
+    {
+        return strength switch
+        {//TODO add 18/xx exceptional strength handling
+            <= 3 => -350,
+            <= 5 => -250,
+            <= 7 => -150,
+            <= 13 => 100,
+            <= 15 => 200,
+            <= 16 => 350,
+            <= 17 => 500,
+            <= 18 => 750,
+            <= 19 => 4500,
+            <= 20 => 5000,
+            <= 21 => 6000,
+            <= 22 => 7500,
+            <= 23 => 9000,
+            <= 24 => 12000,
+            _ => 15000//25
+        };
+    }
+                
+public int StrengthBendBars(int strength)
+    {
+        return strength switch
+        {//TODO add 18/xx exceptional strength handling
+            
+            <= 8 => 1,
+            <= 10 => 2,
+            <= 12 => 4,
+            <= 14 => 7,
+            <= 15 => 10,
+            <= 18 => 750,
+            <= 19 => 4500,
+            <= 20 => 5000,
+            <= 21 => 6000,
+            <= 22 => 7500,
+            <= 23 => 9000,
+            <= 24 => 12000,
+            _ => 15000//25
+        };
+    }
+
+public int StrengthOpenDoor(int strength)
     {
         return strength switch
         {//TODO add 18/xx exceptional strength handling
@@ -116,7 +182,8 @@ public class CharacterCreator
         };
     }
 
-    public AbilityScores RollAbilities()
+                
+        public AbilityScores RollAbilities()
     {
         AbilityScores RollThreeD6InOrder()
         {
