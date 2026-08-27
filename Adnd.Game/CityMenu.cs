@@ -220,7 +220,7 @@ public class CityMenu
 
         // determine HP using the already-rolled constitution
         int hp = _creator.RollHitPoints(chosenClasses[0], abilities.Constitution);
-        int armorClass = 10 + _creator.GetDexterityArmorClassAdjustment(abilities.Dexterity);
+        int armorClass = 10 + _creator.DexterityACModifier(abilities.Dexterity);
 
         var minGold = GameRulesProvider.Current.CharacterCreationMinGold;
         var maxGold = GameRulesProvider.Current.CharacterCreationMaxGold;

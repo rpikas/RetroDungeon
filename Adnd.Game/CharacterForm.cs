@@ -52,8 +52,20 @@ namespace Adnd.Game.Windows
             DrawInCircle(g, _character.Abilities.Constitution.ToString(), new Rectangle(507, 300, 66, 66));
             DrawInCircle(g, _character.Abilities.Dexterity.ToString(), new Rectangle(660, 300, 66, 66));
             DrawInCircle(g, _character.Abilities.Charisma.ToString(), new Rectangle(815, 300, 66, 66));
+
+            var creator = new CharacterCreator();
+            //DEXTERITY ARMOR CLASS ADJUSTMENT
+            DrawInBox(g, creator.DexterityACModifier(_character.Abilities.Dexterity).ToString(), new Rectangle(660, 450, 45, 40));
+
+            //STRENGTH MODIFIER
+            DrawInBox(g, creator.StrengthTHModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 400, 45, 40));
+            DrawInBox(g, creator.StrengthDamageModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 450, 45, 40));
+            DrawInBox(g, creator.StrengthWeightAllowanceModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 500, 45, 40));
+            //DrawInBox(g, creator.StrengthOpenDoor(_character.Abilities.Strength).ToString(), new Rectangle(40, 550, 45, 40));
+            //DrawInBox(g, creator.StrengthBendBars(_character.Abilities.Strength).ToString(), new Rectangle(40, 600, 45, 40));
+
         }
-   
+
         private readonly Random _rnd = new Random();
         private void DrawBoldString(Graphics g, string text, Font font, Brush brush, Rectangle rect, StringFormat format)
         {
