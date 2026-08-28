@@ -754,6 +754,26 @@ public sealed class CombatResolver
         return events;
     }
 
+    private int GetAttacksThisRound(float attacksPerRound, int roundNumber)
+    {
+        // 1 attack per round
+        if (attacksPerRound <= 1f)
+            return 1;
+
+        // 2 attacks per round
+        if (attacksPerRound >= 2f)
+            return 2;
+
+        // 1.5 attacks per round (3/2)
+        // Odd rounds: 1 attack
+        // Even rounds: 2 attacks
+        if (Math.Abs(attacksPerRound - 1.5f) < 0.01f)
+            return (roundNumber % 2 == 0) ? 2 : 1;
+
+        // fallback
+        return 1;
+    }
+
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
         // Determine target: the named monster first, then a spread, then the group, then whoever is first.
@@ -802,11 +822,16 @@ public sealed class CombatResolver
 
         if (target is null)
             return;
+     
 
-        int attacks = Math.Max(1, member.NumberOfAttacks);
+
+
+        int attacks = GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
+
         for (int i = 0; i < attacks; i++)
         {
             var thac0Modifier = session.IsBlessed(member.Name) ? 1 : 0;
+
             if (member.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.MainHand, out var mainHand)
                 && mainHand != null)
             {
@@ -815,17 +840,18 @@ public sealed class CombatResolver
 
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
             int roll = _dice.Roll(20);
+
             if (roll >= needed)
             {
                 int damage = RollDamage(string.IsNullOrWhiteSpace(member.Damage) ? "1d2" : member.Damage);
+
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
-                var actualDamage = before - target.CurrentHitPoints;
-                var weaponName = member.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.MainHand, out var weapon) && weapon != null
-                    ? weapon.Name
-                    : "bare hands";
-                //              events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} for {actualDamage} (rolled {damage}). HP {before}->{target.CurrentHitPoints}."));
-                events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} with {weaponName} for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
+
+                var weaponName = mainHand != null ? mainHand.Name : "bare hands";
+
+                events.Add(new CombatEvent(
+                    $"{member.Name} hits {target.DisplayName} with {weaponName} for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
 
                 if (target.CurrentHitPoints <= 0)
                 {
@@ -838,6 +864,7 @@ public sealed class CombatResolver
                 events.Add(new CombatEvent($"{member.Name} misses {target.DisplayName}."));
             }
         }
+
     }
 
     private int GetMonsterThac0(MonsterInstance monster)

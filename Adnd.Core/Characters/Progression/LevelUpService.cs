@@ -97,16 +97,23 @@ public sealed class LevelUpService
 
         ApplyBasicWarriorAttackProgression(character, entry.Level);
     }
-
+   
     private static void ApplyBasicWarriorAttackProgression(Character character, int effectiveLevel)
     {
         if (character.Classes.Count == 0)
             return;
 
         var primary = character.Classes[0];
+
         if (primary is CharacterClass.Fighter or CharacterClass.Paladin or CharacterClass.Ranger)
         {
-            character.NumberOfAttacks = effectiveLevel >= 13 ? 2 : 1;
+            if (effectiveLevel < 7)
+                character.NumberOfAttacks = 1f;
+            else if (effectiveLevel < 13)
+                character.NumberOfAttacks = 1.5f; // 3/2 attacks
+            else
+                character.NumberOfAttacks = 2f;
         }
     }
+
 }

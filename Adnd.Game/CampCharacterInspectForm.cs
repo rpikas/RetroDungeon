@@ -365,6 +365,8 @@ public sealed class CampCharacterInspectForm : Form
             for (int i = 0; i < c.Inventory.Count; i++)
                 lines.Add($"{i + 1}. {c.Inventory[i].Name}");
 
+        lines.Add($"Carry Weight: {c.CurrentCarryWeight}/{c.MaxCarryWeight}");
+
         lines.Add(string.Empty);
         lines.Add("=== SPELLCASTING ===");
 
@@ -488,6 +490,7 @@ public sealed class CampCharacterInspectForm : Form
             c.ArmorClass.ToString()));
         sb.AppendLine($"CONSTITUTION {c.Abilities.Constitution,2}");
         sb.AppendLine($"CHARISMA     {c.Abilities.Charisma,2}    STATUS {statusText}");
+        sb.AppendLine($"CARRY WT     {c.CurrentCarryWeight,3}/{c.MaxCarryWeight,-3}");
         sb.AppendLine();
 
         if (c.Spellcasting != null && c.Spellcasting.Count > 0)
@@ -515,10 +518,30 @@ public sealed class CampCharacterInspectForm : Form
         if (c == null)
             return;
 
+        var equipped = c.Equipment.Where(kv => kv.Value != null).Select(kv => kv.Key).ToList();
+
         var equipable = c.Inventory
             .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue)
             .Where(it => it.AllowedClasses.Count == 0 || c.Classes.Any(cls => it.AllowedClasses.Contains(cls)))
             .ToList();
+
+        if (equipable.Count > 0 && equipped.Count > 0)
+        {
+            var actionIdx = PromptChoice("Equip", new List<string> { "Equip item", "Unequip item" });
+            if (!actionIdx.HasValue)
+                return;
+
+            if (actionIdx.Value == 1)
+            {
+                UnequipAction();
+                return;
+            }
+        }
+        else if (equipable.Count == 0 && equipped.Count > 0)
+        {
+            UnequipAction();
+            return;
+        }
 
         if (equipable.Count == 0)
         {
@@ -595,7 +618,13 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var idx = PromptChoice("Unequip", equipped.Select(s => s.ToString()).ToList());
+        var idx = PromptChoice(
+            "Unequip",
+            equipped.Select(slot =>
+            {
+                var item = c.Equipment[slot];
+                return item == null ? slot.ToString() : $"{slot} ({item.Name})";
+            }).ToList());
         if (!idx.HasValue)
             return;
 
@@ -972,7 +1001,7 @@ public sealed class CampCharacterInspectForm : Form
             return true;
 
         return GameRulesProvider.Current.AutoMemorizeArcaneSpellsDaily
-               && spellClass is SpellClass.
+               && spellClass is SpellClass.MagicUser
                or SpellClass.Illusionist;
     }
 

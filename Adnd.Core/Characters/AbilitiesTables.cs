@@ -315,7 +315,7 @@ public static class AbilitiesTables
         };
     }
     public static int DexterityPickingPockets(int dex)
-    {//could be improved with a table for 19-25, but this is good enough for now
+    {
         return dex switch
         {
             <= 9 => -15,
@@ -326,10 +326,100 @@ public static class AbilitiesTables
             14 => 0,
             15 => 0,
             16 => 0,
-            17 =>5,
-            _ => 10
+            17 => 5,
+            18 => 10,
+            19 => 15,
+            20 => 20,
+            21 => 25,
+            22 => 30,
+            23 => 35,
+            24 => 40,
+            _ => 45 // 25
         };
     }
+    public static int DexterityOpenLocks(int dex) => dex switch
+    {
+        <= 9 => -10,
+        10 => -5,
+        11 => 0,
+        12 => 0,
+        13 => 0,
+        14 => 0,
+        15 => 5,
+        16 => 10,
+        17 => 15,
+        18 => 15,
+        19 => 20,
+        20 => 25,
+        21 => 30,
+        22 => 35,
+        23 => 40,
+        24 => 45,
+        _ => 50
+    };
+    public static int DexterityLocateRemoveTraps(int dex) => dex switch
+    {
+        <= 9 => -10,
+        10 => -10,
+        11 => -5,
+        12 => 0,
+        13 => 0,
+        14 => 0,
+        15 => 0,
+        16 => 5,
+        17 => 5,
+        18 => 5,
+        19 => 10,
+        20 => 15,
+        21 => 20,
+        22 => 25,
+        23 => 30,
+        24 => 35,
+        _ => 40
+    };
+
+    public static int DexterityMoveSilently(int dex) => dex switch
+    {
+        <= 9 => -20,
+        10 => -15,
+        11 => -10,
+        12 => -5,
+        13 => 0,
+        14 => 0,
+        15 => 0,
+        16 => 5,
+        17 => 10,
+        18 => 10,
+        19 => 12,
+        20 => 15,
+        21 => 18,
+        22 => 20,
+        23 => 23,
+        24 => 25,
+        _ => 30
+    };
+
+    public static int DexterityHideInShadows(int dex) => dex switch
+    {
+        <= 9 => -10,
+        10 => -5,
+        11 => 0,
+        12 => 0,
+        13 => 0,
+        14 => 0,
+        15 => 0,
+        16 => 5,
+        17 => 0,
+        18 => 10,
+        19 => 12,
+        20 => 15,
+        21 => 18,
+        22 => 20,
+        23 => 23,
+        24 => 25,
+        _ => 30
+    };
+
 
     // -----------------------------
     //  CONSTITUTION (AD&D 1e)
@@ -495,6 +585,7 @@ public static class AbilitiesTables
     // -----------------------------
     //  WISDOM (AD&D 1e)
     // -----------------------------
+    /*
     public readonly struct WisdomSpellBonus
     {
         public int L1 { get; }
@@ -510,6 +601,26 @@ public static class AbilitiesTables
         public override string ToString()
             => $"1st:{L1}, 2nd:{L2}, 3rd:{L3}, 4th:{L4}";
     }
+    */
+    public readonly struct WisdomSpellBonus
+    {
+        public int L1 { get; }
+        public int L2 { get; }
+        public int L3 { get; }
+        public int L4 { get; }
+
+        public WisdomSpellBonus(int l1, int l2, int l3, int l4)
+        {
+            L1 = l1;
+            L2 = l2;
+            L3 = l3;
+            L4 = l4;
+        }
+
+        public override string ToString()
+            => $"{L1}/{L2}/{L3}/{L4}";
+    }
+
 
 
     public static WisdomSpellBonus WisdomBonus(int wis)

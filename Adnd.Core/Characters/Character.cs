@@ -77,95 +77,12 @@ public class Character
     }
     [JsonIgnore]
     public string DamageDisplay => GetDamageDisplay();
-    public int NumberOfAttacks { get; set; } = 1; // Base attacks per round; can be modified by level/class/weapon
+   // public int NumberOfAttacks { get; set; } = 1; // Base attacks per round; can be modified by level/class/weapon
+    public float NumberOfAttacks { get; set; } = 1; // Base attacks per round; can be modified by level/class/weapon
     public string Damage { get; set; } = "1d6"; // Base damage or equipped weapon damage
 
     // Status conditions (can be combined as flags)
     public CharacterStatus Status { get; set; } = CharacterStatus.None;
-    /*
-    public int ConstitutionHPModifier => Abilities.Constitution switch
-    {
-        <= 3 => -2,
-        <= 6 => -1,
-        <= 12 => 0,
-        <= 15 => 1,
-        <= 16 => 2,
-        <= 17 => 3,
-        <= 18 => 4,
-        <= 20 => 5,
-        <= 23 => 6,
-        _ => 7//24 or 25
-    };
-    public int DexterityACModifier => Abilities.Dexterity switch
-    {
-        <= 3 => 4,
-        <= 4 => 3,
-        <= 5 => 2,
-        <= 6 => 1,
-        <= 14 => 0,
-        <= 15 => -1,
-        <= 16 => -2,
-        <= 17 => -3,
-        <= 20 => -4,
-        <= 23 => -5,
-        _ => -6//24 or 25
-    };
-    public int StrengthDamageModifier => Abilities.Strength switch
-    {//TODO add 18/xx exceptional strength handling
-        <= 4 => -1,
-        <= 15 => 0,
-        <= 17 => 1,
-        <= 18 => 2,
-        <= 19 => 7,
-        <= 20 => 8,
-        <= 21 => 9,
-        <= 22 => 10,
-        <= 23 => 11,
-        <= 24 => 12,
-        _ => 14//25
-    };
-    public int StrengthTHModifier => Abilities.Strength switch
-    {//TODO add 18/xx exceptional strength handling
-        <= 3 => -3,
-        <= 5 => -2,
-        <= 7 => -1,
-        <= 15 => 0,
-        <= 17 => 1,
-        <= 18 => 1,
-        <= 19 => 3,
-        <= 20 => 3,
-        <= 21 => 4,
-        <= 22 => 4,
-        <= 23 => 5,
-        <= 24 => 6,
-        _ => 7//25
-    };
-
-    public int StrengthWeightAllowanceModifier => Abilities.Strength switch
-    {//TODO add 18/xx exceptional strength handling
-        <= 3 => -350,
-        <= 5 => -250,
-        <= 7 => -150,
-        <= 13 => 100,
-        <= 15 => 200,
-        <= 16 => 350,
-        <= 17 => 500,
-        <= 18 => 750,
-        <= 19 => 4500,
-        <= 20 => 5000,
-        <= 21 => 6000,
-        <= 22 => 7500,
-        <= 23 => 9000,
-        <= 24 => 12000,
-        _ => 15000//25
-    };
-    */
-    /*
-    public int StrengthBendBarsProbablityInPercent => Abilities.Strength switch
-    {//TBD
-        <= 5 => 0,
-    };
-    */
 
     public override string ToString()
     {
