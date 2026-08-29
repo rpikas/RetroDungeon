@@ -15,7 +15,7 @@
       "Range": "10/20/30",
       "ArmorClassBonus": 0,
       "MagicBonus": 0,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [],
       "IsCursed": false,
       "IsShopBuyable": true,
       "AllowedClasses": [
@@ -485,7 +485,7 @@
       "Range": "",
       "ArmorClassBonus": 0,
       "MagicBonus": 0,
-      "SpecialAbilities": [""],
+      "SpecialAbilities": [],
       "IsCursed": false,
       "IsShopBuyable": true,
       "AllowedClasses": [

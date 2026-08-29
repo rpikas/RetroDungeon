@@ -35,7 +35,7 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 25,
+      "BaseXPValue": 25,
       "TreasureType": "B",
       "Source": "Adnd"
     },
@@ -73,7 +73,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 35,
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "WizardryAndAdnd"
     },
@@ -116,7 +117,8 @@
           "Description": "Victim may be poisoned on hit."
         }
       ],
-      "XPValue": 45,
+      "BaseXPValue": 45,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Adnd"
     },
@@ -154,7 +156,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 20,
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
       "TreasureType": "C",
       "Source": "Adnd"
     },
@@ -192,7 +195,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 30,
+      "BaseXPValue": 30,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Adnd"
 
@@ -233,7 +237,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 350,
+      "BaseXPValue": 350,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Wizardry"
     },
@@ -271,7 +276,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 550,
+      "BaseXPValue": 550,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Wizardry"
     },
@@ -317,7 +323,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 620,
+      "BaseXPValue": 620,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Wizardry"
     },
@@ -368,7 +375,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 600,
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Wizardry"
     },
@@ -403,7 +411,8 @@
           "Description": "1 hp damage breath on everybody in party"
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "J",
       "Source": "Wizardry"
     }

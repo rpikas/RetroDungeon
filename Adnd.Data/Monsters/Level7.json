@@ -45,7 +45,7 @@
                     "Description": "Can fire tail spikes at range; each volley counts as one attack."
                 }
             ],
-            "XPValue": 950,
+            "BaseXPValue": 950,
             "TreasureType": "G"
         },
         {
@@ -87,7 +87,7 @@
                     "Description": "If both claws hit, target takes extra 2d8 damage."
                 }
             ],
-            "XPValue": 700,
+            "BaseXPValue": 700,
             "TreasureType": "None"
         },
         {
@@ -129,7 +129,7 @@
                     "Description": "Held targets take automatic constrict damage each round."
                 }
             ],
-            "XPValue": 750,
+            "BaseXPValue": 750,
             "TreasureType": "None"
         },
         {
@@ -171,7 +171,7 @@
                     "Description": "Heals 4 hp per round; fire/acid needed to kill."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
             "TreasureType": "E"
         },
         {
@@ -212,7 +212,7 @@
                     "Description": "Can entangle targets; save vs spell to avoid being stuck."
                 }
             ],
-            "XPValue": 800,
+            "BaseXPValue": 800,
             "TreasureType": "None"
         },
         {
@@ -249,7 +249,7 @@
                     "Description": "If fighting with allies, gains +1 to hit."
                 }
             ],
-            "XPValue": 350,
+            "BaseXPValue": 350,
             "TreasureType": "None"
         },
         {
@@ -290,7 +290,7 @@
                     "Description": "On hit, target loses 1 point of Wisdom (temporary)."
                 }
             ],
-            "XPValue": 1100,
+            "BaseXPValue": 1100,
             "TreasureType": "H"
         },
         {
@@ -340,7 +340,7 @@
                     "Description": "May instantly kill on a successful strike."
                 }
             ],
-            "XPValue": 1500,
+            "BaseXPValue": 1500,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -387,7 +387,7 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -441,7 +441,7 @@
                     "Description": "Resistant to magic."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -487,7 +487,7 @@
                     "Description": "May drain levels."
                 }
             ],
-            "XPValue": 850,
+            "BaseXPValue": 850,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -533,7 +533,7 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 1400,
+            "BaseXPValue": 1400,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -573,7 +573,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 500,
+            "BaseXPValue": 500,
             "TreasureType": "None",
             "Source": "Wizardry"
         }

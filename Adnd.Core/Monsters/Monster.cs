@@ -50,7 +50,9 @@ public class Monster
     public List<MonsterAttack> Attacks { get; set; } = new();
     public List<MonsterSpecialAbility> SpecialAbilities { get; set; } = new();
 
-    public int XPValue { get; set; }
+    public int BaseXPValue { get; set; }
+    public int XPValuePerHitPoint { get; set; }
+
 
     // AD&D treasure type token(s), e.g. "A", "B", "A,B", or "None".
     public string TreasureType { get; set; } = "None";

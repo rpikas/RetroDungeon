@@ -40,7 +40,7 @@
                     "Description": "Half damage from fire."
                 }
             ],
-            "XPValue": 3000,
+            "BaseXPValue": 3000,
             "TreasureType": "L"
         },
         {
@@ -82,7 +82,7 @@
                     "Description": "Half damage from cold."
                 }
             ],
-            "XPValue": 2800,
+            "BaseXPValue": 2800,
             "TreasureType": "L"
         },
         {
@@ -119,7 +119,7 @@
                     "Description": "Hill giants within 30 ft gain +1 to hit."
                 }
             ],
-            "XPValue": 2200,
+            "BaseXPValue": 2200,
             "TreasureType": "K"
         },
         {
@@ -156,7 +156,7 @@
                     "Description": "Save vs poison or death; survivors take 1d6 damage per round for 3 rounds."
                 }
             ],
-            "XPValue": 2500,
+            "BaseXPValue": 2500,
             "TreasureType": "None"
         },
         {
@@ -198,7 +198,7 @@
                     "Description": "Sting forces save vs poison or death."
                 }
             ],
-            "XPValue": 2300,
+            "BaseXPValue": 2300,
             "TreasureType": "None"
         },
         {
@@ -235,7 +235,7 @@
                     "Description": "On a dive, gains +2 to hit and +1d6 damage."
                 }
             ],
-            "XPValue": 1600,
+            "BaseXPValue": 1600,
             "TreasureType": "None"
         },
         {
@@ -277,7 +277,7 @@
                     "Description": "Held targets take automatic constrict damage each round."
                 }
             ],
-            "XPValue": 2200,
+            "BaseXPValue": 2200,
             "TreasureType": "None"
         },
 
@@ -296,7 +296,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 900,
+            "BaseXPValue": 900,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -315,7 +315,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 700,
+            "BaseXPValue": 700,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -339,7 +339,7 @@
                 "Description": "Petrifying breath attack."
               }
             ],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -358,7 +358,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 950,
+            "BaseXPValue": 950,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -377,7 +377,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1000,
+            "BaseXPValue": 1000,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -406,7 +406,7 @@
                     "Description": "Sting may poison."
                 }
             ],
-            "XPValue": 1100,
+            "BaseXPValue": 1100,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -430,7 +430,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 850,
+            "BaseXPValue": 850,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -454,7 +454,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -487,7 +487,7 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 1400,
+            "BaseXPValue": 1400,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -506,7 +506,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 2000,
+            "BaseXPValue": 2000,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -525,7 +525,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1500,
+            "BaseXPValue": 1500,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -578,7 +578,7 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 2000,
+            "BaseXPValue": 2000,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -602,7 +602,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1300,
+            "BaseXPValue": 1300,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -650,7 +650,7 @@
                     "Description": "May drain levels."
                 }
             ],
-            "XPValue": 1800,
+            "BaseXPValue": 1800,
             "TreasureType": "E",
             "Source": "Wizardry"
         }

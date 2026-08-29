@@ -1,5 +1,3 @@
-using System.Text;
-using System.Windows.Forms;
 using Adnd.Core.Characters;
 using Adnd.Core.Characters.Progression;
 using Adnd.Core.Combat.Actions;
@@ -9,8 +7,8 @@ using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
 using Adnd.Core.Dices;
 using Adnd.Core.Items;
+using Adnd.Core.Monsters;
 using Adnd.Core.Spells.Casting;
-using Adnd.Game.Viewer;
 using Adnd.Core.Spells.Casting.Handlers;
 using Adnd.Core.Treasure;
 using Adnd.Data.Characters;
@@ -20,6 +18,9 @@ using Adnd.Data.Monsters;
 using Adnd.Data.Party;
 using Adnd.Data.Spells;
 using Adnd.Data.Treasure;
+using Adnd.Game.Viewer;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Adnd.Game.Combat;
 
@@ -286,8 +287,10 @@ public sealed class CombatCoordinator
 
         if (survivors.Count == 0)
             return;
+        int xpPerHitPoint = session.Monsters.First().Template.XPValuePerHitPoint;
+        int totalHP = session.Monsters.Sum(m => m.MaxHitPoints);
 
-        int totalMonsterXp = session.Monsters.Sum(m => Math.Max(0, m.Template.XPValue));
+        int totalMonsterXp = session.Monsters.Sum(m => Math.Max(0, m.Template.BaseXPValue + m.Template.XPValuePerHitPoint * m.MaxHitPoints));
         int xpEach = totalMonsterXp / survivors.Count;
         int xpRemainder = totalMonsterXp % survivors.Count;
         var xpMultiplier = GameRulesProvider.Current.XpMultiplier;
@@ -308,11 +311,11 @@ public sealed class CombatCoordinator
 
         var treasure = _treasureService.RollTreasureForEncounter(session.Monsters);
 
-        DistributeCoin(survivors, treasure.CopperPieces, (c, amount) => c.CopperPieces += amount);
-        DistributeCoin(survivors, treasure.SilverPieces, (c, amount) => c.SilverPieces += amount);
-        DistributeCoin(survivors, treasure.ElectrumPieces, (c, amount) => c.ElectrumPieces += amount);
+        DistributeCoin(survivors, treasure.CopperPieces, (c, amount) => c.CopperPieces += amount);//currently not used
+        DistributeCoin(survivors, treasure.SilverPieces, (c, amount) => c.SilverPieces += amount);//currently not used
+        DistributeCoin(survivors, treasure.ElectrumPieces, (c, amount) => c.ElectrumPieces += amount);//currently not used
         DistributeCoin(survivors, treasure.GoldPieces, (c, amount) => c.GoldPieces += amount);
-        DistributeCoin(survivors, treasure.PlatinumPieces, (c, amount) => c.PlatinumPieces += amount);
+        DistributeCoin(survivors, treasure.PlatinumPieces, (c, amount) => c.PlatinumPieces += amount);//currently not used
 
         var valuablesValueGp = treasure.TotalGemValueGp + treasure.TotalJewelryValueGp + treasure.TotalArtValueGp;
         DistributeCoin(survivors, valuablesValueGp, (c, amount) => c.GoldPieces += amount);
@@ -325,8 +328,13 @@ public sealed class CombatCoordinator
         var sb = new StringBuilder();
         sb.AppendLine("Victory Rewards");
         sb.AppendLine();
-        sb.AppendLine($"Monsters defeated: {session.Monsters.Count}");
-        sb.AppendLine($"Base monster XP: {totalMonsterXp}");
+        sb.AppendLine($"Monsters defeated: {session.Monsters.First().Template.Name}");
+        sb.AppendLine($"Number of Monsters defeated: {session.Monsters.Count}");
+        sb.AppendLine($"Base monster XP: {session.Monsters.First().Template.BaseXPValue}");
+        sb.AppendLine($"Total Base monster XP: {session.Monsters.Count* session.Monsters.First().Template.BaseXPValue}");
+        sb.AppendLine($"XP per HP: {xpPerHitPoint}");
+        sb.AppendLine($"Total HP: {totalHP}");
+        sb.AppendLine($"Total XP from HP: {totalHP * xpPerHitPoint}");
         sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
         sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
         sb.AppendLine($"Survivors: {survivors.Count}");

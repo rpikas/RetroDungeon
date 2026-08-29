@@ -44,7 +44,7 @@
                     "Description": "Creatures of less than 5 HD must save vs spell or flee."
                 }
             ],
-            "XPValue": 5000,
+            "BaseXPValue": 5000,
             "TreasureType": "Hoard"
         },
         {
@@ -86,7 +86,7 @@
                     "Description": "+3 to hit with thrown rocks."
                 }
             ],
-            "XPValue": 3200,
+            "BaseXPValue": 3200,
             "TreasureType": "L"
         },
         {
@@ -123,7 +123,7 @@
                     "Description": "Adjacent foes take 1d4 fire damage per round."
                 }
             ],
-            "XPValue": 3800,
+            "BaseXPValue": 3800,
             "TreasureType": "L"
         },
         {
@@ -160,7 +160,7 @@
                     "Description": "Can attack up to 7 different targets per round."
                 }
             ],
-            "XPValue": 3500,
+            "BaseXPValue": 3500,
             "TreasureType": "None"
         },
         {
@@ -202,7 +202,7 @@
                     "Description": "Sting forces save vs poison or death; success still takes 2d6 damage."
                 }
             ],
-            "XPValue": 2800,
+            "BaseXPValue": 2800,
             "TreasureType": "J"
         },
         {
@@ -243,7 +243,7 @@
                     "Description": "Immune to non-magical weapons."
                 }
             ],
-            "XPValue": 4000,
+            "BaseXPValue": 4000,
             "TreasureType": "K"
         },
         {
@@ -285,7 +285,7 @@
                     "Description": "+2 to hit in dungeon corridors."
                 }
             ],
-            "XPValue": 2600,
+            "BaseXPValue": 2600,
             "TreasureType": "D"
         },
 
@@ -309,7 +309,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1500,
+            "BaseXPValue": 1500,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -338,7 +338,7 @@
                     "Description": "May call reinforcements."
                 }
             ],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -362,7 +362,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1400,
+            "BaseXPValue": 1400,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -408,7 +408,7 @@
                     "Description": "May paralyze."
                 }
             ],
-            "XPValue": 1600,
+            "BaseXPValue": 1600,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -464,7 +464,7 @@
                     "Description": "May drain levels."
                 }
             ],
-            "XPValue": 2200,
+            "BaseXPValue": 2200,
             "TreasureType": "E",
             "Source": "Wizardry"
         },
@@ -498,7 +498,7 @@
                 "Description": "Fire breath attack."
               }
             ],
-            "XPValue": 2500,
+            "BaseXPValue": 2500,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -522,7 +522,7 @@
                     "Description": "Resistant to fire."
                 }
             ],
-            "XPValue": 1800,
+            "BaseXPValue": 1800,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -551,7 +551,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 2400,
+            "BaseXPValue": 2400,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -584,7 +584,7 @@
                     "Description": "May paralyze."
                 }
             ],
-            "XPValue": 3000,
+            "BaseXPValue": 3000,
             "TreasureType": "E",
             "Source": "Wizardry"
         },
@@ -608,7 +608,7 @@
                     "Description": "Resistant to cold."
                 }
             ],
-            "XPValue": 2000,
+            "BaseXPValue": 2000,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -656,7 +656,7 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 3000,
+            "BaseXPValue": 3000,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -685,7 +685,7 @@
                     "Description": "Resistant to fire."
                 }
             ],
-            "XPValue": 3500,
+            "BaseXPValue": 3500,
             "TreasureType": "E",
             "Source": "Wizardry"
         },
@@ -709,7 +709,7 @@
                     "Description": "May paralyze."
                 }
             ],
-            "XPValue": 4000,
+            "BaseXPValue": 4000,
             "TreasureType": "E",
             "Source": "Wizardry"
         },
@@ -733,7 +733,7 @@
                     "Description": "Poison breath attack."
                 }
             ],
-            "XPValue": 3000,
+            "BaseXPValue": 3000,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -793,7 +793,7 @@
                     "Description": "May instantly kill."
                 }
             ],
-            "XPValue": 5000,
+            "BaseXPValue": 5000,
             "TreasureType": "E",
             "Source": "Wizardry"
         },
@@ -850,7 +850,7 @@
                     "Description": "May instantly kill."
                 }
             ],
-            "XPValue": 10000,
+            "BaseXPValue": 10000,
             "TreasureType": "F",
             "Source": "Wizardry"
         }

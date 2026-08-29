@@ -27,9 +27,10 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 20,
+      "BaseXPValue": 20,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AD&D",
+      "DM comment": "Bandits appear according to DMG page 175, but stats does not exist in MM"
     },
     {
       "Name": "Berserker",
@@ -62,14 +63,15 @@
           "Description": "Never checks morale; fights to the death."
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "A",
       "Source": "AD&D"
     },
     {
       "Name": "Buccaneer",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 6,
@@ -97,14 +99,14 @@
           "Description": "Expert sailors; may fight aboard ships or coastal caves."
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
     {
       "Name": "Nomad",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 7,
@@ -132,14 +134,15 @@
           "Description": "Often encountered with horses or camels; gains advantage when mounted."
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
     {
       "Name": "Tribesmen",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 7,
@@ -167,14 +170,14 @@
           "Description": "Uses spears, clubs, and slings; may employ poison darts."
         }
       ],
-      "XPValue": 20,
+      "BaseXPValue": 20,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
     {
       "Name": "Dervish",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 6,
@@ -202,14 +205,14 @@
           "Description": "Lawful zealots; never retreat; may have cleric leaders."
         }
       ],
-      "XPValue": 30,
+      "BaseXPValue": 30,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
     {
       "Name": "Merchant",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 8,
@@ -237,14 +240,14 @@
           "Description": "Usually accompanied by 2–12 guards; may carry valuable goods."
         }
       ],
-      "XPValue": 15,
+      "BaseXPValue": 15,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
     {
       "Name": "Pilgrim",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 8,
@@ -272,14 +275,14 @@
           "Description": "Level 1 Priest spells"
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
       "TreasureType": "J",
-      "Source": "Adnd"
+      "Source": "AI"
     },
     {
       "Name": "Adventurer",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 5,
@@ -311,14 +314,15 @@
           "Description": "Adventurers fight intelligently, using spells and ranged weapons effectively."
         }
       ],
-      "XPValue": 35,
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
     {
       "Name": "Noble",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 5,
@@ -350,9 +354,10 @@
           "Description": "Possesses fine equipment, jewelry, and may command loyalty from other humans."
         }
       ],
-      "XPValue": 40,
+      "BaseXPValue": 40,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "A",
-      "Source": "AD&D"
+      "Source": "AI"
     },
 
     {
@@ -408,7 +413,8 @@
           "Description": "Zombies always strike last in combat regardless of initiative."
         }
       ],
-      "XPValue": 35,
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "None",
       "Source": "Adnd",
       "ImageUrl": "https://1eonline.info/6mm2/image1JM.JPG",
@@ -459,7 +465,8 @@
           "Description": "Rot grubs burrow into any living flesh they touch. Flame must be applied immediately (1d6 damage) or cure disease cast. Otherwise they reach the heart and kill the host in 1–3 turns."
         }
       ],
-      "XPValue": 0,
+      "BaseXPValue": 0,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "None",
       "Source": "Adnd",
       "ImageUrl": "",
@@ -516,7 +523,7 @@
           "Description": "Lays 9–16 eggs in warm cavities; larvae hatch in 4–24 hours and kill host 90% of the time unless cured."
         }
       ],
-      "XPValue": 0,
+      "BaseXPValue": 0,
       "TreasureType": "None",
       "Source": "Adnd",
       "ImageUrl": "",
@@ -573,7 +580,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 15,
+      "BaseXPValue": 15,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "",
       "Source": "Adnd",
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYxMTufzeLtHJ1SmpPXR45w0tM-Y4FHPReWBiFj47Wdlz-0h84hhGSIk6o&s=10",
@@ -626,7 +634,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 15,
+      "BaseXPValue": 15,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd",
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOAJSQBEEzVH3yYrgySU2gXY342OqzARYZakiknGvBBg&s=10",
@@ -679,7 +688,7 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 10,
+      "BaseXPValue": 10,
       "TreasureType": "C",
       "Source": "Adnd",
       "ImageUrl": "",
@@ -742,7 +751,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 65,
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "None",
       "Source": "Adnd",
       "Info": "Giant Badgers are large, aggressive creatures known for their burrowing abilities and sharp claws. They are often found in forests and grasslands.",
@@ -799,7 +809,8 @@
           "Description": "Produces light for 10 ft for 6 days after death."
         }
       ],
-      "XPValue": 20,
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "None",
       "Source": "Adnd",
       "Info": "",
@@ -852,7 +863,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 10,
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd",
       "Info": "",
@@ -905,7 +917,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 10,
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd",
       "Info": "",
@@ -958,7 +971,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 20,
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd",
       "Info": "",
@@ -1016,7 +1030,8 @@
           "Description": "Appears as a stalactite until it drops on prey."
         }
       ],
-      "XPValue": 20,
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "None",
       "Source": "Adnd",
       "Info": "",
@@ -1068,7 +1083,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 15,
+      "BaseXPValue": 15,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd"
     },
@@ -1109,7 +1125,8 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 20,
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "D",
       "Source": "WizardryAndAdnd",
       "Info": "",
@@ -1158,7 +1175,8 @@
           "Description": "Bite may poison the target."
         }
       ],
-      "XPValue": 10,
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd",
       "Info": "",
@@ -1207,7 +1225,7 @@
           "Description": "On hit, target may be paralyzed."
         }
       ],
-      "XPValue": 50,
+      "BaseXPValue": 50,
       "TreasureType": "None",
       "Source": "Adnd"
     },
@@ -1252,7 +1270,8 @@
           "Damage": "1d2"
         }
       ],
-      "XPValue": 10,
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "J",
       "Source": "AdndAndWizardry"
     },
@@ -1283,7 +1302,7 @@
         }
       ],
       "SpecialAbilities": [],
-      "XPValue": 5,
+      "BaseXPValue": 5,
       "TreasureType": "J",
       "Source": "Wizardry"
     },
@@ -1318,7 +1337,8 @@
           "Description": "Level 1 Mage spells"
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "J",
       "Source": "Wizardry"
     },
@@ -1353,7 +1373,7 @@
           "Description": "Level 1 Mage spells"
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
       "TreasureType": "J",
       "Source": "Adnd"
     },
@@ -1389,7 +1409,8 @@
           "Description": "Level 1 Priest spells"
         }
       ],
-      "XPValue": 25,
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "J",
       "Source": "Wizardry"
     },
@@ -1421,7 +1442,8 @@
       ],
       "SpecialAbilities": [
       ],
-      "XPValue": 15,
+      "BaseXPValue": 15,
+      "XPValuePerHitPoint": 1,
       "TreasureType": "J",
       "Source": "Wizardry"
     }

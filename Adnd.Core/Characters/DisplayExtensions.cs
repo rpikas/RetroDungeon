@@ -20,7 +20,16 @@ public static class DisplayExtensions
             _ => c.ToString()
         };
     }
-
+    
+    public static string ToDisplayString(this Spells.SpellClass c)
+    {
+        return c switch
+        {
+            Spells.SpellClass.MagicUser => "Magic-User",
+            _ => c.ToString()
+        };
+    }
+    
     public static string ToDisplayString(this Alignment a)
     {
         return a switch

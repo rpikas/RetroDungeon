@@ -40,7 +40,7 @@
                     "Description": "+2 to hit with thrown rocks."
                 }
             ],
-            "XPValue": 1500,
+            "BaseXPValue": 1500,
             "TreasureType": "I"
         },
         {
@@ -81,7 +81,7 @@
                     "Description": "Save vs poison or death."
                 }
             ],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
             "TreasureType": "None"
         },
         {
@@ -123,7 +123,7 @@
                     "Description": "If both claws hit, extra 2d8 damage."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
             "TreasureType": "None"
         },
         {
@@ -165,7 +165,7 @@
                     "Description": "Sting forces save vs poison or death."
                 }
             ],
-            "XPValue": 1300,
+            "BaseXPValue": 1300,
             "TreasureType": "J"
         },
         {
@@ -202,7 +202,7 @@
                     "Description": "Can attempt to overturn small boats; crew must save vs death or fall overboard."
                 }
             ],
-            "XPValue": 1400,
+            "BaseXPValue": 1400,
             "TreasureType": "None"
         },
         {
@@ -239,7 +239,7 @@
                     "Description": "Ranged attack, 2d6 damage; metal armor suffers corrosion."
                 }
             ],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
             "TreasureType": "None"
         },
         {
@@ -280,7 +280,7 @@
                     "Description": "Immune to non-magical weapons."
                 }
             ],
-            "XPValue": 2000,
+            "BaseXPValue": 2000,
             "TreasureType": "K"
         },
 
@@ -330,7 +330,7 @@
                     "Description": "May instantly kill on a successful strike."
                 }
             ],
-            "XPValue": 1600,
+            "BaseXPValue": 1600,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -381,7 +381,7 @@
                     "Description": "May instantly kill on a successful strike."
                 }
             ],
-            "XPValue": 1600,
+            "BaseXPValue": 1600,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -417,7 +417,7 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 400,
+            "BaseXPValue": 400,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -481,7 +481,7 @@
                     "Description": "Fire breath attack."
                   }
                 ],
-                "XPValue": 1200,
+                "BaseXPValue": 1200,
                 "TreasureType": "D",
                 "Source": "Wizardry"
             },
@@ -535,7 +535,7 @@
                         "Description": "May flee from combat."
                     }
                 ],
-                "XPValue": 700,
+                "BaseXPValue": 700,
                 "TreasureType": "A",
                 "Source": "Wizardry"
             },
@@ -569,7 +569,7 @@
                     }
                 ],
                 "SpecialAbilities": [],
-                "XPValue": 900,
+                "BaseXPValue": 900,
                 "TreasureType": "B",
                 "Source": "Wizardry"
             },
@@ -613,7 +613,7 @@
                     }
                 ],
                 "SpecialAbilities": [],
-                "XPValue": 600,
+                "BaseXPValue": 600,
                 "TreasureType": "A",
                 "Source": "Wizardry"
             },
@@ -662,7 +662,7 @@
                         "Description": "May instantly kill on a successful strike."
                     }
                 ],
-                "XPValue": 800,
+                "BaseXPValue": 800,
                 "TreasureType": "B",
                 "Source": "Wizardry"
             },
@@ -735,7 +735,7 @@
                         "Description": "May instantly kill on a successful strike."
                     }
                 ],
-                "XPValue": 3000,
+                "BaseXPValue": 3000,
                 "TreasureType": "E",
                 "Source": "Wizardry"
             }

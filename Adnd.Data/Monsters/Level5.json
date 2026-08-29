@@ -40,7 +40,8 @@
                     "Description": "Heals 3 hp per round; only fire/acid prevents regeneration."
                 }
             ],
-            "XPValue": 450,
+            "BaseXPValue": 450,
+            "XPValuePerHitPoint":10,
             "TreasureType": "E"
         },
         {
@@ -81,7 +82,8 @@
                     "Description": "Leads lesser undead; they gain +1 morale."
                 }
             ],
-            "XPValue": 650,
+            "BaseXPValue": 650,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "D"
         },
         {
@@ -118,7 +120,8 @@
                     "Description": "On a charge, damage increases to 3d6."
                 }
             ],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None"
         },
         {
@@ -155,7 +158,8 @@
                     "Description": "Can cast invisibility, charm person, and sleep 1/day each."
                 }
             ],
-            "XPValue": 700,
+            "BaseXPValue": 700,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "F"
         },
         {
@@ -197,7 +201,8 @@
                     "Description": "On hit, target is held; must win STR check to escape."
                 }
             ],
-            "XPValue": 350,
+            "BaseXPValue": 350,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None"
         },
         {
@@ -234,7 +239,8 @@
                     "Description": "Sheds light in 20 ft radius; can blind on a failed save (1 round)."
                 }
             ],
-            "XPValue": 250,
+            "BaseXPValue": 250,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None"
         },
         {
@@ -276,7 +282,8 @@
                     "Description": "Half damage from non-magical weapons."
                 }
             ],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "C"
         },
         {
@@ -316,7 +323,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 450,
+            "BaseXPValue": 450,
+            "XPValuePerHitPoint": 10,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -358,7 +366,8 @@
                     "Description": "Resistant to magic."
                 }
             ],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 4,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -400,7 +409,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 350,
+            "BaseXPValue": 350,
+            "XPValuePerHitPoint": 4,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -448,7 +458,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -492,7 +503,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -542,7 +554,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -592,7 +605,8 @@
                     "Description": "Mist attack may paralyze."
                 }
             ],
-            "XPValue": 550,
+            "BaseXPValue": 550,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -639,7 +653,8 @@
                     "Description": "May instantly kill on a successful strike."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
+            "XPValuePerHitPoint": 12,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -685,7 +700,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 400,
+            "BaseXPValue": 400,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "A",
             "Source": "Wizardry"
         }

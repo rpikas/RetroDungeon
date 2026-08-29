@@ -31,7 +31,8 @@ public class MonsterJsonModel
     public List<MonsterAttackJson> Attacks { get; set; } = new();
     public List<MonsterSpecialAbilityJson> SpecialAbilities { get; set; } = new();
 
-    public int XPValue { get; set; }
+    public int BaseXPValue { get; set; }
+    public int XPValuePerHitPoint { get; set; }
 
     public string TreasureType { get; set; } = "None";
     public double? TreasureChanceOverride { get; set; }

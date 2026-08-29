@@ -61,7 +61,8 @@ public sealed class EncounterMonsterFactory
             ArmorClass = 9,
             HitDice = 1,
             HitPoints = 6,
-            XPValue = xp,
+            BaseXPValue = xp,
+            XPValuePerHitPoint = 1,
             TreasureType = "None",
             Attacks =
             {
@@ -89,7 +90,8 @@ public sealed class EncounterMonsterFactory
             Movement = source.Movement,
             Morale = source.Morale,
             SavingThrows = source.SavingThrows,
-            XPValue = source.XPValue,
+            BaseXPValue = source.BaseXPValue,
+            XPValuePerHitPoint = source.XPValuePerHitPoint,
             TreasureType = source.TreasureType,
             TreasureChanceOverride = source.TreasureChanceOverride,
             Source = source.Source, // Important: Copy the Source property!

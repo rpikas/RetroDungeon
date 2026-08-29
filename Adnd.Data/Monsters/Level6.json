@@ -39,7 +39,8 @@
                     "Description": "Can pass through walls; half damage from non-magical weapons."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "E"
         },
         {
@@ -81,7 +82,8 @@
                     "Description": "Never gets lost in mazes; +2 to surprise in dungeon corridors."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 8,
             "TreasureType": "D"
         },
         {
@@ -118,7 +120,8 @@
                     "Description": "Bite forces save vs poison or death."
                 }
             ],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 8,
             "TreasureType": "None"
         },
         {
@@ -155,7 +158,8 @@
                     "Description": "On hit in water, target must save vs death or take extra 2d6 damage."
                 }
             ],
-            "XPValue": 550,
+            "BaseXPValue": 550,
+            "XPValuePerHitPoint": 8,
             "TreasureType": "None"
         },
         {
@@ -192,7 +196,8 @@
                     "Description": "Creatures within 30 ft must save vs petrification or turn to stone."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
+            "XPValuePerHitPoint": 8,
             "TreasureType": "F"
         },
         {
@@ -229,7 +234,8 @@
                     "Description": "If it wounds a target, gains +1 to hit that target until it dies."
                 }
             ],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None"
         },
         {
@@ -266,7 +272,8 @@
                     "Description": "Never checks morale while within 60 ft of another ant."
                 }
             ],
-            "XPValue": 275,
+            "BaseXPValue": 275,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None"
         },
         {
@@ -301,7 +308,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 950,
+            "BaseXPValue": 950,
+            "XPValuePerHitPoint": 12,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -348,7 +356,8 @@
                     "Description": "Resistant to magic."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -390,7 +399,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -430,7 +440,8 @@
                     "Description": "Gaze may petrify."
                 }
             ],
-            "XPValue": 700,
+            "BaseXPValue": 700,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -472,7 +483,8 @@
                     "Description": "Level 5 Mage Spells"
                 }
             ],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
+            "XPValuePerHitPoint": 14,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -514,7 +526,8 @@
                     "Description": "Bite may poison."
                 }
             ],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -551,7 +564,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 450,
+            "BaseXPValue": 450,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -597,7 +611,8 @@
                     "Description": "May call for reinforcements."
                 }
             ],
-            "XPValue": 800,
+            "BaseXPValue": 800,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -654,7 +669,8 @@
                     "Description": "Resistant to magic."
                 }
             ],
-            "XPValue": 700,
+            "BaseXPValue": 700,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -706,7 +722,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 850,
+            "BaseXPValue": 850,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -741,7 +758,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -791,7 +809,8 @@
                 "Description": "Gas breath attack."
               }
             ],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -849,7 +868,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -901,7 +921,8 @@
                     "Description": "May instantly kill on a successful strike."
                 }
             ],
-            "XPValue": 1500,
+            "BaseXPValue": 1500,
+            "XPValuePerHitPoint": 14,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -942,7 +963,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 450,
+            "BaseXPValue": 450,
+            "XPValuePerHitPoint": 10,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -984,7 +1006,8 @@
                     "Description": "Resistant to magic."
                 }
             ],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 4,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -1026,7 +1049,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 350,
+            "BaseXPValue": 350,
+            "XPValuePerHitPoint": 4,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -1076,7 +1100,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -1120,7 +1145,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -1170,7 +1196,8 @@
                     "Description": "Can be affected by sleep effects."
                 }
             ],
-            "XPValue": 500,
+            "BaseXPValue": 500,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -1220,7 +1247,8 @@
                     "Description": "Mist attack may paralyze."
                 }
             ],
-            "XPValue": 550,
+            "BaseXPValue": 550,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -1265,7 +1293,8 @@
                     "Description": "May instantly kill on a successful strike."
                 }
             ],
-            "XPValue": 900,
+            "BaseXPValue": 900,
+            "XPValuePerHitPoint": 10,
             "TreasureType": "C",
             "Source": "Wizardry"
         },
@@ -1311,7 +1340,8 @@
                     "Description": "May flee from combat."
                 }
             ],
-            "XPValue": 400,
+            "BaseXPValue": 400,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -1348,7 +1378,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 950,
+            "BaseXPValue": 950,
+            "XPValuePerHitPoint": 12,
             "TreasureType": "B",
             "Source": "Wizardry"
         },
@@ -1395,7 +1426,8 @@
                     "Description": "Resistant to magic."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -1437,7 +1469,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 300,
+            "BaseXPValue": 300,
+            "XPValuePerHitPoint": 5,
             "TreasureType": "A",
             "Source": "Wizardry"
         },
@@ -1477,7 +1510,8 @@
                     "Description": "Gaze may petrify."
                 }
             ],
-            "XPValue": 700,
+            "BaseXPValue": 700,
+            "XPValuePerHitPoint": 6,
             "TreasureType": "None",
             "Source": "Wizardry"
         },
@@ -1514,7 +1548,8 @@
                 }
             ],
             "SpecialAbilities": [],
-            "XPValue": 1200,
+            "BaseXPValue": 1200,
+            "XPValuePerHitPoint": 14,
             "TreasureType": "C",
             "Source": "Wizardry"
         }

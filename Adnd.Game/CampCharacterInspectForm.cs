@@ -504,8 +504,7 @@ public sealed class CampCharacterInspectForm : Form
                     var used = i < state.SlotsUsed.Count ? state.SlotsUsed[i] : 0;
                     slots.Add(Math.Max(0, max - used).ToString());
                 }
-
-                sb.AppendLine($"{state.SpellClass.ToString().ToUpperInvariant(),-12} {string.Join("/", slots)}");
+                sb.AppendLine($"{state.SpellClass.ToDisplayString().ToUpperInvariant(),-12} {string.Join("/", slots)}");                
             }
         }
 

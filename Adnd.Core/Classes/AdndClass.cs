@@ -1,4 +1,6 @@
 ﻿// Classes/AdndClass.cs
+
+/*
 namespace Adnd.Core.Classes;
 
 public enum AdndClass
@@ -7,5 +9,6 @@ public enum AdndClass
     Cleric, Druid,
     Thief, Assassin,
     MagicUser, Illusionist,
-    Monk
+    Monk, Bard
 }
+*/

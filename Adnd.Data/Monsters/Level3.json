@@ -45,7 +45,8 @@
                     "Description": "Immune to charm, sleep, hold."
                 }
             ],
-            "XPValue": 65,
+            "BaseXPValue": 65,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "B",
             "Source": "Adnd"
         },
@@ -88,7 +89,8 @@
                     "Description": "Immune to charm, sleep, hold."
                 }
             ],
-            "XPValue": 175,
+            "BaseXPValue": 175,
+          "XPValuePerHitPoint": 5,
             "TreasureType": "D",
             "Source": "Adnd"
         },
@@ -127,7 +129,7 @@
                     "Description": "Save vs poison or become ill (-2 to rolls) for 1 hour."
                 }
             ],
-            "XPValue": 35,
+            "BaseXPValue": 35,
             "TreasureType": "None",
             "Source": "Adnd"
         },
@@ -166,7 +168,8 @@
                     "Description": "May pull small targets adjacent on hit."
                 }
             ],
-            "XPValue": 40,
+            "BaseXPValue": 40,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "None",
             "Source": "Adnd"
         },
@@ -205,7 +208,8 @@
                     "Description": "All hobgoblins within 30 ft gain +1 morale."
                 }
             ],
-            "XPValue": 45,
+            "BaseXPValue": 45,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "B",
             "Source": "Adnd"
         },
@@ -243,7 +247,8 @@
                     "Description": "Unaffected by darkness; blinded by loud noise."
                 }
             ],
-            "XPValue": 30,
+            "BaseXPValue": 30,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "None",
             "Source": "Adnd"
         },
@@ -289,7 +294,8 @@
                     "Description": "Regenerates 3 HP per round unless damaged by fire or acid."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 8,
             "TreasureType": "D",
             "Source": "Adnd"
         },
@@ -333,7 +339,8 @@
                     "Description": "Can instantly kill with a successful bite attack."
                 }
             ],
-            "XPValue": 735,
+            "BaseXPValue": 735,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -377,7 +384,8 @@
                     "Description": "Can poison its target with a successful claw attack."
                 }
             ],
-            "XPValue": 520,
+            "BaseXPValue": 520,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -424,7 +432,8 @@
                     "Description": "Can paralyze its target with a successful claw attack."
                 }
             ],
-            "XPValue": 680,
+            "BaseXPValue": 680,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Adnd"
         },
@@ -473,7 +482,8 @@
                 "Description": "Can exhale a cone of fire causing damage to all creatures in its path."
               }
             ],
-            "XPValue": 1275,
+            "BaseXPValue": 1275,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -522,7 +532,8 @@
                     "Description": "Can attempt to decapitate its target with a successful sword attack."
                 }
             ],
-            "XPValue": 840,
+            "BaseXPValue": 840,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -566,7 +577,8 @@
                     "Description": "Can cast a level 5 mage spell."
                 }
             ],
-            "XPValue": 1400,
+            "BaseXPValue": 1400,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -610,7 +622,8 @@
                     "Description": "Can inject poison with its bite."
                 }
             ],
-            "XPValue": 600,
+            "BaseXPValue": 600,
+            "XPValuePerHitPoint": 8,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -654,7 +667,8 @@
                     "Description": "Can cast a level 1 mage spell."
                 }
             ],
-            "XPValue": 795,
+            "BaseXPValue": 795,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         },
@@ -703,7 +717,8 @@
                     "Description": "No special abilities."
                 }
             ],
-            "XPValue": 380,
+            "BaseXPValue": 380,
+            "XPValuePerHitPoint": 3,
             "TreasureType": "D",
             "Source": "Wizardry"
         }

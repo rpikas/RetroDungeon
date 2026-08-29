@@ -121,10 +121,11 @@ public class CharacterCreator
 
     public int RollHitPoints(CharacterClass cls, int constitution, int level = 1)
     {
+
+
         int hd = cls switch
         {
             CharacterClass.Fighter => RollHitDie(10, level),
-            CharacterClass.Ranger => RollHitDie(10, level),
             CharacterClass.Paladin => RollHitDie(10, level),
             CharacterClass.Cleric => RollHitDie(8, level),
             CharacterClass.Druid => RollHitDie(8, level),
@@ -136,6 +137,13 @@ public class CharacterCreator
             CharacterClass.MagicUser => RollHitDie(4, level),
             _ => RollHitDie(6, level)
         };
+
+        if (cls == CharacterClass.Ranger)
+        {
+            hd = level <= 1
+                ? RollHitDie(8, 1) + RollHitDie(8, 1)
+                : RollHitDie(8, level);
+        }
         int conMod = 0;
 
         if (cls == CharacterClass.Fighter || cls == CharacterClass.Paladin || cls == CharacterClass.Ranger) { 
@@ -146,9 +154,11 @@ public class CharacterCreator
                 13 or 14 => 1,
                 15 or 16 => 2,
                 17 => 3,
-                18 or 19 or 20 or 21 => 4,
-                22 or 23 => 5,
-                24 or 25 => 6,
+                18 => 4,
+                19 or 20 => 5,
+                21 => 6,
+                22 or 23 => 6,
+                24 or 25 => 7,
                 _ => 0
             }; 
         }

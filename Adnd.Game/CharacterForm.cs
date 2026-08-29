@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Adnd.Core.Characters;
+using Adnd.Core.Characters.Progression;
 using Adnd.Data.Spells;
 
 namespace Adnd.Game.Windows
@@ -134,13 +135,108 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.NumberOfAttacks.ToString(), new Rectangle(17, 655, 155, 66));
 
             //Weight allowance
-            DrawInBox(g, _character.CurrentCarryWeight.ToString() + "/" + _character.MaxCarryWeight.ToString(), new Rectangle(7, 755, 155, 66), true, StringAlignment.Center, _handFontSmall12);
+            DrawInBox(g, _character.CurrentCarryWeight.ToString() + "/" + _character.MaxCarryWeight.ToString(), new Rectangle(7, 765, 155, 66), true, StringAlignment.Center, _handFontSmall12);
 
+            int xpBonus = XpBonusCalculator.GetXpModifier(_character.Class, _character.Abilities);
             //XP
-            DrawInBox(g, _character.Experience.ToString() , new Rectangle(630, 755, 155, 66), true, StringAlignment.Center, _handFontSmall12);
+            DrawInBox(g, xpBonus.ToString()+"%", new Rectangle(630, 761, 155, 66), true, StringAlignment.Center, _handFontSmall14);
+            DrawInBox(g, _character.Experience.ToString() + " XP", new Rectangle(630, 785, 155, 66), true, StringAlignment.Center, _handFontSmall10);
 
             //Gold
-            DrawInBox(g, _character.GoldPieces.ToString() , new Rectangle(800, 755, 155, 66));
+            DrawInBox(g, _character.GoldPieces.ToString() + " GP", new Rectangle(800, 765, 155, 66), true, StringAlignment.Center, _handFontSmall12);
+
+            //Equipped Items
+            var monoFont = new Font("Consolas", 8);   // eller "Courier New"
+
+            var itemList = _character.Equipment
+                .Where(kv => kv.Value != null)
+                .Select(kv =>
+                {
+                    var name = kv.Value!.Name.PadRight(18);
+                    var weight = kv.Value.Weight.ToString().PadRight(5);
+                    var slot = kv.Key.ToString().PadRight(15);
+                    var cost = kv.Value.Cost.ToString().PadRight(5);
+
+                    return $"{name}{weight}{slot}{cost}";
+                })
+                .ToList();
+
+            if (itemList.Count == 0)
+            {
+                itemList.Add("(none equipped)");
+            }
+
+            int EuipedItemYOffset = 0;
+            int additionalItemLineSpacingEvery4thRowCounter = 0;
+
+            foreach (var item in itemList)
+            {
+                DrawInAlignedBox(
+                    g,
+                    item,
+                    new Rectangle(-150, 850 + EuipedItemYOffset, 350, 66), // bredare box
+                    false,
+                    StringAlignment.Near,
+                    monoFont   // ← viktig ändring
+                );
+
+                EuipedItemYOffset += 14;
+                additionalItemLineSpacingEvery4thRowCounter++;
+
+                if (additionalItemLineSpacingEvery4thRowCounter % 4 == 0)
+                {
+                    EuipedItemYOffset += 1;
+                }
+            }
+
+
+            var equippedItems = _character.Equipment
+                .Where(kv => kv.Value != null)
+                .Select(kv => kv.Value!)
+                .ToHashSet();
+
+            var unequippedItems = _character.Inventory
+                .Where(item => !equippedItems.Contains(item))
+                .ToList();
+
+            //not equipped non-magic items
+            int NotEuipedItemYOffset = 0;
+            var notEquippedItems = unequippedItems
+                    //.Where(item => item.MagicBonus <= 0 && (item.SpecialAbilities == null || item.SpecialAbilities.Count == 0))
+                      .Where(item => item.MagicBonus <= 0 && (item.SpecialAbilities == null || !item.SpecialAbilities.Any()))
+                 .Select(item => item.Name)
+                .ToList();
+
+            foreach(var item in notEquippedItems)
+            {
+                DrawInAlignedBox(g, item, new Rectangle(263, 849 + NotEuipedItemYOffset, 177, 66), false, StringAlignment.Near, _handFontSmall8);
+                NotEuipedItemYOffset += 14;
+                additionalItemLineSpacingEvery4thRowCounter++;
+                if (additionalItemLineSpacingEvery4thRowCounter % 4 == 0)
+                {
+                    NotEuipedItemYOffset += 1;
+                }
+            }
+
+            //not equipped magic items
+            int MagicItemYOffset = 0;
+            var MagicItems = unequippedItems
+                .Where(item => item.MagicBonus > 0 || (item.SpecialAbilities != null && item.SpecialAbilities.Count > 0))
+                .Select(item => item.Name)
+                .ToList();
+
+            foreach (var item in MagicItems)
+            {
+                DrawInAlignedBox(g, item, new Rectangle(420, 740 + MagicItemYOffset, 175, 66), false, StringAlignment.Near, _handFontSmall8);
+                MagicItemYOffset += 14;
+                additionalItemLineSpacingEvery4thRowCounter++;
+                if (additionalItemLineSpacingEvery4thRowCounter % 4 == 0)
+                {
+                    MagicItemYOffset += 1;
+                }
+            }
+
+
 
 
             //spells
@@ -218,7 +314,7 @@ namespace Adnd.Game.Windows
         }
         */
 
-        
+
         private void DrawInBox(Graphics g, string text, Rectangle rect, bool offsetFont = false, StringAlignment lineAlignment = StringAlignment.Center, Font font = null)
         {
             font ??= _handFont; // default: stora fonten
