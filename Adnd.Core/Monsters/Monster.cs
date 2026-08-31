@@ -21,7 +21,7 @@ public class Monster
     public int THAC0 { get; set; }
     public int NumberOfAttacks { get; set; }
     public string MagicResistance { get; set; } = string.Empty;//TBD string should be an enum
-    public string Size { get; set; } = string.Empty;//TBD string should be an enum
+    public MonsterSize Size { get; set; } = MonsterSize.Medium;
     public int HitPoints { get; set; }
     public int DungeonLevel { get; set; } // Dungeon level where this monster appears
     public Sources Source { get; set; } = Sources.Adnd;

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Adnd.Data.Party;
+using Adnd.Data.Items;
 using Adnd.Core.Characters;
+using Adnd.Core.Items;
 
 namespace Adnd.Data.Characters;
 
@@ -20,6 +22,10 @@ public class CharacterRepository
     public IEnumerable<Character> GetAll()
     {
         var list = new List<Character>();
+        var itemLookup = new ItemRepository("Data/Items")
+            .LoadAll()
+            .GroupBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
         foreach (var file in Directory.GetFiles(_folder, "*.json"))
         {
@@ -28,11 +34,38 @@ public class CharacterRepository
             if (c != null)
             {
                 c.EnsureClassProgressions();
+                HydrateWeaponDamageVsLarge(c, itemLookup);
                 list.Add(c);
             }
         }
 
         return list;
+    }
+
+    private static void HydrateWeaponDamageVsLarge(Character character, IReadOnlyDictionary<string, Item> itemLookup)
+    {
+        foreach (var item in character.Inventory)
+            HydrateItem(item, itemLookup);
+
+        foreach (var equipped in character.Equipment.Values)
+            HydrateItem(equipped, itemLookup);
+    }
+
+    private static void HydrateItem(Item? item, IReadOnlyDictionary<string, Item> itemLookup)
+    {
+        if (item == null || item.Type != ItemType.Weapon)
+            return;
+
+        if (!string.IsNullOrWhiteSpace(item.DamageVsLarge))
+            return;
+
+        if (!itemLookup.TryGetValue(item.Name, out var template))
+            return;
+
+        if (string.IsNullOrWhiteSpace(template.DamageVsLarge))
+            return;
+
+        item.DamageVsLarge = template.DamageVsLarge;
     }
 
     public void Save(Character character)

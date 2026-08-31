@@ -294,6 +294,7 @@ public class ShopMenu
                     StockQuantity = it.StockQuantity,
                     ArmorClassBonus = it.ArmorClassBonus,
                     Damage = it.Damage,
+                    DamageVsLarge = it.DamageVsLarge,
                     AllowedClasses = new System.Collections.Generic.List<CharacterClass>(it.AllowedClasses),
                     SpecialAbilities = new System.Collections.Generic.List<string>(it.SpecialAbilities)
                 };

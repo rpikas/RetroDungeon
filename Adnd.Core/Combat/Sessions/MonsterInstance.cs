@@ -44,6 +44,7 @@ public sealed class MonsterInstance
     public int BaseArmorClass { get; }
     public int ArmorClassModifier { get; private set; }
     public int ArmorClass => BaseArmorClass + ArmorClassModifier;
+    public int Thac0Modifier { get; private set; }
     public bool IsAlive => CurrentHitPoints > 0;
 
     public string DisplayName => $"{Name} #{Index}";
@@ -89,5 +90,10 @@ public sealed class MonsterInstance
     public void AdjustArmorClass(int delta)
     {
         ArmorClassModifier += delta;
+    }
+
+    public void AdjustThac0(int delta)
+    {
+        Thac0Modifier += delta;
     }
 }

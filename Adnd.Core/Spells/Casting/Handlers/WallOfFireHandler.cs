@@ -43,9 +43,13 @@ public sealed class WallOfFireHandler : ISpellEffectHandler
         foreach (var monster in groupTargets)
             monster.SetStatus(MonsterStatus.WallOfFire, rounds);
 
+        var flameColor = string.Equals(request.SpellId, "wall_of_fire_druid", StringComparison.OrdinalIgnoreCase)
+            ? "yellow-green"
+            : "violet";
+
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add($"A wall of fire surrounds group {targetGroupId} for {rounds} round(s).");
+        result.Events.Add($"A {flameColor} wall of fire surrounds group {targetGroupId} for {rounds} round(s).");
         return result;
     }
 }

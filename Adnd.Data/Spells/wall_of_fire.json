@@ -3,11 +3,11 @@
   "Name": "Wall of Fire",
   "Class": "MagicUser",
   "Level": 4,
-  "Description": "A blazing wall engulfs one enemy group over time.",
+  "Description": "A violet blazing wall engulfs one enemy group over time.",
   "RangeType": "Enemy",
   "Targeting": "Multiple",
   "TargetingScope": "SingleGroup",
   "CastContext": "Combat",
   "EffectType": "Damage",
-  "EffectDescription": "Deals 2d4 fire damage per round to one target group for 1 round per caster level."
+  "EffectDescription": "Creates violet fire. Deals 2d4 fire damage per round to one target group for 1 round per caster level."
 }

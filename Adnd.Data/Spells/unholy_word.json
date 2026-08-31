@@ -1,0 +1,13 @@
+{
+  "Id": "unholy_word",
+  "Name": "Unholy Word",
+  "Class": "Cleric",
+  "Level": 7,
+  "Description": "A dreadful blasphemy that crushes fiendish foes.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Against demons and devils in one group: HD 1-3 die, HD 4-7 paralyzed 10-40 rounds, HD 8-11 stunned 2-8 rounds, HD 12+ get -2 THAC0."
+}

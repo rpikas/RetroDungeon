@@ -2020,6 +2020,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (!roster.TryGetValue(name, out var c))
                 continue;
 
+            if (c.CurrentHitPoints > 0
+                && !c.HasStatus(CharacterStatus.Dead)
+                && c.CurrentHitPoints < c.MaxHitPoints
+                && HasEquippedRegeneration(c))
+            {
+                var beforeRegen = c.CurrentHitPoints;
+                c.CurrentHitPoints = Math.Min(c.MaxHitPoints, c.CurrentHitPoints + 1);
+                var healed = c.CurrentHitPoints - beforeRegen;
+                if (healed > 0)
+                {
+                    changed = true;
+                    messages.Add($"{c.Name} regenerates {healed} HP while walking. HP {beforeRegen}->{c.CurrentHitPoints}.");
+                }
+            }
+
             if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead) || !c.HasStatus(CharacterStatus.Poisoned))
                 continue;
 
@@ -2051,7 +2066,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         foreach (var c in roster.Values)
             _characterRepository.Save(c);
 
-        SayOnBoth("Poison", string.Join(Environment.NewLine, messages));
+        SayOnBoth("Effects", string.Join(Environment.NewLine, messages));
+    }
+
+    private static bool HasEquippedRegeneration(Character c)
+    {
+        return c.Equipment.Values
+            .Where(item => item != null)
+            .Any(item => item!.SpecialAbilities.Any(a =>
+                string.Equals(a?.Trim(), "Regeneration (1)", StringComparison.OrdinalIgnoreCase)));
     }
 
     private void TryRandomEncounter()

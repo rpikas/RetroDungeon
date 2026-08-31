@@ -2,7 +2,7 @@
   "Id": "phantasmal_force",
   "Name": "Phantasmal Force",
   "Class": "Illusionist",
-  "Level": 2,
+  "Level": 1,
   "Description": "Creates a believable visual illusion.",
   "RangeType": "Enemy",
   "Targeting": "Multiple",

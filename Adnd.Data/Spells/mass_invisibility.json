@@ -1,0 +1,13 @@
+{
+  "Id": "mass_invisibility",
+  "Name": "Mass Invisibility",
+  "Class": "MagicUser",
+  "Level": 7,
+  "Description": "Renders the entire party unseen.",
+  "RangeType": "Self",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "Arcane veil hides the whole party from sight."
+}

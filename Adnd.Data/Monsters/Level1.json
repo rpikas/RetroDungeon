@@ -32,7 +32,9 @@
       "SpecialAbilities": [],
       "BaseXPValue": 25,
       "TreasureType": "B",
-      "Source": "Adnd"
+       "Source": "Adnd",
+      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSALLRPhLTSlhbB6Z95EHXWhKHUOXQ2akTPUJHCcqMYSw&s=10"
+
     },
     {
       "Name": "Bandit",
@@ -971,59 +973,8 @@
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtDj0y2wQmcMHaeDCMN_ZZAdRR7nnDvj6PNL-J189AuA&s=10"
     },
 
-    {
-      "Name": "Hobgoblin",
-      "Type": "Humanoid",
-      "ClimateTerain": "Temperate",
-      "Frequency": "Uncommon",
-      "ActivityCycle": "Day",
-      "Intelligence": "Low",
-      "Alignment": "Lawful Evil",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 5,
-      "MovementRate": "Medium",
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Medium",
-      "HitPoints": 6,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Longsword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
-      "Source": "Adnd",
-      "Info": "",
-      "InfoUrl": "",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSALLRPhLTSlhbB6Z95EHXWhKHUOXQ2akTPUJHCcqMYSw&s=10"
-    },
+  
+
 
     {
       "Name": "Piercer",
@@ -1102,7 +1053,7 @@
       "THAC0": 19,
       "NumberOfAttacks": 1,
       "MagicResistance": "None",
-      "Size": "Small",
+      "Size": "Large",
       "Movement": {
         "Walk": 20,
         "Fly": 0,
@@ -1144,7 +1095,7 @@
       "HitDice": 1,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
+      "Size": "Large",
       "Movement": {
         "Walk": 30,
         "Fly": 0,
@@ -1186,10 +1137,10 @@
       "NumberOfAppearancesMin": 5,
       "NumberOfAppearancesMax": 20,
       "ArmorClass": 12,
+      "Size": "Large",
       "HitDice": 1,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
       "Movement": {
         "Walk": 30,
         "Fly": 0,

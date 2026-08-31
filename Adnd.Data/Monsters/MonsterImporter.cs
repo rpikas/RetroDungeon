@@ -29,7 +29,7 @@ public static class MonsterImporter
             THAC0 = json.THAC0,
             NumberOfAttacks = json.NumberOfAttacks,
             MagicResistance = json.MagicResistance,
-            Size = json.Size,
+            Size = ParseSize(json.Size),
             HitPoints = json.HitPoints,
 
             BaseXPValue = json.BaseXPValue,
@@ -140,5 +140,15 @@ public static class MonsterImporter
             16 => 7,
             _ => 6
         };
+    }
+
+    private static MonsterSize ParseSize(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return MonsterSize.Medium;
+
+        return Enum.TryParse<MonsterSize>(raw.Trim(), ignoreCase: true, out var parsed)
+            ? parsed
+            : MonsterSize.Medium;
     }
 }

@@ -6,6 +6,7 @@ using Adnd.Core.Combat.Events;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Dices;
 using Adnd.Core.Items;
+using Adnd.Core.Monsters;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 
@@ -94,6 +95,56 @@ public sealed class CombatResolver
         {
             if (!IsAlive(member))
                 continue;
+
+            var regeneration = GetEquippedRegeneration(member);
+            if (regeneration > 0 && member.CurrentHitPoints < member.MaxHitPoints)
+            {
+                var before = member.CurrentHitPoints;
+                member.CurrentHitPoints = Math.Min(member.MaxHitPoints, member.CurrentHitPoints + regeneration);
+                var healed = member.CurrentHitPoints - before;
+                if (healed > 0)
+                    events.Add(new CombatEvent($"{member.Name} regenerates {healed} HP. HP {before}->{member.CurrentHitPoints}."));
+            }
+
+            var mirrorRounds = session.GetMirrorImageRounds(member.Name);
+            if (mirrorRounds > 0)
+            {
+                var imageCount = session.GetMirrorImageCount(member.Name);
+                var remaining = session.TickMirrorImage(member.Name);
+                if (remaining <= 0 && imageCount > 0)
+                    events.Add(new CombatEvent($"{member.Name}'s mirror image fades."));
+            }
+
+            var strengthRounds = session.GetStrengthBuffRounds(member.Name);
+            if (strengthRounds > 0)
+            {
+                var remaining = session.TickStrengthBuff(member.Name);
+                if (remaining <= 0)
+                {
+                    var bonus = session.GetStrengthBuffBonus(member.Name);
+                    if (bonus > 0)
+                    {
+                        member.Abilities.Strength = Math.Max(1, member.Abilities.Strength - bonus);
+                        session.ClearStrengthBuff(member.Name);
+                        events.Add(new CombatEvent($"{member.Name}'s Strength spell fades (−{bonus} STR)."));
+                    }
+                }
+            }
+
+            if (member.HasStatus(CharacterStatus.Invisible))
+            {
+                var improvedRounds = session.GetImprovedInvisibilityRounds(member.Name);
+                if (improvedRounds > 0)
+                {
+                    var remaining = session.TickImprovedInvisibility(member.Name);
+                    if (remaining <= 0)
+                    {
+                        member.RemoveStatus(CharacterStatus.Invisible);
+                        member.ArmorClass += 4;
+                        events.Add(new CombatEvent($"{member.Name}'s improved invisibility fades."));
+                    }
+                }
+            }
 
             if (member.HasStatus(CharacterStatus.Asleep))
             {
@@ -317,6 +368,17 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (monster.HasStatus(MonsterStatus.Stunned))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Stunned);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is stunned ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} is no longer stunned."));
+
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.Panicked))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Panicked);
@@ -369,9 +431,24 @@ public sealed class CombatResolver
 
                     if (roll >= needed)
                     {
+                        var imageCount = session.GetMirrorImageCount(target.Name);
+                        if (imageCount > 0)
+                        {
+                            var imageHitRoll = _dice.Roll(imageCount + 1);
+                            if (imageHitRoll > 1)
+                            {
+                                var remainingImages = session.RemoveOneMirrorImage(target.Name);
+                                events.Add(new CombatEvent($"{monster.DisplayName} hits a mirror image of {target.Name}!"));
+                                events.Add(new CombatEvent($"{target.Name} has {remainingImages} mirror image(s) remaining."));
+                                if (remainingImages <= 0)
+                                    events.Add(new CombatEvent($"{target.Name} has no mirror images left."));
+                                continue;
+                            }
+                        }
+
                         int damage = RollDamage(attack.Damage);
                         target.CurrentHitPoints -= damage;
-                        events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} for {damage}."));
+                        events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name} for {damage}."));
                         WakeCharacterIfAsleepAfterDamage(target, damage, events);
 
                         if (target.CurrentHitPoints <= 0)
@@ -781,6 +858,17 @@ public sealed class CombatResolver
 
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
+        var hasImprovedInvisibility = session.GetImprovedInvisibilityRounds(member.Name) > 0;
+        if (!hasImprovedInvisibility
+            && member.HasStatus(CharacterStatus.Invisible)
+            && session.InvisiblyBuffedPartyMembers.Contains(member.Name))
+        {
+            member.RemoveStatus(CharacterStatus.Invisible);
+            member.ArmorClass += 4;
+            session.InvisiblyBuffedPartyMembers.Remove(member.Name);
+            events.Add(new CombatEvent($"{member.Name} attacks and becomes visible."));
+        }
+
         // Determine target: the named monster first, then a spread, then the group, then whoever is first.
         Combat.Sessions.MonsterInstance? target = null;
 
@@ -848,7 +936,8 @@ public sealed class CombatResolver
 
             if (roll >= needed)
             {
-                int damage = RollDamage(string.IsNullOrWhiteSpace(member.Damage) ? "1d2" : member.Damage);
+                var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
+                int damage = RollDamage(damageExpression);
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
@@ -857,7 +946,7 @@ public sealed class CombatResolver
                 var weaponName = mainHand != null ? mainHand.Name : "bare hands";
 
                 events.Add(new CombatEvent(
-                    $"{member.Name} hits {target.DisplayName} with {weaponName} for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
+                    $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageExpression}) for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
 
                 if (target.CurrentHitPoints <= 0)
                 {
@@ -875,7 +964,7 @@ public sealed class CombatResolver
 
     private int GetMonsterThac0(MonsterInstance monster)
     {
-        return Math.Max(10, 20 - Math.Max(0, monster.Template.HitDice - 1));
+        return Math.Max(1, Math.Max(10, 20 - Math.Max(0, monster.Template.HitDice - 1)) + monster.Thac0Modifier);
     }
 
     private Character? SelectMonsterTarget(CombatSession session)
@@ -1115,5 +1204,29 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{member.Name} wakes up from taking damage!"));
     }
 
+    private static int GetEquippedRegeneration(Character member)
+    {
+        var hasRegeneration = member.Equipment.Values
+            .Where(item => item != null)
+            .Any(item => item!.SpecialAbilities.Any(a =>
+                string.Equals(a?.Trim(), "Regeneration (1)", StringComparison.OrdinalIgnoreCase)));
+
+        return hasRegeneration ? 1 : 0;
+    }
+
     private static bool IsAlive(Character c) => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead);
+
+    private static string ResolveWeaponDamageExpression(Character member, Item? mainHand, MonsterInstance target)
+    {
+        if (mainHand != null && mainHand.Type == ItemType.Weapon)
+        {
+            if (target.Template.Size == MonsterSize.Large && !string.IsNullOrWhiteSpace(mainHand.DamageVsLarge))
+                return mainHand.DamageVsLarge;
+
+            if (!string.IsNullOrWhiteSpace(mainHand.Damage))
+                return mainHand.Damage;
+        }
+
+        return string.IsNullOrWhiteSpace(member.Damage) ? "1d2" : member.Damage;
+    }
 }

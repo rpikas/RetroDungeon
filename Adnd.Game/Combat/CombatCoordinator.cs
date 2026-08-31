@@ -90,6 +90,8 @@ public sealed class CombatCoordinator
             new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
+            new StrengthHandler(),
+            new MirrorImageHandler(),
             new InvisibilityHandler(),
             new ShieldSpellHandler(),
             new FireballHandler(),
@@ -100,6 +102,8 @@ public sealed class CombatCoordinator
             new DisintegrateHandler(),
             new DeathFogHandler(),
             new DelayedBlastFireballHandler(),
+            new EarthquakeHandler(),
+            new UnholyWordHandler(),
             new FingerOfDeathHandler(),
             new IncendiaryCloudHandler(),
             new MeteorSwarmHandler(),
@@ -278,8 +282,37 @@ public sealed class CombatCoordinator
             }
         }
 
+        foreach (var name in session.ImprovedInvisibilityRounds.Keys.ToList())
+        {
+            var c = session.Party.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (c == null)
+                continue;
+
+            if (c.HasStatus(CharacterStatus.Invisible))
+            {
+                c.RemoveStatus(CharacterStatus.Invisible);
+                c.ArmorClass += 4;
+            }
+        }
+
+        foreach (var name in session.StrengthBuffBonuses.Keys.ToList())
+        {
+            var c = session.Party.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (c == null)
+                continue;
+
+            var bonus = session.GetStrengthBuffBonus(name);
+            if (bonus > 0)
+                c.Abilities.Strength = Math.Max(1, c.Abilities.Strength - bonus);
+
+            session.ClearStrengthBuff(name);
+        }
+
         session.BlessedPartyMembers.Clear();
         session.InvisiblyBuffedPartyMembers.Clear();
+        session.ImprovedInvisibilityRounds.Clear();
+        session.MirrorImageCounts.Clear();
+        session.MirrorImageRounds.Clear();
     }
    
     private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, int? dungeonLevel)
@@ -672,6 +705,7 @@ public sealed class CombatCoordinator
             StockQuantity = source.StockQuantity,
             ArmorClassBonus = source.ArmorClassBonus,
             Damage = source.Damage,
+            DamageVsLarge = source.DamageVsLarge,
             AllowedClasses = new List<CharacterClass>(source.AllowedClasses),
             SpecialAbilities = new List<string>(source.SpecialAbilities)
         };

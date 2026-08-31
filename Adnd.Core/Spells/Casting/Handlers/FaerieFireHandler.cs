@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Monsters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -47,7 +48,6 @@ public sealed class FaerieFireHandler : ISpellEffectHandler
         return result;
     }
 
-    private static bool IsLarge(string size)
-        => !string.IsNullOrWhiteSpace(size)
-           && size.Trim().Contains("large", StringComparison.OrdinalIgnoreCase);
+    private static bool IsLarge(MonsterSize size)
+        => size == MonsterSize.Large;
 }

@@ -92,6 +92,7 @@ public sealed class EncounterMonsterFactory
             HitDice = source.HitDice,
             HitDiceType = source.HitDiceType,
             ExtraHitPoints = source.ExtraHitPoints,
+            Size = source.Size,
             HitPoints = source.HitPoints,
             Movement = source.Movement,
             Morale = source.Morale,

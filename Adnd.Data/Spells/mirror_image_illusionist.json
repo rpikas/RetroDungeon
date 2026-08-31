@@ -1,0 +1,12 @@
+{
+  "Id": "mirror_image_illusionist",
+  "Name": "Mirror Image",
+  "Class": "Illusionist",
+  "Level": 2,
+  "Description": "Creates illusory duplicates of the caster.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "Creates 1d4 mirror images with equal chance to be struck instead of the caster."
+}

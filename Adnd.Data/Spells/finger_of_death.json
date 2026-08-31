@@ -1,7 +1,7 @@
 {
   "Id": "finger_of_death",
   "Name": "Finger of Death",
-  "Class": "MagicUser",
+  "Class": "Druid",
   "Level": 7,
   "Description": "A killing ray that can slay one foe outright.",
   "RangeType": "Enemy",

@@ -18,6 +18,11 @@ public sealed class CombatSession
     // Temporary round-combat effects only (not persisted).
     public HashSet<string> BlessedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> InvisiblyBuffedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> ImprovedInvisibilityRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> StrengthBuffRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> StrengthBuffBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
 
@@ -32,6 +37,140 @@ public sealed class CombatSession
         }
 
         AsleepPartyRounds[characterName] = rounds;
+    }
+
+    public void SetImprovedInvisibility(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+        {
+            ImprovedInvisibilityRounds.Remove(characterName);
+            return;
+        }
+
+        ImprovedInvisibilityRounds[characterName] = rounds;
+    }
+
+    public int GetImprovedInvisibilityRounds(string characterName)
+    {
+        return ImprovedInvisibilityRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickImprovedInvisibility(string characterName)
+    {
+        if (!ImprovedInvisibilityRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            ImprovedInvisibilityRounds.Remove(characterName);
+            return 0;
+        }
+
+        ImprovedInvisibilityRounds[characterName] = rounds;
+        return rounds;
+    }
+
+    public void SetStrengthBuff(string characterName, int bonus, int rounds)
+    {
+        if (rounds <= 0 || bonus <= 0)
+        {
+            StrengthBuffRounds.Remove(characterName);
+            StrengthBuffBonuses.Remove(characterName);
+            return;
+        }
+
+        StrengthBuffBonuses[characterName] = bonus;
+        StrengthBuffRounds[characterName] = rounds;
+    }
+
+    public int GetStrengthBuffRounds(string characterName)
+    {
+        return StrengthBuffRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int GetStrengthBuffBonus(string characterName)
+    {
+        return StrengthBuffBonuses.TryGetValue(characterName, out var bonus) ? Math.Max(0, bonus) : 0;
+    }
+
+    public int TickStrengthBuff(string characterName)
+    {
+        if (!StrengthBuffRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            StrengthBuffRounds.Remove(characterName);
+            return 0;
+        }
+
+        StrengthBuffRounds[characterName] = rounds;
+        return rounds;
+    }
+
+    public void ClearStrengthBuff(string characterName)
+    {
+        StrengthBuffRounds.Remove(characterName);
+        StrengthBuffBonuses.Remove(characterName);
+    }
+
+    public void SetMirrorImage(string characterName, int imageCount, int rounds)
+    {
+        if (imageCount <= 0 || rounds <= 0)
+        {
+            MirrorImageCounts.Remove(characterName);
+            MirrorImageRounds.Remove(characterName);
+            return;
+        }
+
+        MirrorImageCounts[characterName] = imageCount;
+        MirrorImageRounds[characterName] = rounds;
+    }
+
+    public int GetMirrorImageCount(string characterName)
+    {
+        return MirrorImageCounts.TryGetValue(characterName, out var count) ? Math.Max(0, count) : 0;
+    }
+
+    public int GetMirrorImageRounds(string characterName)
+    {
+        return MirrorImageRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickMirrorImage(string characterName)
+    {
+        if (!MirrorImageRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            MirrorImageRounds.Remove(characterName);
+            MirrorImageCounts.Remove(characterName);
+            return 0;
+        }
+
+        MirrorImageRounds[characterName] = rounds;
+        return rounds;
+    }
+
+    public int RemoveOneMirrorImage(string characterName)
+    {
+        if (!MirrorImageCounts.TryGetValue(characterName, out var count) || count <= 0)
+            return 0;
+
+        count -= 1;
+        if (count <= 0)
+        {
+            MirrorImageCounts.Remove(characterName);
+            MirrorImageRounds.Remove(characterName);
+            return 0;
+        }
+
+        MirrorImageCounts[characterName] = count;
+        return count;
     }
 
     public int GetPartyAsleepRounds(string characterName)

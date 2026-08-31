@@ -1,0 +1,12 @@
+{
+  "Id": "strength",
+  "Name": "Strength",
+  "Class": "MagicUser",
+  "Level": 2,
+  "Description": "Bolsters a companion with magical might.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "Increases target Strength for 10 rounds based on class-specific die."
+}

@@ -7,6 +7,8 @@ public sealed class InvisibilityHandler : ISpellEffectHandler
     public bool CanHandle(string spellId)
     {
         return string.Equals(spellId, "invisibility", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(spellId, "invisibility_illusionist", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(spellId, "mass_invisibility", StringComparison.OrdinalIgnoreCase)
                || string.Equals(spellId, "improved_invisibility", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -16,18 +18,33 @@ public sealed class InvisibilityHandler : ISpellEffectHandler
         if (spell == null)
             return SpellCastResult.Failure("Missing spell definition.");
 
-        var allyNames = request.Targets
-            .Where(t => t.Type == SpellCastTargetType.Ally && !string.IsNullOrWhiteSpace(t.CharacterName))
-            .Select(t => t.CharacterName!)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        var isMassInvisibility = string.Equals(request.SpellId, "mass_invisibility", StringComparison.OrdinalIgnoreCase);
 
-        if (allyNames.Count == 0)
-            return SpellCastResult.Failure("No valid ally target for Invisibility.");
+        List<Character> allies;
+        if (isMassInvisibility)
+        {
+            allies = request.PartyTargets
+                .Where(c => c.CurrentHitPoints > 0
+                            && !c.HasStatus(CharacterStatus.Dead)
+                            && !c.HasStatus(CharacterStatus.Ashes)
+                            && !c.HasStatus(CharacterStatus.Lost))
+                .ToList();
+        }
+        else
+        {
+            var allyNames = request.Targets
+                .Where(t => t.Type == SpellCastTargetType.Ally && !string.IsNullOrWhiteSpace(t.CharacterName))
+                .Select(t => t.CharacterName!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
 
-        var allies = request.PartyTargets
-            .Where(c => allyNames.Contains(c.Name, StringComparer.OrdinalIgnoreCase))
-            .ToList();
+            if (allyNames.Count == 0)
+                return SpellCastResult.Failure("No valid ally target for Invisibility.");
+
+            allies = request.PartyTargets
+                .Where(c => allyNames.Contains(c.Name, StringComparer.OrdinalIgnoreCase))
+                .ToList();
+        }
 
         if (allies.Count == 0)
             return SpellCastResult.Failure("No valid ally target for Invisibility.");
@@ -48,10 +65,19 @@ public sealed class InvisibilityHandler : ISpellEffectHandler
             newlyInvisible.Add(ally.Name);
 
             if (request.Context == SpellUseContext.Combat
-                && request.CombatSession != null
-                && string.Equals(request.SpellId, "invisibility", StringComparison.OrdinalIgnoreCase))
+                && request.CombatSession != null)
             {
-                request.CombatSession.InvisiblyBuffedPartyMembers.Add(ally.Name);
+                if (string.Equals(request.SpellId, "improved_invisibility", StringComparison.OrdinalIgnoreCase))
+                {
+                    var rounds = 4 + Math.Max(1, request.Caster.Level);
+                    request.CombatSession.SetImprovedInvisibility(ally.Name, rounds);
+                }
+                else if (string.Equals(request.SpellId, "invisibility", StringComparison.OrdinalIgnoreCase)
+                         || string.Equals(request.SpellId, "invisibility_illusionist", StringComparison.OrdinalIgnoreCase)
+                         || string.Equals(request.SpellId, "mass_invisibility", StringComparison.OrdinalIgnoreCase))
+                {
+                    request.CombatSession.InvisiblyBuffedPartyMembers.Add(ally.Name);
+                }
             }
         }
 

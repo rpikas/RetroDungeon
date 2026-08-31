@@ -1,0 +1,13 @@
+{
+  "Id": "earthquake",
+  "Name": "Earthquake",
+  "Class": "Cleric",
+  "Level": 7,
+  "Description": "The ground convulses violently beneath all enemies.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 5d12 damage to all enemy groups; save vs spell for half damage."
+}

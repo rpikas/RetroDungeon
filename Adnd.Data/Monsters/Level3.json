@@ -101,13 +101,7 @@
             "ArmorClass": 9,
             "HitDice": 1,
             "HitPoints": 4,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 10
-            },
+            "Movement": 20,
             "SavingThrows": {
                 "ParalyzationPoisonDeath": 14,
                 "RodStaffWand": 15,
@@ -177,7 +171,8 @@
             "Name": "Hobgoblin Captain",
             "Type": "Humanoid",
             "Frequency": "Uncommon",
-            "ArmorClass": 5,
+          "ArmorClass": 5,
+          "Size": "Large",
             "HitDice": 2,
             "HitPoints": 14,
             "Movement": {

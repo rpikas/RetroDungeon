@@ -1,7 +1,7 @@
 {
   "Id": "improved_invisibility",
   "Name": "Improved Invisibility",
-  "Class": "MagicUser",
+  "Class": "Illusionist",
   "Level": 4,
   "Description": "Renders one target unseen with stronger persistence.",
   "RangeType": "Ally",

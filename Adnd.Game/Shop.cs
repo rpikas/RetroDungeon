@@ -70,6 +70,7 @@ public static class Shop
         StockQuantity = it.StockQuantity,
         ArmorClassBonus = it.ArmorClassBonus,
         Damage = it.Damage,
+        DamageVsLarge = it.DamageVsLarge,
         AllowedClasses = new List<CharacterClass>(it.AllowedClasses),
         SpecialAbilities = new List<string>(it.SpecialAbilities)
     };
