@@ -237,7 +237,8 @@ public sealed class EncounterForm : Form
             if (paralyzedCount > 0) statusBits.Add($"{paralyzedCount} paralyzed");
 
             var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
-            return $"{count} {name}{statusText}";
+            var displayName = count > 1 ? name + "s" : name;
+            return $"{count} {displayName}{statusText}";
         }).Where(d => d != null).ToList();
 
         // Om det finns 3 eller 4 grupper, skapa en separat lista för de senare
@@ -257,11 +258,16 @@ public sealed class EncounterForm : Form
                 _monsterImages.Add((name, image));
 
                 var statusBits = new List<string>();
-                if (monstersInGroup.Any(m => m.HasStatus(MonsterStatus.Asleep))) statusBits.Add("asleep");
-                if (monstersInGroup.Any(m => m.HasStatus(MonsterStatus.Paralyzed))) statusBits.Add("paralyzed");
+                var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
+                var paralyzedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+                var unconsciousCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Unconscious));
+                if (asleepCount > 0) statusBits.Add($"{asleepCount} asleep");
+                if (paralyzedCount > 0) statusBits.Add($"{paralyzedCount} paralyzed");
+                if (unconsciousCount > 0) statusBits.Add($"{unconsciousCount} unconscious");
 
                 var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
-                return $"{count} {name}{statusText}";
+                var displayName = count > 1 ? name + "s" : name;
+                return $"{count} {displayName}{statusText}";
             }).Where(d => d != null).ToList();
         }
         /*
@@ -1490,7 +1496,14 @@ public sealed class EncounterForm : Form
         var paralyzedText = !_multipleGroups && paralyzedCount > 0
             ? $"  ({paralyzedCount} PARALYZED)"
             : string.Empty;
-        _headerLabel.Text = $"1)  {_monsterCount}  {_monsterName.ToUpperInvariant()}{asleepText}{heldText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}";
+        var unconsciousText = !_multipleGroups && unconsciousCount > 0
+            ? $"  ({unconsciousCount} UNCONSCIOUS)"
+            : string.Empty;
+        var headerMonsterName = (!_multipleGroups && _monsterCount > 1)
+            ? _monsterName.ToUpperInvariant() + "S"
+            : _monsterName.ToUpperInvariant();
+
+        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{heldText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

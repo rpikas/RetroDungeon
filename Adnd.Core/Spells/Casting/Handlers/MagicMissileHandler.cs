@@ -1,4 +1,5 @@
 namespace Adnd.Core.Spells.Casting.Handlers;
+using Adnd.Core.Diagnostics;
 
 public sealed class MagicMissileHandler : ISpellEffectHandler
 {
@@ -53,18 +54,19 @@ public sealed class MagicMissileHandler : ISpellEffectHandler
 
             var damageRoll = rng.Next(1, 5);
             var damage = damageRoll + 1; // 1d4+1
-            var before = target.CurrentHitPoints;
-            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
-            var actual = Math.Max(0, before - target.CurrentHitPoints);
 
-            result.Events.Add($"Missile {i + 1}: {target.DisplayName} takes {actual} damage (rolled {damage}). HP {before}->{target.CurrentHitPoints}.");
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(target, damage, rng, spell.Name);
+
+            result.Events.Add(
+                $"Missile {i + 1}: {target.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+                $"Damage {damage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
             if (!target.IsAlive)
                 result.Events.Add($"{target.DisplayName} is destroyed.");
 
             if (result.HpChanges.ContainsKey(target.DisplayName))
-                result.HpChanges[target.DisplayName] -= actual;
+                result.HpChanges[target.DisplayName] -= outcome.ActualDamage;
             else
-                result.HpChanges[target.DisplayName] = -actual;
+                result.HpChanges[target.DisplayName] = -outcome.ActualDamage;
         }
 
         return result;

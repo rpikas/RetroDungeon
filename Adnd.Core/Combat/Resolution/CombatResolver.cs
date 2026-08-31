@@ -191,6 +191,7 @@ public sealed class CombatResolver
                 var beforeHp = monster.CurrentHitPoints;
                 monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
                 var actualDamage = beforeHp - monster.CurrentHitPoints;
+                WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
                 var remaining = monster.TickStatus(MonsterStatus.IncendiaryCloud);
 
                 events.Add(new CombatEvent($"Incendiary cloud burns {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
@@ -212,6 +213,7 @@ public sealed class CombatResolver
                 var beforeHp = monster.CurrentHitPoints;
                 monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
                 var actualDamage = beforeHp - monster.CurrentHitPoints;
+                WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
                 var remaining = monster.TickStatus(MonsterStatus.DeathFog);
 
                 events.Add(new CombatEvent($"Death fog engulfs {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
@@ -233,6 +235,7 @@ public sealed class CombatResolver
                 var beforeHp = monster.CurrentHitPoints;
                 monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
                 var actualDamage = beforeHp - monster.CurrentHitPoints;
+                WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
                 var remaining = monster.TickStatus(MonsterStatus.WallOfFire);
 
                 events.Add(new CombatEvent($"Flames burn {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
@@ -254,6 +257,7 @@ public sealed class CombatResolver
                 var beforeHp = monster.CurrentHitPoints;
                 monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
                 var actualDamage = beforeHp - monster.CurrentHitPoints;
+                WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
                 var remaining = monster.TickStatus(MonsterStatus.AcidArrow);
 
                 events.Add(new CombatEvent($"Acid burns {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
@@ -368,6 +372,7 @@ public sealed class CombatResolver
                         int damage = RollDamage(attack.Damage);
                         target.CurrentHitPoints -= damage;
                         events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} for {damage}."));
+                        WakeCharacterIfAsleepAfterDamage(target, damage, events);
 
                         if (target.CurrentHitPoints <= 0)
                         {
@@ -847,6 +852,7 @@ public sealed class CombatResolver
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+                WakeMonsterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
 
                 var weaponName = mainHand != null ? mainHand.Name : "bare hands";
 
@@ -918,6 +924,7 @@ public sealed class CombatResolver
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
             var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
 
             events.Add(new CombatEvent($"{monster.DisplayName} casts Magic Missile! {target.Name} takes {actual} damage (rolled {damage})."));
 
@@ -997,6 +1004,7 @@ public sealed class CombatResolver
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
             var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
 
             if (saveRoll >= saveTarget)
                 events.Add(new CombatEvent($"{target.Name} succeeds breath save ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
@@ -1057,6 +1065,7 @@ public sealed class CombatResolver
             var before = member.CurrentHitPoints;
             member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - damage);
             var actual = before - member.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(member, actual, events);
 
             events.Add(new CombatEvent($"Poison harms {member.Name} for {actual} (rolled {damage}). HP {before}->{member.CurrentHitPoints}."));
 
@@ -1066,6 +1075,44 @@ public sealed class CombatResolver
                 events.Add(new CombatEvent($"{member.Name} dies from poison!"));
             }
         }
+    }
+
+    private static void WakeMonsterIfAsleepAfterDamage(MonsterInstance monster, int actualDamage, List<CombatEvent> events)
+    {
+        if (actualDamage <= 0)
+            return;
+
+        if (!monster.IsAlive)
+            return;
+
+        var wokeFromAsleep = monster.HasStatus(MonsterStatus.Asleep);
+        var wokeFromUnconscious = monster.HasStatus(MonsterStatus.Unconscious);
+
+        if (!wokeFromAsleep && !wokeFromUnconscious)
+            return;
+
+        if (wokeFromAsleep)
+            monster.SetStatus(MonsterStatus.Asleep, 0);
+
+        if (wokeFromUnconscious)
+            monster.SetStatus(MonsterStatus.Unconscious, 0);
+
+        events.Add(new CombatEvent($"{monster.DisplayName} wakes up from taking damage!"));
+    }
+
+    private static void WakeCharacterIfAsleepAfterDamage(Character member, int actualDamage, List<CombatEvent> events)
+    {
+        if (actualDamage <= 0)
+            return;
+
+        if (member.CurrentHitPoints <= 0)
+            return;
+
+        if (!member.HasStatus(CharacterStatus.Asleep))
+            return;
+
+        member.RemoveStatus(CharacterStatus.Asleep);
+        events.Add(new CombatEvent($"{member.Name} wakes up from taking damage!"));
     }
 
     private static bool IsAlive(Character c) => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead);

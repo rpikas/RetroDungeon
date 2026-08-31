@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Adnd.Data.Monsters;
 
@@ -11,6 +12,7 @@ public class MonsterJsonModel
     public string ActivityCycle { get; set; } = "";
     public string Intelligence { get; set; } = "";
     public string Alignment { get; set; } = "";
+    public string Class { get; set; } = "";
     public int NumberOfAppearancesMin { get; set; }
     public int NumberOfAppearancesMax { get; set; }
     public int ArmorClass { get; set; }
@@ -24,8 +26,9 @@ public class MonsterJsonModel
     public string Size { get; set; } = "";
     public int HitPoints { get; set; }
 
+    [JsonConverter(typeof(MonsterMovementJsonConverter))]
     public MonsterMovementJson Movement { get; set; } = new();
-    public MonsterSavingThrowsJson SavingThrows { get; set; } = new();
+    public MonsterSavingThrowsJson? SavingThrows { get; set; }
     public MonsterMoraleJson Morale { get; set; } = new();
 
     public List<MonsterAttackJson> Attacks { get; set; } = new();

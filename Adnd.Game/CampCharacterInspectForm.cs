@@ -82,7 +82,9 @@ public sealed class CampCharacterInspectForm : Form
             new IncendiaryCloudHandler(),
             new MeteorSwarmHandler(),
             new PowerWordStunHandler(),
-            new PowerWordKillHandler()
+            new PowerWordKillHandler(),
+            new FearHandler(),
+            new PhantasmalForceHandler()
         });
         _spellCastingService = new SpellCastingService(resolver, _spellRepository.LoadAll());
 

@@ -2,6 +2,7 @@ using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
+using Adnd.Core.Diagnostics;
 using Adnd.Core.Monsters;
 using Adnd.Data.Characters;
 using Adnd.Data.Encounters;
@@ -14,6 +15,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Adnd.Game;
@@ -57,6 +59,8 @@ public sealed class MazeForm : Form
     private bool _partyOverlayVisible = true;
     private int _currentDungeonLevel = 1;
     private readonly TabletopViewerBridge _viewer = new();
+    private RuleApplicationInfoForm? _ruleApplicationInfoForm;
+    private Action<string>? _ruleApplicationInfoHandler;
 
     // Lets the viewer send moves back. Null when no viewer is configured, and idle when none is
     // running; the keyboard is unaffected either way.
@@ -730,6 +734,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         Shown += (_, _) =>
         {
+            if (GameRulesProvider.Current.ShowDiceRollAndRuleApplicationInfo)
+            {
+                _ruleApplicationInfoForm = new RuleApplicationInfoForm();
+                _ruleApplicationInfoHandler = message => _ruleApplicationInfoForm?.AppendInfo(message);
+                RuleApplicationInfo.InfoPublished += _ruleApplicationInfoHandler;
+                _ruleApplicationInfoForm.Show();
+                _ruleApplicationInfoForm.BringToFront();
+                RuleApplicationInfo.Publish("Rule/dice diagnostics enabled.");
+            }
+
             if (_position.X == 1 && _position.Y == 2)
             {
                 ShowElevatorDialog();
@@ -745,7 +759,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             _viewerControl = ViewerControlPump.Start(this, ViewerCommands.Maze, InjectViewerKey, _viewer);
         };
 
-        FormClosed += (_, _) => _viewerControl?.Dispose();
+        FormClosed += (_, _) =>
+        {
+            _viewerControl?.Dispose();
+            if (_ruleApplicationInfoHandler != null)
+                RuleApplicationInfo.InfoPublished -= _ruleApplicationInfoHandler;
+
+            if (_ruleApplicationInfoForm != null && !_ruleApplicationInfoForm.IsDisposed)
+                _ruleApplicationInfoForm.Close();
+        };
     }
 
     private void PruneUnavailablePartyMembers()
@@ -1979,6 +2001,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
 
             TryRandomEncounter();
+
+            var delayMs = Math.Max(0, GameRulesProvider.Current.DelayInMsbetweenActions);
+            if (delayMs > 0)
+                Thread.Sleep(delayMs);
         }
     }
 
@@ -2115,6 +2141,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 numberOfMonsters = _random.Next(1, 7); // 1d6 fallback
             }
 
+
             // Monsters reach the table from the coordinator's own events, which carry the real
             // instances — no need to guess counts here.
             outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel);
@@ -2130,9 +2157,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private string? RollDungeonMonsterForLevel(int level)
     {
-        // Get all monsters for this dungeon level
+        var rolledMonsterLevel = MonsterLevelGenerator.RollMonsterLevel(level);
+
+        // Get all monsters for the rolled monster level
         var monstersForLevel = _monsterRepository.GetAll()
-            .Where(m => m.DungeonLevel == level)
+            .Where(m => m.DungeonLevel == rolledMonsterLevel)
             .ToList();
 
         if (monstersForLevel.Count == 0)

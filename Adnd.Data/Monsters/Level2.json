@@ -2,42 +2,49 @@
   "Level": 2,
   "Monsters": [
     {
-      "Name": "Hobgoblin",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Name": "Giant Badger",
+      "Type": "Animal",
+      "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 4,
-      "ArmorClass": 5,
-      "HitDice": 1,
-      "Size": "Large",
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
+      "ArmorClass": 4,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
       "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": {
-        "Value": 9
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
       },
       "Attacks": [
         {
-          "Name": "Long Sword",
+          "Name": "Claws",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d8"
+          "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 25,
-      "TreasureType": "B",
-      "Source": "Adnd"
+      "SpecialAbilities": [
+        {
+          "Name": "Ferocity",
+          "Description": "Fights to the death when cornered or defending its lair."
+        },
+        {
+          "Name": "Burrowing",
+          "Description": "Can dig through earth and soft rock at 1 foot per round."
+        }
+      ],
+      "BaseXPValue": 65,
+      "TreasureType": "Nil",
+      "Source": "AD&D",
+      "DM comment": "Giant Badgers are fierce burrowing animals; they attack with claws and bite, fighting to the death if threatened. Monster Manual p.8"
     },
     {
       "Name": "Zombie",

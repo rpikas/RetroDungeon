@@ -6,6 +6,7 @@ using Adnd.Core.Combat.Resolution;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
 using Adnd.Core.Dices;
+using Adnd.Core.Experience;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
 using Adnd.Core.Spells.Casting;
@@ -105,6 +106,8 @@ public sealed class CombatCoordinator
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
             new ColorSprayHandler(),
+            new FearHandler(),
+            new PhantasmalForceHandler(),
         });
 
         var spellCastingService = new SpellCastingService(resolver, spellRepo.LoadAll());
@@ -278,7 +281,7 @@ public sealed class CombatCoordinator
         session.BlessedPartyMembers.Clear();
         session.InvisiblyBuffedPartyMembers.Clear();
     }
-
+   
     private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, int? dungeonLevel)
     {
         var survivors = session.Party
@@ -287,20 +290,55 @@ public sealed class CombatCoordinator
 
         if (survivors.Count == 0)
             return;
-        int xpPerHitPoint = session.Monsters.First().Template.XPValuePerHitPoint;
-        int totalHP = session.Monsters.Sum(m => m.MaxHitPoints);
 
-        int totalMonsterXp = session.Monsters.Sum(m => Math.Max(0, m.Template.BaseXPValue + m.Template.XPValuePerHitPoint * m.MaxHitPoints));
-        int xpEach = totalMonsterXp / survivors.Count;
-        int xpRemainder = totalMonsterXp % survivors.Count;
+        // --- NYTT: Gruppera monster ---
+        var monsterGroups = session.Monsters
+            .GroupBy(m => m.GroupId)
+            .ToList();
+
+        // --- NYTT: Beräkna XP per grupp ---
+        var xpCalculator = new XpCalculator();
+        var groupXpInfos = monsterGroups.Select(g =>
+        {
+            var monsters = g.ToList();
+            var first = monsters.First().Template;
+
+            int xpPerHp = first.XPValuePerHitPoint;
+            if (xpPerHp == 0)
+                xpPerHp = xpCalculator.GetHpXp(first.HitDice, 1);
+            int totalHp = monsters.Sum(m => m.MaxHitPoints);
+
+            int totalXp = monsters.Sum(m =>
+                Math.Max(0, m.Template.BaseXPValue + xpPerHp * m.MaxHitPoints));
+
+            return new
+            {
+                GroupId = g.Key,
+                MonsterName = first.Name,
+                Count = monsters.Count,
+                XPPerHP = xpPerHp,
+                TotalHP = totalHp,
+                TotalXP = totalXp
+            };
+        }).ToList();
+
+        // --- NYTT: Summera XP från alla grupper ---
+        int totalMonsterXp = groupXpInfos.Sum(g => g.TotalXP);
+
+        // --- XP-fördelning ---
         var xpMultiplier = GameRulesProvider.Current.XpMultiplier;
+        int xpEach = (int)Math.Round(totalMonsterXp * xpMultiplier / survivors.Count);
+        int xpRemainder = totalMonsterXp % survivors.Count;
+
 
         var levelUpResults = new List<LevelUpResult>();
         var allSpells = _spellRepository.LoadAll();
+
         for (int i = 0; i < survivors.Count; i++)
         {
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
-            var gain = (int)Math.Round(baseGain * xpMultiplier, MidpointRounding.AwayFromZero);
+  //          var gain = (int)Math.Round(baseGain * xpMultiplier, MidpointRounding.AwayFromZero);
+            var gain = xpEach;
             if (gain < 0)
                 gain = 0;
 
@@ -309,38 +347,49 @@ public sealed class CombatCoordinator
 
         var totalAwardedXp = levelUpResults.Sum(r => r.ExperienceAfter - r.ExperienceBefore);
 
+        // --- Treasure etc (oförändrat) ---
         var treasure = _treasureService.RollTreasureForEncounter(session.Monsters);
 
-        DistributeCoin(survivors, treasure.CopperPieces, (c, amount) => c.CopperPieces += amount);//currently not used
-        DistributeCoin(survivors, treasure.SilverPieces, (c, amount) => c.SilverPieces += amount);//currently not used
-        DistributeCoin(survivors, treasure.ElectrumPieces, (c, amount) => c.ElectrumPieces += amount);//currently not used
+        DistributeCoin(survivors, treasure.CopperPieces, (c, amount) => c.CopperPieces += amount);
+        DistributeCoin(survivors, treasure.SilverPieces, (c, amount) => c.SilverPieces += amount);
+        DistributeCoin(survivors, treasure.ElectrumPieces, (c, amount) => c.ElectrumPieces += amount);
         DistributeCoin(survivors, treasure.GoldPieces, (c, amount) => c.GoldPieces += amount);
-        DistributeCoin(survivors, treasure.PlatinumPieces, (c, amount) => c.PlatinumPieces += amount);//currently not used
+        DistributeCoin(survivors, treasure.PlatinumPieces, (c, amount) => c.PlatinumPieces += amount);
 
         var valuablesValueGp = treasure.TotalGemValueGp + treasure.TotalJewelryValueGp + treasure.TotalArtValueGp;
         DistributeCoin(survivors, valuablesValueGp, (c, amount) => c.GoldPieces += amount);
 
         var magicAward = AwardMagicItemsFromPlaceholders(survivors, treasure.MagicPlaceholders, dungeonLevel);
-
-        // Random item finding after killing monsters
         var randomItemsAward = AwardRandomItemsAfterCombat(survivors, dungeonLevel);
 
+        // --- Logg ---
         var sb = new StringBuilder();
         sb.AppendLine("Victory Rewards");
         sb.AppendLine();
-        sb.AppendLine($"Monsters defeated: {session.Monsters.First().Template.Name}");
-        sb.AppendLine($"Number of Monsters defeated: {session.Monsters.Count}");
-        sb.AppendLine($"Base monster XP: {session.Monsters.First().Template.BaseXPValue}");
-        sb.AppendLine($"Total Base monster XP: {session.Monsters.Count* session.Monsters.First().Template.BaseXPValue}");
-        sb.AppendLine($"XP per HP: {xpPerHitPoint}");
-        sb.AppendLine($"Total HP: {totalHP}");
-        sb.AppendLine($"Total XP from HP: {totalHP * xpPerHitPoint}");
-        sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
-        sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
-        sb.AppendLine($"Survivors: {survivors.Count}");
-        sb.AppendLine();
-        sb.AppendLine("XP awards:");
 
+        sb.AppendLine("Monster Groups Defeated:");
+        foreach (var g in groupXpInfos)
+        {
+            if (g.Count == 1)
+                sb.AppendLine($"{g.Count} {g.MonsterName}");
+            else
+                sb.AppendLine($"{g.GroupId}: {g.Count}x {g.MonsterName}");
+            sb.AppendLine($"  Base XP per monster: {session.Monsters.First(m => m.GroupId == g.GroupId).Template.BaseXPValue}");
+            sb.AppendLine($"  XP per HP: {g.XPPerHP}");
+            sb.AppendLine($"  Total HP: {g.TotalHP}");
+            sb.AppendLine($"  Total XP (group) before multiplier: {g.TotalXP}");
+            sb.AppendLine($"  Total XP (group) after multiplier: {(int)Math.Round(g.TotalXP * xpMultiplier)}");
+            sb.AppendLine();
+        }
+        if (groupXpInfos.Count > 1)
+        { 
+            sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");
+            sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
+            sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
+            sb.AppendLine($"Survivors: {survivors.Count}");
+            sb.AppendLine();
+            sb.AppendLine("XP awards:");
+        }
         foreach (var r in levelUpResults)
         {
             var gain = r.ExperienceAfter - r.ExperienceBefore;
@@ -414,6 +463,7 @@ public sealed class CombatCoordinator
 
         Say(owner, "Combat Rewards", sb.ToString(), session);
     }
+
 
     private MagicAwardResult AwardMagicItemsFromPlaceholders(List<Character> survivors, List<TreasureMagicPlaceholderResult> placeholders, int? dungeonLevel)
     {

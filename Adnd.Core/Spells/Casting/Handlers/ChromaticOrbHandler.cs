@@ -43,17 +43,17 @@ public sealed class ChromaticOrbHandler : ISpellEffectHandler
         for (int i = 0; i < profile.DiceCount; i++)
             rolled += rng.Next(1, profile.DieSides + 1);
 
-        var before = target.CurrentHitPoints;
-        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - rolled);
-        var actual = before - target.CurrentHitPoints;
+        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. Orb color: {profile.Color}.");
-        result.Events.Add($"{target.DisplayName} takes {actual} damage (rolled {rolled} from {profile.DiceCount}d{profile.DieSides}). HP {before}->{target.CurrentHitPoints}.");
+        result.Events.Add(
+            $"{target.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+            $"Damage {rolled} (from {profile.DiceCount}d{profile.DieSides}){(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
         if (!target.IsAlive)
             result.Events.Add($"{target.DisplayName} is destroyed.");
 
-        result.HpChanges[target.DisplayName] = -actual;
+        result.HpChanges[target.DisplayName] = -outcome.ActualDamage;
         return result;
     }
 

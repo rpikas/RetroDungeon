@@ -55,7 +55,9 @@ public class GameRules
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
     public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
     public bool UIOldStyle { get; set; } = true;
-    public int DelayInbetweenActions { get; set; } =0;
+    public int DelayInMsbetweenActions { get; set; } =0;
+    public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
+    public int MaxSizeEncounter { get; set; } = 2;
     public Color ForegroundColor { get; set; } = Color.White;
     [JsonIgnore]
     public Color DefaultColor

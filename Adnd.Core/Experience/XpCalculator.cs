@@ -7,14 +7,14 @@ namespace Adnd.Core.Experience
 
     public class XpCalculator
     {
-        // DMG Appendix E: Basic XP Value per Hit Die (exakt enligt tabellen du visade)
-        private static readonly Dictionary<int, int> BasicXpByHD = new()
+        // DMG, page 85 Appendix E: Basic XP Value per Hit Die
+        public static readonly Dictionary<int, int> BasicXpByHD = new()
     {
         { 1, 10 },
         { 2, 35 },
         { 3, 60 },
         { 4, 90 },
-        { 5, 159},
+        { 5, 159 },
         { 6, 225 },
         { 7, 375 },
         { 8, 600 },
@@ -33,9 +33,32 @@ namespace Adnd.Core.Experience
         { 21, 5000 }
     };
 
-        /// <summary>
-        /// DMG Appendix E RAW + valfri damage-XP (inte originalregel).
-        /// </summary>
+        // DMG, page 85 Appendix E: XP per HP depending on HD
+        public static readonly Dictionary<int, int> XpPerHpByHD = new()
+    {
+        { 1, 1 },
+        { 2, 3 },
+        { 3, 5 },
+        { 4, 5 },
+        { 5, 6 },
+        { 6, 8 },
+        { 7, 10 },
+        { 8, 12 },
+        { 9, 14 },
+        { 10, 14 },
+        { 11, 16 },
+        { 12, 16 },
+        { 13, 18 },
+        { 14, 18 },
+        { 15, 20 },
+        { 16, 20 },
+        { 17, 25 },
+        { 18, 25 },
+        { 19, 30 },
+        { 20, 30 },
+        { 21, 35 }
+    };
+
         public int CalculateXp(
             int hitDice,
             int hitPoints,
@@ -46,8 +69,7 @@ namespace Adnd.Core.Experience
         {
             int baseXp = GetBaseXp(hitDice);
 
-            // DMG RAW: +1 XP per hit point
-            int hpXp = hitPoints;
+            int hpXp = GetHpXp(hitDice, hitPoints);
 
             int specialXp = specialAbilityBonus;
             int exceptionalXp = exceptionalAbilityAddition;
@@ -57,19 +79,23 @@ namespace Adnd.Core.Experience
             return baseXp + hpXp + specialXp + exceptionalXp + damageXp;
         }
 
-        private int GetBaseXp(int hitDice)
+        public int GetBaseXp(int hitDice)
         {
             if (BasicXpByHD.TryGetValue(hitDice, out int xp))
                 return xp;
 
-            // Enkel extrapolering för HD > 21
             return 5000 + (hitDice - 21) * 2500;
         }
 
-        /// <summary>
-        /// Husregel: XP för max damage (inte DMG RAW).
-        /// </summary>
-        private int GetDamageXp(int maxDamage)
+        public int GetHpXp(int hitDice, int hitPoints)
+        {
+            if (!XpPerHpByHD.TryGetValue(hitDice, out int xpPerHp))
+                xpPerHp = 1;
+
+            return xpPerHp * hitPoints;
+        }
+
+        public int GetDamageXp(int maxDamage)
         {
             if (maxDamage <= 0)
                 return 0;
@@ -77,5 +103,6 @@ namespace Adnd.Core.Experience
             return (int)Math.Ceiling(maxDamage / 2.0);
         }
     }
+
 }
 

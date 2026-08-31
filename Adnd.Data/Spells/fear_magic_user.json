@@ -1,0 +1,13 @@
+{
+  "Id": "fear_magic_user",
+  "Name": "Fear",
+  "Class": "MagicUser",
+  "Level": 4,
+  "Description": "A cone of terrifying magic that can send enemies fleeing in panic.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Targeted monster group saves vs. spell. Fail = flee from combat."
+}

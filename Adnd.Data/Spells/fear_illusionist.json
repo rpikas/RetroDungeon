@@ -1,0 +1,13 @@
+{
+  "Id": "fear_illusionist",
+  "Name": "Fear",
+  "Class": "Illusionist",
+  "Level": 3,
+  "Description": "A terrifying illusion that overwhelms foes with panic.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Targeted monster group saves vs. spell. Fail = flee from combat."
+}

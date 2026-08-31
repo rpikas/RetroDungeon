@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Diagnostics;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -60,13 +61,13 @@ public sealed class FireballHandler : ISpellEffectHandler
                 totalDamage += rng.Next(1, 7); // 1d6
             }
 
-            var before = monster.CurrentHitPoints;
-            monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - totalDamage);
-            var actualDamage = before - monster.CurrentHitPoints;
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, totalDamage, rng, spell.Name);
 
-            if (actualDamage > 0)
+            if (outcome.ActualDamage > 0)
             {
-                result.Events.Add($"{monster.DisplayName} takes {actualDamage} fire damage (rolled {totalDamage}). HP {before}->{monster.CurrentHitPoints}.");
+                result.Events.Add(
+                    $"{monster.DisplayName} save vs spell: rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+                    $"Damage {totalDamage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
                 if (monster.CurrentHitPoints <= 0)
                 {
                     result.Events.Add($"{monster.DisplayName} is incinerated!");

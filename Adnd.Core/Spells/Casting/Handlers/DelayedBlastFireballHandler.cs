@@ -31,11 +31,10 @@ public sealed class DelayedBlastFireballHandler : ISpellEffectHandler
             for (int i = 0; i < diceCount; i++)
                 rolledDamage += rng.Next(1, 7) + 1; // 1d6 + 1 per die
 
-            var before = monster.CurrentHitPoints;
-            monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
-            var actualDamage = before - monster.CurrentHitPoints;
-
-            result.Events.Add($"{monster.DisplayName} takes {actualDamage} fire damage (rolled {rolledDamage}). HP {before}->{monster.CurrentHitPoints}.");
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
+            result.Events.Add(
+                $"{monster.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+                $"Damage {rolledDamage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is consumed by the blast!");
         }

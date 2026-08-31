@@ -59,7 +59,9 @@ public class PartyMenu
             new IncendiaryCloudHandler(),
             new MeteorSwarmHandler(),
             new PowerWordStunHandler(),
-            new PowerWordKillHandler()
+            new PowerWordKillHandler(),
+            new FearHandler(),
+            new PhantasmalForceHandler()
         });
 
         _spellCastingService = new SpellCastingService(resolver, _spellRepo.LoadAll());

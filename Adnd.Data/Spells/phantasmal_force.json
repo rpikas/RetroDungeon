@@ -5,8 +5,9 @@
   "Level": 2,
   "Description": "Creates a believable visual illusion.",
   "RangeType": "Enemy",
-  "Targeting": "Single",
-  "CastContext": "Both",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
   "EffectType": "Damage",
-  "EffectDescription": "Conjures a compelling illusion that confounds the target."
+  "EffectDescription": "Targeted group saves vs spell. If one succeeds, all disbelieve and take no damage; otherwise all take 16d6 illusionary dragon-breath damage."
 }

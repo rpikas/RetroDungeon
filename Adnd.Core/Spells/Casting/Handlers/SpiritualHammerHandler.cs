@@ -37,17 +37,17 @@ public sealed class SpiritualHammerHandler : ISpellEffectHandler
             return SpellCastResult.Failure("No valid enemy target selected.");
 
         var rolled = rng.Next(1, 7);
-        var before = target.CurrentHitPoints;
-        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - rolled);
-        var actual = before - target.CurrentHitPoints;
+        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add($"{target.DisplayName} takes {actual} force damage (rolled {rolled}). HP {before}->{target.CurrentHitPoints}.");
+        result.Events.Add(
+            $"{target.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+            $"Damage {rolled}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
         if (!target.IsAlive)
             result.Events.Add($"{target.DisplayName} is destroyed.");
 
-        result.HpChanges[target.DisplayName] = -actual;
+        result.HpChanges[target.DisplayName] = -outcome.ActualDamage;
         return result;
     }
 }

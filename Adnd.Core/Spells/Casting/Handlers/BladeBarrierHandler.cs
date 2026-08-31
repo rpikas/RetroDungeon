@@ -46,11 +46,10 @@ public sealed class BladeBarrierHandler : ISpellEffectHandler
             for (int i = 0; i < 8; i++)
                 rolledDamage += rng.Next(1, 9);
 
-            var before = monster.CurrentHitPoints;
-            monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
-            var actualDamage = before - monster.CurrentHitPoints;
-
-            result.Events.Add($"{monster.DisplayName} takes {actualDamage} slashing damage (rolled {rolledDamage}). HP {before}->{monster.CurrentHitPoints}.");
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
+            result.Events.Add(
+                $"{monster.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+                $"Damage {rolledDamage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is shredded by the barrier!");
         }

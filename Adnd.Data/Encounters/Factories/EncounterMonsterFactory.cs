@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Config;
 using Adnd.Core.Monsters;
 using Adnd.Data.Monsters;
 
@@ -7,6 +8,7 @@ namespace Adnd.Data.Encounters.Factories;
 public sealed class EncounterMonsterFactory
 {
     private readonly MonsterRepository _monsterRepository;
+    private readonly Random _random = new();
 
     public EncounterMonsterFactory(MonsterRepository? monsterRepository = null)
     {
@@ -21,6 +23,10 @@ public sealed class EncounterMonsterFactory
     public List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId)
     {
         count = Math.Max(1, count);
+        if (count > GameRulesProvider.Current.MaxSizeEncounter)
+        {
+            count = _random.Next(1, GameRulesProvider.Current.MaxSizeEncounter + 1);
+        }
 
         var template = _monsterRepository
             .GetAll()
