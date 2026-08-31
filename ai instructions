@@ -1,15 +1,21 @@
-for every step the party takes, give it a chanse of 1/10 to encounter a group of randoms level 1 monsters according to classical adnd rules.. When monsters are encountered, show a picture of the monsters, then number of mosters and the name of the mosters. go through all party members and ask if they want to F)ight P)arry, T)ake Back U)se item or R)un
+for every step the party takes, give it a chanse of 1/10 to encounter a group of randoms level 1 monsters according to classical adnd 
+rules.. When monsters are encountered, show a picture of the monsters, then number of mosters and the name of the mosters. go through 
+all party members and ask if they want to F)ight P)arry, T)ake Back U)se item or R)un
 
 
-when reaching square 0,0 ask in a dialog "Stairs up, take them?" with a yes and no button. if yes is pressed, close the form and enter the town again
+when reaching square 0,0 ask in a dialog "Stairs up, take them?" with a yes and no button. if yes is pressed, close the form and enter
+the town again
 
-when encountering mosters, show a picture of the monster and loop through all charates in the party and ask for their actions like shown in this screenshot:
+when encountering mosters, show a picture of the monster and loop through all charates in the party and ask for their actions like shown 
+in this screenshot:
 
 only let the 3 first charaters have the option of fight
 
-make the only two possible encounters gobiln and skeleton, when encountered, show the corresponding picture at 	Adnd.Game/Assets/Monsters
+make the only two possible encounters gobiln and skeleton, when encountered, show the corresponding picture at 
+Adnd.Game/Assets/Monsters
 
-How do you suggest I structure the code if I want to implement a feature to carry out a combat session between the party and the enocountered monsters
+How do you suggest I structure the code if I want to implement a feature to carry out a combat session between the party and the 
+enocountered monsters
 
 can you implement all these parts for me so I can get a functional combat feature in my game?
 
@@ -17,32 +23,40 @@ when a character dies, change the status do dead and put him last in the party a
 
 when creating a charater, add ac bonus depending on dex according to classical adnd rules
 
-add an attribute for each character on what level and cell in the dungeon that the charater is located. when defeated save the positions for the different charaters , remove all charaters from the party, close the maze and return to town
+add an attribute for each character on what level and cell in the dungeon that the charater is located. when defeated save the positions 
+for the different charaters , remove all charaters from the party, close the maze and return to town
 
 add items plate mail and longsword +7 to the shop
 
-when pool gold is pressed, tranfer all the gold from all the characters into the active charater also have this option in the shop after a charter is selected
+when pool gold is pressed, tranfer all the gold from all the characters into the active charater also have this option in the shop after 
+a charter is selected
 
-after victory make sure all the surviving charaters get xp and if lucky let them find some treasure all according to classical adnd rules and also inform about the details to the user
+after victory make sure all the surviving charaters get xp and if lucky let them find some treasure all according to classical adnd rules 
+and also inform about the details to the user
 
 when removing member, also show additional information, for example what charaters are dead and not
 
 can you make the probability that some treasure is found 90%
 
-how do you suggest that I structure the project if I want to introduce level progression, where the charater automatically gains a level once he gets enough xp according to classical adnd rules?
+how do you suggest that I structure the project if I want to introduce level progression, where the charater automatically gains a level 
+once he gets enough xp according to classical adnd rules?
 
-when one charater dies, it should immeadetly be put last in the order, so for example if the 1 st charater dies, he should be last and the charater that used to be in place 4 will be in place 3 and allowed to attack mosters
+when one charater dies, it should immeadetly be put last in the order, so for example if the 1 st charater dies, he should be last and the 
+charater that used to be in place 4 will be in place 3 and allowed to attack mosters
 
 impement RaiseDead. Ask who wants to be raied and who will pay, check if enough money, since it cost 100 gp before raising
 
-how do you suggest i implement one common place where i can adjust preferences, such as prorbabliyt to find treasure, chanse to enounter monsters, method to randomize abilities
+how do you suggest i implement one common place where i can adjust preferences, such as prorbabliyt to find treasure, chanse to enounter 
+monsters, method to randomize abilities
 
 create a new class GameRules with public class GameRules 
 make sure that that probablity to find treasure and AbilityRollMethod and MonsterEncounterChance is affected by the settings
 
-create a SettingsMenu class where the user an uppdate all the current game settings. also introduce an ai skill so that if more settings are added in the future, the settings class is updated accordingly
+create a SettingsMenu class where the user an uppdate all the current game settings. also introduce an ai skill so that if more settings 
+are added in the future, the settings class is updated accordingly
 
-introduce a xp multiplier factor defined in game rules, configurable in settings and used to multiply the xp that charaters get after winning a battle
+introduce a xp multiplier factor defined in game rules, configurable in settings and used to multiply the xp that charaters get after 
+winning a battle
 
 Do not allow the user to select optoin C)hurch, B)oltax or M)aze if no member exist in the party
 
@@ -50,11 +64,15 @@ introduce settings for minimum gold and maximum gold that the user gets when cre
 
 json files for items, let "AllowedClasses": ["All"] mean all classes
 
-In PartyMenu.cs implement ChangeOrderOfMembers that allows the user to reorder the members. This method should be possible to reuse later on when camping in the dungeon.
+In PartyMenu.cs implement ChangeOrderOfMembers that allows the user to reorder the members. This method should be possible to reuse later 
+on when camping in the dungeon.
 
-in the  CHANGE PARTY ORDER show also info about class, hp, ac and status of the members. only have two alternatives: R)eorder and L<-eave. if selecting R then ask the user to specify the new order by typing numbers from 1-6. as the numbers are typed show the new order in real time.
+in the  CHANGE PARTY ORDER show also info about class, hp, ac and status of the members. only have two alternatives: R)eorder and L<-eave. 
+if selecting R then ask the user to specify the new order by typing numbers from 1-6. as the numbers are typed show the new order in real 
+time.
 
-when reordering show both the old order and the new order at the same time. so obviously the old order is not updated real time and the new order starts empty and grows as the user presses numbers
+when reordering show both the old order and the new order at the same time. so obviously the old order is not updated real time and the new 
+order starts empty and grows as the user presses numbers
 
 when Choose who will enter the shop: also show the class of the charaters in the list
 when showing the combat reward also use the xp multiplier factor on total xp
@@ -66,70 +84,96 @@ when in dungeon and c pressed, party is camped and is offered to inspect or reor
 
 when reordering show a dialog that implements the same reorder functinoality as from the party admin 
 
-remove the i)nspect and s)tatus text in the dungeon. and move the c)amp A-W-D K to be above the dungeon and explain what A-W-D does. K means Kick
+remove the i)nspect and s)tatus text in the dungeon. and move the c)amp A-W-D K to be above the dungeon and explain what A-W-D does. 
+K means Kick
 
 change o)off to Esc=Toggle full dungeon view and the short cut accordingly
 change c)amp to C=Camp in header of dungon
 
-let the dungeon with the party view be shown as default when entering the dungeon. In the view that does not show the dungeon, remonve the B=Back option and introduce text Esc = Toggle full dungeon view
+let the dungeon with the party view be shown as default when entering the dungeon. In the view that does not show the dungeon, remonve 
+the B=Back option and introduce text Esc = Toggle full dungeon view
 
 in the maze: display pos and facing in both views. harmonize the awd texts between the views
 
 after a raise dead reduce con stat with 1
 
-när man försöker väcka en person till liv, slår en 100 sidig tärning, visa resultatet för användaren och använd adnd system shock tabel som beror på con för att avgöra om raise dead lyckades. ifall den inte lyckades ändra status för karaktären från dead till ashes.
+när man försöker väcka en person till liv, slår en 100 sidig tärning, visa resultatet för användaren och använd adnd system shock tabel 
+som beror på con för att avgöra om raise dead lyckades. ifall den inte lyckades ändra status för karaktären från dead till ashes.
 
-ifall man väljer att göra raise dead på en person som är ashes konstar det 500 gp, personen måste göra en system roll igen. ifall den lyckas blir han levande om inte får han status lost och kan aldrig väckas till liv igen.
+ifall man väljer att göra raise dead på en person som är ashes konstar det 500 gp, personen måste göra en system roll igen. ifall den 
+lyckas blir han levande om inte får han status lost och kan aldrig väckas till liv igen.
 
 when showing party in maze also show status
 
 ifall man försöker göra raise dead eller resurect på en charatär som har con 0 blir den automatisk lost
 
-when healing the party, it will cost 10 gp per person that need healing, inform about that and only heal the charaters that can affort it
+when healing the party, it will cost 10 gp per person that need healing, inform about that and only heal the charaters that can affort 
+it
 
 con should be reduced with 1 both for raise dead and for resurect
 
-if I want to make it possible to cast a spell, for example magic missile or cure light wounds during combat and cure light wounds when inspecting c char for a start, how would you structure it? 
+if I want to make it possible to cast a spell, for example magic missile or cure light wounds during combat and cure light wounds when 
+inspecting c char for a start, how would you structure it? 
 
-can you add this to the spell definition and update the spell jsons to fit it •	RangeType (Self, Ally, Enemy) •	Targeting (Single, Multiple) •	CastContext (Combat, Exploration, Both) •	EffectType (Damage, Heal) and also a string that is a Description of effect when casting it
+can you add this to the spell definition and update the spell jsons to fit it •	RangeType (Self, Ally, Enemy) •	Targeting 
+(Single, Multiple) •	CastContext (Combat, Exploration, Both) •	EffectType (Damage, Heal) and also a string that is a Description of 
+effect when casting it
 
-can you implement all this 2,3,4,5 and 6 below for cure light wounds and magic missile in detail and in such a way that more spells with their specific different functions could easily be added later see attachment
+can you implement all this 2,3,4,5 and 6 below for cure light wounds and magic missile in detail and in such a way that more spells with 
+their specific different functions could easily be added later see attachment
 
 it is not possible to heal hit points for charaters that are dead, ashes or lost
 
-När en användare väljer att kasta en spell under combat vill jag att det visas en dialog där användare får välja vilken spell som ska kastas om det finns flera spells memorerade
+När en användare väljer att kasta en spell under combat vill jag att det visas en dialog där användare får välja vilken spell som ska 
+kastas om det finns flera spells memorerade
 
 when entering the maze, remove all charaters from party that are dead, ashes or lost
 
 then trying to delete a charater that is above level 1 or has more gold then maximum starting gold, ask for confirmation.
 
-If I want to introduce adnd treasure type for mosters, how do you suggest that i structure that work? (See attachment) implement step by step according to structure
+If I want to introduce adnd treasure type for mosters, how do you suggest that i structure that work? (See attachment) implement step by 
+step according to structure
 
-when bless is cast all party members get one less ac and one less in thac0 during the battle after battle the bonus goes away. bless can only be cast the first round of the battle.
+when bless is cast all party members get one less ac and one less in thac0 during the battle after battle the bonus goes away. bless can 
+only be cast the first round of the battle.
 
 //when creating a new charater introduce a thac0 bonus for strength according to adnd 1e rules//No need, done already
 
-expand the charater to be able to have not only gold pieces, but also copper pieces, silver pieces, electrum pieces and platinum pieces. correct my spelling if needed
+expand the charater to be able to have not only gold pieces, but also copper pieces, silver pieces, electrum pieces and platinum pieces. 
+correct my spelling if needed
 
-Det finns 20 st olika typer av jewlry med olika värden eligt adnd, lägg till dem i items listan, de ska gå att sälja i shoppen men inte dyka up i listan över saker som går att köpa
+Det finns 20 st olika typer av jewlry med olika värden eligt adnd, lägg till dem i items listan, de ska gå att sälja i shoppen men inte 
+dyka up i listan över saker som går att köpa
 
-I affären ska inte allt gå att köpa och en del saker ska ha begränsat antal som går att köpa. När en charatär köper något ska lagret minska med 1. när man säljer ska det öka. skriv ut hur många som finns i stock i affären brevid namnet på namnet och priset om det finns någon i stock och det går att köpa. om det finns obegränsat som det gör av t ex dagger kan du skriva - istället för antal
+I affären ska inte allt gå att köpa och en del saker ska ha begränsat antal som går att köpa. När en charatär köper något ska lagret 
+minska med 1. när man säljer ska det öka. skriv ut hur många som finns i stock i affären brevid namnet på namnet och priset om det finns 
+någon i stock och det går att köpa. om det finns obegränsat som det gör av t ex dagger kan du skriva - istället för antal
 
 when exiting the dungeon or when in town all spells points are restored like it is a new day
 
-bless should affect all party members so no target needs to be selected and after it is cast the list of charaters should be refreshed so the user can see the uppdated ac
+bless should affect all party members so no target needs to be selected and after it is cast the list of charaters should be refreshed so 
+the user can see the uppdated ac
 
-when inspecting a charater from camp in dungeon, the same information should be shown and the same actions should be possible as when inspecting a charater from party view in town. only difference is that when inspecting the charater in the maze, a form with buttons for for example equip are shown
+when inspecting a charater from camp in dungeon, the same information should be shown and the same actions should be possible as when 
+inspecting a charater from party view in town. only difference is that when inspecting the charater in the maze, a form with buttons for 
+for example equip are shown
 
-introduce a new setting: "Automatically memorize all Magic-User/Illustionists spells" with options yes and no. also if yes, then Automatically memorize all Magic-User/Illustionists spells
+introduce a new setting: "Automatically memorize all Magic-User/Illustionists spells" with options yes and no. also if yes, then
+Automatically memorize all Magic-User/Illustionists spells
 
 i roster vyn lägg till ett nytt alternativ: delete all charaters och implementera det
 
-möjliggör för karatärer att ha flera olika levels och olika xp, en level och en xp för varje klass. man ska ha lika många olika levels och xp som man är klasser, så det är bara multiklasser som har flera olika levels och xp. när en mulitklass får xp delas xpn upp lika mellan de olika klasser som karaktären har. det gör att en karaktär i vissa fall kan gå upp i level för en klass men inte för en annan beroende på att de har olika xp tabeller
+möjliggör för karatärer att ha flera olika levels och olika xp, en level och en xp för varje klass. man ska ha lika många olika levels och 
+xp som man är klasser, så det är bara multiklasser som har flera olika levels och xp. när en mulitklass får xp delas xpn upp lika mellan de 
+olika klasser som karaktären har. det gör att en karaktär i vissa fall kan gå upp i level för en klass men inte för en annan beroende på 
+att de har olika xp tabeller
 
-lägg attribut för hur mycket karaktärerna max kan bära som beror på str och hur mycket som de för närvarande bär. Lägg till ett Weight attribut på alla items. När en karaktär försöker köp något eller på annat sätt få något item ska spelet först utvärdera om karaktären kan bära mer innan köpet eller överföringen av item sker 
+lägg attribut för hur mycket karaktärerna max kan bära som beror på str och hur mycket som de för närvarande bär. Lägg till ett Weight 
+attribut på alla items. När en karaktär försöker köp något eller på annat sätt få något item ska spelet först utvärdera om karaktären 
+kan bära mer innan köpet eller överföringen av item sker 
 
-when inspecting a charater an T)rade is selected, then open a new forrm  asking what party member you want to trade with and what item you want to trade. This shoule both be applicable from instecting in town and in dungeon
+when inspecting a charater an T)rade is selected, then open a new forrm  asking what party member you want to trade with and what item 
+you want to trade. This shoule both be applicable from instecting in town and in dungeon
 
 can you restructue the items json files, so all item of the same category are in the same json file
 can you add armor for head, legs feet hands, neck, back and belt
@@ -143,7 +187,9 @@ in camp dialog introduce short cuts R)eorder I)nspect L<-eave
 
 after reorder maka refresh of the maze so the new order can be seen
 
-introduce maze level 2 to 10 with unique set of connected corridor and rooms for every 10 levels. also add more corridors and rooms to level 1. introduce an elevator in cell 1,0 where the party starts, make sure cell 1,0 is clear on all 10 levels and connected to a corridor. when entering cell 1,0 show a dialog and ask what level the party wish to travel to.
+introduce maze level 2 to 10 with unique set of connected corridor and rooms for every 10 levels. also add more corridors and rooms to 
+level 1. introduce an elevator in cell 1,0 where the party starts, make sure cell 1,0 is clear on all 10 levels and connected to a 
+corridor. when entering cell 1,0 show a dialog and ask what level the party wish to travel to.
 
 only show stairs up? dialog when on level 1 and in position 0,0
 let the starting position be 0,0
@@ -156,7 +202,8 @@ can you display the number in settings with . instead of ,
 change the elevator postion to 1, 2
 use Dungeon_Level1.json to determine what monsters to encounter on level 1 and add the mosters missing into Monsters/Level1.json
 
-find insperation of how i designed level 1 and design level 2 in a similar way but not identical, with the same amount of corridors and rooms connected to the corridors
+find insperation of how i designed level 1 and design level 2 in a similar way but not identical, with the same amount of corridors 
+and rooms connected to the corridors
 
 add one more room and one more corridor to level 1 and level 2
 
@@ -168,7 +215,9 @@ make the mosters on level2 different from the mosters on level 1
 
 add level 2 spells for all 4 classes
 
-add sleep level 1 spell for magic users and fi cast on the mosters, the mosters should individually roll a savethrow against magic, if the save fails the moster should fall asslep between 1-4 rounds. the mosterss could also besides asleep also be poisoned, paralyzed, confused and cursed if the party casts certain other spells on the monsters to be implemented later
+add sleep level 1 spell for magic users and fi cast on the mosters, the mosters should individually roll a savethrow against magic, 
+if the save fails the moster should fall asslep between 1-4 rounds. the mosterss could also besides asleep also be poisoned, paralyzed, 
+confused and cursed if the party casts certain other spells on the monsters to be implemented later
 
 New context: introduce a setting for magic-users/illutionists that all spells are automticlly memorized every day
 
@@ -183,37 +232,48 @@ in the encounter view, show how many mosters that are asleep
 updates 260807
 in the Trade With dialog also shown the class of the other charaters, not just the name
 
-when parsing json in Monsters make sure NumberOfAppearancesMin and all other attibutes I added populate the Monster class NumberOfAppearancesMin and other attributes. Currently when running for example NumberOfAppearancesMin is always 0
+when parsing json in Monsters make sure NumberOfAppearancesMin and all other attibutes I added populate the Monster class 
+NumberOfAppearancesMin and other attributes. Currently when running for example NumberOfAppearancesMin is always 0
 
 "Manually added most attriubes from monster manual to the monster class and told ai to parse it inderectly when fixing a bug"
 
-when selling somthing in the shop instead of showing  [Out of stock] don't show the item at all, and when something has StockQuantity >0 in the  shop show the item even if IsShopBuyable is false
+when selling somthing in the shop instead of showing  [Out of stock] don't show the item at all, and when something has StockQuantity 
+>0 in the  shop show the item even if IsShopBuyable is false
 
 ai instructions 260808-09
 when monsters hit the party radomly distirute the hits among the first 3 party members
 when some monsters are asleep shown in the encounter window how many monsters that are asleep
 when casting sleep dont ask about target since all monsters can be affected
-the same spell should be possible to cast several times the same day only the number of spellpoints should restrict if it could be cast or not
+the same spell should be possible to cast several times the same day only the number of spellpoints should restrict if it could be cast 
+or not
 create .md doc for Treasure
 when casting invisibilty the selected friendly targets ac should be lowered with 4.
-add a status to the charater class: invisible that the target should be after hit by an invisibilty spell. aftter the battle the invisibility should be removed. Ihe insisibilty does not stack, so when cast twice ac does not go down further. Add a new level 4 spell for magic users: Impoved invisibility that when cast, lowers the friendly target ac until as long as the party stays in the maze
+add a status to the charater class: invisible that the target should be after hit by an invisibilty spell. aftter the battle the 
+invisibility should be removed. Ihe insisibilty does not stack, so when cast twice ac does not go down further. Add a new level 4 spell 
+for magic users: Impoved invisibility that when cast, lowers the friendly target ac until as long as the party stays in the maze
 
 ai instructions 260815
 Jag har skrivit en HoldMonsterHandler använd den när du introducerar en Magic-User Hold monster spell
 ai instructions 260816
-Bugfix: when enoutering mulitiple groups casting sleep on the first group and killing the 2nd groupthe (asleep) message appear twice in the enounter dialog, I only expect it to appear once
-when taret an ally with a fiendly spell and a dialog asking what ally to target, also inform the user in the dialog what spell that is cast
-When enoutering multiple Groups of monsters and casting a spell that target a Group of monsters, the Group of monsters selected should be affected by the spell, currenly only the first Group is affected by the spell even if Another Group has been selected.
-the hold person spell should not be single target, but affect one group and maximum 3 opponents in that group should be affected by the spell. The number of opponents held should be displayed in a similar was as the number of asleep opponetes are displayed.
+Bugfix: when enoutering mulitiple groups casting sleep on the first group and killing the 2nd groupthe (asleep) message appear twice in 
+the enounter dialog, I only expect it to appear once
+when taret an ally with a fiendly spell and a dialog asking what ally to target, also inform the user in the dialog what spell that is 
+cast
+When enoutering multiple Groups of monsters and casting a spell that target a Group of monsters, the Group of monsters selected should 
+be affected by the spell, currenly only the first Group is affected by the spell even if Another Group has been selected.
+the hold person spell should not be single target, but affect one group and maximum 3 opponents in that group should be affected by the 
+spell. The number of opponents held should be displayed in a similar was as the number of asleep opponetes are displayed.
 Bugfix:monsters that are held or assleep should not be able to attack
-Bugfix:I enountered two groups 1. slimes and Priests. I selected group 1 when i casted hold person, but group 2 was targeted. I expected group 1 to be targeted
+Bugfix:I enountered two groups 1. slimes and Priests. I selected group 1 when i casted hold person, but group 2 was targeted. I expected 
+group 1 to be targeted
 The dialog that asks I want to take the stair up, remove the buttons, make Y/N keys select yes and no and stye the dialog like this.
 Bugfix:Now it looks like this, I like it, but can you please make sure the lines to the left and right are not broken
 also make the enter key to be shortcut for leave
 
 introduce a setting UIOldStyle that could be yes or no where default is yes
 in the maze dialog; show a number 1-6 in a new column the most to the left in the party. One number in front of each charater
-Update the camp dialog from I)Inspect to #)Inspect and From R)Reorder to R)eorder. Also remove I as a shortcut and if a number is pressed show the charter with that number inspect view.
+Update the camp dialog from I)Inspect to #)Inspect and From R)Reorder to R)eorder. Also remove I as a shortcut and if a number is pressed 
+show the charter with that number inspect view.
 
 in the inspect charater dialog:
 rename Close to L<-eave 
@@ -222,14 +282,17 @@ Remove Refresh button
 Remove the Memorize button, but when Read button is pressed, memorize dialog should be shown.
 introduce shortcuts and rename the buttons R)ead T)rade P)ool gold S)pell E)quip D)rop I)dentify 
 
-maintain two versions of the inspect charater view the current one with clickable buttons should be shoen if setting UIOldStyle=No but if setting UIOldStyle=Yes then no buttons, only keyboard short Cuts should be avaliable and the style should be simliar to this attached example, but for exmple with Wisdom instead of Piety, Intellligence instead of I.Q. etc 
+maintain two versions of the inspect charater view the current one with clickable buttons should be shoen if setting UIOldStyle=No but if 
+setting UIOldStyle=Yes then no buttons, only keyboard short Cuts should be avaliable and the style should be simliar to this attached
+example, but for exmple with Wisdom instead of Piety, Intellligence instead of I.Q. etc 
 ai instructions 26-08-17
 Implemented Cleric level 5 spell: Raise Dead
 Återupplivar en död karaktär med 1 HP. -1 con på den som blir till liv. ifall saven misslyckas blir han ashes
 when casting raise dead spell and selecting target, dead charaters should be possible to select
 implement a level 7 cleric spell Resurrection  
 Återupplivar en död karaktär med full HP from ashes. -1 con. ifall save misslyckas blir han Lost
-When selecting what character in deleting charaters in  TRAINING GROUNDS, let the user type in two charaters before enter is automatically triggered
+When selecting what character in deleting charaters in  TRAINING GROUNDS, let the user type in two charaters before enter is automatically 
+triggered
 implementera cleric level 6 spell: Heal som funkar på de som inte är dead, ashes eller lost  
 Healar ALL HP och tar bort:
 blindness
@@ -240,20 +303,24 @@ slow
 allow adding members that are dead or ashes to the party
 
 if saving throw fails when raise dead is cast, the dead person becomes ashes.
-if saving throw fails when reserect is cast, the dead person becomes lost. Inform the user what the 20 side dice shows and how much he has to roll to be saved
+if saving throw fails when reserect is cast, the dead person becomes lost. Inform the user what the 20 side dice shows and how much he has 
+to roll to be saved
 
-if a charater is poisoned, hp has 50% chanse to be reduces by 1-3 every round fighting. and for every step taken out of combat 30% chanse to get hp reduces by 1-2. 
+if a charater is poisoned, hp has 50% chanse to be reduces by 1-3 every round fighting. and for every step taken out of combat 30% chanse 
+to get hp reduces by 1-2. 
 A monster with SpecialAbilities Poison has 70% chanse of poisoning the target every time it hits.
 
 Implement a level 4 cleric spell called Neutralize poison. when cast on a charater poison disapears
 Druid get Neutralize Poison as level 3
 Bug fix: Bubbly Slime hit charaters very many times but nobody got poisoned
 Bug fix: when a charater is poisoned I expected the charater to loose hp while walking an while fighting but that did not happen
-when party is healed in the church, poison is removed also, it cost 100  gp per person that is cured from poison, paralyze is also removed, it cost 200 gp per person who is cured from paralyze
+when party is healed in the church, poison is removed also, it cost 100  gp per person that is cured from poison, paralyze is also removed, 
+it cost 200 gp per person who is cured from paralyze
 
 manuellt lagt till deadly poisoned i status
 if a monster with special ability Paralyze hits a charater, ther is a 60% chasne that the charater is paralyzed. 
-While paralyzed the charater can not do anything. Implement a level 3 cleric spell Remove Paralysis that remove paralyze from the person tageted.
+While paralyzed the charater can not do anything. Implement a level 3 cleric spell Remove Paralysis that remove paralyze from the person 
+tageted.
 Bug fix: undead kobold hit the party many times but nobody got paralyzed, how come?
 
 in the choose allay target also show status, for example dead, poisoned, paralyzed
@@ -262,9 +329,11 @@ Bugfix: in choose ally target also paralyzed targets should be possible to selec
 
 If the enouter got SpecialAbilities: Level 1 Mage spells then the first round instead of attacking with normal damage, 
 it is 50% chanse that the enounter casts a magic missile causing 2-5 dammage on a random target in the group, not only the first 3.
-it is 50% chanse the enouter cast a sleep spell. then all the charaters have to throw a save thorw against spell, if that fails he will be asleep between 2-4 rounds and can do nothing while asleep.
+it is 50% chanse the enouter cast a sleep spell. then all the charaters have to throw a save thorw against spell, if that fails he will be 
+asleep between 2-4 rounds and can do nothing while asleep.
 
-in the encounter view in the status column show if the charater has a status thats stops him from fighting. if assleep, show for how many more rounds he is asleep
+in the encounter view in the status column show if the charater has a status thats stops him from fighting. if assleep, show for how many 
+more rounds he is asleep
 
 260818-260819
 
@@ -321,11 +390,112 @@ set default  ProbabilityFindingEachItem = 0.05
 
 when inspecting a charater or when encountering monsters introduce the option U)se short cut key:U asks what item that should be used.
 when an item is used the SpecialAbilities should cast the spell mentioned. 
-For example Potion of Extra Healing has  "SpecialAbilities": [ "Casts Cure Serious Wounds" ] that means that spell Cure Serious Wounds should be cast when that item is used.
+For example Potion of Extra Healing has  "SpecialAbilities": [ "Casts Cure Serious Wounds" ] that means that spell Cure Serious Wounds 
+should be cast when that item is used.
 Potions and scroll disapears after used once. 
 Bug: I get the message No usable magical items. even when Potion of healing is in the inventory, i expected it to be usable
 Bug: in the encounter view a charater with both with scroll of sleep and potion of invisibility selected to use item i got the message 
 that the charater has no usable magical items
 after leaving inspec a charater in the maze, go back to the camp menu
 
-in the encounter dialog when a cleric level 1 or higher or a paladin level 3 or higher should select the option Dispell undead be avaliaböe
+260820
+implement level 1 druid sepll Faerie Fire, if cast on an encounter with size Large ac is increased by 3 and if cast on other encounters, 
+it is increased by2
+
+in the encounter dialog when a cleric level 1 or higher or a paladin level 3 or higher should select the option Dispell undead be 
+avaliable
+Use the table in ClericTurnUndead.json to see the chanse that they are turned, can not attack but be attacked for 3-12 rounds. 
+T means that they are 100% turned for 3-12 rounds without save throw. D means they are disintegrated and dies imeadetly without save thorw.
+The same table can be used for paladins but a paladin needs to be 2 lvels higher, so for example a level 5 paladin turns as a level 3 
+cleric. 
+turn undead does not monstes that are not undead. If the monster name can not be found, assume it is a skeleton.
+AI Usage 260821:76.2%
+
+can you create an Export json to excel method that takes for example this json and produce 3 rows, 
+first heading then club row then Spear row with many bland cells, save the excel file in C:\dev\RetroDungeon\Items\
+
+can you in the same project create a button that when you press it, you can you can select a csv file in C:\dev\RetroDungeon\Items\ 
+and save it 
+in a json format as used in the reversed method allready implemented. let the File name without .suffix of the selected file populate
+the Category filed.
+
+260825
+can you make the choose spell window resizable
+Jag har den här klassen och vill ha en csharp metod som visar den  i ett windowsformulär där siffrorna och textn ser hanskrivna ut på 
+denna bild
+Ifall UIOldStyle= no så vill jag att CharacterForm visas när anävndaren gör inspect på en charatär
+
+260827
+klassen ska heta AbilitiesTables och innehålla alla abilites bonusar
+exceptionalStrengthPercentile och massa annat manuellet i char form.
+when inspecting charater I want to see how much weight they can carry and how much they are currnetly carrying
+when selecting equip from inspect, also give the option to unequip
+when selecting what slot to unequip, also show what is equiped
+semi manual implement xpcalculator and added xp per hp manually
+
+Manually visa vapen och utrustning i char sheet
+
+when creating a ragner an rolling hp, use 2d8, level 2-10 1d8 per level
+update this class, so if character.Class=Fighter and newLevel is 10 or above, 
+gain only 3 hp per level without random.
+Magic‑User (1 HP efter level 11)
+Thief (2 HP efter level 10)
+Multiclass‑hantering (separata HD per klass)
+static hp when gain level afer level 9
+kan du fixa Level 10+ paladins också  ger +3
+Rangers Level 11+ ger +2
+Illusioniset Level 11+ → 1 + CON‑mod
+
+look at this and give me paladin https://1eonline.info/2ph/paladin.htm etc
+lista alla items liknande som spellsen listas,
+manually introduced a setting for max monster group size
+
+Paste in page 174 DMG table picture did not work, reformated to text first
+I want a c-sharp method that takes as input level of dungeon. 
+Rolls 1d20 and returns level of monster that uses this tabel:
+so for example if dungeon is level 1, roll 1-16 level of monster is 1, 
+roll 17-19 level of monster is 2, roll 20 then level of monster is 3.
+but if dungeon level is for example 7, rolling 1 wil retrun level 1 monster,
+rolling 2-3 will return level 2 monsters. rolling 20 will return a level 9 monster.
+When determining what level the monster should be, use this method: RollMonsterLevel
+
+if GameRules.ShowDiceRollAndRuleApplicationInfo is true open a new form that shows 
+info provided by other methods as the game progress. Other methods will sned info about 
+what ADnD rules are applied dice rolled and the result on the dice and the consequense 
+of the dice roll result.
+
+in the encounter form if a group of monsters are >1 then add an S after the name
+
+MonsterLevelRuleDecription should returna a string on this format: 
+1-16>Level 1, 17-19>Level 2. 20 Level 3
+in ApplyVictoryRewards I want a fallback, if xpPerHp == 0 i want to use the table 
+in XpCalculator to figure out how much xpPerHp should be depening on hd
+
+I want to update json parsing for Monsters.  instead of having  "Movement": 
+{ "Walk": 30, "Fly": 0, "Swim": 0, "Burrow": 0, "Climb": 0 }, 
+as now i want it to be "Movement": 30,
+
+If SavingThrows is missing from json, I want a fallback to look at a table 
+that depend on the class of the moster and the HitDice if no class is defined, 
+use the Fighter class. The table for Fighter and save vs spell is 
+when spells that inflict damage on encounters are cast for example fire ball 
+and magic missile, they have to roll a save against spell, show in the AdnD 
+rule and dice info what the rolls are and if they make it. if they make it, 
+they should only get half the damage, wirte that in the combat round dialog
+also other spells wirh   "EffectType": "Damage", there should also be a 
+save throw and damage should be half if save succeds, for example Ice_storm
+
+in the enounter i want to see the number of uncouncious monsters.
+
+introduce a level 4 magic-user spell: Fear and a level 3 illustionist spell 
+also named fear, they both work in the same way, the group of mosters targeted 
+does a save throw vs. spell. if they fail, the monster runns away and will not be there next round.
+
+implement Phantasmal Force. If save vs spell fails, the encounter thinks a 
+red dragon breath at them for 16d6 in damage and they think they die and they do 
+if they continue to beleave. If one monster in the goup makes the save throw, 
+he does not take any damage and shouts it is fake, then no other encounter beleave 
+it and no other encoutner takes damage from the spell
+
+if a monster or party member that is asleep is hurt by a spell or by beeing hit, 
+he instantly wakes up
