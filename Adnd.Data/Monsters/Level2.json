@@ -12,13 +12,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
       "Attacks": [
         {
           "Name": "Claws",
@@ -47,6 +40,273 @@
       "DM comment": "Giant Badgers are fierce burrowing animals; they attack with claws and bite, fighting to the death if threatened. Monster Manual p.8"
     },
     {
+      "Name": "Giant Centipede",
+      "Type": "Animal",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 13,
+      "ArmorClass": 9,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
+      "Size": "Small",
+      "Movement": 15,
+      "Morale": {
+        "Value": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs poison or become ill; not lethal in AD&D 1E."
+        }
+      ],
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "Nil",
+      "Source": "AD&D Monster Manual"
+    },
+    {
+      "Name": "Devil, Lemure",
+      "Type": "Devil",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 7,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 3,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 1 hit point per round unless damaged by holy water or blessed weapons."
+        },
+        {
+          "Name": "Immunities",
+          "Description": "Immune to fire, poison, and non-magical weapons."
+        },
+        {
+          "Name": "Devil Traits",
+          "Description": "Affected by protection from evil; can be commanded by higher devils."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "None",
+      "Source": "AD&D Monster Manual"
+    },
+    {
+      "Name": "Gas Spore",
+      "Type": "Fungus",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 9,
+      "HitDice": 0,
+      "ExtraHitPoints": 1,
+      "Size": "Large",
+      "Movement": 3,
+      "Morale": {
+        "Value": 0
+      },
+      "Attacks": [
+        {
+          "Name": "Explosion",
+          "NumberOfAttacks": 1,
+          "Damage": "See below"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Explosive Spores",
+          "Description": "When struck or touched, the gas spore bursts, releasing spores that infect nearby creatures."
+        },
+        {
+          "Name": "Mimicry",
+          "Description": "Resembles a beholder, often mistaken for one until attacked."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non‑",
+      "Alignment": "Neutral",
+      "PsionicAbility": "Nil",
+      "TreasureType": "Nil",
+      "BaseXPValue": 15,
+      "XPValuePerHitPoint": 1,
+      "Source": "AD&D Monster Manual (1977)"
+    },
+    {
+      "Name": "Giant Rat",
+      "Type": "Animal",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 6,
+      "NumberOfAppearancesMax": 24,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Size": "Small",
+      "Movement": 12,
+      "Morale": {
+        "Value": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Disease",
+          "Description": "10% chance of transmitting disease when biting."
+        }
+      ],
+      "BaseXPValue": 7,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "C",
+      "Source": "AD&D Monster Manual (1977)"
+    },
+    {
+      "Name": "Stirge",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 15,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Size": "Small",
+      "Movement": 18,
+      "Morale": {
+        "Value": 9
+      },
+      "Attacks": [
+        {
+          "Name": "Attach",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Blood Drain",
+          "Description": "Once attached, drains 1–4 hit points per round until killed or removed."
+        },
+        {
+          "Name": "Attach on Hit",
+          "Description": "If the attack hits, the stirge clings to the victim and continues draining automatically."
+        }
+      ],
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "None",
+      "Source": "AD&D Monster Manual (1977)"
+    },
+    {
+      "Name": "Giant Toad",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": {
+        "Value": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Sticky Tongue",
+          "Description": "Can strike with tongue up to 10 feet; on hit, pulls victim toward mouth."
+        },
+        {
+          "Name": "Swallow",
+          "Description": "May swallow small creatures whole if bite reduces target to 0 HP."
+        },
+        {
+          "Name": "Leap",
+          "Description": "Can leap long distances when attacking or fleeing."
+        }
+      ],
+      "BaseXPValue": 45,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "None",
+      "Source": "AD&D Monster Manual (1977)"
+    },
+    {
+      "Name": "Troglodyte",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": {
+        "Value": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d5"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Chameleon Skin",
+          "Description": "Surprise opponents 90% of the time due to natural camouflage."
+        },
+        {
+          "Name": "Stench",
+          "Description": "Creatures within 30 feet must save vs poison or suffer –2 to hit."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "C",
+      "Source": "AD&D Monster Manual (1977)"
+    },
+    {
       "Name": "Zombie",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 5,
@@ -55,13 +315,7 @@
       "ArmorClass": 8,
       "HitDice": 2,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 10,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
+      "Movement": 10,
       "SavingThrows": {
         "ParalyzationPoisonDeath": 13,
         "RodStaffWand": 14,
@@ -94,20 +348,7 @@
       "ArmorClass": 4,
       "HitDice": 2,
       "Size": "Large",
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 20
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement": 10,
       "Morale": {
         "Value": 8
       },
@@ -138,20 +379,7 @@
       "ArmorClass": 7,
       "HitDice": 1,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 8
       },
@@ -177,20 +405,7 @@
       "ArmorClass": 7,
       "HitDice": 2,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement":40,
       "Morale": {
         "Value": 8
       },
@@ -206,7 +421,6 @@
       "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Adnd"
-
     },
     {
       "Name": "Gas Cloud",
@@ -219,20 +433,7 @@
       "HitDiceType": 5,
       "ExtraHitPoints": 1,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 0,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement": 40,
       "Morale": {
         "Value": 8
       },
@@ -258,20 +459,7 @@
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
       "Size": "Small",
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement":40,
       "Morale": {
         "Value": 8
       },
@@ -300,20 +488,7 @@
       "HitDiceType": 5,
       "ExtraHitPoints": 1,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement":40,
       "Morale": {
         "Value": 8
       },
@@ -347,20 +522,7 @@
       "HitDiceType": 4,
       "ExtraHitPoints": 2,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement": 40,
       "Morale": {
         "Value": 8
       },
@@ -398,13 +560,7 @@
       "HitDiceType": 1,
       "ExtraHitPoints": 0,
       "Size": "Small",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement": 10,
       "Attacks": [
         {
           "Name": "bite",

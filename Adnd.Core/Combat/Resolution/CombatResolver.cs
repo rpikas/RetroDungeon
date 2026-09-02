@@ -937,7 +937,7 @@ public sealed class CombatResolver
             if (roll >= needed)
             {
                 var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
-                int damage = RollDamage(damageExpression);
+                int damage = RollDamage(damageExpression) + AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength);
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
@@ -946,7 +946,7 @@ public sealed class CombatResolver
                 var weaponName = mainHand != null ? mainHand.Name : "bare hands";
 
                 events.Add(new CombatEvent(
-                    $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageExpression}) for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
+                    $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageExpression}+{AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
 
                 if (target.CurrentHitPoints <= 0)
                 {

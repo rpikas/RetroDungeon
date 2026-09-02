@@ -12,13 +12,6 @@
       "Size": "Large",
       "Movement": 30,
       "Class": "Fighter",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Morale": {
         "Value": 9
       },
@@ -74,13 +67,6 @@
       "ExtraHitPoints": 0,
       "Size": "Medium",
       "Movement": 30,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Weapon",
@@ -111,13 +97,6 @@
       "ExtraHitPoints": 0,
       "Size": "Medium",
       "Movement": 30,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Weapon",
@@ -180,13 +159,6 @@
       "ExtraHitPoints": 0,
       "Size": "Medium",
       "Movement": 30,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Cutlass",
@@ -212,13 +184,6 @@
       "ExtraHitPoints": 0,
       "Size": "Medium",
       "Movement": 30,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Scimitar",
@@ -243,13 +208,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Spear",
@@ -274,13 +232,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Scimitar",
@@ -305,13 +256,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Dagger",
@@ -341,13 +285,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Mace",
@@ -377,13 +314,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Weapon",
@@ -412,9 +342,6 @@
       "Type": "Undead",
       "ClimateTerain": "Any",
       "Frequency": "Rare",
-      "ActivityCycle": "Any",
-      "Intelligence": "Non",
-      "Alignment": "Neutral",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 3,
       "ArmorClass": 8,
@@ -426,20 +353,7 @@
       "NumberOfAttacks": 1,
       "MagicResistance": "None",
       "Size": "Medium",
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 6
       },
@@ -488,20 +402,7 @@
       "NumberOfAttacks": 0,
       "MagicResistance": "Standard",
       "Size": "Small",
-      "Movement": {
-        "Walk": 10,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 16,
-        "RodStaffWand": 17,
-        "PetrificationPolymorph": 18,
-        "BreathWeapon": 19,
-        "Spell": 19
-      },
+      "Movement": 10,
       "Morale": {
         "Value": 7
       },
@@ -540,20 +441,7 @@
       "NumberOfAttacks": 1,
       "MagicResistance": "None",
       "Size": "Small",
-      "Movement": {
-        "Walk": 10,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 16,
-        "RodStaffWand": 17,
-        "PetrificationPolymorph": 18,
-        "BreathWeapon": 19,
-        "Spell": 19
-      },
+      "Movement": 10,
       "Morale": {
         "Value": 7
       },
@@ -597,20 +485,7 @@
       "NumberOfAttacks": 1,
       "MagicResistance": "None",
       "Size": "Small",
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 7
       },
@@ -656,20 +531,7 @@
       "MagicResistance": "None",
       "Size": "Small",
       "HitPoints": 4,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 7
       },
@@ -710,20 +572,7 @@
       "MagicResistance": "None",
       "Size": "Medium",
       "HitPoints": 4,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement": 30,
       "Morale": {
         "Value": 8
       },
@@ -763,20 +612,7 @@
       "MagicResistance": "None",
       "Size": "Medium",
       "HitPoints": 14,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 10,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
+      "Movement": 30,
       "Morale": {
         "Value": 9
       },
@@ -826,20 +662,7 @@
       "MagicResistance": "None",
       "Size": "Small",
       "HitPoints": 4,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 30,
       "Morale": {
         "Value": 7
       },
@@ -885,20 +708,7 @@
       "MagicResistance": "None",
       "Size": "Small",
       "HitPoints": 4,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 8
       },
@@ -939,20 +749,7 @@
       "MagicResistance": "None",
       "Size": "Small",
       "HitPoints": 4,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 8
       },
@@ -996,20 +793,7 @@
       "MagicResistance": "None",
       "Size": "Small",
       "HitPoints": 4,
-      "Movement": {
-        "Walk": 0,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 10
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 10,
       "Morale": {
         "Value": 7
       },
@@ -1054,20 +838,7 @@
       "NumberOfAttacks": 1,
       "MagicResistance": "None",
       "Size": "Large",
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 7
       },
@@ -1096,20 +867,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "Movement": 30,
       "Morale": {
         "Value": 8
       },
@@ -1141,20 +899,7 @@
       "HitDice": 1,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 30,
       "Morale": {
         "Value": 8
       },
@@ -1191,20 +936,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 4,
       "Size": "Medium",
-      "Movement": {
-        "Walk": 10,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 10,
       "Morale": {
         "Value": 9
       },
@@ -1237,20 +969,7 @@
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
       "Size": "Small",
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
+      "Movement": 20,
       "Morale": {
         "Value": 6
       },
