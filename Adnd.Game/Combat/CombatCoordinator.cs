@@ -369,13 +369,16 @@ public sealed class CombatCoordinator
 
         for (int i = 0; i < survivors.Count; i++)
         {
+            var survivor = survivors[i];
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
-  //          var gain = (int)Math.Round(baseGain * xpMultiplier, MidpointRounding.AwayFromZero);
-            var gain = xpEach;
+            var xpModifierPercent = XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
+            var individualBonus = (int)Math.Round(baseGain * (xpModifierPercent / 100.0), MidpointRounding.AwayFromZero);
+
+            var gain = baseGain + individualBonus;
             if (gain < 0)
                 gain = 0;
 
-            levelUpResults.Add(_levelUpService.ApplyExperienceAndAutoLevel(survivors[i], gain, allSpells));
+            levelUpResults.Add(_levelUpService.ApplyExperienceAndAutoLevel(survivor, gain, allSpells));
         }
 
         var totalAwardedXp = levelUpResults.Sum(r => r.ExperienceAfter - r.ExperienceBefore);
@@ -426,7 +429,9 @@ public sealed class CombatCoordinator
         foreach (var r in levelUpResults)
         {
             var gain = r.ExperienceAfter - r.ExperienceBefore;
-            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (total {r.ExperienceAfter})");
+            var survivor = survivors.FirstOrDefault(s => string.Equals(s.Name, r.CharacterName, StringComparison.OrdinalIgnoreCase));
+            var xpModifierPercent = survivor == null ? 0 : XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
+            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (includes {xpModifierPercent:+#;-#;0}% individual bonus, total {r.ExperienceAfter})");
         }
 
         sb.AppendLine();

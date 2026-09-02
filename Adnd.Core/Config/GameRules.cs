@@ -36,6 +36,7 @@ public enum Sources
 public enum SourceOptions
 {
     OnlyAdnd,
+    OnlyAdndDMGEncounterTable,
     OnlyWizardry,
     AllButWizardry,// this will include WizardryAndAdnd
     All

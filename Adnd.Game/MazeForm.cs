@@ -2206,6 +2206,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return sourceOption switch
         {
             SourceOptions.OnlyAdnd => monsters.Where(m => m.Source == Sources.Adnd).ToList(),
+            SourceOptions.OnlyAdndDMGEncounterTable => monsters.Where(m => m.Source == Sources.Adnd).ToList(),
             SourceOptions.OnlyWizardry => monsters.Where(m => m.Source == Sources.Wizardry || m.Source == Sources.WizardryAndAdnd).ToList(),
             SourceOptions.AllButWizardry => monsters.Where(m => m.Source != Sources.Wizardry).ToList(),
             SourceOptions.All => monsters,
