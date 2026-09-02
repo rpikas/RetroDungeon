@@ -2180,6 +2180,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private string? RollDungeonMonsterForLevel(int level)
     {
+        if (GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyAdndDMGEncounterTable)
+        {
+            var fromDmgTable = RollFromDmgEncounterTable(level);
+            if (!string.IsNullOrWhiteSpace(fromDmgTable))
+                return fromDmgTable;
+        }
+
         var rolledMonsterLevel = MonsterLevelGenerator.RollMonsterLevel(level);
 
         // Get all monsters for the rolled monster level
@@ -2198,7 +2205,117 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return null;
 
         // Use frequency-based weighted selection
-        return SelectMonsterByFrequencyWeight(filteredMonsters)?.Name;
+        return SelectMonsterByFrequencyWeight(filteredMonsters, level, rolledMonsterLevel)?.Name;
+    }
+
+    private string? RollFromDmgEncounterTable(int dungeonLevel)
+    {
+        var tablePath = Path.Combine("Data", "Encounters", "MonsterLevels.json");
+        if (!File.Exists(tablePath))
+            return null;
+
+        using var document = JsonDocument.Parse(File.ReadAllText(tablePath));
+        if (!document.RootElement.TryGetProperty("MonsterLevels", out var allLevels))
+            return null;
+
+        var levelKey = $"Level{dungeonLevel}";
+        if (!allLevels.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
+            return null;
+
+        var roll = _random.Next(1, 101);
+
+        foreach (var entry in entries.EnumerateArray())
+        {
+            if (!entry.TryGetProperty("DiceMin", out var minEl)
+                || !entry.TryGetProperty("DiceMax", out var maxEl)
+                || !entry.TryGetProperty("Creature", out var creatureEl))
+            {
+                continue;
+            }
+
+            var min = minEl.GetInt32();
+            var max = maxEl.GetInt32();
+            if (roll < min || roll > max)
+                continue;
+
+            var creature = creatureEl.GetString();
+            var resolved = ResolveDmgCreatureToMonsterName(creature);
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "174",
+                $"Roll encounter creature for dungeon level {dungeonLevel}",
+                $"Use encounter table Level{dungeonLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                "1",
+                "100",
+                roll.ToString(),
+                string.IsNullOrWhiteSpace(resolved)
+                    ? $"Matched '{creature}', but no monster mapping was found."
+                    : $"Matched '{creature}', mapped to '{resolved}'.");
+
+            if (!string.IsNullOrWhiteSpace(resolved))
+                return resolved;
+
+            return null;
+        }
+
+        return null;
+    }
+
+    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature)
+    {
+        if (string.IsNullOrWhiteSpace(dmgCreature))
+            return null;
+
+        if (string.Equals(dmgCreature.Trim(), "Character", StringComparison.OrdinalIgnoreCase))
+            return "Adventurer";
+
+        var allMonsters = _monsterRepository.GetAll()
+            .Where(m => m.Source == Sources.Adnd)
+            .ToList();
+
+        var raw = dmgCreature.Trim();
+        var candidateNames = new List<string> { raw };
+
+        var comma = raw.IndexOf(',');
+        if (comma > 0 && comma < raw.Length - 1)
+        {
+            var left = raw[..comma].Trim();
+            var right = raw[(comma + 1)..].Trim();
+            if (!string.IsNullOrWhiteSpace(left) && !string.IsNullOrWhiteSpace(right))
+                candidateNames.Add($"{right} {left}");
+        }
+
+        foreach (var candidate in candidateNames)
+        {
+            var exact = allMonsters.FirstOrDefault(m => string.Equals(m.Name, candidate, StringComparison.OrdinalIgnoreCase));
+            if (exact != null)
+                return exact.Name;
+        }
+
+        var normalizedCandidates = candidateNames
+            .Select(NormalizeMonsterName)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        foreach (var monster in allMonsters)
+        {
+            var normalizedMonster = NormalizeMonsterName(monster.Name);
+            if (normalizedCandidates.Contains(normalizedMonster, StringComparer.OrdinalIgnoreCase))
+                return monster.Name;
+        }
+
+        return null;
+    }
+
+    private static string NormalizeMonsterName(string value)
+    {
+        var chars = value
+            .ToLowerInvariant()
+            .Select(ch => char.IsLetterOrDigit(ch) ? ch : ' ')
+            .ToArray();
+
+        return string.Join(" ", new string(chars)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries));
     }
 
     private List<Monster> FilterMonstersBySource(List<Monster> monsters, SourceOptions sourceOption)
@@ -2214,7 +2331,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         };
     }
 
-    private Monster? SelectMonsterByFrequencyWeight(List<Monster> monsters)
+    private Monster? SelectMonsterByFrequencyWeight(List<Monster> monsters, int dungeonLevel, int rolledMonsterLevel)
     {
         // Define frequency weights (similar to rarity weights for items)
         var frequencyWeights = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
@@ -2256,7 +2373,18 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             cumulativeWeight += weight;
             if (randomValue < cumulativeWeight)
+            {
+                RuleApplicationInfo.Publish(
+                    "Adnd",
+                    "House Rule",
+                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {rolledMonsterLevel})",
+                    "Roll 1dN where N is total frequency weight after source filtering; choose creature by cumulative weight.",
+                    "1",
+                    totalWeight.ToString(),
+                    (randomValue + 1).ToString(),
+                    $"Selected {monster.Name} (weight {weight} of total {totalWeight}).");
                 return monster;
+            }
         }
 
         // Fallback (should never reach here)
