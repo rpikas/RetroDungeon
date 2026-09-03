@@ -25,7 +25,8 @@ public static class Temple
     public static bool NeedsHealing(Character c) =>
         c.CurrentHitPoints < c.MaxHitPoints
         || c.HasStatus(CharacterStatus.Poisoned)
-        || c.HasStatus(CharacterStatus.Paralyzed);
+        || c.HasStatus(CharacterStatus.Paralyzed)
+        || c.HasStatus(CharacterStatus.Diseased);
 
     public static int CostToHeal(Character c)
     {
@@ -39,6 +40,9 @@ public static class Temple
 
         if (c.HasStatus(CharacterStatus.Paralyzed))
             cost += CureParalysisCost;
+
+        if (c.HasStatus(CharacterStatus.Diseased))
+            cost += CurePoisonCost;
 
         return cost;
     }
@@ -68,6 +72,7 @@ public static class Temple
         c.CurrentHitPoints = c.MaxHitPoints;
         c.RemoveStatus(CharacterStatus.Poisoned);
         c.RemoveStatus(CharacterStatus.Paralyzed);
+        c.RemoveStatus(CharacterStatus.Diseased);
         repo.Save(c);
         return true;
     }

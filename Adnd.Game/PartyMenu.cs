@@ -30,6 +30,7 @@ public class PartyMenu
             new RemoveParalysisHandler(),
             new HealHandler(),
             new NeutralizePoisonHandler(),
+            new CureDiseaseHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
             new SpiritualHammerHandler(),

@@ -31,7 +31,8 @@ public sealed class MonsterInstance
         if (hitDiceType <= 0)
             hitDiceType = 8;
 
-        return DiceRoller.Roll(hitDice, hitDiceType) + extraHitPoints;
+    //    return DiceRoller.Roll(hitDice, hitDiceType, " Rolling hit points") + extraHitPoints;
+        return DiceRoller.Roll(hitDice, hitDiceType, extraHitPoints,"Hit points");
     }
 
     public Monster Template { get; }

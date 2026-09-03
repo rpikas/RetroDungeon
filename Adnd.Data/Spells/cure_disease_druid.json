@@ -1,0 +1,12 @@
+{
+  "Id": "cure_disease_druid",
+  "Name": "Cure Disease",
+  "Class": "Druid",
+  "Level": 3,
+  "Description": "Cures disease in one ally.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Removes disease from one ally."
+}

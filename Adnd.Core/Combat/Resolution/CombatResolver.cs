@@ -459,6 +459,8 @@ public sealed class CombatResolver
                         }
                         else
                         {
+                            TryApplyGiantRatDisease(monster, target, events);
+
                             if (HasSpecialAbility(monster, "Poison"))
                             {
                                 var poisonRoll = _dice.Roll(100);
@@ -1137,6 +1139,30 @@ public sealed class CombatResolver
     {
         return monster.Template.SpecialAbilities.Any(a =>
             abilityNames.Any(n => string.Equals(a.Name, n, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private void TryApplyGiantRatDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Giant Rat Disease"))
+            return;
+
+        var diseaseRoll = _dice.Roll(20);
+        if (diseaseRoll == 1)
+        {
+            if (!target.HasStatus(CharacterStatus.Diseased))
+            {
+                target.AddStatus(CharacterStatus.Diseased);
+                events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! (1d20 roll: {diseaseRoll})"));
+            }
+            else
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease, but {target.Name} is already diseased. (1d20 roll: {diseaseRoll})"));
+            }
+
+            return;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease. Infection roll: {diseaseRoll} (needs 1)."));
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

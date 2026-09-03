@@ -1995,6 +1995,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
                 if (result == DialogResult.Yes)
                 {
+                    ApplyDiseaseProgressForDungeonExitDay();
                     Close();
                     return;
                 }
@@ -2067,6 +2068,47 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             _characterRepository.Save(c);
 
         SayOnBoth("Effects", string.Join(Environment.NewLine, messages));
+    }
+
+    private void ApplyDiseaseProgressForDungeonExitDay()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (!c.HasStatus(CharacterStatus.Diseased)
+                || c.HasStatus(CharacterStatus.Dead)
+                || c.HasStatus(CharacterStatus.Ashes)
+                || c.HasStatus(CharacterStatus.Lost)
+                || c.CurrentHitPoints <= 0)
+            {
+                continue;
+            }
+
+            var beforeCon = c.Abilities.Constitution;
+            c.Abilities.Constitution = Math.Max(0, c.Abilities.Constitution - 1);
+
+            if (c.Abilities.Constitution <= 0)
+            {
+                c.CurrentHitPoints = 0;
+                c.AddStatus(CharacterStatus.Dead);
+                messages.Add($"{c.Name} loses 1 Constitution from disease ({beforeCon}->0) and dies.");
+            }
+            else
+            {
+                messages.Add($"{c.Name} loses 1 Constitution from disease ({beforeCon}->{c.Abilities.Constitution}).");
+            }
+
+            _characterRepository.Save(c);
+        }
+
+        if (messages.Count > 0)
+            SayOnBoth("Disease", string.Join(Environment.NewLine, messages));
     }
 
     private static bool HasEquippedRegeneration(Character c)
@@ -2523,6 +2565,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var statuses = new List<string>();
         if (c.HasStatus(CharacterStatus.Dead)) statuses.Add("Dead");
         if (c.HasStatus(CharacterStatus.Poisoned)) statuses.Add("Poisoned");
+        if (c.HasStatus(CharacterStatus.Diseased)) statuses.Add("Diseased");
         if (c.HasStatus(CharacterStatus.Paralyzed)) statuses.Add("Paralyzed");
         if (c.HasStatus(CharacterStatus.Petrified)) statuses.Add("Petrified");
         if (c.HasStatus(CharacterStatus.Asleep)) statuses.Add("Asleep");

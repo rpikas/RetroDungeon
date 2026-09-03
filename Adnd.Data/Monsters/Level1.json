@@ -9,7 +9,8 @@
       "NumberOfAppearancesMax": 4,
       "ArmorClass": 5,
       "HitDice": 1,
-      "Size": "Large",
+      "ExtraHitPoints": 1,
+      "Size": "Medium",
       "Movement": 30,
       "Class": "Fighter",
       "Morale": {
@@ -23,10 +24,12 @@
         }
       ],
       "SpecialAbilities": [],
-      "BaseXPValue": 25,
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
       "TreasureType": "B",
-       "Source": "Adnd",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSALLRPhLTSlhbB6Z95EHXWhKHUOXQ2akTPUJHCcqMYSw&s=10"
+      "Source": "Adnd",
+      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSALLRPhLTSlhbB6Z95EHXWhKHUOXQ2akTPUJHCcqMYSw&s=10",
+      "DM comment": "DMG page 204"
 
     },
     {
@@ -655,8 +658,8 @@
       "ArmorClass": 4,
       "MovementRate": "Medium",
       "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 0,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
       "THAC0": 19,
       "NumberOfAttacks": 1,
       "MagicResistance": "None",
@@ -673,17 +676,11 @@
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Glow",
-          "Description": "Produces light for 10 ft for 6 days after death."
-        }
-      ],
       "BaseXPValue": 20,
-      "XPValuePerHitPoint": 1,
+      "XPValuePerHitPoint": 2,
       "TreasureType": "None",
       "Source": "Adnd",
-      "Info": "",
+      "Info": "DMG page 196",
       "InfoUrl": "",
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW3yAA1k96EpoV1wYt0VwJBLafzs6Ui4pBkF-aJm0YPA&s=10"
     },
@@ -769,9 +766,6 @@
       "InfoUrl": "",
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtDj0y2wQmcMHaeDCMN_ZZAdRR7nnDvj6PNL-J189AuA&s=10"
     },
-
-  
-
 
     {
       "Name": "Piercer",
@@ -912,15 +906,15 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Poison",
-          "Description": "Bite may poison the target."
+          "Name": "Giant Rat Disease",
+          "Description": "Bite may transmit a disease to the target."
         }
       ],
-      "BaseXPValue": 10,
+      "BaseXPValue": 7,
       "XPValuePerHitPoint": 1,
       "TreasureType": "C",
       "Source": "Adnd",
-      "Info": "",
+      "Info": "DMG page 209",
       "InfoUrl": "",
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjjlfJO1H0LbDzVGOJzCINL8uuqwnn_BJmQiUqMKdhOw&s=10"
     },

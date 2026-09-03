@@ -7,7 +7,7 @@ public static class DiceRoller
 {
     private static readonly Random _rng = new();
 
-    public static int Roll(int count, int sides)
+    public static int Roll(int count, int sides, int extra = 0, string ruleApplicationInfo = "")
     {
         int sum = 0;
         var rolls = new int[count];
@@ -18,8 +18,8 @@ public static class DiceRoller
             sum += value;
         }
 
-        RuleApplicationInfo.Publish($"Rolled {count}d{sides}: [{string.Join(", ", rolls)}] => {sum}");
-        return sum;
+        RuleApplicationInfo.Publish($"Rolled {count}d{sides}: [{string.Join(", ", rolls)}] + {extra} => {sum + extra} {ruleApplicationInfo}");
+        return sum + extra;
     }
 
     public static int Roll3d6() => Roll(3, 6);
