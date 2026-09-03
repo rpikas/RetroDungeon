@@ -499,3 +499,86 @@ it and no other encoutner takes damage from the spell
 
 if a monster or party member that is asleep is hurt by a spell or by beeing hit, 
 he instantly wakes up
+
+Bug Gome 12 did not wake up even when hurt
+kan du implementer så att även monster som är uncounsious från color spray vaknar ifall de tar skada?
+
+260831
+prismatical force should be a level 1 illusionest spell, not level 2
+Both magic users and illusiones got invisibility as a level 2 spell they work the same way
+impovoed invisibilty is not a magic user spell, it is a level 4 illusionist spell. 
+The duration only lasts one battle or 4 rounds +1 per level of the caster. the invisible person can attack
+while invisible with improved invisibilty.
+when a person invisible from a level 2 spell, attacks, the invisibility disapears.
+
+implement a 2nd level magic user spell strength, when targeted a party member, the strength increases for
+Durid, Cleric: 1d6, Fighter, Paladin, Ragnger: 1d8, Magic users, illustionists: 1d4, Thief and assasin and 
+bard 1d5, monk 1d4, the spell lasts for 10 rounds
+
+Implement mirror image a level 2 illusionist and level 2 magic user spell. It created 1d4 images of the 
+caster with duration level of caster * 2. When monsters tries to hit the caster, they have eual chanse of 
+hitting the caster as one of the images. For example if 3 images are created, it is only 25% chanse that
+the caster will be hit when attaced.
+
+implement level 7 Magic-user spell: Mass invisibility, it works exactly as invisibilty except for that the 
+whole party get invisible.
+
+implement level 7 cleric spell: Earthquake, that gives 5d12 damage to all enemy groups. 
+(half damage if they make the save vs. spell )
+
+Implement level 7 cleric spell Unholy word. When cast on one group and the group is of type Devil or 
+Deamon, this is what happend depending on encounter hit dice:
+HD 1-3 Monster dies
+HD 3-7 Monster paralyzed for 10-40 rounds
+HD 8-11 Monster stunned for 2-8 rounds
+HD 12 and above. Monsters Got -2 THAC0.
+
+if an item equiped got  "SpecialAbilities": [ "Regeneration (1)" ] then for every step taken and for every 
+round in a battle the bearer heals 1 point of damage if hurt.
+
+Finger of Death is not a magic user spell, but a level 7 druid spell
+when an item with "SpecialAbilities": [ "Casts shield" ] is used the person using it casts shield spell
+when parsing monster json populate Size
+When parsing item json populate DamageVsLarge
+
+when determining how much damage an encounter should get by beeing hit by a weapon, check if the 
+encounter is size Large. If the encounter is Large, if avaliable use the DamageVsLarge attribute 
+instead of Damage attribut. Fallback if DamageVsLarge is missing is to use the Damage attribut 
+from the item.
+
+Bug: "Giant Rat" is "Size": "Large", but Long sword gives 1d8 damage, i expected 1d12
+
+260902
+in combat rewards, add individual xp bonus. 0,4
+in combat rewards, add individual xp bonus Based on the xp bonus in the charater 
+sheet, that is based on class and abilities 0,7 12 +17 works
+in MonsterSourceOptions add an option OnlyAdndDMGEncounterTable 1,1
+where should i put a json file for probablities to encounter monster on dungeon level 1? 1,5
+if MonsterSourceOptions = OnlyAdndDMGEncounterTable then use MonsterLevels,json to 
+randomize what monster to encounter +105 1,9
+inform in ADnd Rule and Dice info what you are rolling when determining what monster to encounter-3+26 2.3
+
+Fixed manually when in combat and hitting an encounter the strength damage bonus should be added to the damage 
+given to the monsters
+260903
+when enountering level 2 monster, do not use the house hold rules, but use the Level2 section in 
+MonstersLevels.json and random 1-100 to find the monster just like for level 1. 
+Also follow the same principle for level 3-10 monsters -31 +35 2,9
+La in monsterEncounterTable manuellt från DMG sid 174.
+När man träffar på ett monster ska man börja med att slå 1d20 sen titta i MonsterEncounterTable 
+för att se vilken level det är på monstret, ifall partyt t ex är på level 2 och man slår 17 på 
+1d20 så  blir encounter monsterLevel: 3 etc skriv vad man slpr på 1d20 i ADnD Rule and Dice info. 
+Sen när man vet vilken level det är på monstret kan man gå tillbaka till att se vilket/vilka 
+monster man träffar på. -9 +94 3,2
+If a player is hit by a mob with SpecialAbilities: Giant Rat Disease then roll 1d20. 
+if the result is 1 the player is diseased. constitution is lowered by 1 per day until the 
+player is dead or the disease is cured by a spell or in the temple.
+Each time the party exits the dungeon there is a new day.+26. +42 -1+6 4,5
+when status is Diseased for a charater, show that in the status column in Maze form +1, 4,6
+implement Cure Disease spell that is a level 3 druid spell and a level 3 cleric spell +44 etc 4,8
+if an item got "SpecialAbilities": [ "Casts Cure Disease" ], and it is used, a cure disease spell is cast 4,9
+Bark skin and other spell effect affecting for example ac, str or other stats disapears when exiting the dungeon
+Spell affect that got a speficied duration should remain during the specified period. Other spell effects should 
+remain untill dungeon is exited. 6,0
+ändring: barkskin har duration 4 rounds + 1 round per level och effekten tar slut när striden är slut. 6,2
+barkskin förbättrar ac bara med 1, inte 3 6,2
