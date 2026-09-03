@@ -2180,14 +2180,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private string? RollDungeonMonsterForLevel(int level)
     {
+        var rolledMonsterLevel = RollMonsterLevelFromEncounterTable(level);
+        if (rolledMonsterLevel <= 0)
+            return null;
+
         if (GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyAdndDMGEncounterTable)
         {
-            var fromDmgTable = RollFromDmgEncounterTable(level);
-            if (!string.IsNullOrWhiteSpace(fromDmgTable))
-                return fromDmgTable;
+            return RollFromDmgEncounterTable(rolledMonsterLevel, level);
         }
-
-        var rolledMonsterLevel = MonsterLevelGenerator.RollMonsterLevel(level);
 
         // Get all monsters for the rolled monster level
         var monstersForLevel = _monsterRepository.GetAll()
@@ -2208,7 +2208,90 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return SelectMonsterByFrequencyWeight(filteredMonsters, level, rolledMonsterLevel)?.Name;
     }
 
-    private string? RollFromDmgEncounterTable(int dungeonLevel)
+    private int RollMonsterLevelFromEncounterTable(int dungeonLevel)
+    {
+        var tablePath = Path.Combine("Data", "Encounters", "MonsterEncounter.json");
+        if (!File.Exists(tablePath))
+            return MonsterLevelGenerator.RollMonsterLevel(dungeonLevel);
+
+        using var document = JsonDocument.Parse(File.ReadAllText(tablePath));
+        if (!document.RootElement.TryGetProperty("monsterEncounterTable", out var tableRoot)
+            || tableRoot.ValueKind != JsonValueKind.Object)
+        {
+            return MonsterLevelGenerator.RollMonsterLevel(dungeonLevel);
+        }
+
+        var levelKey = dungeonLevel.ToString();
+        if (!tableRoot.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
+            return MonsterLevelGenerator.RollMonsterLevel(dungeonLevel);
+
+        var roll = _random.Next(1, 21);
+
+        foreach (var entry in entries.EnumerateArray())
+        {
+            if (!entry.TryGetProperty("roll", out var rollEl)
+                || !entry.TryGetProperty("monsterLevel", out var levelEl))
+                continue;
+
+            var range = rollEl.GetString();
+            if (!TryParseRollRange(range, out var min, out var max))
+                continue;
+
+            if (roll < min || roll > max)
+                continue;
+
+            var monsterLevel = levelEl.GetInt32();
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "174",
+                $"Roll monster level for dungeon level {dungeonLevel}",
+                "Use MonsterEncounterTable: roll 1d20 and map to encounter monster level.",
+                "1",
+                "20",
+                roll.ToString(),
+                $"Monster level {monsterLevel}.");
+
+            return monsterLevel;
+        }
+
+        return MonsterLevelGenerator.RollMonsterLevel(dungeonLevel);
+    }
+
+    private static bool TryParseRollRange(string? range, out int min, out int max)
+    {
+        min = 0;
+        max = 0;
+        if (string.IsNullOrWhiteSpace(range))
+            return false;
+
+        var trimmed = range.Trim();
+        var dash = trimmed.IndexOf('-');
+        if (dash <= 0 || dash >= trimmed.Length - 1)
+        {
+            if (!int.TryParse(trimmed, out var single))
+                return false;
+
+            min = single;
+            max = single;
+            return true;
+        }
+
+        var left = trimmed[..dash].Trim();
+        var right = trimmed[(dash + 1)..].Trim();
+        if (!int.TryParse(left, out min) || !int.TryParse(right, out max))
+            return false;
+
+        if (max < min)
+        {
+            var temp = min;
+            min = max;
+            max = temp;
+        }
+
+        return true;
+    }
+
+    private string? RollFromDmgEncounterTable(int monsterLevel, int dungeonLevel)
     {
         var tablePath = Path.Combine("Data", "Encounters", "MonsterLevels.json");
         if (!File.Exists(tablePath))
@@ -2218,46 +2301,52 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (!document.RootElement.TryGetProperty("MonsterLevels", out var allLevels))
             return null;
 
-        var levelKey = $"Level{dungeonLevel}";
+        var levelKey = $"Level{monsterLevel}";
         if (!allLevels.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
             return null;
 
-        var roll = _random.Next(1, 101);
-
-        foreach (var entry in entries.EnumerateArray())
+        // Strict DMG table mode: use this level's 1d100 table only (no house-rule fallback).
+        // Retry a few times in case a rolled creature cannot be mapped to a local monster name.
+        for (int attempt = 0; attempt < 20; attempt++)
         {
-            if (!entry.TryGetProperty("DiceMin", out var minEl)
-                || !entry.TryGetProperty("DiceMax", out var maxEl)
-                || !entry.TryGetProperty("Creature", out var creatureEl))
+            var roll = _random.Next(1, 101);
+
+            foreach (var entry in entries.EnumerateArray())
             {
-                continue;
+                if (!entry.TryGetProperty("DiceMin", out var minEl)
+                    || !entry.TryGetProperty("DiceMax", out var maxEl)
+                    || !entry.TryGetProperty("Creature", out var creatureEl))
+                {
+                    continue;
+                }
+
+                var min = minEl.GetInt32();
+                var max = maxEl.GetInt32();
+                if (roll < min || roll > max)
+                    continue;
+
+                var creature = creatureEl.GetString();
+                var resolved = ResolveDmgCreatureToMonsterName(creature);
+                RuleApplicationInfo.Publish(
+                    "DMG",
+                    "174",
+                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
+                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                    "1",
+                    "100",
+                    roll.ToString(),
+                    string.IsNullOrWhiteSpace(resolved)
+                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
+                        : $"Matched '{creature}', mapped to '{resolved}'.");
+
+                if (!string.IsNullOrWhiteSpace(resolved))
+                    return resolved;
+
+                break;
             }
-
-            var min = minEl.GetInt32();
-            var max = maxEl.GetInt32();
-            if (roll < min || roll > max)
-                continue;
-
-            var creature = creatureEl.GetString();
-            var resolved = ResolveDmgCreatureToMonsterName(creature);
-            RuleApplicationInfo.Publish(
-                "DMG",
-                "174",
-                $"Roll encounter creature for dungeon level {dungeonLevel}",
-                $"Use encounter table Level{dungeonLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-                "1",
-                "100",
-                roll.ToString(),
-                string.IsNullOrWhiteSpace(resolved)
-                    ? $"Matched '{creature}', but no monster mapping was found."
-                    : $"Matched '{creature}', mapped to '{resolved}'.");
-
-            if (!string.IsNullOrWhiteSpace(resolved))
-                return resolved;
-
-            return null;
         }
 
+        RuleApplicationInfo.Publish($"DMG encounter table Level{monsterLevel} could not map a rolled creature to a local monster after multiple rerolls.");
         return null;
     }
 
