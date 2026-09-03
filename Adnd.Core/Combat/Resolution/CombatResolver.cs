@@ -115,6 +115,22 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{member.Name}'s mirror image fades."));
             }
 
+            var barkskinRounds = session.GetBarkskinRounds(member.Name);
+            if (barkskinRounds > 0)
+            {
+                var remaining = session.TickBarkskin(member.Name);
+                if (remaining <= 0)
+                {
+                    var bonus = session.GetBarkskinBonus(member.Name);
+                    if (bonus > 0)
+                    {
+                        member.ArmorClass += bonus;
+                        session.ClearBarkskin(member.Name);
+                        events.Add(new CombatEvent($"{member.Name}'s Barkskin fades (+{bonus} AC removed)."));
+                    }
+                }
+            }
+
             var strengthRounds = session.GetStrengthBuffRounds(member.Name);
             if (strengthRounds > 0)
             {
@@ -126,8 +142,15 @@ public sealed class CombatResolver
                     {
                         member.Abilities.Strength = Math.Max(1, member.Abilities.Strength - bonus);
                         session.ClearStrengthBuff(member.Name);
+                        member.TemporaryStrengthBonus = 0;
+                        member.TemporaryStrengthRoundsRemaining = 0;
                         events.Add(new CombatEvent($"{member.Name}'s Strength spell fades (−{bonus} STR)."));
                     }
+                }
+                else
+                {
+                    member.TemporaryStrengthBonus = session.GetStrengthBuffBonus(member.Name);
+                    member.TemporaryStrengthRoundsRemaining = remaining;
                 }
             }
 

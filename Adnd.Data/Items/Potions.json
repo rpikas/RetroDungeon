@@ -2,7 +2,7 @@
   "Category": "Potion",
   "Items": [
     {
-      "Name": "Potion of Healing",
+      "Name": "Potion of Cure Light Wounds",
       "Type": "Potion",
       "Slot": "",
       "Cost": 50,
@@ -218,13 +218,13 @@
       "Slot": "",
       "Cost": 400,
       "Weight": 1,
-      "StockQuantity": 0,
+      "StockQuantity": 5,
       "ArmorClassBonus": 0,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "Damage": "",
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Cure Disease" ],
-      "Rarity": "Very Rare",
+      "Rarity": "Uncommon",
       "Source": "Adnd"
     },
     {

@@ -31,6 +31,8 @@ public sealed class StrengthHandler : ISpellEffectHandler
         {
             target.Abilities.Strength = Math.Max(1, target.Abilities.Strength - existingBonus);
             session.ClearStrengthBuff(target.Name);
+            target.TemporaryStrengthBonus = 0;
+            target.TemporaryStrengthRoundsRemaining = 0;
         }
 
         var dieSides = GetDieSidesForClass(target.Class);
@@ -38,6 +40,8 @@ public sealed class StrengthHandler : ISpellEffectHandler
 
         target.Abilities.Strength += bonus;
         session.SetStrengthBuff(target.Name, bonus, 10);
+        target.TemporaryStrengthBonus = bonus;
+        target.TemporaryStrengthRoundsRemaining = 10;
 
         return new SpellCastResult
         {

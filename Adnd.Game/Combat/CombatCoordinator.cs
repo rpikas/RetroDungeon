@@ -126,6 +126,7 @@ public sealed class CombatCoordinator
     {
         var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount);
         var session = new CombatSession(party, monsters);
+        RestorePersistedRoundEffects(session);
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
@@ -210,6 +211,7 @@ public sealed class CombatCoordinator
 
         var monsters = _monsterFactory.CreateMultipleGroups(groups);
         var session = new CombatSession(party, monsters);
+        RestorePersistedRoundEffects(session);
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
@@ -251,6 +253,19 @@ public sealed class CombatCoordinator
         MoveDeadPartyMembersToEnd(session.Party);
         ShowFinalOutcome(owner, session.Outcome, session);
         return session.Outcome;
+    }
+
+    private static void RestorePersistedRoundEffects(CombatSession session)
+    {
+        foreach (var c in session.Party)
+        {
+            var persistedRounds = c.TemporaryStrengthRoundsRemaining;
+            var persistedBonus = c.TemporaryStrengthBonus;
+            if (persistedRounds > 0 && persistedBonus > 0 && session.GetStrengthBuffRounds(c.Name) <= 0)
+            {
+                session.SetStrengthBuff(c.Name, persistedBonus, persistedRounds);
+            }
+        }
     }
 
     private static void RemoveTemporaryCombatEffects(CombatSession session)
@@ -297,21 +312,26 @@ public sealed class CombatCoordinator
         }
 
         foreach (var name in session.StrengthBuffBonuses.Keys.ToList())
+            session.ClearStrengthBuff(name);
+
+        foreach (var name in session.BarkskinBonuses.Keys.ToList())
         {
             var c = session.Party.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
             if (c == null)
                 continue;
 
-            var bonus = session.GetStrengthBuffBonus(name);
+            var bonus = session.GetBarkskinBonus(name);
             if (bonus > 0)
-                c.Abilities.Strength = Math.Max(1, c.Abilities.Strength - bonus);
+                c.ArmorClass += bonus;
 
-            session.ClearStrengthBuff(name);
+            session.ClearBarkskin(name);
         }
 
         session.BlessedPartyMembers.Clear();
         session.InvisiblyBuffedPartyMembers.Clear();
         session.ImprovedInvisibilityRounds.Clear();
+        session.BarkskinBonuses.Clear();
+        session.BarkskinRounds.Clear();
         session.MirrorImageCounts.Clear();
         session.MirrorImageRounds.Clear();
     }

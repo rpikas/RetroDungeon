@@ -353,6 +353,20 @@ public class MainMenu
                 changed = true;
             }
 
+            if (character.TemporaryStrengthRoundsRemaining > 0)
+            {
+                var roundsToConsume = character.TemporaryStrengthRoundsRemaining;
+                character.TemporaryStrengthRoundsRemaining = 0;
+
+                if (character.TemporaryStrengthBonus > 0)
+                {
+                    character.Abilities.Strength = Math.Max(1, character.Abilities.Strength - character.TemporaryStrengthBonus);
+                    character.TemporaryStrengthBonus = 0;
+                }
+
+                changed = true;
+            }
+
             if (character.Spellcasting == null || character.Spellcasting.Count == 0)
             {
                 if (changed)

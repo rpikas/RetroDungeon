@@ -889,7 +889,7 @@
       "NumberOfAppearancesMin": 5,
       "NumberOfAppearancesMax": 20,
       "ArmorClass": 12,
-      "Size": "Large",
+      "Size": "Small",
       "HitDice": 1,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,

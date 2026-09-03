@@ -19,6 +19,8 @@ public sealed class CombatSession
     public HashSet<string> BlessedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> InvisiblyBuffedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ImprovedInvisibilityRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> BarkskinRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> BarkskinBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> StrengthBuffRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> StrengthBuffBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -69,6 +71,51 @@ public sealed class CombatSession
 
         ImprovedInvisibilityRounds[characterName] = rounds;
         return rounds;
+    }
+
+    public void SetBarkskin(string characterName, int bonus, int rounds)
+    {
+        if (rounds <= 0 || bonus <= 0)
+        {
+            BarkskinRounds.Remove(characterName);
+            BarkskinBonuses.Remove(characterName);
+            return;
+        }
+
+        BarkskinBonuses[characterName] = bonus;
+        BarkskinRounds[characterName] = rounds;
+    }
+
+    public int GetBarkskinRounds(string characterName)
+    {
+        return BarkskinRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int GetBarkskinBonus(string characterName)
+    {
+        return BarkskinBonuses.TryGetValue(characterName, out var bonus) ? Math.Max(0, bonus) : 0;
+    }
+
+    public int TickBarkskin(string characterName)
+    {
+        if (!BarkskinRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            BarkskinRounds.Remove(characterName);
+            return 0;
+        }
+
+        BarkskinRounds[characterName] = rounds;
+        return rounds;
+    }
+
+    public void ClearBarkskin(string characterName)
+    {
+        BarkskinRounds.Remove(characterName);
+        BarkskinBonuses.Remove(characterName);
     }
 
     public void SetStrengthBuff(string characterName, int bonus, int rounds)

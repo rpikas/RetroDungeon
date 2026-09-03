@@ -28,8 +28,21 @@ public sealed class BarkskinHandler : ISpellEffectHandler
             return SpellCastResult.Failure($"{spell.Name} cannot protect {target.Name} in current condition.");
         }
 
+        if (request.Context != SpellUseContext.Combat || request.CombatSession == null)
+            return SpellCastResult.Failure("Barkskin can only be cast in combat.");
+
         var acBonus = GetArmorClassImprovement(request.Caster.Level);
+        var rounds = 4 + Math.Max(1, request.Caster.Level);
+
+        var existingBonus = request.CombatSession.GetBarkskinBonus(target.Name);
+        if (existingBonus > 0)
+        {
+            target.ArmorClass += existingBonus;
+            request.CombatSession.ClearBarkskin(target.Name);
+        }
+
         target.ArmorClass -= acBonus;
+        request.CombatSession.SetBarkskin(target.Name, acBonus, rounds);
 
         return new SpellCastResult
         {
@@ -37,19 +50,13 @@ public sealed class BarkskinHandler : ISpellEffectHandler
             Events =
             {
                 $"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}",
-                $"{target.Name} gains {acBonus} AC improvement from Barkskin."
+                $"{target.Name} gains {acBonus} AC improvement from Barkskin for {rounds} rounds."
             }
         };
     }
 
     private static int GetArmorClassImprovement(int druidLevel)
     {
-        return druidLevel switch
-        {
-            <= 3 => 1,
-            <= 6 => 2,
-            <= 9 => 3,
-            _ => 4
-        };
+        return 1;
     }
 }

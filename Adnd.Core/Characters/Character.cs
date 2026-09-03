@@ -33,6 +33,9 @@ public class Character
     public AbilityScores Abilities { get; set; } = new();
     public int Level { get; set; } = 1;
     public bool LayOnHandsUsedToday { get; set; }
+    public int TemporaryStrengthBonus { get; set; }
+    public int TemporaryStrengthRoundsRemaining { get; set; }
+    public int TemporaryArmorClassBonusUntilDungeonExit { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
