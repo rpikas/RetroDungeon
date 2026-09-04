@@ -2,6 +2,58 @@
   "Level": 2,
   "Monsters": [
     {
+      "Name": "Shrieker",
+      "Type": "Fungus",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 7,
+      "HitDice": 3,
+      "Size": "Large",
+      "Movement": 0,
+      "Morale": {
+        "Value": 0
+      },
+      "Attacks": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Shriek",
+          "Description": "Emits a loud shriek when light or movement is nearby, attracting nearby monsters within 30–120 feet."
+        }
+      ],
+      "BaseXPValue": 5,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Gnoll",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 10,
+      "ArmorClass": 5,
+      "HitDice": 2,
+      "Size": "Large",
+      "Movement": 30,
+      "Morale": {
+        "Value": 9
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 28,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "D",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Giant Badger",
       "Type": "Animal",
       "Frequency": "Common",
@@ -24,16 +76,7 @@
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Ferocity",
-          "Description": "Fights to the death when cornered or defending its lair."
-        },
-        {
-          "Name": "Burrowing",
-          "Description": "Can dig through earth and soft rock at 1 foot per round."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 65,
       "TreasureType": "Nil",
       "Source": "AD&D",
@@ -232,7 +275,7 @@
       "ArmorClass": 6,
       "HitDice": 2,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
+      "ExtraHitPoints": 4,
       "Size": "Medium",
       "Movement": 12,
       "Morale": {
@@ -245,21 +288,8 @@
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Sticky Tongue",
-          "Description": "Can strike with tongue up to 10 feet; on hit, pulls victim toward mouth."
-        },
-        {
-          "Name": "Swallow",
-          "Description": "May swallow small creatures whole if bite reduces target to 0 HP."
-        },
-        {
-          "Name": "Leap",
-          "Description": "Can leap long distances when attacking or fleeing."
-        }
-      ],
-      "BaseXPValue": 45,
+      "SpecialAbilities": [],
+      "BaseXPValue": 50,
       "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "AD&D Monster Manual (1977)"
@@ -291,16 +321,7 @@
           "Damage": "1d5"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Chameleon Skin",
-          "Description": "Surprise opponents 90% of the time due to natural camouflage."
-        },
-        {
-          "Name": "Stench",
-          "Description": "Creatures within 30 feet must save vs poison or suffer –2 to hit."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 65,
       "XPValuePerHitPoint": 3,
       "TreasureType": "C",
@@ -405,7 +426,7 @@
       "ArmorClass": 7,
       "HitDice": 2,
       "Size": "Medium",
-      "Movement":40,
+      "Movement": 40,
       "Morale": {
         "Value": 8
       },
@@ -459,7 +480,7 @@
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
       "Size": "Small",
-      "Movement":40,
+      "Movement": 40,
       "Morale": {
         "Value": 8
       },
@@ -488,7 +509,7 @@
       "HitDiceType": 5,
       "ExtraHitPoints": 1,
       "Size": "Medium",
-      "Movement":40,
+      "Movement": 40,
       "Morale": {
         "Value": 8
       },

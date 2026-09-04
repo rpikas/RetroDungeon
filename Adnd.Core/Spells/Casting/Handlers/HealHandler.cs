@@ -32,7 +32,7 @@ public sealed class HealHandler : ISpellEffectHandler
 
         target.CurrentHitPoints = target.MaxHitPoints;
         target.RemoveStatus(CharacterStatus.Blind);
-        target.RemoveStatus(CharacterStatus.Diseased);
+        target.CureDiseaseAndRestoreConstitution();
         target.RemoveStatus(CharacterStatus.Feeblemind);
         target.RemoveStatus(CharacterStatus.Poisoned);
         target.RemoveStatus(CharacterStatus.Slowed);
@@ -44,7 +44,7 @@ public sealed class HealHandler : ISpellEffectHandler
         result.Events.Add(healed > 0
             ? $"{target.Name} is fully healed for {healed} HP."
             : $"{target.Name} is already at full health.");
-        result.Events.Add($"{target.Name} is cured of blindness, disease, feeblemind, poison, and slow.");
+        result.Events.Add($"{target.Name} is cured of blindness, disease (with Constitution restored), feeblemind, poison, and slow.");
         result.HpChanges[target.Name] = healed;
 
         return result;

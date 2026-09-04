@@ -31,12 +31,12 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
         }
 
         var wasDiseased = target.HasStatus(CharacterStatus.Diseased);
-        target.RemoveStatus(CharacterStatus.Diseased);
+        target.CureDiseaseAndRestoreConstitution();
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
         result.Events.Add(wasDiseased
-            ? $"{target.Name} is no longer diseased."
+            ? $"{target.Name} is no longer diseased and Constitution is restored."
             : $"{target.Name} is not diseased.");
 
         return result;

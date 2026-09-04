@@ -31,6 +31,9 @@ public class Character
     // Level in the original class at the time of dual-classing (optional)
     public int DualClassOriginalLevel { get; set; } = 0;
     public AbilityScores Abilities { get; set; } = new();
+    public int? ConstitutionBeforeDisease { get; set; }
+    public bool RotGrubFlamePromptPending { get; set; }
+    public int RotGrubDeathRoundsRemaining { get; set; }
     public int Level { get; set; } = 1;
     public bool LayOnHandsUsedToday { get; set; }
     public int TemporaryStrengthBonus { get; set; }
@@ -196,6 +199,43 @@ public class Character
     public void AddStatus(CharacterStatus status) => Status |= status;
     public void RemoveStatus(CharacterStatus status) => Status &= ~status;
     public void ClearStatus() => Status = CharacterStatus.None;
+
+    public void ApplyDisease()
+    {
+        if (!HasStatus(CharacterStatus.Diseased))
+        {
+            ConstitutionBeforeDisease ??= Abilities.Constitution;
+            AddStatus(CharacterStatus.Diseased);
+        }
+    }
+
+    public void CureDiseaseAndRestoreConstitution()
+    {
+        RemoveStatus(CharacterStatus.Diseased);
+        RotGrubFlamePromptPending = false;
+        RotGrubDeathRoundsRemaining = 0;
+
+        if (ConstitutionBeforeDisease.HasValue)
+        {
+            Abilities.Constitution = Math.Max(0, ConstitutionBeforeDisease.Value);
+            ConstitutionBeforeDisease = null;
+        }
+    }
+
+    public void MarkRotGrubExposurePendingFlame()
+    {
+        if (RotGrubDeathRoundsRemaining > 0)
+            return;
+
+        RotGrubFlamePromptPending = true;
+    }
+
+    public void ApplyRotGrubInfestation(int deathInRounds)
+    {
+        ApplyDisease();
+        RotGrubFlamePromptPending = false;
+        RotGrubDeathRoundsRemaining = Math.Max(1, deathInRounds);
+    }
 
     private string GetStatusDisplay()
     {

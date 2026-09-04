@@ -72,7 +72,7 @@ public static class Temple
         c.CurrentHitPoints = c.MaxHitPoints;
         c.RemoveStatus(CharacterStatus.Poisoned);
         c.RemoveStatus(CharacterStatus.Paralyzed);
-        c.RemoveStatus(CharacterStatus.Diseased);
+        c.CureDiseaseAndRestoreConstitution();
         repo.Save(c);
         return true;
     }

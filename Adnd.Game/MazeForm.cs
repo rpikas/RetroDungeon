@@ -2021,6 +2021,27 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (!roster.TryGetValue(name, out var c))
                 continue;
 
+            if (c.RotGrubDeathRoundsRemaining > 0
+                && !c.HasStatus(CharacterStatus.Dead)
+                && !c.HasStatus(CharacterStatus.Ashes)
+                && !c.HasStatus(CharacterStatus.Lost)
+                && c.CurrentHitPoints > 0)
+            {
+                c.RotGrubDeathRoundsRemaining = Math.Max(0, c.RotGrubDeathRoundsRemaining - 1);
+                changed = true;
+
+                if (c.RotGrubDeathRoundsRemaining <= 0)
+                {
+                    c.CurrentHitPoints = 0;
+                    c.AddStatus(CharacterStatus.Dead);
+                    messages.Add($"{c.Name} dies as rot grubs reach the heart.");
+                }
+                else
+                {
+                    messages.Add($"{c.Name} has {c.RotGrubDeathRoundsRemaining} round(s) before rot grub death unless cured.");
+                }
+            }
+
             if (c.CurrentHitPoints > 0
                 && !c.HasStatus(CharacterStatus.Dead)
                 && c.CurrentHitPoints < c.MaxHitPoints
@@ -2371,7 +2392,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 var resolved = ResolveDmgCreatureToMonsterName(creature);
                 RuleApplicationInfo.Publish(
                     "DMG",
-                    "174",
+                    "175-177",
                     $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
                     $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
                     "1",
@@ -2396,6 +2417,31 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         if (string.IsNullOrWhiteSpace(dmgCreature))
             return null;
+
+        if (string.Equals(dmgCreature.Trim(), "Human", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(dmgCreature.Trim(), "Humans", StringComparison.OrdinalIgnoreCase))
+        {
+            var roll = _random.Next(1, 101);
+            var result = roll switch
+            {
+                <= 25 => "Bandit",
+                <= 30 => "Berserker",
+                <= 45 => "Brigand",
+                _ => "Adventurer"
+            };
+
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "175-177",
+                "Resolve Humans encounter",
+                "If Humans are encountered, roll 1d100: 01-25 Bandit, 26-30 Berserker, 31-45 Brigand, 46-100 Character.",
+                "1",
+                "100",
+                roll.ToString(),
+                $"Selected {result}.");
+
+            return result;
+        }
 
         if (string.Equals(dmgCreature.Trim(), "Character", StringComparison.OrdinalIgnoreCase))
             return "Adventurer";

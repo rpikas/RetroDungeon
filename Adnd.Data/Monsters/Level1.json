@@ -2,6 +2,32 @@
   "Level": 1,
   "Monsters": [
     {
+      "Name": "Orc",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 7,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "Size": "Medium",
+      "Movement": 9,
+      "Morale": {
+        "Value": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "D",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Hobgoblin",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
@@ -61,20 +87,25 @@
     {
       "Name": "Berserker",
       "Type": "Humanoid",
-      "Frequency": "Very Rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 3,
       "NumberOfAppearancesMax": 9,
       "ArmorClass": 7,
       "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 1,
       "Size": "Medium",
       "Movement": 30,
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Short Sword",
           "NumberOfAttacks": 1,
-          "Damage": "1d8"
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Hand Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
         }
       ],
       "SpecialAbilities": [
@@ -409,11 +440,17 @@
       "Morale": {
         "Value": 7
       },
-      "Attacks": [],
+      "Attacks": [
+        {
+          "Name": "Burrow into Flesh",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1"
+        }
+      ],
       "SpecialAbilities": [
         {
-          "Name": "Burrow Into Flesh",
-          "Description": "Rot grubs burrow into any living flesh they touch. Flame must be applied immediately (1d6 damage) or cure disease cast. Otherwise they reach the heart and kill the host in 1–3 turns."
+          "Name": "Disease",
+          "Description": "Burrow into Flesh"
         }
       ],
       "BaseXPValue": 0,
@@ -436,7 +473,7 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 9,
-      "MovementRate": "Very Slow",
+      "Movement": 5,
       "HitDice": 0,
       "HitDiceType": 0,
       "ExtraHitPoints": 1,
@@ -450,15 +487,15 @@
       },
       "Attacks": [
         {
-          "Name": "Burrow",
+          "Name": "Burrow into ear",
           "NumberOfAttacks": 1,
-          "Damage": "Infestation (90% fatal after 4–24 hours)"
+          "Damage": "1d1"
         }
       ],
       "SpecialAbilities": [
         {
-          "Name": "Egg Infestation",
-          "Description": "Lays 9–16 eggs in warm cavities; larvae hatch in 4–24 hours and kill host 90% of the time unless cured."
+          "Name": "Disease",
+          "Description": "Egg Infestation: Lays 9–16 eggs in warm cavities; larvae hatch in 4–24 hours and kill host 90% of the time unless cured."
         }
       ],
       "BaseXPValue": 0,

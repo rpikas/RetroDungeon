@@ -582,3 +582,18 @@ Spell affect that got a speficied duration should remain during the specified pe
 remain untill dungeon is exited. 6,0
 ändring: barkskin har duration 4 rounds + 1 round per level och effekten tar slut när striden är slut. 6,2
 barkskin förbättrar ac bara med 1, inte 3 6,2
+
+efter cure disease i templet eller spell kommer constitution tillbaka till den nivå som det var innan disease. 6,8
+if humans are encountered, then roll 1d100 to determine what is encountered
+01-25 Bandits
+26-30 Berserker
+31-45 Brigand
+46-100 charater +25 7,0
+
+if diseased by a Rot Grub show i dialog if you want to apply flame to the wound. If answer is yes, the charter taked 
+1d6 in damage. if the awnser is no, the character is diseased and will die within 10-30 rounds unless cure disease 
+cures the character before that. Both combat rounds and steps in dungeon count towards the 10-30 rounds. +157 etc 8,1
+
+if monster got SpecialAbilities Shriek then for 1d3 rounds there is a 50% chance that a new random encounter joins 
+the combat if number of groups is less than 4. +58 etc. 8,9
+SpecialAbilities Shriek should be repeated every 3rd round -20 +10 9,1

@@ -192,6 +192,18 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (member.RotGrubDeathRoundsRemaining > 0)
+            {
+                member.RotGrubDeathRoundsRemaining = Math.Max(0, member.RotGrubDeathRoundsRemaining - 1);
+                if (member.RotGrubDeathRoundsRemaining <= 0)
+                {
+                    member.CurrentHitPoints = 0;
+                    member.AddStatus(CharacterStatus.Dead);
+                    events.Add(new CombatEvent($"{member.Name} dies as rot grubs reach the heart."));
+                    continue;
+                }
+            }
+
             if (!partyActions.TryGetValue(member.Name, out var action))
                 action = CombatAction.OfType(CombatActionType.Parry);
 
@@ -482,6 +494,7 @@ public sealed class CombatResolver
                         }
                         else
                         {
+                            TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
 
                             if (HasSpecialAbility(monster, "Poison"))
@@ -1174,7 +1187,7 @@ public sealed class CombatResolver
         {
             if (!target.HasStatus(CharacterStatus.Diseased))
             {
-                target.AddStatus(CharacterStatus.Diseased);
+                target.ApplyDisease();
                 events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! (1d20 roll: {diseaseRoll})"));
             }
             else
@@ -1186,6 +1199,18 @@ public sealed class CombatResolver
         }
 
         events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease. Infection roll: {diseaseRoll} (needs 1)."));
+    }
+
+    private static void TryApplyRotGrubExposure(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!string.Equals(monster.Template.Name, "Rot Grub", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (target.RotGrubFlamePromptPending || target.RotGrubDeathRoundsRemaining > 0)
+            return;
+
+        target.MarkRotGrubExposurePendingFlame();
+        events.Add(new CombatEvent($"ROT_GRUB_PROMPT::{target.Name}"));
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

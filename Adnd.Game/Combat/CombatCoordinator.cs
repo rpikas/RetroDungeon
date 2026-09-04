@@ -20,6 +20,7 @@ using Adnd.Data.Party;
 using Adnd.Data.Spells;
 using Adnd.Data.Treasure;
 using Adnd.Game.Viewer;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -34,6 +35,7 @@ public sealed class CombatCoordinator
     private readonly SpellRepository _spellRepository = new("Data/Spells");
     private readonly TreasureService _treasureService;
     private readonly ItemRepository _itemRepository = new("Data/Items");
+    private readonly MonsterRepository _monsterRepository = new();
     private readonly Random _random = new();
     private readonly IDice _dice = new SystemDice();
 
@@ -170,6 +172,8 @@ public sealed class CombatCoordinator
             ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
+            HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+            ApplyShriekReinforcements(session, roundEvents);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
 
@@ -234,6 +238,8 @@ public sealed class CombatCoordinator
             ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
+            HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+            ApplyShriekReinforcements(session, roundEvents);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
 
@@ -811,6 +817,206 @@ public sealed class CombatCoordinator
             sb.AppendLine(e.Message);
 
         Say(owner, "Combat Round", sb.ToString(), session);
+    }
+
+    private void HandleRotGrubFlamePrompts(IWin32Window owner, CombatSession session, List<CombatEvent> roundEvents, CharacterRepository characterRepository)
+    {
+        var prompts = roundEvents
+            .Select(e => e.Message)
+            .Where(m => m.StartsWith("ROT_GRUB_PROMPT::", StringComparison.Ordinal))
+            .Select(m => m.Substring("ROT_GRUB_PROMPT::".Length).Trim())
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (prompts.Count == 0)
+            return;
+
+        roundEvents.RemoveAll(e => e.Message.StartsWith("ROT_GRUB_PROMPT::", StringComparison.Ordinal));
+
+        foreach (var targetName in prompts)
+        {
+            var target = session.Party.FirstOrDefault(c => string.Equals(c.Name, targetName, StringComparison.OrdinalIgnoreCase));
+            if (target == null || !target.RotGrubFlamePromptPending)
+                continue;
+
+            var result = AskYesNoOnBoth(owner, session,
+                "Rot Grub",
+                $"{target.Name} is infested by rot grubs. Apply flame to wound?");
+
+            if (result == DialogResult.Yes)
+            {
+                var damage = _dice.Roll(6);
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+                target.RotGrubFlamePromptPending = false;
+                target.RotGrubDeathRoundsRemaining = 0;
+
+                var actual = before - target.CurrentHitPoints;
+                roundEvents.Add(new CombatEvent($"Flame is applied to {target.Name}'s wound for {actual} damage (1d6)."));
+
+                if (target.CurrentHitPoints <= 0)
+                {
+                    target.CurrentHitPoints = 0;
+                    target.AddStatus(CharacterStatus.Dead);
+                    roundEvents.Add(new CombatEvent($"{target.Name} dies from the flame treatment."));
+                }
+            }
+            else
+            {
+                var rounds = _random.Next(10, 31);
+                target.ApplyRotGrubInfestation(rounds);
+                roundEvents.Add(new CombatEvent($"{target.Name} refuses flame and is diseased by rot grubs. Death in {rounds} rounds unless cured."));
+            }
+
+            characterRepository.Save(target);
+        }
+    }
+
+    private DialogResult AskYesNoOnBoth(IWin32Window owner, CombatSession session, string title, string question)
+    {
+        using var form = new Form
+        {
+            Text = title,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(620, 170),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 18,
+            Width = framePanel.ClientSize.Width,
+            Height = 34,
+            Text = title.ToUpperInvariant(),
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 18f, FontStyle.Bold)
+        };
+
+        var questionLabel = new Label
+        {
+            Left = 16,
+            Top = 66,
+            Width = framePanel.ClientSize.Width - 32,
+            Height = 54,
+            Text = question,
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 12f, FontStyle.Bold)
+        };
+
+        var hintLabel = new Label
+        {
+            Left = 0,
+            Top = 124,
+            Width = framePanel.ClientSize.Width,
+            Height = 26,
+            Text = "(Y/N)",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 12f, FontStyle.Bold)
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Y)
+            {
+                form.DialogResult = DialogResult.Yes;
+                form.Close();
+            }
+            else if (e.KeyCode == Keys.N || e.KeyCode == Keys.Escape)
+            {
+                form.DialogResult = DialogResult.No;
+                form.Close();
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(questionLabel);
+        framePanel.Controls.Add(hintLabel);
+        form.Controls.Add(framePanel);
+
+        var prompt = new ViewerPrompt("choice", question, null, new[]
+        {
+            new ViewerPromptOption("yes", "Yes"),
+            new ViewerPromptOption("no", "No"),
+        });
+
+        var answers = new Dictionary<string, DialogResult>
+        {
+            ["yes"] = DialogResult.Yes,
+            ["no"] = DialogResult.No,
+        };
+
+        var result = ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
+        ViewerPromptChanged?.Invoke(session, null);
+        return result;
+    }
+
+    private void ApplyShriekReinforcements(CombatSession session, List<CombatEvent> roundEvents)
+    {
+        var hasShriek = session.AliveMonsters.Any(m => m.Template.SpecialAbilities.Any(a =>
+            string.Equals(a.Name?.Trim(), "Shriek", StringComparison.OrdinalIgnoreCase)));
+        if (!hasShriek)
+            return;
+
+        var resolvedRound = session.Outcome == CombatOutcome.InProgress
+            ? Math.Max(1, session.RoundNumber - 1)
+            : session.RoundNumber;
+
+        if (resolvedRound % 3 != 0)
+            return;
+
+        if (session.GetDistinctGroupIds().Count() >= 4)
+            return;
+
+        var roll = _dice.Roll(100);
+        if (roll <= 50)
+        {
+            var candidates = _monsterRepository.GetAll()
+                .Where(m => m.Source == Sources.Adnd)
+                .ToList();
+
+            if (candidates.Count > 0)
+            {
+                var selected = candidates[_random.Next(candidates.Count)];
+                var count = _random.Next(Math.Max(1, selected.NumberOfAppearancesMin), Math.Max(selected.NumberOfAppearancesMin, selected.NumberOfAppearancesMax) + 1);
+                var existingGroups = session.GetDistinctGroupIds().ToList();
+                var nextGroupNumber = 1;
+                while (existingGroups.Contains($"Group{nextGroupNumber}", StringComparer.OrdinalIgnoreCase))
+                    nextGroupNumber++;
+
+                var groupId = $"Group{nextGroupNumber}";
+                var reinforcements = _monsterFactory.CreateGroup(selected.Name, count, groupId);
+                session.Monsters.AddRange(reinforcements);
+                roundEvents.Add(new CombatEvent($"Shriek attracts reinforcements: {count} {selected.Name}{(count > 1 ? "s" : string.Empty)} join the fight ({groupId})."));
+            }
+        }
+        else
+        {
+            roundEvents.Add(new CombatEvent($"Shriek fails to attract reinforcements this round ({roll} on 1d100)."));
+        }
     }
 
     private void ShowFinalOutcome(IWin32Window owner, CombatOutcome outcome, CombatSession session)
