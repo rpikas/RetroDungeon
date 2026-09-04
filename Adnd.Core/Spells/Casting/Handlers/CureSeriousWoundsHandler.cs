@@ -32,11 +32,7 @@ public sealed class CureSeriousWoundsHandler : ISpellEffectHandler
 
         var rng = request.Rng ?? Random.Shared;
         var before = target.CurrentHitPoints;
-        var isDruidVersion = string.Equals(spell.Id, "cure_serious_wounds_druid", StringComparison.OrdinalIgnoreCase);
-        // Cleric: 2d8+1, Druid: 2d6+1
-        var heal = isDruidVersion
-            ? rng.Next(1, 7) + rng.Next(1, 7) + 1
-            : rng.Next(1, 9) + rng.Next(1, 9) + 1;
+        var heal = rng.Next(1, 9) + rng.Next(1, 9) + 1;
         target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + heal);
         var actual = Math.Max(0, target.CurrentHitPoints - before);
 

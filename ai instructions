@@ -633,4 +633,29 @@ i think there should be a 50% chanse to try cast a spell  every round. 13.7
 when i encounter seveal monstergroups at the same time and one group is charater, reroll, they can not be combinded with other groups since they have 
 special handling and are allready several groups +24 13,9
 
+implement a level 7 druid spell called Fire Storm. It should do 2d8 damage+1 per level of the spell caster to all enemy groups. 
+If the encounter makes a save vs. spell, they only take half damage. 14,6
 
+implement a level 6 druid spell called Wall of Thorns. It should work like a wall of fire, but it should do 8 damage+1 per armor class of the encounter. 
+If the encounter makes a save vs. spell, they only take half damage. 15,3
+
+Implement a level 6 druid spell called Feeblemind. It causes one encounter in one group to be Feebleminded permanently if they fail their save vs. spell. 
+If they make their save, they are not feebleminded. When feebleminded, the encounter can not cast spells and they have. 15,8
+
+cure serious wounds that currently is a level 3 celice spell should also be a level 4 druid spell working in the exactly same way. 16,2
+
+implement a level 3 druid spell called Summon Insects. It cause all groups of encounters to be attacked by insects. The insects do 2 damage per round for 1 rounds per level of the caster. 
+There is no save throw vs this spell. 17,2
+
+implement a level 3 druid spell called Snare. it causes one group 1d6 of damage to one group. If the party tries to run whan all encounters are snared, they will always escpe. There is no save throw vs this spell. 17,5
+
+implement a level 4 druid spell called pyrotechnics. It causes one group to be blinded 1 round per level of the spell caster. There is no save throw vs this spell. when the group is blinded, they have -4 thac0.
+The spell does not stack with other spells that causes blindness. also, when hitting an invisibel target, the invisibel target thac0 is not affected by the -4 thac0. 17,9
+
+I want MagicItem json be devided into 3 json files Rings.json, RodsStavesWands.json and MiscMagic.json 18,1
+
+implement a level 3 illusionist spell called Paralyzation. The number of monsters affected depends on the level of the spell caster and HD of the monsters.
+The combined HD of the monsters affected can not be higher than the level of the spell caster multiplied by 2.
+The monsters have to roll a save vs. spell, if they fail they are paralyzed.If they make their save, they are not paralyzed. 18,4
+
+Bugfix.I still see (1 Held) (1 paralyzed) in encouter winodw after i paralyzed a monster 19,2

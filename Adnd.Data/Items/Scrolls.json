@@ -3,6 +3,78 @@
   "Items": [
 
     {
+      "Name": "Scroll of Wall of Thorns",
+      "Type": "Scroll",
+      "Cost": 1200,
+      "Weight": 1,
+      "StockQuantity": 1,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts wall of thorns" ],
+      "Rarity": "Rare",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Feeblemind",
+      "Type": "Scroll",
+      "Cost": 1500,
+      "Weight": 1,
+      "StockQuantity": 1,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts feeblemind" ],
+      "Rarity": "Rare",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Summon Insects",
+      "Type": "Scroll",
+      "Cost": 400,
+      "Weight": 1,
+      "StockQuantity": 2,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts summon insects" ],
+      "Rarity": "Uncommon",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Snare",
+      "Type": "Scroll",
+      "Cost": 300,
+      "Weight": 1,
+      "StockQuantity": 2,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts snare" ],
+      "Rarity": "Uncommon",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Pyrotechnics",
+      "Type": "Scroll",
+      "Cost": 250,
+      "Weight": 1,
+      "StockQuantity": 3,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts pyrotechnics" ],
+      "Rarity": "Common",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Fire Storm",
+      "Type": "Scroll",
+      "Cost": 900,
+      "Weight": 1,
+      "StockQuantity": 1,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts fire storm" ],
+      "Rarity": "Rare",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Scroll of Cure Serious Wounds",
       "Type": "Scroll",
       "Cost": 900,

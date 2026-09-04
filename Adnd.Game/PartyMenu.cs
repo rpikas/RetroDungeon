@@ -37,6 +37,9 @@ public class PartyMenu
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
+            new SummonInsectsHandler(),
+            new SnareHandler(),
+            new PyrotechnicsHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
             new FaerieFireHandler(),
@@ -56,11 +59,14 @@ public class PartyMenu
             new IceStormHandler(),
             new LightningBoltHandler(),
             new WallOfFireHandler(),
+            new WallOfThornsHandler(),
+            new FeeblemindHandler(),
             new CloudkillHandler(),
             new DisintegrateHandler(),
             new DeathFogHandler(),
             new DelayedBlastFireballHandler(),
             new EarthquakeHandler(),
+            new FireStormHandler(),
             new UnholyWordHandler(),
             new FingerOfDeathHandler(),
             new IncendiaryCloudHandler(),
@@ -68,6 +74,7 @@ public class PartyMenu
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
             new FearHandler(),
+            new ParalyzationHandler(),
             new PhantasmalForceHandler()
         });
 

@@ -81,6 +81,9 @@ public sealed class CombatCoordinator
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
+            new SummonInsectsHandler(),
+            new SnareHandler(),
+            new PyrotechnicsHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
             new FaerieFireHandler(),
@@ -99,6 +102,8 @@ public sealed class CombatCoordinator
             new ShieldSpellHandler(),
             new FireballHandler(),
             new WallOfFireHandler(),
+            new WallOfThornsHandler(),
+            new FeeblemindHandler(),
             new LightningBoltHandler(),
             new IceStormHandler(),
             new CloudkillHandler(),
@@ -106,6 +111,7 @@ public sealed class CombatCoordinator
             new DeathFogHandler(),
             new DelayedBlastFireballHandler(),
             new EarthquakeHandler(),
+            new FireStormHandler(),
             new UnholyWordHandler(),
             new FingerOfDeathHandler(),
             new IncendiaryCloudHandler(),
@@ -114,6 +120,7 @@ public sealed class CombatCoordinator
             new PowerWordKillHandler(),
             new ColorSprayHandler(),
             new FearHandler(),
+            new ParalyzationHandler(),
             new PhantasmalForceHandler(),
         });
 
@@ -142,7 +149,7 @@ public sealed class CombatCoordinator
             var aliveMonsters = session.AliveMonsters.ToList();
             var hasMultipleGroups = session.GetDistinctGroupIds().Take(2).Count() > 1;
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
-            var heldMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
+            var heldMonstersLegacy = 0;
             var entangledMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Entangled));
             var panickedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Panicked));
             var fearedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Feared));
@@ -156,7 +163,7 @@ public sealed class CombatCoordinator
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
             using var encounterForm = hasMultipleGroups
                 ? new EncounterForm(session, dungeonLevel)
-                : new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, entangledMonsters, panickedMonsters,
+                : new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonstersLegacy, entangledMonsters, panickedMonsters,
                     fearedMonsters, turnedMonsters, blindedMonsters, confusedMonsters, stunnedMonsters, slowedMonsters, paralyzedMonsters, unconsciousMonsters,
                     session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
             //    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount,

@@ -245,6 +245,19 @@ public sealed class CombatResolver
 
         if (partyAttemptedRun)
         {
+            var allEncounterGroupsSnared = session.GetDistinctGroupIds().All(groupId =>
+            {
+                var livingInGroup = session.GetAliveMonstersByGroup(groupId).ToList();
+                return livingInGroup.Count == 0 || livingInGroup.All(m => m.HasStatus(MonsterStatus.Snared));
+            });
+
+            if (allEncounterGroupsSnared)
+            {
+                session.Outcome = CombatOutcome.Escaped;
+                events.Add(new CombatEvent("All enemy groups are snared. The party escapes automatically!"));
+                return FinalizeRound(session, events);
+            }
+
             var runRoll = _dice.Roll(100);
             if (runRoll <= 50)
             {
@@ -258,24 +271,42 @@ public sealed class CombatResolver
 
         foreach (var monster in session.AliveMonsters.ToList())
         {
-            if (HasAnySpecialAbility(monster, "Level 1 Mage spells", "Level 1 Magic-User spells")
+            var isFeebleminded = monster.HasStatus(MonsterStatus.Feebleminded);
+
+            if (isFeebleminded
+                && HasAnySpecialAbility(monster,
+                    "Level 1 Mage spells",
+                    "Level 1 Magic-User spells",
+                    "Level 1 Priest spells",
+                    "Level 1 Cleric spells",
+                    "Level 1 Druid spells",
+                    "Level 1 Illusionist spells"))
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
+            }
+
+            if (!isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 1 Mage spells", "Level 1 Magic-User spells")
                 && ShouldTryMonsterLevel1SpellCast())
             {
                 ResolveLevel1MageSpells(monster, session, events);
                 continue;
             }
 
-            if (HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
+            if (!isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1PriestSpell(monster, session, events))
                 continue;
 
-            if (HasSpecialAbility(monster, "Level 1 Druid spells")
+            if (!isFeebleminded
+                && HasSpecialAbility(monster, "Level 1 Druid spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1DruidSpell(monster, session, events))
                 continue;
 
-            if (HasSpecialAbility(monster, "Level 1 Illusionist spells")
+            if (!isFeebleminded
+                && HasSpecialAbility(monster, "Level 1 Illusionist spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1IllusionistSpell(monster, session, events))
                 continue;
@@ -302,6 +333,27 @@ public sealed class CombatResolver
                 if (!monster.IsAlive)
                 {
                     events.Add(new CombatEvent($"{monster.DisplayName} is consumed by flames."));
+                    continue;
+                }
+            }
+
+            if (monster.HasStatus(MonsterStatus.SummonInsects))
+            {
+                var beforeHp = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - 2);
+                var actualDamage = beforeHp - monster.CurrentHitPoints;
+                WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
+                var remaining = monster.TickStatus(MonsterStatus.SummonInsects);
+
+                events.Add(new CombatEvent($"Insects bite {monster.DisplayName} for {actualDamage}. HP {beforeHp}->{monster.CurrentHitPoints}."));
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} remains swarmed by insects ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"The insect swarm around {monster.DisplayName} disperses."));
+
+                if (!monster.IsAlive)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is torn down by the insect swarm."));
                     continue;
                 }
             }
@@ -394,6 +446,17 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (monster.HasStatus(MonsterStatus.Snared))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Snared);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is snared ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} breaks free of the snare."));
+
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.TurnedUndead))
             {
                 var remaining = monster.TickStatus(MonsterStatus.TurnedUndead);
@@ -409,7 +472,7 @@ public sealed class CombatResolver
             {
                 var remaining = monster.TickStatus(MonsterStatus.Paralyzed);
                 if (remaining > 0)
-                    events.Add(new CombatEvent($"{monster.DisplayName} is held ({remaining} round(s) remaining)."));
+                    events.Add(new CombatEvent($"{monster.DisplayName} is paralyzed ({remaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{monster.DisplayName} breaks free."));
 
@@ -480,6 +543,11 @@ public sealed class CombatResolver
                     var blessedAcAdjustment = session.IsBlessed(target.Name) ? -1 : 0;
                     var targetAc = target.ArmorClass + (parrying.Contains(target.Name) ? 2 : 0);
                     var thac0 = GetMonsterThac0(monster);
+                    if (monster.HasStatus(MonsterStatus.Blinded)
+                        && !target.HasStatus(CharacterStatus.Invisible))
+                    {
+                        thac0 += 4;
+                    }
                     int needed = thac0 - targetAc;
                     int roll = _dice.Roll(20);
 

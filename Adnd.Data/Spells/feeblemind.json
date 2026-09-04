@@ -1,0 +1,13 @@
+{
+  "Id": "feeblemind",
+  "Name": "Feeblemind",
+  "Class": "Druid",
+  "Level": 6,
+  "Description": "A mind-shattering curse that ruins magical thought.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "One creature in one enemy group must save vs spell or become permanently feebleminded and unable to cast spells."
+}

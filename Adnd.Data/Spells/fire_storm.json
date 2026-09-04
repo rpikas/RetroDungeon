@@ -1,0 +1,13 @@
+{
+  "Id": "fire_storm",
+  "Name": "Fire Storm",
+  "Class": "Druid",
+  "Level": 7,
+  "Description": "A storm of sacred fire engulfs all enemies.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 2d8 + 1 per caster level damage to all enemy groups; save vs spell for half damage."
+}

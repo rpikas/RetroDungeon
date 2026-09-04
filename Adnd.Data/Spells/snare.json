@@ -1,0 +1,13 @@
+{
+  "Id": "snare",
+  "Name": "Snare",
+  "Class": "Druid",
+  "Level": 3,
+  "Description": "Binding snares lash out at one enemy group.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "One enemy group takes 1d6 damage and is snared with no save vs spell."
+}

@@ -1,0 +1,21 @@
+{
+  "Category": "MagicItem",
+  "Items": [
+    {
+      "Name": "Jeweled Amulet",
+      "Type": "MagicItem",
+      "Slot": "Neck",
+      "Cost": 5000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard", "MagicUser", "Illusionist", "Monk" ],
+      "Rarity": "Uncommon",
+      "Description": "A jeweled amulet that casts DUMAPIC.",
+      "SpecialAbilities": [ "Casts DUMAPIC" ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    }
+  ]
+}

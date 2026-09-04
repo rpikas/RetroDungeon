@@ -1,0 +1,13 @@
+{
+  "Id": "paralyzation",
+  "Name": "Paralyzation",
+  "Class": "Illusionist",
+  "Level": 3,
+  "Description": "Freezing illusion magic seizes multiple foes.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Status",
+  "EffectDescription": "Affects monsters in one group up to combined HD equal to twice caster level; each target saves vs spell or is paralyzed."
+}

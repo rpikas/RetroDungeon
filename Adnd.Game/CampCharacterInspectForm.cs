@@ -59,6 +59,9 @@ public sealed class CampCharacterInspectForm : Form
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
             new InsectPlagueHandler(),
+            new SummonInsectsHandler(),
+            new SnareHandler(),
+            new PyrotechnicsHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
             new FaerieFireHandler(),
@@ -78,11 +81,14 @@ public sealed class CampCharacterInspectForm : Form
             new IceStormHandler(),
             new LightningBoltHandler(),
             new WallOfFireHandler(),
+            new WallOfThornsHandler(),
+            new FeeblemindHandler(),
             new CloudkillHandler(),
             new DisintegrateHandler(),
             new DeathFogHandler(),
             new DelayedBlastFireballHandler(),
             new EarthquakeHandler(),
+            new FireStormHandler(),
             new UnholyWordHandler(),
             new FingerOfDeathHandler(),
             new IncendiaryCloudHandler(),
@@ -90,6 +96,7 @@ public sealed class CampCharacterInspectForm : Form
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
             new FearHandler(),
+            new ParalyzationHandler(),
             new PhantasmalForceHandler()
         });
         _spellCastingService = new SpellCastingService(resolver, _spellRepository.LoadAll());

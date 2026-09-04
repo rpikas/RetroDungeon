@@ -1,14 +1,13 @@
 {
   "Category": "MagicItem",
   "Items": [
-
     {
       "Name": "Ring of Protection +1",
       "Type": "MagicItem",
       "Slot": "Ring1",
       "Cost": 500,
       "Weight": 0,
-      "StockQuantity": 0,
+      "StockQuantity": 1,
       "ArmorClassBonus": 1,
       "Damage": "",
       "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard", "MagicUser", "Illusionist", "Monk" ]
@@ -24,22 +23,6 @@
       "IsShopBuyable": false,
       "Damage": "",
       "AllowedClasses": [ "All" ]
-    },
-    {
-      "Name": "Jeweled Amulet",
-      "Type": "MagicItem",
-      "Slot": "Neck",
-      "Cost": 5000,
-      "Weight": 1,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 0,
-      "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard", "MagicUser", "Illusionist", "Monk" ],
-      "Rarity": "Uncommon",
-      "Description": "A jeweled amulet that casts DUMAPIC.",
-      "SpecialAbilities": [ "Casts DUMAPIC" ],
-      "Source": "Wizardry",
-      "StockQuantity": 0
     },
     {
       "Name": "Ring of Shielding",
@@ -88,22 +71,6 @@
       "SpecialAbilities": [ "Casts MAKANITO" ],
       "Source": "Wizardry",
       "StockQuantity": 0
-    },
-    {
-      "Name": "Rod of Flame",
-      "Type": "MagicItem",
-      "Slot": "MainHand",
-      "Cost": 25,
-      "Weight": 2,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 0,
-      "Damage": "",
-      "AllowedClasses": [ "Ranger", "MagicUser", "Illusionist" ],
-      "Rarity": "Rare",
-      "Description": "A fiery rod that protects against fire and casts Fireball.",
-      "SpecialAbilities": [ "Casts Fireball" ],
-      "Source": "Wizardry",
-      "StockQuantity": 2
     },
     {
       "Name": "Ring of Healing",

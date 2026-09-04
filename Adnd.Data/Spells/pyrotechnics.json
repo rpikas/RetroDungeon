@@ -1,0 +1,13 @@
+{
+  "Id": "pyrotechnics",
+  "Name": "Pyrotechnics",
+  "Class": "Druid",
+  "Level": 4,
+  "Description": "A burst of flame and sparks blinds one enemy group.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Status",
+  "EffectDescription": "One enemy group is blinded for 1 round per caster level, no save. Blinded attackers suffer -4 THAC0 against non-invisible targets."
+}

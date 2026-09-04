@@ -25,7 +25,6 @@ public sealed class EncounterForm : Form
     private readonly string _monsterName;
     private readonly int _monsterCount;
     private readonly int _asleepMonsterCount;
-    private readonly int _heldMonsterCount;
     private readonly int _entangledMonsterCount;
     private readonly int _panickedMonsterCount;
     private readonly int _fearedMonsterCount;
@@ -67,14 +66,13 @@ public sealed class EncounterForm : Form
     /// ordinary one-group fight -- which is most fights -- could only offer "Fight" and let the resolver
     /// pick, which is exactly the choice being added.
     /// </param>
-    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount, int fearedMonsterCount, 
+    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int paralyzedMonsterCountLegacy, int entangledMonsterCount, int panickedMonsterCount, int fearedMonsterCount, 
         int turnedMonsterCount, int blindedMonsterCount, int confusedMonsterCount, int stunnedMonsterCount, int slowedMonsterCount, int paralyzedMonsterCount, int unconsciousMonsterCount,
         List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
     {
         _monsterName = monsterName;
         _monsterCount = monsterCount;
         _asleepMonsterCount = asleepMonsterCount;
-        _heldMonsterCount = heldMonsterCount;
         _entangledMonsterCount = entangledMonsterCount;
         _panickedMonsterCount = panickedMonsterCount;
         _fearedMonsterCount = fearedMonsterCount;
@@ -206,7 +204,6 @@ public sealed class EncounterForm : Form
             var name = monstersInGroup.First().Name;
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
-            var heldCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
             var entangledCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Entangled));
             var panickedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Panicked));
             var fearedCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Feared));
@@ -224,7 +221,6 @@ public sealed class EncounterForm : Form
 
             var statusBits = new List<string>();
             if (asleepCount > 0) statusBits.Add($"{asleepCount} asleep");
-            if (heldCount > 0) statusBits.Add($"{heldCount} held");
             if (unconsciousCount > 0) statusBits.Add($"{unconsciousCount} unconscious");
             if (entangledCount > 0) statusBits.Add($"{entangledCount} entangled");
             if (panickedCount > 0) statusBits.Add($"{panickedCount} panicked");
@@ -336,7 +332,6 @@ public sealed class EncounterForm : Form
             : groupsLine1 + Environment.NewLine + groupsLine2;
         _monsterCount = session.AliveMonsters.Count();
         _asleepMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
-        _heldMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
         //_unconsciousMonsterCount = session.AliveMonsters.Count(m => m.HasStatus(MonsterStatus.Unconscious));
 
         Text = "Encounter";
@@ -1451,7 +1446,6 @@ public sealed class EncounterForm : Form
     {
         var aliveMonsters = _session?.AliveMonsters.ToList();
         var asleepCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Asleep)) ?? _asleepMonsterCount;
-        var heldCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Paralyzed)) ?? _heldMonsterCount;
         var entangledCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Entangled)) ?? _entangledMonsterCount;
         var panickedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Panicked)) ?? _panickedMonsterCount;
         var fearedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Feared)) ?? _fearedMonsterCount;
@@ -1465,9 +1459,6 @@ public sealed class EncounterForm : Form
 
         var asleepText = !_multipleGroups && asleepCount > 0
             ? $"  ({asleepCount} ASLEEP)"
-            : string.Empty;
-        var heldText = !_multipleGroups && heldCount > 0
-            ? $"  ({heldCount} HELD)"
             : string.Empty;
         var entangledText = !_multipleGroups && entangledCount > 0
             ? $"  ({entangledCount} ENTANGLED)"
@@ -1503,7 +1494,7 @@ public sealed class EncounterForm : Form
             ? _monsterName.ToUpperInvariant() + "S"
             : _monsterName.ToUpperInvariant();
 
-        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{heldText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}";
+        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

@@ -1,0 +1,13 @@
+{
+  "Id": "summon_insects",
+  "Name": "Summon Insects",
+  "Class": "Druid",
+  "Level": 3,
+  "Description": "Calls a ravenous insect swarm upon all enemies.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "All enemy groups take 2 damage per round for 1 round per caster level. No save vs spell."
+}

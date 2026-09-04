@@ -1,0 +1,13 @@
+{
+  "Id": "wall_of_thorns",
+  "Name": "Wall of Thorns",
+  "Class": "Druid",
+  "Level": 6,
+  "Description": "A vast barrier of razor thorns lashes all enemy groups.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 8 + current AC damage to all enemy groups; save vs spell for half damage."
+}
