@@ -36,7 +36,9 @@ public sealed class CharacterSavingThrowService
 
     private int GetClassSaveTarget(CharacterClass cls, int level, SaveThrowType type)
     {
-        if (!_table.Value.TryGetValue(cls, out var progressions) || progressions.Count == 0)
+        var mappedClass = MapClassForSavingThrows(cls);
+
+        if (!_table.Value.TryGetValue(mappedClass, out var progressions) || progressions.Count == 0)
             return 20;
 
         var progression = progressions.FirstOrDefault(p => p.Contains(level))
@@ -48,6 +50,18 @@ public sealed class CharacterSavingThrowService
             SaveThrowType.BreathWeapon => progression.BreathWeapon,
             SaveThrowType.Spell => progression.Spell,
             _ => 20
+        };
+    }
+
+    private static CharacterClass MapClassForSavingThrows(CharacterClass cls)
+    {
+        return cls switch
+        {
+            CharacterClass.Druid => CharacterClass.Cleric,
+            CharacterClass.Paladin or CharacterClass.Ranger => CharacterClass.Fighter,
+            CharacterClass.Monk or CharacterClass.Bard or CharacterClass.Assassin => CharacterClass.Thief,
+            CharacterClass.Illusionist => CharacterClass.MagicUser,
+            _ => cls
         };
     }
 

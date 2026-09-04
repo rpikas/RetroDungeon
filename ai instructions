@@ -597,3 +597,9 @@ cures the character before that. Both combat rounds and steps in dungeon count t
 if monster got SpecialAbilities Shriek then for 1d3 rounds there is a 50% chance that a new random encounter joins 
 the combat if number of groups is less than 4. +58 etc. 8,9
 SpecialAbilities Shriek should be repeated every 3rd round -20 +10 9,1
+When members of the party is asleep, automatically reorder the party so the asleep charater is last in the party. -14 +34 9,5
+shrieker should not hit only use their special attacks +6 9,7
+Durids ska slår save throws som clerics.
+Paladins och Ragnger slår save throws som fighters. 
+Monks, Bars och Assasins slår save throws som thieves.
+Illusionists slår save som Magic-Users.+15 9,9

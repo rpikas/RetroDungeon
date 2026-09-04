@@ -758,46 +758,66 @@ public sealed class CombatCoordinator
     private void MoveDeadPartyMembersToEnd(List<Character> combatParty)
     {
         // Reorder in-memory combat turn order immediately.
-        var alive = combatParty
-            .Where(c => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead))
+        var awakeAlive = combatParty
+            .Where(c => c.CurrentHitPoints > 0
+                        && !c.HasStatus(CharacterStatus.Dead)
+                        && !c.HasStatus(CharacterStatus.Asleep))
+            .ToList();
+        var asleepAlive = combatParty
+            .Where(c => c.CurrentHitPoints > 0
+                        && !c.HasStatus(CharacterStatus.Dead)
+                        && c.HasStatus(CharacterStatus.Asleep))
             .ToList();
         var dead = combatParty
             .Where(c => c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead))
             .ToList();
 
         combatParty.Clear();
-        combatParty.AddRange(alive);
+        combatParty.AddRange(awakeAlive);
+        combatParty.AddRange(asleepAlive);
         combatParty.AddRange(dead);
 
         var partyData = _partyRepository.Load();
         if (partyData.Members.Count == 0)
             return;
 
-        var deadLookup = combatParty
+        var stateLookup = combatParty
             .ToDictionary(
                 c => c.Name,
-                c => c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead),
+                c => c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead)
+                    ? 2
+                    : c.HasStatus(CharacterStatus.Asleep) ? 1 : 0,
                 StringComparer.OrdinalIgnoreCase);
 
-        var aliveNames = new List<string>();
+        var awakeAliveNames = new List<string>();
+        var asleepAliveNames = new List<string>();
         var unknownNames = new List<string>();
         var deadNames = new List<string>();
 
         foreach (var memberName in partyData.Members)
         {
-            if (!deadLookup.TryGetValue(memberName, out var isDead))
+            if (!stateLookup.TryGetValue(memberName, out var state))
             {
                 unknownNames.Add(memberName);
                 continue;
             }
 
-            if (isDead)
+            if (state == 2)
+            {
                 deadNames.Add(memberName);
+            }
+            else if (state == 1)
+            {
+                asleepAliveNames.Add(memberName);
+            }
             else
-                aliveNames.Add(memberName);
+            {
+                awakeAliveNames.Add(memberName);
+            }
         }
 
-        var reordered = aliveNames
+        var reordered = awakeAliveNames
+            .Concat(asleepAliveNames)
             .Concat(unknownNames)
             .Concat(deadNames)
             .ToList();

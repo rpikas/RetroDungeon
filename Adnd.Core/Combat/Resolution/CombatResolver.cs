@@ -443,6 +443,12 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (HasSpecialAbility(monster, "Shriek"))
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} shrieks and does not make physical attacks."));
+                continue;
+            }
+
             var attacks = monster.Template.Attacks.Count > 0 ? monster.Template.Attacks : new List<Adnd.Core.Monsters.MonsterAttack> { new() { NumberOfAttacks = 1, Damage = "1d4", Name = "Claw" } };
 
             foreach (var attack in attacks)

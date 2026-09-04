@@ -1,348 +1,139 @@
 {
   "SavingThrows": [
     {
-      "Class": "Fighter",
-      "Progression": [
-        {
-          "LevelRange": "1-3",
-          "ParalyzationPoisonDeath": 14,
-          "RodStaffWand": 16,
-          "PetrificationPolymorph": 15,
-          "BreathWeapon": 17,
-          "Spell": 17
-        },
-        {
-          "LevelRange": "4-6",
-          "ParalyzationPoisonDeath": 12,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 13,
-          "BreathWeapon": 15,
-          "Spell": 15
-        },
-        {
-          "LevelRange": "7-9",
-          "ParalyzationPoisonDeath": 10,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 13,
-          "Spell": 13
-        },
-        {
-          "LevelRange": "10-12",
-          "ParalyzationPoisonDeath": 8,
-          "RodStaffWand": 10,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 11,
-          "Spell": 11
-        },
-        {
-          "LevelRange": "13-15",
-          "ParalyzationPoisonDeath": 6,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 9,
-          "Spell": 9
-        },
-        {
-          "LevelRange": "16+",
-          "ParalyzationPoisonDeath": 4,
-          "RodStaffWand": 6,
-          "PetrificationPolymorph": 5,
-          "BreathWeapon": 7,
-          "Spell": 7
-        }
-      ]
-    },
-    {
-      "Class": "Paladin",
-      "Progression": [
-        {
-          "LevelRange": "1-3",
-          "ParalyzationPoisonDeath": 12,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 13,
-          "BreathWeapon": 15,
-          "Spell": 15
-        },
-        {
-          "LevelRange": "4-6",
-          "ParalyzationPoisonDeath": 10,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 13,
-          "Spell": 13
-        },
-        {
-          "LevelRange": "7-9",
-          "ParalyzationPoisonDeath": 8,
-          "RodStaffWand": 10,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 11,
-          "Spell": 11
-        },
-        {
-          "LevelRange": "10-12",
-          "ParalyzationPoisonDeath": 6,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 9,
-          "Spell": 9
-        },
-        {
-          "LevelRange": "13-15",
-          "ParalyzationPoisonDeath": 4,
-          "RodStaffWand": 6,
-          "PetrificationPolymorph": 5,
-          "BreathWeapon": 7,
-          "Spell": 7
-        },
-        {
-          "LevelRange": "16+",
-          "ParalyzationPoisonDeath": 2,
-          "RodStaffWand": 4,
-          "PetrificationPolymorph": 3,
-          "BreathWeapon": 5,
-          "Spell": 5
-        }
-      ]
-    },
-    {
-      "Class": "Ranger",
-      "Progression": [
-        {
-          "LevelRange": "1-7",
-          "ParalyzationPoisonDeath": 14,
-          "RodStaffWand": 16,
-          "PetrificationPolymorph": 15,
-          "BreathWeapon": 17,
-          "Spell": 17
-        },
-        {
-          "LevelRange": "8-10",
-          "ParalyzationPoisonDeath": 12,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 13,
-          "BreathWeapon": 15,
-          "Spell": 15
-        },
-        {
-          "LevelRange": "11-13",
-          "ParalyzationPoisonDeath": 10,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 13,
-          "Spell": 13
-        },
-        {
-          "LevelRange": "14-16",
-          "ParalyzationPoisonDeath": 8,
-          "RodStaffWand": 10,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 11,
-          "Spell": 11
-        },
-        {
-          "LevelRange": "17+",
-          "ParalyzationPoisonDeath": 6,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 9,
-          "Spell": 9
-        }
-      ]
-    },
-    {
       "Class": "Cleric",
       "Progression": [
         {
           "LevelRange": "1-3",
           "ParalyzationPoisonDeath": 10,
-          "RodStaffWand": 14,
           "PetrificationPolymorph": 13,
+          "RodStaffWand": 14,
           "BreathWeapon": 16,
           "Spell": 15
         },
         {
           "LevelRange": "4-6",
-          "ParalyzationPoisonDeath": 8,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 14,
-          "Spell": 13
-        },
-        {
-          "LevelRange": "7-9",
-          "ParalyzationPoisonDeath": 6,
-          "RodStaffWand": 10,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 12,
-          "Spell": 11
-        },
-        {
-          "LevelRange": "10-12",
-          "ParalyzationPoisonDeath": 4,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 10,
-          "Spell": 9
-        },
-        {
-          "LevelRange": "13-15",
-          "ParalyzationPoisonDeath": 2,
-          "RodStaffWand": 6,
-          "PetrificationPolymorph": 5,
-          "BreathWeapon": 8,
-          "Spell": 7
-        },
-        {
-          "LevelRange": "16+",
-          "ParalyzationPoisonDeath": 1,
-          "RodStaffWand": 4,
-          "PetrificationPolymorph": 4,
-          "BreathWeapon": 6,
-          "Spell": 5
-        }
-      ]
-    },
-    {
-      "Class": "Druid",
-      "Progression": [
-        {
-          "LevelRange": "1-3",
-          "ParalyzationPoisonDeath": 10,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 13,
-          "BreathWeapon": 16,
+          "ParalyzationPoisonDeath": 9,
+          "PetrificationPolymorph": 12,
+          "RodStaffWand": 13,
+          "BreathWeapon": 15,
           "Spell": 14
         },
         {
-          "LevelRange": "4-6",
-          "ParalyzationPoisonDeath": 8,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 14,
+          "LevelRange": "7-9",
+          "ParalyzationPoisonDeath": 7,
+          "PetrificationPolymorph": 10,
+          "RodStaffWand": 11,
+          "BreathWeapon": 13,
           "Spell": 12
         },
         {
-          "LevelRange": "7-9",
-          "ParalyzationPoisonDeath": 6,
-          "RodStaffWand": 10,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 12,
-          "Spell": 10
-        },
-        {
           "LevelRange": "10-12",
-          "ParalyzationPoisonDeath": 4,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 10,
-          "Spell": 8
-        },
-        {
-          "LevelRange": "13-15",
-          "ParalyzationPoisonDeath": 2,
-          "RodStaffWand": 6,
-          "PetrificationPolymorph": 5,
-          "BreathWeapon": 8,
-          "Spell": 6
-        },
-        {
-          "LevelRange": "16+",
-          "ParalyzationPoisonDeath": 1,
-          "RodStaffWand": 4,
-          "PetrificationPolymorph": 4,
-          "BreathWeapon": 6,
-          "Spell": 4
-        }
-      ]
-    },
-    {
-      "Class": "Thief",
-      "Progression": [
-        {
-          "LevelRange": "1-4",
-          "ParalyzationPoisonDeath": 13,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 12,
-          "BreathWeapon": 16,
-          "Spell": 15
-        },
-        {
-          "LevelRange": "5-8",
-          "ParalyzationPoisonDeath": 11,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 10,
-          "BreathWeapon": 14,
-          "Spell": 13
-        },
-        {
-          "LevelRange": "9-12",
-          "ParalyzationPoisonDeath": 9,
+          "ParalyzationPoisonDeath": 6,
+          "PetrificationPolymorph": 9,
           "RodStaffWand": 10,
-          "PetrificationPolymorph": 8,
           "BreathWeapon": 12,
           "Spell": 11
         },
         {
-          "LevelRange": "13-16",
-          "ParalyzationPoisonDeath": 7,
+          "LevelRange": "13-15",
+          "ParalyzationPoisonDeath": 5,
+          "PetrificationPolymorph": 8,
+          "RodStaffWand": 9,
+          "BreathWeapon": 11,
+          "Spell": 10
+        },
+        {
+          "LevelRange": "16-18",
+          "ParalyzationPoisonDeath": 4,
+          "PetrificationPolymorph": 7,
           "RodStaffWand": 8,
-          "PetrificationPolymorph": 6,
           "BreathWeapon": 10,
           "Spell": 9
         },
         {
-          "LevelRange": "17+",
-          "ParalyzationPoisonDeath": 5,
+          "LevelRange": "19+",
+          "ParalyzationPoisonDeath": 2,
+          "PetrificationPolymorph": 5,
           "RodStaffWand": 6,
-          "PetrificationPolymorph": 4,
           "BreathWeapon": 8,
           "Spell": 7
         }
       ]
     },
     {
-      "Class": "Assassin",
+      "Class": "Fighter",
       "Progression": [
         {
-          "LevelRange": "1-4",
-          "ParalyzationPoisonDeath": 13,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 12,
-          "BreathWeapon": 16,
-          "Spell": 15
+          "LevelRange": "0",
+          "ParalyzationPoisonDeath": 16,
+          "PetrificationPolymorph": 17,
+          "RodStaffWand": 18,
+          "BreathWeapon": 20,
+          "Spell": 19
         },
         {
-          "LevelRange": "5-8",
+          "LevelRange": "1-2",
+          "ParalyzationPoisonDeath": 14,
+          "PetrificationPolymorph": 15,
+          "RodStaffWand": 16,
+          "BreathWeapon": 17,
+          "Spell": 17
+        },
+        {
+          "LevelRange": "3-4",
+          "ParalyzationPoisonDeath": 13,
+          "PetrificationPolymorph": 14,
+          "RodStaffWand": 15,
+          "BreathWeapon": 16,
+          "Spell": 16
+        },
+        {
+          "LevelRange": "5-6",
           "ParalyzationPoisonDeath": 11,
+          "PetrificationPolymorph": 12,
+          "RodStaffWand": 13,
+          "BreathWeapon": 13,
+          "Spell": 14
+        },
+        {
+          "LevelRange": "7-8",
+          "ParalyzationPoisonDeath": 10,
+          "PetrificationPolymorph": 11,
           "RodStaffWand": 12,
-          "PetrificationPolymorph": 10,
-          "BreathWeapon": 14,
+          "BreathWeapon": 12,
           "Spell": 13
         },
         {
-          "LevelRange": "9-12",
-          "ParalyzationPoisonDeath": 9,
+          "LevelRange": "9-10",
+          "ParalyzationPoisonDeath": 8,
+          "PetrificationPolymorph": 9,
           "RodStaffWand": 10,
-          "PetrificationPolymorph": 8,
-          "BreathWeapon": 12,
+          "BreathWeapon": 9,
           "Spell": 11
         },
         {
-          "LevelRange": "13-16",
+          "LevelRange": "11-12",
           "ParalyzationPoisonDeath": 7,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 6,
-          "BreathWeapon": 10,
-          "Spell": 9
+          "PetrificationPolymorph": 8,
+          "RodStaffWand": 9,
+          "BreathWeapon": 8,
+          "Spell": 10
         },
         {
-          "LevelRange": "17+",
+          "LevelRange": "13-14",
           "ParalyzationPoisonDeath": 5,
+          "PetrificationPolymorph": 6,
+          "RodStaffWand": 7,
+          "BreathWeapon": 5,
+          "Spell": 8
+        },
+        {
+          "LevelRange": "15-16",
+          "ParalyzationPoisonDeath": 4,
+          "PetrificationPolymorph": 5,
           "RodStaffWand": 6,
-          "PetrificationPolymorph": 4,
-          "BreathWeapon": 8,
+          "BreathWeapon": 4,
           "Spell": 7
         }
       ]
@@ -353,169 +144,95 @@
         {
           "LevelRange": "1-5",
           "ParalyzationPoisonDeath": 14,
-          "RodStaffWand": 11,
           "PetrificationPolymorph": 13,
-          "BreathWeapon": 15,
-          "Spell": 12
-        },
-        {
-          "LevelRange": "6-10",
-          "ParalyzationPoisonDeath": 13,
-          "RodStaffWand": 9,
-          "PetrificationPolymorph": 12,
-          "BreathWeapon": 14,
-          "Spell": 10
-        },
-        {
-          "LevelRange": "11-15",
-          "ParalyzationPoisonDeath": 11,
-          "RodStaffWand": 7,
-          "PetrificationPolymorph": 10,
-          "BreathWeapon": 12,
-          "Spell": 8
-        },
-        {
-          "LevelRange": "16-20",
-          "ParalyzationPoisonDeath": 9,
-          "RodStaffWand": 5,
-          "PetrificationPolymorph": 8,
-          "BreathWeapon": 10,
-          "Spell": 6
-        },
-        {
-          "LevelRange": "21+",
-          "ParalyzationPoisonDeath": 7,
-          "RodStaffWand": 3,
-          "PetrificationPolymorph": 6,
-          "BreathWeapon": 8,
-          "Spell": 4
-        }
-      ]
-    },
-    {
-      "Class": "Illusionist",
-      "Progression": [
-        {
-          "LevelRange": "1-5",
-          "ParalyzationPoisonDeath": 13,
-          "RodStaffWand": 12,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 16,
-          "Spell": 12
-        },
-        {
-          "LevelRange": "6-10",
-          "ParalyzationPoisonDeath": 11,
-          "RodStaffWand": 10,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 14,
-          "Spell": 10
-        },
-        {
-          "LevelRange": "11-15",
-          "ParalyzationPoisonDeath": 9,
-          "RodStaffWand": 8,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 12,
-          "Spell": 8
-        },
-        {
-          "LevelRange": "16-20",
-          "ParalyzationPoisonDeath": 7,
-          "RodStaffWand": 6,
-          "PetrificationPolymorph": 5,
-          "BreathWeapon": 10,
-          "Spell": 6
-        },
-        {
-          "LevelRange": "21+",
-          "ParalyzationPoisonDeath": 5,
-          "RodStaffWand": 4,
-          "PetrificationPolymorph": 3,
-          "BreathWeapon": 8,
-          "Spell": 4
-        }
-      ]
-    },
-    {
-      "Class": "Monk",
-      "Progression": [
-        {
-          "LevelRange": "1-2",
-          "ParalyzationPoisonDeath": 12,
-          "RodStaffWand": 13,
-          "PetrificationPolymorph": 11,
-          "BreathWeapon": 15,
-          "Spell": 14
-        },
-        {
-          "LevelRange": "3-5",
-          "ParalyzationPoisonDeath": 10,
           "RodStaffWand": 11,
-          "PetrificationPolymorph": 9,
-          "BreathWeapon": 13,
+          "BreathWeapon": 15,
           "Spell": 12
         },
         {
-          "LevelRange": "6-8",
-          "ParalyzationPoisonDeath": 8,
+          "LevelRange": "6-10",
+          "ParalyzationPoisonDeath": 13,
+          "PetrificationPolymorph": 11,
           "RodStaffWand": 9,
-          "PetrificationPolymorph": 7,
-          "BreathWeapon": 11,
+          "BreathWeapon": 13,
           "Spell": 10
         },
         {
-          "LevelRange": "9-11",
-          "ParalyzationPoisonDeath": 6,
+          "LevelRange": "11-15",
+          "ParalyzationPoisonDeath": 11,
+          "PetrificationPolymorph": 9,
           "RodStaffWand": 7,
-          "PetrificationPolymorph": 5,
-          "BreathWeapon": 9,
+          "BreathWeapon": 11,
           "Spell": 8
         },
         {
-          "LevelRange": "12-14",
-          "ParalyzationPoisonDeath": 4,
+          "LevelRange": "16-20",
+          "ParalyzationPoisonDeath": 10,
+          "PetrificationPolymorph": 7,
           "RodStaffWand": 5,
-          "PetrificationPolymorph": 3,
-          "BreathWeapon": 7,
+          "BreathWeapon": 9,
           "Spell": 6
         },
         {
-          "LevelRange": "15+",
-          "ParalyzationPoisonDeath": 2,
+          "LevelRange": "21+",
+          "ParalyzationPoisonDeath": 8,
+          "PetrificationPolymorph": 5,
           "RodStaffWand": 3,
-          "PetrificationPolymorph": 1,
-          "BreathWeapon": 5,
+          "BreathWeapon": 7,
           "Spell": 4
         }
       ]
     },
     {
-      "Class": "Bard",
+      "Class": "Thief",
       "Progression": [
         {
           "LevelRange": "1-4",
           "ParalyzationPoisonDeath": 13,
-          "RodStaffWand": 14,
           "PetrificationPolymorph": 12,
+          "RodStaffWand": 14,
           "BreathWeapon": 16,
           "Spell": 15
         },
         {
-          "LevelRange": "5-7",
-          "ParalyzationPoisonDeath": 11,
+          "LevelRange": "5-8",
+          "ParalyzationPoisonDeath": 12,
+          "PetrificationPolymorph": 11,
           "RodStaffWand": 12,
-          "PetrificationPolymorph": 10,
-          "BreathWeapon": 14,
+          "BreathWeapon": 15,
           "Spell": 13
         },
         {
-          "LevelRange": "8+",
+          "LevelRange": "9-12",
+          "ParalyzationPoisonDeath": 11,
+          "PetrificationPolymorph": 10,
+          "RodStaffWand": 10,
+          "BreathWeapon": 14,
+          "Spell": 11
+        },
+        {
+          "LevelRange": "13-16",
           "ParalyzationPoisonDeath": 10,
-          "RodStaffWand": 14,
-          "PetrificationPolymorph": 13,
-          "BreathWeapon": 16,
-          "Spell": 14
+          "PetrificationPolymorph": 9,
+          "RodStaffWand": 8,
+          "BreathWeapon": 13,
+          "Spell": 9
+        },
+        {
+          "LevelRange": "17-20",
+          "ParalyzationPoisonDeath": 9,
+          "PetrificationPolymorph": 8,
+          "RodStaffWand": 6,
+          "BreathWeapon": 12,
+          "Spell": 7
+        },
+        {
+          "LevelRange": "21+",
+          "ParalyzationPoisonDeath": 8,
+          "PetrificationPolymorph": 7,
+          "RodStaffWand": 4,
+          "BreathWeapon": 11,
+          "Spell": 5
         }
       ]
     }
