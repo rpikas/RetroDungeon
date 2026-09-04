@@ -140,6 +140,7 @@ public sealed class CombatCoordinator
             }
 
             var aliveMonsters = session.AliveMonsters.ToList();
+            var hasMultipleGroups = session.GetDistinctGroupIds().Take(2).Count() > 1;
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var heldMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
             var entangledMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Entangled));
@@ -153,9 +154,11 @@ public sealed class CombatCoordinator
             var paralyzedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
             var unconsciousMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Unconscious));
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
-            using var encounterForm = new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, entangledMonsters, panickedMonsters, 
-                fearedMonsters, turnedMonsters, blindedMonsters, confusedMonsters, stunnedMonsters, slowedMonsters, paralyzedMonsters, unconsciousMonsters,
-                session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
+            using var encounterForm = hasMultipleGroups
+                ? new EncounterForm(session, dungeonLevel)
+                : new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonsters, entangledMonsters, panickedMonsters,
+                    fearedMonsters, turnedMonsters, blindedMonsters, confusedMonsters, stunnedMonsters, slowedMonsters, paralyzedMonsters, unconsciousMonsters,
+                    session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
             //    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount,
             //    int fearedMonsterCount, int turnedMonsterCount, int blindedMonsterCount, int confusedMonsterCount, int stunnedMonsterCount, int slowedMonsterCount, int paralyzedMonsterCount,
             //    int unconsciousMonsterCount, List<Character> party, int roundNumber, int? dungeonLevel = null, Monster? monsterTemplate = null, CombatSession? session = null)
@@ -184,6 +187,62 @@ public sealed class CombatCoordinator
         {
             ApplyVictoryRewards(owner, session, dungeonLevel);
         }
+
+        RemoveTemporaryCombatEffects(session);
+
+        foreach (var character in party)
+            characterRepository.Save(character);
+
+        MoveDeadPartyMembersToEnd(session.Party);
+        ShowFinalOutcome(owner, session.Outcome, session);
+        return session.Outcome;
+    }
+
+    public CombatOutcome StartEncounterWithGroupCounts(IWin32Window owner, List<(string name, int count)> groups, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null)
+    {
+        var normalized = groups
+            .Where(g => !string.IsNullOrWhiteSpace(g.name))
+            .Select(g => (g.name, Math.Max(1, g.count)))
+            .ToList();
+
+        if (normalized.Count == 0)
+            return CombatOutcome.Escaped;
+
+        var monsters = _monsterFactory.CreateMultipleGroups(normalized);
+        var session = new CombatSession(party, monsters);
+        RestorePersistedRoundEffects(session);
+        EncounterStarted?.Invoke(session);
+
+        while (session.Outcome == CombatOutcome.InProgress)
+        {
+            if (!session.AliveParty.Any())
+            {
+                session.Outcome = CombatOutcome.Defeat;
+                break;
+            }
+
+            using var encounterForm = new EncounterForm(session, dungeonLevel);
+            encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
+            var dialogResult = encounterForm.ShowDialog(owner);
+            if (dialogResult != DialogResult.OK)
+            {
+                session.Outcome = CombatOutcome.Escaped;
+                break;
+            }
+
+            ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
+
+            var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
+            HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+            ApplyShriekReinforcements(session, roundEvents);
+            RoundResolved?.Invoke(session);
+            ShowRoundEvents(owner, roundEvents, session);
+
+            MoveDeadPartyMembersToEnd(session.Party);
+        }
+
+        if (session.Outcome == CombatOutcome.Victory)
+            ApplyVictoryRewards(owner, session, dungeonLevel);
 
         RemoveTemporaryCombatEffects(session);
 
@@ -333,11 +392,21 @@ public sealed class CombatCoordinator
             session.ClearBarkskin(name);
         }
 
+        foreach (var name in session.FaerieFiredPartyMembers.ToList())
+        {
+            var c = session.Party.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (c == null)
+                continue;
+
+            c.ArmorClass -= 2;
+        }
+
         session.BlessedPartyMembers.Clear();
         session.InvisiblyBuffedPartyMembers.Clear();
         session.ImprovedInvisibilityRounds.Clear();
         session.BarkskinBonuses.Clear();
         session.BarkskinRounds.Clear();
+        session.FaerieFiredPartyMembers.Clear();
         session.MirrorImageCounts.Clear();
         session.MirrorImageRounds.Clear();
     }
@@ -996,16 +1065,10 @@ public sealed class CombatCoordinator
 
     private void ApplyShriekReinforcements(CombatSession session, List<CombatEvent> roundEvents)
     {
-        var hasShriek = session.AliveMonsters.Any(m => m.Template.SpecialAbilities.Any(a =>
-            string.Equals(a.Name?.Trim(), "Shriek", StringComparison.OrdinalIgnoreCase)));
+        var hasShriek = session.AliveMonsters.Any(m =>
+            string.Equals(m.Template.Name, "Shrieker", StringComparison.OrdinalIgnoreCase)
+            || m.Template.SpecialAbilities.Any(a => string.Equals(a.Name?.Trim(), "Shriek", StringComparison.OrdinalIgnoreCase)));
         if (!hasShriek)
-            return;
-
-        var resolvedRound = session.Outcome == CombatOutcome.InProgress
-            ? Math.Max(1, session.RoundNumber - 1)
-            : session.RoundNumber;
-
-        if (resolvedRound % 3 != 0)
             return;
 
         if (session.GetDistinctGroupIds().Count() >= 4)
@@ -1016,6 +1079,8 @@ public sealed class CombatCoordinator
         {
             var candidates = _monsterRepository.GetAll()
                 .Where(m => m.Source == Sources.Adnd)
+                .Where(m => m.DungeonLevel == 2)
+                .Where(m => !string.Equals(m.Name, "Shrieker", StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             if (candidates.Count > 0)

@@ -145,41 +145,6 @@
       "Source": "AD&D",
       "DM comment": "Brigands are better armed and armored than Bandits; typically chaotic evil and more ruthless.  1e Dungeon Masters Guide p.175"
     },
-    {
-      "Name": "Adventurer",
-      "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
-      "ArmorClass": 3,
-      "HitDice": 2,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 30,
-      "Class": "MagicUser",
-      "Attacks": [
-        {
-          "Name": "Party Weapons",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 1 Priest spells",
-          "Description": "Level 1 Priest spells."
-        },
-        {
-          "Name": "Level 1 Mage spells",
-          "Description": "Level 1 Mage spells."
-        }
-      ],
-      "BaseXPValue": 35,
-      "TreasureType": "Mixed (individual equipment only)",
-      "Source": "AD&D",
-      "DM comment": "This JSON represents a full adventuring party using the same structure as Berserkers; individual members can be expanded separately."
-    },
 
     {
       "Name": "Buccaneer",
@@ -1115,8 +1080,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Level 1 Mage spells",
-          "Description": "Level 1 Mage spells"
+          "Name": "Level 1 Magic-User spells",
+          "Description": "Level 1 Magic-User spells"
         }
       ],
       "BaseXPValue": 25,
@@ -1125,7 +1090,7 @@
     },
 
     {
-      "Name": "Lvl 1 Priest",
+      "Name": "Lvl 1 Cleric",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 2,
@@ -1151,16 +1116,329 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Level 1 Priest spells",
-          "Description": "Level 1 Priest spells"
+          "Name": "Level 1 Cleric spells",
+          "Description": "Level 1 Cleric spells"
         }
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J",
-      "Source": "Wizardry"
+      "Source": "Adnd"
     },
-
+    {
+      "Name": "Lvl 1 Fighter",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 1,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 16,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Thief",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Thief Skills",
+          "Description": "Pick Pockets, Move Silently, Hide in Shadows, Open Locks, Find/Remove Traps."
+        }
+      ],
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Monk",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 10,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Unarmed Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Monk Abilities",
+          "Description": "Open Hand attack, AC improves with level, Thief saving throws."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Assassin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Assassination",
+          "Description": "Can attempt assassination attack; uses Thief saving throws."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Bard",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Bardic Music",
+          "Description": "Can inspire allies and charm creatures; uses Thief saving throws."
+        }
+      ],
+      "BaseXPValue": 40,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Druid",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Druid spells",
+          "Description": "Access to 1st-level druid spells such as Detect Magic, Faerie Fire, Pass Without Trace."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Ranger",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 16,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 50,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Illusionist",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 15,
+        "Spell": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Illusionist spells",
+          "Description": "Access to 1st-level illusionist spells such as Color Spray and Hypnotism."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Paladin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 1,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lay on Hands",
+          "Description": "Paladin can heal 2 hit points per level once per day."
+        }
+      ],
+      "BaseXPValue": 40,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
     {
       "Name": "Undead Kobold",
       "Type": "Undead",

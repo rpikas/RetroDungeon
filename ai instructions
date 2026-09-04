@@ -597,9 +597,40 @@ cures the character before that. Both combat rounds and steps in dungeon count t
 if monster got SpecialAbilities Shriek then for 1d3 rounds there is a 50% chance that a new random encounter joins 
 the combat if number of groups is less than 4. +58 etc. 8,9
 SpecialAbilities Shriek should be repeated every 3rd round -20 +10 9,1
+________
 When members of the party is asleep, automatically reorder the party so the asleep charater is last in the party. -14 +34 9,5
 shrieker should not hit only use their special attacks +6 9,7
 Durids ska slår save throws som clerics.
 Paladins och Ragnger slår save throws som fighters. 
 Monks, Bars och Assasins slår save throws som thieves.
 Illusionists slår save som Magic-Users.+15 9,9
+________
+When a player is diseased by an ear seaker, he will die next time he enters a dungeon unless he is cured by a spell 
+or in the temple. +35, 10.6
+all shriekers should have the special ability Shriek and use it every 3rd round. When a moster group arives to help 
+the shrikers, the new monster picture should be displayed beside the shriekers picture. 11,2
+change: shrikers should use thir special ability every round and they have 50% chanse of attracting new mobs then -7 11,4
+
+ "SpecialAbilities":  "Level 1 Mage spells", and
+ "SpecialAbilities":  "Level 1 Magic-User spells" men the same thing
+"Level 1 Priest spells" and "Level 1 Cleric spells" also mean the same thing +2 11,6
+
+if an encounter got "SpecialAbilities":  "Level 1 Druid spells", then it is 50% chanse they cast Engangle and 50% Faerie Fire at the party
+if an encounter got "SpecialAbilities":  "Level 1 Illusionist spells", then it is 50% chanse they cast color spray and 50% phantasm force at the party. +156 etc, 12,1
+
+when shreikers manage to attract more monster groups, the monsters shold be dungeon level 2 mobs +1, 12,2
+
+when charaters are enountered, roll 1d4+1 to see the numbers och charaters dmg, pg. 175
+then roll 1d100 2-5 times to see what is classes the encounter got. the level of the classes should be the same as the dungeon level.
+1-17 Cleric, 18-20 Druid 21-60 Fighter, 61-62 Paladin, 63-65 Ranger, 66-86 Magic-User, 87-88 Illusionist, 89-98 Thief, 99 Assassin, 100 Monk or Bard. 
+if 5 charaters are encountered, and 5 different clasess are rolled, then reroll the classes until at least 2 charaters have the same class. +56, +128, 13.1
+
+When enoutering Characters, do not select Adventurers, but select 2-5 charaters with different classes one monster group per class encoutered (1-4)
+that you just implemnted with CombatCoordinator.StartEncounterWithGroupCounts and MazeForm.ResolveCharacterEncounter -10 +36 13,4
+
+i think there should be a 50% chanse to try cast a spell  every round. 13.7
+
+when i encounter seveal monstergroups at the same time and one group is charater, reroll, they can not be combinded with other groups since they have 
+special handling and are allready several groups +24 13,9
+
+

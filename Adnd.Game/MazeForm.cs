@@ -2165,6 +2165,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (string.Equals(monsterName, "No Encounter", StringComparison.OrdinalIgnoreCase))
             return;
 
+        if (string.Equals(monsterName, "Adventurer", StringComparison.OrdinalIgnoreCase))
+        {
+            ResolveCharacterEncounter(_currentDungeonLevel);
+            PublishToViewer();
+            return;
+        }
+
         var party = LoadEncounterParty();
         if (party.Count == 0)
         {
@@ -2199,7 +2206,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             for (int i = 1; i < numberOfGroups; i++)
             {
-                var additionalMonsterName = RollDungeonMonsterForLevel(_currentDungeonLevel);
+                var additionalMonsterName = RollDungeonMonsterForLevelExcludingCharacter(_currentDungeonLevel);
                 if (string.IsNullOrWhiteSpace(additionalMonsterName))
                     additionalMonsterName = LevelOneMonsters[_random.Next(LevelOneMonsters.Length)];
                 monsterNames[i] = additionalMonsterName;
@@ -2239,6 +2246,176 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         // The fight is over: clear the monsters and show the damage taken.
         PublishToViewer();
+    }
+
+    private string? RollDungeonMonsterForLevelExcludingCharacter(int level)
+    {
+        for (var attempt = 0; attempt < 30; attempt++)
+        {
+            var rolled = RollDungeonMonsterForLevel(level);
+            if (string.IsNullOrWhiteSpace(rolled))
+                continue;
+
+            if (string.Equals(rolled, "No Encounter", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (string.Equals(rolled, "Adventurer", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(rolled, "Character", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            return rolled;
+        }
+
+        return null;
+    }
+
+    private void ResolveCharacterEncounter(int dungeonLevel)
+    {
+        var party = LoadEncounterParty();
+        if (party.Count == 0)
+        {
+            SayOnBoth("Characters", "Encounter!\n\nCharacter\n\n(No active party members found)");
+            return;
+        }
+
+        var count = _random.Next(1, 5) + 1; // 1d4+1
+        var classMonsters = RollCharacterEncounterClasses(count, dungeonLevel);
+        if (classMonsters.Count == 0)
+        {
+            SayOnBoth("Characters", $"No class-based character templates were found for dungeon level {Math.Max(1, dungeonLevel)}.");
+            return;
+        }
+
+        var classSummary = string.Join(", ", classMonsters.GroupBy(n => n).Select(g => $"{g.Key} x{g.Count()}"));
+        RuleApplicationInfo.Publish(
+            "Adnd",
+            "House Rule",
+            "Character encounter composition",
+            "Roll 1d4+1 for count, then roll class table once per encountered character. All encountered classes use current dungeon level.",
+            "1",
+            "5",
+            count.ToString(),
+            classSummary);
+
+        var grouped = classMonsters
+            .GroupBy(n => n, StringComparer.OrdinalIgnoreCase)
+            .Select(g => (name: g.Key, count: g.Count()))
+            .ToList();
+
+        var outcome = _combatCoordinator.StartEncounterWithGroupCounts(this, grouped, party, _characterRepository, dungeonLevel);
+        if (outcome == CombatOutcome.Defeat)
+            HandlePartyDefeatAtCurrentCell();
+    }
+
+    private List<string> RollCharacterEncounterClasses(int count, int dungeonLevel)
+    {
+        var result = new List<string>(count);
+        if (count <= 0)
+            return result;
+
+        bool TryBuildOneSet()
+        {
+            result.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                string? mapped = null;
+                for (int attempt = 0; attempt < 40; attempt++)
+                {
+                    mapped = MapCharacterClassRollToMonsterName(_random.Next(1, 101), dungeonLevel);
+                    if (!string.IsNullOrWhiteSpace(mapped))
+                        break;
+                }
+
+                if (string.IsNullOrWhiteSpace(mapped))
+                {
+                    result.Clear();
+                    return false;
+                }
+
+                result.Add(mapped);
+            }
+
+            return true;
+        }
+
+        if (count == 5)
+        {
+            for (int reroll = 0; reroll < 100; reroll++)
+            {
+                if (!TryBuildOneSet())
+                    return result;
+
+                if (result.Distinct(StringComparer.OrdinalIgnoreCase).Count() < 5)
+                    break;
+            }
+
+            return result;
+        }
+
+        TryBuildOneSet();
+
+        return result;
+    }
+
+    private string? MapCharacterClassRollToMonsterName(int roll, int dungeonLevel)
+    {
+        string className;
+        if (roll <= 17)
+            className = "Cleric";
+        else if (roll <= 20)
+            className = "Druid";
+        else if (roll <= 60)
+            className = "Fighter";
+        else if (roll <= 62)
+            className = "Paladin";
+        else if (roll <= 65)
+            className = "Ranger";
+        else if (roll <= 86)
+            className = "Magic-User";
+        else if (roll <= 88)
+            className = "Illusionist";
+        else if (roll <= 98)
+            className = "Thief";
+        else if (roll == 99)
+            className = "Assassin";
+        else
+            className = _random.Next(0, 2) == 0 ? "Monk" : "Bard";
+
+        var candidates = BuildCharacterClassMonsterNameCandidates(className, dungeonLevel);
+        var monsters = _monsterRepository.GetAll().ToList();
+
+        foreach (var candidate in candidates)
+        {
+            var exact = monsters.FirstOrDefault(m => string.Equals(m.Name, candidate, StringComparison.OrdinalIgnoreCase));
+            if (exact != null)
+                return exact.Name;
+        }
+
+        return null;
+    }
+
+    private static List<string> BuildCharacterClassMonsterNameCandidates(string className, int dungeonLevel)
+    {
+        var level = Math.Max(1, dungeonLevel);
+        var names = new List<string>
+        {
+            $"Lvl {level} {className}",
+            $"Lvl {level} {className.Replace("-", " ", StringComparison.Ordinal)}"
+        };
+
+        if (string.Equals(className, "Magic-User", StringComparison.OrdinalIgnoreCase))
+        {
+            names.Add($"Lvl {level} Mage");
+            names.Add($"Lvl {level} MagicUser");
+        }
+        else if (string.Equals(className, "Cleric", StringComparison.OrdinalIgnoreCase))
+        {
+            names.Add($"Lvl {level} Priest");
+        }
+
+        return names.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
     }
 
     private string? RollDungeonMonsterForLevel(int level)

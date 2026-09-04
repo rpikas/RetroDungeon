@@ -258,13 +258,26 @@ public sealed class CombatResolver
 
         foreach (var monster in session.AliveMonsters.ToList())
         {
-            if (session.RoundNumber == 1 && HasSpecialAbility(monster, "Level 1 Mage spells"))
+            if (HasAnySpecialAbility(monster, "Level 1 Mage spells", "Level 1 Magic-User spells")
+                && ShouldTryMonsterLevel1SpellCast())
             {
                 ResolveLevel1MageSpells(monster, session, events);
                 continue;
             }
 
-            if (HasSpecialAbility(monster, "Level 1 Priest spells") && ResolveLevel1PriestSpell(monster, session, events))
+            if (HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
+                && ShouldTryMonsterLevel1SpellCast()
+                && ResolveLevel1PriestSpell(monster, session, events))
+                continue;
+
+            if (HasSpecialAbility(monster, "Level 1 Druid spells")
+                && ShouldTryMonsterLevel1SpellCast()
+                && ResolveLevel1DruidSpell(monster, session, events))
+                continue;
+
+            if (HasSpecialAbility(monster, "Level 1 Illusionist spells")
+                && ShouldTryMonsterLevel1SpellCast()
+                && ResolveLevel1IllusionistSpell(monster, session, events))
                 continue;
 
             if (TryGetHpDamageBreathDamage(monster, out var breathDamage)
@@ -443,7 +456,7 @@ public sealed class CombatResolver
                 continue;
             }
 
-            if (HasSpecialAbility(monster, "Shriek"))
+            if (IsShrieker(monster))
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} shrieks and does not make physical attacks."));
                 continue;
@@ -500,6 +513,7 @@ public sealed class CombatResolver
                         }
                         else
                         {
+                            TryApplyEarSeekerDisease(monster, target, events);
                             TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
 
@@ -1094,10 +1108,6 @@ public sealed class CombatResolver
         if (session.Level1PriestSpellCastsUsed >= 3)
             return false;
 
-        var spellRoll = _dice.Roll(100);
-        if (spellRoll <= 50)
-            return false; // Attack normally.
-
         var damagedAllies = session.AliveMonsters
             .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
             .ToList();
@@ -1114,6 +1124,161 @@ public sealed class CombatResolver
         session.Level1PriestSpellCastsUsed += 1;
         events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Light Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
         return true;
+    }
+
+    private bool ShouldTryMonsterLevel1SpellCast()
+    {
+        return _dice.Roll(100) <= 50;
+    }
+
+    private bool ResolveLevel1DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Entangle!"));
+            foreach (var target in aliveParty)
+            {
+                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveRoll = _dice.Roll(20);
+                if (saveRoll >= saveTarget)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Entangle (save {saveRoll} vs {saveTarget})."));
+                    continue;
+                }
+
+                var rounds = 5;
+                target.AddStatus(CharacterStatus.Paralyzed);
+                session.SetPartyAsleep(target.Name, 0);
+                events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is entangled for {rounds} round(s)."));
+            }
+
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Faerie Fire!"));
+        var affected = 0;
+        foreach (var target in aliveParty)
+        {
+            if (session.FaerieFiredPartyMembers.Contains(target.Name))
+                continue;
+
+            target.ArmorClass += 2;
+            session.FaerieFiredPartyMembers.Add(target.Name);
+            affected++;
+            events.Add(new CombatEvent($"{target.Name} is outlined by faerie fire: AC worsens by 2."));
+        }
+
+        if (affected == 0)
+            events.Add(new CombatEvent("No additional party members are affected by faerie fire."));
+
+        return true;
+    }
+
+    private bool ResolveLevel1IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Color Spray!"));
+            ResolveIllusionistColorSpray(monster, session, events);
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Phantasmal Force!"));
+        ResolveIllusionistPhantasmalForce(monster, session, events);
+        return true;
+    }
+
+    private void ResolveIllusionistColorSpray(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return;
+
+        var maxAffected = Math.Min(aliveParty.Count, _dice.Roll(6));
+        var targets = aliveParty.OrderBy(_ => _dice.Roll(100)).Take(maxAffected).ToList();
+        var casterLevel = Math.Max(1, monster.Template.HitDice);
+
+        foreach (var target in targets)
+        {
+            var hdDifference = Math.Max(1, target.Level) - casterLevel;
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveRoll = _dice.Roll(20);
+
+            if (hdDifference <= 0)
+            {
+                var rounds = _dice.Roll(4) + _dice.Roll(4);
+                target.AddStatus(CharacterStatus.Asleep);
+                session.SetPartyAsleep(target.Name, rounds);
+                events.Add(new CombatEvent($"{target.Name} is overwhelmed by colors and falls unconscious for {rounds} round(s)."));
+            }
+            else if (hdDifference <= 2)
+            {
+                if (saveRoll >= saveTarget)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Color Spray (save {saveRoll} vs {saveTarget})."));
+                }
+                else
+                {
+                    var rounds = _dice.Roll(4);
+                    target.AddStatus(CharacterStatus.Asleep);
+                    session.SetPartyAsleep(target.Name, rounds);
+                    events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is unconscious for {rounds} round(s)."));
+                }
+            }
+            else
+            {
+                if (saveRoll >= saveTarget)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Color Spray (save {saveRoll} vs {saveTarget})."));
+                }
+                else
+                {
+                    target.AddStatus(CharacterStatus.Slowed);
+                    events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is stunned by the spray."));
+                }
+            }
+        }
+    }
+
+    private void ResolveIllusionistPhantasmalForce(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return;
+
+        foreach (var target in aliveParty)
+        {
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveRoll = _dice.Roll(20);
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} disbelieves the phantasmal force (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            var rolledDamage = 0;
+            for (int i = 0; i < 16; i++)
+                rolledDamage += _dice.Roll(6);
+
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - rolledDamage);
+            var actual = Math.Max(0, before - target.CurrentHitPoints);
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            events.Add(new CombatEvent($"{target.Name} believes the phantasmal force and takes {actual} damage (rolled {rolledDamage}). HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} dies from terror and shock."));
+            }
+        }
     }
 
     private bool ResolveHpDamageBreath(MonsterInstance monster, int maxDamage, CombatSession session, List<CombatEvent> events)
@@ -1217,6 +1382,24 @@ public sealed class CombatResolver
 
         target.MarkRotGrubExposurePendingFlame();
         events.Add(new CombatEvent($"ROT_GRUB_PROMPT::{target.Name}"));
+    }
+
+    private static void TryApplyEarSeekerDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!string.Equals(monster.Template.Name, "Ear Seeker", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (target.EarSeekerDeathOnNextDungeonEntry)
+            return;
+
+        target.ApplyEarSeekerDisease();
+        events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! They will die upon next dungeon entry unless cured."));
+    }
+
+    private static bool IsShrieker(MonsterInstance monster)
+    {
+        return string.Equals(monster.Template.Name, "Shrieker", StringComparison.OrdinalIgnoreCase)
+               || HasSpecialAbility(monster, "Shriek");
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

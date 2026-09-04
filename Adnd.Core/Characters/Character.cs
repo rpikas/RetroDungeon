@@ -34,6 +34,7 @@ public class Character
     public int? ConstitutionBeforeDisease { get; set; }
     public bool RotGrubFlamePromptPending { get; set; }
     public int RotGrubDeathRoundsRemaining { get; set; }
+    public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
     public int Level { get; set; } = 1;
     public bool LayOnHandsUsedToday { get; set; }
     public int TemporaryStrengthBonus { get; set; }
@@ -214,6 +215,7 @@ public class Character
         RemoveStatus(CharacterStatus.Diseased);
         RotGrubFlamePromptPending = false;
         RotGrubDeathRoundsRemaining = 0;
+        EarSeekerDeathOnNextDungeonEntry = false;
 
         if (ConstitutionBeforeDisease.HasValue)
         {
@@ -235,6 +237,12 @@ public class Character
         ApplyDisease();
         RotGrubFlamePromptPending = false;
         RotGrubDeathRoundsRemaining = Math.Max(1, deathInRounds);
+    }
+
+    public void ApplyEarSeekerDisease()
+    {
+        ApplyDisease();
+        EarSeekerDeathOnNextDungeonEntry = true;
     }
 
     private string GetStatusDisplay()

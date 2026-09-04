@@ -260,6 +260,8 @@ public class MainMenu
     private void EnterMaze()
     {
         Enter("EdgeOfTown");
+
+        ApplyEarSeekerDungeonEntryDeaths();
         _dungeonMenu.Show();
 
         // A new day starts only after the party leaves the maze.
@@ -275,6 +277,39 @@ public class MainMenu
 
             member.LayOnHandsUsedToday = false;
             _charRepo.Save(member);
+        }
+    }
+
+    private void ApplyEarSeekerDungeonEntryDeaths()
+    {
+        var party = _partyRepo.Load();
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var member))
+                continue;
+
+            if (!member.EarSeekerDeathOnNextDungeonEntry
+                || member.HasStatus(CharacterStatus.Dead)
+                || member.HasStatus(CharacterStatus.Ashes)
+                || member.HasStatus(CharacterStatus.Lost)
+                || member.CurrentHitPoints <= 0)
+            {
+                continue;
+            }
+
+            member.CurrentHitPoints = 0;
+            member.AddStatus(CharacterStatus.Dead);
+            member.EarSeekerDeathOnNextDungeonEntry = false;
+            _charRepo.Save(member);
+            messages.Add($"{member.Name} dies from untreated Ear Seeker disease when entering the dungeon.");
+        }
+
+        if (messages.Count > 0)
+        {
+            ViewerMessage.Show(null, "Ear Seeker Disease", string.Join(Environment.NewLine, messages));
         }
     }
 
