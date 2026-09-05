@@ -2,6 +2,38 @@
     "Level": 6,
   "Monsters": [
     {
+      "Name": "Carrion Crawler",
+      "Type": "Aberration",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 7,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Tentacles",
+          "NumberOfAttacks": 8,
+          "Damage": "0d1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Paralyzation",
+          "Description": "Each tentacle hit forces a save vs paralysis; even armored targets can be affected."
+        }
+      ],
+      "Alignment": "Neutral",
+      "Intelligence": "Non-",
+      "TreasureType": "None",
+      "BaseXPValue": 135,
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Hydra 8 Heads",
       "Type": "Monstrous Beast",
       "Frequency": "Rare",

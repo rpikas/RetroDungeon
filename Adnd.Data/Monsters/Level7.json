@@ -2,6 +2,324 @@
     "Level": 7,
   "Monsters": [
     {
+      "Name": "Mummy",
+      "Type": "Undead",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 60,
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Mummy Rot",
+          "Description": "Victim must save or suffer a rotting curse; healing is drastically slowed and wounds do not naturally recover."
+        },
+        {
+          "Name": "Fear Aura",
+          "Description": "Creatures within 30 ft must save vs. fear or flee in panic."
+        },
+        {
+          "Name": "Fire Vulnerability",
+          "Description": "Takes double damage from fire-based attacks."
+        },
+        {
+          "Name": "Weapon Resistance",
+          "Description": "Takes half damage from non-magical weapons."
+        }
+      ],
+      "Alignment": "Lawful Evil",
+      "Intelligence": "Low",
+      "TreasureType": "C",
+      "BaseXPValue": 650,
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Black Pudding",
+      "Type": "Ooze",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large (15 ft diameter)",
+      "Movement": 20,
+      "Attacks": [
+        {
+          "Name": "Pseudopod",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Acid",
+          "Description": "Dissolves wood, metal, leather, and flesh; stone is unaffected."
+        },
+        {
+          "Name": "Split When Struck",
+          "Description": "Slashing or lightning attacks divide the pudding into smaller puddings."
+        },
+        {
+          "Name": "Climb",
+          "Description": "Can move on walls and ceilings without penalty."
+        },
+        {
+          "Name": "Immunity",
+          "Description": "Immune to cold; takes half damage from fire."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Roper",
+      "Type": "Aberration",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 30,
+      "Attacks": [
+        {
+          "Name": "Tentacle",
+          "NumberOfAttacks": 6,
+          "Damage": "1d4 + Strength Drain"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "5d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Strength Drain",
+          "Description": "Tentacle hits drain 1–3 Strength per strike; reaching 0 Strength renders the victim helpless."
+        },
+        {
+          "Name": "Tentacle Grapple",
+          "Description": "Tentacles extend up to 50 feet and can reel in victims at 10 feet per round."
+        },
+        {
+          "Name": "Camouflage",
+          "Description": "Appears identical to a stalagmite until it attacks."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "High resistance to magic; many spells fail to affect it."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "TreasureType": "E",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Shambling Mound",
+      "Type": "Plant Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 20,
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Constrict",
+          "Description": "On a successful hit, the mound wraps around its target, dealing automatic damage each round."
+        },
+        {
+          "Name": "Electricity Absorption",
+          "Description": "Electric attacks heal the Shambling Mound instead of harming it."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Takes only half damage from fire-based attacks."
+        },
+        {
+          "Name": "Camouflage",
+          "Description": "Appears as normal vegetation until it moves or attacks."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Groaning Spirit",
+      "Type": "Undead",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": {
+        "Walk": 15,
+        "Fly": 18
+      },
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8 + energy drain"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Wail of Death",
+          "Description": "Once per night, emits a terrifying wail; all within 30 feet must save vs death or die instantly."
+        },
+        {
+          "Name": "Ethereal Form",
+          "Description": "Can pass through solid objects and is immune to non-magical weapons."
+        },
+        {
+          "Name": "Fear Aura",
+          "Description": "Creatures within 30 feet must save vs spell or flee in terror."
+        }
+      ],
+      "BaseXPValue": 1500,
+      "TreasureType": "E",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Neo-otyugh",
+      "Type": "Monstrous Vermin",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": {
+        "Walk": 6
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Tentacle",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Disease",
+          "Description": "Victims struck by bite must save vs poison or contract a severe wasting disease."
+        },
+        {
+          "Name": "Tentacle Grab",
+          "Description": "Tentacles can grapple and hold targets; restrained creatures suffer automatic bite damage."
+        },
+        {
+          "Name": "Filth Habitat",
+          "Description": "Thrives in refuse pits; immune to most mundane diseases and poisons."
+        },
+        {
+          "Name": "Limited Telepathy",
+          "Description": "Can communicate simple concepts telepathically within 30 feet."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+
+
+    {
+      "Name": "Umber Hulk",
+      "Type": "Monstrous Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large (9 ft tall)",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 12
+      },
+      "Movement": {
+        "Walk": 6,
+        "Burrow": 1
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "3d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Confusion Gaze",
+          "Description": "Creatures meeting its gaze must save vs spell or become confused for 3 rounds."
+        },
+        {
+          "Name": "Burrowing",
+          "Description": "Can tunnel through solid earth and stone at slow speed, leaving rough passages."
+        },
+        {
+          "Name": "Darkvision",
+          "Description": "Sees perfectly in total darkness up to 60 feet."
+        }
+      ],
+      "BaseXPValue": 975,
+      "TreasureType": "C",
+      "Source": "AD&D Monster Manual"
+    },
+
+    {
       "Name": "Hydra 10 Heads",
       "Type": "Monstrous Beast",
       "Frequency": "Rare",
@@ -142,48 +460,7 @@
       "BaseXPValue": 950,
       "TreasureType": "G"
     },
-    {
-      "Name": "Owlbear",
-      "Type": "Monstrous Animal",
-      "ArmorClass": 5,
-      "HitDice": 5,
-      "HitPoints": 32,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 11 },
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Bear Hug",
-          "Description": "If both claws hit, target takes extra 2d8 damage."
-        }
-      ],
-      "BaseXPValue": 700,
-      "TreasureType": "None"
-    },
+
     {
       "Name": "Giant Snake (Giant Python)",
       "Type": "Animal",

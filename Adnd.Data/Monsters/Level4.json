@@ -2,6 +2,219 @@
     "Level": 4,
   "Monsters": [
     {
+      "Name": "Su-monster",
+      "Type": "Monstrous Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 5,
+      "Size": "Medium",
+      "Movement": 90,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 4,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Psychic Blast",
+          "Description": "Can unleash a psionic shockwave stunning or killing weaker minds within 30 feet."
+        },
+        {
+          "Name": "Climbing",
+          "Description": "Moves easily through trees and rocky terrain; rarely surprised."
+        },
+        {
+          "Name": "Pack Behavior",
+          "Description": "Often hunts in small groups; coordinates attacks telepathically."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Alignment": "Chaotic",
+      "Intelligence": "Average",
+      "PsionicAbility": 120,
+      "BaseXPValue": 270,
+      "TreasureType": "C, Y",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Snake, Giant Constrictor",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large (30 ft long)",
+      "Movement": 30,
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Constrict",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Constrict",
+          "Description": "On a successful hit, coils around the victim, dealing automatic damage each round until freed."
+        },
+        {
+          "Name": "Stealth",
+          "Description": "Moves silently and surprises prey on 1–3 in 6."
+        },
+        {
+          "Name": "Swim",
+          "Description": "Excellent swimmer; can attack in water without penalty."
+        }
+      ],
+      "BaseXPValue": 270,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Shadow",
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 7,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 90,
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4 + Strength Drain"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Strength Drain",
+          "Description": "Touch drains 1–3 Strength; reaching 0 Strength kills the victim."
+        },
+        {
+          "Name": "Incorporeal Movement",
+          "Description": "Can pass through small openings and move silently."
+        },
+        {
+          "Name": "Darkvision",
+          "Description": "Sees perfectly in total darkness."
+        },
+        {
+          "Name": "Resistance to Physical Attacks",
+          "Description": "Takes half damage from non-magical weapons."
+        }
+      ],
+      "BaseXPValue": 135,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+
+    {
+      "Name": "Rust Monster",
+      "Type": "Aberration",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 30,
+      "Attacks": [
+        {
+          "Name": "Antennae Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "Special"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Metal Corrosion",
+          "Description": "Touch instantly rusts ferrous metals; magical items receive a saving throw to resist."
+        },
+        {
+          "Name": "Scent Metal",
+          "Description": "Can detect metal objects up to 90 feet away."
+        },
+        {
+          "Name": "Non‑Aggressive",
+          "Description": "Attacks only to feed; ignores non‑metallic creatures unless provoked."
+        }
+      ],
+      "BaseXPValue": 270,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Owlbear",
+      "Type": "Monstrous Animal",
+      "ArmorClass": 5,
+      "HitDice": 5,
+      "HitPoints": 32,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Bear Hug",
+          "Description": "If both claws hit, target takes extra 2d8 damage."
+        }
+      ],
+      "BaseXPValue": 700,
+      "TreasureType": "None"
+    },
+    {
       "Name": "Hydra 5 Heads",
       "Type": "Monstrous Beast",
       "Frequency": "Rare",
@@ -1205,8 +1418,133 @@
       "TreasureType": "J",
       "Source": "Adnd"
     },
+    {
+      "Name": "Gray Ooze",
+      "Type": "Ooze",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 8,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 10,
+      "Attacks": [
+        {
+          "Name": "Pseudopod",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Acid",
+          "Description": "Dissolves metal and organic material; stone is unaffected."
+        },
+        {
+          "Name": "Immunity",
+          "Description": "Immune to cold and most spells; takes half damage from fire."
+        },
+        {
+          "Name": "Ambush",
+          "Description": "Often hides on floors or ceilings, surprising on 1–3 in 6."
+        }
+      ],
+      "BaseXPValue": 135,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Pyrohydra 5 Heads",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 60,
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 5,
+          "Damage": "1d10"
+        },
+        {
+          "Name": "Fire Breath",
+          "NumberOfAttacks": 1,
+          "Damage": "5d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Multiple Heads",
+          "Description": "Each head attacks independently; severed heads do not regrow."
+        },
+        {
+          "Name": "Fire Breath",
+          "Description": "Each head can exhale flame; damage scales with number of heads."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Takes reduced damage from fire-based attacks."
+        }
+      ],
+      "BaseXPValue": 450,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
 
-   
+    {
+      "Name": "Hell Hound",
+      "Type": "Extraplanar Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 40,
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Fire Breath",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Breath",
+          "Description": "Can exhale a cone of flame; damage scales with hit dice."
+        },
+        {
+          "Name": "Heat Sense",
+          "Description": "Can detect warm-blooded creatures up to 60 feet away."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Takes minimal damage from fire-based attacks."
+        },
+        {
+          "Name": "Pack Tactics",
+          "Description": "Gains advantage when attacking with other Hell Hounds."
+        }
+      ],
+      "BaseXPValue": 165,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+
     {
       "Name": "Ghast",
       "Type": "Undead",
@@ -1255,7 +1593,7 @@
       "TreasureType": "C",
       "Source": "Adnd"
     },
-    
+
     {
       "Name": "Giant Scorpion",
       "Type": "Vermin",
@@ -1300,7 +1638,7 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
-   
+
     {
       "Name": "Harpy",
       "Type": "Monstrous Humanoid",
@@ -1345,6 +1683,50 @@
       "TreasureType": "D",
       "Source": "Adnd"
     },
+    {
+      "Name": "Toad, Ice",
+      "Type": "Amphibian",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 30,
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Tongue Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4 + Freeze"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Freeze Touch",
+          "Description": "Victims struck by tongue or bite must save vs cold or be slowed by frostbite."
+        },
+        {
+          "Name": "Cold Aura",
+          "Description": "Emits chilling air; creatures within 10 feet take 1 point of cold damage per round."
+        },
+        {
+          "Name": "Camouflage",
+          "Description": "Blends with icy terrain; surprise opponents on 1–3 in 6."
+        }
+      ],
+      "BaseXPValue": 270,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+
     {
       "Name": "Giant Toad",
       "Type": "Animal",
