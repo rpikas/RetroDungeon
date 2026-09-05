@@ -1,1557 +1,1709 @@
 {
     "Level": 6,
-    "Monsters": [
+  "Monsters": [
+    {
+      "Name": "Hydra 8 Heads",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 13
+      },
+      "Movement": {
+        "Walk": 9
+      },
+      "Attacks": [
         {
-            "Name": "Wraith",
-            "Type": "Undead",
-            "ArmorClass": 4,
-            "HitDice": 5,
-            "HitPoints": 30,
-            "Movement": {
-                "Walk": 0,
-                "Fly": 30,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 9,
-                "RodStaffWand": 10,
-                "PetrificationPolymorph": 11,
-                "BreathWeapon": 12,
-                "Spell": 12
-            },
-            "Morale": { "Value": 12 },
-            "Attacks": [
-                {
-                    "Name": "Chilling Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Energy Drain",
-                    "Description": "Target loses 1 level unless save vs death."
-                },
-                {
-                    "Name": "Incorporeal",
-                    "Description": "Can pass through walls; half damage from non-magical weapons."
-                }
-            ],
-            "BaseXPValue": 900,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "E"
-        },
-        {
-            "Name": "Minotaur",
-            "Type": "Monstrous Humanoid",
-            "ArmorClass": 6,
-            "HitDice": 6,
-            "HitPoints": 34,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 11 },
-            "Attacks": [
-                {
-                    "Name": "Battle Axe",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d10"
-                },
-                {
-                    "Name": "Gore",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Labyrinth Sense",
-                    "Description": "Never gets lost in mazes; +2 to surprise in dungeon corridors."
-                }
-            ],
-            "BaseXPValue": 600,
-            "XPValuePerHitPoint": 8,
-            "TreasureType": "D"
-        },
-        {
-            "Name": "Giant Snake (Poisonous)",
-            "Type": "Animal",
-            "ArmorClass": 5,
-            "HitDice": 6,
-            "HitPoints": 36,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 0,
-                "Swim": 10,
-                "Burrow": 0,
-                "Climb": 10
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Deadly Poison",
-                    "Description": "Bite forces save vs poison or death."
-                }
-            ],
-            "BaseXPValue": 500,
-            "XPValuePerHitPoint": 8,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Giant Crocodile",
-            "Type": "Animal",
-            "ArmorClass": 4,
-            "HitDice": 6,
-            "HitPoints": 38,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 0,
-                "Swim": 30,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Death Roll",
-                    "Description": "On hit in water, target must save vs death or take extra 2d6 damage."
-                }
-            ],
-            "BaseXPValue": 550,
-            "XPValuePerHitPoint": 8,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Basilisk",
-            "Type": "Monstrous",
-            "ArmorClass": 4,
-            "HitDice": 6,
-            "HitPoints": 32,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 11 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Petrifying Gaze",
-                    "Description": "Creatures within 30 ft must save vs petrification or turn to stone."
-                }
-            ],
-            "BaseXPValue": 900,
-            "XPValuePerHitPoint": 8,
-            "TreasureType": "F"
-        },
-        {
-            "Name": "Giant Weasel",
-            "Type": "Animal",
-            "ArmorClass": 6,
-            "HitDice": 4,
-            "HitPoints": 22,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 10
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Blood Frenzy",
-                    "Description": "If it wounds a target, gains +1 to hit that target until it dies."
-                }
-            ],
-            "BaseXPValue": 300,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Giant Ant (Warrior)",
-            "Type": "Vermin",
-            "ArmorClass": 3,
-            "HitDice": 4,
-            "HitPoints": 24,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 10,
-                "Climb": 10
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Mandibles",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Hive Loyalty",
-                    "Description": "Never checks morale while within 60 ft of another ant."
-                }
-            ],
-            "BaseXPValue": 275,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Arch Mage",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 9,
-            "HitDice": 8,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 2,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 950,
-            "XPValuePerHitPoint": 12,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Werewolf",
-            "Type": "Lycanthrope",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 4,
-            "ArmorClass": 5,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 3,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                },
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                }
-            ],
-            "BaseXPValue": 600,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Level 4 Thief",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 3,
-            "ArmorClass": 10,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 3,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 7 },
-            "Attacks": [
-                {
-                    "Name": "Dagger",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                },
-                {
-                    "Name": "Backstab",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 300,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "A",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Medusalizard",
-            "Type": "Monster",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 2,
-            "ArmorClass": 6,
-            "HitDice": 5,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Stone",
-                    "Description": "Gaze may petrify."
-                }
-            ],
-            "BaseXPValue": 700,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Level 10 Mage",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 10,
-            "HitDice": 10,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Level 5 Mage Spells",
-                    "Description": "Level 5 Mage Spells"
-                }
-            ],
-            "BaseXPValue": 1200,
-            "XPValuePerHitPoint": 14,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Giant Spider",
-            "Type": "Animal",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 4,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 4,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 8 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Poison",
-                    "Description": "Bite may poison."
-                }
-            ],
-            "BaseXPValue": 500,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Level 5 Priest",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 2,
-            "ArmorClass": 4,
-            "HitDice": 5,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 8 },
-            "Attacks": [
-                {
-                    "Name": "Mace",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6+2"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 450,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Minor Daimyo",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 2,
-            "HitDice": 4,
-            "HitDiceType": 10,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                },
-                {
-                    "Name": "Help",
-                    "Description": "May call for reinforcements."
-                }
-            ],
-            "BaseXPValue": 800,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Gargoyle",
-            "Type": "Monster",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 3,
-            "ArmorClass": 5,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 4,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 40,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                },
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                },
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                },
-                {
-                    "Name": "Wing Buffet",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                }
-            ],
-            "BaseXPValue": 700,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Were Bear",
-            "Type": "Lycanthrope",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 2,
-            "ArmorClass": 6,
-            "HitDice": 5,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6+1"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Cold Resistance",
-                    "Description": "Resistant to cold."
-                },
-                {
-                    "Name": "Poison Resistance",
-                    "Description": "Resistant to poison."
-                },
-                {
-                    "Name": "Paralyze",
-                    "Description": "May paralyze on hit."
-                },
-                {
-                    "Name": "Run",
-                    "Description": "May flee from combat."
-                }
-            ],
-            "BaseXPValue": 850,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Boring Beetle",
-            "Type": "Animal",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 3,
-            "HitDice": 5,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 20,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 14,
-                "RodStaffWand": 15,
-                "PetrificationPolymorph": 16,
-                "BreathWeapon": 17,
-                "Spell": 17
-            },
-            "Morale": { "Value": 8 },
-            "Attacks": [
-                {
-                    "Name": "Mandibles",
-                    "NumberOfAttacks": 1,
-                    "Damage": "5d4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 500,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Gas Dragon",
-            "Type": "Dragon",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 3,
-            "HitDice": 5,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 40,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                },
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                },
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-              {
-                "Name": "50 hp damage breath",
-                "Description": "Gas breath attack."
-              }
-            ],
-            "BaseXPValue": 1200,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "D",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Weretiger",
-            "Type": "Lycanthrope",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 2,
-            "ArmorClass": 4,
-            "HitDice": 5,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                },
-                {
-                    "Name": "Paralyze",
-                    "Description": "May paralyze on hit."
-                },
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                }
-            ],
-            "BaseXPValue": 900,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Master Ninja",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 3,
-            "HitDice": 10,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d10+3"
-                },
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d10+3"
-                },
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d10+3"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Autokill",
-                    "Description": "May instantly kill on a successful strike."
-                }
-            ],
-            "BaseXPValue": 1500,
-            "XPValuePerHitPoint": 14,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Level 7 Mage",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 8,
-            "HitDice": 7,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 8 },
-            "Attacks": [
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                }
-            ],
-            "BaseXPValue": 450,
-            "XPValuePerHitPoint": 10,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Shade",
-            "Type": "Undead",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmororClass": 7,
-            "HitDice": 3,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 3,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 20,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 14,
-                "RodStaffWand": 15,
-                "PetrificationPolymorph": 16,
-                "BreathWeapon": 17,
-                "Spell": 17
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Shadow Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4+1"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                }
-            ],
-            "BaseXPValue": 500,
-            "XPValuePerHitPoint": 4,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Swordsman",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 3,
-            "HitDice": 3,
-            "HitDiceType": 10,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 8 },
-            "Attacks": [
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d7"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                }
-            ],
-            "BaseXPValue": 350,
-            "XPValuePerHitPoint": 4,
-            "TreasureType": "A",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Gaze Hound",
-            "Type": "Beast",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 5,
-            "ArmorClass": -1,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d2"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                },
-                {
-                    "Name": "Paralyze",
-                    "Description": "Gaze attack may paralyze."
-                },
-                {
-                    "Name": "Run",
-                    "Description": "May flee from combat."
-                }
-            ],
-            "BaseXPValue": 600,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Attack Dog",
-            "Type": "Animal",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 1,
-            "HitDice": 4,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 7 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                },
-                {
-                    "Name": "Run",
-                    "Description": "May flee from combat."
-                }
-            ],
-            "BaseXPValue": 300,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Bishop",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 4,
-            "HitDice": 4,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 8 },
-            "Attacks": [
-                {
-                    "Name": "Staff",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                },
-                {
-                    "Name": "Staff",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                },
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                }
-            ],
-            "BaseXPValue": 500,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Grave Mist",
-            "Type": "Undead",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 4,
-            "HitDice": 4,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 20,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 14,
-                "RodStaffWand": 15,
-                "PetrificationPolymorph": 16,
-                "BreathWeapon": 17,
-                "Spell": 17
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Mist Lash",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                },
-                {
-                    "Name": "Mist Lash",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                },
-                {
-                    "Name": "Mist Crush",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Paralyze",
-                    "Description": "Mist attack may paralyze."
-                }
-            ],
-            "BaseXPValue": 550,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Level 8 Ninja",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 3,
-            "ArmorClass": 4,
-            "HitDice": 8,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Kick",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Autokill",
-                    "Description": "May instantly kill on a successful strike."
-                }
-            ],
-            "BaseXPValue": 900,
-            "XPValuePerHitPoint": 10,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Ogre",
-            "Type": "Giant",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 8,
-            "ArmorClass": 5,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 1,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Club",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Slept",
-                    "Description": "Can be affected by sleep effects."
-                },
-                {
-                    "Name": "Run",
-                    "Description": "May flee from combat."
-                }
-            ],
-            "BaseXPValue": 400,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "A",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Arch Mage",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 9,
-            "HitDice": 8,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 2,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 11,
-                "RodStaffWand": 12,
-                "PetrificationPolymorph": 13,
-                "BreathWeapon": 14,
-                "Spell": 14
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 950,
-            "XPValuePerHitPoint": 12,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Werewolf",
-            "Type": "Lycanthrope",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 4,
-            "ArmorClass": 5,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 3,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                },
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                }
-            ],
-            "BaseXPValue": 600,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Level 4 Thief",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 10,
-            "HitDice": 4,
-            "HitDiceType": 8,
-            "ExtraHitPoints": 3,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 13,
-                "RodStaffWand": 14,
-                "PetrificationPolymorph": 15,
-                "BreathWeapon": 16,
-                "Spell": 16
-            },
-            "Morale": { "Value": 7 },
-            "Attacks": [
-                {
-                    "Name": "Dagger",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                },
-                {
-                    "Name": "Backstab",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 300,
-            "XPValuePerHitPoint": 5,
-            "TreasureType": "A",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Medusalizard",
-            "Type": "Monster",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 6,
-            "HitDice": 5,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Morale": { "Value": 9 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Stone",
-                    "Description": "Gaze may petrify."
-                }
-            ],
-            "BaseXPValue": 700,
-            "XPValuePerHitPoint": 6,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-
-        {
-            "Name": "Level 10 Mage",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 10,
-            "HitDice": 10,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 1200,
-            "XPValuePerHitPoint": 14,
-            "TreasureType": "C",
-            "Source": "Wizardry"
+          "Name": "Bite",
+          "NumberOfAttacks": 8,
+          "Damage": "1d10"
         }
-    ]
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Multiple Heads",
+          "Description": "Each head attacks independently; all heads can strike the same or different targets."
+        },
+        {
+          "Name": "Increased Awareness",
+          "Description": "Hydras cannot be surprised due to multiple heads watching in all directions."
+        },
+        {
+          "Name": "Head Loss Behavior",
+          "Description": "Severed heads do not regrow unless the hydra is a special variant (not applicable to standard hydra)."
+        }
+      ],
+      "BaseXPValue": 750,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Djinni",
+      "Type": "Air Spirit",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 12
+      },
+      "Movement": {
+        "Walk": 9,
+        "Fly": 24
+      },
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Air Form",
+          "Description": "Can become invisible, gaseous, or assume whirlwind form."
+        },
+        {
+          "Name": "Create Food & Drink",
+          "Description": "Can create nourishing food and drink for up to a dozen people."
+        },
+        {
+          "Name": "Illusions",
+          "Description": "Can create illusions that are 90% convincing unless interacted with."
+        },
+        {
+          "Name": "Whirlwind Attack",
+          "Description": "Can transform into a whirlwind that deals damage and throws creatures."
+        },
+        {
+          "Name": "Limited Wish",
+          "Description": "A noble djinni may grant a limited wish once per day."
+        }
+      ],
+      "BaseXPValue": 900,
+      "TreasureType": "F",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Medusa",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 8,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 15,
+        "Spell": 14
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Snake Hair Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4 + Poison"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Petrifying Gaze",
+          "Description": "Anyone meeting the medusa’s gaze must save vs petrification or turn to stone."
+        },
+        {
+          "Name": "Poisonous Snake Hair",
+          "Description": "Snake hair bites deliver lethal poison; save vs poison or die."
+        },
+        {
+          "Name": "Surprise",
+          "Description": "Medusae surprise opponents on a roll of 1–3 on d6."
+        }
+      ],
+      "BaseXPValue": 275,
+      "TreasureType": "F",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Wraith",
+      "Type": "Undead",
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitPoints": 30,
+      "Movement": {
+        "Walk": 0,
+        "Fly": 30,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Chilling Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Target loses 1 level unless save vs death."
+        },
+        {
+          "Name": "Incorporeal",
+          "Description": "Can pass through walls; half damage from non-magical weapons."
+        }
+      ],
+      "BaseXPValue": 900,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "E"
+    },
+    {
+      "Name": "Minotaur",
+      "Type": "Monstrous Humanoid",
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "HitPoints": 34,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Battle Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        },
+        {
+          "Name": "Gore",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Labyrinth Sense",
+          "Description": "Never gets lost in mazes; +2 to surprise in dungeon corridors."
+        }
+      ],
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "D"
+    },
+    {
+      "Name": "Giant Snake (Poisonous)",
+      "Type": "Animal",
+      "ArmorClass": 5,
+      "HitDice": 6,
+      "HitPoints": 36,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 0,
+        "Swim": 10,
+        "Burrow": 0,
+        "Climb": 10
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Deadly Poison",
+          "Description": "Bite forces save vs poison or death."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Crocodile",
+      "Type": "Animal",
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "HitPoints": 38,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 0,
+        "Swim": 30,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Roll",
+          "Description": "On hit in water, target must save vs death or take extra 2d6 damage."
+        }
+      ],
+      "BaseXPValue": 550,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Basilisk",
+      "Type": "Monstrous",
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "HitPoints": 32,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Petrifying Gaze",
+          "Description": "Creatures within 30 ft must save vs petrification or turn to stone."
+        }
+      ],
+      "BaseXPValue": 900,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "F"
+    },
+    {
+      "Name": "Giant Weasel",
+      "Type": "Animal",
+      "ArmorClass": 6,
+      "HitDice": 4,
+      "HitPoints": 22,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 10
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Blood Frenzy",
+          "Description": "If it wounds a target, gains +1 to hit that target until it dies."
+        }
+      ],
+      "BaseXPValue": 300,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Ant (Warrior)",
+      "Type": "Vermin",
+      "ArmorClass": 3,
+      "HitDice": 4,
+      "HitPoints": 24,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 10,
+        "Climb": 10
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Mandibles",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Hive Loyalty",
+          "Description": "Never checks morale while within 60 ft of another ant."
+        }
+      ],
+      "BaseXPValue": 275,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Arch Mage",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "HitDice": 8,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 950,
+      "XPValuePerHitPoint": 12,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Werewolf",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        }
+      ],
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Level 4 Thief",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 10,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 7 },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 300,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Medusalizard",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Stone",
+          "Description": "Gaze may petrify."
+        }
+      ],
+      "BaseXPValue": 700,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Level 10 Mage",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 10,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Mage Spells",
+          "Description": "Level 5 Mage Spells"
+        }
+      ],
+      "BaseXPValue": 1200,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Giant Spider",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "Bite may poison."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Level 5 Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6+2"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 450,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Minor Daimyo",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 4,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        },
+        {
+          "Name": "Help",
+          "Description": "May call for reinforcements."
+        }
+      ],
+      "BaseXPValue": 800,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Gargoyle",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 40,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Wing Buffet",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        }
+      ],
+      "BaseXPValue": 700,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Were Bear",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Poison Resistance",
+          "Description": "Resistant to poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze on hit."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 850,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Boring Beetle",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 5,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 20,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 15,
+        "PetrificationPolymorph": 16,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Mandibles",
+          "NumberOfAttacks": 1,
+          "Damage": "5d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Gas Dragon",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 5,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 40,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "50 hp damage breath",
+          "Description": "Gas breath attack."
+        }
+      ],
+      "BaseXPValue": 1200,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Weretiger",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze on hit."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 900,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Master Ninja",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10+3"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10+3"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10+3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "May instantly kill on a successful strike."
+        }
+      ],
+      "BaseXPValue": 1500,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Level 7 Mage",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 8,
+      "HitDice": 7,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 450,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Shade",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmororClass": 7,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 20,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 15,
+        "PetrificationPolymorph": 16,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Shadow Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Swordsman",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 3,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "2d7"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 350,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Gaze Hound",
+      "Type": "Beast",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": -1,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "Gaze attack may paralyze."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Attack Dog",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 1,
+      "HitDice": 4,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 7 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 300,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Bishop",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Grave Mist",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 20,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 15,
+        "PetrificationPolymorph": 16,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Mist Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Mist Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Mist Crush",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Paralyze",
+          "Description": "Mist attack may paralyze."
+        }
+      ],
+      "BaseXPValue": 550,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Level 8 Ninja",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "HitDice": 8,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "May instantly kill on a successful strike."
+        }
+      ],
+      "BaseXPValue": 900,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Ogre",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 400,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Arch Mage",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 9,
+      "HitDice": 8,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 950,
+      "XPValuePerHitPoint": 12,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Werewolf",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        }
+      ],
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Level 4 Thief",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 10,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": { "Value": 7 },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 300,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Medusalizard",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Stone",
+          "Description": "Gaze may petrify."
+        }
+      ],
+      "BaseXPValue": 700,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Level 10 Mage",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 10,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1200,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    }
+  ]
 }

@@ -1,658 +1,705 @@
 {
     "Level": 9,
-    "Monsters": [
+  "Monsters": [
+    {
+      "Name": "Hydra 17 Heads",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 17,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 7,
+        "RodStaffWand": 8,
+        "PetrificationPolymorph": 9,
+        "BreathWeapon": 10,
+        "Spell": 10
+      },
+      "Movement": {
+        "Walk": 9
+      },
+      "Attacks": [
         {
-            "Name": "Fire Giant",
-            "Type": "Giant",
-            "ArmorClass": 3,
-            "HitDice": 11,
-            "HitPoints": 66,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 7,
-                "RodStaffWand": 8,
-                "PetrificationPolymorph": 9,
-                "BreathWeapon": 10,
-                "Spell": 10
-            },
-            "Morale": { "Value": 13 },
-            "Attacks": [
-                {
-                    "Name": "Greatsword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                },
-                {
-                    "Name": "Rock Throw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Fire Resistance",
-                    "Description": "Half damage from fire."
-                }
-            ],
-            "BaseXPValue": 3000,
-            "TreasureType": "L"
-        },
-        {
-            "Name": "Frost Giant",
-            "Type": "Giant",
-            "ArmorClass": 3,
-            "HitDice": 10,
-            "HitPoints": 60,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 7,
-                "RodStaffWand": 8,
-                "PetrificationPolymorph": 9,
-                "BreathWeapon": 10,
-                "Spell": 10
-            },
-            "Morale": { "Value": 13 },
-            "Attacks": [
-                {
-                    "Name": "Axe",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                },
-                {
-                    "Name": "Rock Throw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Cold Resistance",
-                    "Description": "Half damage from cold."
-                }
-            ],
-            "BaseXPValue": 2800,
-            "TreasureType": "L"
-        },
-        {
-            "Name": "Hill Giant Chief",
-            "Type": "Giant",
-            "ArmorClass": 4,
-            "HitDice": 9,
-            "HitPoints": 54,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 8,
-                "RodStaffWand": 9,
-                "PetrificationPolymorph": 10,
-                "BreathWeapon": 11,
-                "Spell": 11
-            },
-            "Morale": { "Value": 12 },
-            "Attacks": [
-                {
-                    "Name": "Club",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Command Giants",
-                    "Description": "Hill giants within 30 ft gain +1 to hit."
-                }
-            ],
-            "BaseXPValue": 2200,
-            "TreasureType": "K"
-        },
-        {
-            "Name": "Giant Spider (Demonic)",
-            "Type": "Vermin",
-            "ArmorClass": 1,
-            "HitDice": 8,
-            "HitPoints": 48,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 40
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 8,
-                "RodStaffWand": 9,
-                "PetrificationPolymorph": 10,
-                "BreathWeapon": 11,
-                "Spell": 11
-            },
-            "Morale": { "Value": 12 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Infernal Venom",
-                    "Description": "Save vs poison or death; survivors take 1d6 damage per round for 3 rounds."
-                }
-            ],
-            "BaseXPValue": 2500,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Giant Scorpion (Huge)",
-            "Type": "Vermin",
-            "ArmorClass": 2,
-            "HitDice": 8,
-            "HitPoints": 50,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 8,
-                "RodStaffWand": 9,
-                "PetrificationPolymorph": 10,
-                "BreathWeapon": 11,
-                "Spell": 11
-            },
-            "Morale": { "Value": 11 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 2,
-                    "Damage": "1d6"
-                },
-                {
-                    "Name": "Sting",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Deadly Poison",
-                    "Description": "Sting forces save vs poison or death."
-                }
-            ],
-            "BaseXPValue": 2300,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Giant Bat (Dire)",
-            "Type": "Animal",
-            "ArmorClass": 5,
-            "HitDice": 7,
-            "HitPoints": 40,
-            "Movement": {
-                "Walk": 10,
-                "Fly": 50,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 9,
-                "RodStaffWand": 10,
-                "PetrificationPolymorph": 11,
-                "BreathWeapon": 12,
-                "Spell": 12
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Swooping Attack",
-                    "Description": "On a dive, gains +2 to hit and +1d6 damage."
-                }
-            ],
-            "BaseXPValue": 1600,
-            "TreasureType": "None"
-        },
-        {
-            "Name": "Giant Snake (Ancient Python)",
-            "Type": "Animal",
-            "ArmorClass": 4,
-            "HitDice": 9,
-            "HitPoints": 54,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 0,
-                "Swim": 10,
-                "Burrow": 0,
-                "Climb": 10
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 8,
-                "RodStaffWand": 9,
-                "PetrificationPolymorph": 10,
-                "BreathWeapon": 11,
-                "Spell": 11
-            },
-            "Morale": { "Value": 11 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Constrict",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Crushing Coils",
-                    "Description": "Held targets take automatic constrict damage each round."
-                }
-            ],
-            "BaseXPValue": 2200,
-            "TreasureType": "None"
-        },
-
-        {
-            "Name": "High Priest",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 3,
-            "HitDice": 8,
-            "Attacks": [
-                {
-                    "Name": "Mace",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8+2"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 900,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Ogre Lord",
-            "Type": "Giant",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 5,
-            "ArmorClass": 4,
-            "HitDice": 8,
-            "Attacks": [
-                {
-                    "Name": "Club",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 700,
-            "TreasureType": "A",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Gorgon",
-            "Type": "Monster",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 2,
-            "HitDice": 8,
-            "Attacks": [
-                {
-                    "Name": "Hoof",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [
-              {
-                "Name": "80 hp damage breath",
-                "Description": "Petrifying breath attack."
-              }
-            ],
-            "BaseXPValue": 1200,
-            "TreasureType": "D",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Lvl 8 Bishop",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 2,
-            "HitDice": 8,
-            "Attacks": [
-                {
-                    "Name": "Staff",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8+4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 950,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "High Priest",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 2,
-            "ArmorClass": 2,
-            "HitDice": 8,
-            "Attacks": [
-                {
-                    "Name": "Mace",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8+4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 1000,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Wyvern",
-            "Type": "Dragon",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 4,
-            "ArmorClass": 3,
-            "HitDice": 7,
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d8"
-                },
-                {
-                    "Name": "Sting",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Poison",
-                    "Description": "Sting may poison."
-                }
-            ],
-            "BaseXPValue": 1100,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Lvl 7 Fighter",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 2,
-            "ArmorClass": 0,
-            "HitDice": 7,
-            "Attacks": [
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12"
-                },
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 850,
-            "TreasureType": "A",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Lvl 10 Fighter",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 0,
-            "HitDice": 7,
-            "Attacks": [
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12"
-                },
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 1200,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Master Thief",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": 2,
-            "HitDice": 12,
-            "Attacks": [
-                {
-                    "Name": "Dagger",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                },
-                {
-                    "Name": "Backstab",
-                    "NumberOfAttacks": 1,
-                    "Damage": "5d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Poison",
-                    "Description": "May poison."
-                },
-                {
-                    "Name": "Run",
-                    "Description": "May flee from combat."
-                }
-            ],
-            "BaseXPValue": 1400,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Arch Mage",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 0,
-            "HitDice": 20,
-            "Attacks": [
-                {
-                    "Name": "Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 2000,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Will O' Wisp",
-            "Type": "Monster",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": -8,
-            "HitDice": 10,
-            "Attacks": [
-                {
-                    "Name": "Shock",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d8"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 1500,
-            "TreasureType": "None",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Bleeb",
-            "Type": "Monster",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 8,
-            "ArmorClass": 0,
-            "HitDice": 10,
-            "Attacks": [
-                {
-                    "Name": "Punch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8+1"
-                },
-                {
-                    "Name": "Punch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8+1"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Fire Resistance",
-                    "Description": "Resistant to fire."
-                },
-                {
-                    "Name": "Cold Resistance",
-                    "Description": "Resistant to cold."
-                },
-                {
-                    "Name": "Poison Resistance",
-                    "Description": "Resistant to poison."
-                },
-                {
-                    "Name": "LvlDrain",
-                    "Description": "May drain levels."
-                },
-                {
-                    "Name": "Stoning",
-                    "Description": "May petrify."
-                },
-                {
-                    "Name": "Magic Resistance",
-                    "Description": "Resistant to magic."
-                },
-                {
-                    "Name": "Run",
-                    "Description": "May flee from combat."
-                }
-            ],
-            "BaseXPValue": 2000,
-            "TreasureType": "D",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Lvl 8 Fighter",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 6,
-            "ArmorClass": -1,
-            "HitDice": 8,
-            "Attacks": [
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12+2"
-                },
-                {
-                    "Name": "Sword",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d12+2"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 1300,
-            "TreasureType": "B",
-            "Source": "Wizardry"
-        },
-        {
-            "Name": "Lesser Demon",
-            "Type": "Demon",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": 4,
-            "HitDice": 10,
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                },
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d3"
-                },
-                {
-                    "Name": "Tail",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d4+4"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Help",
-                    "Description": "May call reinforcements."
-                },
-                {
-                    "Name": "LvlDrain",
-                    "Description": "May drain levels."
-                }
-            ],
-            "BaseXPValue": 1800,
-            "TreasureType": "E",
-            "Source": "Wizardry"
+          "Name": "Bite",
+          "NumberOfAttacks": 17,
+          "Damage": "1d10"
         }
-    ]
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Multiple Heads",
+          "Description": "Each head attacks independently; all heads may strike the same or different targets."
+        },
+        {
+          "Name": "Increased Awareness",
+          "Description": "Hydras are nearly impossible to surprise due to multiple heads watching all directions."
+        },
+        {
+          "Name": "Head Loss Behavior",
+          "Description": "Severed heads do not regrow unless the hydra is a special variant."
+        }
+      ],
+      "BaseXPValue": 1800,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Fire Giant",
+      "Type": "Giant",
+      "ArmorClass": 3,
+      "HitDice": 11,
+      "HitPoints": 66,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 7,
+        "RodStaffWand": 8,
+        "PetrificationPolymorph": 9,
+        "BreathWeapon": 10,
+        "Spell": 10
+      },
+      "Morale": { "Value": 13 },
+      "Attacks": [
+        {
+          "Name": "Greatsword",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Rock Throw",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Resistance",
+          "Description": "Half damage from fire."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "TreasureType": "L"
+    },
+    {
+      "Name": "Frost Giant",
+      "Type": "Giant",
+      "ArmorClass": 3,
+      "HitDice": 10,
+      "HitPoints": 60,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 7,
+        "RodStaffWand": 8,
+        "PetrificationPolymorph": 9,
+        "BreathWeapon": 10,
+        "Spell": 10
+      },
+      "Morale": { "Value": 13 },
+      "Attacks": [
+        {
+          "Name": "Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Rock Throw",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Cold Resistance",
+          "Description": "Half damage from cold."
+        }
+      ],
+      "BaseXPValue": 2800,
+      "TreasureType": "L"
+    },
+    {
+      "Name": "Hill Giant Chief",
+      "Type": "Giant",
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "HitPoints": 54,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Command Giants",
+          "Description": "Hill giants within 30 ft gain +1 to hit."
+        }
+      ],
+      "BaseXPValue": 2200,
+      "TreasureType": "K"
+    },
+    {
+      "Name": "Giant Spider (Demonic)",
+      "Type": "Vermin",
+      "ArmorClass": 1,
+      "HitDice": 8,
+      "HitPoints": 48,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 40
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Infernal Venom",
+          "Description": "Save vs poison or death; survivors take 1d6 damage per round for 3 rounds."
+        }
+      ],
+      "BaseXPValue": 2500,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Scorpion (Huge)",
+      "Type": "Vermin",
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "HitPoints": 50,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Deadly Poison",
+          "Description": "Sting forces save vs poison or death."
+        }
+      ],
+      "BaseXPValue": 2300,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Bat (Dire)",
+      "Type": "Animal",
+      "ArmorClass": 5,
+      "HitDice": 7,
+      "HitPoints": 40,
+      "Movement": {
+        "Walk": 10,
+        "Fly": 50,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Swooping Attack",
+          "Description": "On a dive, gains +2 to hit and +1d6 damage."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Snake (Ancient Python)",
+      "Type": "Animal",
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "HitPoints": 54,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 0,
+        "Swim": 10,
+        "Burrow": 0,
+        "Climb": 10
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Constrict",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Crushing Coils",
+          "Description": "Held targets take automatic constrict damage each round."
+        }
+      ],
+      "BaseXPValue": 2200,
+      "TreasureType": "None"
+    },
+
+    {
+      "Name": "High Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 8,
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+2"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 900,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Ogre Lord",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 8,
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 700,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Gorgon",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "Attacks": [
+        {
+          "Name": "Hoof",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "80 hp damage breath",
+          "Description": "Petrifying breath attack."
+        }
+      ],
+      "BaseXPValue": 1200,
+      "TreasureType": "D",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Lvl 8 Bishop",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 950,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "High Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1000,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Wyvern",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 3,
+      "HitDice": 7,
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "Sting may poison."
+        }
+      ],
+      "BaseXPValue": 1100,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Lvl 7 Fighter",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 0,
+      "HitDice": 7,
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        },
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 850,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Lvl 10 Fighter",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 0,
+      "HitDice": 7,
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        },
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1200,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Master Thief",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "HitDice": 12,
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "5d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 1400,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Arch Mage",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 20,
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 2000,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Will O' Wisp",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -8,
+      "HitDice": 10,
+      "Attacks": [
+        {
+          "Name": "Shock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1500,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Bleeb",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 0,
+      "HitDice": 10,
+      "Attacks": [
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+1"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Poison Resistance",
+          "Description": "Resistant to poison."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "May drain levels."
+        },
+        {
+          "Name": "Stoning",
+          "Description": "May petrify."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "TreasureType": "D",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Lvl 8 Fighter",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": -1,
+      "HitDice": 8,
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12+2"
+        },
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12+2"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1300,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Lesser Demon",
+      "Type": "Demon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 10,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Help",
+          "Description": "May call reinforcements."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "May drain levels."
+        }
+      ],
+      "BaseXPValue": 1800,
+      "TreasureType": "E",
+      "Source": "Wizardry"
+    }
+  ]
 }

@@ -670,3 +670,17 @@ if dragon is encountered on level 3 roll 1d100 to determine what dragon
 1-28 Black dragon
 29-62 Brarass dragon
 63-100 White dragon 20,7
+
+manually added chars for level2, level3, level4, level5, level6, level7, level8, level9 and level10 to MonsterLevels.json
+
+
+when trying to find a picture for monster also try to look for file names without "," so for example Ape, Carnevourus could use the picture 
+file named "ApeCarnevourus.png" 21.3
+
+i was supposed to encounter level 3 monsters Dragon on level 1. I expecte the dragon roll  1d100 to determine what dragon 1-28 Black dragon 
+29-62 Brass dragon 63-100 White dragon 21,8
+
+when encountering level 4 dragons, use this table to see what dragon to encoutter:
+Dice Score	Dragon Type	Age Category (Hit Points/Die) 01–10	Black	very old (7) 11–21	Blue	old (6) 22–29	Brass	very old (7) 30–36	
+Bronze	old (6) 37–48	Copper	old (6) 49–52	Gold	old (6) 53–66	Green	old (6) 67–80	Red	old (6) 81–87	Silver	old (6) 88–00	
+White	very old (7) 22,5

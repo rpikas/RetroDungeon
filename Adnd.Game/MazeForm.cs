@@ -2445,7 +2445,20 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return null;
 
         // Use frequency-based weighted selection
-        return SelectMonsterByFrequencyWeight(filteredMonsters, level, rolledMonsterLevel)?.Name;
+        var selected = SelectMonsterByFrequencyWeight(filteredMonsters, level, rolledMonsterLevel);
+        if (selected == null)
+            return null;
+
+        if (selected.Type == MonsterType.Dragon)
+        {
+            if (rolledMonsterLevel == 3)
+                return RollLevel3DragonBySubtable();
+
+            if (rolledMonsterLevel == 4)
+                return RollLevel4DragonBySubtable();
+        }
+
+        return selected.Name;
     }
 
     private int RollMonsterLevelFromEncounterTable(int dungeonLevel)
@@ -2566,7 +2579,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     continue;
 
                 var creature = creatureEl.GetString();
-                var resolved = ResolveDmgCreatureToMonsterName(creature, dungeonLevel);
+                var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
                 RuleApplicationInfo.Publish(
                     "DMG",
                     "175-177",
@@ -2590,13 +2603,19 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return null;
     }
 
-    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int dungeonLevel)
+    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int monsterLevel)
     {
         if (string.IsNullOrWhiteSpace(dmgCreature))
             return null;
 
-        if (dungeonLevel == 3 && IsDragonEncounter(dmgCreature))
-            return RollLevel3DragonBySubtable();
+        if (IsDragonEncounter(dmgCreature))
+        {
+            if (monsterLevel == 3)
+                return RollLevel3DragonBySubtable();
+
+            if (monsterLevel == 4)
+                return RollLevel4DragonBySubtable();
+        }
 
         if (string.Equals(dmgCreature.Trim(), "Human", StringComparison.OrdinalIgnoreCase)
             || string.Equals(dmgCreature.Trim(), "Humans", StringComparison.OrdinalIgnoreCase))
@@ -2685,6 +2704,36 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             "Dragon Subtable",
             "Resolve level 3 dragon encounter",
             "If dragon is encountered on dungeon level 3, roll 1d100: 01-28 Black Dragon, 29-62 Brass Dragon, 63-100 White Dragon.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
+    }
+
+    private string RollLevel4DragonBySubtable()
+    {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 10 => "Black Dragon",
+            <= 21 => "Blue Dragon",
+            <= 29 => "Brass Dragon",
+            <= 36 => "Bronze Dragon",
+            <= 48 => "Copper Dragon",
+            <= 52 => "Gold Dragon",
+            <= 66 => "Green Dragon",
+            <= 80 => "Red Dragon",
+            <= 87 => "Silver Dragon",
+            _ => "White Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 4 dragon encounter",
+            "If a level 4 dragon is encountered, roll 1d100: 01-10 Black, 11-21 Blue, 22-29 Brass, 30-36 Bronze, 37-48 Copper, 49-52 Gold, 53-66 Green, 67-80 Red, 81-87 Silver, 88-100 White.",
             "1",
             "100",
             roll.ToString(),

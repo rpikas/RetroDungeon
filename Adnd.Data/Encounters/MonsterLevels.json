@@ -477,120 +477,157 @@
         "CountMax": 3
       }
     ],
-    "Level5": [
-      {
-        "DiceMin": 1,
-        "DiceMax": 6,
-        "Creature": "Character",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 7,
-        "DiceMax": 12,
-        "Creature": "Cockatrice",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 13,
-        "DiceMax": 18,
-        "Creature": "Displacer beast",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 19,
-        "DiceMax": 24,
-        "Creature": "Dragon",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 25,
-        "DiceMax": 26,
-        "Creature": "Hydra, 7 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 27,
-        "DiceMax": 28,
-        "Creature": "Hydra, 8 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 29,
-        "DiceMax": 32,
-        "Creature": "Lizard, subterranean",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 33,
-        "DiceMax": 40,
-        "Creature": "Lycanthrope, wereboar",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 41,
-        "DiceMax": 50,
-        "Creature": "Mold, yellow",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 51,
-        "DiceMax": 60,
-        "Creature": "Otyugh",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 61,
-        "DiceMax": 65,
-        "Creature": "Rust monster",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 66,
-        "DiceMax": 70,
-        "Creature": "Shrieker",
-        "CountMin": 1,
-        "CountMax": 5
-      },
-      {
-        "DiceMin": 71,
-        "DiceMax": 74,
-        "Creature": "Slithering tracker",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 75,
-        "DiceMax": 82,
-        "Creature": "Snake, giant poisonous",
-        "CountMin": 1,
-        "CountMax": 3
-      },
-      {
-        "DiceMin": 83,
-        "DiceMax": 86,
-        "Creature": "Snake, giant spitting",
-        "CountMin": 1,
-        "CountMax": 3
-      },
-      {
-        "DiceMin": 87,
-        "DiceMax": 90,
-        "Creature": "Spider, giant",
-        "CountMin": 1,
-        "CountMax": 3
-      }
-    ],
+      "Level5": [
+        {
+          "DiceMin": 1,
+          "DiceMax": 8,
+          "Creature": "Character — see Character Subtable",
+          "CountMin": 1,
+          "CountMax": 2
+        },
+        {
+          "DiceMin": 9,
+          "DiceMax": 15,
+          "Creature": "Cockatrice",
+          "CountMin": 1,
+          "CountMax": 2
+        },
+        {
+          "DiceMin": 16,
+          "DiceMax": 18,
+          "Creature": "Displacer beast",
+          "CountMin": 1,
+          "CountMax": 2
+        },
+        {
+          "DiceMin": 19,
+          "DiceMax": 22,
+          "Creature": "Doppelganger",
+          "CountMin": 1,
+          "CountMax": 3
+        },
+        {
+          "DiceMin": 23,
+          "DiceMax": 24,
+          "Creature": "Dragon — see Dragon Subtable",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 25,
+          "DiceMax": 26,
+          "Creature": "Hydra, 7 heads",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 27,
+          "DiceMax": 27,
+          "Creature": "Hydra, pyro-, 6 heads",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 28,
+          "DiceMax": 28,
+          "Creature": "Imp",
+          "CountMin": 1,
+          "CountMax": 2
+        },
+        {
+          "DiceMin": 29,
+          "DiceMax": 31,
+          "Creature": "Leucrotta",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 32,
+          "DiceMax": 50,
+          "Creature": "Lizard, subterranean",
+          "CountMin": 1,
+          "CountMax": 3
+        },
+        {
+          "DiceMin": 51,
+          "DiceMax": 52,
+          "Creature": "Lycanthrope, wereboar",
+          "CountMin": 1,
+          "CountMax": 3
+        },
+        {
+          "DiceMin": 53,
+          "DiceMax": 60,
+          "Creature": "Minotaur",
+          "CountMin": 1,
+          "CountMax": 3
+        },
+        {
+          "DiceMin": 61,
+          "DiceMax": 64,
+          "Creature": "Mold, yellow",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 65,
+          "DiceMax": 65,
+          "Creature": "Quasit",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 66,
+          "DiceMax": 67,
+          "Creature": "Rust Monster",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 68,
+          "DiceMax": 70,
+          "Creature": "Shrieker",
+          "CountMin": 2,
+          "CountMax": 5
+        },
+        {
+          "DiceMin": 71,
+          "DiceMax": 72,
+          "Creature": "Slithering Tracker",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 73,
+          "DiceMax": 74,
+          "Creature": "Snake, giant, amphisbaena",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 75,
+          "DiceMax": 82,
+          "Creature": "Snake, giant, poisonous",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 83,
+          "DiceMax": 86,
+          "Creature": "Snake, giant, spitting",
+          "CountMin": 1,
+          "CountMax": 1
+        },
+        {
+          "DiceMin": 87,
+          "DiceMax": 100,
+          "Creature": "Spider, giant",
+          "CountMin": 1,
+          "CountMax": 2
+        }
+      ],
+    
+
     "Level6": [
       {
         "DiceMin": 1,
@@ -1072,7 +1109,7 @@
         "CountMax": 3
       }
     ],
-      "Level7": [
+      "Level8": [
         {
           "DiceMin": 1,
           "DiceMax": 1,

@@ -1,6 +1,7 @@
 {
   "Level": 2,
   "Monsters": [
+   
     {
       "Name": "Lvl 2 Magic-User",
       "Type": "Humanoid",

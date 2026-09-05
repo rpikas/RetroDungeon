@@ -1,745 +1,792 @@
 {
     "Level": 8,
-    "Monsters": [
+  "Monsters": [
+    {
+      "Name": "Hydra 13 Heads",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 13,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 11
+      },
+      "Movement": {
+        "Walk": 9
+      },
+      "Attacks": [
         {
-            "Name": "Stone Giant",
-            "Type": "Giant",
-            "ArmorClass": 3,
-            "HitDice": 8,
-            "HitPoints": 48,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 9,
-                "RodStaffWand": 10,
-                "PetrificationPolymorph": 11,
-                "BreathWeapon": 12,
-                "Spell": 12
-            },
-            "Morale": { "Value": 12 },
-            "Attacks": [
-                {
-                    "Name": "Rock Throw",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                },
-                {
-                    "Name": "Club",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Rock Mastery",
-                    "Description": "+2 to hit with thrown rocks."
-                }
-            ],
-            "BaseXPValue": 1500,
-            "TreasureType": "I"
+          "Name": "Bite",
+          "NumberOfAttacks": 13,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Multiple Heads",
+          "Description": "Each head attacks independently; all heads may strike the same or different targets."
         },
         {
-            "Name": "Giant Spider (Phase)",
-            "Type": "Vermin",
-            "ArmorClass": 2,
-            "HitDice": 7,
-            "HitPoints": 40,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 40
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 9,
-                "RodStaffWand": 10,
-                "PetrificationPolymorph": 11,
-                "BreathWeapon": 12,
-                "Spell": 12
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Phase Shift",
-                    "Description": "Can become ethereal for 1 round, 3/day."
-                },
-                {
-                    "Name": "Poison Bite",
-                    "Description": "Save vs poison or death."
-                }
-            ],
-            "BaseXPValue": 1200,
-            "TreasureType": "None"
+          "Name": "Increased Awareness",
+          "Description": "Hydras are nearly impossible to surprise due to multiple heads watching all directions."
         },
         {
-            "Name": "Giant Bear (Cave)",
-            "Type": "Animal",
-            "ArmorClass": 5,
-            "HitDice": 7,
-            "HitPoints": 45,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 0,
-                "Swim": 10,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 11 },
-            "Attacks": [
-                {
-                    "Name": "Claw",
-                    "NumberOfAttacks": 2,
-                    "Damage": "1d8"
-                },
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Mauling Frenzy",
-                    "Description": "If both claws hit, extra 2d8 damage."
-                }
-            ],
-            "BaseXPValue": 900,
-            "TreasureType": "None"
+          "Name": "Head Loss Behavior",
+          "Description": "Severed heads do not regrow unless the hydra is a special variant."
+        }
+      ],
+      "BaseXPValue": 1400,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Stone Giant",
+      "Type": "Giant",
+      "ArmorClass": 3,
+      "HitDice": 8,
+      "HitPoints": 48,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Rock Throw",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
         },
         {
-            "Name": "Wyvern",
-            "Type": "Dragonkin",
-            "ArmorClass": 3,
-            "HitDice": 7,
-            "HitPoints": 42,
-            "Movement": {
-                "Walk": 20,
-                "Fly": 40,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 9,
-                "RodStaffWand": 10,
-                "PetrificationPolymorph": 11,
-                "BreathWeapon": 12,
-                "Spell": 12
-            },
-            "Morale": { "Value": 12 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d6"
-                },
-                {
-                    "Name": "Sting",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Venomous Sting",
-                    "Description": "Sting forces save vs poison or death."
-                }
-            ],
-            "BaseXPValue": 1300,
-            "TreasureType": "J"
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Rock Mastery",
+          "Description": "+2 to hit with thrown rocks."
+        }
+      ],
+      "BaseXPValue": 1500,
+      "TreasureType": "I"
+    },
+    {
+      "Name": "Giant Spider (Phase)",
+      "Type": "Vermin",
+      "ArmorClass": 2,
+      "HitDice": 7,
+      "HitPoints": 40,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 40
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Phase Shift",
+          "Description": "Can become ethereal for 1 round, 3/day."
         },
         {
-            "Name": "Giant Snake (Sea Serpent)",
-            "Type": "Animal",
-            "ArmorClass": 4,
-            "HitDice": 8,
-            "HitPoints": 50,
-            "Movement": {
-                "Walk": 0,
-                "Fly": 0,
-                "Swim": 40,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 9,
-                "RodStaffWand": 10,
-                "PetrificationPolymorph": 11,
-                "BreathWeapon": 12,
-                "Spell": 12
-            },
-            "Morale": { "Value": 11 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d6"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Capsize",
-                    "Description": "Can attempt to overturn small boats; crew must save vs death or fall overboard."
-                }
-            ],
-            "BaseXPValue": 1400,
-            "TreasureType": "None"
+          "Name": "Poison Bite",
+          "Description": "Save vs poison or death."
+        }
+      ],
+      "BaseXPValue": 1200,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Bear (Cave)",
+      "Type": "Animal",
+      "ArmorClass": 5,
+      "HitDice": 7,
+      "HitPoints": 45,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 10,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
         },
         {
-            "Name": "Giant Slug",
-            "Type": "Monstrous",
-            "ArmorClass": 6,
-            "HitDice": 8,
-            "HitPoints": 48,
-            "Movement": {
-                "Walk": 10,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Morale": { "Value": 10 },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "2d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Acid Spit",
-                    "Description": "Ranged attack, 2d6 damage; metal armor suffers corrosion."
-                }
-            ],
-            "BaseXPValue": 1200,
-            "TreasureType": "None"
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Mauling Frenzy",
+          "Description": "If both claws hit, extra 2d8 damage."
+        }
+      ],
+      "BaseXPValue": 900,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Wyvern",
+      "Type": "Dragonkin",
+      "ArmorClass": 3,
+      "HitDice": 7,
+      "HitPoints": 42,
+      "Movement": {
+        "Walk": 20,
+        "Fly": 40,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
         },
         {
-            "Name": "Spectre",
-            "Type": "Undead",
-            "ArmorClass": 2,
-            "HitDice": 7,
-            "HitPoints": 42,
-            "Movement": {
-                "Walk": 0,
-                "Fly": 30,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 8,
-                "RodStaffWand": 9,
-                "PetrificationPolymorph": 10,
-                "BreathWeapon": 11,
-                "Spell": 11
-            },
-            "Morale": { "Value": 13 },
-            "Attacks": [
-                {
-                    "Name": "Chilling Touch",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Energy Drain",
-                    "Description": "Target loses 2 levels unless save vs death."
-                },
-                {
-                    "Name": "Incorporeal",
-                    "Description": "Immune to non-magical weapons."
-                }
-            ],
-            "BaseXPValue": 2000,
-            "TreasureType": "K"
-        },
-
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
         {
-            "Name": "Hatamoto",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": -1,
-            "HitDice": 12,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Attacks": [
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d8"
-                },
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d8"
-                },
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Autokill",
-                    "Description": "May instantly kill on a successful strike."
-                }
-            ],
-            "BaseXPValue": 1600,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-
+          "Name": "Venomous Sting",
+          "Description": "Sting forces save vs poison or death."
+        }
+      ],
+      "BaseXPValue": 1300,
+      "TreasureType": "J"
+    },
+    {
+      "Name": "Giant Snake (Sea Serpent)",
+      "Type": "Animal",
+      "ArmorClass": 4,
+      "HitDice": 8,
+      "HitPoints": 50,
+      "Movement": {
+        "Walk": 0,
+        "Fly": 0,
+        "Swim": 40,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Morale": { "Value": 11 },
+      "Attacks": [
         {
-            "Name": "High Ninja",
-            "Type": "Humanoid",
-            "NumberOfAppearancesMin": 1,
-            "NumberOfAppearancesMax": 1,
-            "ArmorClass": -1,
-            "HitDice": 12,
-            "HitDiceType": 4,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 40,
-                "Fly": 0,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 20
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 10,
-                "RodStaffWand": 11,
-                "PetrificationPolymorph": 12,
-                "BreathWeapon": 13,
-                "Spell": 13
-            },
-            "Attacks": [
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d8"
-                },
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d8"
-                },
-                {
-                    "Name": "Katana",
-                    "NumberOfAttacks": 1,
-                    "Damage": "3d8"
-                }
-            ],
-            "SpecialAbilities": [
-                {
-                    "Name": "Autokill",
-                    "Description": "May instantly kill on a successful strike."
-                }
-            ],
-            "BaseXPValue": 1600,
-            "TreasureType": "C",
-            "Source": "Wizardry"
-        },
-
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
         {
-            "Name": "Dragon Puppy",
-            "Type": "Dragon",
-            "NumberOfAppearancesMin": 2,
-            "NumberOfAppearancesMax": 4,
-            "ArmorClass": 4,
-            "HitDice": 5,
-            "HitDiceType": 10,
-            "ExtraHitPoints": 0,
-            "Movement": {
-                "Walk": 30,
-                "Fly": 20,
-                "Swim": 0,
-                "Burrow": 0,
-                "Climb": 0
-            },
-            "SavingThrows": {
-                "ParalyzationPoisonDeath": 12,
-                "RodStaffWand": 13,
-                "PetrificationPolymorph": 14,
-                "BreathWeapon": 15,
-                "Spell": 15
-            },
-            "Attacks": [
-                {
-                    "Name": "Bite",
-                    "NumberOfAttacks": 1,
-                    "Damage": "1d10"
-                }
-            ],
-            "SpecialAbilities": [],
-            "BaseXPValue": 400,
-            "TreasureType": "B",
-            "Source": "Wizardry"
+          "Name": "Capsize",
+          "Description": "Can attempt to overturn small boats; crew must save vs death or fall overboard."
+        }
+      ],
+      "BaseXPValue": 1400,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Giant Slug",
+      "Type": "Monstrous",
+      "ArmorClass": 6,
+      "HitDice": 8,
+      "HitPoints": 48,
+      "Movement": {
+        "Walk": 10,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Acid Spit",
+          "Description": "Ranged attack, 2d6 damage; metal armor suffers corrosion."
+        }
+      ],
+      "BaseXPValue": 1200,
+      "TreasureType": "None"
+    },
+    {
+      "Name": "Spectre",
+      "Type": "Undead",
+      "ArmorClass": 2,
+      "HitDice": 7,
+      "HitPoints": 42,
+      "Movement": {
+        "Walk": 0,
+        "Fly": 30,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Morale": { "Value": 13 },
+      "Attacks": [
+        {
+          "Name": "Chilling Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Target loses 2 levels unless save vs death."
         },
+        {
+          "Name": "Incorporeal",
+          "Description": "Immune to non-magical weapons."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "TreasureType": "K"
+    },
 
-            {
-                "Name": "Chimera",
-                "Type": "Monster",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 4,
-                "ArmorClass": 2,
-                "HitDice": 9,
-                "Movement": {
-                    "Walk": 30,
-                    "Fly": 40,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 0
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 11,
-                    "RodStaffWand": 12,
-                    "PetrificationPolymorph": 13,
-                    "BreathWeapon": 14,
-                    "Spell": 14
-                },
-                "Attacks": [
-                    {
-                        "Name": "Claw",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d3"
-                    },
-                    {
-                        "Name": "Claw",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d3"
-                    },
-                    {
-                        "Name": "Bite",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d4"
-                    },
-                    {
-                        "Name": "Bite",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d4"
-                    },
-                    {
-                        "Name": "Horn",
-                        "NumberOfAttacks": 1,
-                        "Damage": "2d4"
-                    },
-                    {
-                        "Name": "Tail",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d4"
-                    }
-                ],
-                "SpecialAbilities": [
-                  {
-                    "Name": "70 hp damage breath",
-                    "Description": "Fire breath attack."
-                  }
-                ],
-                "BaseXPValue": 1200,
-                "TreasureType": "D",
-                "Source": "Wizardry"
-            },
+    {
+      "Name": "Hatamoto",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "May instantly kill on a successful strike."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
 
-            {
-                "Name": "Thief",
-                "Type": "Humanoid",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 5,
-                "ArmorClass": 4,
-                "HitDice": 9,
-                "Movement": {
-                    "Walk": 40,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 20
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 12,
-                    "RodStaffWand": 13,
-                    "PetrificationPolymorph": 14,
-                    "BreathWeapon": 15,
-                    "Spell": 15
-                },
-                "Attacks": [
-                    {
-                        "Name": "Dagger",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d8"
-                    },
-                    {
-                        "Name": "Punch",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d3"
-                    },
-                    {
-                        "Name": "Backstab",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d8"
-                    },
-                    {
-                        "Name": "Kick",
-                        "NumberOfAttacks": 1,
-                        "Damage": "2d10"
-                    }
-                ],
-                "SpecialAbilities": [
-                    {
-                        "Name": "Run",
-                        "Description": "May flee from combat."
-                    }
-                ],
-                "BaseXPValue": 700,
-                "TreasureType": "A",
-                "Source": "Wizardry"
-            },
+    {
+      "Name": "High Ninja",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "May instantly kill on a successful strike."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "TreasureType": "C",
+      "Source": "Wizardry"
+    },
 
-            {
-                "Name": "Lvl 8 Priest",
-                "Type": "Humanoid",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 5,
-                "ArmorClass": 3,
-                "HitDice": 7,
-                "Movement": {
-                    "Walk": 30,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 0
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 11,
-                    "RodStaffWand": 12,
-                    "PetrificationPolymorph": 13,
-                    "BreathWeapon": 14,
-                    "Spell": 14
-                },
-                "Attacks": [
-                    {
-                        "Name": "Mace",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d8"
-                    }
-                ],
-                "SpecialAbilities": [],
-                "BaseXPValue": 900,
-                "TreasureType": "B",
-                "Source": "Wizardry"
-            },
+    {
+      "Name": "Dragon Puppy",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 20,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 400,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
 
-            {
-                "Name": "Troll",
-                "Type": "Giant",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 3,
-                "ArmorClass": 4,
-                "HitDice": 6,
-                "Movement": {
-                    "Walk": 30,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 0
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 12,
-                    "RodStaffWand": 13,
-                    "PetrificationPolymorph": 14,
-                    "BreathWeapon": 15,
-                    "Spell": 15
-                },
-                "Attacks": [
-                    {
-                        "Name": "Claw",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d4"
-                    },
-                    {
-                        "Name": "Claw",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d4"
-                    },
-                    {
-                        "Name": "Bite",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d4"
-                    }
-                ],
-                "SpecialAbilities": [],
-                "BaseXPValue": 600,
-                "TreasureType": "A",
-                "Source": "Wizardry"
-            },
+    {
+      "Name": "Chimera",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 2,
+      "HitDice": 9,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 40,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Horn",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "3d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "70 hp damage breath",
+          "Description": "Fire breath attack."
+        }
+      ],
+      "BaseXPValue": 1200,
+      "TreasureType": "D",
+      "Source": "Wizardry"
+    },
 
-            {
-                "Name": "Lvl 6 Ninja",
-                "Type": "Humanoid",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 5,
-                "ArmorClass": 6,
-                "HitDice": 6,
-                "Movement": {
-                    "Walk": 40,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 20
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 12,
-                    "RodStaffWand": 13,
-                    "PetrificationPolymorph": 14,
-                    "BreathWeapon": 15,
-                    "Spell": 15
-                },
-                "Attacks": [
-                    {
-                        "Name": "Katana",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d6"
-                    },
-                    {
-                        "Name": "Kick",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d6"
-                    },
-                    {
-                        "Name": "Punch",
-                        "NumberOfAttacks": 1,
-                        "Damage": "1d6"
-                    }
-                ],
-                "SpecialAbilities": [
-                    {
-                        "Name": "Autokill",
-                        "Description": "May instantly kill on a successful strike."
-                    }
-                ],
-                "BaseXPValue": 800,
-                "TreasureType": "B",
-                "Source": "Wizardry"
-            },
+    {
+      "Name": "Thief",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        }
+      ],
+      "BaseXPValue": 700,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
 
-            {
-                "Name": "The High Master",
-                "Type": "Humanoid",
-                "NumberOfAppearancesMin": 1,
-                "NumberOfAppearancesMax": 1,
-                "ArmorClass": -2,
-                "HitDice": 15,
-                "Movement": {
-                    "Walk": 40,
-                    "Fly": 0,
-                    "Swim": 0,
-                    "Burrow": 0,
-                    "Climb": 20
-                },
-                "SavingThrows": {
-                    "ParalyzationPoisonDeath": 9,
-                    "RodStaffWand": 10,
-                    "PetrificationPolymorph": 11,
-                    "BreathWeapon": 12,
-                    "Spell": 12
-                },
-                "Attacks": [
-                    {
-                        "Name": "Strike",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d12"
-                    },
-                    {
-                        "Name": "Strike",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d12"
-                    },
-                    {
-                        "Name": "Kick",
-                        "NumberOfAttacks": 1,
-                        "Damage": "3d6"
-                    }
-                ],
-                "SpecialAbilities": [
-                    {
-                        "Name": "Fire Resistance",
-                        "Description": "Resistant to fire."
-                    },
-                    {
-                        "Name": "Cold Resistance",
-                        "Description": "Resistant to cold."
-                    },
-                    {
-                        "Name": "Poison Resistance",
-                        "Description": "Resistant to poison."
-                    },
-                    {
-                        "Name": "LvlDrain",
-                        "Description": "May drain levels."
-                    },
-                    {
-                        "Name": "Stoning",
-                        "Description": "May petrify."
-                    },
-                    {
-                        "Name": "Magic Resistance",
-                        "Description": "Resistant to magic."
-                    },
-                    {
-                        "Name": "Autokill",
-                        "Description": "May instantly kill on a successful strike."
-                    }
-                ],
-                "BaseXPValue": 3000,
-                "TreasureType": "E",
-                "Source": "Wizardry"
-            }
-        
+    {
+      "Name": "Lvl 8 Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 3,
+      "HitDice": 7,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 900,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
 
-    ]
+    {
+      "Name": "Troll",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 600,
+      "TreasureType": "A",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Lvl 6 Ninja",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "May instantly kill on a successful strike."
+        }
+      ],
+      "BaseXPValue": 800,
+      "TreasureType": "B",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "The High Master",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -2,
+      "HitDice": 15,
+      "Movement": {
+        "Walk": 40,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 20
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        },
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Poison Resistance",
+          "Description": "Resistant to poison."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "May drain levels."
+        },
+        {
+          "Name": "Stoning",
+          "Description": "May petrify."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Resistant to magic."
+        },
+        {
+          "Name": "Autokill",
+          "Description": "May instantly kill on a successful strike."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "TreasureType": "E",
+      "Source": "Wizardry"
+    }
+
+
+  ]
 }

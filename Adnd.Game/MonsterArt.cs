@@ -35,8 +35,12 @@ public static class MonsterArt
     {
         if (string.IsNullOrWhiteSpace(monsterName)) return null;
 
-        var slug = monsterName.Trim().ToLowerInvariant().Replace(" ", "_");
-        var camelCase = monsterName.Trim().Replace(" ", "");
+        var trimmedName = monsterName.Trim();
+        var slug = trimmedName.ToLowerInvariant().Replace(" ", "_");
+        var camelCase = trimmedName.Replace(" ", "");
+        var noComma = trimmedName.Replace(",", string.Empty).Trim();
+        var noCommaSlug = noComma.ToLowerInvariant().Replace(" ", "_");
+        var noCommaCamelCase = noComma.Replace(" ", "");
         // PNG first, webp LAST. Both halves have to be able to open whatever is chosen, and the viewer reads
         // PNG and JPG only -- Unity's LoadImage has no webp decoder, while the game's ImageSharp does. With
         // webp preferred, a monster that had both formats came out as a blank card on the table while looking
@@ -69,7 +73,10 @@ public static class MonsterArt
 
             AddCandidates(baseFolder, slug, useWizardrySuffix);
             AddCandidates(baseFolder, camelCase, useWizardrySuffix);
+            AddCandidates(baseFolder, noCommaSlug, useWizardrySuffix);
+            AddCandidates(baseFolder, noCommaCamelCase, useWizardrySuffix);
             AddCandidates(baseFolder, monsterName, useWizardrySuffix);
+            AddCandidates(baseFolder, noComma, useWizardrySuffix);
 
             // Source paths
             var sourceFolder1 = Path.Combine("Adnd.Game", "Assets", "Monsters", levelFolder);
@@ -77,8 +84,14 @@ public static class MonsterArt
 
             AddCandidates(sourceFolder1, slug, useWizardrySuffix);
             AddCandidates(sourceFolder1, camelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder1, noCommaSlug, useWizardrySuffix);
+            AddCandidates(sourceFolder1, noCommaCamelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder1, noComma, useWizardrySuffix);
             AddCandidates(sourceFolder2, slug, useWizardrySuffix);
             AddCandidates(sourceFolder2, camelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder2, noCommaSlug, useWizardrySuffix);
+            AddCandidates(sourceFolder2, noCommaCamelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder2, noComma, useWizardrySuffix);
         }
 
         // Also search in all level folders (Level1-Level10) if not found yet
@@ -89,7 +102,10 @@ public static class MonsterArt
 
             AddCandidates(baseFolder, slug, useWizardrySuffix);
             AddCandidates(baseFolder, camelCase, useWizardrySuffix);
+            AddCandidates(baseFolder, noCommaSlug, useWizardrySuffix);
+            AddCandidates(baseFolder, noCommaCamelCase, useWizardrySuffix);
             AddCandidates(baseFolder, monsterName, useWizardrySuffix);
+            AddCandidates(baseFolder, noComma, useWizardrySuffix);
 
             // Source paths
             var sourceFolder1 = Path.Combine("Adnd.Game", "Assets", "Monsters", levelFolder);
@@ -97,21 +113,36 @@ public static class MonsterArt
 
             AddCandidates(sourceFolder1, slug, useWizardrySuffix);
             AddCandidates(sourceFolder1, camelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder1, noCommaSlug, useWizardrySuffix);
+            AddCandidates(sourceFolder1, noCommaCamelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder1, noComma, useWizardrySuffix);
             AddCandidates(sourceFolder2, slug, useWizardrySuffix);
             AddCandidates(sourceFolder2, camelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder2, noCommaSlug, useWizardrySuffix);
+            AddCandidates(sourceFolder2, noCommaCamelCase, useWizardrySuffix);
+            AddCandidates(sourceFolder2, noComma, useWizardrySuffix);
         }
 
         // Fallback: search in root Monsters folder
         var rootFolder = Path.Combine(baseDir, "Assets", "Monsters");
         AddCandidates(rootFolder, slug, useWizardrySuffix);
         AddCandidates(rootFolder, camelCase, useWizardrySuffix);
+        AddCandidates(rootFolder, noCommaSlug, useWizardrySuffix);
+        AddCandidates(rootFolder, noCommaCamelCase, useWizardrySuffix);
+        AddCandidates(rootFolder, noComma, useWizardrySuffix);
         AddCandidates(rootFolder, monsterName, useWizardrySuffix);
 
         // Source root paths
         AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), slug, useWizardrySuffix);
         AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), camelCase, useWizardrySuffix);
+        AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), noCommaSlug, useWizardrySuffix);
+        AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), noCommaCamelCase, useWizardrySuffix);
+        AddCandidates(Path.Combine("Adnd.Game", "Assets", "Monsters"), noComma, useWizardrySuffix);
         AddCandidates(Path.Combine("Assets", "Monsters"), slug, useWizardrySuffix);
         AddCandidates(Path.Combine("Assets", "Monsters"), camelCase, useWizardrySuffix);
+        AddCandidates(Path.Combine("Assets", "Monsters"), noCommaSlug, useWizardrySuffix);
+        AddCandidates(Path.Combine("Assets", "Monsters"), noCommaCamelCase, useWizardrySuffix);
+        AddCandidates(Path.Combine("Assets", "Monsters"), noComma, useWizardrySuffix);
         return candidates.FirstOrDefault(File.Exists);
     }
 }
