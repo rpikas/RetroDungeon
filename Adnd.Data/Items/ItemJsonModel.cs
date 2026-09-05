@@ -3,6 +3,7 @@
 public class ItemJsonModel
 {
     public string Name { get; set; } = "";
+    public string Status { get; set; } = "";
     public string Type { get; set; } = "";
     public string Slot { get; set; } = "";
     public int Cost { get; set; }

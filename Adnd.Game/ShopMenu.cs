@@ -290,6 +290,7 @@ public class ShopMenu
                     Cost = it.Cost,
                     Weight = it.Weight,
                     ToHitBonus = it.ToHitBonus,
+                    Status = it.Status,
                     IsShopBuyable = it.IsShopBuyable,
                     StockQuantity = it.StockQuantity,
                     ArmorClassBonus = it.ArmorClassBonus,

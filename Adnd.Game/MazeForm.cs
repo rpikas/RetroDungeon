@@ -2566,7 +2566,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     continue;
 
                 var creature = creatureEl.GetString();
-                var resolved = ResolveDmgCreatureToMonsterName(creature);
+                var resolved = ResolveDmgCreatureToMonsterName(creature, dungeonLevel);
                 RuleApplicationInfo.Publish(
                     "DMG",
                     "175-177",
@@ -2590,10 +2590,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return null;
     }
 
-    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature)
+    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int dungeonLevel)
     {
         if (string.IsNullOrWhiteSpace(dmgCreature))
             return null;
+
+        if (dungeonLevel == 3 && IsDragonEncounter(dmgCreature))
+            return RollLevel3DragonBySubtable();
 
         if (string.Equals(dmgCreature.Trim(), "Human", StringComparison.OrdinalIgnoreCase)
             || string.Equals(dmgCreature.Trim(), "Humans", StringComparison.OrdinalIgnoreCase))
@@ -2659,6 +2662,35 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         return null;
+    }
+
+    private static bool IsDragonEncounter(string dmgCreature)
+    {
+        var trimmed = dmgCreature.Trim();
+        return trimmed.StartsWith("Dragon", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private string RollLevel3DragonBySubtable()
+    {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 28 => "Black Dragon",
+            <= 62 => "Brass Dragon",
+            _ => "White Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 3 dragon encounter",
+            "If dragon is encountered on dungeon level 3, roll 1d100: 01-28 Black Dragon, 29-62 Brass Dragon, 63-100 White Dragon.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
     }
 
     private static string NormalizeMonsterName(string value)

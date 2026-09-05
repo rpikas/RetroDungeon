@@ -2,6 +2,7 @@
   "Category": "MagicItem",
   "Items": [
     {
+      "Status": "NotImplemented",
       "Name": "Achemy Jug",
       "Type": "MagicItem",
       "Slot": "",
@@ -18,6 +19,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Amulet of Inescapable Location",
       "Type": "MagicItem",
       "Slot": "",
@@ -34,6 +36,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Amulet of Life Protection",
       "Type": "MagicItem",
       "Slot": "",
@@ -50,6 +53,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Amulet of the Planes",
       "Type": "MagicItem",
       "Slot": "",
@@ -66,6 +70,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Amulet of Proof Against Detection and Location",
       "Type": "MagicItem",
       "Slot": "",
@@ -82,6 +87,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Apparatus of Kwalish",
       "Type": "MagicItem",
       "Slot": "",
@@ -98,6 +104,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Arrow of Direction",
       "Type": "MagicItem",
       "Slot": "",
@@ -114,6 +121,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Artifact or Relic",
       "Type": "MagicItem",
       "Slot": "",
@@ -130,6 +138,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bag of Beans",
       "Type": "MagicItem",
       "Slot": "",
@@ -146,6 +155,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bag of Devouring",
       "Type": "MagicItem",
       "Slot": "",
@@ -162,6 +172,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bag of Holding",
       "Type": "MagicItem",
       "Slot": "",
@@ -178,6 +189,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bag of Transmuting",
       "Type": "MagicItem",
       "Slot": "",
@@ -194,6 +206,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bag of Tricks",
       "Type": "MagicItem",
       "Slot": "",
@@ -210,6 +223,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Beaker of Plentiful Potions",
       "Type": "MagicItem",
       "Slot": "",
@@ -226,6 +240,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Boat, Folding",
       "Type": "MagicItem",
       "Slot": "",
@@ -242,6 +257,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Book of Exalted Deeds",
       "Type": "MagicItem",
       "Slot": "",
@@ -258,6 +274,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Book of Infinite Spells",
       "Type": "MagicItem",
       "Slot": "",
@@ -274,6 +291,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Book of Vile Darkness",
       "Type": "MagicItem",
       "Slot": "",
@@ -290,6 +308,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Boats of Dancing",
       "Type": "MagicItem",
       "Slot": "",
@@ -306,6 +325,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Boots of Elvenkind",
       "Type": "MagicItem",
       "Slot": "",
@@ -322,6 +342,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Boots of Levitation",
       "Type": "MagicItem",
       "Slot": "",
@@ -338,6 +359,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Boots of Speed",
       "Type": "MagicItem",
       "Slot": "",
@@ -354,6 +376,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Boots of Striding and Springing",
       "Type": "MagicItem",
       "Slot": "",
@@ -370,6 +393,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bowl Commanding Water Elementals",
       "Type": "MagicItem",
       "Slot": "",
@@ -386,6 +410,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bowl of Watery Death",
       "Type": "MagicItem",
       "Slot": "",
@@ -402,6 +427,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bracers of Defense",
       "Type": "MagicItem",
       "Slot": "",
@@ -418,6 +444,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bracers of Defenselessness",
       "Type": "MagicItem",
       "Slot": "",
@@ -434,6 +461,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Brazier Commanding Fire Elementals",
       "Type": "MagicItem",
       "Slot": "",
@@ -450,6 +478,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Brazier of Sleep Smoke",
       "Type": "MagicItem",
       "Slot": "",
@@ -466,6 +495,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Brooch of Shielding",
       "Type": "MagicItem",
       "Slot": "",
@@ -482,6 +512,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Broom of Animated Attack",
       "Type": "MagicItem",
       "Slot": "",
@@ -498,6 +529,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Broom of Flying",
       "Type": "MagicItem",
       "Slot": "",
@@ -514,6 +546,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Bucknard's Everfull Purse",
       "Type": "MagicItem",
       "Slot": "",
@@ -530,6 +563,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Candle of Invocation",
       "Type": "MagicItem",
       "Slot": "",
@@ -546,6 +580,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Carpet of Flying",
       "Type": "MagicItem",
       "Slot": "",
@@ -562,6 +597,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Censer Controlling Air Elementals",
       "Type": "MagicItem",
       "Slot": "",
@@ -578,6 +614,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Censer of Summoning Hostile Air Elementals",
       "Type": "MagicItem",
       "Slot": "",
@@ -594,6 +631,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Chime of Opening",
       "Type": "MagicItem",
       "Slot": "",
@@ -610,6 +648,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Chime of Hunger",
       "Type": "MagicItem",
       "Slot": "",
@@ -626,6 +665,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Cloak of Displacement",
       "Type": "MagicItem",
       "Slot": "",
@@ -642,6 +682,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Cloak of Elvenkind",
       "Type": "MagicItem",
       "Slot": "",
@@ -658,6 +699,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Cloak of Mana Ray",
       "Type": "MagicItem",
       "Slot": "",
@@ -674,6 +716,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Cloak of Poisonousness",
       "Type": "MagicItem",
       "Slot": "",
@@ -690,6 +733,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Cloak of Protection",
       "Type": "MagicItem",
       "Slot": "",
@@ -706,6 +750,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Crystal Ball",
       "Type": "MagicItem",
       "Slot": "",
@@ -722,6 +767,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Crystal Hypnosis Ball",
       "Type": "MagicItem",
       "Slot": "",
@@ -738,6 +784,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Figurine of Wondrous Power",
       "Type": "MagicItem",
       "Slot": "",
@@ -754,6 +801,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Flask of Curses",
       "Type": "MagicItem",
       "Slot": "",
@@ -770,6 +818,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Gauntlets of Dexterity",
       "Type": "MagicItem",
       "Slot": "",
@@ -786,6 +835,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Gauntlets of Fumbling",
       "Type": "MagicItem",
       "Slot": "",
@@ -802,6 +852,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Gauntlets of Ogre Power",
       "Type": "MagicItem",
       "Slot": "",
@@ -818,6 +869,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Gauntlets of Swimming and Climbing",
       "Type": "MagicItem",
       "Slot": "",
@@ -834,6 +886,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Gem of Brightness",
       "Type": "MagicItem",
       "Slot": "",
@@ -850,6 +903,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Gem of Seeing",
       "Type": "MagicItem",
       "Slot": "",
@@ -866,6 +920,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Girdle of Femininity/Masculinity",
       "Type": "MagicItem",
       "Slot": "",
@@ -882,6 +937,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Girdle of Giant Strength",
       "Type": "MagicItem",
       "Slot": "",
@@ -898,6 +954,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Helm of Brilliance",
       "Type": "MagicItem",
       "Slot": "",
@@ -914,6 +971,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Helm of Comprehending Languages & Reading Magic",
       "Type": "MagicItem",
       "Slot": "",
@@ -930,6 +988,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Helm of Opposite Alignment",
       "Type": "MagicItem",
       "Slot": "",
@@ -946,6 +1005,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Helm of Telepathy",
       "Type": "MagicItem",
       "Slot": "",
@@ -962,6 +1022,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Helm of Teleportation",
       "Type": "MagicItem",
       "Slot": "",
@@ -978,6 +1039,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Helm of Underwater Action",
       "Type": "MagicItem",
       "Slot": "",
@@ -994,6 +1056,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horn of Blasting",
       "Type": "MagicItem",
       "Slot": "",
@@ -1010,6 +1073,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horn of Bubbles",
       "Type": "MagicItem",
       "Slot": "",
@@ -1026,6 +1090,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horn of Collapsing",
       "Type": "MagicItem",
       "Slot": "",
@@ -1042,6 +1107,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horn of the Tritons",
       "Type": "MagicItem",
       "Slot": "",
@@ -1058,6 +1124,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horn of Valhalla",
       "Type": "MagicItem",
       "Slot": "",
@@ -1074,6 +1141,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horseshoes of Speed",
       "Type": "MagicItem",
       "Slot": "",
@@ -1090,6 +1158,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Horseshoes of a Zephyr",
       "Type": "MagicItem",
       "Slot": "",
@@ -1106,6 +1175,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Incense of Meditation",
       "Type": "MagicItem",
       "Slot": "",
@@ -1122,6 +1192,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Incense of Obsession",
       "Type": "MagicItem",
       "Slot": "",
@@ -1138,6 +1209,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Clear Spindle",
       "Type": "MagicItem",
       "Slot": "",
@@ -1154,6 +1226,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Dusty Rose Prism",
       "Type": "MagicItem",
       "Slot": "",
@@ -1170,6 +1243,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Deep Red Sphere",
       "Type": "MagicItem",
       "Slot": "",
@@ -1186,6 +1260,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Incandescent Blue Sphere",
       "Type": "MagicItem",
       "Slot": "",
@@ -1202,6 +1277,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Pale Blue Rhomboid",
       "Type": "MagicItem",
       "Slot": "",
@@ -1218,6 +1294,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Pink and Green Sphere",
       "Type": "MagicItem",
       "Slot": "",
@@ -1234,6 +1311,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Pink Rhomboid",
       "Type": "MagicItem",
       "Slot": "",
@@ -1250,6 +1328,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Scarlet and Blue Sphere",
       "Type": "MagicItem",
       "Slot": "",
@@ -1266,6 +1345,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Ioun Stone, Vibrant Purple Prism",
       "Type": "MagicItem",
       "Slot": "",
@@ -1282,6 +1362,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Iron Bands of Bilarro",
       "Type": "MagicItem",
       "Slot": "",
@@ -1298,6 +1379,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Iron Flask",
       "Type": "MagicItem",
       "Slot": "",
@@ -1314,6 +1396,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Javelin of Lightning",
       "Type": "MagicItem",
       "Slot": "",
@@ -1330,6 +1413,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Javelin of Piercing",
       "Type": "MagicItem",
       "Slot": "",
@@ -1346,6 +1430,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Jug of Alchemy",
       "Type": "MagicItem",
       "Slot": "",
@@ -1362,6 +1447,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Keoghtom's Ointment",
       "Type": "MagicItem",
       "Slot": "",
@@ -1378,6 +1464,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Lens of Detection",
       "Type": "MagicItem",
       "Slot": "",
@@ -1394,6 +1481,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Manual of Bodily Health",
       "Type": "MagicItem",
       "Slot": "",
@@ -1410,6 +1498,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Manual of Gainful Exercise",
       "Type": "MagicItem",
       "Slot": "",
@@ -1426,6 +1515,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Manual of Golems",
       "Type": "MagicItem",
       "Slot": "",
@@ -1442,6 +1532,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Manual of Quickness of Action",
       "Type": "MagicItem",
       "Slot": "",
@@ -1458,6 +1549,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Marvelous Pigments",
       "Type": "MagicItem",
       "Slot": "",
@@ -1474,6 +1566,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Mask of the Medusa",
       "Type": "MagicItem",
       "Slot": "",
@@ -1490,6 +1583,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Medallion of ESP",
       "Type": "MagicItem",
       "Slot": "",
@@ -1506,6 +1600,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Medallion of Thought Projection",
       "Type": "MagicItem",
       "Slot": "",
@@ -1522,6 +1617,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Mirror of Life Trapping",
       "Type": "MagicItem",
       "Slot": "",
@@ -1538,6 +1634,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Mirror of Mental Prowess",
       "Type": "MagicItem",
       "Slot": "",
@@ -1554,6 +1651,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Necklace of Missiles",
       "Type": "MagicItem",
       "Slot": "",
@@ -1570,6 +1668,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Necklace of Strangulation",
       "Type": "MagicItem",
       "Slot": "",
@@ -1586,6 +1685,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Net of Snaring",
       "Type": "MagicItem",
       "Slot": "",
@@ -1602,6 +1702,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Nolzur's Marvelous Pigments",
       "Type": "MagicItem",
       "Slot": "",
@@ -1618,6 +1719,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Nolzur's Marvelous Pigments (Greater)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1634,6 +1736,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Orb of Storms",
       "Type": "MagicItem",
       "Slot": "",
@@ -1650,6 +1753,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Pearl of Power",
       "Type": "MagicItem",
       "Slot": "",
@@ -1666,6 +1770,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Periapt of Health",
       "Type": "MagicItem",
       "Slot": "",
@@ -1682,6 +1787,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Periapt of Proof Against Poison",
       "Type": "MagicItem",
       "Slot": "",
@@ -1698,6 +1804,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Periapt of Wound Closure",
       "Type": "MagicItem",
       "Slot": "",
@@ -1714,6 +1821,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Phylactery of Faithfulness",
       "Type": "MagicItem",
       "Slot": "",
@@ -1730,6 +1838,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Pipes of Haunting",
       "Type": "MagicItem",
       "Slot": "",
@@ -1746,6 +1855,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Pipes of the Sewers",
       "Type": "MagicItem",
       "Slot": "",
@@ -1762,6 +1872,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Portable Hole",
       "Type": "MagicItem",
       "Slot": "",
@@ -1778,6 +1889,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Quaal's Feather Token (Anchor)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1794,6 +1906,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Quaal's Feather Token (Bird)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1810,6 +1923,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Quaal's Feather Token (Fan)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1826,6 +1940,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Quaal's Feather Token (Swan Boat)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1842,6 +1957,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Quaal's Feather Token (Tree)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1858,6 +1974,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Quaal's Feather Token (Whip)",
       "Type": "MagicItem",
       "Slot": "",
@@ -1874,6 +1991,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Robe of Eyes",
       "Type": "MagicItem",
       "Slot": "",
@@ -1890,6 +2008,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Robe of Scintillating Colors",
       "Type": "MagicItem",
       "Slot": "",
@@ -1906,6 +2025,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Robe of Stars",
       "Type": "MagicItem",
       "Slot": "",
@@ -1922,6 +2042,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Robe of Useful Items",
       "Type": "MagicItem",
       "Slot": "",
@@ -1939,6 +2060,7 @@
     },
 
     {
+      "Status": "NotImplemented",
       "Name": "Rope of Climbing",
       "Type": "MagicItem",
       "Slot": "",
@@ -1955,6 +2077,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Rope of Entanglement",
       "Type": "MagicItem",
       "Slot": "",
@@ -1971,6 +2094,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Scarab of Enraging Enemies",
       "Type": "MagicItem",
       "Slot": "",
@@ -1987,6 +2111,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Scarab of Protection",
       "Type": "MagicItem",
       "Slot": "",
@@ -2003,6 +2128,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Scarab of Death",
       "Type": "MagicItem",
       "Slot": "",
@@ -2019,6 +2145,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Shadow Cloak",
       "Type": "MagicItem",
       "Slot": "",
@@ -2035,6 +2162,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Shield of Missile Attraction",
       "Type": "MagicItem",
       "Slot": "",
@@ -2051,6 +2179,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Sovereign Glue",
       "Type": "MagicItem",
       "Slot": "",
@@ -2067,6 +2196,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Spade of Colossal Excavation",
       "Type": "MagicItem",
       "Slot": "",
@@ -2083,6 +2213,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Stone of Controlling Earth Elementals",
       "Type": "MagicItem",
       "Slot": "",
@@ -2099,6 +2230,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Stone of Good Luck (Luckstone)",
       "Type": "MagicItem",
       "Slot": "",
@@ -2115,6 +2247,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Talisman of Pure Good",
       "Type": "MagicItem",
       "Slot": "",
@@ -2131,6 +2264,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Talisman of Ultimate Evil",
       "Type": "MagicItem",
       "Slot": "",
@@ -2147,6 +2281,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Talisman of the Sphere",
       "Type": "MagicItem",
       "Slot": "",
@@ -2163,6 +2298,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Tome of Clear Thought",
       "Type": "MagicItem",
       "Slot": "",
@@ -2179,6 +2315,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Tome of Leadership and Influence",
       "Type": "MagicItem",
       "Slot": "",
@@ -2195,6 +2332,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Tome of Understanding",
       "Type": "MagicItem",
       "Slot": "",
@@ -2211,6 +2349,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Universal Solvent",
       "Type": "MagicItem",
       "Slot": "",
@@ -2227,6 +2366,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Vacuous Grimoire",
       "Type": "MagicItem",
       "Slot": "",
@@ -2243,6 +2383,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Well of Many Worlds",
       "Type": "MagicItem",
       "Slot": "",
@@ -2259,6 +2400,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Wings of Flying",
       "Type": "MagicItem",
       "Slot": "",
@@ -2275,6 +2417,7 @@
       "StockQuantity": 0
     },
     {
+      "Status": "NotImplemented",
       "Name": "Jeweled Amulet",
       "Type": "MagicItem",
       "Slot": "Neck",

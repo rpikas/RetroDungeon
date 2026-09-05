@@ -48,6 +48,7 @@ public class ItemRepository
         }
 
         return list
+            .Where(i => i.Status != ItemStatus.NotImplemented)
             .GroupBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
             .Select(g => g.First())
             .ToList();
@@ -136,6 +137,7 @@ public class ItemRepository
         return new Item
         {
             Name = model.Name,
+            Status = ResolveStatus(model.Status),
             Type = Enum.Parse<ItemType>(model.Type),
             Slot = string.IsNullOrEmpty(model.Slot) ? null : Enum.Parse<EquipmentSlot>(model.Slot),
             Cost = model.Cost,
@@ -160,6 +162,16 @@ public class ItemRepository
             Source = model.Source,
             Version = model.Version
         };
+    }
+
+    private static ItemStatus ResolveStatus(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return ItemStatus.Implemented;
+
+        return status.Trim().Equals("NotImplemented", StringComparison.OrdinalIgnoreCase)
+            ? ItemStatus.NotImplemented
+            : ItemStatus.Implemented;
     }
 
     private static List<CharacterClass> ResolveAllowedClasses(List<string>? rawAllowedClasses)

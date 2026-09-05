@@ -809,6 +809,7 @@ public sealed class CombatCoordinator
             Cost = source.Cost,
             Weight = source.Weight,
             ToHitBonus = source.ToHitBonus,
+            Status = source.Status,
             IsShopBuyable = source.IsShopBuyable,
             StockQuantity = source.StockQuantity,
             ArmorClassBonus = source.ArmorClassBonus,

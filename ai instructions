@@ -659,3 +659,14 @@ The combined HD of the monsters affected can not be higher than the level of the
 The monsters have to roll a save vs. spell, if they fail they are paralyzed.If they make their save, they are not paralyzed. 18,4
 
 Bugfix.I still see (1 Held) (1 paralyzed) in encouter winodw after i paralyzed a monster 19,2
+______________________
+
+260905
+for item class inctruduce Status
+when parsing items json make sure  "Status": "NotImplemented" updatest status to NotImplemented. No items with       "Status": "NotImplemented",
+can be found in the dungeson or sold in the shop 19,9
+
+if dragon is encountered on level 3 roll 1d100 to determine what dragon
+1-28 Black dragon
+29-62 Brarass dragon
+63-100 White dragon 20,7

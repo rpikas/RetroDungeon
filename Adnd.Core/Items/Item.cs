@@ -5,6 +5,7 @@ namespace Adnd.Core.Items;
 public class Item
 {
     public string Name { get; set; } = "";
+    public ItemStatus Status { get; set; } = ItemStatus.Implemented;
     public ItemType Type { get; set; }
     public EquipmentSlot? Slot { get; set; } // null = cannot equip (potions etc.)
     public int Cost { get; set; } = 0;
