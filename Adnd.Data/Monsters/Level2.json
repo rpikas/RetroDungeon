@@ -2,6 +2,185 @@
   "Level": 2,
   "Monsters": [
     {
+      "Name": "Lvl 2 Magic-User",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 2,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 2 Magic-User spells",
+          "Description": "Access to 1st and 2nd-level spells."
+        }
+      ],
+      "BaseXPValue": 75,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 2 Cleric",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 2 Cleric spells",
+          "Description": "Access to 1st and 2nd-level divine spells."
+        },
+        {
+          "Name": "Turn Undead",
+          "Description": "Can repel undead creatures."
+        }
+      ],
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 2 Fighter",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 2,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 15,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 2 Thief",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 2,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 15,
+        "Spell": 14
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Improved Thief Skills",
+          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
+        }
+      ],
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 2 Monk",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 15,
+        "Spell": 14
+      },
+      "Attacks": [
+        {
+          "Name": "Unarmed Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Monk Abilities",
+          "Description": "Improved AC, faster movement, and Open Hand attack."
+        }
+      ],
+      "BaseXPValue": 90,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Shrieker",
       "Type": "Fungus",
       "Frequency": "Uncommon",
