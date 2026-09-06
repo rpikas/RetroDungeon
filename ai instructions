@@ -689,3 +689,56 @@ i want for example "Manes Deamon" to match "Demon, manes" when finding a monster
 
 When Encounter "Character — see Character Subtable" use the same table as when character is enountered under the Human table on level 1
 only difference is that the lvl of the chartars should correspond to the level of the dungeon. 25,0
+
+when encountering demon price, I want to randomly pick one of the monsters with   "Type": "Demon Prince", (currently Orcus and Demagorgon) 25,4
+
+When encountering a level 8 dragon, roll 1d100 and use the following table to determin what dragon the group encounters. (the numer in parentasis is the number of HitDice the dragon got)
+DMG page 179
+01–13  Black  ancient (8)
+14–24  Blue  very old (7)
+25–31  Brass  ancient (8)
+32–35  Bronze  very old (7)
+36–43  Copper  very old (7)
+44–47  Gold  very old (7)
+48–62  Green  very old (7)
+63–78  Red  very old (7)
+79–82  Silver  very old (7)
+83–00  White  ancient (8)
+
+But when encountering a dragon on level 9
+this table should be used
+01–10  Black, 2  ancient & old (8 & 6)
+11–22  Blue  ancient (8)
+23–31  Brass, 2  ancient & old (8 & 6)
+32–34  Bronze  ancient (8)
+35–42  Copper  ancient (8)
+43–46  Gold  ancient (8)
+47–62  Green  ancient (8)
+63–78  Red  ancient (8)
+79–82  Silver  ancient (8)
+83–00  White, 2  ancient & very old (8 & 7)
+
+level 10
+01–20  Blue, 2  ancient & very old (8 & 7)
+21–26  Bronze, 2  ancient & very old (8 & 7)
+27–33  Copper, 2  ancient & very old (8 & 7)
+34–35  Chromatic  (Tiamat)
+36–40  Gold, 2  ancient & old (8 & 6)
+41–60  Green, 2  ancient & very old (8 & 7)
+61–63  Platinum  (Bahamut)
+64–94  Red, 2  ancient & old (8 & 6)
+95–00  Silver, 2  ancient & old (8 & 6)
+25,5
+
+Make sure to parse the following fields that I plan to introduce in monster jsons for some mosters.
+      "%InLair": 
+      "MagicResistance": 
+Default if tags does not exist should be
+      "%InLair": "50",
+      "MagicResistance": "Standard",
+If MagicResistance is Standard there is no effect. If there is a number, for example 20%, then besides the normal save that is applicable for some spells, there is also a 20% chanse that the spell effect is totaly avoidid.
+If the monster is not InLair, then no treasure can be found. 26,9
+
+write in ADnD Rule and Dice Info when roling if monster is inLair or not. Also when rolling Magic resistance inform in the same dialog 27,1
+The inLair roll should not be done per monster but per group of encounters
+

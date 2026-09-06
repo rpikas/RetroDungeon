@@ -79,6 +79,12 @@ public sealed class ParalyzationHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+            {
+                result.Events.Add($"{target.DisplayName} negates paralyzation with magic resistance.");
+                continue;
+            }
+
             target.SetStatus(MonsterStatus.Paralyzed, paralyzedRounds);
             affectedCount++;
             result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is paralyzed for {paralyzedRounds} round(s)!");

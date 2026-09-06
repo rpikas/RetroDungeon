@@ -8,12 +8,48 @@ namespace Adnd.Data.Monsters;
 
 public static class MonsterImporter
 {
+    private static int ParsePercent(string? raw, int defaultValue)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return defaultValue;
+
+        var trimmed = raw.Trim();
+        if (trimmed.EndsWith("%", StringComparison.Ordinal))
+            trimmed = trimmed[..^1].Trim();
+
+        if (!int.TryParse(trimmed, out var parsed))
+            return defaultValue;
+
+        return Math.Clamp(parsed, 0, 100);
+    }
+
+    private static int? ParseMagicResistancePercent(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return null;
+
+        var trimmed = raw.Trim();
+        if (string.Equals(trimmed, "Standard", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        if (trimmed.EndsWith("%", StringComparison.Ordinal))
+            trimmed = trimmed[..^1].Trim();
+
+        if (!int.TryParse(trimmed, out var parsed))
+            return null;
+
+        return Math.Clamp(parsed, 0, 100);
+    }
+
     public static Monster Convert(MonsterJsonModel json)
     {
+        var magicResistance = string.IsNullOrWhiteSpace(json.MagicResistance) ? "Standard" : json.MagicResistance;
+
         return new Monster
         {
             Name = json.Name,
             Type = Enum.TryParse<MonsterType>(json.Type, out var t) ? t : MonsterType.Other,
+            TypeName = json.Type,
             ClimateTerain = json.ClimateTerain,
             Frequency = json.Frequency,
             ActivityCycle = json.ActivityCycle,
@@ -28,7 +64,9 @@ public static class MonsterImporter
             ExtraHitPoints = json.ExtraHitPoints,
             THAC0 = json.THAC0,
             NumberOfAttacks = json.NumberOfAttacks,
-            MagicResistance = json.MagicResistance,
+            MagicResistance = magicResistance,
+            MagicResistancePercent = ParseMagicResistancePercent(magicResistance),
+            InLairPercent = ParsePercent(json.InLairPercent, 50),
             Size = ParseSize(json.Size),
             HitPoints = json.HitPoints,
 

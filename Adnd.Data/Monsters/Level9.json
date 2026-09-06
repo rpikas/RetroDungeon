@@ -2,6 +2,276 @@
     "Level": 9,
   "Monsters": [
     {
+      "Name": "Devil, Pit Fiend",
+      "Type": "Devil",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -3,
+      "HitDice": 13,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4 + poison"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Immunity",
+          "Description": "Immune to fire and heat‑based attacks."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "High resistance to magical effects."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can use fear, charm, hold person, and fireball at will."
+        },
+        {
+          "Name": "Summon Devils",
+          "Description": "Can summon lesser devils once per day."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Titan, Lesser",
+      "Type": "Outer Planar Being",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -2,
+      "HitDice": 14,
+      "Size": "Huge",
+      "Movement": 15,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Weapon or Fist",
+          "NumberOfAttacks": 2,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast cleric and magic‑user spells up to 7th level."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Strong resistance to magical effects."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        },
+        {
+          "Name": "Telepathy",
+          "Description": "Communicates mentally across great distances."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Titan, Minor",
+      "Type": "Outer Planar Being",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 10,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Weapon or Fist",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Limited Spell Use",
+          "Description": "Can cast cleric and magic‑user spells up to 5th level."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Moderate resistance to magical effects."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        }
+      ],
+      "BaseXPValue": 4500,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Purple Worm",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 15,
+      "Size": "Huge",
+      "Movement": 9,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d12"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6 + poison"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Swallow Whole",
+          "Description": "On a hit vs. small or man-sized targets, may swallow the victim whole."
+        },
+        {
+          "Name": "Burrowing",
+          "Description": "Can tunnel rapidly through earth and stone."
+        },
+        {
+          "Name": "Poison Sting",
+          "Description": "Tail sting delivers lethal venom unless a save is made."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Nycadaemon",
+      "Type": "Daemon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -4,
+      "HitDice": 12,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Gate",
+          "Description": "Can summon other daemons or demons once per day."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "High resistance to magical effects."
+        },
+        {
+          "Name": "Teleportation",
+          "Description": "Can teleport without error."
+        },
+        {
+          "Name": "Poison Sting",
+          "Description": "Tail sting delivers lethal venom unless a save is made."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can use several spell‑like abilities such as fear, charm, and invisibility."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Will-o-Wisp",
+      "Type": "Aberration",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -8,
+      "HitDice": 9,
+      "Size": "Small",
+      "Movement": 18,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Shock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Invisibility",
+          "Description": "Can become invisible at will."
+        },
+        {
+          "Name": "Immunity to Magic",
+          "Description": "Nearly all spells fail to affect it."
+        },
+        {
+          "Name": "Light Form",
+          "Description": "Appears as a floating sphere of eerie light."
+        },
+        {
+          "Name": "Energy Feeding",
+          "Description": "Feeds on fear and life energy from dying creatures."
+        }
+      ],
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 9,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Hydra 17 Heads",
       "Type": "Monstrous Beast",
       "Frequency": "Rare",

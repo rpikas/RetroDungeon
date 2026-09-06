@@ -150,6 +150,237 @@
       "TreasureType": "E",
       "Source": "Adnd"
     },
+    {
+      "Name": "Dragon, Green",
+      "Type": "Dragon",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Huge",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (chlorine gas)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales a cone of poisonous chlorine gas."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a magic‑user and cleric of moderate level."
+        },
+        {
+          "Name": "Speak and Charm",
+          "Description": "Can speak and use charm person at will."
+        }
+      ],
+      "BaseXPValue": 6000,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Dragon, Red",
+      "Type": "Dragon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Huge",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (fire cone)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales a massive cone of fire."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level magic‑user and cleric."
+        },
+        {
+          "Name": "Speak and Charm",
+          "Description": "Can speak and use charm person at will."
+        },
+        {
+          "Name": "Fire Immunity",
+          "Description": "Completely immune to fire and heat."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Dragon, Silver",
+      "Type": "Dragon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Huge",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (cold or paralyzing gas)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales either cold or paralyzing gas."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level magic‑user and cleric."
+        },
+        {
+          "Name": "Shapechange",
+          "Description": "Can assume human form at will."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Ettin",
+      "Type": "Giant",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "HitDice": 10,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Left Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Right Club",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Two Heads",
+          "Description": "Immune to surprise; gains bonuses to detect threats."
+        },
+        {
+          "Name": "Night Vision",
+          "Description": "Excellent vision in darkness."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Invisible Stalker",
+      "Type": "Elemental (Air)",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 8,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Blow/Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Invisibility",
+          "Description": "Permanently invisible; can only be detected by special means."
+        },
+        {
+          "Name": "Tracking",
+          "Description": "Unerringly tracks its assigned target across any distance."
+        },
+        {
+          "Name": "Summoned Task",
+          "Description": "Obeys the summoner’s command until the task is completed or it is destroyed."
+        },
+        {
+          "Name": "Immunity",
+          "Description": "Immune to most physical attacks; harmed only by magic or magical weapons."
+        }
+      ],
+      "BaseXPValue": 1900,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
 
     {
       "Name": "Hill Giant",

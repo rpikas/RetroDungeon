@@ -81,6 +81,9 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
 
         foreach (var monster in targets)
         {
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+                continue;
+
             var rolledDamage = 0;
             for (int i = 0; i < 16; i++)
                 rolledDamage += rng.Next(1, 7);

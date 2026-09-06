@@ -71,6 +71,12 @@ public sealed class ColorSprayHandler : ISpellEffectHandler
             if (hdDifference <= 0)
             {
                 //Case A: Monster HD <= caster level -> uncounscious, no save
+                if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+                {
+                    result.Events.Add($"{monster.DisplayName} negates Color Spray with magic resistance.");
+                    continue;
+                }
+
                 var rounds = rng.Next(1, 5) + rng.Next(1, 5);// 2d4 rounds
                 monster.SetStatus(MonsterStatus.Unconscious, rounds);
                 result.Events.Add($"{monster.DisplayName} has {monsterHd} HD, which is less than or equal to caster level " +
@@ -88,6 +94,12 @@ public sealed class ColorSprayHandler : ISpellEffectHandler
                 }
                 else
                 {
+                    if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+                    {
+                        result.Events.Add($"{monster.DisplayName} negates Color Spray with magic resistance.");
+                        continue;
+                    }
+
                     var rounds = rng.Next(1, 5);
                     monster.SetStatus(MonsterStatus.Unconscious, rounds);
                     result.Events.Add($"{monster.DisplayName} fails save ({saveRoll} vs {saveTarget}) and becomes unconscious for {rounds} round(s).");
@@ -105,6 +117,12 @@ public sealed class ColorSprayHandler : ISpellEffectHandler
                 }
                 else
                 {
+                    if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+                    {
+                        result.Events.Add($"{monster.DisplayName} negates Color Spray with magic resistance.");
+                        continue;
+                    }
+
                     var rounds = rng.Next(1, 5);
                     monster.SetStatus(MonsterStatus.Stunned, 1);
                     result.Events.Add($"{monster.DisplayName} fails save ({saveRoll} vs {saveTarget}) and becomes stunned for 1 round(s).");

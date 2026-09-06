@@ -46,6 +46,12 @@ public sealed class EntangleHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+            {
+                result.Events.Add($"{target.DisplayName} negates entangle with magic resistance.");
+                continue;
+            }
+
             target.SetStatus(MonsterStatus.Entangled, rounds);
             entangledCount++;
             result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is entangled for {rounds} round(s)!");

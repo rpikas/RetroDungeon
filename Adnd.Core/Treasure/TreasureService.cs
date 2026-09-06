@@ -23,6 +23,12 @@ public sealed class TreasureService
 
         foreach (var monster in monsters)
         {
+            if (!monster.IsInLair)
+            {
+                result.LogLines.Add($"{monster.DisplayName}: not in lair, no treasure.");
+                continue;
+            }
+
             var tokens = ParseTreasureTypes(monster.Template.TreasureType);
             if (tokens.Count == 0)
             {

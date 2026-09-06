@@ -64,6 +64,12 @@ public sealed class HoldMonsterHandler : ISpellEffectHandler
             return result;
         }
 
+        if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+        {
+            result.Events.Add($"{target.DisplayName} negates Hold Monster with magic resistance.");
+            return result;
+        }
+
         var rounds = rng.Next(2, 7); // 2-6 rounds
         target.SetStatus(MonsterStatus.Paralyzed, rounds);
         result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is paralyzed for {rounds} round(s)!");

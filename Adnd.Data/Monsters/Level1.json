@@ -9,6 +9,8 @@
       "NumberOfAppearancesMax": 12,
       "ArmorClass": 6,
       "HitDice": 1,
+      "%InLair": "35",
+      "MagicResistance": "Standard",
       "Size": "Medium",
       "Movement": 9,
       "Morale": {

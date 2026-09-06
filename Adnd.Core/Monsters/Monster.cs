@@ -6,6 +6,7 @@ public class Monster
 {
     public string Name { get; set; }
     public MonsterType Type { get; set; }
+    public string TypeName { get; set; } = string.Empty;
     public string ClimateTerain { get; set; } = string.Empty;//TBD string should be an enum
     public string Frequency { get; set; } = string.Empty;//TBD string should be an enum
     public string ActivityCycle { get; set; } = string.Empty;//TBD string should be an enum
@@ -21,6 +22,8 @@ public class Monster
     public int THAC0 { get; set; }
     public int NumberOfAttacks { get; set; }
     public string MagicResistance { get; set; } = string.Empty;//TBD string should be an enum
+    public int? MagicResistancePercent { get; set; }
+    public int InLairPercent { get; set; } = 50;
     public MonsterSize Size { get; set; } = MonsterSize.Medium;
     public int HitPoints { get; set; }
     public int DungeonLevel { get; set; } // Dungeon level where this monster appears

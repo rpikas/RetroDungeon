@@ -2615,6 +2615,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             if (monsterLevel == 4)
                 return RollLevel4DragonBySubtable();
+
+            if (monsterLevel == 8)
+                return RollLevel8DragonBySubtable();
+
+            if (monsterLevel == 9)
+                return RollLevel9DragonBySubtable();
+
+            if (monsterLevel == 10)
+                return RollLevel10DragonBySubtable();
         }
 
         if (string.Equals(dmgCreature.Trim(), "Human", StringComparison.OrdinalIgnoreCase)
@@ -2644,6 +2653,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (IsCharacterEncounterEntry(dmgCreature))
             return "Adventurer";
+
+        if (IsDemonPrinceEncounter(dmgCreature))
+        {
+            var demonPrince = GetRandomDemonPrinceName();
+            if (!string.IsNullOrWhiteSpace(demonPrince))
+                return demonPrince;
+        }
 
         var allMonsters = _monsterRepository.GetAll()
             .Where(m => m.Source == Sources.Adnd)
@@ -2695,6 +2711,28 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return trimmed.StartsWith("Character", StringComparison.OrdinalIgnoreCase);
     }
 
+    private static bool IsDemonPrinceEncounter(string dmgCreature)
+    {
+        var normalized = NormalizeMonsterName(dmgCreature);
+        return normalized.Contains("demon", StringComparison.OrdinalIgnoreCase)
+            && normalized.Contains("prince", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private string? GetRandomDemonPrinceName()
+    {
+        var demonPrinces = _monsterRepository.GetAll()
+            .Where(m => m.Source == Sources.Adnd
+                && string.Equals(m.TypeName?.Trim(), "Demon Prince", StringComparison.OrdinalIgnoreCase))
+            .Select(m => m.Name)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (demonPrinces.Count == 0)
+            return null;
+
+        return demonPrinces[_random.Next(demonPrinces.Count)];
+    }
+
     private string RollLevel3DragonBySubtable()
     {
         var roll = _random.Next(1, 101);
@@ -2716,6 +2754,111 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             $"Selected {selected}.");
 
         return selected;
+    }
+
+    private string RollLevel8DragonBySubtable()
+    {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 13 => "Black Dragon",
+            <= 24 => "Blue Dragon",
+            <= 31 => "Brass Dragon",
+            <= 35 => "Bronze Dragon",
+            <= 43 => "Copper Dragon",
+            <= 47 => "Gold Dragon",
+            <= 62 => "Green Dragon",
+            <= 78 => "Red Dragon",
+            <= 82 => "Silver Dragon",
+            _ => "White Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 8 dragon encounter",
+            "If a level 8 dragon is encountered, roll 1d100: 01-13 Black, 14-24 Blue, 25-31 Brass, 32-35 Bronze, 36-43 Copper, 44-47 Gold, 48-62 Green, 63-78 Red, 79-82 Silver, 83-100 White.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
+    }
+
+    private string RollLevel9DragonBySubtable()
+    {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 10 => "Black Dragon",
+            <= 22 => "Blue Dragon",
+            <= 31 => "Brass Dragon",
+            <= 34 => "Bronze Dragon",
+            <= 42 => "Copper Dragon",
+            <= 46 => "Gold Dragon",
+            <= 62 => "Green Dragon",
+            <= 78 => "Red Dragon",
+            <= 82 => "Silver Dragon",
+            _ => "White Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 9 dragon encounter",
+            "If a level 9 dragon is encountered, roll 1d100: 01-10 Black, 11-22 Blue, 23-31 Brass, 32-34 Bronze, 35-42 Copper, 43-46 Gold, 47-62 Green, 63-78 Red, 79-82 Silver, 83-100 White.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
+    }
+
+    private string RollLevel10DragonBySubtable()
+    {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 20 => "Blue Dragon",
+            <= 26 => "Bronze Dragon",
+            <= 33 => "Copper Dragon",
+            <= 35 => ResolveBestAvailableMonsterName("Tiamat", "Chromatic Dragon", "Red Dragon"),
+            <= 40 => "Gold Dragon",
+            <= 60 => "Green Dragon",
+            <= 63 => ResolveBestAvailableMonsterName("Bahamut", "Platinum Dragon", "Gold Dragon"),
+            <= 94 => "Red Dragon",
+            _ => "Silver Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 10 dragon encounter",
+            "If a level 10 dragon is encountered, roll 1d100: 01-20 Blue, 21-26 Bronze, 27-33 Copper, 34-35 Chromatic (Tiamat), 36-40 Gold, 41-60 Green, 61-63 Platinum (Bahamut), 64-94 Red, 95-100 Silver.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
+    }
+
+    private string ResolveBestAvailableMonsterName(params string[] candidates)
+    {
+        var allMonsters = _monsterRepository.GetAll()
+            .Where(m => m.Source == Sources.Adnd)
+            .ToList();
+
+        foreach (var candidate in candidates)
+        {
+            var match = FindMonsterByName(allMonsters, candidate);
+            if (match != null)
+                return match.Name;
+        }
+
+        return candidates.Last();
     }
 
     private string RollLevel4DragonBySubtable()

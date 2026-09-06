@@ -50,6 +50,12 @@ public sealed class FingerOfDeathHandler : ISpellEffectHandler
             return result;
         }
 
+        if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+        {
+            result.Events.Add($"{target.DisplayName} negates Finger of Death with magic resistance.");
+            return result;
+        }
+
         var before = target.CurrentHitPoints;
         target.CurrentHitPoints = 0;
         result.HpChanges[target.DisplayName] = -before;

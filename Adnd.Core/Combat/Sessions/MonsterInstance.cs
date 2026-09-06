@@ -20,6 +20,7 @@ public sealed class MonsterInstance
         MaxHitPoints = rolledHitPoints;
         CurrentHitPoints = rolledHitPoints;
         BaseArmorClass = template.ArmorClass;
+        IsInLair = true;
     }
 
     private static int RollHitPoints(int hitDice, int hitDiceType = 8, int extraHitPoints = 0)
@@ -46,6 +47,7 @@ public sealed class MonsterInstance
     public int ArmorClassModifier { get; private set; }
     public int ArmorClass => BaseArmorClass + ArmorClassModifier;
     public int Thac0Modifier { get; private set; }
+    public bool IsInLair { get; set; }
     public bool IsAlive => CurrentHitPoints > 0;
 
     public string DisplayName => $"{Name} #{Index}";

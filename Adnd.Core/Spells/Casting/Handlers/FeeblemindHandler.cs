@@ -45,6 +45,12 @@ public sealed class FeeblemindHandler : ISpellEffectHandler
             return result;
         }
 
+        if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+        {
+            result.Events.Add($"{target.DisplayName} negates feeblemind with magic resistance.");
+            return result;
+        }
+
         target.SetStatus(MonsterStatus.Feebleminded, int.MaxValue);
         result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is permanently feebleminded.");
         return result;

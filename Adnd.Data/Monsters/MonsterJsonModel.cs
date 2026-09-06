@@ -23,6 +23,8 @@ public class MonsterJsonModel
     public int THAC0 { get; set; }
     public int NumberOfAttacks { get; set; }
     public string MagicResistance { get; set; } = "";
+    [JsonPropertyName("%InLair")]
+    public string InLairPercent { get; set; } = "50";
     public string Size { get; set; } = "";
     public int HitPoints { get; set; }
 

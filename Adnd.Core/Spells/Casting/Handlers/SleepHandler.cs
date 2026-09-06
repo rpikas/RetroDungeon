@@ -70,6 +70,12 @@ public sealed class SleepHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+            {
+                result.Events.Add($"{monster.DisplayName} negates Sleep with magic resistance.");
+                continue;
+            }
+
             var rounds = rng.Next(1, 5);
             monster.SetStatus(MonsterStatus.Asleep, rounds);
             result.Events.Add($"{monster.DisplayName} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s).");

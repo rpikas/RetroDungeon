@@ -67,6 +67,12 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+            {
+                result.Events.Add($"{target.DisplayName} negates Hold Person with magic resistance.");
+                continue;
+            }
+
             var rounds = rng.Next(4, 4 + request.Caster.Level); // original adnd rules 4 rounds + 1/level
             target.SetStatus(MonsterStatus.Paralyzed, rounds);
             heldCount++;

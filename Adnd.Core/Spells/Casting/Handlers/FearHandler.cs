@@ -63,6 +63,12 @@ public sealed class FearHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+            {
+                result.Events.Add($"{monster.DisplayName} negates fear with magic resistance.");
+                continue;
+            }
+
             monster.CurrentHitPoints = 0;
             result.Events.Add($"{monster.DisplayName} fails save ({saveRoll} vs {saveTarget}), flees in terror, and is gone from the battle!");
         }

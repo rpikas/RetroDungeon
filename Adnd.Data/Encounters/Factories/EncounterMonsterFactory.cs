@@ -1,5 +1,6 @@
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
+using Adnd.Core.Diagnostics;
 using Adnd.Core.Monsters;
 using Adnd.Data.Monsters;
 using System.IO;
@@ -11,6 +12,21 @@ public sealed class EncounterMonsterFactory
 {
     private readonly MonsterRepository _monsterRepository;
     private readonly Random _random = new();
+
+    private static int ParsePercent(string? raw, int defaultValue)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return defaultValue;
+
+        var trimmed = raw.Trim();
+        if (trimmed.EndsWith("%", StringComparison.Ordinal))
+            trimmed = trimmed[..^1].Trim();
+
+        if (!int.TryParse(trimmed, out var parsed))
+            return defaultValue;
+
+        return Math.Clamp(parsed, 0, 100);
+    }
 
     public EncounterMonsterFactory(MonsterRepository? monsterRepository = null)
     {
@@ -89,9 +105,30 @@ public sealed class EncounterMonsterFactory
 
         template ??= BuildFallback(monsterName);
 
+        var lairTemplate = CloneMonster(template);
+        var inLairRoll = _random.Next(1, 101);
+        var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
+        var isInLair = inLairRoll <= inLairChance;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Monster Lair %",
+            $"Determine if {lairTemplate.Name} group ({groupId}) is in lair",
+            "Roll 1d100 once per encounter group. If result is less than or equal to %InLair, the group is in lair.",
+            "1",
+            "100",
+            inLairRoll.ToString(),
+            $"%InLair={inLairChance}%. {(isInLair ? "Group in lair" : "Group not in lair")}.");
+
         var list = new List<MonsterInstance>(count);
         for (int i = 1; i <= count; i++)
-            list.Add(new MonsterInstance(CloneMonster(template), i, groupId));
+        {
+            var cloned = CloneMonster(template);
+            list.Add(new MonsterInstance(cloned, i, groupId)
+            {
+                IsInLair = isInLair
+            });
+        }
 
         return list;
     }
@@ -201,6 +238,9 @@ public sealed class EncounterMonsterFactory
             ExtraHitPoints = source.ExtraHitPoints,
             Size = source.Size,
             HitPoints = source.HitPoints,
+            MagicResistance = source.MagicResistance,
+            MagicResistancePercent = source.MagicResistancePercent,
+            InLairPercent = source.InLairPercent,
             Movement = source.Movement,
             Morale = source.Morale,
             SavingThrows = source.SavingThrows,
