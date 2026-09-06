@@ -2,6 +2,8 @@ using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
 using Adnd.Core.Monsters;
 using Adnd.Data.Monsters;
+using System.IO;
+using System.Text.Json;
 
 namespace Adnd.Data.Encounters.Factories;
 
@@ -13,6 +15,45 @@ public sealed class EncounterMonsterFactory
     public EncounterMonsterFactory(MonsterRepository? monsterRepository = null)
     {
         _monsterRepository = monsterRepository ?? new MonsterRepository();
+    }
+
+    private Monster? GetRandomMonsterByJsonType(string desiredType)
+    {
+        if (!Directory.Exists(MonsterDataPaths.MonsterJsonFolder))
+            return null;
+
+        var matches = new List<Adnd.Data.Monsters.MonsterJsonModel>();
+
+        foreach (var file in Directory.GetFiles(MonsterDataPaths.MonsterJsonFolder, "*.json"))
+        {
+            var jsonText = File.ReadAllText(file);
+
+            try
+            {
+                var levelModel = JsonSerializer.Deserialize<Adnd.Data.Monsters.MonsterLevelJsonModel>(jsonText);
+                if (levelModel?.Monsters != null && levelModel.Monsters.Count > 0)
+                {
+                    matches.AddRange(levelModel.Monsters.Where(m => string.Equals(m.Type?.Trim(), desiredType, StringComparison.OrdinalIgnoreCase)));
+                    continue;
+                }
+
+                var single = JsonSerializer.Deserialize<Adnd.Data.Monsters.MonsterJsonModel>(jsonText);
+                if (single != null && string.Equals(single.Type?.Trim(), desiredType, StringComparison.OrdinalIgnoreCase))
+                {
+                    matches.Add(single);
+                }
+            }
+            catch
+            {
+                // ignore malformed files
+            }
+        }
+
+        if (matches.Count == 0)
+            return null;
+
+        var pick = matches[_random.Next(matches.Count)];
+        return MonsterImporter.Convert(pick);
     }
 
     public List<MonsterInstance> CreateGroup(string monsterName, int count)
@@ -30,8 +71,23 @@ public sealed class EncounterMonsterFactory
 
         var template = _monsterRepository
             .GetAll()
-            .FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase))
-            ?? BuildFallback(monsterName);
+            .FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
+
+        if (template == null)
+        {
+            var lower = monsterName.ToLowerInvariant();
+
+            if (lower.Contains("demon") && lower.Contains("prince"))
+            {
+                template = GetRandomMonsterByJsonType("Demon Prince");
+            }
+            else if (lower.Contains("devil") && (lower.Contains("arch") || lower.Contains("archfiend")))
+            {
+                template = GetRandomMonsterByJsonType("Devil, Archfiend");
+            }
+        }
+
+        template ??= BuildFallback(monsterName);
 
         var list = new List<MonsterInstance>(count);
         for (int i = 1; i <= count; i++)
@@ -51,6 +107,8 @@ public sealed class EncounterMonsterFactory
         }
         return allMonsters;
     }
+
+
 
     private static Monster BuildFallback(string monsterName)
     {

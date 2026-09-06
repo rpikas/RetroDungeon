@@ -19,14 +19,15 @@ namespace Adnd.Game;
 public static class Shop
 {
     /// <summary>
-    /// What is on the shelves: buyable, and not sold out. The 52 cap is the console's, kept so both surfaces
-    /// see the same shop rather than the table quietly stocking more than Boltac admits to.
+    /// What is on the shelves: buyable, and not sold out. The cap (formerly 52) is now raised to allow up to
+    /// 9999 different items so both surfaces see the same shop rather than the table quietly stocking more
+    /// than Boltac admits to.
     /// </summary>
     public static List<Item> Stock(ItemRepository items) =>
         items.LoadAll()
             .Where(i => i.IsShopBuyable || (i.StockQuantity.HasValue && i.StockQuantity.Value > 0))
             .Where(i => !i.StockQuantity.HasValue || i.StockQuantity.Value > 0)
-            .Take(52)
+            .Take(9999)
             .ToList();
 
     /// <summary>Boltac buys at half. He is a merchant.</summary>
