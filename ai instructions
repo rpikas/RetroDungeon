@@ -684,3 +684,8 @@ when encountering level 4 dragons, use this table to see what dragon to encoutte
 Dice Score	Dragon Type	Age Category (Hit Points/Die) 01–10	Black	very old (7) 11–21	Blue	old (6) 22–29	Brass	very old (7) 30–36	
 Bronze	old (6) 37–48	Copper	old (6) 49–52	Gold	old (6) 53–66	Green	old (6) 67–80	Red	old (6) 81–87	Silver	old (6) 88–00	
 White	very old (7) 22,5
+
+i want for example "Manes Deamon" to match "Demon, manes" when finding a monster to encounter 24,3
+
+When Encounter "Character — see Character Subtable" use the same table as when character is enountered under the Human table on level 1
+only difference is that the lvl of the chartars should correspond to the level of the dungeon. 25,0

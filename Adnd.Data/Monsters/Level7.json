@@ -2,6 +2,255 @@
     "Level": 7,
   "Monsters": [
     {
+      "Name": "Stone Giant",
+      "Type": "Giant",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "HitDice": 12,
+      "Size": "Large (18 ft tall)",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Rock Throw",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Rock Throwing",
+          "Description": "Can hurl rocks with great accuracy at long range."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 12,
+      "TreasureType": "E",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Trapper",
+      "Type": "Creature",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 12,
+      "Size": "Large",
+      "Movement": 3,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Smother",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Camouflage",
+          "Description": "Perfectly mimics stone floors; nearly impossible to detect."
+        },
+        {
+          "Name": "Engulf",
+          "Description": "Drops onto victims and smothers them, preventing movement."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 12,
+      "TreasureType": "None",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Fire Lizard",
+      "Type": "Reptile",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "HitDice": 10,
+      "Size": "Large (up to 30 ft long)",
+      "Movement": 9,
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Tail Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Heat Aura",
+          "Description": "Body radiates intense heat; close contact causes damage."
+        },
+        {
+          "Name": "Molten Blood",
+          "Description": "Creatures striking the Fire Lizard risk burn damage."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Chimera",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "HitDice": 9,
+      "Size": "Large",
+      "Movement": 9,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Lion Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Goat Horns",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Dragon Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d4"
+        },
+        {
+          "Name": "Dragon Breath",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon Breath",
+          "Description": "Short-range fire breath from the dragon head."
+        }
+      ],
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 9,
+      "TreasureType": "E",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Hill Giant",
+      "Type": "Giant",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "HitDice": 8,
+      "Size": "Large (16 ft tall)",
+      "Movement": 12,
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Rock Throwing",
+          "Description": "Can throw rocks, though less accurately than other giants."
+        }
+      ],
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "D",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Fire Giant",
+      "Type": "Giant",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 3,
+      "HitDice": 11,
+      "ExtraHitPoints": 4,
+      "Size": "Large (18 ft tall)",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "5d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Resistance",
+          "Description": "Takes reduced damage from fire-based attacks."
+        },
+        {
+          "Name": "Rock Throwing",
+          "Description": "Can hurl rocks with great accuracy."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "XPValuePerHitPoint": 13,
+      "TreasureType": "E",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Frost Giant",
+      "Type": "Giant",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "HitDice": 10,
+      "ExtraHitPoints": 2,
+      "Size": "Large (21 ft tall)",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Cold Resistance",
+          "Description": "Takes reduced damage from cold-based attacks."
+        },
+        {
+          "Name": "Rock Throwing",
+          "Description": "Can throw rocks with great force."
+        }
+      ],
+      "BaseXPValue": 2500,
+      "XPValuePerHitPoint": 12,
+      "TreasureType": "D",
+      "Source": "Adnd"
+    },
+
+
+    {
       "Name": "Mummy",
       "Type": "Undead",
       "Frequency": "Rare",

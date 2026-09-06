@@ -1,0 +1,9 @@
+If old versions of pictures are used, remove them from 
+C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\bin\Debug\net10.0-windows\Assets\Monsters
+
+In open office
+=LETARAD(<Cell att hitta>;<Fliknamn>.
+<cell högts upp till vänster i området att leta>:
+<cell lägnst ner till höger i området att leta>
+;kolumn att returnera;0)
+=LETARAD(A20;Ark1.A1:X100;1;0)

@@ -2,6 +2,44 @@
     "Level": 6,
   "Monsters": [
     {
+      "Name": "Green Slime",
+      "Type": "Ooze",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 9,
+      "HitDice": 2,
+      "Size": "Medium",
+      "Movement": 0,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Corrosion",
+          "NumberOfAttacks": 1,
+          "Damage": "Special"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Body Corrosion",
+          "Description": "Dissolves flesh and organic material on contact."
+        },
+        {
+          "Name": "Metal Corrosion",
+          "Description": "Can corrode metal items unless they are magical."
+        },
+        {
+          "Name": "Cling",
+          "Description": "Drops from ceilings or clings to surfaces, surprising victims."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Carrion Crawler",
       "Type": "Aberration",
       "Frequency": "Uncommon",
@@ -79,7 +117,80 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
-
+    {
+      "Name": "Jackalwere",
+      "Type": "Shapechanger",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Sleep Gaze",
+          "Description": "Victims must save vs. spell or fall asleep when meeting its gaze."
+        },
+        {
+          "Name": "Shapechange",
+          "Description": "Can shift between jackal and humanoid form."
+        }
+      ],
+      "BaseXPValue": 135,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lammasu",
+      "Type": "Lawful Good Outsider",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "HitDice": 7,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Hooves",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Clerical Spells",
+          "Description": "Cast cleric spells as a 7th‑level cleric."
+        },
+        {
+          "Name": "Protection from Evil",
+          "Description": "Constant 10‑foot radius protection."
+        },
+        {
+          "Name": "Invisibility",
+          "Description": "Can become invisible at will."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Strong resistance to magical effects."
+        }
+      ],
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 7,
+      "TreasureType": "U",
+      "Source": "Adnd"
+    },
     {
       "Name": "Djinni",
       "Type": "Air Spirit",
@@ -496,6 +607,134 @@
       "XPValuePerHitPoint": 12,
       "TreasureType": "B",
       "Source": "Wizardry"
+    },
+    {
+      "Name": "Lycanthrope, Werebear",
+      "Type": "Lycanthrope",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 2,
+      "HitDice": 7,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lycanthropy",
+          "Description": "Can shift between human and bear‑hybrid form."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates damage except from silver or magic weapons."
+        },
+        {
+          "Name": "Great Strength",
+          "Description": "Exceptional physical power; gains bonuses to damage."
+        }
+      ],
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 7,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Manticore",
+      "Type": "Monstrous Beast",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Tail Spikes",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6 (up to 6 spikes)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Spike Volley",
+          "Description": "Can fire 1–6 tail spikes per round at range."
+        },
+        {
+          "Name": "Savage Nature",
+          "Description": "Highly aggressive; often attacks without provocation."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Lycanthrope, Weretiger",
+      "Type": "Lycanthrope",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "HitDice": 6,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lycanthropy",
+          "Description": "Can shift between human and tiger‑hybrid form."
+        },
+        {
+          "Name": "Stealth",
+          "Description": "Moves silently and surprises prey easily."
+        },
+        {
+          "Name": "Immunity to Normal Weapons",
+          "Description": "Can only be harmed by silver or magical weapons."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "C",
+      "Source": "Adnd"
     },
 
     {

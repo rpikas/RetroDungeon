@@ -28,9 +28,7 @@ public sealed class EncounterMonsterFactory
             count = _random.Next(1, GameRulesProvider.Current.MaxSizeEncounter + 1);
         }
 
-        var template = _monsterRepository
-            .GetAll()
-            .FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase))
+        var template = FindMonsterByName(_monsterRepository.GetAll(), monsterName)
             ?? BuildFallback(monsterName);
 
         var list = new List<MonsterInstance>(count);
@@ -38,6 +36,55 @@ public sealed class EncounterMonsterFactory
             list.Add(new MonsterInstance(CloneMonster(template), i, groupId));
 
         return list;
+    }
+
+    private static Monster? FindMonsterByName(IEnumerable<Monster> monsters, string requestedName)
+    {
+        if (string.IsNullOrWhiteSpace(requestedName))
+            return null;
+
+        var exact = monsters.FirstOrDefault(m => string.Equals(m.Name, requestedName, StringComparison.OrdinalIgnoreCase));
+        if (exact != null)
+            return exact;
+
+        var normalizedRequested = NormalizeMonsterName(requestedName);
+        var signatureRequested = MonsterNameSignature(requestedName);
+
+        foreach (var monster in monsters)
+        {
+            if (string.Equals(NormalizeMonsterName(monster.Name), normalizedRequested, StringComparison.OrdinalIgnoreCase))
+                return monster;
+
+            if (string.Equals(MonsterNameSignature(monster.Name), signatureRequested, StringComparison.OrdinalIgnoreCase))
+                return monster;
+        }
+
+        return null;
+    }
+
+    private static string NormalizeMonsterName(string value)
+    {
+        var normalized = value
+            .ToLowerInvariant()
+            .Replace("deamon", "demon", StringComparison.Ordinal)
+            .Replace(',', ' ')
+            .Replace('-', ' ');
+
+        var chars = normalized
+            .Select(ch => char.IsLetterOrDigit(ch) ? ch : ' ')
+            .ToArray();
+
+        return string.Join(" ", new string(chars)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries));
+    }
+
+    private static string MonsterNameSignature(string value)
+    {
+        var parts = NormalizeMonsterName(value)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase);
+
+        return string.Join(" ", parts);
     }
 
     public List<MonsterInstance> CreateMultipleGroups(List<(string monsterName, int count)> groups)

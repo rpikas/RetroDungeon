@@ -2,6 +2,188 @@
     "Level": 5,
   "Monsters": [
     {
+      "Name": "Lycanthrope, Wereboar",
+      "Type": "Lycanthrope",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "HitDice": 4,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Gore",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lycanthropy",
+          "Description": "Can shift between human and boar‑hybrid form."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates damage except from silver or magic weapons."
+        }
+      ],
+      "BaseXPValue": 190,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Slithering Tracker",
+      "Type": "Ooze",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "Size": "Small",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Engulf",
+          "NumberOfAttacks": 1,
+          "Damage": "Special"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Paralysis",
+          "Description": "Contact can paralyze victims, allowing the tracker to suffocate them."
+        },
+        {
+          "Name": "Fluid Body",
+          "Description": "Can slip through cracks and under doors; immune to most physical attacks."
+        },
+        {
+          "Name": "Tracking",
+          "Description": "Unerringly follows a designated target."
+        }
+      ],
+      "BaseXPValue": 275,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Quasit",
+      "Type": "Demon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 3,
+      "Size": "Small",
+      "Movement": 15,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d2"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "Claw attacks deliver a weak poison requiring a saving throw."
+        },
+        {
+          "Name": "Invisibility",
+          "Description": "Can become invisible at will."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 1 hit point per round."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "High resistance to magical effects."
+        }
+      ],
+      "BaseXPValue": 135,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "Q",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Lizard, Subterranean",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 5,
+      "HitDice": 3,
+      "Size": "Medium",
+      "Movement": 9,
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Ambush Predator",
+          "Description": "Lies in wait in caverns and tunnels, surprising prey."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Cockatrice",
+      "Type": "Magical Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "Size": "Small",
+      "Movement": 6,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Petrifying Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "Special"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Petrification",
+          "Description": "Touch can turn victims to stone unless they save vs. petrification."
+        }
+      ],
+      "BaseXPValue": 275,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Hydra 7 Heads",
       "Type": "Monstrous Beast",
       "Frequency": "Rare",
@@ -47,6 +229,106 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
+    {
+      "Name": "Doppelganger",
+      "Type": "Shapechanger",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "Size": "Medium",
+      "Movement": 9,
+      "Morale": { "Value": 11 },
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Shapechange",
+          "Description": "Can assume the appearance of any humanoid creature."
+        },
+        {
+          "Name": "Detect Thoughts",
+          "Description": "Can sense surface thoughts of nearby creatures."
+        }
+      ],
+      "BaseXPValue": 190,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Displacer Beast",
+      "Type": "Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "Size": "Large",
+      "Movement": 15,
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Tentacle",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Displacement",
+          "Description": "Appears 1–2 feet away from its true position, causing attackers to suffer penalties."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "C",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Imp",
+      "Type": "Devil",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 2,
+      "Size": "Small",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4 + poison"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Invisibility",
+          "Description": "Can turn invisible at will."
+        },
+        {
+          "Name": "Polymorph",
+          "Description": "Can assume animal forms."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 1 hit point per round."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "Q",
+      "Source": "Adnd"
+    },
+
 
     {
       "Name": "Lvl 5 Magic-User",
@@ -608,7 +890,135 @@
       "TreasureType": "F"
     },
     {
-      "Name": "Giant Snake (Constrictor)",
+      "Name": "Snake, Giant",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 5,
+      "HitDice": 5,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Constriction",
+          "Description": "On a successful hit, may wrap and deal additional crushing damage."
+        }
+      ],
+      "BaseXPValue": 190,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Snake, Giant, Amphisbaena",
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 10 },
+      "Attacks": [
+        {
+          "Name": "Bite (Head 1)",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite (Head 2)",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dual Heads",
+          "Description": "Can attack two different targets each round."
+        }
+      ],
+      "BaseXPValue": 135,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Snake, Giant, Poisonous",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 6,
+      "HitDice": 4,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": { "Value": 9 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3 + poison"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "Victims must save vs. poison or suffer lethal effects."
+        }
+      ],
+      "BaseXPValue": 190,
+      "XPValuePerHitPoint": 4,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Snake, Giant, Spitting",
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 3,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": { "Value": 8 },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Spit",
+          "NumberOfAttacks": 1,
+          "Damage": "Special"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Blinding Spit",
+          "Description": "Spits venom into eyes; target must save or be blinded."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "Nil",
+      "Source": "Adnd"
+    },
+
+
+    {
+      "Name": "Giant Snake Constrictor",
       "Type": "Animal",
       "ArmorClass": 5,
       "HitDice": 5,
@@ -651,7 +1061,7 @@
       "TreasureType": "None"
     },
     {
-      "Name": "Giant Beetle (Fire)",
+      "Name": "Giant Beetle Fire",
       "Type": "Vermin",
       "ArmorClass": 4,
       "HitDice": 4,

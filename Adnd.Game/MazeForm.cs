@@ -2223,7 +2223,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         else
         {
             // Single group encounter
-            var monster = _monsterRepository.GetAll().FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
+            var monster = FindMonsterByName(_monsterRepository.GetAll(), monsterName);
             int numberOfMonsters;
             if (monster != null)
             {
@@ -2642,7 +2642,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return result;
         }
 
-        if (string.Equals(dmgCreature.Trim(), "Character", StringComparison.OrdinalIgnoreCase))
+        if (IsCharacterEncounterEntry(dmgCreature))
             return "Adventurer";
 
         var allMonsters = _monsterRepository.GetAll()
@@ -2687,6 +2687,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         var trimmed = dmgCreature.Trim();
         return trimmed.StartsWith("Dragon", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsCharacterEncounterEntry(string dmgCreature)
+    {
+        var trimmed = dmgCreature.Trim();
+        return trimmed.StartsWith("Character", StringComparison.OrdinalIgnoreCase);
     }
 
     private string RollLevel3DragonBySubtable()
@@ -2744,13 +2750,51 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private static string NormalizeMonsterName(string value)
     {
-        var chars = value
+        var normalized = value
             .ToLowerInvariant()
+            .Replace("deamon", "demon", StringComparison.Ordinal)
+            .Replace(',', ' ')
+            .Replace('-', ' ');
+
+        var chars = normalized
             .Select(ch => char.IsLetterOrDigit(ch) ? ch : ' ')
             .ToArray();
 
         return string.Join(" ", new string(chars)
             .Split(' ', StringSplitOptions.RemoveEmptyEntries));
+    }
+
+    private static string MonsterNameSignature(string value)
+    {
+        var parts = NormalizeMonsterName(value)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase);
+
+        return string.Join(" ", parts);
+    }
+
+    private static Monster? FindMonsterByName(IEnumerable<Monster> monsters, string requestedName)
+    {
+        if (string.IsNullOrWhiteSpace(requestedName))
+            return null;
+
+        var exact = monsters.FirstOrDefault(m => string.Equals(m.Name, requestedName, StringComparison.OrdinalIgnoreCase));
+        if (exact != null)
+            return exact;
+
+        var normalizedRequested = NormalizeMonsterName(requestedName);
+        var signatureRequested = MonsterNameSignature(requestedName);
+
+        foreach (var monster in monsters)
+        {
+            if (string.Equals(NormalizeMonsterName(monster.Name), normalizedRequested, StringComparison.OrdinalIgnoreCase))
+                return monster;
+
+            if (string.Equals(MonsterNameSignature(monster.Name), signatureRequested, StringComparison.OrdinalIgnoreCase))
+                return monster;
+        }
+
+        return null;
     }
 
     private List<Monster> FilterMonstersBySource(List<Monster> monsters, SourceOptions sourceOption)
