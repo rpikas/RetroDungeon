@@ -740,5 +740,6 @@ If MagicResistance is Standard there is no effect. If there is a number, for exa
 If the monster is not InLair, then no treasure can be found. 26,9
 
 write in ADnD Rule and Dice Info when roling if monster is inLair or not. Also when rolling Magic resistance inform in the same dialog 27,1
-The inLair roll should not be done per monster but per group of encounters
+The inLair roll should not be done per monster but per group of encounters 27,2
 
+When CountMin and CountMax is defined in MonsterLevels, use that instead to figure out how many monsters are in the group, show what you are radomizing in the log and rule window 28,7

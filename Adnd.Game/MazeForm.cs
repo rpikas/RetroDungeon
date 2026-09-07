@@ -2143,22 +2143,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private void TryRandomEncounter()
     {
         var configuredChance = GameRulesProvider.ClampChance(GameRulesProvider.Current.MonsterEncounterChance);
-
-        bool shouldEncounter;
-
-        if (configuredChance > 0)
-        {
-            shouldEncounter = _random.NextDouble() < configuredChance;
-        }
-        else
-        {
-            shouldEncounter = false;
-        }
-
+        var shouldEncounter = configuredChance > 0 && _random.NextDouble() < configuredChance;
         if (!shouldEncounter)
             return;
 
-        var monsterName = RollDungeonMonsterForLevel(_currentDungeonLevel);
+        var firstGroupRoll = RollDungeonMonsterForLevelWithCount(_currentDungeonLevel);
+        var monsterName = firstGroupRoll?.MonsterName;
         if (string.IsNullOrWhiteSpace(monsterName))
             monsterName = LevelOneMonsters[_random.Next(LevelOneMonsters.Length)];
 
@@ -2179,88 +2169,103 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return;
         }
 
-        // Determine number of monster groups that appear
-        // 60% = 1 group, 25% = 2 groups, 10% = 3 groups, 5% = 4 groups
         int numberOfGroups = 1;
-        var roll = _random.NextDouble();
-        if (roll < 0.01) // 1%
-        {
-            numberOfGroups = 4;
-        }
-        else if (roll < 0.06) // 5% (0.01 + 0.05)
-        {
-            numberOfGroups = 3;
-        }
-        else if (roll < 0.20) // 14% (0.06 + 0.14)
-        {
-            numberOfGroups = 2;
-        }
-        // else: 80% (remaining) = 1 group
+        var groupRoll = _random.NextDouble();
+        if (groupRoll < 0.01) numberOfGroups = 4;
+        else if (groupRoll < 0.06) numberOfGroups = 3;
+        else if (groupRoll < 0.20) numberOfGroups = 2;
 
         CombatOutcome outcome;
         if (numberOfGroups > 1)
         {
-            // Generate multiple groups
-            var monsterNames = new string[numberOfGroups];
-            monsterNames[0] = monsterName;
+            var groups = new List<(string name, int count)>
+            {
+                (monsterName, ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride))
+            };
 
             for (int i = 1; i < numberOfGroups; i++)
             {
-                var additionalMonsterName = RollDungeonMonsterForLevelExcludingCharacter(_currentDungeonLevel);
+                var additionalRoll = RollDungeonMonsterForLevelWithCountExcludingCharacter(_currentDungeonLevel);
+                var additionalMonsterName = additionalRoll?.MonsterName;
                 if (string.IsNullOrWhiteSpace(additionalMonsterName))
                     additionalMonsterName = LevelOneMonsters[_random.Next(LevelOneMonsters.Length)];
-                monsterNames[i] = additionalMonsterName;
+
+                groups.Add((additionalMonsterName, ResolveEncounterGroupCount(additionalMonsterName, additionalRoll?.CountOverride)));
             }
 
-            outcome = _combatCoordinator.StartEncounterWithMultipleGroups(
+            outcome = _combatCoordinator.StartEncounterWithGroupCounts(
                 this,
-                monsterNames,
+                groups,
                 party,
                 _characterRepository,
-                _monsterRepository,
                 _currentDungeonLevel);
         }
         else
         {
-            // Single group encounter
-            var monster = FindMonsterByName(_monsterRepository.GetAll(), monsterName);
-            int numberOfMonsters;
-            if (monster != null)
-            {
-                numberOfMonsters = _random.Next(monster.NumberOfAppearancesMin, monster.NumberOfAppearancesMax + 1);
-            }
-            else
-            {
-                numberOfMonsters = _random.Next(1, 7); // 1d6 fallback
-            }
-
-
-            // Monsters reach the table from the coordinator's own events, which carry the real
-            // instances — no need to guess counts here.
+            var numberOfMonsters = ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride);
             outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel);
         }
-        if (outcome == CombatOutcome.Defeat)
-        {
-            HandlePartyDefeatAtCurrentCell();
-        }
 
-        // The fight is over: clear the monsters and show the damage taken.
+        if (outcome == CombatOutcome.Defeat)
+            HandlePartyDefeatAtCurrentCell();
+
         PublishToViewer();
     }
 
-    private string? RollDungeonMonsterForLevelExcludingCharacter(int level)
+    private sealed record EncounterRoll(string MonsterName, int? CountOverride);
+
+    private int ResolveEncounterGroupCount(string monsterName, int? tableCount)
+    {
+        if (tableCount.HasValue && tableCount.Value > 0)
+            return tableCount.Value;
+
+        var monster = FindMonsterByName(_monsterRepository.GetAll(), monsterName);
+        if (monster != null)
+        {
+            var min = Math.Max(1, monster.NumberOfAppearancesMin);
+            var max = Math.Max(1, monster.NumberOfAppearancesMax);
+            if (max < min)
+                (min, max) = (max, min);
+
+            var rolled = _random.Next(min, max + 1);
+            RuleApplicationInfo.Publish(
+                "Adnd",
+                "Monster data",
+                $"Roll count for {monsterName}",
+                "When MonsterLevels CountMin/CountMax is unavailable, roll from monster NumberOfAppearancesMin-NumberOfAppearancesMax.",
+                "1",
+                (max - min + 1).ToString(),
+                (rolled - min + 1).ToString(),
+                $"{monsterName} count {rolled} (range {min}-{max}).");
+            return rolled;
+        }
+
+        var fallback = _random.Next(1, 7);
+        RuleApplicationInfo.Publish(
+            "Adnd",
+            "Fallback",
+            $"Roll count for {monsterName}",
+            "No monster template found; fallback count roll 1d6.",
+            "1",
+            "6",
+            fallback.ToString(),
+            $"{monsterName} count {fallback}.");
+        return fallback;
+    }
+
+    private EncounterRoll? RollDungeonMonsterForLevelWithCountExcludingCharacter(int level)
     {
         for (var attempt = 0; attempt < 30; attempt++)
         {
-            var rolled = RollDungeonMonsterForLevel(level);
-            if (string.IsNullOrWhiteSpace(rolled))
+            var rolled = RollDungeonMonsterForLevelWithCount(level);
+            if (rolled == null || string.IsNullOrWhiteSpace(rolled.MonsterName))
                 continue;
 
-            if (string.Equals(rolled, "No Encounter", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(rolled.MonsterName, "No Encounter", StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (string.Equals(rolled, "Adventurer", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(rolled, "Character", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(rolled.MonsterName, "Adventurer", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(rolled.MonsterName, "Character", StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -2270,6 +2275,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         return null;
     }
+
+    private string? RollDungeonMonsterForLevelExcludingCharacter(int level)
+        => RollDungeonMonsterForLevelWithCountExcludingCharacter(level)?.MonsterName;
 
     private void ResolveCharacterEncounter(int dungeonLevel)
     {
@@ -2419,6 +2427,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     }
 
     private string? RollDungeonMonsterForLevel(int level)
+        => RollDungeonMonsterForLevelWithCount(level)?.MonsterName;
+
+    private EncounterRoll? RollDungeonMonsterForLevelWithCount(int level)
     {
         var rolledMonsterLevel = RollMonsterLevelFromEncounterTable(level);
         if (rolledMonsterLevel <= 0)
@@ -2429,7 +2440,6 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return RollFromDmgEncounterTable(rolledMonsterLevel, level);
         }
 
-        // Get all monsters for the rolled monster level
         var monstersForLevel = _monsterRepository.GetAll()
             .Where(m => m.DungeonLevel == rolledMonsterLevel)
             .ToList();
@@ -2437,28 +2447,31 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (monstersForLevel.Count == 0)
             return null;
 
-        // Filter by source based on game rules
         var sourceOption = GameRulesProvider.Current.MonsterSourceOptions;
         var filteredMonsters = FilterMonstersBySource(monstersForLevel, sourceOption);
-
         if (filteredMonsters.Count == 0)
             return null;
 
-        // Use frequency-based weighted selection
         var selected = SelectMonsterByFrequencyWeight(filteredMonsters, level, rolledMonsterLevel);
         if (selected == null)
             return null;
 
+        var name = selected.Name;
         if (selected.Type == MonsterType.Dragon)
         {
             if (rolledMonsterLevel == 3)
-                return RollLevel3DragonBySubtable();
-
-            if (rolledMonsterLevel == 4)
-                return RollLevel4DragonBySubtable();
+                name = RollLevel3DragonBySubtable();
+            else if (rolledMonsterLevel == 4)
+                name = RollLevel4DragonBySubtable();
+            else if (rolledMonsterLevel == 8)
+                name = RollLevel8DragonBySubtable();
+            else if (rolledMonsterLevel == 9)
+                name = RollLevel9DragonBySubtable();
+            else if (rolledMonsterLevel == 10)
+                name = RollLevel10DragonBySubtable();
         }
 
-        return selected.Name;
+        return new EncounterRoll(name, null);
     }
 
     private int RollMonsterLevelFromEncounterTable(int dungeonLevel)
@@ -2544,7 +2557,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return true;
     }
 
-    private string? RollFromDmgEncounterTable(int monsterLevel, int dungeonLevel)
+    private EncounterRoll? RollFromDmgEncounterTable(int monsterLevel, int dungeonLevel)
     {
         var tablePath = Path.Combine("Data", "Encounters", "MonsterLevels.json");
         if (!File.Exists(tablePath))
@@ -2558,8 +2571,6 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (!allLevels.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
             return null;
 
-        // Strict DMG table mode: use this level's 1d100 table only (no house-rule fallback).
-        // Retry a few times in case a rolled creature cannot be mapped to a local monster name.
         for (int attempt = 0; attempt < 20; attempt++)
         {
             var roll = _random.Next(1, 101);
@@ -2580,6 +2591,32 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
                 var creature = creatureEl.GetString();
                 var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
+                int? countOverride = null;
+                if (entry.TryGetProperty("CountMin", out var countMinEl)
+                    && entry.TryGetProperty("CountMax", out var countMaxEl)
+                    && countMinEl.ValueKind == JsonValueKind.Number
+                    && countMaxEl.ValueKind == JsonValueKind.Number)
+                {
+                    var countMin = countMinEl.GetInt32();
+                    var countMax = countMaxEl.GetInt32();
+                    if (countMax < countMin)
+                        (countMin, countMax) = (countMax, countMin);
+
+                    countMin = Math.Max(1, countMin);
+                    countMax = Math.Max(1, countMax);
+                    countOverride = _random.Next(countMin, countMax + 1);
+
+                    RuleApplicationInfo.Publish(
+                        "DMG",
+                        "175-177",
+                        $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
+                        "Use CountMin-CountMax from MonsterLevels entry.",
+                        "1",
+                        (countMax - countMin + 1).ToString(),
+                        (countOverride.Value - countMin + 1).ToString(),
+                        $"Count {countOverride.Value} (range {countMin}-{countMax}).");
+                }
+
                 RuleApplicationInfo.Publish(
                     "DMG",
                     "175-177",
@@ -2593,7 +2630,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                         : $"Matched '{creature}', mapped to '{resolved}'.");
 
                 if (!string.IsNullOrWhiteSpace(resolved))
-                    return resolved;
+                    return new EncounterRoll(resolved, countOverride);
 
                 break;
             }
