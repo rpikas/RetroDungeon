@@ -8,70 +8,11 @@
       "NumberOfAppearancesMin": 30,
       "NumberOfAppearancesMax": 300,
       "ArmorClass": 6,
+      "Movement": 9,
       "HitDice": 1,
       "%InLair": "35",
-      "MagicResistance": "Standard",
-      "Size": "Medium",
-      "Movement": 9,
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 10,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "D",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Hobgoblin",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 5,
-      "HitDice": 1,
-      "ExtraHitPoints": 1,
-      "Size": "Medium",
-      "Movement": 30,
-      "Class": "Fighter",
-      "Morale": {
-        "Value": 9
-      },
-      "Attacks": [
-        {
-          "Name": "Long Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "B",
-      "Source": "Adnd",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSALLRPhLTSlhbB6Z95EHXWhKHUOXQ2akTPUJHCcqMYSw&s=10",
-      "DM comment": "DMG page 204"
-
-    },
-    {
-      "Name": "Bandit",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 15,
-      "ArmorClass": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 30,
+      "TreasureType": "C,O,Q(x10), S",
+      "IndividualTreasure": "L",
       "Attacks": [
         {
           "Name": "Weapon",
@@ -79,25 +20,98 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 20,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average (low)",
+      "Size": "Medium",
+      "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AD&D",
-      "DM comment": "Bandits appear according to DMG page 175, but stats does not exist in MM"
+      "Source": "Adnd",
+      "Other": "MM page 76"
+    }
+
+    {
+      "Name": "Hobgoblin",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 20,
+      "NumberOfAppearancesMax": 200,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": "1",
+      "ExtraHitPoints": 1,
+      "%InLair": "25",
+      "TreasureType": "D, Q(x5)",
+      "IndividualTreasure": "J, M",
+      "Attacks": [
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Lawful Evil",
+      "Strength": "15–16",
+      "Source": "Adnd"
     },
+
+    {
+      "Name": "Bandit",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 20,
+      "NumberOfAppearancesMax": 200,
+      "ArmorClass": 6,
+      "Movement": 9,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "A",
+      "IndividualTreasure": "M",
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 5,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral",
+      "Psionics": "Leader types",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/bandit.htm"
+    },
+
+
     {
       "Name": "Berserker",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 9,
+      "NumberOfAppearancesMin": 10,
+      "NumberOfAppearancesMax": 100,
       "ArmorClass": 7,
+      "Movement": 12,
       "HitDice": 1,
       "HitDiceType": 6,
       "ExtraHitPoints": 1,
-      "Size": "Medium",
-      "Movement": 30,
+      "%InLair": "10",
+      "TreasureType": "B",
+      "IndividualTreasure": "K",
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -110,17 +124,19 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Battle Frenzy",
-          "Description": "Never checks morale; fights to the death."
-        }
-      ],
-      "BaseXPValue": 25,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average to Very",
+      "Size": "Medium",
+      "BaseXPValue": 14,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AD&D"
-    },
+      "Alignment": "Neutral",
+      "Psionics": "Leader types",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/berserker.htm"
+    }
+
     {
       "Name": "Brigand",
       "Type": "Humanoid",
@@ -151,15 +167,17 @@
     {
       "Name": "Buccaneer",
       "Type": "Humanoid",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 50,
+      "NumberOfAppearancesMax": 300,
       "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 1,
-      "HitDiceType": 8,
+      "HitDiceType": 6,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 30,
+      "%InLair": "80",
+      "TreasureType": "W",
+      "IndividualTreasure": "K",
       "Attacks": [
         {
           "Name": "Cutlass",
@@ -167,12 +185,18 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 25,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 5,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AI"
-    },
+      "Alignment": "Neutral",
+      "Source": "AI",
+      "Other": "https://1eonline.info/1mm/buccaneer.htm"
+    }
+
     {
       "Name": "Nomad",
       "Type": "Humanoid",

@@ -447,6 +447,48 @@
       "Source": "AD&D Monster Manual (1977)"
     },
     {
+      "Name": "Tick, Giant",
+      "Type": "Vermin",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 3,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 9,
+      "Morale": {
+        "Value": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Blood Drain",
+          "Description": "If the tick hits, it attaches and drains 1d6 hit points per round."
+        },
+        {
+          "Name": "Attachment",
+          "Description": "Once attached, it cannot be removed without fire or great force."
+        },
+        {
+          "Name": "Disease Carrier",
+          "Description": "Victims may contract disease; save vs poison to resist."
+        }
+      ],
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "None",
+      "Source": "AD&D"
+    },
+
+    {
       "Name": "Giant Toad",
       "Type": "Animal",
       "Frequency": "Uncommon",
@@ -472,7 +514,7 @@
       "BaseXPValue": 50,
       "XPValuePerHitPoint": 3,
       "TreasureType": "None",
-      "Source": "AD&D Monster Manual (1977)"
+      "Source": "AD&D"
     },
     {
       "Name": "Troglodyte",
