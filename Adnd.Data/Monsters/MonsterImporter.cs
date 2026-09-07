@@ -73,6 +73,7 @@ public static class MonsterImporter
             BaseXPValue = json.BaseXPValue,
             XPValuePerHitPoint = json.XPValuePerHitPoint,
             TreasureType = string.IsNullOrWhiteSpace(json.TreasureType) ? "None" : json.TreasureType,
+            IndividualTreasure = string.IsNullOrWhiteSpace(json.IndividualTreasure) ? "None" : json.IndividualTreasure,
             TreasureChanceOverride = json.TreasureChanceOverride,
             Source = ParseSource(json),
 

@@ -1,33 +1,27 @@
 {
   "Name": "Treasure Type A",
   "Coins": {
-    "CopperPieces": { "Amount": "0", "Chance": 0 },
-    "SilverPieces": { "Amount": "0", "Chance": 0 },
-    "ElectrumPieces": { "Amount": "0", "Chance": 0 },
-    "GoldPieces": { "Amount": "5d20*10", "Chance": 40 },
-    "PlatinumPieces": { "Amount": "0", "Chance": 0 }
+    "CopperPieces": { "Amount": "1d6*1000", "Chance": 25 },
+    "SilverPieces": { "Amount": "1d6*1000", "Chance": 30 },
+    "ElectrumPieces": { "Amount": "1d6*1000", "Chance": 35 },
+    "GoldPieces": { "Amount": "1d10*1000", "Chance": 40 },
+    "PlatinumPieces": { "Amount": "1d4*1000", "Chance": 25 }
   },
   "Gems": {
-    "Amount": "2d6",
-    "Chance": 20,
+    "Amount": "4d10",
+    "Chance": 60,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },
   "Jewelry": {
-    "Amount": "0",
-    "Chance": 0,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
-  },
-  "Art": {
-    "Amount": "0",
-    "Chance": 0,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
+    "Amount": "3d10",
+    "Chance": 50,
+    "MinValueGp": 100,
+    "MaxValueGp": 1000
   },
   "Magic": {
     "Rolls": [
-      { "Table": "Potion", "Amount": "1", "Chance": 10 }
+      { "Table": "Any", "Amount": "3", "Chance": 30 }
     ]
   }
 }

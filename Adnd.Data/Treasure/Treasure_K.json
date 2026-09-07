@@ -1,8 +1,8 @@
 {
-  "Name": "Treasure Type J",
+  "Name": "Treasure Type K",
   "Coins": {
-    "CopperPieces": { "Amount": "3d8", "Chance": 100 },
-    "SilverPieces": { "Amount": "0", "Chance": 0 },
+    "CopperPieces": { "Amount": "0", "Chance": 0 },
+    "SilverPieces": { "Amount": "3d6", "Chance": 100 },
     "ElectrumPieces": { "Amount": "0", "Chance": 0 },
     "GoldPieces": { "Amount": "0", "Chance": 0 },
     "PlatinumPieces": { "Amount": "0", "Chance": 0 }

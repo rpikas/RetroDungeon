@@ -1,0 +1,57 @@
+{
+  "Name": "Treasure Type V",
+  "Coins": {
+    "CopperPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "SilverPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "ElectrumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "GoldPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "PlatinumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    }
+  },
+  "Gems": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Jewelry": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Magic": {
+    "Rolls": [
+      {
+        "Table": "Any",
+        "Amount": "2",
+        "Chance": 85
+      },
+      {
+        "Table": "Any",
+        "Amount": "1",
+        "Chance": 55
+      },
+      {
+        "Table": "Any",
+        "Amount": "2",
+        "Chance": 60
+      },
+      {
+        "Table": "Any",
+        "Amount": "3",
+        "Chance": 50
+      }
+    ]
+  }
+}

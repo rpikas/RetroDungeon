@@ -743,3 +743,26 @@ write in ADnD Rule and Dice Info when roling if monster is inLair or not. Also w
 The inLair roll should not be done per monster but per group of encounters 27,2
 
 When CountMin and CountMax is defined in MonsterLevels, use that instead to figure out how many monsters are in the group, show what you are radomizing in the log and rule window 28,7
+
+in rules and dice info inform what treasures has been found and what rolls are beeing made with probablity and amount of coins, gems etc 30,1
+make sure individual treasure is parsed when parsing monster json also individial treasure allways appear for the mobs with individual treasure even if not in lair 30,3
+
+when finding treasure in lair that is not individual treasure, adjust the amount of coins found by the number of monsters in the group, 
+The treasure found should be multiplied by the number of monsters in the group. and divided by the expected average number of monsters in the group. 
+the expected average number of monsters in the group is calculated by (NumberOfAppearancesMin+NumberOfAppearancesMax)/2. 30,5
+show what you are doing in the rules and dice info window
+also adjust the amount of gems and magic items, gems and jewelry found in the same way. but then adjust the probability of 
+finding magic items, gems and jewelry by the number of monsters in the group divided by the expected average number of monsters in the group.
+show what you are doing in the rules and dice info window 30,5
+
+if found something in "Table": "Any", 
+then roll 1d100 to see what is found, 
+
+Dice Roll	Result
+01–20	Potions
+21–35	Scrolls
+36–40	Rings
+41–45	Rods, Staves & Wands
+46–60	Misc Magic
+61–75	Armor
+76–100	Weapons

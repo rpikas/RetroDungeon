@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Diagnostics;
 
 namespace Adnd.Core.Treasure;
 
@@ -20,70 +22,175 @@ public sealed class TreasureService
     public TreasureResult RollTreasureForEncounter(IEnumerable<MonsterInstance> monsters)
     {
         var result = new TreasureResult();
+        var monsterList = monsters?.ToList() ?? new List<MonsterInstance>();
 
-        foreach (var monster in monsters)
+        foreach (var group in monsterList.GroupBy(m => string.IsNullOrWhiteSpace(m.GroupId) ? "default" : m.GroupId))
         {
-            if (!monster.IsInLair)
-            {
-                result.LogLines.Add($"{monster.DisplayName}: not in lair, no treasure.");
+            var members = group.ToList();
+            if (members.Count == 0)
                 continue;
-            }
 
-            var tokens = ParseTreasureTypes(monster.Template.TreasureType);
-            if (tokens.Count == 0)
-            {
-                result.LogLines.Add($"{monster.DisplayName}: no treasure type.");
-                continue;
-            }
+            var representative = members[0];
+            result.LogLines.Add($"Group {representative.GroupId}: non-individual treasure is rolled once for the whole group ({members.Count} monster(s)).");
+            RollLairTreasure(representative, members.Count, result);
 
-            foreach (var token in tokens)
-            {
-                if (!_tableProvider.TryGetTable(token, out var table))
-                {
-                    result.LogLines.Add($"{monster.DisplayName}: unknown treasure type '{token}'.");
-                    continue;
-                }
+            foreach (var monster in members)
+                RollIndividualTreasure(monster, result);
+        }
 
-                var overrideChance = monster.Template.TreasureChanceOverride;
-                if (overrideChance.HasValue)
-                {
-                    var clamped = Math.Clamp(overrideChance.Value, 0d, 1d);
-                    var roll = _random.NextDouble();
-                    if (roll > clamped)
-                    {
-                        result.LogLines.Add($"{monster.DisplayName}: treasure type {token} skipped by override chance ({clamped:P0}).");
-                        continue;
-                    }
-                }
-
-                RollTable(table, token, monster.DisplayName, result);
-            }
+        if (result.LogLines.Count > 0)
+        {
+            RuleApplicationInfo.Publish("Treasure roll details:");
+            foreach (var line in result.LogLines)
+                RuleApplicationInfo.Publish(line);
         }
 
         return result;
     }
 
-    private void RollTable(TreasureTable table, string tableCode, string monsterDisplayName, TreasureResult result)
+    private void RollLairTreasure(MonsterInstance monster, int groupCount, TreasureResult result)
+    {
+        var tokens = ParseTreasureTypes(monster.Template.TreasureType);
+        var expectedAverage = GetExpectedAverageGroupSize(monster);
+        var scaleFactor = expectedAverage > 0d ? groupCount / expectedAverage : 1d;
+
+        result.LogLines.Add(
+            $"{monster.DisplayName}: lair treasure scaling uses group size {groupCount} / expected average {expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)} " +
+            $"((min {monster.Template.NumberOfAppearancesMin} + max {monster.Template.NumberOfAppearancesMax}) / 2) => factor {scaleFactor.ToString("0.###", CultureInfo.InvariantCulture)}.");
+
+        if (!monster.IsInLair)
+        {
+            if (tokens.Count > 0)
+                result.LogLines.Add($"{monster.DisplayName}: not in lair, lair treasure skipped.");
+            return;
+        }
+
+        if (tokens.Count == 0)
+        {
+            result.LogLines.Add($"{monster.DisplayName}: no lair treasure type.");
+            return;
+        }
+
+        foreach (var token in tokens)
+            RollTreasureToken(
+                token,
+                monster.DisplayName,
+                result,
+                monster.Template.TreasureChanceOverride,
+                "lair",
+                scaleFactor,
+                adjustGemJewelryMagicChanceByScale: true,
+                adjustArtAmountByScale: false);
+    }
+
+    private void RollIndividualTreasure(MonsterInstance monster, TreasureResult result)
+    {
+        var tokens = ParseTreasureTypes(monster.Template.IndividualTreasure);
+        if (tokens.Count == 0)
+            return;
+
+        result.LogLines.Add($"{monster.DisplayName}: rolling individual treasure (always, even when not in lair).");
+        foreach (var token in tokens)
+            RollTreasureToken(
+                token,
+                monster.DisplayName,
+                result,
+                null,
+                "individual",
+                amountScaleFactor: 1d,
+                adjustGemJewelryMagicChanceByScale: false,
+                adjustArtAmountByScale: false);
+    }
+
+    private void RollTreasureToken(
+        string token,
+        string monsterDisplayName,
+        TreasureResult result,
+        double? overrideChance,
+        string scope,
+        double amountScaleFactor,
+        bool adjustGemJewelryMagicChanceByScale,
+        bool adjustArtAmountByScale)
+    {
+        var (tableCode, repeats) = ParseTreasureToken(token);
+        if (!_tableProvider.TryGetTable(tableCode, out var table))
+        {
+            result.LogLines.Add($"{monsterDisplayName}: unknown {scope} treasure type '{token}'.");
+            return;
+        }
+
+        if (overrideChance.HasValue)
+        {
+            var clamped = Math.Clamp(overrideChance.Value, 0d, 1d);
+            var roll = _random.NextDouble();
+            if (roll > clamped)
+            {
+                result.LogLines.Add($"{monsterDisplayName}: {scope} treasure type {token} skipped by override chance ({clamped:P0}).");
+                return;
+            }
+        }
+
+        for (var i = 1; i <= repeats; i++)
+        {
+            if (repeats > 1)
+                result.LogLines.Add($"{monsterDisplayName}: {scope} treasure {tableCode} roll {i}/{repeats}.");
+            RollTable(table, tableCode, monsterDisplayName, result, amountScaleFactor, adjustGemJewelryMagicChanceByScale, adjustArtAmountByScale);
+        }
+    }
+
+    private static (string tableCode, int repeats) ParseTreasureToken(string token)
+    {
+        var trimmed = token?.Trim() ?? string.Empty;
+        if (trimmed.Length == 0)
+            return (string.Empty, 1);
+
+        var match = Regex.Match(trimmed, @"^(?<code>[A-Za-z]+)\s*(?:\(\s*x\s*(?<count>\d+)\s*\))?$", RegexOptions.IgnoreCase);
+        if (!match.Success)
+            return (trimmed.ToUpperInvariant(), 1);
+
+        var tableCode = match.Groups["code"].Value.Trim().ToUpperInvariant();
+        var repeats = 1;
+        if (match.Groups["count"].Success && int.TryParse(match.Groups["count"].Value, out var parsed))
+            repeats = Math.Max(1, parsed);
+
+        return (tableCode, repeats);
+    }
+
+    private void RollTable(
+        TreasureTable table,
+        string tableCode,
+        string monsterDisplayName,
+        TreasureResult result,
+        double amountScaleFactor,
+        bool adjustGemJewelryMagicChanceByScale,
+        bool adjustArtAmountByScale)
     {
         var source = string.IsNullOrWhiteSpace(table.Name) ? tableCode : table.Name;
         result.LogLines.Add($"{monsterDisplayName}: rolling {source} ({tableCode}).");
 
-        RollCoins("CP", table.Coins.CopperPieces, source, result, v => result.CopperPieces += v);
-        RollCoins("SP", table.Coins.SilverPieces, source, result, v => result.SilverPieces += v);
-        RollCoins("EP", table.Coins.ElectrumPieces, source, result, v => result.ElectrumPieces += v);
-        RollCoins("GP", table.Coins.GoldPieces, source, result, v => result.GoldPieces += v);
-        RollCoins("PP", table.Coins.PlatinumPieces, source, result, v => result.PlatinumPieces += v);
+        RollCoins("CP", table.Coins.CopperPieces, source, result, v => result.CopperPieces += v, amountScaleFactor);
+        RollCoins("SP", table.Coins.SilverPieces, source, result, v => result.SilverPieces += v, amountScaleFactor);
+        RollCoins("EP", table.Coins.ElectrumPieces, source, result, v => result.ElectrumPieces += v, amountScaleFactor);
+        RollCoins("GP", table.Coins.GoldPieces, source, result, v => result.GoldPieces += v, amountScaleFactor);
+        RollCoins("PP", table.Coins.PlatinumPieces, source, result, v => result.PlatinumPieces += v, amountScaleFactor);
 
-        RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines);
-        RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines);
-        RollValuables("Art", table.Art, source, result.Art, result.LogLines);
+        var chanceScale = adjustGemJewelryMagicChanceByScale ? amountScaleFactor : 1d;
+        RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines, amountScaleFactor, chanceScale);
+        RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines, amountScaleFactor, chanceScale);
+        RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d);
 
         foreach (var magicRule in table.MagicRolls)
         {
-            if (!RollChance(magicRule.ChancePercent))
+            if (!RollChance(
+                    magicRule.ChancePercent,
+                    $"Magic ({magicRule.Table}) chance",
+                    result.LogLines,
+                    chanceScale))
                 continue;
 
-            var count = Math.Max(0, RollAmount(magicRule.AmountExpression));
+            var count = Math.Max(0, RollAmount(magicRule.AmountExpression, out var amountDetail));
+            result.LogLines.Add($"    Amount roll ({magicRule.AmountExpression}) => {amountDetail}");
+            count = ScaleAmount(count, amountScaleFactor, $"Magic ({magicRule.Table}) amount", result.LogLines);
             if (count <= 0)
                 continue;
 
@@ -98,12 +205,14 @@ public sealed class TreasureService
         }
     }
 
-    private void RollCoins(string label, TreasureRollRule rule, string source, TreasureResult result, Action<int> add)
+    private void RollCoins(string label, TreasureRollRule rule, string source, TreasureResult result, Action<int> add, double amountScaleFactor)
     {
-        if (!RollChance(rule.ChancePercent))
+        if (!RollChance(rule.ChancePercent, $"{source} {label} chance", result.LogLines))
             return;
 
-        var amount = Math.Max(0, RollAmount(rule.AmountExpression));
+        var amount = Math.Max(0, RollAmount(rule.AmountExpression, out var amountDetail));
+        result.LogLines.Add($"    Amount roll ({rule.AmountExpression}) => {amountDetail}");
+        amount = ScaleAmount(amount, amountScaleFactor, $"{source} {label} amount", result.LogLines);
         if (amount <= 0)
             return;
 
@@ -111,12 +220,21 @@ public sealed class TreasureService
         result.LogLines.Add($"  + {label}: {amount}");
     }
 
-    private void RollValuables(string category, TreasureValuablesRule rule, string source, List<TreasureValuableResult> target, List<string> logs)
+    private void RollValuables(
+        string category,
+        TreasureValuablesRule rule,
+        string source,
+        List<TreasureValuableResult> target,
+        List<string> logs,
+        double amountScaleFactor,
+        double chanceScaleFactor)
     {
-        if (!RollChance(rule.ChancePercent))
+        if (!RollChance(rule.ChancePercent, $"{source} {category} chance", logs, chanceScaleFactor))
             return;
 
-        var count = Math.Max(0, RollAmount(rule.AmountExpression));
+        var count = Math.Max(0, RollAmount(rule.AmountExpression, out var countDetail));
+        logs.Add($"    Amount roll ({rule.AmountExpression}) => {countDetail}");
+        count = ScaleAmount(count, amountScaleFactor, $"{source} {category} amount", logs);
         if (count <= 0)
             return;
 
@@ -126,6 +244,7 @@ public sealed class TreasureService
         for (int i = 0; i < count; i++)
         {
             var value = max <= 0 ? 0 : _random.Next(min, max + 1);
+            logs.Add($"    {category} #{i + 1}: value roll {value} gp (range {min}-{max})");
             target.Add(new TreasureValuableResult
             {
                 Category = category,
@@ -138,21 +257,58 @@ public sealed class TreasureService
         logs.Add($"  + {category}: {count} item(s), total {total} gp");
     }
 
-    private bool RollChance(int chancePercent)
+    private bool RollChance(int chancePercent, string context, List<string> logs, double chanceScaleFactor = 1d)
     {
-        var chance = Math.Clamp(chancePercent, 0, 100);
-        if (chance <= 0)
-            return false;
-        if (chance >= 100)
-            return true;
+        var baseChance = Math.Clamp(chancePercent, 0, 100);
+        var chance = baseChance;
+        if (Math.Abs(chanceScaleFactor - 1d) > 0.0001d)
+        {
+            chance = Math.Clamp((int)Math.Round(baseChance * Math.Max(0d, chanceScaleFactor), MidpointRounding.AwayFromZero), 0, 100);
+            logs.Add($"    Chance scaling for {context}: base {baseChance}% x {chanceScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {chance}%");
+        }
 
-        return _random.Next(1, 101) <= chance;
+        if (chance <= 0)
+        {
+            logs.Add($"    Chance roll for {context}: 0% => fail");
+            return false;
+        }
+        if (chance >= 100)
+        {
+            logs.Add($"    Chance roll for {context}: 100% => success");
+            return true;
+        }
+
+        var roll = _random.Next(1, 101);
+        var success = roll <= chance;
+        logs.Add($"    Chance roll for {context}: rolled {roll} on 1d100 vs {chance}% => {(success ? "success" : "fail")}");
+        return success;
     }
 
-    private int RollAmount(string expression)
+    private static int ScaleAmount(int amount, double factor, string context, List<string> logs)
+    {
+        if (Math.Abs(factor - 1d) <= 0.0001d)
+            return amount;
+
+        var scaled = Math.Max(0, (int)Math.Round(amount * Math.Max(0d, factor), MidpointRounding.AwayFromZero));
+        logs.Add($"    Scale {context}: {amount} x {factor.ToString("0.###", CultureInfo.InvariantCulture)} => {scaled}");
+        return scaled;
+    }
+
+    private static double GetExpectedAverageGroupSize(MonsterInstance monster)
+    {
+        var min = monster.Template.NumberOfAppearancesMin;
+        var max = monster.Template.NumberOfAppearancesMax;
+        var avg = (min + max) / 2d;
+        return avg <= 0d ? 1d : avg;
+    }
+
+    private int RollAmount(string expression, out string detail)
     {
         if (string.IsNullOrWhiteSpace(expression))
+        {
+            detail = "empty expression => 0";
             return 0;
+        }
 
         var normalized = expression.Replace(" ", "", StringComparison.Ordinal);
         var parts = normalized.Split('*', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -162,28 +318,46 @@ public sealed class TreasureService
         if (parts.Length > 1 && !int.TryParse(parts[1], out multiplier))
             multiplier = 1;
 
-        var baseValue = EvaluateBase(basePart);
-        return baseValue * multiplier;
+        var baseValue = EvaluateBase(basePart, out var baseDetail);
+        var total = baseValue * multiplier;
+        detail = multiplier == 1
+            ? $"{baseDetail} => {total}"
+            : $"{baseDetail}, x{multiplier} => {total}";
+        return total;
     }
 
-    private int EvaluateBase(string baseExpression)
+    private int EvaluateBase(string baseExpression, out string detail)
     {
         if (int.TryParse(baseExpression, out var fixedValue))
+        {
+            detail = fixedValue.ToString();
             return fixedValue;
+        }
 
         var m = Regex.Match(baseExpression, @"^(?<count>\d+)d(?<sides>\d+)(?<mod>[+-]\d+)?$", RegexOptions.IgnoreCase);
         if (!m.Success)
+        {
+            detail = $"invalid expression '{baseExpression}' => 0";
             return 0;
+        }
 
         var count = int.Parse(m.Groups["count"].Value);
         var sides = int.Parse(m.Groups["sides"].Value);
         var mod = m.Groups["mod"].Success ? int.Parse(m.Groups["mod"].Value) : 0;
 
         var sum = 0;
+        var rolls = new List<int>();
         for (var i = 0; i < Math.Max(1, count); i++)
-            sum += _random.Next(1, Math.Max(2, sides) + 1);
+        {
+            var roll = _random.Next(1, Math.Max(2, sides) + 1);
+            rolls.Add(roll);
+            sum += roll;
+        }
 
-        return sum + mod;
+        var final = sum + mod;
+        var modText = mod == 0 ? string.Empty : mod > 0 ? $"+{mod}" : mod.ToString();
+        detail = $"{count}d{sides}{modText} [{string.Join(",", rolls)}] => {final}";
+        return final;
     }
 
     private static List<string> ParseTreasureTypes(string? raw)

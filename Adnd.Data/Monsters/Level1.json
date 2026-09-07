@@ -29,7 +29,7 @@
       "XPValuePerHitPoint": 1,
       "Source": "Adnd",
       "Other": "MM page 76"
-    }
+    },
 
     {
       "Name": "Hobgoblin",
@@ -39,7 +39,7 @@
       "NumberOfAppearancesMax": 200,
       "ArmorClass": 5,
       "Movement": 9,
-      "HitDice": "1",
+      "HitDice": 1,
       "ExtraHitPoints": 1,
       "%InLair": "25",
       "TreasureType": "D, Q(x5)",
@@ -60,7 +60,8 @@
       "XPValuePerHitPoint": 2,
       "Alignment": "Lawful Evil",
       "Strength": "15–16",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hobgoblin.htm"
     },
 
     {
@@ -135,7 +136,7 @@
       "Psionics": "Leader types",
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/berserker.htm"
-    }
+    },
 
     {
       "Name": "Brigand",
@@ -195,7 +196,7 @@
       "Alignment": "Neutral",
       "Source": "AI",
       "Other": "https://1eonline.info/1mm/buccaneer.htm"
-    }
+    },
 
     {
       "Name": "Nomad",
@@ -410,27 +411,18 @@
 
     {
       "Name": "Rot Grub",
-      "Type": "Insectoid",
-      "ClimateTerain": "Any (found in refuse, offal, filth) Rare in dungeon",
-      "Frequency": "Not Implemented",
-      "ActivityCycle": "Any",
-      "Intelligence": "Non",
-      "Alignment": "Neutral",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "Type": "Vermin",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 20,
       "ArmorClass": 9,
-      "MovementRate": "Very Slow",
-      "HitDice": 0,
-      "HitDiceType": 0,
-      "ExtraHitPoints": 1,
-      "THAC0": 20,
-      "NumberOfAttacks": 0,
-      "MagicResistance": "Standard",
-      "Size": "Small",
-      "Movement": 10,
-      "Morale": {
-        "Value": 7
-      },
+      "Movement": 1,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Burrow into Flesh",
@@ -444,38 +436,31 @@
           "Description": "Burrow into Flesh"
         }
       ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Small",
       "BaseXPValue": 0,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "None",
+      "XPValuePerHitPoint": 0,
+      "Alignment": "Neutral",
       "Source": "Adnd",
-      "ImageUrl": "",
-      "Info": "Small flesh-eating grubs found in heaps of offal; deadly if not burned out immediately.",
-      "InfoUrl": "https://1eonline.info/1mm/rotgrub.htm"
+      "Other": "Rot grubs burrow into flesh; flame or cure disease required to survive"
     },
 
     {
       "Name": "Ear Seeker",
-      "Type": "Insectoid",
-      "ClimateTerain": "Any (lives in wood)",
-      "Frequency": "Not Implemented",
-      "ActivityCycle": "Any",
-      "Intelligence": "Non",
-      "Alignment": "Neutral",
+      "Type": "Vermin",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 9,
-      "Movement": 5,
-      "HitDice": 0,
-      "HitDiceType": 0,
-      "ExtraHitPoints": 1,
-      "THAC0": 20,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "Movement": 10,
-      "Morale": {
-        "Value": 7
-      },
+      "Movement": 1,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 0,
+      "%InLair": "90",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Burrow into ear",
@@ -489,190 +474,165 @@
           "Description": "Egg Infestation: Lays 9–16 eggs in warm cavities; larvae hatch in 4–24 hours and kill host 90% of the time unless cured."
         }
       ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Small",
       "BaseXPValue": 0,
-      "TreasureType": "None",
+      "XPValuePerHitPoint": 0,
+      "Alignment": "Neutral",
       "Source": "Adnd",
-      "ImageUrl": "",
-      "Info": "Tiny cellulose-eating insect that burrows into ears and lays eggs, causing lethal infestation.",
-      "InfoUrl": "https://1eonline.info/1mm/earseekers.htm?utm_source=copilot.com"
+      "Other": "Burrows into ear; cure disease required to prevent death"
     },
 
     {
-      "Name": "Manes Deamon",
+      "Name": "Manes",
       "Type": "Demon",
-      "ClimateTerain": "Temperate",
       "Frequency": "Very Rare",
-      "ActivityCycle": "Nocturnal",
-      "Intelligence": "Semi",
-      "Alignment": "Chaotic Evil",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 16,
       "ArmorClass": 7,
-      "MovementRate": "Slow",
+      "Movement": 3,
       "HitDice": 1,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "Movement": 20,
-      "Morale": {
-        "Value": 7
-      },
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d2"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
+          "Name": "Claw/Claw/Bite",
+          "NumberOfAttacks": 3,
+          "Damage": "1d2 / 1d2 / 1d4"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 15,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        "+1 or better weapons to hit",
+        "Resistant to spells as undead"
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Small",
+      "BaseXPValue": 18,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "",
+      "Alignment": "Chaotic Evil",
       "Source": "Adnd",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYxMTufzeLtHJ1SmpPXR45w0tM-Y4FHPReWBiFj47Wdlz-0h84hhGSIk6o&s=10",
-      "Info": "",
-      "InfoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYxMTufzeLtHJ1SmpPXR45w0tM-Y4FHPReWBiFj47Wdlz-0h84hhGSIk6o&s=10"
+      "Other": "https://1eonline.info/1mm/manes.htm"
     },
 
     {
       "Name": "Dwarf",
       "Type": "Humanoid",
-      "ClimateTerain": "Temperate",
-      "Frequency": "Rare",
-      "ActivityCycle": "Nocturnal",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic Good",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
       "ArmorClass": 4,
-      "MovementRate": "Slow",
+      "Movement": 6,
       "HitDice": 1,
-      "HitDiceType": 7,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "HitPoints": 4,
-      "Movement": 20,
-      "Morale": {
-        "Value": 7
-      },
+      "%InLair": "50",
+      "TreasureType": "G, Q(x20), R",
+      "IndividualTreasure": "M(x5)",
       "Attacks": [
         {
-          "Name": "Short Sword",
+          "Name": "Battle Axe",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 15,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        "Save at 4 levels higher (magic & poison resistance)"
+      ],
+      "MagicResistance": "Standard",
+      "Strength": "13–14",
+      "Intelligence": "Very",
+      "Size": "Small",
+      "BaseXPValue": 18,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
+      "Alignment": "Lawful Good",
       "Source": "Adnd",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOAJSQBEEzVH3yYrgySU2gXY342OqzARYZakiknGvBBg&s=10",
-      "Info": "Dwarves are short, stocky humanoids known for their skill in mining and metalworking. They are often found in mountainous regions and are known for their loyalty and bravery.",
-      "InfoUrl": "https://en.wikipedia.org/wiki/Dwarf_(Dungeons_%26_Dragons)"
+      "Other": "https://1eonline.info/1mm/dwarf.htm"
     },
 
     {
       "Name": "Elf",
       "Type": "Humanoid",
-      "ClimateTerain": "Temperate",
-      "Frequency": "Very Rare",
-      "ActivityCycle": "Day",
-      "Intelligence": "Average",
-      "Alignment": "Chaotic Good",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 11,
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 20,
+      "NumberOfAppearancesMax": 200,
       "ArmorClass": 5,
-      "MovementRate": "Medium",
+      "Movement": 12,
       "HitDice": 1,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Medium",
-      "HitPoints": 4,
-      "Movement": 30,
-      "Morale": {
-        "Value": 8
-      },
+      "ExtraHitPoints": 1,
+      "%InLair": "10",
+      "TreasureType": "G, S, T",
+      "IndividualTreasure": "N",
       "Attacks": [
         {
-          "Name": "Longsword",
+          "Name": "Elven extra sharp Longsword",
           "NumberOfAttacks": 1,
-          "Damage": "1d8"
+          "Damage": "1d10"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 10,
-      "TreasureType": "C",
+      "MagicResistance": "90% vs charm and sleep",
+      "Strength": "12",
+      "Intelligence": "High",
+      "Size": "Medium",
+      "BaseXPValue": 18,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Chaotic Good",
       "Source": "Adnd",
-      "ImageUrl": "",
-      "Info": "Elves are graceful, magical humanoids known for their long lifespans and affinity for nature. They are often found in forests and are skilled in archery and magic.",
-      "InfoUrl": "https://en.wikipedia.org/wiki/Elf_(Dungeons_%26_Dragons)"
+      "Other": "https://1eonline.info/1mm/elf.htm"
     },
+
 
     {
       "Name": "Badger",
       "Type": "Animal",
-      "ClimateTerain": "Temperate",
-      "Frequency": "Rare",
-      "ActivityCycle": "Nocturnal",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
-      "MovementRate": "Medium",
-      "HitDice": 3,
+      "Movement": 6,
+      "HitDice": 1,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "THAC0": 17,
-      "NumberOfAttacks": 3,
-      "MagicResistance": "None",
-      "Size": "Medium",
-      "HitPoints": 14,
-      "Movement": 30,
-      "Morale": {
-        "Value": 9
-      },
+      "ExtraHitPoints": 2,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 1,
-          "Damage": "1d3"
+          "Damage": "1d2"
         },
         {
           "Name": "Claw",
           "NumberOfAttacks": 1,
-          "Damage": "1d3"
+          "Damage": "1d2"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "None",
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Neutral",
       "Source": "Adnd",
-      "Info": "Badgers are large, aggressive creatures known for their burrowing abilities and sharp claws. They are often found in forests and grasslands.",
-      "InfoUrl": "",
-      "ImageUrl": "https://i.redd.it/8mwl94iv5td81.jpg"
+      "Other": "Pelt worth 10–30 gp"
     },
+
     {
       "Name": "Fire Beetle",
       "Type": "Animal",

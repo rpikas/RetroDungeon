@@ -1,36 +1,36 @@
 {
-  "Name": "Treasure Type C",
+  "Name": "Treasure Type G",
   "Coins": {
     "CopperPieces": {
-      "Amount": "1d12*1000",
-      "Chance": 20
+      "Amount": "nil",
+      "Chance": 0
     },
     "SilverPieces": {
-      "Amount": "1d6*1000",
-      "Chance": 30
+      "Amount": "nil",
+      "Chance": 0
     },
     "ElectrumPieces": {
-      "Amount": "1d4*1000",
-      "Chance": 10
+      "Amount": "nil",
+      "Chance": 0
     },
     "GoldPieces": {
-      "Amount": "nil",
-      "Chance": 0
+      "Amount": "1d10*1000",
+      "Chance": 50
     },
     "PlatinumPieces": {
-      "Amount": "nil",
-      "Chance": 0
+      "Amount": "1d20*100",
+      "Chance": 50
     }
   },
   "Gems": {
-    "Amount": "1d6",
-    "Chance": 25,
+    "Amount": "1d5+20",
+    "Chance": 30,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },
   "Jewelry": {
-    "Amount": "1d3",
-    "Chance": 20,
+    "Amount": "1d10",
+    "Chance": 25,
     "MinValueGp": 100,
     "MaxValueGp": 1000
   },
@@ -38,8 +38,8 @@
     "Rolls": [
       {
         "Table": "Any",
-        "Amount": "2",
-        "Chance": 10
+        "Amount": "5",
+        "Chance": 35
       }
     ]
   }

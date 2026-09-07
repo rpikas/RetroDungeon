@@ -40,6 +40,7 @@ public class MonsterJsonModel
     public int XPValuePerHitPoint { get; set; }
 
     public string TreasureType { get; set; } = "None";
+    public string IndividualTreasure { get; set; } = "None";
     public double? TreasureChanceOverride { get; set; }
     public string Source { get; set; } = "Adnd";
 }

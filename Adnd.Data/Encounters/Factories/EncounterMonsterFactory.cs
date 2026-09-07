@@ -247,6 +247,7 @@ public sealed class EncounterMonsterFactory
             BaseXPValue = source.BaseXPValue,
             XPValuePerHitPoint = source.XPValuePerHitPoint,
             TreasureType = source.TreasureType,
+            IndividualTreasure = source.IndividualTreasure,
             TreasureChanceOverride = source.TreasureChanceOverride,
             Source = source.Source, // Important: Copy the Source property!
             DungeonLevel = source.DungeonLevel, // Also copy DungeonLevel

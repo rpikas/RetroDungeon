@@ -6,6 +6,7 @@ using Adnd.Core.Combat.Resolution;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
 using Adnd.Core.Dices;
+using Adnd.Core.Diagnostics;
 using Adnd.Core.Experience;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
@@ -620,17 +621,20 @@ public sealed class CombatCoordinator
 
         foreach (var placeholder in placeholders)
         {
-            var pool = GetItemPoolForMagicTable(allItems, placeholder.Table);
-            if (pool.Count == 0)
-            {
-                for (int i = 0; i < Math.Max(1, placeholder.Count); i++)
-                    result.UnassignedItems.Add($"{placeholder.Table} (no matching item defined)");
-                continue;
-            }
-
             var rolls = Math.Max(0, placeholder.Count);
             for (int i = 0; i < rolls; i++)
             {
+                var resolvedTable = ResolveAnyMagicTable(placeholder.Table, out var anyRollInfo);
+                if (!string.IsNullOrWhiteSpace(anyRollInfo))
+                    RuleApplicationInfo.Publish(anyRollInfo!);
+
+                var pool = GetItemPoolForMagicTable(allItems, resolvedTable);
+                if (pool.Count == 0)
+                {
+                    result.UnassignedItems.Add($"{resolvedTable} (no matching item defined)");
+                    continue;
+                }
+
                 var rolled = pool[_random.Next(pool.Count)];
                 var item = CloneItem(rolled);
 
@@ -792,11 +796,69 @@ public sealed class CombatCoordinator
         {
             "potion" => allItems.Where(i => i.Type == ItemType.Potion).ToList(),
             "scroll" => allItems.Where(i => i.Type == ItemType.Scroll).ToList(),
+            "ring" => allItems.Where(IsRingItem).ToList(),
+            "rods, staves & wands" => allItems.Where(IsRodStaffWandItem).ToList(),
+            "rods staves wands" => allItems.Where(IsRodStaffWandItem).ToList(),
+            "rods/staves/wands" => allItems.Where(IsRodStaffWandItem).ToList(),
+            "miscmagic" => allItems.Where(IsMiscMagicItem).ToList(),
+            "misc magic" => allItems.Where(IsMiscMagicItem).ToList(),
             "weapon" => allItems.Where(i => i.Type == ItemType.Weapon).ToList(),
             "armor" => allItems.Where(i => i.Type == ItemType.Armor || i.Type == ItemType.Shield).ToList(),
             "magicitem" => allItems.Where(i => i.Type == ItemType.MagicItem).ToList(),
             _ => allItems.Where(i => i.Type == ItemType.MagicItem && i.Name.Contains(table, StringComparison.OrdinalIgnoreCase)).ToList()
         };
+    }
+
+    private string ResolveAnyMagicTable(string table, out string? anyRollInfo)
+    {
+        anyRollInfo = null;
+        if (!string.Equals(table?.Trim(), "Any", StringComparison.OrdinalIgnoreCase))
+            return table;
+
+        var roll = _random.Next(1, 101);
+        var resolved = roll switch
+        {
+            <= 20 => "Potion",
+            <= 35 => "Scroll",
+            <= 40 => "Ring",
+            <= 45 => "Rods, Staves & Wands",
+            <= 60 => "Misc Magic",
+            <= 75 => "Armor",
+            _ => "Weapon"
+        };
+
+        anyRollInfo = $"Magic table Any: rolled {roll} on 1d100 => {resolved}.";
+        return resolved;
+    }
+
+    private static bool IsRingItem(Item item)
+    {
+        if (item == null)
+            return false;
+
+        if (item.Slot == EquipmentSlot.Ring1 || item.Slot == EquipmentSlot.Ring2)
+            return true;
+
+        return item.Name.StartsWith("Ring", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsRodStaffWandItem(Item item)
+    {
+        if (item == null)
+            return false;
+
+        var name = item.Name ?? string.Empty;
+        return name.StartsWith("Rod", StringComparison.OrdinalIgnoreCase)
+               || name.StartsWith("Staff", StringComparison.OrdinalIgnoreCase)
+               || name.StartsWith("Wand", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsMiscMagicItem(Item item)
+    {
+        if (item == null || item.Type != ItemType.MagicItem)
+            return false;
+
+        return !IsRingItem(item) && !IsRodStaffWandItem(item);
     }
 
     private static Item CloneItem(Item source)

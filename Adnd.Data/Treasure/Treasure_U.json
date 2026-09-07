@@ -1,0 +1,44 @@
+{
+  "Name": "Treasure Type U",
+  "Coins": {
+    "CopperPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "SilverPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "ElectrumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "GoldPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "PlatinumPieces": {
+      "Amount": "10d80*100",
+      "Chance": 90
+    }
+  },
+  "Gems": {
+    "Amount": "5d30",
+    "Chance": 80,
+    "MinValueGp": 10,
+    "MaxValueGp": 100
+  },
+  "Jewelry": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Magic": {
+    "Rolls": [
+      {
+        "Table": "Any",
+        "Amount": "5",
+        "Chance": 70
+      }
+    ]
+  }
+}

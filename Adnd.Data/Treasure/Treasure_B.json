@@ -1,33 +1,57 @@
 {
   "Name": "Treasure Type B",
   "Coins": {
-    "CopperPieces": { "Amount": "0", "Chance": 0 },
-    "SilverPieces": { "Amount": "0", "Chance": 0 },
-    "ElectrumPieces": { "Amount": "0", "Chance": 0 },
-    "GoldPieces": { "Amount": "2d8*100", "Chance": 50 },
-    "PlatinumPieces": { "Amount": "0", "Chance": 0 }
+    "CopperPieces": {
+      "Amount": "1d8*1000",
+      "Chance": 50
+    },
+    "SilverPieces": {
+      "Amount": "1d6*1000",
+      "Chance": 25
+    },
+    "ElectrumPieces": {
+      "Amount": "1d4*1000",
+      "Chance": 25
+    },
+    "GoldPieces": {
+      "Amount": "1d3*1000",
+      "Chance": 25
+    },
+    "PlatinumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    }
   },
   "Gems": {
-    "Amount": "1d6",
-    "Chance": 15,
+    "Amount": "1d8",
+    "Chance": 30,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },
   "Jewelry": {
-    "Amount": "0",
-    "Chance": 0,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
-  },
-  "Art": {
-    "Amount": "0",
-    "Chance": 0,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
+    "Amount": "1d4",
+    "Chance": 20,
+    "MinValueGp": 100,
+    "MaxValueGp": 1000
   },
   "Magic": {
-    "Rolls": [
-      { "Table": "Scroll", "Amount": "1", "Chance": 5 }
-    ]
+      "Rolls": [
+        {
+          "Table": "Misc",
+          "Amount": "1",
+          "Chance": 3
+        },
+        {
+          "Table": "Sword",
+          "Amount": "1",
+          "Chance": 3
+        },
+        {
+          "Table": "Armor",
+          "Amount": "1",
+          "Chance": 4
+        }
+      ]
+    }
   }
-}
+

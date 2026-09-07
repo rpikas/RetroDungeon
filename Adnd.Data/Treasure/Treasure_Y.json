@@ -1,0 +1,36 @@
+{
+  "Name": "Treasure Type Y",
+  "Coins": {
+    "CopperPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "SilverPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "ElectrumPieces": {
+      "Amount": "1d4*1000",
+      "Chance": 25
+    },
+    "GoldPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "PlatinumPieces": {
+      "Amount": "2d12*100",
+      "Chance": 70
+    }
+  },
+  "Gems": {
+    "Amount": "10d60",
+    "Chance": 55,
+    "MinValueGp": 10,
+    "MaxValueGp": 100
+  },
+  "Jewelry": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Magic": { "Rolls": [] }
+}

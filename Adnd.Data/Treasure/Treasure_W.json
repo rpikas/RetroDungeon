@@ -1,0 +1,51 @@
+{
+  "Name": "Treasure Type W",
+  "Coins": {
+    "CopperPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "SilverPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "ElectrumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "GoldPieces": {
+      "Amount": "5d30*1000",
+      "Chance": 60
+    },
+    "PlatinumPieces": {
+      "Amount": "1d8*100",
+      "Chance": 15
+    }
+  },
+  "Gems": {
+    "Amount": "10d80",
+    "Chance": 60,
+    "MinValueGp": 10,
+    "MaxValueGp": 100
+  },
+  "Jewelry": {
+    "Amount": "5d40",
+    "Chance": 50,
+    "MinValueGp": 100,
+    "MaxValueGp": 1000
+  },
+  "Magic": {
+    "Rolls": [
+      {
+        "Table": "Map",
+        "Amount": "1",
+        "Chance": 55
+      },
+      {
+        "Table": "Miscellaneous magic plus 1 potion",
+        "Amount": "2",
+        "Chance": 60
+      }
+    ]
+  }
+}

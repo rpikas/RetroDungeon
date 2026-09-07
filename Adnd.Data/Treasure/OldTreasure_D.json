@@ -1,0 +1,57 @@
+{
+  "Name": "Old Treasure Type D",
+  "Coins": {
+    "CopperPieces": { "Amount": "0", "Chance": 0 },
+    "SilverPieces": { "Amount": "0", "Chance": 0 },
+    "ElectrumPieces": { "Amount": "0", "Chance": 0 },
+    "GoldPieces": { "Amount": "2d6*100", "Chance": 60 },
+    "PlatinumPieces": { "Amount": "0", "Chance": 0 }
+  },
+  "Gems": {
+    "Amount": "1d4",
+    "Chance": 20,
+    "MinValueGp": 10,
+    "MaxValueGp": 100
+  },
+  "Jewelry": {
+    "Amount": "1d3",
+    "Chance": 10,
+    "MinValueGp": 10,
+    "MaxValueGp": 100
+  },
+  "Art": {
+    "Amount": "0",
+    "Chance": 0,
+    "MinValueGp": 0,
+    "MaxValueGp": 0
+  },
+  "Magic": {
+    "Rolls": [
+        {
+            "Table": "MagicItem",
+            "Amount": "1",
+            "Chance": 10
+        },
+        {
+            "Table": "Potion",
+            "Amount": "1",
+            "Chance": 5
+        },
+        {
+            "Table": "Scroll",
+            "Amount": "1",
+            "Chance": 2
+        },
+        {
+            "Table": "Weapon",
+            "Amount": "1",
+            "Chance": 30
+        },
+        {
+            "Table": "Armor",
+            "Amount": "1",
+            "Chance": 30
+        }
+    ]
+  }
+}

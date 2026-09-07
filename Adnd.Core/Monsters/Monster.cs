@@ -60,6 +60,9 @@ public class Monster
     // AD&D treasure type token(s), e.g. "A", "B", "A,B", or "None".
     public string TreasureType { get; set; } = "None";
 
+    // AD&D individual treasure token(s), e.g. "L", "J,M", "M(x5)", or "None".
+    public string IndividualTreasure { get; set; } = "None";
+
     // Optional override for treasure chance (0.0-1.0) used by future treasure systems.
     public double? TreasureChanceOverride { get; set; }
 }

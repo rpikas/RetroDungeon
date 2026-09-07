@@ -1,0 +1,34 @@
+{
+  "Name": "Treasure Type O",
+  "Coins": {
+    "CopperPieces": {
+      "Amount": "1d4*1000",
+      "Chance": 25
+    },
+    "SilverPieces": {
+      "Amount": "1d3*1000",
+      "Chance": 20
+    },
+    "ElectrumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "GoldPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "PlatinumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    }
+  },
+  "Gems": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Jewelry": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Magic": { "Rolls": [] }
+}

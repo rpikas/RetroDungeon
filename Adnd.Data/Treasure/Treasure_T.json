@@ -1,0 +1,42 @@
+{
+  "Name": "Treasure Type T",
+  "Coins": {
+    "CopperPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "SilverPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "ElectrumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "GoldPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    },
+    "PlatinumPieces": {
+      "Amount": "nil",
+      "Chance": 0
+    }
+  },
+  "Gems": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Jewelry": {
+    "Amount": "nil",
+    "Chance": 0
+  },
+  "Magic": {
+    "Rolls": [
+      {
+        "Table": "Scrolls",
+        "Amount": "1d4",
+        "Chance": 50
+      }
+    ]
+  }
+}
