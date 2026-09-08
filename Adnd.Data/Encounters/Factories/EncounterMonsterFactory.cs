@@ -232,6 +232,8 @@ public sealed class EncounterMonsterFactory
         {
             Name = source.Name,
             Type = source.Type,
+            NumberOfAppearancesMin = source.NumberOfAppearancesMin,
+            NumberOfAppearancesMax = source.NumberOfAppearancesMax,
             ArmorClass = source.ArmorClass,
             HitDice = source.HitDice,
             HitDiceType = source.HitDiceType,

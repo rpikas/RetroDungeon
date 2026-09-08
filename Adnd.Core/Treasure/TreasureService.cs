@@ -52,18 +52,18 @@ public sealed class TreasureService
     {
         var tokens = ParseTreasureTypes(monster.Template.TreasureType);
         var expectedAverage = GetExpectedAverageGroupSize(monster);
-        var scaleFactor = expectedAverage > 0d ? groupCount / expectedAverage : 1d;
-        var coinAmountScale = expectedAverage > 0d ? 1d / expectedAverage : 1d;
-        var itemChanceScale = expectedAverage > 0d ? 1d / expectedAverage : 1d;
+        var lootFactor = expectedAverage > 0d ? groupCount / expectedAverage : 1d;
+        var coinAmountScale = lootFactor;
+        var itemChanceScale = lootFactor;
 
         result.LogLines.Add(
             $"{monster.DisplayName}: ExpectedAverageNumberOfMonsters = ({monster.Template.NumberOfAppearancesMin}+{monster.Template.NumberOfAppearancesMax})/2 = {expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)}.");
         result.LogLines.Add(
-            $"{monster.DisplayName}: lair treasure amount scaling factor = group size {groupCount} / expected average {expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)} = {scaleFactor.ToString("0.###", CultureInfo.InvariantCulture)}.");
+            $"{monster.DisplayName}: Lootfactor = number of monsters in group / ExpectedAverageNumberOfMonsters = {groupCount}/{expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)} = {lootFactor.ToString("0.###", CultureInfo.InvariantCulture)}.");
         result.LogLines.Add(
-            $"{monster.DisplayName}: item find probability scaling factor = 1 / ExpectedAverageNumberOfMonsters = {itemChanceScale.ToString("0.######", CultureInfo.InvariantCulture)}.");
+            $"{monster.DisplayName}: item find probability scaling factor = Lootfactor = {itemChanceScale.ToString("0.###", CultureInfo.InvariantCulture)}.");
         result.LogLines.Add(
-            $"{monster.DisplayName}: lair coin amount scaling factor = 1 / ExpectedAverageNumberOfMonsters = {coinAmountScale.ToString("0.######", CultureInfo.InvariantCulture)}.");
+            $"{monster.DisplayName}: coin amount scaling factor = Lootfactor = {coinAmountScale.ToString("0.###", CultureInfo.InvariantCulture)}.");
 
         if (!monster.IsInLair)
         {
@@ -85,9 +85,10 @@ public sealed class TreasureService
                 result,
                 monster.Template.TreasureChanceOverride,
                 "lair",
-                scaleFactor,
+                amountScaleFactor: 1d,
                 coinAmountScale,
                 gemJewelryMagicChanceScaleFactor: itemChanceScale,
+                gemJewelryValueScaleFactor: lootFactor,
                 adjustArtAmountByScale: false);
     }
 
@@ -112,6 +113,7 @@ public sealed class TreasureService
                 amountScaleFactor: 1d,
                 coinAmountScaleFactor: 1d,
                 gemJewelryMagicChanceScaleFactor: 1d,
+                gemJewelryValueScaleFactor: 1d,
                 adjustArtAmountByScale: false,
                 suppressFailedRollLogs: true);
 
@@ -140,6 +142,7 @@ public sealed class TreasureService
         double amountScaleFactor,
         double coinAmountScaleFactor,
         double gemJewelryMagicChanceScaleFactor,
+        double gemJewelryValueScaleFactor,
         bool adjustArtAmountByScale,
         bool suppressFailedRollLogs = false)
     {
@@ -165,7 +168,7 @@ public sealed class TreasureService
         {
             if (repeats > 1)
                 result.LogLines.Add($"{monsterDisplayName}: {scope} treasure {tableCode} roll {i}/{repeats}.");
-            RollTable(table, tableCode, monsterDisplayName, result, amountScaleFactor, coinAmountScaleFactor, gemJewelryMagicChanceScaleFactor, adjustArtAmountByScale, suppressFailedRollLogs);
+            RollTable(table, tableCode, monsterDisplayName, result, amountScaleFactor, coinAmountScaleFactor, gemJewelryMagicChanceScaleFactor, gemJewelryValueScaleFactor, adjustArtAmountByScale, suppressFailedRollLogs);
         }
     }
 
@@ -195,6 +198,7 @@ public sealed class TreasureService
         double amountScaleFactor,
         double coinAmountScaleFactor,
         double gemJewelryMagicChanceScaleFactor,
+        double gemJewelryValueScaleFactor,
         bool adjustArtAmountByScale,
         bool suppressFailedRollLogs)
     {
@@ -208,9 +212,9 @@ public sealed class TreasureService
         RollCoins("PP", table.Coins.PlatinumPieces, source, result, v => result.PlatinumPieces += v, coinAmountScaleFactor, suppressFailedRollLogs);
 
         var chanceScale = gemJewelryMagicChanceScaleFactor;
-        RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines, amountScaleFactor, chanceScale, suppressFailedRollLogs);
-        RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines, amountScaleFactor, chanceScale, suppressFailedRollLogs);
-        RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d, suppressFailedRollLogs);
+        RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines, amountScaleFactor, chanceScale, gemJewelryValueScaleFactor, suppressFailedRollLogs);
+        RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines, amountScaleFactor, chanceScale, gemJewelryValueScaleFactor, suppressFailedRollLogs);
+        RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d, 1d, suppressFailedRollLogs);
 
         foreach (var magicRule in table.MagicRolls)
         {
@@ -249,16 +253,8 @@ public sealed class TreasureService
         if (Math.Abs(amountScaleFactor - 1d) > 0.0001d)
         {
             var scaledAmount = Math.Max(0, (int)Math.Round(amount * Math.Max(0d, amountScaleFactor), MidpointRounding.AwayFromZero));
-            if (amountScaleFactor > 0d && amountScaleFactor < 1d)
-            {
-                var expectedAverage = 1d / amountScaleFactor;
-                result.LogLines.Add($"    {label} before dividing by ExpectedAverageNumberOfMonsters: {amount}");
-                result.LogLines.Add($"    {label} after dividing by ExpectedAverageNumberOfMonsters ({expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)}): {scaledAmount}");
-            }
-            else
-            {
-                result.LogLines.Add($"    Scale {source} {label} amount: {amount} x {amountScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {scaledAmount}");
-            }
+            result.LogLines.Add($"    {label} before Lootfactor: {amount}");
+            result.LogLines.Add($"    {label} after Lootfactor x{amountScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)}: {scaledAmount}");
 
             amount = scaledAmount;
         }
@@ -277,6 +273,7 @@ public sealed class TreasureService
         List<string> logs,
         double amountScaleFactor,
         double chanceScaleFactor,
+        double valueScaleFactor,
         bool suppressFailedRollLogs)
     {
         if (!RollChance(rule.ChancePercent, $"{source} {category} chance", logs, chanceScaleFactor, suppressFailedRollLogs))
@@ -294,11 +291,21 @@ public sealed class TreasureService
         for (int i = 0; i < count; i++)
         {
             var value = max <= 0 ? 0 : _random.Next(min, max + 1);
-            logs.Add($"    {category} #{i + 1}: value roll {value} gp (range {min}-{max})");
+            var scaledValue = value;
+            if (Math.Abs(valueScaleFactor - 1d) > 0.0001d)
+            {
+                scaledValue = Math.Max(0, (int)Math.Round(value * Math.Max(0d, valueScaleFactor), MidpointRounding.AwayFromZero));
+                logs.Add($"    {category} #{i + 1}: value before Lootfactor {value} gp, after Lootfactor x{valueScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {scaledValue} gp (range {min}-{max})");
+            }
+            else
+            {
+                logs.Add($"    {category} #{i + 1}: value roll {value} gp (range {min}-{max})");
+            }
+
             target.Add(new TreasureValuableResult
             {
                 Category = category,
-                ValueGp = value,
+                ValueGp = scaledValue,
                 SourceTable = source
             });
         }
@@ -309,30 +316,30 @@ public sealed class TreasureService
 
     private bool RollChance(int chancePercent, string context, List<string> logs, double chanceScaleFactor = 1d, bool suppressFailureLog = false)
     {
-        var baseChance = Math.Clamp(chancePercent, 0, 100);
-        var chance = baseChance;
+        var baseProbability = Math.Clamp(chancePercent / 100d, 0d, 1d);
+        var probability = baseProbability;
         if (Math.Abs(chanceScaleFactor - 1d) > 0.0001d)
         {
-            chance = Math.Clamp((int)Math.Round(baseChance * Math.Max(0d, chanceScaleFactor), MidpointRounding.AwayFromZero), 0, 100);
-            logs.Add($"    Chance scaling for {context}: base {baseChance}% x {chanceScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {chance}%");
+            probability = Math.Clamp(baseProbability * Math.Max(0d, chanceScaleFactor), 0d, 1d);
+            logs.Add($"    Chance scaling for {context}: base {baseProbability.ToString("0.######", CultureInfo.InvariantCulture)} x {chanceScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {probability.ToString("0.######", CultureInfo.InvariantCulture)}");
         }
 
-        if (chance <= 0)
+        if (probability <= 0d)
         {
             if (!suppressFailureLog)
-                logs.Add($"    Chance roll for {context}: 0% => fail");
+                logs.Add($"    Chance roll for {context}: probability 0 => fail");
             return false;
         }
-        if (chance >= 100)
+        if (probability >= 1d)
         {
-            logs.Add($"    Chance roll for {context}: 100% => success");
+            logs.Add($"    Chance roll for {context}: probability 1 => success");
             return true;
         }
 
-        var roll = _random.Next(1, 101);
-        var success = roll <= chance;
+        var roll = _random.NextDouble();
+        var success = roll <= probability;
         if (success || !suppressFailureLog)
-            logs.Add($"    Chance roll for {context}: rolled {roll} on 1d100 vs {chance}% => {(success ? "success" : "fail")}");
+            logs.Add($"    Chance roll for {context}: rolled {roll.ToString("0.######", CultureInfo.InvariantCulture)} on [0,1) vs {probability.ToString("0.######", CultureInfo.InvariantCulture)} => {(success ? "success" : "fail")}");
         return success;
     }
 

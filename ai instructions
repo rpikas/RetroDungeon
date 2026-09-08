@@ -785,5 +785,13 @@ do not write the failed rolls for individual treasure in the dice and rule log, 
 in the dice and rule log wirte clearly coins found before dividing by ExpectedAverageNumberOfMonsters and after dividing by ExpectedAverageNumberOfMonsters 31,7
 in combat rewards also write xp gained from finding gp 31,9
 ___________________
+260908
+Lootfactor = Number of monsters in the group divided by ExpectedAverageNumberOfMonsters.
+For treasure found inlair, I want to change, so loot is not multiplied with number of monsters nor radomzed for every monster, 
+instead i want the amount of coins found to be mulitiplied with Lootfactor.  also the value from gems and jewelry should be 
+multiplied with lootfactor. chanse to find items should also not be mulitplied with number of monsters nor repeated for every 
+monster but instead the proablity to find items for the group of minsters should be mulitplied by the Lootfactor 32.3
 
+erOfMonsters and Lootfactor should be float numbers. The probablitis should also be floats and could be inbetween 0 and 1. 32,4
+The number of coins should be rounded off.
 
