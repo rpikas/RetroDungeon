@@ -53,10 +53,17 @@ public sealed class TreasureService
         var tokens = ParseTreasureTypes(monster.Template.TreasureType);
         var expectedAverage = GetExpectedAverageGroupSize(monster);
         var scaleFactor = expectedAverage > 0d ? groupCount / expectedAverage : 1d;
+        var coinAmountScale = expectedAverage > 0d ? 1d / expectedAverage : 1d;
+        var itemChanceScale = expectedAverage > 0d ? 1d / expectedAverage : 1d;
 
         result.LogLines.Add(
-            $"{monster.DisplayName}: lair treasure scaling uses group size {groupCount} / expected average {expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)} " +
-            $"((min {monster.Template.NumberOfAppearancesMin} + max {monster.Template.NumberOfAppearancesMax}) / 2) => factor {scaleFactor.ToString("0.###", CultureInfo.InvariantCulture)}.");
+            $"{monster.DisplayName}: ExpectedAverageNumberOfMonsters = ({monster.Template.NumberOfAppearancesMin}+{monster.Template.NumberOfAppearancesMax})/2 = {expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)}.");
+        result.LogLines.Add(
+            $"{monster.DisplayName}: lair treasure amount scaling factor = group size {groupCount} / expected average {expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)} = {scaleFactor.ToString("0.###", CultureInfo.InvariantCulture)}.");
+        result.LogLines.Add(
+            $"{monster.DisplayName}: item find probability scaling factor = 1 / ExpectedAverageNumberOfMonsters = {itemChanceScale.ToString("0.######", CultureInfo.InvariantCulture)}.");
+        result.LogLines.Add(
+            $"{monster.DisplayName}: lair coin amount scaling factor = 1 / ExpectedAverageNumberOfMonsters = {coinAmountScale.ToString("0.######", CultureInfo.InvariantCulture)}.");
 
         if (!monster.IsInLair)
         {
@@ -79,7 +86,8 @@ public sealed class TreasureService
                 monster.Template.TreasureChanceOverride,
                 "lair",
                 scaleFactor,
-                adjustGemJewelryMagicChanceByScale: true,
+                coinAmountScale,
+                gemJewelryMagicChanceScaleFactor: itemChanceScale,
                 adjustArtAmountByScale: false);
     }
 
@@ -89,8 +97,12 @@ public sealed class TreasureService
         if (tokens.Count == 0)
             return;
 
-        result.LogLines.Add($"{monster.DisplayName}: rolling individual treasure (always, even when not in lair).");
+        var foundAnyForMonster = false;
         foreach (var token in tokens)
+        {
+            var logStart = result.LogLines.Count;
+            var snapshot = CaptureSnapshot(result);
+
             RollTreasureToken(
                 token,
                 monster.DisplayName,
@@ -98,8 +110,25 @@ public sealed class TreasureService
                 null,
                 "individual",
                 amountScaleFactor: 1d,
-                adjustGemJewelryMagicChanceByScale: false,
-                adjustArtAmountByScale: false);
+                coinAmountScaleFactor: 1d,
+                gemJewelryMagicChanceScaleFactor: 1d,
+                adjustArtAmountByScale: false,
+                suppressFailedRollLogs: true);
+
+            if (!HasFoundTreasure(snapshot, result))
+            {
+                var toRemove = result.LogLines.Count - logStart;
+                if (toRemove > 0)
+                    result.LogLines.RemoveRange(logStart, toRemove);
+                continue;
+            }
+
+            if (!foundAnyForMonster)
+            {
+                result.LogLines.Insert(logStart, $"{monster.DisplayName}: individual treasure found.");
+                foundAnyForMonster = true;
+            }
+        }
     }
 
     private void RollTreasureToken(
@@ -109,8 +138,10 @@ public sealed class TreasureService
         double? overrideChance,
         string scope,
         double amountScaleFactor,
-        bool adjustGemJewelryMagicChanceByScale,
-        bool adjustArtAmountByScale)
+        double coinAmountScaleFactor,
+        double gemJewelryMagicChanceScaleFactor,
+        bool adjustArtAmountByScale,
+        bool suppressFailedRollLogs = false)
     {
         var (tableCode, repeats) = ParseTreasureToken(token);
         if (!_tableProvider.TryGetTable(tableCode, out var table))
@@ -134,7 +165,7 @@ public sealed class TreasureService
         {
             if (repeats > 1)
                 result.LogLines.Add($"{monsterDisplayName}: {scope} treasure {tableCode} roll {i}/{repeats}.");
-            RollTable(table, tableCode, monsterDisplayName, result, amountScaleFactor, adjustGemJewelryMagicChanceByScale, adjustArtAmountByScale);
+            RollTable(table, tableCode, monsterDisplayName, result, amountScaleFactor, coinAmountScaleFactor, gemJewelryMagicChanceScaleFactor, adjustArtAmountByScale, suppressFailedRollLogs);
         }
     }
 
@@ -162,22 +193,24 @@ public sealed class TreasureService
         string monsterDisplayName,
         TreasureResult result,
         double amountScaleFactor,
-        bool adjustGemJewelryMagicChanceByScale,
-        bool adjustArtAmountByScale)
+        double coinAmountScaleFactor,
+        double gemJewelryMagicChanceScaleFactor,
+        bool adjustArtAmountByScale,
+        bool suppressFailedRollLogs)
     {
         var source = string.IsNullOrWhiteSpace(table.Name) ? tableCode : table.Name;
         result.LogLines.Add($"{monsterDisplayName}: rolling {source} ({tableCode}).");
 
-        RollCoins("CP", table.Coins.CopperPieces, source, result, v => result.CopperPieces += v, amountScaleFactor);
-        RollCoins("SP", table.Coins.SilverPieces, source, result, v => result.SilverPieces += v, amountScaleFactor);
-        RollCoins("EP", table.Coins.ElectrumPieces, source, result, v => result.ElectrumPieces += v, amountScaleFactor);
-        RollCoins("GP", table.Coins.GoldPieces, source, result, v => result.GoldPieces += v, amountScaleFactor);
-        RollCoins("PP", table.Coins.PlatinumPieces, source, result, v => result.PlatinumPieces += v, amountScaleFactor);
+        RollCoins("CP", table.Coins.CopperPieces, source, result, v => result.CopperPieces += v, coinAmountScaleFactor, suppressFailedRollLogs);
+        RollCoins("SP", table.Coins.SilverPieces, source, result, v => result.SilverPieces += v, coinAmountScaleFactor, suppressFailedRollLogs);
+        RollCoins("EP", table.Coins.ElectrumPieces, source, result, v => result.ElectrumPieces += v, coinAmountScaleFactor, suppressFailedRollLogs);
+        RollCoins("GP", table.Coins.GoldPieces, source, result, v => result.GoldPieces += v, coinAmountScaleFactor, suppressFailedRollLogs);
+        RollCoins("PP", table.Coins.PlatinumPieces, source, result, v => result.PlatinumPieces += v, coinAmountScaleFactor, suppressFailedRollLogs);
 
-        var chanceScale = adjustGemJewelryMagicChanceByScale ? amountScaleFactor : 1d;
-        RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines, amountScaleFactor, chanceScale);
-        RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines, amountScaleFactor, chanceScale);
-        RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d);
+        var chanceScale = gemJewelryMagicChanceScaleFactor;
+        RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines, amountScaleFactor, chanceScale, suppressFailedRollLogs);
+        RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines, amountScaleFactor, chanceScale, suppressFailedRollLogs);
+        RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d, suppressFailedRollLogs);
 
         foreach (var magicRule in table.MagicRolls)
         {
@@ -185,7 +218,8 @@ public sealed class TreasureService
                     magicRule.ChancePercent,
                     $"Magic ({magicRule.Table}) chance",
                     result.LogLines,
-                    chanceScale))
+                    chanceScale,
+                    suppressFailedRollLogs))
                 continue;
 
             var count = Math.Max(0, RollAmount(magicRule.AmountExpression, out var amountDetail));
@@ -205,14 +239,29 @@ public sealed class TreasureService
         }
     }
 
-    private void RollCoins(string label, TreasureRollRule rule, string source, TreasureResult result, Action<int> add, double amountScaleFactor)
+    private void RollCoins(string label, TreasureRollRule rule, string source, TreasureResult result, Action<int> add, double amountScaleFactor, bool suppressFailedRollLogs)
     {
-        if (!RollChance(rule.ChancePercent, $"{source} {label} chance", result.LogLines))
+        if (!RollChance(rule.ChancePercent, $"{source} {label} chance", result.LogLines, 1d, suppressFailedRollLogs))
             return;
 
         var amount = Math.Max(0, RollAmount(rule.AmountExpression, out var amountDetail));
         result.LogLines.Add($"    Amount roll ({rule.AmountExpression}) => {amountDetail}");
-        amount = ScaleAmount(amount, amountScaleFactor, $"{source} {label} amount", result.LogLines);
+        if (Math.Abs(amountScaleFactor - 1d) > 0.0001d)
+        {
+            var scaledAmount = Math.Max(0, (int)Math.Round(amount * Math.Max(0d, amountScaleFactor), MidpointRounding.AwayFromZero));
+            if (amountScaleFactor > 0d && amountScaleFactor < 1d)
+            {
+                var expectedAverage = 1d / amountScaleFactor;
+                result.LogLines.Add($"    {label} before dividing by ExpectedAverageNumberOfMonsters: {amount}");
+                result.LogLines.Add($"    {label} after dividing by ExpectedAverageNumberOfMonsters ({expectedAverage.ToString("0.###", CultureInfo.InvariantCulture)}): {scaledAmount}");
+            }
+            else
+            {
+                result.LogLines.Add($"    Scale {source} {label} amount: {amount} x {amountScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {scaledAmount}");
+            }
+
+            amount = scaledAmount;
+        }
         if (amount <= 0)
             return;
 
@@ -227,9 +276,10 @@ public sealed class TreasureService
         List<TreasureValuableResult> target,
         List<string> logs,
         double amountScaleFactor,
-        double chanceScaleFactor)
+        double chanceScaleFactor,
+        bool suppressFailedRollLogs)
     {
-        if (!RollChance(rule.ChancePercent, $"{source} {category} chance", logs, chanceScaleFactor))
+        if (!RollChance(rule.ChancePercent, $"{source} {category} chance", logs, chanceScaleFactor, suppressFailedRollLogs))
             return;
 
         var count = Math.Max(0, RollAmount(rule.AmountExpression, out var countDetail));
@@ -257,7 +307,7 @@ public sealed class TreasureService
         logs.Add($"  + {category}: {count} item(s), total {total} gp");
     }
 
-    private bool RollChance(int chancePercent, string context, List<string> logs, double chanceScaleFactor = 1d)
+    private bool RollChance(int chancePercent, string context, List<string> logs, double chanceScaleFactor = 1d, bool suppressFailureLog = false)
     {
         var baseChance = Math.Clamp(chancePercent, 0, 100);
         var chance = baseChance;
@@ -269,7 +319,8 @@ public sealed class TreasureService
 
         if (chance <= 0)
         {
-            logs.Add($"    Chance roll for {context}: 0% => fail");
+            if (!suppressFailureLog)
+                logs.Add($"    Chance roll for {context}: 0% => fail");
             return false;
         }
         if (chance >= 100)
@@ -280,9 +331,48 @@ public sealed class TreasureService
 
         var roll = _random.Next(1, 101);
         var success = roll <= chance;
-        logs.Add($"    Chance roll for {context}: rolled {roll} on 1d100 vs {chance}% => {(success ? "success" : "fail")}");
+        if (success || !suppressFailureLog)
+            logs.Add($"    Chance roll for {context}: rolled {roll} on 1d100 vs {chance}% => {(success ? "success" : "fail")}");
         return success;
     }
+
+    private static TreasureSnapshot CaptureSnapshot(TreasureResult result)
+    {
+        return new TreasureSnapshot(
+            result.CopperPieces,
+            result.SilverPieces,
+            result.ElectrumPieces,
+            result.GoldPieces,
+            result.PlatinumPieces,
+            result.Gems.Count,
+            result.Jewelry.Count,
+            result.Art.Count,
+            result.MagicPlaceholders.Count);
+    }
+
+    private static bool HasFoundTreasure(TreasureSnapshot before, TreasureResult after)
+    {
+        return after.CopperPieces > before.CopperPieces
+               || after.SilverPieces > before.SilverPieces
+               || after.ElectrumPieces > before.ElectrumPieces
+               || after.GoldPieces > before.GoldPieces
+               || after.PlatinumPieces > before.PlatinumPieces
+               || after.Gems.Count > before.GemsCount
+               || after.Jewelry.Count > before.JewelryCount
+               || after.Art.Count > before.ArtCount
+               || after.MagicPlaceholders.Count > before.MagicPlaceholdersCount;
+    }
+
+    private readonly record struct TreasureSnapshot(
+        int CopperPieces,
+        int SilverPieces,
+        int ElectrumPieces,
+        int GoldPieces,
+        int PlatinumPieces,
+        int GemsCount,
+        int JewelryCount,
+        int ArtCount,
+        int MagicPlaceholdersCount);
 
     private static int ScaleAmount(int amount, double factor, string context, List<string> logs)
     {

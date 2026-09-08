@@ -462,23 +462,32 @@ public sealed class CombatCoordinator
         // --- NYTT: Summera XP från alla grupper ---
         int totalMonsterXp = groupXpInfos.Sum(g => g.TotalXP);
 
+        // --- Treasure ---
+        var treasure = _treasureService.RollTreasureForEncounter(session.Monsters);
+
         // --- XP-fördelning ---
         var xpMultiplier = GameRulesProvider.Current.XpMultiplier;
         int xpEach = (int)Math.Round(totalMonsterXp * xpMultiplier / survivors.Count);
         int xpRemainder = totalMonsterXp % survivors.Count;
+        int goldXpPool = Math.Max(0, treasure.GoldPieces);
+        int goldXpEach = goldXpPool / survivors.Count;
+        int goldXpRemainder = goldXpPool % survivors.Count;
 
 
         var levelUpResults = new List<LevelUpResult>();
+        var goldXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var allSpells = _spellRepository.LoadAll();
 
         for (int i = 0; i < survivors.Count; i++)
         {
             var survivor = survivors[i];
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
+            var goldXpGain = goldXpEach + (i < goldXpRemainder ? 1 : 0);
+            goldXpByCharacter[survivor.Name] = goldXpGain;
             var xpModifierPercent = XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
             var individualBonus = (int)Math.Round(baseGain * (xpModifierPercent / 100.0), MidpointRounding.AwayFromZero);
 
-            var gain = baseGain + individualBonus;
+            var gain = baseGain + individualBonus + goldXpGain;
             if (gain < 0)
                 gain = 0;
 
@@ -486,9 +495,6 @@ public sealed class CombatCoordinator
         }
 
         var totalAwardedXp = levelUpResults.Sum(r => r.ExperienceAfter - r.ExperienceBefore);
-
-        // --- Treasure etc (oförändrat) ---
-        var treasure = _treasureService.RollTreasureForEncounter(session.Monsters);
 
         DistributeCoin(survivors, treasure.CopperPieces, (c, amount) => c.CopperPieces += amount);
         DistributeCoin(survivors, treasure.SilverPieces, (c, amount) => c.SilverPieces += amount);
@@ -525,6 +531,7 @@ public sealed class CombatCoordinator
         { 
             sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");
             sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
+            sb.AppendLine($"Gold XP bonus: {goldXpPool} XP total (1 XP per GP found), split {goldXpEach} each with {goldXpRemainder} remainder");
             sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
             sb.AppendLine($"Survivors: {survivors.Count}");
             sb.AppendLine();
@@ -535,12 +542,14 @@ public sealed class CombatCoordinator
             var gain = r.ExperienceAfter - r.ExperienceBefore;
             var survivor = survivors.FirstOrDefault(s => string.Equals(s.Name, r.CharacterName, StringComparison.OrdinalIgnoreCase));
             var xpModifierPercent = survivor == null ? 0 : XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
-            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (includes {xpModifierPercent:+#;-#;0}% individual bonus, total {r.ExperienceAfter})");
+            goldXpByCharacter.TryGetValue(r.CharacterName, out var goldXpGain);
+            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (includes {xpModifierPercent:+#;-#;0}% individual bonus, +{goldXpGain} XP from GP found, total {r.ExperienceAfter})");
         }
 
         sb.AppendLine();
         sb.AppendLine("Treasure found:");
         sb.AppendLine($"- Coins: {treasure.CopperPieces} cp, {treasure.SilverPieces} sp, {treasure.ElectrumPieces} ep, {treasure.GoldPieces} gp, {treasure.PlatinumPieces} pp");
+        sb.AppendLine($"- XP from GP found: {goldXpPool} XP total (1 XP per GP)");
 
         if (treasure.Gems.Count > 0)
             sb.AppendLine($"- Gems: {treasure.Gems.Count} (total {treasure.TotalGemValueGp} gp)");

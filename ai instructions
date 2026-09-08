@@ -765,4 +765,22 @@ Dice Roll	Result
 41–45	Rods, Staves & Wands
 46–60	Misc Magic
 61–75	Armor
-76–100	Weapons
+76–100	Weapons 31,0
+
+the ExpectedAverageNumberOfMonsters in the group is calculated by (NumberOfAppearancesMin+NumberOfAppearancesMax)/2 calculate that and write it to the dice and rule log.
+probability to find items should be divided by ExpectedAverageNumberOfMonsters. so for exampel for Orcs
+      "NumberOfAppearancesMin": 30,
+      "NumberOfAppearancesMax": 300,
+that menan ExpectedAverageNumberOfMonsters=165.
+If in lair they find treasure tyep C.
+Treasure type C got a 10% chanse of finding 2 items from Any, that probablity should be divided by 165, that is abtou 0,06 & chanse. write that to the dice and rule log also 31,2
+
+the probability to find gems and jewely should alsso be divided by 	ExpectedAverageNumberOfMonsters just like for magic items 31,3
+Then number of coins found when in lair should be divided by ExpectedAverageNumberOfMonsters 31,4
+number of gold pieces found should add to the xp gained. 1 extra xp per gold piece found. 31,5
+Then number of cp,sp,ep,gp and pp found when in lair should be divided by ExpectedAverageNumberOfMonsters
+do not write the failed rolls for individual treasure in the dice and rule log, only write it when something is found for individual treasure.31,7
+
+in the dice and rule log wirte clearly coins found before dividing by ExpectedAverageNumberOfMonsters and after dividing by ExpectedAverageNumberOfMonsters 31,7
+in combat rewards also write xp gained from finding gp 31,9
+
