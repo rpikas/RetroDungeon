@@ -766,6 +766,7 @@ Dice Roll	Result
 46–60	Misc Magic
 61–75	Armor
 76–100	Weapons 31,0
+_________________
 
 the ExpectedAverageNumberOfMonsters in the group is calculated by (NumberOfAppearancesMin+NumberOfAppearancesMax)/2 calculate that and write it to the dice and rule log.
 probability to find items should be divided by ExpectedAverageNumberOfMonsters. so for exampel for Orcs
@@ -783,4 +784,6 @@ do not write the failed rolls for individual treasure in the dice and rule log, 
 
 in the dice and rule log wirte clearly coins found before dividing by ExpectedAverageNumberOfMonsters and after dividing by ExpectedAverageNumberOfMonsters 31,7
 in combat rewards also write xp gained from finding gp 31,9
+___________________
+
 
