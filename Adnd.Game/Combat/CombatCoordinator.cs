@@ -469,12 +469,15 @@ public sealed class CombatCoordinator
         var xpMultiplier = GameRulesProvider.Current.XpMultiplier;
         int xpEach = (int)Math.Round(totalMonsterXp * xpMultiplier / survivors.Count);
         int xpRemainder = totalMonsterXp % survivors.Count;
-        int goldXpPool = Math.Max(0, treasure.GoldPieces);
+        int gemJewelryXpPool = Math.Max(0, treasure.TotalGemValueGp + treasure.TotalJewelryValueGp);
+        int goldXpPool = Math.Max(0, treasure.GoldPieces) + gemJewelryXpPool;
         int goldXpEach = goldXpPool / survivors.Count;
         int goldXpRemainder = goldXpPool % survivors.Count;
 
 
         var levelUpResults = new List<LevelUpResult>();
+        var baseXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var bonusXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var goldXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var allSpells = _spellRepository.LoadAll();
 
@@ -483,9 +486,12 @@ public sealed class CombatCoordinator
             var survivor = survivors[i];
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
             var goldXpGain = goldXpEach + (i < goldXpRemainder ? 1 : 0);
-            goldXpByCharacter[survivor.Name] = goldXpGain;
             var xpModifierPercent = XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
             var individualBonus = (int)Math.Round(baseGain * (xpModifierPercent / 100.0), MidpointRounding.AwayFromZero);
+
+            baseXpByCharacter[survivor.Name] = baseGain;
+            bonusXpByCharacter[survivor.Name] = individualBonus;
+            goldXpByCharacter[survivor.Name] = goldXpGain;
 
             var gain = baseGain + individualBonus + goldXpGain;
             if (gain < 0)
@@ -527,29 +533,33 @@ public sealed class CombatCoordinator
             sb.AppendLine($"  Total XP (group) after multiplier: {(int)Math.Round(g.TotalXP * xpMultiplier)}");
             sb.AppendLine();
         }
-        if (groupXpInfos.Count > 1)
-        { 
-            sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");
-            sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
-            sb.AppendLine($"Gold XP bonus: {goldXpPool} XP total (1 XP per GP found), split {goldXpEach} each with {goldXpRemainder} remainder");
-            sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
-            sb.AppendLine($"Survivors: {survivors.Count}");
-            sb.AppendLine();
-            sb.AppendLine("XP awards:");
-        }
+        sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");
+        sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
+        sb.AppendLine($"Gold XP bonus: {goldXpPool} XP total (1 XP per GP found; includes {treasure.GoldPieces} from GP coins and {gemJewelryXpPool} from gem/jewelry value), split {goldXpEach} each with {goldXpRemainder} remainder");
+        sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
+        sb.AppendLine($"Survivors: {survivors.Count}");
+        sb.AppendLine();
+        sb.AppendLine("XP awards:");
         foreach (var r in levelUpResults)
         {
             var gain = r.ExperienceAfter - r.ExperienceBefore;
             var survivor = survivors.FirstOrDefault(s => string.Equals(s.Name, r.CharacterName, StringComparison.OrdinalIgnoreCase));
             var xpModifierPercent = survivor == null ? 0 : XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
+            baseXpByCharacter.TryGetValue(r.CharacterName, out var baseGain);
+            bonusXpByCharacter.TryGetValue(r.CharacterName, out var bonusGain);
             goldXpByCharacter.TryGetValue(r.CharacterName, out var goldXpGain);
-            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (includes {xpModifierPercent:+#;-#;0}% individual bonus, +{goldXpGain} XP from GP found, total {r.ExperienceAfter})");
+
+            var classForProgress = survivor?.Class ?? CharacterClass.Fighter;
+            var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
+            var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
+
+            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + GP XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
         }
 
         sb.AppendLine();
         sb.AppendLine("Treasure found:");
         sb.AppendLine($"- Coins: {treasure.CopperPieces} cp, {treasure.SilverPieces} sp, {treasure.ElectrumPieces} ep, {treasure.GoldPieces} gp, {treasure.PlatinumPieces} pp");
-        sb.AppendLine($"- XP from GP found: {goldXpPool} XP total (1 XP per GP)");
+        sb.AppendLine($"- XP from GP value: {goldXpPool} XP total (1 XP per GP; {treasure.GoldPieces} from GP coins + {gemJewelryXpPool} from gem/jewelry value)");
 
         if (treasure.Gems.Count > 0)
             sb.AppendLine($"- Gems: {treasure.Gems.Count} (total {treasure.TotalGemValueGp} gp)");

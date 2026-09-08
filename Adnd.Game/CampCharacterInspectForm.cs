@@ -7,6 +7,7 @@ using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
 using Adnd.Data.Characters;
+using Adnd.Data.Items;
 using Adnd.Data.Party;
 using Adnd.Data.Spells;
 using Adnd.Game.Viewer;
@@ -20,6 +21,7 @@ public sealed class CampCharacterInspectForm : Form
     private readonly CharacterRepository _characterRepository = new("Data/Characters");
     private readonly PartyRepository _partyRepository = new("Data/Party");
     private readonly SpellRepository _spellRepository = new("Data/Spells");
+    private readonly ItemRepository _itemRepository = new("Data/Items");
     private readonly SpellCastingService _spellCastingService;
 
     private readonly TextBox _detailsBox;
@@ -138,7 +140,7 @@ public sealed class CampCharacterInspectForm : Form
         _buttonsPanel.Controls.Add(MakeButton("T)rade", (_, _) => TradeAction()));
         _buttonsPanel.Controls.Add(MakeButton("D)rop", (_, _) => DropAction()));
         _buttonsPanel.Controls.Add(MakeButton("P)ool Gold", (_, _) => PoolGoldAction()));
-        _buttonsPanel.Controls.Add(MakeButton("I)dentify", (_, _) => NotImplemented("Identify")));
+        _buttonsPanel.Controls.Add(MakeButton("I)dentify", (_, _) => IdentifyAction()));
         _buttonsPanel.Controls.Add(MakeButton("S)pell", (_, _) => CastSpellAction()));
         _buttonsPanel.Controls.Add(MakeButton("U)se Item", (_, _) => UseItemAction()));
         _buttonsPanel.Controls.Add(MakeButton("C)haracter Sheet", (_, _) => ShowCharacterSheetAction()));
@@ -220,7 +222,7 @@ public sealed class CampCharacterInspectForm : Form
                 case "trade": TradeAction(); break;
                 case "drop": DropAction(); break;
                 case "pool": PoolGoldAction(); break;
-                case "identify": NotImplemented("Identify"); break;
+                case "identify": IdentifyAction(); break;
                 case "spell": CastSpellAction(); break;
                 case "useItem": UseItemAction(); break;
                 case "characterSheet": ShowCharacterSheetAction(); break;
@@ -273,7 +275,7 @@ public sealed class CampCharacterInspectForm : Form
                 DropAction();
                 break;
             case Keys.I:
-                NotImplemented("Identify");
+                IdentifyAction();
                 break;
             case Keys.C:
                 ShowCharacterSheetAction();
@@ -727,6 +729,12 @@ public sealed class CampCharacterInspectForm : Form
         if (knownSpells.Count == 0)
             return;
 
+        if (IsAutoMemorizedClass(state.SpellClass))
+        {
+            ShowKnownSpellsWithMoreInfo(knownSpells);
+            return;
+        }
+
         var spellIdx = PromptChoice("Memorize Spell", knownSpells.Select(s => $"L{s.Level} {s.Name}").ToList());
         if (!spellIdx.HasValue)
             return;
@@ -1023,6 +1031,8 @@ public sealed class CampCharacterInspectForm : Form
     {
         return c.Classes.Any(cls => cls == CharacterClass.MagicUser
                                     || cls == CharacterClass.Illusionist
+                                    || cls == CharacterClass.Cleric
+                                    || cls == CharacterClass.Druid
                                     || cls == CharacterClass.Ranger);
     }
 
@@ -1073,6 +1083,156 @@ public sealed class CampCharacterInspectForm : Form
             return null;
 
         return list.SelectedIndex >= 0 ? list.SelectedIndex : null;
+    }
+
+    private void ShowKnownSpellsWithMoreInfo(List<Spell> knownSpells)
+    {
+        using var form = new Form();
+        form.Text = "Known Spells";
+        form.FormBorderStyle = FormBorderStyle.FixedDialog;
+        form.StartPosition = FormStartPosition.CenterParent;
+        form.ClientSize = new Size(560, 420);
+        form.MinimizeBox = false;
+        form.MaximizeBox = false;
+
+        var list = new ListBox
+        {
+            Left = 12,
+            Top = 12,
+            Width = 536,
+            Height = 330,
+            Font = new Font("Consolas", 10f)
+        };
+
+        foreach (var spell in knownSpells)
+            list.Items.Add($"L{spell.Level} {spell.Name}");
+
+        var moreInfo = new Button { Text = "More info", Left = 392, Top = 354, Width = 75 };
+        var close = new Button { Text = "Close", Left = 473, Top = 354, Width = 75, DialogResult = DialogResult.Cancel };
+
+        moreInfo.Click += (_, _) =>
+        {
+            if (list.SelectedIndex < 0 || list.SelectedIndex >= knownSpells.Count)
+                return;
+
+            var spell = knownSpells[list.SelectedIndex];
+            var details = new List<string>
+            {
+                $"Name: {spell.Name}",
+                $"Class: {spell.SpellClass}",
+                $"Level: {spell.Level}",
+                $"Cast context: {spell.CastContext}",
+                $"Range type: {spell.RangeType}",
+                $"Targeting: {spell.Targeting}",
+                $"Target scope: {spell.TargetingScope}",
+                $"Effect type: {spell.EffectType}",
+                $"Description: {spell.Description}"
+            };
+
+            if (!string.IsNullOrWhiteSpace(spell.EffectDescription))
+                details.Add($"Effect: {spell.EffectDescription}");
+
+            ViewerMessage.Show(form, $"Spell Info - {spell.Name}", string.Join(Environment.NewLine, details));
+        };
+
+        form.Controls.Add(list);
+        form.Controls.Add(moreInfo);
+        form.Controls.Add(close);
+        form.CancelButton = close;
+
+        form.ShowDialog(this);
+    }
+
+    private void IdentifyAction()
+    {
+        var c = GetCharacter();
+        if (c == null)
+            return;
+
+        var entries = new List<(string Label, Item Item)>();
+
+        foreach (var kv in c.Equipment)
+        {
+            if (kv.Value != null)
+                entries.Add(($"Equipped [{kv.Key}] {kv.Value.Name}", kv.Value));
+        }
+
+        foreach (var item in c.Inventory)
+            entries.Add(($"Inventory {item.Name}", item));
+
+        if (entries.Count == 0)
+        {
+            SayOnBoth("Identify", "No items to identify.");
+            return;
+        }
+
+        var allItems = _itemRepository.LoadAll().ToList();
+
+        using var form = new Form();
+        form.Text = "Identify";
+        form.FormBorderStyle = FormBorderStyle.FixedDialog;
+        form.StartPosition = FormStartPosition.CenterParent;
+        form.ClientSize = new Size(560, 420);
+        form.MinimizeBox = false;
+        form.MaximizeBox = false;
+
+        var list = new ListBox
+        {
+            Left = 12,
+            Top = 12,
+            Width = 536,
+            Height = 330,
+            Font = new Font("Consolas", 10f)
+        };
+
+        foreach (var entry in entries)
+            list.Items.Add(entry.Label);
+
+        var moreInfo = new Button { Text = "More info", Left = 392, Top = 354, Width = 75 };
+        var cancel = new Button { Text = "Cancel", Left = 473, Top = 354, Width = 75, DialogResult = DialogResult.Cancel };
+
+        moreInfo.Click += (_, _) =>
+        {
+            if (list.SelectedIndex < 0 || list.SelectedIndex >= entries.Count)
+                return;
+
+            var selected = entries[list.SelectedIndex].Item;
+            var fromJson = allItems.FirstOrDefault(i => string.Equals(i.Name, selected.Name, StringComparison.OrdinalIgnoreCase));
+            var item = fromJson ?? selected;
+            var specialAbilities = fromJson?.SpecialAbilities ?? item.SpecialAbilities;
+
+            var details = new List<string>
+            {
+                $"Name: {item.Name}",
+                $"Type: {item.Type}",
+                $"Slot: {(item.Slot?.ToString() ?? "None")}",
+                $"Cost: {item.Cost}",
+                $"Weight: {item.Weight}",
+                $"Status: {item.Status}",
+                $"Shop buyable: {item.IsShopBuyable}",
+                $"Armor class bonus: {item.ArmorClassBonus}",
+                $"To hit bonus: {item.ToHitBonus}",
+                $"Magic bonus: {item.MagicBonus}",
+                $"Damage: {item.Damage}",
+                $"Damage vs large: {item.DamageVsLarge}",
+                $"Special abilities: {(specialAbilities.Count > 0 ? string.Join(", ", specialAbilities) : "None")}",
+                $"Description: {item.Description}",
+                $"Source: {item.Source}",
+                $"Version: {item.Version}"
+            };
+
+            if (item.AllowedClasses.Count > 0)
+                details.Add("Allowed classes: " + string.Join(", ", item.AllowedClasses));
+
+            ViewerMessage.Show(form, $"Item Info - {item.Name}", string.Join(Environment.NewLine, details));
+        };
+
+        form.Controls.Add(list);
+        form.Controls.Add(moreInfo);
+        form.Controls.Add(cancel);
+        form.CancelButton = cancel;
+
+        form.ShowDialog(this);
     }
 
     private void TradeAction()

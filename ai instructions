@@ -793,5 +793,22 @@ multiplied with lootfactor. chanse to find items should also not be mulitplied w
 monster but instead the proablity to find items for the group of minsters should be mulitplied by the Lootfactor 32.3
 
 erOfMonsters and Lootfactor should be float numbers. The probablitis should also be floats and could be inbetween 0 and 1. 32,4
-The number of coins should be rounded off.
+The number of coins should be rounded off. 32,5
 
+change plaese of xp calculation and treasure calculations in reward summary dialog, so xp from gp can be included in the total xp summary per charater 32,6
+also gp value from gems and jewelry should be added t to xp where 1 gp of value should give 1 xp. 32,7
+
+in xp rewards after the total xp for eaxh indicidual, also say how much is needed for next level 33,0
+make the combat reward window 50 pixels broader and resizable 33,3
+
+when inspecting a charater that is druid or cleric from the camp and selecting Read, show all spells that the charater
+knows just like it is done for illutsionists and magic-users. 33,5
+
+in the known spells dialog, replace the OK button with a More info button,  if the user selects a spell and press the more info button, 
+present the information from spell json file. 33,8
+
+When identify is selected from the inscpect charater in the camp, then show a list of all items in the inventory and equiped. The identify 
+dialog should have a More info button and a Cancel button. If an item is selected and then More info button is pressed, then present the 
+info from from the corresponding item json 34,0
+
+when identifying an item also show the SpecialAbilities from the json 34,2

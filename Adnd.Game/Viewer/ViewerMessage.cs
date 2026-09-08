@@ -65,26 +65,28 @@ public static class ViewerMessage
     /// </summary>
     public static void Show(IWin32Window? owner, string title, string text)
     {
+        var isCombatRewards = string.Equals(title?.Trim(), "Combat Rewards", StringComparison.OrdinalIgnoreCase);
+
         using var form = new Form
         {
             Text = title,
-            FormBorderStyle = FormBorderStyle.FixedDialog,
+            FormBorderStyle = isCombatRewards ? FormBorderStyle.Sizable : FormBorderStyle.FixedDialog,
             StartPosition = owner is null ? FormStartPosition.CenterScreen : FormStartPosition.CenterParent,
             MinimizeBox = false,
-            MaximizeBox = false,
+            MaximizeBox = isCombatRewards,
             ShowInTaskbar = false,
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            AutoSize = !isCombatRewards,
+            AutoSizeMode = isCombatRewards ? AutoSizeMode.GrowOnly : AutoSizeMode.GrowAndShrink,
             Padding = new Padding(16),
         };
 
-        var body = new Label
+        if (isCombatRewards)
         {
-            Text = string.IsNullOrWhiteSpace(text) ? " " : text.TrimEnd(),
-            AutoSize = true,
-            MaximumSize = new Size(560, 0),
-            Margin = new Padding(0, 0, 0, 12),
-        };
+            form.ClientSize = new Size(642, 560);
+            form.MinimumSize = new Size(642, 360);
+        }
+
+        var message = string.IsNullOrWhiteSpace(text) ? " " : text.TrimEnd();
 
         var ok = new Button
         {
@@ -94,16 +96,54 @@ public static class ViewerMessage
             Anchor = AnchorStyles.Right,
         };
 
-        var layout = new FlowLayoutPanel
+        if (isCombatRewards)
         {
-            FlowDirection = FlowDirection.TopDown,
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            WrapContents = false,
-        };
-        layout.Controls.Add(body);
-        layout.Controls.Add(ok);
-        form.Controls.Add(layout);
+            var body = new TextBox
+            {
+                Text = message,
+                ReadOnly = true,
+                Multiline = true,
+                WordWrap = true,
+                ScrollBars = ScrollBars.Vertical,
+                BorderStyle = BorderStyle.FixedSingle,
+                Dock = DockStyle.Fill,
+            };
+
+            var buttonPanel = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.RightToLeft,
+                Dock = DockStyle.Bottom,
+                Height = 42,
+                Padding = new Padding(0),
+                Margin = new Padding(0),
+                WrapContents = false,
+            };
+            buttonPanel.Controls.Add(ok);
+
+            form.Controls.Add(body);
+            form.Controls.Add(buttonPanel);
+        }
+        else
+        {
+            var body = new Label
+            {
+                Text = message,
+                AutoSize = true,
+                MaximumSize = new Size(560, 0),
+                Margin = new Padding(0, 0, 0, 12),
+            };
+
+            var layout = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.TopDown,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                WrapContents = false,
+            };
+            layout.Controls.Add(body);
+            layout.Controls.Add(ok);
+            form.Controls.Add(layout);
+        }
 
         form.AcceptButton = ok;
         form.CancelButton = ok;   // Escape means the same as OK: there is nothing here to cancel
