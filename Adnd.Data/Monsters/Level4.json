@@ -2,17 +2,19 @@
     "Level": 4,
   "Monsters": [
     {
-      "Name": "Su-monster",
-      "Type": "Monstrous Humanoid",
+      "Name": "Su-Monster",
+      "Type": "Humanoid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 6,
+      "Movement": 9,
       "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 5,
-      "Size": "Medium",
-      "Movement": 90,
+      "%InLair": "30",
+      "TreasureType": "C, Y",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
@@ -22,74 +24,106 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d8"
+          "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Psychic Blast",
-          "Description": "Can unleash a psionic shockwave stunning or killing weaker minds within 30 feet."
-        },
-        {
-          "Name": "Climbing",
-          "Description": "Moves easily through trees and rocky terrain; rarely surprised."
-        },
-        {
-          "Name": "Pack Behavior",
-          "Description": "Often hunts in small groups; coordinates attacks telepathically."
+          "Name": "Psionics",
+          "Description": "Psionic ability score 120; attack/defense modes vary."
         }
       ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
-      "Alignment": "Chaotic",
       "Intelligence": "Average",
+      "Alignment": "Chaotic Neutral",
+      "Size": "Medium",
       "PsionicAbility": 120,
-      "BaseXPValue": 270,
-      "TreasureType": "C, Y",
-      "Source": "Adnd"
+      "BaseXPValue": 225,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "Other": "Subterranean predator; vicious simian creature with psionic powers."
     },
-
     {
-      "Name": "Snake, Giant Constrictor",
+      "Name": "Snake, Poisonous",
       "Type": "Animal",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 5,
-      "HitDice": 6,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 6,
+      "Movement": 15,
+      "HitDice": 2,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Large (30 ft long)",
-      "Movement": 30,
+      "ExtraHitPoints": 1,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "Snake Stew ($5), Fried Snake ($3), Snake Eggs ($50)",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Constrict",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
+          "Damage": "1"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Constrict",
-          "Description": "On a successful hit, coils around the victim, dealing automatic damage each round until freed."
-        },
-        {
-          "Name": "Stealth",
-          "Description": "Moves silently and surprises prey on 1–3 in 6."
-        },
-        {
-          "Name": "Swim",
-          "Description": "Excellent swimmer; can attack in water without penalty."
+          "Name": "Poison",
+          "Description": "Snake bite delivers venom; save vs poison or suffer effects."
         }
       ],
-      "BaseXPValue": 270,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Small (5' long)",
+      "BaseXPValue": 255,
+      "XPValuePerHitPoint": 3,
+      "Source": "Adnd",
+      "Other": "Common serpent; sometimes harvested for stew, fried meat, or valuable eggs."
     },
+
+      {
+        "Name": "Snake, Giant Constrictor",
+        "Type": "Animal",
+        "Frequency": "Uncommon",
+        "NumberOfAppearancesMin": 1,
+        "NumberOfAppearancesMax": 2,
+        "ArmorClass": 6,
+        "Movement": 9,
+        "HitDice": 3,
+        "HitDiceType": 8,
+        "ExtraHitPoints": 2,
+        "%InLair": "Nil",
+        "TreasureType": "Nil",
+        "IndividualTreasure": "Snake Stew ($5), Fried Snake ($3), Snake Eggs ($50)",
+        "Attacks": [
+          {
+            "Name": "Bite",
+            "NumberOfAttacks": 1,
+            "Damage": "1"
+          },
+          {
+            "Name": "Coil",
+            "NumberOfAttacks": 1,
+            "Damage": "1d3"
+          }
+        ],
+        "SpecialAttacks": [
+          {
+            "Name": "Constriction",
+            "Description": "Snake coils around prey, dealing damage and restraining."
+          }
+        ],
+        "SpecialDefenses": [],
+        "MagicResistance": "Standard",
+        "Intelligence": "Animal",
+        "Alignment": "Neutral",
+        "Size": "Medium",
+        "BaseXPValue": 85,
+        "XPValuePerHitPoint": 4,
+        "Source": "Adnd",
+        "Other": "Subterranean serpent; valued for meat and eggs."
+      },
 
     {
       "Name": "Shadow",
@@ -174,30 +208,28 @@
 
     {
       "Name": "Owlbear",
-      "Type": "Monstrous Animal",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
+      "Movement": 12,
       "HitDice": 5,
-      "HitPoints": 32,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 11 },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "30",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
         },
         {
           "Name": "Bite",
@@ -205,15 +237,23 @@
           "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Bear Hug",
-          "Description": "If both claws hit, target takes extra 2d8 damage."
+          "Name": "Hug",
+          "Description": "If both claws hit, owlbear hugs for 2d8 damage."
         }
       ],
-      "BaseXPValue": 700,
-      "TreasureType": "None"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral",
+      "Size": "Large (8' tall)",
+      "BaseXPValue": 225,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Ferocious hybrid of bear and owl; notorious for aggression and territorial behavior."
     },
+
     {
       "Name": "Hydra 5 Heads",
       "Type": "Monstrous Beast",
@@ -225,16 +265,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 15,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "Movement": 9,
       "Attacks": [
         {
           "Name": "Bite",
@@ -272,19 +303,7 @@
       "HitDiceType": 7,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 15
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -326,12 +345,7 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 0
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -373,12 +387,7 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 0
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -413,19 +422,7 @@
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 12
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -460,19 +457,7 @@
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 0
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -507,19 +492,7 @@
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 12
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -554,19 +527,7 @@
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 0
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -601,19 +562,7 @@
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 0
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -648,19 +597,7 @@
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 0
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -695,19 +632,7 @@
       "HitDiceType": 7,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12,
-        "Fly": 30,
-        "Swim": 12
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -742,16 +667,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 15,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "Movement": 9,
       "Attacks": [
         {
           "Name": "Bite",
@@ -789,16 +705,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 15,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12
-      },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Bite",
@@ -836,16 +743,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Small",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 16,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
-      "Movement": {
-        "None": 0
-      },
+      "Movement": 0,
       "Attacks": [
         {
           "Name": "Spores",
@@ -883,17 +781,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Movement": {
-        "Walk": 12,
-        "Climb": 9
-      },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Claw",
@@ -932,17 +820,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Small",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Movement": {
-        "Walk": 6,
-        "Leap": 9
-      },
+      "Movement": 6,
       "Attacks": [
         {
           "Name": "Bite",
@@ -980,16 +858,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 15,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 12
-      },
+      "Movement": 12,
       "Attacks": [
         {
           "Name": "Bite",
@@ -1551,21 +1420,7 @@
       "ArmorClass": 4,
       "HitDice": 4,
       "HitPoints": 18,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 11 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1600,21 +1455,7 @@
       "ArmorClass": 3,
       "HitDice": 4,
       "HitPoints": 20,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1645,21 +1486,7 @@
       "ArmorClass": 7,
       "HitDice": 3,
       "HitPoints": 13,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1736,21 +1563,7 @@
       "HitDice": 4,
       "HitDiceType": 5,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1789,21 +1602,7 @@
       "HitDice": 4,
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1831,21 +1630,7 @@
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Sai",
@@ -1873,21 +1658,7 @@
       "HitDice": 4,
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -1920,21 +1691,7 @@
       "HitDice": 7,
       "HitDiceType": 3,
       "ExtraHitPoints": 2,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1962,21 +1719,7 @@
       "HitDice": 4,
       "HitDiceType": 8,
       "ExtraHitPoints": 1,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Mace",
@@ -2004,21 +1747,7 @@
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 1,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Mace",
@@ -2046,21 +1775,7 @@
       "HitDice": 3,
       "HitDiceType": 6,
       "ExtraHitPoints": 4,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Katana",
@@ -2089,21 +1804,7 @@
       "HitDice": 7,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 9 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Dagger",

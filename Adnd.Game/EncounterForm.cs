@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
@@ -38,6 +39,7 @@ public sealed class EncounterForm : Form
     private readonly int _roundNumber;
     private readonly List<Character> _party;
     private readonly CombatSession? _session;
+    private readonly Monster? _singleMonsterTemplate;
     private readonly bool _multipleGroups;
     private readonly Dictionary<string, CombatAction> _actions = new(StringComparer.OrdinalIgnoreCase);
 
@@ -86,6 +88,7 @@ public sealed class EncounterForm : Form
         _roundNumber = roundNumber;
         _party = party;
         _session = session;
+        _singleMonsterTemplate = monsterTemplate;
 
         // Check if we should use Wizardry suffix
         bool useWizSuffix = monsterTemplate != null && ShouldUseWizardrySuffix(monsterTemplate);
@@ -188,6 +191,7 @@ public sealed class EncounterForm : Form
     public EncounterForm(CombatSession session, int? dungeonLevel = null)
     {
         _session = session;
+        _singleMonsterTemplate = null;
         _multipleGroups = true;
         _party = session.Party;
         _roundNumber = session.RoundNumber;
@@ -377,7 +381,7 @@ public sealed class EncounterForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 16f, FontStyle.Bold),
-            Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK\nG)ROUP   (Select Target Group)",
+            Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK\nG)ROUP   I)NFO",
             TextAlign = ContentAlignment.MiddleLeft
         };
 
@@ -512,6 +516,12 @@ public sealed class EncounterForm : Form
     {
         if (string.IsNullOrEmpty(command)) return;
 
+        if (string.Equals(command, "info", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEncounterInfoWindow();
+            return;
+        }
+
         // Auto has no branch here on purpose: it answers to Enter, which this form's own key handler already
         // understands, so the pump injects the key and the game decides. See the note on Enter in
         // EncounterForm_KeyDown -- one path for both surfaces, rather than a table-only shortcut that could
@@ -581,6 +591,7 @@ public sealed class EncounterForm : Form
             options.Add(new ViewerPromptOption("layOnHands", character.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
         options.Add(new ViewerPromptOption("useItem", "Use an item"));
         options.Add(new ViewerPromptOption("run", "Run"));
+        options.Add(new ViewerPromptOption("info", "Info"));
 
         if (_multipleGroups && _session != null)
             options.Add(new ViewerPromptOption("targetGroup", "Choose target group"));
@@ -649,6 +660,9 @@ public sealed class EncounterForm : Form
                 break;
             case Keys.S:
                 ChooseSpellAction();
+                break;
+            case Keys.I:
+                ShowEncounterInfoWindow();
                 break;
             case Keys.D:
                 ChooseDispellUndeadAction();
@@ -1548,12 +1562,167 @@ public sealed class EncounterForm : Form
 
         if (_multipleGroups)
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}\nG)ROUP   (Select Target Group)";
+            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}\nG)ROUP   I)NFO";
         }
         else
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}";
+            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}\nI)NFO";
         }
+    }
+
+    private void ShowEncounterInfoWindow()
+    {
+        var text = BuildEncounterInfoText();
+
+        using var form = new Form
+        {
+            Text = "Encounter Info",
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.Sizable,
+            ClientSize = new Size(820, 620),
+            MinimizeBox = false,
+            MaximizeBox = true
+        };
+
+        var details = new TextBox
+        {
+            Dock = DockStyle.Fill,
+            Multiline = true,
+            ReadOnly = true,
+            ScrollBars = ScrollBars.Vertical,
+            Font = new Font("Consolas", 10f),
+            Text = text
+        };
+
+        var close = new Button
+        {
+            Text = "Close",
+            Dock = DockStyle.Right,
+            Width = 90,
+            DialogResult = DialogResult.OK
+        };
+
+        var panel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 44,
+            Padding = new Padding(8)
+        };
+        panel.Controls.Add(close);
+
+        form.Controls.Add(details);
+        form.Controls.Add(panel);
+        form.AcceptButton = close;
+        form.CancelButton = close;
+
+        form.ShowDialog(this);
+        UpdateHeader();
+    }
+
+    private string BuildEncounterInfoText()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Encounter Monster Info");
+        sb.AppendLine();
+
+        if (_session == null)
+        {
+            if (_singleMonsterTemplate != null)
+            {
+                AppendMonsterTemplateInfo(sb, "default", _singleMonsterTemplate, _monsterCount, _monsterCount);
+            }
+            else
+            {
+                sb.AppendLine($"Name: {_monsterName}");
+                sb.AppendLine($"Count: {_monsterCount}");
+                sb.AppendLine("No template details available.");
+            }
+
+            return sb.ToString();
+        }
+
+        var groups = _session.Monsters
+            .GroupBy(m => m.GroupId)
+            .OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        foreach (var group in groups)
+        {
+            var list = group.ToList();
+            if (list.Count == 0)
+                continue;
+
+            var template = list[0].Template;
+            var total = list.Count;
+            var alive = list.Count(m => m.IsAlive);
+            AppendMonsterTemplateInfo(sb, group.Key, template, total, alive);
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
+    }
+
+    private static void AppendMonsterTemplateInfo(StringBuilder sb, string groupId, Monster template, int totalCount, int aliveCount)
+    {
+        var attacks = template.Attacks.Count == 0
+            ? "None"
+            : string.Join(", ", template.Attacks.Select(a => $"{a.Name} {a.Damage} x{Math.Max(1, a.NumberOfAttacks)}"));
+
+        sb.AppendLine($"Group: {groupId}");
+        sb.AppendLine($"  Name: {template.Name}");
+        sb.AppendLine($"  Type: {template.TypeName}");
+        sb.AppendLine($"  Frequency: {DisplayOrUnknown(template.Frequency)}");
+        sb.AppendLine($"  NumberOfAppearancesMin: {template.NumberOfAppearancesMin}");
+        sb.AppendLine($"  NumberOfAppearancesMax: {template.NumberOfAppearancesMax}");
+        sb.AppendLine($"  CountInEncounter: {aliveCount}/{totalCount} alive");
+        sb.AppendLine($"  ArmorClass: {template.ArmorClass}");
+        sb.AppendLine($"  Movement: {GetMovementDisplay(template)}");
+        sb.AppendLine($"  HitDice: {template.HitDice}");
+        sb.AppendLine($"  HitDiceType: {(template.HitDiceType <= 0 ? 8 : template.HitDiceType)}");
+        sb.AppendLine($"  ExtraHitPoints: {template.ExtraHitPoints}");
+        sb.AppendLine($"  THAC0: {template.THAC0}");
+        sb.AppendLine($"  NumberOfAttacks: {template.NumberOfAttacks}");
+        sb.AppendLine($"  %InLair: {template.InLairPercent}");
+        sb.AppendLine($"  TreasureType: {DisplayOrUnknown(template.TreasureType)}");
+        sb.AppendLine($"  IndividualTreasure: {DisplayOrUnknown(template.IndividualTreasure)}");
+        sb.AppendLine($"  Attacks: {attacks}");
+        if (template.SpecialAttacks.Count > 0)
+            sb.AppendLine($"  SpecialAttacks: {string.Join(", ", template.SpecialAttacks.Select(a => string.IsNullOrWhiteSpace(a.Description) ? a.Name : $"{a.Name} ({a.Description})"))}");
+        if (template.SpecialDefenses.Count > 0)
+            sb.AppendLine($"  SpecialDefenses: {string.Join(", ", template.SpecialDefenses.Select(d => string.IsNullOrWhiteSpace(d.Description) ? d.Name : $"{d.Name} ({d.Description})"))}");
+        if (template.SpecialAbilities.Count > 0)
+            sb.AppendLine($"  SpecialAbilities: {string.Join(", ", template.SpecialAbilities.Select(a => string.IsNullOrWhiteSpace(a.Description) ? a.Name : $"{a.Name} ({a.Description})"))}");
+        sb.AppendLine($"  MagicResistance: {DisplayOrUnknown(template.MagicResistance)}");
+        sb.AppendLine($"  Intelligence: {DisplayOrUnknown(template.Intelligence)}");
+        sb.AppendLine($"  Size: {template.Size}");
+        sb.AppendLine($"  BaseXPValue: {template.BaseXPValue}");
+        sb.AppendLine($"  XPValuePerHitPoint: {template.XPValuePerHitPoint}");
+        sb.AppendLine($"  Alignment: {DisplayOrUnknown(template.Alignment)}");
+        sb.AppendLine($"  Source: {template.Source}");
+        sb.AppendLine($"  DungeonLevel: {template.DungeonLevel}");
+    }
+
+    private static string DisplayOrUnknown(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? "Unknown" : value;
+    }
+
+    private static string GetMovementDisplay(Monster template)
+    {
+        if (!string.IsNullOrWhiteSpace(template.MovementRate))
+            return template.MovementRate;
+
+        var parts = new List<string>();
+        if (template.Movement.Walk > 0) parts.Add($"Walk {template.Movement.Walk}");
+        if (template.Movement.Fly > 0) parts.Add($"Fly {template.Movement.Fly}");
+        if (template.Movement.Swim > 0) parts.Add($"Swim {template.Movement.Swim}");
+        if (template.Movement.Burrow > 0) parts.Add($"Burrow {template.Movement.Burrow}");
+        if (template.Movement.Climb > 0) parts.Add($"Climb {template.Movement.Climb}");
+
+        if (parts.Count > 0)
+            return string.Join(", ", parts);
+
+        return "Unknown";
     }
 
     private void UpdatePartyList()

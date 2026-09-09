@@ -62,7 +62,7 @@ public static class MonsterImporter
             HitDice = json.HitDice,
             HitDiceType = json.HitDiceType,
             ExtraHitPoints = json.ExtraHitPoints,
-            THAC0 = json.THAC0,
+            THAC0 = ResolveMonsterThac0(json),
             NumberOfAttacks = json.NumberOfAttacks,
             MagicResistance = magicResistance,
             MagicResistancePercent = ParseMagicResistancePercent(magicResistance),
@@ -100,12 +100,38 @@ public static class MonsterImporter
                 Damage = a.Damage
             }).ToList(),
 
+            SpecialAttacks = (json.SpecialAttacks ?? new List<MonsterSpecialAbilityJson>())
+                .Where(sa => !string.IsNullOrWhiteSpace(sa.Name) || !string.IsNullOrWhiteSpace(sa.Description))
+                .Select(sa => new MonsterSpecialAbility
+                {
+                    Name = sa.Name,
+                    Description = sa.Description
+                })
+                .ToList(),
+
+            SpecialDefenses = (json.SpecialDefenses ?? new List<MonsterSpecialAbilityJson>())
+                .Where(sd => !string.IsNullOrWhiteSpace(sd.Name) || !string.IsNullOrWhiteSpace(sd.Description))
+                .Select(sd => new MonsterSpecialAbility
+                {
+                    Name = sd.Name,
+                    Description = sd.Description
+                })
+                .ToList(),
+
             SpecialAbilities = json.SpecialAbilities.Select(sa => new MonsterSpecialAbility
             {
                 Name = sa.Name,
                 Description = sa.Description
             }).ToList()
         };
+    }
+
+    private static int ResolveMonsterThac0(MonsterJsonModel json)
+    {
+        if (json.THAC0 > 0)
+            return json.THAC0;
+
+        return Math.Max(1, Math.Max(10, 20 - Math.Max(0, json.HitDice - 1)));
     }
 
     private static Sources ParseSource(MonsterJsonModel json)

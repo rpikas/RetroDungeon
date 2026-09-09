@@ -85,9 +85,9 @@ public sealed class EncounterMonsterFactory
             count = _random.Next(1, GameRulesProvider.Current.MaxSizeEncounter + 1);
         }
 
-        var template = _monsterRepository
-            .GetAll()
-            .FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
+        var allMonsters = _monsterRepository.GetAll().ToList();
+        var template = FindMonsterByName(allMonsters, monsterName)
+            ?? allMonsters.FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
 
         if (template == null)
         {
@@ -210,6 +210,7 @@ public sealed class EncounterMonsterFactory
             Name = monsterName,
             ArmorClass = 9,
             HitDice = 1,
+            THAC0 = 20,
             HitPoints = 6,
             BaseXPValue = xp,
             XPValuePerHitPoint = 1,
@@ -232,12 +233,21 @@ public sealed class EncounterMonsterFactory
         {
             Name = source.Name,
             Type = source.Type,
+            TypeName = source.TypeName,
+            ClimateTerain = source.ClimateTerain,
+            Frequency = source.Frequency,
+            ActivityCycle = source.ActivityCycle,
+            Intelligence = source.Intelligence,
+            Alignment = source.Alignment,
             NumberOfAppearancesMin = source.NumberOfAppearancesMin,
             NumberOfAppearancesMax = source.NumberOfAppearancesMax,
             ArmorClass = source.ArmorClass,
+            MovementRate = source.MovementRate,
             HitDice = source.HitDice,
             HitDiceType = source.HitDiceType,
             ExtraHitPoints = source.ExtraHitPoints,
+            THAC0 = source.THAC0,
+            NumberOfAttacks = source.NumberOfAttacks,
             Size = source.Size,
             HitPoints = source.HitPoints,
             MagicResistance = source.MagicResistance,
@@ -259,6 +269,20 @@ public sealed class EncounterMonsterFactory
                     Name = a.Name,
                     NumberOfAttacks = a.NumberOfAttacks,
                     Damage = a.Damage
+                })
+                .ToList(),
+            SpecialAttacks = source.SpecialAttacks
+                .Select(sa => new MonsterSpecialAbility
+                {
+                    Name = sa.Name,
+                    Description = sa.Description
+                })
+                .ToList(),
+            SpecialDefenses = source.SpecialDefenses
+                .Select(sd => new MonsterSpecialAbility
+                {
+                    Name = sd.Name,
+                    Description = sd.Description
                 })
                 .ToList(),
             SpecialAbilities = source.SpecialAbilities

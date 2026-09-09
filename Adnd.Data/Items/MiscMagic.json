@@ -2,7 +2,7 @@
   "Category": "MagicItem",
   "Items": [
     {
-      "Status": "NotImplemented",
+      "Status": "Implemented",
       "Name": "Achemy Jug",
       "Type": "MagicItem",
       "Slot": "",

@@ -11,7 +11,6 @@
       "HitDice": 15,
       "Size": "Gargantuan",
       "Movement": 12,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Claw",
@@ -77,7 +76,6 @@
       "HitDice": 15,
       "Size": "Gargantuan",
       "Movement": 12,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Claw",
@@ -133,7 +131,6 @@
       "HitDice": 15,
       "Size": "Large",
       "Movement": 12,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Staff",
@@ -179,7 +176,6 @@
       "HitDice": 13,
       "Size": "Large",
       "Movement": 12,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Mace",
@@ -225,7 +221,6 @@
       "HitDice": 12,
       "Size": "Medium",
       "Movement": 15,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Rod",
@@ -266,7 +261,6 @@
       "HitDice": 14,
       "Size": "Large",
       "Movement": 12,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Claw",
@@ -312,7 +306,6 @@
       "HitDice": 10,
       "Size": "Large",
       "Movement": 3,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Bite",
@@ -349,7 +342,6 @@
       "HitDice": 18,
       "Size": "Large",
       "Movement": 6,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Fist",
@@ -386,7 +378,6 @@
       "HitDice": 11,
       "Size": "Medium",
       "Movement": 6,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Touch",
@@ -427,7 +418,6 @@
       "HitDice": 20,
       "Size": "Large",
       "Movement": 15,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Weapon",
@@ -474,7 +464,6 @@
       "HitDice": 8,
       "Size": "Medium",
       "Movement": 12,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Energy Drain",
@@ -529,7 +518,6 @@
       "HitDice": 120,
       "Size": "Large",
       "Movement": 9,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Wand of Orcus",
@@ -580,7 +568,6 @@
       "HitDice": 45,
       "Size": "Large",
       "Movement": 15,
-      "Morale": { "Value": 12 },
       "Attacks": [
         {
           "Name": "Tentacle",
@@ -624,21 +611,7 @@
       "ArmorClass": -1,
       "HitDice": 10,
       "HitPoints": 60,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 80,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 6,
-        "RodStaffWand": 7,
-        "PetrificationPolymorph": 8,
-        "BreathWeapon": 9,
-        "Spell": 9
-      },
-      "Morale": { "Value": 14 },
+      "Movement": 24,
       "Attacks": [
         {
           "Name": "Claw",
@@ -670,21 +643,7 @@
       "ArmorClass": 2,
       "HitDice": 10,
       "HitPoints": 60,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 7,
-        "RodStaffWand": 8,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 10,
-        "Spell": 10
-      },
-      "Morale": { "Value": 13 },
+      "Movement": 40,
       "Attacks": [
         {
           "Name": "Rock Throw",
@@ -712,21 +671,7 @@
       "ArmorClass": 2,
       "HitDice": 12,
       "HitPoints": 72,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 6,
-        "RodStaffWand": 7,
-        "PetrificationPolymorph": 8,
-        "BreathWeapon": 9,
-        "Spell": 9
-      },
-      "Morale": { "Value": 14 },
+      "Movement": 40,
       "Attacks": [
         {
           "Name": "Flaming Greatsword",
@@ -749,21 +694,7 @@
       "ArmorClass": 4,
       "HitDice": 10,
       "HitPoints": 70,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 10,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 7,
-        "RodStaffWand": 8,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 10,
-        "Spell": 10
-      },
-      "Morale": { "Value": 13 },
+      "Movement": 20,
       "Attacks": [
         {
           "Name": "Bite",
@@ -786,21 +717,7 @@
       "ArmorClass": 2,
       "HitDice": 9,
       "HitPoints": 54,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 50,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 7,
-        "RodStaffWand": 8,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 10,
-        "Spell": 10
-      },
-      "Morale": { "Value": 13 },
+      "Movement": 50,
       "Attacks": [
         {
           "Name": "Bite",
@@ -828,21 +745,7 @@
       "ArmorClass": 1,
       "HitDice": 9,
       "HitPoints": 54,
-      "Movement": {
-        "Walk": 0,
-        "Fly": 30,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 6,
-        "RodStaffWand": 7,
-        "PetrificationPolymorph": 8,
-        "BreathWeapon": 9,
-        "Spell": 9
-      },
-      "Morale": { "Value": 14 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Chilling Touch",
@@ -869,21 +772,7 @@
       "ArmorClass": 4,
       "HitDice": 9,
       "HitPoints": 54,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 7,
-        "RodStaffWand": 8,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 10,
-        "Spell": 10
-      },
-      "Morale": { "Value": 13 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Great Axe",

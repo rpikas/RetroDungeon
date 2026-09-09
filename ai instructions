@@ -813,4 +813,20 @@ info from from the corresponding item json 34,0
 
 when identifying an item also show the SpecialAbilities from the json 34,2
 _______
+Introdue an option I)nfo in the Encounter dialog. When I pressed, open a new window presending info about the monster groups from the json files 35,3
+In encounter Monster info dialog:
+Frequency and Alignment are shown as empty strings, they should not be that
+present the info in this order 35,6
+Frequency and Alignment and Movement are Unknown, show the same values as in the json. If the monster object is not populated with this info, 
+pleaes include these fields in the monster json parsing.35,8
+can you fix this Movement: Unknown and show the number instead, parse it if needed in the general monster json parsing.
+If preseneted, also show SpecialAttacks, SpecialDefenses, SpecialAbilities 36,3
 
+Show the option I)nfo in the encounter dialog when charaters should select action.
+when parsing SpecialAttacks, it should be interpreted in the same way as SpecialAbilities. Add a new attribut of the same structure to the Monster class: 
+SpecialDefenses it should also be parsed in the monster parsing and populate the monster object 36,9
+
+If THAC0 can be calculated for a group of monsters with existing methods, populate THAC0 for the monster objects and show that in the monster info dialog. 37,6
+
+When found something in "Table": "Any", and rolling 46–60	Misc Magic get somthin grom MiscMagic,json 38,0
+_____

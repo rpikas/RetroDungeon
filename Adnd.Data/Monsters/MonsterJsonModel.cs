@@ -34,6 +34,8 @@ public class MonsterJsonModel
     public MonsterMoraleJson Morale { get; set; } = new();
 
     public List<MonsterAttackJson> Attacks { get; set; } = new();
+    public List<MonsterSpecialAbilityJson> SpecialAttacks { get; set; } = new();
+    public List<MonsterSpecialAbilityJson> SpecialDefenses { get; set; } = new();
     public List<MonsterSpecialAbilityJson> SpecialAbilities { get; set; } = new();
 
     public int BaseXPValue { get; set; }

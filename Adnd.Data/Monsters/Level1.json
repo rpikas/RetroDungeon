@@ -366,23 +366,17 @@
     {
       "Name": "Zombie",
       "Type": "Undead",
-      "ClimateTerain": "Any",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 24,
       "ArmorClass": 8,
-      "MovementRate": "Slow",
+      "Movement": 6,
       "HitDice": 2,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Medium",
-      "Movement": 20,
-      "Morale": {
-        "Value": 6
-      },
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Slam",
@@ -390,24 +384,27 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Undead Traits",
-          "Description": "Immune to sleep, charm, and hold spells; turned by clerics; unaffected by morale."
+          "Name": "Spell Immunity",
+          "Description": "Immune to sleep, charm, hold, and cold-based spells."
         },
         {
-          "Name": "Slow",
-          "Description": "Zombies always strike last in combat regardless of initiative."
+          "Name": "Piercing Resistance",
+          "Description": "Piercing weapons inflict only 1 point or half damage depending on interpretation."
         }
       ],
-      "BaseXPValue": 35,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "None",
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
       "Source": "Adnd",
-      "ImageUrl": "https://1eonline.info/6mm2/image1JM.JPG",
-      "Info": "Mindless undead animated corpses that attack relentlessly and move slowly.",
-      "InfoUrl": ""
+      "Other": "Always strikes last; holy water deals 2d8 damage."
     },
+
 
     {
       "Name": "Rot Grub",
@@ -509,11 +506,18 @@
           "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "1d2"
-        }],
+        }
+      ],
       "SpecialAttacks": [],
       "SpecialDefenses": [
-        "+1 or better weapons to hit",
-        "Resistant to spells as undead"
+        {
+          "Name": "+1 or better weapons to hit",
+          "Description": "+1 or better weapons to hit"
+        },
+        {
+          "Name": "Resistant to spells as undead",
+          "Description": "Resistant to spells as undead"
+        }
       ],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",
@@ -548,7 +552,10 @@
       ],
       "SpecialAttacks": [],
       "SpecialDefenses": [
-        "Save at 4 levels higher (magic & poison resistance)"
+        {
+          "Name": "Save at 4 levels higher (magic & poison resistance)",
+          "Description": "Save at 4 levels higher (magic & poison resistance)"
+        }
       ],
       "MagicResistance": "Standard",
       "Strength": "13–14",
@@ -685,12 +692,7 @@
         }
       ],
       "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Magic & Poison Resistance",
-          "Description": "Saves as if 4 levels higher"
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Save at 4 levels higher",
       "Intelligence": "Very",
       "Alignment": "Neutral Good",
@@ -744,31 +746,20 @@
       "Other": "Deity: Yondalla; Psionics Nil; Surprise on 1–4; Invisible in vegetation; Shun water"
     },
 
-
     {
-      "Name": "Piercer",
+      "Name": "Piercer (Small)",
       "Type": "Monster",
-      "ClimateTerain": "Underground",
-      "Frequency": "Not Implemented",
-      "ActivityCycle": "Any",
-      "Intelligence": "Non",
-      "Alignment": "Neutral",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
       "ArmorClass": 3,
-      "MovementRate": "None",
+      "Movement": 1,
       "HitDice": 1,
-      "HitDiceType": 6,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "HitPoints": 4,
-      "Movement": 10,
-      "Morale": {
-        "Value": 7
-      },
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Drop Attack",
@@ -776,44 +767,187 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Camouflage",
-          "Description": "Appears as a stalactite until it drops on prey."
+          "Name": "Surprise",
+          "Description": "95% likely to surprise"
         }
       ],
-      "BaseXPValue": 20,
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "None",
       "Source": "Adnd",
-      "Info": "",
-      "InfoUrl": "",
-      "ImageUrl": ""
+      "Other": "Piercers drop from ceilings; no further attacks after landing."
+    },
+    {
+      "Name": "Piercer (Medium)",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 3,
+      "Movement": 1,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Drop Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "95% likely to surprise"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Piercers drop from ceilings; no further attacks after landing."
+    },
+    {
+      "Name": "Piercer (Large)",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 3,
+      "Movement": 1,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Drop Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "95% likely to surprise"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 3,
+      "Source": "Adnd",
+      "Other": "Piercers drop from ceilings; no further attacks after landing."
+    },
+
+    {
+      "Name": "Piercer (Largest)",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 3,
+      "Movement": 1,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Drop Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "4d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "95% likely to surprise"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 60,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Piercers drop from ceilings; no further attacks after landing."
+    },
+
+    {
+      "Name": "Piercer",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 3,
+      "Movement": 1,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Drop Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "95% likely to surprise"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": " (Medium) Piercers drop from ceilings; no further attacks after landing."
     },
 
     {
       "Name": "Goblin",
       "Type": "Humanoid",
-      "ClimateTerain": "Temperate",
       "Frequency": "Uncommon",
-      "ActivityCycle": "Nocturnal",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic Evil",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 15,
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
       "ArmorClass": 6,
-      "MovementRate": "Slow",
+      "Movement": 6,
       "HitDice": 1,
-      "HitDiceType": 7,
-      "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Large",
-      "Movement": 20,
-      "Morale": {
-        "Value": 7
-      },
+      "HitDiceType": 8,
+      "ExtraHitPoints": -1,
+      "%InLair": "40",
+      "TreasureType": "C",
+      "IndividualTreasure": "K",
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -821,43 +955,17 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 15,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": "10",
+      "Intelligence": "Average",
+      "Alignment": "Lawful Evil",
+      "Size": "Small",
+      "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Orc",
-      "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 7,
-      "NumberOfAppearancesMax": 12,
-      "ArmorClass": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 30,
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Battle Axe",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "D",
-      "Source": "WizardryAndAdnd",
-      "Info": "",
-      "InfoUrl": "",
-      "ImageUrl": "https://static.wikia.nocookie.net/forgottenrealms/images/4/44/Monster_Manual_-_1D%26D_-_Orc_-_p76.png/revision/latest?cb=20141012193130"
+      "Source": "Adnd",
+      "Other": "Suffer -1 to hit in sunlight; normal infravision 60'; fair miners; hate dwarves and gnomes."
     },
 
     {
@@ -865,16 +973,15 @@
       "Type": "Animal",
       "Frequency": "Common",
       "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 20,
-      "ArmorClass": 12,
-      "Size": "Small",
+      "NumberOfAppearancesMax": 50,
+      "ArmorClass": 7,
+      "Movement": 12,
       "HitDice": 1,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": 30,
-      "Morale": {
-        "Value": 8
-      },
+      "%InLair": "10",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
@@ -882,153 +989,62 @@
           "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Giant Rat Disease",
-          "Description": "Bite may transmit a disease to the target."
+          "Name": "Disease",
+          "Description": "5% chance per wound of contracting a serious disease; save vs. poison to avoid infection."
         }
       ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Small",
       "BaseXPValue": 7,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
       "Source": "Adnd",
-      "Info": "DMG page 209",
-      "InfoUrl": "",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjjlfJO1H0LbDzVGOJzCINL8uuqwnn_BJmQiUqMKdhOw&s=10"
+      "Other": "Fearful of fire; swim well; sacred to Gruumsh; often found in crypts and dungeons."
     },
 
     {
       "Name": "Skeleton",
       "Type": "Undead",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 13,
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 30,
+      "ArmorClass": 7,
+      "Movement": 12,
       "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 4,
-      "Size": "Medium",
-      "Movement": 10,
-      "Morale": {
-        "Value": 9
-      },
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6+2"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Paralyze",
-          "Description": "On hit, target may be paralyzed."
-        }
-      ],
-      "BaseXPValue": 50,
-      "TreasureType": "None",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Kobold",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 6,
-      "NumberOfAppearancesMax": 18,
-      "ArmorClass": 8,
-      "HitDice": 1,
-      "HitDiceType": 4,
+      "HitDiceType": 1,
       "ExtraHitPoints": 0,
-      "Size": "Small",
-      "Movement": 20,
-      "Morale": {
-        "Value": 6
-      },
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "Claw",
+          "Name": "Weapon Strike",
           "NumberOfAttacks": 1,
-          "Damage": "1d2"
-        },
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d2"
+          "Damage": "1d6"
         }
       ],
-      "BaseXPValue": 10,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Half Damage from Sharp Weapons",
+          "Description": "Edged/slashing/piercing weapons deal half damage."
+        }
+      ],
+      "MagicResistance": "Immune to charm, sleep, cold-based magic, and all willpower-affecting spells",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 14,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
-      "Source": "AdndAndWizardry"
+      "Source": "Adnd",
+      "Other": "Holy water deals 2d4 damage; blunt weapons deal full damage; fire deals normal damage."
     },
 
-    {
-      "Name": "Bubbly Slime",
-      "Type": "Other",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 12,
-      "HitDice": 1,
-      "HitDiceType": 3,
-      "ExtraHitPoints": 1,
-      "Size": "Small",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Attacks": [
-        {
-          "Name": "Slime",
-          "NumberOfAttacks": 1,
-          "Damage": "1d2"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 5,
-      "TreasureType": "J",
-      "Source": "Wizardry"
-    },
-    {
-      "Name": "Lvl 1 Mage",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
-      "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 1,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 1 Mage spells",
-          "Description": "Level 1 Mage spells"
-        }
-      ],
-      "BaseXPValue": 25,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
-      "Source": "Wizardry"
-    },
+
     {
       "Name": "Lvl 1 Magic-User",
       "Type": "Humanoid",
@@ -1414,6 +1430,167 @@
       "XPValuePerHitPoint": 2,
       "TreasureType": "J",
       "Source": "Adnd"
+    },
+    {
+      "Name": "Orc",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 7,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 30,
+      "Morale": {
+        "Value": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Battle Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "D",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Kobold",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
+      "ArmorClass": 7,
+      "Movement": 6,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "%InLair": "40",
+      "TreasureType": "Q(x5), O",
+      "IndividualTreasure": "J",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": "9",
+      "Intelligence": "Average",
+      "Alignment": "Lawful Evil",
+      "Size": "Small",
+      "BaseXPValue": 5,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "Other": "Hate bright sunlight (-1 to hit); infravision 60'; tribal society; often accompanied by boars or giant weasels."
+    },
+
+    {
+      "Name": "Kobold",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 6,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 8,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Size": "Small",
+      "Movement": 20,
+      "Morale": {
+        "Value": 6
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        }
+      ],
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Wizardry"
+    },
+
+    {
+      "Name": "Bubbly Slime",
+      "Type": "Other",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 12,
+      "HitDice": 1,
+      "HitDiceType": 3,
+      "ExtraHitPoints": 1,
+      "Size": "Small",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Slime",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 5,
+      "TreasureType": "J",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Lvl 1 Mage",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        }
+      ],
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J",
+      "Source": "Wizardry"
     },
     {
       "Name": "Undead Kobold",

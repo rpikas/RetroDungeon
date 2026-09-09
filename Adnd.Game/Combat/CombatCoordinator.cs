@@ -23,6 +23,7 @@ using Adnd.Data.Treasure;
 using Adnd.Game.Viewer;
 using System.Drawing;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace Adnd.Game.Combat;
@@ -633,6 +634,7 @@ public sealed class CombatCoordinator
             return result;
 
         var allItems = FilterItemsByDungeonLevelCostCap(_itemRepository.LoadAll().ToList(), dungeonLevel);
+        var miscMagicNames = LoadItemNamesFromFile("MiscMagic.json");
         if (allItems.Count == 0)
             return result;
 
@@ -647,7 +649,7 @@ public sealed class CombatCoordinator
                 if (!string.IsNullOrWhiteSpace(anyRollInfo))
                     RuleApplicationInfo.Publish(anyRollInfo!);
 
-                var pool = GetItemPoolForMagicTable(allItems, resolvedTable);
+                var pool = GetItemPoolForMagicTable(allItems, resolvedTable, miscMagicNames);
                 if (pool.Count == 0)
                 {
                     result.UnassignedItems.Add($"{resolvedTable} (no matching item defined)");
@@ -805,7 +807,7 @@ public sealed class CombatCoordinator
         };
     }
 
-    private static List<Item> GetItemPoolForMagicTable(List<Item> allItems, string table)
+    private static List<Item> GetItemPoolForMagicTable(List<Item> allItems, string table, HashSet<string> miscMagicNames)
     {
         if (string.IsNullOrWhiteSpace(table))
             return new List<Item>();
@@ -819,13 +821,34 @@ public sealed class CombatCoordinator
             "rods, staves & wands" => allItems.Where(IsRodStaffWandItem).ToList(),
             "rods staves wands" => allItems.Where(IsRodStaffWandItem).ToList(),
             "rods/staves/wands" => allItems.Where(IsRodStaffWandItem).ToList(),
-            "miscmagic" => allItems.Where(IsMiscMagicItem).ToList(),
-            "misc magic" => allItems.Where(IsMiscMagicItem).ToList(),
+            "miscmagic" => allItems.Where(i => miscMagicNames.Contains(i.Name)).ToList(),
+            "misc magic" => allItems.Where(i => miscMagicNames.Contains(i.Name)).ToList(),
             "weapon" => allItems.Where(i => i.Type == ItemType.Weapon).ToList(),
             "armor" => allItems.Where(i => i.Type == ItemType.Armor || i.Type == ItemType.Shield).ToList(),
             "magicitem" => allItems.Where(i => i.Type == ItemType.MagicItem).ToList(),
             _ => allItems.Where(i => i.Type == ItemType.MagicItem && i.Name.Contains(table, StringComparison.OrdinalIgnoreCase)).ToList()
         };
+    }
+
+    private static HashSet<string> LoadItemNamesFromFile(string fileName)
+    {
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var path = Path.Combine("Data", "Items", fileName);
+        if (!File.Exists(path))
+            return names;
+
+        var json = File.ReadAllText(path);
+        var grouped = JsonSerializer.Deserialize<ItemCategoryJsonModel>(json);
+        if (grouped?.Items != null)
+        {
+            foreach (var item in grouped.Items)
+            {
+                if (!string.IsNullOrWhiteSpace(item.Name))
+                    names.Add(item.Name);
+            }
+        }
+
+        return names;
     }
 
     private string ResolveAnyMagicTable(string table, out string? anyRollInfo)

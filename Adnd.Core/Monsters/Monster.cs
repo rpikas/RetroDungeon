@@ -51,6 +51,8 @@ public class Monster
     public MonsterSavingThrows SavingThrows { get; set; }
 
     public List<MonsterAttack> Attacks { get; set; } = new();
+    public List<MonsterSpecialAbility> SpecialAttacks { get; set; } = new();
+    public List<MonsterSpecialAbility> SpecialDefenses { get; set; } = new();
     public List<MonsterSpecialAbility> SpecialAbilities { get; set; } = new();
 
     public int BaseXPValue { get; set; }

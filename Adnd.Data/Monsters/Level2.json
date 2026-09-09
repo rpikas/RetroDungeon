@@ -210,29 +210,37 @@
     {
       "Name": "Gnoll",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 4,
-      "NumberOfAppearancesMax": 10,
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 20,
+      "NumberOfAppearancesMax": 200,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 2,
-      "Size": "Large",
-      "Movement": 30,
-      "Morale": {
-        "Value": 9
-      },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "D, Q(x5), S",
+      "IndividualTreasure": "L, M",
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Battle Axe",
           "NumberOfAttacks": 1,
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": "19",
+      "Intelligence": "Low-Average",
+      "Alignment": "Chaotic Evil",
+      "Size": "Large",
       "BaseXPValue": 28,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "D",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Other": "Hyena-like humanoids; aggressive and rapacious; often accompanied by flinds."
     },
+
     {
       "Name": "Giant Badger",
       "Type": "Animal",
@@ -264,52 +272,56 @@
     },
     {
       "Name": "Giant Centipede",
-      "Type": "Animal",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 13,
+      "Type": "Vermin",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 24,
       "ArmorClass": 9,
-      "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 1,
-      "Size": "Small",
       "Movement": 15,
-      "Morale": {
-        "Value": 7
-      },
+      "HitDice": 1,
+      "HitDiceType": 2,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1"
+          "Damage": "0"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Poison",
-          "Description": "Victim must save vs poison or become ill; not lethal in AD&D 1E."
+          "Description": "Victim must save vs. poison or suffer effects"
         }
       ],
-      "BaseXPValue": 10,
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 30,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "Nil",
-      "Source": "AD&D Monster Manual"
+      "Source": "Adnd",
+      "Other": "Bite causes no damage; poison is the threat."
     },
+
     {
-      "Name": "Devil, Lemure",
+      "Name": "Lemure",
       "Type": "Devil",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 30,
       "ArmorClass": 7,
-      "HitDice": 2,
+      "Movement": 3,
+      "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 3,
-      "Morale": {
-        "Value": 12
-      },
+      "%InLair": "100",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
@@ -317,150 +329,79 @@
           "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
           "Name": "Regeneration",
-          "Description": "Regenerates 1 hit point per round unless damaged by holy water or blessed weapons."
+          "Description": "Regenerates 1 hp per melee round"
         },
         {
-          "Name": "Immunities",
-          "Description": "Immune to fire, poison, and non-magical weapons."
-        },
-        {
-          "Name": "Devil Traits",
-          "Description": "Affected by protection from evil; can be commanded by higher devils."
-        }
-      ],
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "None",
-      "Source": "AD&D Monster Manual"
-    },
-    {
-      "Name": "Gas Spore",
-      "Type": "Fungus",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
-      "ArmorClass": 9,
-      "HitDice": 0,
-      "ExtraHitPoints": 1,
-      "Size": "Large",
-      "Movement": 3,
-      "Morale": {
-        "Value": 0
-      },
-      "Attacks": [
-        {
-          "Name": "Explosion",
-          "NumberOfAttacks": 1,
-          "Damage": "See below"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Explosive Spores",
-          "Description": "When struck or touched, the gas spore bursts, releasing spores that infect nearby creatures."
-        },
-        {
-          "Name": "Mimicry",
-          "Description": "Resembles a beholder, often mistaken for one until attacked."
+          "Name": "Spell Immunity",
+          "Description": "Immune to charm, sleep, and all mind-affecting spells"
         }
       ],
       "MagicResistance": "Standard",
-      "Intelligence": "Non‑",
-      "Alignment": "Neutral",
-      "PsionicAbility": "Nil",
-      "TreasureType": "Nil",
-      "BaseXPValue": 15,
-      "XPValuePerHitPoint": 1,
-      "Source": "AD&D Monster Manual (1977)"
+      "Intelligence": "Semi-",
+      "Alignment": "Lawful Evil",
+      "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "Source": "Adnd",
+      "Other": "Can only be permanently destroyed by blessed items such as holy water or holy swords."
     },
-    {
-      "Name": "Giant Rat",
-      "Type": "Animal",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 6,
-      "NumberOfAppearancesMax": 24,
-      "ArmorClass": 7,
-      "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 0,
-      "Size": "Small",
-      "Movement": 12,
-      "Morale": {
-        "Value": 7
-      },
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Disease",
-          "Description": "10% chance of transmitting disease when biting."
-        }
-      ],
-      "BaseXPValue": 7,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
-      "Source": "AD&D Monster Manual (1977)"
-    },
+
     {
       "Name": "Stirge",
       "Type": "Animal",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 15,
-      "ArmorClass": 7,
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 30,
+      "ArmorClass": 8,
+      "Movement": 18,
       "HitDice": 1,
       "HitDiceType": 8,
       "ExtraHitPoints": 1,
-      "Size": "Small",
-      "Movement": 18,
-      "Morale": {
-        "Value": 9
-      },
+      "%InLair": "60",
+      "TreasureType": "D",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "Attach",
+          "Name": "Proboscis",
           "NumberOfAttacks": 1,
           "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Blood Drain",
-          "Description": "Once attached, drains 1–4 hit points per round until killed or removed."
-        },
-        {
-          "Name": "Attach on Hit",
-          "Description": "If the attack hits, the stirge clings to the victim and continues draining automatically."
+          "Name": "Drain Blood",
+          "Description": "After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
         }
       ],
-      "BaseXPValue": 20,
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 36,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "None",
-      "Source": "AD&D Monster Manual (1977)"
+      "Source": "Adnd",
+      "Other": "Attacks as if it had 4 HD; only way to detach is to kill the stirge."
     },
+
     {
-      "Name": "Tick, Giant",
-      "Type": "Vermin",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "Name": "Giant Tick",
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 3,
+      "Movement": 3,
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 9,
-      "Morale": {
-        "Value": 10
-      },
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
@@ -468,41 +409,41 @@
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Blood Drain",
-          "Description": "If the tick hits, it attaches and drains 1d6 hit points per round."
+          "Description": "After attaching, drains 1–6 HP per round until total drained equals its hit points."
         },
         {
-          "Name": "Attachment",
-          "Description": "Once attached, it cannot be removed without fire or great force."
-        },
-        {
-          "Name": "Disease Carrier",
-          "Description": "Victims may contract disease; save vs poison to resist."
+          "Name": "Disease",
+          "Description": "50% chance of contracting a fatal disease; victim dies in 2–8 days unless cured."
         }
       ],
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "None",
-      "Source": "AD&D"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 105,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Must be killed, burned, or immersed in water to detach before satiation."
     },
 
     {
       "Name": "Giant Toad",
       "Type": "Animal",
-      "Frequency": "Uncommon",
+      "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 2,
       "HitDiceType": 8,
       "ExtraHitPoints": 4,
-      "Size": "Medium",
-      "Movement": 12,
-      "Morale": {
-        "Value": 8
-      },
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
@@ -510,27 +451,32 @@
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
       "BaseXPValue": 50,
       "XPValuePerHitPoint": 3,
-      "TreasureType": "None",
-      "Source": "AD&D"
+      "Source": "Adnd",
+      "Other": "Can hop its full movement distance; may attack mid-air or at landing."
     },
+
     {
       "Name": "Troglodyte",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 10,
+      "NumberOfAppearancesMax": 100,
       "ArmorClass": 5,
+      "Movement": 12,
       "HitDice": 2,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 12,
-      "Morale": {
-        "Value": 10
-      },
+      "%InLair": "15",
+      "TreasureType": "A",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
@@ -538,17 +484,36 @@
           "Damage": "1d3"
         },
         {
-          "Name": "Bite",
+          "Name": "Spear",
           "NumberOfAttacks": 1,
-          "Damage": "1d5"
+          "Damage": "1d4+1"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "C",
-      "Source": "AD&D Monster Manual (1977)"
+      "SpecialAttacks": [
+        {
+          "Name": "Revulsion Odor",
+          "Description": "Humanoids must save vs. poison or lose 1 STR per round for 1–6 rounds; STR loss lasts 10 rounds after final effect."
+        },
+        {
+          "Name": "Missiles",
+          "Description": "Troglodytes using javelins gain +3 to hit and deal 2–8 damage."
+        },
+        {
+          "Name": "Surprise",
+          "Description": "Surprise opponents on 1–4 due to chameleon coloration unless emitting odor."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Medium",
+      "BaseXPValue": 36,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "50% use weapons; armed half carry javelins (25%), stone axes (10%), stone morning stars (10%), swords (5%). Infravision 9\"."
     },
+
     {
       "Name": "Zombie",
       "NumberOfAppearancesMin": 1,
@@ -580,91 +545,89 @@
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 3,
       "TreasureType": "None",
-      "Source": "WizardryAndAdnd"
+      "Source": "Wizardry"
     },
     {
       "Name": "Giant Spider",
-      "Type": "Animal",
+      "Type": "Arachnid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 5,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 4,
-      "HitDice": 2,
-      "Size": "Large",
-      "Movement": 10,
-      "Morale": {
-        "Value": 8
-      },
+      "Movement": 12,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "%InLair": "70",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
+        {
+          "Name": "Webs",
+          "Description": "Constructs sticky horizontal or vertical webs functioning like a web spell; STR 18 breaks free in 1 round, STR 17 in 2 rounds, etc. Webs are highly flammable."
+        },
         {
           "Name": "Poison",
-          "Description": "Victim may be poisoned on hit."
+          "Description": "Victim must save vs. poison or die."
         }
       ],
-      "BaseXPValue": 45,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Large",
+      "BaseXPValue": 315,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Web‑building ambush predator; may drop from above; flees from superior foes and hides."
     },
-    {
-      "Name": "Bandit",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
-      "ArmorClass": 7,
-      "HitDice": 1,
-      "Size": "Medium",
-      "Movement": 20,
-      "Morale": {
-        "Value": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "C",
-      "Source": "Adnd"
-    },
+
+
     {
       "Name": "Wolf",
       "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 20,
       "ArmorClass": 7,
+      "Movement": 18,
       "HitDice": 2,
-      "Size": "Medium",
-      "Movement": 40,
-      "Morale": {
-        "Value": 8
-      },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "10",
+      "TreasureType": "Wolf Stew",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d4"
+          "Damage": "2d4+1"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 30,
+      "SpecialAttacks": [
+        {
+          "Name": "Howling",
+          "Description": "Pack howling may attract additional wolves or cause morale effects depending on DM ruling."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 35,
       "XPValuePerHitPoint": 3,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Other": "Wolves hunt in packs; found in forests from temperate to sub‑arctic regions."
     },
+
     {
       "Name": "Gas Cloud",
       "Type": "Enchant",
@@ -693,6 +656,7 @@
       "TreasureType": "None",
       "Source": "Wizardry"
     },
+
     {
       "Name": "Creeping Crud",
       "Type": "Animal",
