@@ -812,3 +812,5 @@ dialog should have a More info button and a Cancel button. If an item is selecte
 info from from the corresponding item json 34,0
 
 when identifying an item also show the SpecialAbilities from the json 34,2
+_______
+

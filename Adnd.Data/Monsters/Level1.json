@@ -23,12 +23,12 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
-      "Intelligence": "Average (low)",
+      "Intelligence": "Average",
       "Size": "Medium",
       "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
       "Source": "Adnd",
-      "Other": "MM page 76"
+      "Other": "https://1eonline.info/1mm/orc.htm"
     },
 
     {
@@ -501,11 +501,15 @@
       "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "Claw/Claw/Bite",
-          "NumberOfAttacks": 3,
-          "Damage": "1d2 / 1d2 / 1d4"
-        }
-      ],
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d2"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        }],
       "SpecialAttacks": [],
       "SpecialDefenses": [
         "+1 or better weapons to hit",
@@ -589,7 +593,6 @@
       "Other": "https://1eonline.info/1mm/elf.htm"
     },
 
-
     {
       "Name": "Badger",
       "Type": "Animal",
@@ -607,12 +610,7 @@
       "Attacks": [
         {
           "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d2"
-        },
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
+          "NumberOfAttacks": 2,
           "Damage": "1d2"
         },
         {
@@ -632,31 +630,20 @@
       "Source": "Adnd",
       "Other": "Pelt worth 10–30 gp"
     },
-
     {
       "Name": "Fire Beetle",
-      "Type": "Animal",
-      "ClimateTerain": "Any",
-      "Frequency": "Common",
-      "ActivityCycle": "Nocturnal",
-      "Intelligence": "Non",
-      "Alignment": "Neutral",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "Type": "Insect",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 4,
-      "MovementRate": "Medium",
+      "Movement": 12,
       "HitDice": 1,
       "HitDiceType": 8,
       "ExtraHitPoints": 2,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "HitPoints": 4,
-      "Movement": 30,
-      "Morale": {
-        "Value": 7
-      },
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
@@ -664,96 +651,99 @@
           "Damage": "2d4"
         }
       ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Size": "Small",
       "BaseXPValue": 20,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "None",
+      "Alignment": "Neutral",
       "Source": "Adnd",
-      "Info": "DMG page 196",
-      "InfoUrl": "",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW3yAA1k96EpoV1wYt0VwJBLafzs6Ui4pBkF-aJm0YPA&s=10"
+      "Other": "https://1eonline.info/1mm/beetle.giant.htm"
     },
 
     {
       "Name": "Gnome",
       "Type": "Humanoid",
-      "ClimateTerain": "Temperate",
       "Frequency": "Rare",
-      "ActivityCycle": "Day",
-      "Intelligence": "Average",
-      "Alignment": "Neutral Good",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 15,
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
       "ArmorClass": 5,
-      "MovementRate": "Slow",
+      "Movement": 6,
       "HitDice": 1,
-      "HitDiceType": 6,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "HitPoints": 4,
-      "Movement": 20,
-      "Morale": {
-        "Value": 8
-      },
+      "%InLair": "50",
+      "TreasureType": "C, Q(x20)",
+      "IndividualTreasure": "M(x3)",
       "Attacks": [
         {
-          "Name": "Hammer",
+          "Name": "Weapon",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 10,
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic & Poison Resistance",
+          "Description": "Saves as if 4 levels higher"
+        }
+      ],
+      "MagicResistance": "Save at 4 levels higher",
+      "Intelligence": "Very",
+      "Alignment": "Neutral Good",
+      "Size": "Small",
+      "BaseXPValue": 22,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
       "Source": "Adnd",
-      "Info": "",
-      "InfoUrl": "",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVgKoHFSlfymu9leq87pI84qGWT9vFG6upj-RXkidL3A&s=10    "
+      "Other": "Deity: Garl Glittergold; Morale 55%; Psionics Nil"
     },
 
     {
       "Name": "Halfling",
       "Type": "Humanoid",
-      "ClimateTerain": "Temperate",
       "Frequency": "Rare",
-      "ActivityCycle": "Day",
-      "Intelligence": "Average",
-      "Alignment": "Lawful Good",
-      "NumberOfAppearancesMin": 9,
-      "NumberOfAppearancesMax": 16,
-      "ArmorClass": 6,
-      "MovementRate": "Slow",
+      "NumberOfAppearancesMin": 30,
+      "NumberOfAppearancesMax": 300,
+      "ArmorClass": 7,
+      "Movement": 9,
       "HitDice": 1,
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
-      "THAC0": 19,
-      "NumberOfAttacks": 1,
-      "MagicResistance": "None",
-      "Size": "Small",
-      "HitPoints": 4,
-      "Movement": 20,
-      "Morale": {
-        "Value": 8
-      },
+      "%InLair": "70",
+      "TreasureType": "B",
+      "IndividualTreasure": "K",
       "Attacks": [
         {
-          "Name": "Dagger",
+          "Name": "Short sword",
           "NumberOfAttacks": 1,
-          "Damage": "1d4"
+          "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 10,
+      "SpecialAttacks": [
+        {
+          "Name": "+3 with bow or sling",
+          "Description": "Halflings gain +3 to hit when using bows or slings"
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic & Poison Resistance",
+          "Description": "Saves as if 4 levels higher"
+        }
+      ],
+      "MagicResistance": "Save at 4 levels higher",
+      "Intelligence": "Very",
+      "Alignment": "Lawful Good",
+      "Size": "Small",
+      "BaseXPValue": 22,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "C",
       "Source": "Adnd",
-      "Info": "",
-      "InfoUrl": "",
-      "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtDj0y2wQmcMHaeDCMN_ZZAdRR7nnDvj6PNL-J189AuA&s=10"
+      "Other": "Deity: Yondalla; Psionics Nil; Surprise on 1–4; Invisible in vegetation; Shun water"
     },
+
 
     {
       "Name": "Piercer",
