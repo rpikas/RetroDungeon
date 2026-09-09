@@ -2057,6 +2057,22 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 }
             }
 
+            if (c.HasStatus(CharacterStatus.Paralyzed)
+                && !c.HasStatus(CharacterStatus.Dead)
+                && !c.HasStatus(CharacterStatus.Ashes)
+                && !c.HasStatus(CharacterStatus.Lost)
+                && c.CurrentHitPoints > 0)
+            {
+                var beforeRounds = c.ParalyzedRoundsRemaining;
+                var afterRounds = c.TickParalysisRound();
+                changed = true;
+
+                if (afterRounds > 0)
+                    messages.Add($"{c.Name} remains paralyzed ({afterRounds} round(s) remaining). Step consumed 1 round.");
+                else if (beforeRounds > 0)
+                    messages.Add($"{c.Name} is no longer paralyzed.");
+            }
+
             if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead) || !c.HasStatus(CharacterStatus.Poisoned))
                 continue;
 

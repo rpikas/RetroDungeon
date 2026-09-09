@@ -34,6 +34,7 @@ public class Character
     public int? ConstitutionBeforeDisease { get; set; }
     public bool RotGrubFlamePromptPending { get; set; }
     public int RotGrubDeathRoundsRemaining { get; set; }
+    public int ParalyzedRoundsRemaining { get; set; }
     public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
     public int Level { get; set; } = 1;
     public bool LayOnHandsUsedToday { get; set; }
@@ -201,6 +202,36 @@ public class Character
     public void RemoveStatus(CharacterStatus status) => Status &= ~status;
     public void ClearStatus() => Status = CharacterStatus.None;
 
+    public void ApplyParalysis(int rounds)
+    {
+        AddStatus(CharacterStatus.Paralyzed);
+        ParalyzedRoundsRemaining = Math.Max(1, rounds);
+    }
+
+    public int TickParalysisRound()
+    {
+        if (!HasStatus(CharacterStatus.Paralyzed))
+        {
+            ParalyzedRoundsRemaining = 0;
+            return 0;
+        }
+
+        if (ParalyzedRoundsRemaining <= 0)
+            ParalyzedRoundsRemaining = 1;
+
+        ParalyzedRoundsRemaining = Math.Max(0, ParalyzedRoundsRemaining - 1);
+        if (ParalyzedRoundsRemaining <= 0)
+            ClearParalysis();
+
+        return ParalyzedRoundsRemaining;
+    }
+
+    public void ClearParalysis()
+    {
+        RemoveStatus(CharacterStatus.Paralyzed);
+        ParalyzedRoundsRemaining = 0;
+    }
+
     public void ApplyDisease()
     {
         if (!HasStatus(CharacterStatus.Diseased))
@@ -215,6 +246,7 @@ public class Character
         RemoveStatus(CharacterStatus.Diseased);
         RotGrubFlamePromptPending = false;
         RotGrubDeathRoundsRemaining = 0;
+        ClearParalysis();
         EarSeekerDeathOnNextDungeonEntry = false;
 
         if (ConstitutionBeforeDisease.HasValue)

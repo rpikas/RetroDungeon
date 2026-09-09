@@ -29,7 +29,7 @@ public sealed class RemoveParalysisHandler : ISpellEffectHandler
         }
 
         var wasParalyzed = target.HasStatus(CharacterStatus.Paralyzed);
-        target.RemoveStatus(CharacterStatus.Paralyzed);
+        target.ClearParalysis();
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");

@@ -388,6 +388,12 @@ public class MainMenu
                 changed = true;
             }
 
+            if (character.HasStatus(CharacterStatus.Paralyzed))
+            {
+                character.ClearParalysis();
+                changed = true;
+            }
+
             if (character.TemporaryStrengthRoundsRemaining > 0)
             {
                 var roundsToConsume = character.TemporaryStrengthRoundsRemaining;

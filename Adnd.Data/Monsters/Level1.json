@@ -423,7 +423,7 @@
       "SpecialAbilities": [
         {
           "Name": "Disease",
-          "Description": "Rot Grub burrow into Flesh. If not treated immediately with flame or cure disease within 24 hours, it will with 99% probability cause death."
+          "Description": "Rot Grub burrow into Flesh. If not treated immediately with flame or cure disease within 10 rounds, it will with cause death."
         }
       ],
       "SpecialDefenses": [],

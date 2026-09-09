@@ -441,6 +441,21 @@ public sealed class CombatCoordinator
             var monsters = g.ToList();
             var first = monsters.First().Template;
 
+            var groupFledAfterTheft = session.NoXpMonsterGroupIds.Contains(g.Key);
+            if (groupFledAfterTheft)
+            {
+                return new
+                {
+                    GroupId = g.Key,
+                    MonsterName = first.Name,
+                    Count = monsters.Count,
+                    XPPerHP = 0,
+                    TotalHP = monsters.Sum(m => m.MaxHitPoints),
+                    TotalXP = 0,
+                    NoXpReason = "Stole from party and fled"
+                };
+            }
+
             int xpPerHp = first.XPValuePerHitPoint;
             if (xpPerHp == 0)
                 xpPerHp = xpCalculator.GetHpXp(first.HitDice, 1);
@@ -456,7 +471,8 @@ public sealed class CombatCoordinator
                 Count = monsters.Count,
                 XPPerHP = xpPerHp,
                 TotalHP = totalHp,
-                TotalXP = totalXp
+                TotalXP = totalXp,
+                NoXpReason = string.Empty
             };
         }).ToList();
 
@@ -532,6 +548,8 @@ public sealed class CombatCoordinator
             sb.AppendLine($"  Total HP: {g.TotalHP}");
             sb.AppendLine($"  Total XP (group) before multiplier: {g.TotalXP}");
             sb.AppendLine($"  Total XP (group) after multiplier: {(int)Math.Round(g.TotalXP * xpMultiplier)}");
+            if (!string.IsNullOrWhiteSpace(g.NoXpReason))
+                sb.AppendLine($"  XP note: {g.NoXpReason}.");
             sb.AppendLine();
         }
         sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");

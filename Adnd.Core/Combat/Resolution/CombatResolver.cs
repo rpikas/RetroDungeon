@@ -5,6 +5,7 @@ using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Dices;
+using Adnd.Core.Diagnostics;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
 using Adnd.Core.Spells;
@@ -188,7 +189,10 @@ public sealed class CombatResolver
 
             if (member.HasStatus(CharacterStatus.Paralyzed))
             {
-                events.Add(new CombatEvent($"{member.Name} is paralyzed and cannot act."));
+                var remainingParalysis = member.TickParalysisRound();
+                events.Add(new CombatEvent(remainingParalysis > 0
+                    ? $"{member.Name} is paralyzed and cannot act ({remainingParalysis} round(s) remaining)."
+                    : $"{member.Name} is no longer paralyzed."));
                 continue;
             }
 
@@ -271,6 +275,9 @@ public sealed class CombatResolver
 
         foreach (var monster in session.AliveMonsters.ToList())
         {
+            if (!monster.IsAlive || !session.Monsters.Contains(monster))
+                continue;
+
             var isFeebleminded = monster.HasStatus(MonsterStatus.Feebleminded);
 
             if (isFeebleminded
@@ -313,6 +320,9 @@ public sealed class CombatResolver
 
             if (TryGetHpDamageBreathDamage(monster, out var breathDamage)
                 && ResolveHpDamageBreath(monster, breathDamage, session, events))
+                continue;
+
+            if (TryResolveMonsterPickPockets(session, monster, events))
                 continue;
 
             if (monster.HasStatus(MonsterStatus.IncendiaryCloud))
@@ -609,26 +619,7 @@ public sealed class CombatResolver
 
                             if (HasAnySpecialAbility(monster, "Paralyze", "Paralyzation", "Paralysis"))
                             {
-                                var paralyzeRoll = _dice.Roll(100);
-                                if (paralyzeRoll <= 60)
-                                {
-                                    var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
-                                    var saveRoll = _dice.Roll(20);
-
-                                    if (saveRoll >= saveTarget)
-                                    {
-                                        events.Add(new CombatEvent($"{target.Name} resists paralysis (save {saveRoll} vs {saveTarget})."));
-                                    }
-                                    else if (!target.HasStatus(CharacterStatus.Paralyzed))
-                                    {
-                                        target.AddStatus(CharacterStatus.Paralyzed);
-                                        events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
-                                    }
-                                    else
-                                    {
-                                        events.Add(new CombatEvent($"{target.Name} resists further paralysis from {monster.DisplayName}."));
-                                    }
-                                }
+                                TryApplyMonsterParalyzation(monster, target, events);
                             }
                         }
                     }
@@ -1409,8 +1400,136 @@ public sealed class CombatResolver
 
     private static bool HasSpecialAbility(MonsterInstance monster, string abilityName)
     {
-        return monster.Template.SpecialAbilities.Any(a =>
-            string.Equals(a.Name, abilityName, StringComparison.OrdinalIgnoreCase));
+        return GetMonsterAbilityNames(monster)
+            .Any(name => string.Equals(name, abilityName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static IEnumerable<string> GetMonsterAbilityNames(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            yield break;
+
+        foreach (var name in monster.Template.SpecialAbilities.Select(a => a.Name))
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                yield return name.Trim();
+        }
+
+        foreach (var name in monster.Template.SpecialAttacks.Select(a => a.Name))
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                yield return name.Trim();
+        }
+
+        foreach (var name in monster.Template.SpecialDefenses.Select(a => a.Name))
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                yield return name.Trim();
+        }
+    }
+
+    private bool TryResolveMonsterPickPockets(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Pick pockets"))
+            return false;
+
+        var aliveParty = session.Party.Where(IsAlive).ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var chancePercent = Math.Clamp(25 + Math.Max(0, monster.Template.HitDice) * 5, 0, 100);
+        var roll = _dice.Roll(100);
+        var success = roll <= chancePercent;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Pick Pockets",
+            $"{monster.DisplayName} pick pockets attempt (Player's Handbook p.28)",
+            "Roll 1d100. Chance = 25% + Hit Dice x 5% (probability progression reference: PHB page 28).",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Chance {chancePercent}%. {(success ? "Success" : "Failure")}.");
+
+        if (!success)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} tries to pick pockets but fails (roll {roll} vs {chancePercent}%)."));
+            return false;
+        }
+
+        var victim = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var coinsStolen = TryStealCoins(victim, out var coinSummary);
+        var itemStolen = TryStealInventoryItem(victim, out var stolenItemName);
+
+        if (!coinsStolen && !itemStolen)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} succeeds at pick pockets but {victim.Name} has nothing to steal."));
+            return false;
+        }
+
+        var effects = new List<string>();
+        if (coinsStolen && !string.IsNullOrWhiteSpace(coinSummary))
+            effects.Add(coinSummary!);
+        if (itemStolen && !string.IsNullOrWhiteSpace(stolenItemName))
+            effects.Add(stolenItemName!);
+
+        events.Add(new CombatEvent($"{monster.DisplayName} steals from {victim.Name}: {string.Join("; ", effects)}."));
+
+        var fleeingGroupId = monster.GroupId;
+        session.NoXpMonsterGroupIds.Add(fleeingGroupId);
+        var removedCount = session.Monsters.RemoveAll(m => string.Equals(m.GroupId, fleeingGroupId, StringComparison.OrdinalIgnoreCase));
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Pick Pockets Outcome",
+            $"{monster.DisplayName} theft result",
+            "A successful theft causes the encounter group to run away; no XP is awarded for that group.",
+            null,
+            null,
+            null,
+            $"Group {fleeingGroupId} fled after stealing: {string.Join(", ", effects)}.");
+
+        events.Add(new CombatEvent($"Group {fleeingGroupId} runs away after the theft and leaves the battle ({removedCount} monster(s) gone)."));
+        return true;
+    }
+
+    private bool TryStealCoins(Character victim, out string? summary)
+    {
+        summary = null;
+
+        var currencyGetters = new List<(string Label, Func<Character, int> Get, Action<Character, int> Set)>
+        {
+            ("gp", c => c.GoldPieces, (c, v) => c.GoldPieces = v),
+            ("pp", c => c.PlatinumPieces, (c, v) => c.PlatinumPieces = v),
+            ("ep", c => c.ElectrumPieces, (c, v) => c.ElectrumPieces = v),
+            ("sp", c => c.SilverPieces, (c, v) => c.SilverPieces = v),
+            ("cp", c => c.CopperPieces, (c, v) => c.CopperPieces = v)
+        };
+
+        var available = currencyGetters.Where(x => x.Get(victim) > 0).ToList();
+        if (available.Count == 0)
+            return false;
+
+        var picked = available[_dice.Roll(available.Count) - 1];
+        var current = picked.Get(victim);
+        var amount = Math.Max(1, _dice.Roll(Math.Max(1, current)));
+        amount = Math.Min(amount, current);
+        picked.Set(victim, current - amount);
+        summary = $"{amount} {picked.Label}";
+        return true;
+    }
+
+    private bool TryStealInventoryItem(Character victim, out string? itemName)
+    {
+        itemName = null;
+        if (victim.Inventory == null || victim.Inventory.Count == 0)
+            return false;
+
+        var idx = _dice.Roll(victim.Inventory.Count) - 1;
+        var item = victim.Inventory[idx];
+        victim.Inventory.RemoveAt(idx);
+        itemName = item.Name;
+        return true;
     }
 
     private static bool TryResolveMonsterLayOnHands(CombatSession session, MonsterInstance caster, List<CombatEvent> events)
@@ -1447,32 +1566,90 @@ public sealed class CombatResolver
 
     private static bool HasAnySpecialAbility(MonsterInstance monster, params string[] abilityNames)
     {
-        return monster.Template.SpecialAbilities.Any(a =>
-            abilityNames.Any(n => string.Equals(a.Name, n, StringComparison.OrdinalIgnoreCase)));
+        return GetMonsterAbilityNames(monster)
+            .Any(name => abilityNames.Any(n => string.Equals(name, n, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private void TryApplyMonsterParalyzation(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
+        var saveRoll = _dice.Roll(20);
+        var failedSave = saveRoll < saveTarget;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Monster Paralyzation",
+            $"{monster.DisplayName} paralyzation attack on {target.Name}",
+            "Target rolls saving throw vs Paralyzation/Poison/Death. On failed save, paralysis duration is 30-120 rounds (until dungeon exit if still active).",
+            "1",
+            "20",
+            saveRoll.ToString(),
+            $"Save target {saveTarget}. {(failedSave ? "Failed save." : "Successful save.")}");
+
+        if (!failedSave)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists paralysis (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        if (target.HasStatus(CharacterStatus.Paralyzed))
+        {
+            events.Add(new CombatEvent($"{target.Name} is already paralyzed by {monster.DisplayName}."));
+            return;
+        }
+
+        var rounds = _dice.Roll(91) + 29;
+        target.ApplyParalysis(rounds);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Paralyzation Duration",
+            $"{target.Name} paralysis duration",
+            "Roll determines paralysis duration in rounds (30-120). Every combat round and each dungeon step counts as one round.",
+            "30",
+            "120",
+            rounds.ToString(),
+            "Character is paralyzed until duration expires or they leave the dungeon.");
+
+        events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName} for {rounds} round(s)! (save {saveRoll} vs {saveTarget})"));
     }
 
     private void TryApplyGiantRatDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
     {
-        if (!HasSpecialAbility(monster, "Giant Rat Disease"))
+        var isGiantRat = string.Equals(monster.Template.Name, "Giant Rat", StringComparison.OrdinalIgnoreCase);
+        if (!isGiantRat && !HasAnySpecialAbility(monster, "Giant Rat Disease", "Disease"))
             return;
 
-        var diseaseRoll = _dice.Roll(20);
-        if (diseaseRoll == 1)
+        var diseaseRoll = _dice.Roll(100);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Giant Rat Disease",
+            $"{monster.DisplayName} disease check after hit on {target.Name}",
+            "Roll 1d100. Only 1-5 causes disease (5% chance).",
+            "1",
+            "100",
+            diseaseRoll.ToString(),
+            diseaseRoll <= 5
+                ? "Result is within 1-5, disease is contracted."
+                : "Result is outside 1-5, no disease.");
+
+        if (diseaseRoll <= 5)
         {
             if (!target.HasStatus(CharacterStatus.Diseased))
             {
                 target.ApplyDisease();
-                events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! (1d20 roll: {diseaseRoll})"));
+                events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! (1d100 roll: {diseaseRoll}, needs 1-5)"));
             }
             else
             {
-                events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease, but {target.Name} is already diseased. (1d20 roll: {diseaseRoll})"));
+                events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease, but {target.Name} is already diseased. (1d100 roll: {diseaseRoll}, needs 1-5)"));
             }
 
             return;
         }
 
-        events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease. Infection roll: {diseaseRoll} (needs 1)."));
+        events.Add(new CombatEvent($"{monster.DisplayName} carries Giant Rat Disease. Infection roll: {diseaseRoll} on 1d100 (needs 1-5)."));
     }
 
     private static void TryApplyRotGrubExposure(MonsterInstance monster, Character target, List<CombatEvent> events)

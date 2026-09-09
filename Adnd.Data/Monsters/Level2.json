@@ -135,8 +135,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Improved Thief Skills",
-          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
+          "Name": "Pick pockets",
+          "Description": "Can Pick Pockets and steal something from a target."
         }
       ],
       "BaseXPValue": 75,
@@ -155,13 +155,6 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 15,
-        "Spell": 14
-      },
       "Attacks": [
         {
           "Name": "Unarmed Strike",
@@ -190,10 +183,7 @@
       "ArmorClass": 7,
       "HitDice": 3,
       "Size": "Large",
-      "Movement": 0,
-      "Morale": {
-        "Value": 0
-      },
+      "Movement": 1,
       "Attacks": [],
       "SpecialAbilities": [
         {

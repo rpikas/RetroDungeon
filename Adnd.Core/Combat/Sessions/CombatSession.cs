@@ -28,6 +28,7 @@ public sealed class CombatSession
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
 
     public bool HasMonsterUsedLayOnHands(MonsterInstance monster)

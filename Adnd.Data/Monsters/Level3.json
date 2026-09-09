@@ -870,10 +870,16 @@
       "Name": "Ghoul",
       "Type": "Undead",
       "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 24,
       "ArmorClass": 6,
+      "Movement": 9,
       "HitDice": 2,
-      "HitPoints": 10,
-      "Movement": 30,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B, T",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
@@ -886,21 +892,24 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Paralyzing Touch",
-          "Description": "Save vs paralysis or be paralyzed 2d6 rounds."
-        },
-        {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold."
+          "Name": "Paralyzation",
+          "Description": "Victims struck must save vs. paralyzation or be paralyzed; elves are immune."
         }
       ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Medium",
       "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "B",
-      "Source": "Adnd"
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Ghouls are undead who feed on corpses and paralyze living victims.Ghouls cannot be affected by sleep or charm spells just like other undead. Originally from the AD&D Monster Manual they can be affected by cold spells, but not in this implemenation.."
     },
+
+
     {
       "Name": "Wight",
       "Type": "Undead",

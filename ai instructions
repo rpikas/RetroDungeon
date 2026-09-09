@@ -834,3 +834,16 @@ _____
 All monsters with  "Type": "Undead" are Immune to sleep, charm, hold, and cold-based spells such as ice storm 39,0
 if an encounter got "SpecialAbilities" "Lay on Hands" and that encounter or another encounter is damaged, it will be 
 healed by the encounter with SpecialAbilities" "Lay on Hands" for 2 hp * HitDice of the caster once per battle 39,5
+_____
+
+When a Giant Rat hits a party member show in adnd rule and dice roll what the 1d100 dice roll was and explain that only 1-5 on the d100 will cause a disease. 39,7
+I did not see any info about the 5% roll for disease  in the adnd rule and dice info when a party member got hit by a giant rat 40,0
+
+If an encounter got SpecialAbilities":  "Pick pockets", there is a chanse = 25%+HitDice*5% that one of the party members get coins 
+and/or something something from the inventory stolen. show in the adnd rule and dice info what the 1d100 rolls and the effect. 
+refer to players hand book page 28 for probablity calcumations. If something is stolen the encounter runns away and leaves the battle. 
+The party gets no xp from that encounter. 41.0
+
+if an enounter got SpecialAttacks Paralyzation then the player attacked will roll a save throw. Show that in Adnd logs a dice roll dialogan.
+if save fails, the charater will be paralyzed for 30-120 rounds or until leaving the dungeon. 
+Every step taken counts as a round and every combat round conts as a round. 41,7

@@ -71,7 +71,7 @@ public static class Temple
         c.GoldPieces -= cost;
         c.CurrentHitPoints = c.MaxHitPoints;
         c.RemoveStatus(CharacterStatus.Poisoned);
-        c.RemoveStatus(CharacterStatus.Paralyzed);
+        c.ClearParalysis();
         c.CureDiseaseAndRestoreConstitution();
         repo.Save(c);
         return true;
