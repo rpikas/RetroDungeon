@@ -829,4 +829,8 @@ SpecialDefenses it should also be parsed in the monster parsing and populate the
 If THAC0 can be calculated for a group of monsters with existing methods, populate THAC0 for the monster objects and show that in the monster info dialog. 37,6
 
 When found something in "Table": "Any", and rolling 46–60	Misc Magic get somthin grom MiscMagic,json 38,0
+manaully removed save throw and morale for all monsters
 _____
+All monsters with  "Type": "Undead" are Immune to sleep, charm, hold, and cold-based spells such as ice storm 39,0
+if an encounter got "SpecialAbilities" "Lay on Hands" and that encounter or another encounter is damaged, it will be 
+healed by the encounter with SpecialAbilities" "Lay on Hands" for 2 hp * HitDice of the caster once per battle 39,5

@@ -26,7 +26,7 @@ public sealed class HoldMonsterHandler : ISpellEffectHandler
         if (firstTarget?.TargetGroupId != null && session != null)
         {
             var groupTargets = session.GetAliveMonstersByGroup(firstTarget.TargetGroupId)
-                .Where(m => IsUndead(m.InstanceMonsterType))
+                .Where(m => !IsUndead(m.InstanceMonsterType))
                 .ToList();
 
             if (groupTargets.Count > 0)
@@ -50,10 +50,16 @@ public sealed class HoldMonsterHandler : ISpellEffectHandler
         }
 
         if (target == null)
-            return SpellCastResult.Failure("No valid targets for Hold Monster.");
+            return SpellCastResult.Failure("No valid non-undead targets for Hold Monster.");
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}!");
+
+        if (SpellDamageSaveHelper.IsUndeadImmuneToSpell(target, spell.Id))
+        {
+            result.Events.Add($"{target.DisplayName} is undead and immune to {spell.Name}.");
+            return result;
+        }
 
         var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
         var saveRoll = rng.Next(1, 21);

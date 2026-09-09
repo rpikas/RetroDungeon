@@ -1,5 +1,6 @@
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Diagnostics;
+using Adnd.Core.Monsters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -30,6 +31,22 @@ internal static class SpellDamageSaveHelper
                 : $"Magic resistance fails ({clampedChance}%). Spell proceeds.");
 
         return resisted;
+    }
+
+    internal static bool IsUndeadImmuneToSpell(MonsterInstance monster, string? spellIdOrName)
+    {
+        if (monster.InstanceMonsterType != MonsterType.Undead && monster.Template.Type != MonsterType.Undead)
+            return false;
+
+        if (string.IsNullOrWhiteSpace(spellIdOrName))
+            return false;
+
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("sleep", StringComparison.Ordinal)
+               || key.Contains("charm", StringComparison.Ordinal)
+               || key.Contains("hold", StringComparison.Ordinal)
+               || key.Contains("cold", StringComparison.Ordinal)
+               || key.Contains("ice", StringComparison.Ordinal);
     }
 
     internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName)

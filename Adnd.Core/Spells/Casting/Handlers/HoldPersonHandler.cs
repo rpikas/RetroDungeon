@@ -73,6 +73,12 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (SpellDamageSaveHelper.IsUndeadImmuneToSpell(target, spell.Id))
+            {
+                result.Events.Add($"{target.DisplayName} is undead and immune to {spell.Name}.");
+                continue;
+            }
+
             var rounds = rng.Next(4, 4 + request.Caster.Level); // original adnd rules 4 rounds + 1/level
             target.SetStatus(MonsterStatus.Paralyzed, rounds);
             heldCount++;

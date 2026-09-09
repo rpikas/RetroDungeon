@@ -1713,7 +1713,8 @@ public sealed class EncounterForm : Form
             return template.MovementRate;
 
         var parts = new List<string>();
-        if (template.Movement.Walk > 0) parts.Add($"Walk {template.Movement.Walk}");
+        if (template.Movement.Walk > 0) parts.Add($"{template.Movement.Walk}");
+     //   if (template.Movement.Walk > 0) parts.Add($"Walk {template.Movement.Walk}");
         if (template.Movement.Fly > 0) parts.Add($"Fly {template.Movement.Fly}");
         if (template.Movement.Swim > 0) parts.Add($"Swim {template.Movement.Swim}");
         if (template.Movement.Burrow > 0) parts.Add($"Burrow {template.Movement.Burrow}");

@@ -15,7 +15,7 @@
       "IndividualTreasure": "L",
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Short Sword",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
         }
@@ -46,7 +46,7 @@
       "IndividualTreasure": "J, M",
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Long Sword",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
@@ -59,7 +59,6 @@
       "BaseXPValue": 20,
       "XPValuePerHitPoint": 2,
       "Alignment": "Lawful Evil",
-      "Strength": "15–16",
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/hobgoblin.htm"
     },
@@ -93,7 +92,6 @@
       "BaseXPValue": 5,
       "XPValuePerHitPoint": 1,
       "Alignment": "Neutral",
-      "Psionics": "Leader types",
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/bandit.htm"
     },
@@ -128,12 +126,11 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
-      "Intelligence": "Average to Very",
+      "Intelligence": "Average",
       "Size": "Medium",
       "BaseXPValue": 14,
       "XPValuePerHitPoint": 1,
       "Alignment": "Neutral",
-      "Psionics": "Leader types",
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/berserker.htm"
     },
@@ -342,7 +339,7 @@
       "Size": "Medium",
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Short Sword",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
         }
@@ -374,7 +371,7 @@
       "HitDice": 2,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "Nil",
+      "%InLair": "0",
       "TreasureType": "Nil",
       "IndividualTreasure": "None",
       "Attacks": [
@@ -386,10 +383,7 @@
       ],
       "SpecialAttacks": [],
       "SpecialDefenses": [
-        {
-          "Name": "Spell Immunity",
-          "Description": "Immune to sleep, charm, hold, and cold-based spells."
-        },
+
         {
           "Name": "Piercing Resistance",
           "Description": "Piercing weapons inflict only 1 point or half damage depending on interpretation."
@@ -404,7 +398,6 @@
       "Source": "Adnd",
       "Other": "Always strikes last; holy water deals 2d8 damage."
     },
-
 
     {
       "Name": "Rot Grub",
@@ -430,7 +423,7 @@
       "SpecialAbilities": [
         {
           "Name": "Disease",
-          "Description": "Burrow into Flesh"
+          "Description": "Rot Grub burrow into Flesh. If not treated immediately with flame or cure disease within 24 hours, it will with 99% probability cause death."
         }
       ],
       "SpecialDefenses": [],

@@ -525,6 +525,9 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (TryResolveMonsterLayOnHands(session, monster, events))
+                continue;
+
             var attacks = monster.Template.Attacks.Count > 0 ? monster.Template.Attacks : new List<Adnd.Core.Monsters.MonsterAttack> { new() { NumberOfAttacks = 1, Damage = "1d4", Name = "Claw" } };
 
             foreach (var attack in attacks)
@@ -1408,6 +1411,38 @@ public sealed class CombatResolver
     {
         return monster.Template.SpecialAbilities.Any(a =>
             string.Equals(a.Name, abilityName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool TryResolveMonsterLayOnHands(CombatSession session, MonsterInstance caster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(caster, "Lay on Hands"))
+            return false;
+
+        if (session.HasMonsterUsedLayOnHands(caster))
+            return false;
+
+        var target = session.Monsters
+            .Where(m => m.IsAlive && m.CurrentHitPoints < m.MaxHitPoints)
+            .OrderBy(m => m.CurrentHitPoints)
+            .ThenBy(m => m.MaxHitPoints)
+            .FirstOrDefault();
+
+        if (target == null)
+            return false;
+
+        var healAmount = Math.Max(0, caster.Template.HitDice) * 2;
+        if (healAmount <= 0)
+            return false;
+
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healAmount);
+        var healed = target.CurrentHitPoints - before;
+        if (healed <= 0)
+            return false;
+
+        session.MarkMonsterLayOnHandsUsed(caster);
+        events.Add(new CombatEvent($"{caster.DisplayName} uses Lay on Hands on {target.DisplayName} and heals {healed} HP. HP {before}->{target.CurrentHitPoints}."));
+        return true;
     }
 
     private static bool HasAnySpecialAbility(MonsterInstance monster, params string[] abilityNames)

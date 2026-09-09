@@ -25,6 +25,12 @@ public sealed class IceStormHandler : ISpellEffectHandler
 
         foreach (var monster in targets)
         {
+            if (SpellDamageSaveHelper.IsUndeadImmuneToSpell(monster, spell.Id))
+            {
+                result.Events.Add($"{monster.DisplayName} is undead and immune to {spell.Name}.");
+                continue;
+            }
+
             var damage = 0;
             for (int i = 0; i < 3; i++)
                 damage += rng.Next(1, 11);

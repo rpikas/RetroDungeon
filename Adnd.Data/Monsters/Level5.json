@@ -306,7 +306,7 @@
         {
           "Name": "Sting",
           "NumberOfAttacks": 1,
-          "Damage": "1d4 + poison"
+          "Damage": "1d4"
         }
       ],
       "SpecialAbilities": [
@@ -314,6 +314,11 @@
           "Name": "Invisibility",
           "Description": "Can turn invisible at will."
         },
+        {
+          "Name": "Poison",
+          "Description": "Can poison its target."
+        },
+
         {
           "Name": "Polymorph",
           "Description": "Can assume animal forms."

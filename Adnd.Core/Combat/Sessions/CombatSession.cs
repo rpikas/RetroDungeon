@@ -27,7 +27,23 @@ public sealed class CombatSession
     public Dictionary<string, int> MirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
+
+    public bool HasMonsterUsedLayOnHands(MonsterInstance monster)
+    {
+        return MonsterLayOnHandsUsed.Contains(MonsterKey(monster));
+    }
+
+    public void MarkMonsterLayOnHandsUsed(MonsterInstance monster)
+    {
+        MonsterLayOnHandsUsed.Add(MonsterKey(monster));
+    }
+
+    private static string MonsterKey(MonsterInstance monster)
+    {
+        return $"{monster.GroupId}#{monster.Index}";
+    }
 
     public bool IsBlessed(string characterName) => BlessedPartyMembers.Contains(characterName);
 

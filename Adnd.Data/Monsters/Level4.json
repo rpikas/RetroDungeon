@@ -128,82 +128,95 @@
     {
       "Name": "Shadow",
       "Type": "Undead",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 20,
       "ArmorClass": 7,
+      "Movement": 12,
       "HitDice": 3,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 90,
+      "ExtraHitPoints": 3,
+      "%InLair": "40",
+      "TreasureType": "F",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Touch",
           "NumberOfAttacks": 1,
-          "Damage": "1d4 + Strength Drain"
+          "Damage": "2-5"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Strength Drain",
-          "Description": "Touch drains 1–3 Strength; reaching 0 Strength kills the victim."
-        },
-        {
-          "Name": "Incorporeal Movement",
-          "Description": "Can pass through small openings and move silently."
-        },
-        {
-          "Name": "Darkvision",
-          "Description": "Sees perfectly in total darkness."
-        },
-        {
-          "Name": "Resistance to Physical Attacks",
-          "Description": "Takes half damage from non-magical weapons."
+          "Description": "Victim loses 1–4 points of Strength; if reduced to 0, they die."
         }
       ],
-      "BaseXPValue": 135,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Hit only by magic weapons",
+          "Description": "Shadow can only be harmed by magic weapons."
+        },
+        {
+          "Name": "90% undetectable",
+          "Description": "Shadow is nearly invisible and extremely difficult to detect (90%)."
+        },
+        {
+          "Name": "Not affected by sleep, charm, or hold; immune to cold-based attacks",
+          "Description": "Shadow is immune to sleep, charm, hold, and cold-based attacks."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Medium",
+      "BaseXPValue": 255,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Shadow creatures drain strength and are difficult to detect."
     },
-
 
     {
       "Name": "Rust Monster",
       "Type": "Aberration",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 2,
+      "Movement": 18,
       "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 30,
+      "%InLair": "10",
+      "TreasureType": "Q (x10)",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Antennae Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "Special"
+          "NumberOfAttacks": 2,
+          "Damage": "Nil"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Metal Corrosion",
-          "Description": "Touch instantly rusts ferrous metals; magical items receive a saving throw to resist."
-        },
-        {
-          "Name": "Scent Metal",
-          "Description": "Can detect metal objects up to 90 feet away."
-        },
-        {
-          "Name": "Non‑Aggressive",
-          "Description": "Attacks only to feed; ignores non‑metallic creatures unless provoked."
+          "Name": "Destroy Metal",
+          "Description": "Touch with antennae rusts or corrodes metal instantly; magical items gain a saving throw."
         }
       ],
-      "BaseXPValue": 270,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Hit on Monster Destroys Metal",
+          "Description": "Weapons striking the rust monster corrode as if touched by its antennae."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 185,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Rust monsters inhabit subterranean places and feed on ferrous metals."
     },
 
     {
@@ -224,12 +237,7 @@
         {
           "Name": "Claw",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "2d6"
         },
         {
           "Name": "Bite",
@@ -247,50 +255,88 @@
       "MagicResistance": "Standard",
       "Intelligence": "Low",
       "Alignment": "Neutral",
-      "Size": "Large (8' tall)",
+      "Size": "Large",
       "BaseXPValue": 225,
       "XPValuePerHitPoint": 8,
       "Source": "Adnd",
       "Other": "Ferocious hybrid of bear and owl; notorious for aggression and territorial behavior."
     },
-
     {
       "Name": "Hydra 5 Heads",
-      "Type": "Monstrous Beast",
-      "Frequency": "Rare",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 9,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "Bite",
-          "NumberOfAttacks": 5,
-          "Damage": "1d10"
+          "Name": "Head Attacks",
+          "NumberOfAttacks": 15,
+          "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Multiple Heads",
-          "Description": "Each head attacks independently; all heads may strike the same or different targets."
-        },
-        {
-          "Name": "Increased Awareness",
-          "Description": "Hydras are nearly impossible to surprise due to multiple heads watching all directions."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant."
+          "Name": "Multi-Headed",
+          "Description": "All heads must be killed to slay the hydra."
         }
       ],
-      "BaseXPValue": 350,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 165,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Hydras vary in head count; attack numbers scale with remaining heads (15–19)."
     },
+
+      {
+        "Name": "Hydra 7 Heads",
+        "Type": "Animal",
+        "Frequency": "Uncommon",
+        "NumberOfAppearancesMin": 1,
+        "NumberOfAppearancesMax": 1,
+        "ArmorClass": 5,
+        "Movement": 9,
+        "HitDice": 7,
+        "HitDiceType": 8,
+        "ExtraHitPoints": 0,
+        "%InLair": "20",
+        "TreasureType": "B",
+        "IndividualTreasure": "None",
+        "Attacks": [
+          {
+            "Name": "Head Attacks",
+            "NumberOfAttacks": 13,
+            "Damage": "1d8"
+          }
+        ],
+        "SpecialAttacks": [],
+        "SpecialDefenses": [
+          {
+            "Name": "Multi-Headed",
+            "Description": "All heads must be killed to slay the hydra."
+          }
+        ],
+        "MagicResistance": "Standard",
+        "Intelligence": "Semi-",
+        "Alignment": "Neutral",
+        "Size": "Large",
+        "BaseXPValue": 400,
+        "XPValuePerHitPoint": 8,
+        "Source": "Adnd",
+        "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
+      },
+
 
     {
       "Name": "Black Dragon",
@@ -696,41 +742,47 @@
 
     {
       "Name": "Blink Dog",
-      "Type": "Enchanted Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 16,
       "ArmorClass": 5,
+      "Movement": 12,
       "HitDice": 4,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 12,
+      "%InLair": "20",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1-6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Blink",
-          "Description": "Teleports randomly during combat; difficult to target."
-        },
-        {
-          "Name": "Pack Tactics",
-          "Description": "Blink dogs coordinate attacks intelligently when in groups."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "20% resistance to magical effects."
+          "Name": "Rear Attack",
+          "Description": "75% chance to blink behind an opponent and attack from the rear."
         }
       ],
-      "BaseXPValue": 175,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Teleport Away",
+          "Description": "If seriously threatened or injured, the blink dog teleports away and does not return."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Lawful Good",
+      "Size": "Medium",
+      "BaseXPValue": 170,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Blink dogs use instinctive teleportation to reposition in combat and avoid danger."
     },
+
 
     {
       "Name": "Yellow Mold",
@@ -739,126 +791,148 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 9,
-      "HitDice": 1,
+      "Movement": 0,
+      "HitDice": 0,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Small",
-      "Movement": 0,
+      "%InLair": "0",
+      "TreasureType": "None",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "Spores",
+          "Name": "Spore Burst",
           "NumberOfAttacks": 1,
-          "Damage": "Special"
+          "Damage": "1-8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Poisonous Spores",
-          "Description": "Touching or disturbing the mold releases deadly spores; save vs poison or die."
-        },
-        {
-          "Name": "Growth on Flesh",
-          "Description": "Yellow mold grows rapidly on organic material, consuming flesh within minutes."
-        },
-        {
-          "Name": "Fire Vulnerability",
-          "Description": "Fire destroys yellow mold instantly."
+          "Name": "Poison Spores",
+          "Description": "Disturbing the mold releases deadly spores; inhalation can be fatal."
         }
       ],
+      "SpecialDefenses": [
+        {
+          "Name": "See Below",
+          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
+        }
+      ],
+      "MagicResistance": "See Below",
+      "Intelligence": "Non-Intelligent",
+      "Alignment": "Neutral",
+      "Size": "Small to Large",
       "BaseXPValue": 65,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed."
     },
 
     {
-      "Name": "Ape, Carnivorous",
+      "Name": "Carnivorous Ape",
       "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 6,
-      "HitDice": 4,
+      "Movement": 12,
+      "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 12,
+      "%InLair": "10",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "NumberOfAttacks": 1,
+          "Damage": "1-4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1-4"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1-8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Rend",
-          "Description": "If both claws hit, the ape rends for an additional 1d8 damage."
-        },
-        {
-          "Name": "Aggressive Behavior",
-          "Description": "Carnivorous apes attack without provocation and fight to the death."
+          "Name": "Rending",
+          "Description": "If both claw attacks hit, the ape deals an additional 1-8 rending damage."
         }
       ],
-      "BaseXPValue": 175,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Surprised Only on 1",
+          "Description": "Due to keen senses, the ape is surprised only on a roll of 1."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low (upper)",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 170,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Very aggressive relative of the gorilla; cunning and hungers for human flesh."
     },
 
     {
       "Name": "Poisonous Toad",
-      "Type": "Amphibian",
+      "Type": "Animal",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 7,
+      "Movement": 12,
       "HitDice": 2,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Small",
-      "Movement": 6,
+      "%InLair": "0",
+      "TreasureType": "None",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d4 + Poison"
+          "Damage": "1d4+1"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Poison Secretion",
-          "Description": "Skin exudes a toxic slime; contact or bite requires save vs poison or suffer 1d6 damage per round for 3 rounds."
-        },
-        {
-          "Name": "Camouflage",
-          "Description": "Blends with swamp or cavern surroundings; surprise opponents on 1–3 on d6."
-        },
-        {
-          "Name": "Leap Attack",
-          "Description": "Can leap up to 10 feet to attack prey."
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or die immediately."
         }
       ],
-      "BaseXPValue": 65,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 155,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Indistinguishable from non-poisonous giant toads."
     },
 
+
     {
-      "Name": "Lycanthrope, Werewolf",
+      "Name": "Werewolf",
       "Type": "Lycanthrope",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 5,
+      "Movement": 15,
       "HitDice": 4,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 12,
+      "ExtraHitPoints": 3,
+      "%InLair": "25",
+      "TreasureType": "B",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Bite",
@@ -866,24 +940,28 @@
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Lycanthropy",
-          "Description": "Victims bitten must save vs. lycanthropy or become werewolves."
-        },
-        {
-          "Name": "Immunity to Normal Weapons",
-          "Description": "Can only be harmed by silver or magical weapons."
-        },
-        {
-          "Name": "Animal Form",
-          "Description": "Can shift between human, wolf, and hybrid form."
+          "Name": "Surprise",
+          "Description": "Werewolves surprise opponents on a roll of 1–3."
         }
       ],
-      "BaseXPValue": 225,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Hit Only by Silver or Magic Weapons",
+          "Description": "Werewolves can only be harmed by silver or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic Evil",
+      "Size": "Medium",
+      "BaseXPValue": 205,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Werewolves are swift predators; their alignment varies in folklore but is Chaotic Evil in AD&D."
     },
+
 
     {
       "Name": "Lvl 4 Magic-User",

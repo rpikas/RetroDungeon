@@ -61,6 +61,12 @@ public sealed class SleepHandler : ISpellEffectHandler
 
         foreach (var monster in targets)
         {
+            if (SpellDamageSaveHelper.IsUndeadImmuneToSpell(monster, spell.Id))
+            {
+                result.Events.Add($"{monster.DisplayName} is undead and immune to {spell.Name}.");
+                continue;
+            }
+
             var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
             var saveRoll = rng.Next(1, 21);
 
