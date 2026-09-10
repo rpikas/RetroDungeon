@@ -26,6 +26,9 @@ public sealed class HasteHandler : ISpellEffectHandler
         if (target.HasStatus(CharacterStatus.Dead) || target.HasStatus(CharacterStatus.Ashes) || target.HasStatus(CharacterStatus.Lost))
             return SpellCastResult.Failure("Target cannot be affected by Haste.");
 
+        if (target.IsMonkImmuneToDiseaseSlowHaste())
+            return SpellCastResult.Failure($"{target.Name} is immune to Haste.");
+
         var casterLevel = request.Caster.Classes.Contains(CharacterClass.MagicUser)
             ? request.Caster.GetClassLevel(CharacterClass.MagicUser)
             : request.Caster.Level;

@@ -12,6 +12,7 @@
 - InLair chance must be rolled once per encounter group, not once per individual monster.
 - Monk open-hand attacks per melee round should be 1.25 at levels 4 and 5 (instead of 1.5); all other monk attack progression values remain unchanged.
 - For attack cadence, when the number of attacks is 1.25, the character should get 2 attacks every 4th round.
+- Monks of level 5 and above are immune to disease, slow, and haste effects.
 
 ## Artwork Filenames
 - When resolving monster artwork filenames, also try variants with commas removed from monster names (e.g., 'Ape, Carnevourus' -> 'ApeCarnevourus').

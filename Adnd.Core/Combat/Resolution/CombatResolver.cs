@@ -1477,6 +1477,12 @@ public sealed class CombatResolver
                 }
                 else
                 {
+                    if (target.IsMonkImmuneToDiseaseSlowHaste())
+                    {
+                        events.Add(new CombatEvent($"{target.Name} is immune to Slow effects."));
+                        continue;
+                    }
+
                     target.AddStatus(CharacterStatus.Slowed);
                     events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is stunned by the spray."));
                 }
@@ -1844,6 +1850,12 @@ public sealed class CombatResolver
     {
         if (!string.Equals(monster.Template.Name, "Ear Seeker", StringComparison.OrdinalIgnoreCase))
             return;
+
+        if (target.IsMonkImmuneToDiseaseSlowHaste())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to disease from {monster.DisplayName}."));
+            return;
+        }
 
         if (target.EarSeekerDeathOnNextDungeonEntry)
             return;

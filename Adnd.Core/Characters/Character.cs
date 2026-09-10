@@ -137,6 +137,8 @@ public class Character
 
     public bool IsMonk() => Classes.Contains(CharacterClass.Monk);
 
+    public bool IsMonkImmuneToDiseaseSlowHaste() => IsMonk() && GetMonkLevel() >= 5;
+
     public int GetPaladinLevel() => IsPaladin()
         ? GetClassLevel(CharacterClass.Paladin)
         : 0;
@@ -252,6 +254,9 @@ public class Character
 
     public void ApplyDisease()
     {
+        if (IsMonkImmuneToDiseaseSlowHaste())
+            return;
+
         if (!HasStatus(CharacterStatus.Diseased))
         {
             ConstitutionBeforeDisease ??= Abilities.Constitution;
