@@ -940,4 +940,8 @@ dex ac bonus should be included when calculating monk ac without armor 48,5
 
 stength damage bonus should not be added when hitting with bare hands 48,6
 
-I have changed my mind, the monk should have 1,25 attacks per melee round, not 1,5 attacks per melee round when level 4 and 5. other should remain the same. 
+I have changed my mind, the monk should have 1,25 attacks per melee round, not 1,5 attacks per melee round when level 4 and 5. other should remain the same. 48,7
+______________
+
+when selecting what charater to delete, let the user enter two chars before automaticly trigger enter.48,7
+when number of attacks is 1,25 then every 4th round the player should have 2 attacks

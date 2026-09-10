@@ -1009,6 +1009,11 @@ public sealed class CombatResolver
         if (attacksPerRound <= 1f)
             return 1;
 
+        // 1.25 attacks per round (5/4)
+        // Every 4th round: 2 attacks, otherwise 1.
+        if (Math.Abs(attacksPerRound - 1.25f) < 0.01f)
+            return (roundNumber % 4 == 0) ? 2 : 1;
+
         // 2 attacks per round
         if (attacksPerRound >= 2f)
             return 2;
