@@ -21,6 +21,7 @@ public enum MonsterStatus
     Feared,
     Feebleminded,
     Blinded,
+    Silenced,
     Petrified,
     Stunned,
     Unconscious

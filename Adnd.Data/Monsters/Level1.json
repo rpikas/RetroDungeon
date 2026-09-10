@@ -1168,8 +1168,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Thief Skills",
-          "Description": "Pick Pockets, Move Silently, Hide in Shadows, Open Locks, Find/Remove Traps."
+          "Name": "Pick pockets",
+          "Description": "Pick Pockets"
         }
       ],
       "BaseXPValue": 25,
@@ -1202,12 +1202,7 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Monk Abilities",
-          "Description": "Open Hand attack, AC improves with level, Thief saving throws."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J",
@@ -1276,8 +1271,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Bardic Music",
-          "Description": "Can inspire allies and charm creatures; uses Thief saving throws."
+          "Name": "Level 1 Druid spells",
+          "Description": "Access to 1st-level druid spells such as Entangle and Faerie Fire."
         }
       ],
       "BaseXPValue": 40,
@@ -1313,7 +1308,7 @@
       "SpecialAbilities": [
         {
           "Name": "Level 1 Druid spells",
-          "Description": "Access to 1st-level druid spells such as Detect Magic, Faerie Fire, Pass Without Trace."
+          "Description": "Access to 1st-level druid spells such as Entangle and Faerie Fire."
         }
       ],
       "BaseXPValue": 35,

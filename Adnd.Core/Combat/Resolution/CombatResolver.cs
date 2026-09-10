@@ -279,11 +279,31 @@ public sealed class CombatResolver
                 continue;
 
             var isFeebleminded = monster.HasStatus(MonsterStatus.Feebleminded);
+            var isSilenced = monster.HasStatus(MonsterStatus.Silenced);
 
-            if (isFeebleminded
+            if (isSilenced)
+            {
+                var remainingSilence = monster.TickStatus(MonsterStatus.Silenced);
+                if (HasAnySpecialAbility(monster,
+                        "Level 1 Mage spells",
+                        "Level 1 Magic-User spells",
+                        "Level 1 Priest spells",
+                        "Level 1 Cleric spells",
+                        "Level 1 Druid spells",
+                        "Level 1 Illusionist spells"))
+                {
+                    events.Add(new CombatEvent(remainingSilence > 0
+                        ? $"{monster.DisplayName} is silenced and cannot cast spells ({remainingSilence} round(s) remaining)."
+                        : $"{monster.DisplayName} is no longer silenced."));
+                }
+            }
+
+            if (!isSilenced && isFeebleminded
                 && HasAnySpecialAbility(monster,
                     "Level 1 Mage spells",
                     "Level 1 Magic-User spells",
+                    "Level 2 Mage spells",
+                    "Level 2 Magic-User spells",
                     "Level 1 Priest spells",
                     "Level 1 Cleric spells",
                     "Level 1 Druid spells",
@@ -292,7 +312,15 @@ public sealed class CombatResolver
                 events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
             }
 
-            if (!isFeebleminded
+            if (!isSilenced
+                && !isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 2 Mage spells", "Level 2 Magic-User spells")
+                && ShouldTryMonsterLevel1SpellCast()
+                && ResolveLevel2MagicUserSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
                 && HasAnySpecialAbility(monster, "Level 1 Mage spells", "Level 1 Magic-User spells")
                 && ShouldTryMonsterLevel1SpellCast())
             {
@@ -300,19 +328,21 @@ public sealed class CombatResolver
                 continue;
             }
 
-            if (!isFeebleminded
+            if (!isSilenced
+                && !isFeebleminded
                 && HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1PriestSpell(monster, session, events))
                 continue;
 
-            if (!isFeebleminded
+            if (!isSilenced
+                && !isFeebleminded
                 && HasSpecialAbility(monster, "Level 1 Druid spells")
-                && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1DruidSpell(monster, session, events))
                 continue;
 
-            if (!isFeebleminded
+            if (!isSilenced
+                && !isFeebleminded
                 && HasSpecialAbility(monster, "Level 1 Illusionist spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1IllusionistSpell(monster, session, events))
@@ -345,6 +375,14 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{monster.DisplayName} is consumed by flames."));
                     continue;
                 }
+            }
+
+            var monsterMirrorCount = session.GetMonsterMirrorImageCount(monster);
+            if (monsterMirrorCount > 0)
+            {
+                var remaining = session.TickMonsterMirrorImage(monster);
+                if (remaining <= 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName}'s mirror image fades."));
             }
 
             if (monster.HasStatus(MonsterStatus.SummonInsects))
@@ -1056,6 +1094,21 @@ public sealed class CombatResolver
 
             if (roll >= needed)
             {
+                var mirrorImages = session.GetMonsterMirrorImageCount(target);
+                if (mirrorImages > 0)
+                {
+                    var imageHitRoll = _dice.Roll(mirrorImages + 1);
+                    if (imageHitRoll > 1)
+                    {
+                        var remainingImages = session.RemoveOneMonsterMirrorImage(target);
+                        events.Add(new CombatEvent($"{member.Name} hits a mirror image of {target.DisplayName}!"));
+                        events.Add(new CombatEvent($"{target.DisplayName} has {remainingImages} mirror image(s) remaining."));
+                        if (remainingImages <= 0)
+                            events.Add(new CombatEvent($"{target.DisplayName} has no mirror images left."));
+                        continue;
+                    }
+                }
+
                 var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
                 int damage = RollDamage(damageExpression) + AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength);
 
@@ -1080,6 +1133,29 @@ public sealed class CombatResolver
             }
         }
 
+    }
+
+    private bool ResolveLevel2MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            var imageCount = _dice.Roll(4);
+            var rounds = Math.Max(1, Math.Max(1, monster.Template.HitDice) * 2);
+            session.SetMonsterMirrorImage(monster, imageCount, rounds);
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Mirror Image on itself. {imageCount} mirror image(s) appear for {rounds} round(s)."));
+            return true;
+        }
+
+        var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var roundsAcid = _dice.Roll(3);
+        session.SetPartyAcidArrow(target.Name, roundsAcid);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+        return true;
     }
 
     private int GetMonsterThac0(MonsterInstance monster)

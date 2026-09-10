@@ -1,0 +1,13 @@
+{
+  "Id": "improved_phantasmal_force",
+  "Name": "Improved Phantasmal Force",
+  "Class": "Illusionist",
+  "Level": 3,
+  "Description": "A stronger phantasmal force that can overwhelm all encountered groups.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Works like Phantasmal Force, but affects all encounter groups. Each group can disbelieve independently by one successful save."
+}

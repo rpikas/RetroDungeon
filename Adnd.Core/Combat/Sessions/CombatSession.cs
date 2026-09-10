@@ -25,6 +25,9 @@ public sealed class CombatSession
     public Dictionary<string, int> StrengthBuffBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterMirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterMirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> AcidArrowPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -236,6 +239,88 @@ public sealed class CombatSession
 
         MirrorImageCounts[characterName] = count;
         return count;
+    }
+
+    public void SetMonsterMirrorImage(MonsterInstance monster, int imageCount, int rounds)
+    {
+        var key = MonsterKey(monster);
+        if (imageCount <= 0 || rounds <= 0)
+        {
+            MonsterMirrorImageCounts.Remove(key);
+            MonsterMirrorImageRounds.Remove(key);
+            return;
+        }
+
+        MonsterMirrorImageCounts[key] = imageCount;
+        MonsterMirrorImageRounds[key] = rounds;
+    }
+
+    public int GetMonsterMirrorImageCount(MonsterInstance monster)
+    {
+        return MonsterMirrorImageCounts.TryGetValue(MonsterKey(monster), out var count) ? Math.Max(0, count) : 0;
+    }
+
+    public int TickMonsterMirrorImage(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        if (!MonsterMirrorImageRounds.TryGetValue(key, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            MonsterMirrorImageRounds.Remove(key);
+            MonsterMirrorImageCounts.Remove(key);
+            return 0;
+        }
+
+        MonsterMirrorImageRounds[key] = rounds;
+        return rounds;
+    }
+
+    public int RemoveOneMonsterMirrorImage(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        if (!MonsterMirrorImageCounts.TryGetValue(key, out var count) || count <= 0)
+            return 0;
+
+        count -= 1;
+        if (count <= 0)
+        {
+            MonsterMirrorImageCounts.Remove(key);
+            MonsterMirrorImageRounds.Remove(key);
+            return 0;
+        }
+
+        MonsterMirrorImageCounts[key] = count;
+        return count;
+    }
+
+    public void SetPartyAcidArrow(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+        {
+            AcidArrowPartyRounds.Remove(characterName);
+            return;
+        }
+
+        AcidArrowPartyRounds[characterName] = rounds;
+    }
+
+    public int TickPartyAcidArrow(string characterName)
+    {
+        if (!AcidArrowPartyRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            AcidArrowPartyRounds.Remove(characterName);
+            return 0;
+        }
+
+        AcidArrowPartyRounds[characterName] = rounds;
+        return rounds;
     }
 
     public int GetPartyAsleepRounds(string characterName)

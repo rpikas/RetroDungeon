@@ -1,0 +1,13 @@
+{
+  "Id": "silence_15_radius",
+  "Name": "Silence 15' Radius",
+  "Class": "Cleric",
+  "Level": 2,
+  "Description": "Creates a zone of magical silence around one enemy group.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "One selected enemy group cannot cast spells for 2 rounds per caster level."
+}

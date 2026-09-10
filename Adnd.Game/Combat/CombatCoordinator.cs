@@ -88,6 +88,7 @@ public sealed class CombatCoordinator
             new PyrotechnicsHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
+            new Silence15RadiusHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),

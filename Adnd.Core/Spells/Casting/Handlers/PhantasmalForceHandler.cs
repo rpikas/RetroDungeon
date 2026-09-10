@@ -5,7 +5,12 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class PhantasmalForceHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "phantasmal_force", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+    {
+        return string.Equals(spellId, "phantasmal_force", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(spellId, "phantasmal_force_magic_user", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(spellId, "improved_phantasmal_force", StringComparison.OrdinalIgnoreCase);
+    }
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -22,6 +27,30 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
 
         var rng = request.Rng ?? Random.Shared;
 
+        var isImproved = string.Equals(request.SpellId, "improved_phantasmal_force", StringComparison.OrdinalIgnoreCase)
+                         || spell.TargetingScope == SpellTargetingScope.AllGroups;
+
+        var groupIds = isImproved
+            ? session.GetDistinctGroupIds().Where(g => session.GetAliveCountByGroup(g) > 0).ToList()
+            : ResolveSingleTargetGroup(request, session);
+
+        if (groupIds.Count == 0)
+            return SpellCastResult.Failure("No valid monsters in target group.");
+
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add(isImproved
+            ? $"{request.Caster.Name} casts {spell.Name}! A terrifying red dragon illusion breathes on all encounter groups."
+            : $"{request.Caster.Name} casts {spell.Name}! A terrifying red dragon illusion breathes on group {groupIds[0]}."
+        );
+
+        foreach (var groupId in groupIds)
+            ResolvePhantasmalForceAgainstGroup(groupId, spell, session, rng, result);
+
+        return result;
+    }
+
+    private static List<string> ResolveSingleTargetGroup(SpellCastRequest request, CombatSession session)
+    {
         string targetGroupId = "default";
         var firstTarget = request.Targets.FirstOrDefault();
         if (!string.IsNullOrWhiteSpace(firstTarget?.TargetGroupId))
@@ -34,12 +63,14 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
                 .FirstOrDefault(g => session.GetAliveCountByGroup(g) > 0) ?? "default";
         }
 
-        var targets = session.GetAliveMonstersByGroup(targetGroupId).ToList();
-        if (targets.Count == 0)
-            return SpellCastResult.Failure("No valid monsters in target group.");
+        return new List<string> { targetGroupId };
+    }
 
-        var result = new SpellCastResult { Success = true };
-        result.Events.Add($"{request.Caster.Name} casts {spell.Name}! A terrifying red dragon illusion breathes on group {targetGroupId}.");
+    private static void ResolvePhantasmalForceAgainstGroup(string groupId, Spell spell, CombatSession session, Random rng, SpellCastResult result)
+    {
+        var targets = session.GetAliveMonstersByGroup(groupId).ToList();
+        if (targets.Count == 0)
+            return;
 
         MonsterInstance? disbeliefMonster = null;
         int disbeliefRoll = 0;
@@ -74,9 +105,9 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
 
         if (disbeliefMonster != null)
         {
-            result.Events.Add($"{disbeliefMonster.DisplayName} makes save ({disbeliefRoll} vs {disbeliefTarget}) and shouts it is fake!");
-            result.Events.Add("The illusion is exposed. No monsters in the group take damage.");
-            return result;
+            result.Events.Add($"{disbeliefMonster.DisplayName} (Group {groupId}) makes save ({disbeliefRoll} vs {disbeliefTarget}) and shouts it is fake!");
+            result.Events.Add($"The illusion is exposed for group {groupId}. No monsters in that group take damage.");
+            return;
         }
 
         foreach (var monster in targets)
@@ -92,7 +123,7 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
             monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
             var actual = Math.Max(0, before - monster.CurrentHitPoints);
 
-            result.Events.Add($"{monster.DisplayName} believes the dragon breath, takes {actual} illusionary fire damage (rolled {rolledDamage}). HP {before}->{monster.CurrentHitPoints}.");
+            result.Events.Add($"{monster.DisplayName} (Group {groupId}) believes the dragon breath, takes {actual} illusionary fire damage (rolled {rolledDamage}). HP {before}->{monster.CurrentHitPoints}.");
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} dies from terror and shock.");
 
@@ -101,7 +132,5 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
             else
                 result.HpChanges[monster.DisplayName] = -actual;
         }
-
-        return result;
     }
 }

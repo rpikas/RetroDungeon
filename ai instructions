@@ -847,3 +847,16 @@ The party gets no xp from that encounter. 41.0
 if an enounter got SpecialAttacks Paralyzation then the player attacked will roll a save throw. Show that in Adnd logs a dice roll dialogan.
 if save fails, the charater will be paralyzed for 30-120 rounds or until leaving the dungeon. 
 Every step taken counts as a round and every combat round conts as a round. 41,7
+_____
+Implement level 2 cleric spell called Silence 15' radius. It causes one selected group of encounters to be 
+unable to cast spells for 2 round per level of the caster. 42,2
+
+If  "SpecialAbilities":  "Level 2 Magic-User spells" then let it be 50 % chanse the ecounters case 
+Mirror image on them self and 50% chanse they cast Melf’s Acid Arrow 43,0
+
+Implement Magic user level 3 spell Phantasmal Force that should work exactly like level 1 Illustionist spell with the same name 43,4
+
+Implement Illustionist level 3 spell Improved Phantasmal Force that should work like level 1 Illustionist spell Phantasmal Force
+but this spell should be more affect all encountered groups. 43,7
+
+____
