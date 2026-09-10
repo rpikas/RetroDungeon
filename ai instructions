@@ -945,3 +945,13 @@ ______________
 
 when selecting what charater to delete, let the user enter two chars before automaticly trigger enter.48,7
 when number of attacks is 1,25 then every 4th round the player should have 2 attacks
+_________
+
+implement magic user spell Hold person. It is similar to cleric level 2 hold person spell, they both target one gorup of monsters I only affect humanoids. Differences are
+Duration for cleric hold person is 4 rounds + 1 per level of caster
+Duration for magic user  hold person is 2 rounds per level of caster
+Max number of humanoids affected for cleric spell is 3
+Max number of humanoids affected for magic user  spell is 4
+If only one humanoid is in the group save thow is -2 for cleric spell but -3 for magic user spell 49,3
+______
+monk that are level 5 or higher should is not affected by disease or haste.

@@ -73,6 +73,7 @@ public sealed class CampCharacterInspectForm : Form
             new ChromaticOrbHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),
+            new HoldPersonHandler(),
             new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),

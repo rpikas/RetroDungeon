@@ -95,6 +95,7 @@ public sealed class CombatCoordinator
             new ChromaticOrbHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),
+            // Handles both cleric and magic-user Hold Person spell IDs.
             new HoldPersonHandler(),
             new HoldMonsterHandler(),
             new BlessHandler(),

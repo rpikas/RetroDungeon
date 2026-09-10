@@ -1,11 +1,14 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Characters;
 using Adnd.Core.Monsters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class HoldPersonHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "hold_person", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+        => string.Equals(spellId, "hold_person", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "hold_person_magic_user", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -45,20 +48,34 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
         if (humanoidCandidates.Count == 0)
             return SpellCastResult.Failure("No valid humanoid targets for Hold Person.");
 
+        var isMagicUserHoldPerson = string.Equals(spell.Id, "hold_person_magic_user", StringComparison.OrdinalIgnoreCase)
+            || spell.SpellClass == SpellClass.MagicUser;
+
+        var maxTargets = isMagicUserHoldPerson ? 4 : 3;
         var targets = humanoidCandidates
             .OrderBy(_ => rng.Next())
-            .Take(3)
+            .Take(maxTargets)
             .ToList();
+
+        var casterLevel = ResolveCasterLevel(request, spell);
+        var rounds = isMagicUserHoldPerson
+            ? Math.Max(1, casterLevel * 2)
+            : 4 + Math.Max(1, casterLevel);
+
+        var savePenalty = humanoidCandidates.Count == 1
+            ? (isMagicUserHoldPerson ? 3 : 2)
+            : 0;
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}!");
-        result.Events.Add($"Hold Person targets up to 3 foes in one group ({targets.Count} selected).");
+        result.Events.Add($"Hold Person targets up to {maxTargets} humanoids in one group ({targets.Count} selected).");
 
         var heldCount = 0;
 
         foreach (var target in targets)
         {
-            var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+            var baseSaveTarget = target.Template.SavingThrows?.Spell ?? 20;
+            var saveTarget = Math.Min(20, baseSaveTarget + savePenalty);
             var saveRoll = rng.Next(1, 21);
 
             if (saveRoll >= saveTarget)
@@ -79,7 +96,6 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
                 continue;
             }
 
-            var rounds = rng.Next(4, 4 + request.Caster.Level); // original adnd rules 4 rounds + 1/level
             target.SetStatus(MonsterStatus.Paralyzed, rounds);
             heldCount++;
             result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is paralyzed for {rounds} round(s)!");
@@ -96,6 +112,19 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
        // var nameLower = monsterName.ToLowerInvariant();
        //return humanoids.Any(h => nameLower.Contains(h));
        return monsterType == MonsterType.Humanoid;
+    }
+
+    private static int ResolveCasterLevel(SpellCastRequest request, Spell spell)
+    {
+        var caster = request.Caster;
+        var classLevel = spell.SpellClass switch
+        {
+            SpellClass.Cleric when caster.Classes.Contains(CharacterClass.Cleric) => caster.GetClassLevel(CharacterClass.Cleric),
+            SpellClass.MagicUser when caster.Classes.Contains(CharacterClass.MagicUser) => caster.GetClassLevel(CharacterClass.MagicUser),
+            _ => caster.Level
+        };
+
+        return Math.Max(1, classLevel);
     }
 
 

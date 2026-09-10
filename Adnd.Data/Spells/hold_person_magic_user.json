@@ -1,0 +1,13 @@
+{
+  "Id": "hold_person_magic_user",
+  "Name": "Hold Person",
+  "Class": "MagicUser",
+  "Level": 3,
+  "Description": "Paralyzes up to four humanoid targets in one group.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Arcane force locks up to four humanoid targets in the chosen group in place for 2 rounds per caster level. If only one humanoid is in the group, it saves at -3."
+}
