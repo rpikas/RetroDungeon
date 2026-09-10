@@ -981,3 +981,6 @@ Påverkar 1 creature per caster level, upp till maxområdet
 Saving throw (negates) — lyckas de, påverkas de inte alls 52,0
 
 Fix: Slowed mobs hits every round, but only every second round they should be able to attack. 52,2
+__________
+
+If "SpecialAbilities":  "Level 3 Magic-User spells" then let it be 50 % chanse the ecounters cast Slow and 50% chanse they cast Fireball. 53,8

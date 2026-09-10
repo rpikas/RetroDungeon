@@ -23,6 +23,8 @@ public sealed class CombatSession
     public Dictionary<string, int> BarkskinBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> StrengthBuffRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> StrengthBuffBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> PartySlowRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> PartySlowOriginalMove { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> HasteRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> HasteOriginalMove { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -233,6 +235,55 @@ public sealed class CombatSession
     {
         StrengthBuffRounds.Remove(characterName);
         StrengthBuffBonuses.Remove(characterName);
+    }
+
+    public bool IsPartySlowed(string characterName) => PartySlowRounds.TryGetValue(characterName, out var rounds) && rounds > 0;
+
+    public void SetPartySlow(string characterName, int rounds, int originalMove)
+    {
+        if (rounds <= 0)
+        {
+            PartySlowRounds.Remove(characterName);
+            PartySlowOriginalMove.Remove(characterName);
+            return;
+        }
+
+        if (!PartySlowOriginalMove.ContainsKey(characterName))
+            PartySlowOriginalMove[characterName] = Math.Max(1, originalMove);
+
+        PartySlowRounds[characterName] = rounds;
+    }
+
+    public int GetPartySlowRounds(string characterName)
+    {
+        return PartySlowRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int GetPartySlowOriginalMove(string characterName)
+    {
+        return PartySlowOriginalMove.TryGetValue(characterName, out var move) ? Math.Max(1, move) : 0;
+    }
+
+    public int TickPartySlow(string characterName)
+    {
+        if (!PartySlowRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            PartySlowRounds.Remove(characterName);
+            return 0;
+        }
+
+        PartySlowRounds[characterName] = rounds;
+        return rounds;
+    }
+
+    public void ClearPartySlow(string characterName)
+    {
+        PartySlowRounds.Remove(characterName);
+        PartySlowOriginalMove.Remove(characterName);
     }
 
     public void SetMirrorImage(string characterName, int imageCount, int rounds)

@@ -334,7 +334,6 @@
       "Source": "Adnd"
     },
 
-
     {
       "Name": "Lvl 5 Magic-User",
       "Type": "Humanoid",
@@ -399,10 +398,6 @@
         {
           "Name": "Level 3 Cleric spells",
           "Description": "Access to 1st–3rd level spells."
-        },
-        {
-          "Name": "Turn Undead",
-          "Description": "Can repel undead creatures."
         }
       ],
       "BaseXPValue": 500,
@@ -430,7 +425,7 @@
       },
       "Attacks": [
         {
-          "Name": "Longsword",
+          "Name": "Long sword",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
@@ -468,7 +463,7 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Improved Thief Skills",
+          "Name": "Pick Pockets",
           "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
         },
         {
@@ -506,12 +501,7 @@
           "Damage": "1d10"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Monk Abilities",
-          "Description": "Improved AC, faster movement, Open Hand attack, thief-like saves."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 600,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
@@ -645,7 +635,7 @@
       },
       "Attacks": [
         {
-          "Name": "Longsword",
+          "Name": "Long sword",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
@@ -684,7 +674,7 @@
       "SpecialAbilities": [
         {
           "Name": "Level 3 Illusionist spells",
-          "Description": "Access to 1st–5th level illusion spells."
+          "Description": "Access to 1st–3rd level illusion spells."
         }
       ],
       "BaseXPValue": 600,
@@ -721,11 +711,8 @@
         {
           "Name": "Lay on Hands",
           "Description": "Heals 2 HP per level once per day."
-        },
-        {
-          "Name": "Protection from Evil",
-          "Description": "Continuous aura."
         }
+
       ],
       "BaseXPValue": 700,
       "XPValuePerHitPoint": 2,

@@ -342,8 +342,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Level 3 Magic-User spells",
-          "Description": "Access to 1st–3rd level spells."
+          "Name": "Level 2 Magic-User spells",
+          "Description": "Access to 1st–2nd level spells."
         }
       ],
       "BaseXPValue": 150,

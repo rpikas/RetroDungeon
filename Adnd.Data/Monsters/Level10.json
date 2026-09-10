@@ -2,6 +2,404 @@
     "Level": 10,
   "Monsters": [
     {
+      "Name": "Lvl 10 Magic-User",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 5,
+        "PetrificationPolymorph": 6,
+        "BreathWeapon": 7,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Magic-User spells",
+          "Description": "Access to 1st–5th level spells."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Cleric",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 4,
+        "RodStaffWand": 5,
+        "PetrificationPolymorph": 6,
+        "BreathWeapon": 7,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Cleric spells",
+          "Description": "Access to 1st–5th level spells."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Fighter",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 10,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 7,
+        "PetrificationPolymorph": 6,
+        "BreathWeapon": 8,
+        "Spell": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Long sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Thief",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 10,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 4,
+        "RodStaffWand": 5,
+        "PetrificationPolymorph": 3,
+        "BreathWeapon": 7,
+        "Spell": 6
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Pick Pockets",
+          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab multiplier remains ×4 at this level."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Monk",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 1,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 4,
+        "RodStaffWand": 5,
+        "PetrificationPolymorph": 3,
+        "BreathWeapon": 7,
+        "Spell": 6
+      },
+      "Attacks": [
+        {
+          "Name": "Unarmed Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "2d12"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 2300,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Assassin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 10,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 4,
+        "RodStaffWand": 5,
+        "PetrificationPolymorph": 3,
+        "BreathWeapon": 7,
+        "Spell": 6
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Assassination",
+          "Description": "Improved assassination chance; uses thief saving throws."
+        }
+      ],
+      "BaseXPValue": 2300,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Bard",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 10,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 4,
+        "RodStaffWand": 5,
+        "PetrificationPolymorph": 3,
+        "BreathWeapon": 7,
+        "Spell": 6
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Bardic Music",
+          "Description": "Improved inspiration and charm abilities."
+        }
+      ],
+      "BaseXPValue": 2600,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Druid",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 5,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 2,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 5,
+        "BreathWeapon": 8,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Druid spells",
+          "Description": "Access to 1st–5th level druid spells."
+        }
+      ],
+      "BaseXPValue": 2300,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Ranger",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 6,
+        "RodStaffWand": 8,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 9,
+        "Spell": 9
+      },
+      "Attacks": [
+        {
+          "Name": "Long sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Druid level 1 spells",
+          "Description": "Druid level 1 spells"
+        },
+        {
+          "Name": "Magic-User level 1 spells",
+          "Description": "Magic-User level 1 spells"
+        }
+      ],
+      "BaseXPValue": 2600,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Illusionist",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 3,
+        "BreathWeapon": 7,
+        "Spell": 4
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Illusionist spells",
+          "Description": "Access to 1st–5th level illusion spells."
+        }
+      ],
+      "BaseXPValue": 2300,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 10 Paladin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 10,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 4,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 5,
+        "BreathWeapon": 7,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lay on Hands",
+          "Description": "Heals 2 HP per level once per day."
+        },
+        {
+          "Name": "Cleric level 1 spells",
+          "Description": "Cleric level 1 spells"
+        }
+      ],
+      "BaseXPValue": 2600,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Dragon, Chromatic",
       "Type": "Dragon",
       "Frequency": "Unique",

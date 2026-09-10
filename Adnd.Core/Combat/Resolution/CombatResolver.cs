@@ -170,6 +170,30 @@ public sealed class CombatResolver
                 }
             }
 
+            var partySlowRounds = session.GetPartySlowRounds(member.Name);
+            if (partySlowRounds > 0)
+            {
+                var slowRemaining = session.TickPartySlow(member.Name);
+                if (slowRemaining <= 0)
+                {
+                    var originalMove = session.GetPartySlowOriginalMove(member.Name);
+                    if (originalMove > 0)
+                        member.Move = originalMove;
+
+                    session.ClearPartySlow(member.Name);
+                    member.RemoveStatus(CharacterStatus.Slowed);
+                    events.Add(new CombatEvent($"{member.Name} is no longer slowed."));
+                }
+                else
+                {
+                    member.AddStatus(CharacterStatus.Slowed);
+                }
+            }
+            else if (member.HasStatus(CharacterStatus.Slowed))
+            {
+                member.RemoveStatus(CharacterStatus.Slowed);
+            }
+
             if (member.HasStatus(CharacterStatus.Invisible))
             {
                 var improvedRounds = session.GetImprovedInvisibilityRounds(member.Name);
@@ -305,6 +329,8 @@ public sealed class CombatResolver
                 if (HasAnySpecialAbility(monster,
                         "Level 1 Mage spells",
                         "Level 1 Magic-User spells",
+                        "Level 3 Mage spells",
+                        "Level 3 Magic-User spells",
                         "Level 2 Illusionist spells",
                         "Level 1 Priest spells",
                         "Level 1 Cleric spells",
@@ -321,6 +347,8 @@ public sealed class CombatResolver
                 && HasAnySpecialAbility(monster,
                     "Level 1 Mage spells",
                     "Level 1 Magic-User spells",
+                    "Level 3 Mage spells",
+                    "Level 3 Magic-User spells",
                     "Level 2 Mage spells",
                     "Level 2 Magic-User spells",
                     "Level 2 Illusionist spells",
@@ -331,6 +359,13 @@ public sealed class CombatResolver
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
             }
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 3 Mage spells", "Level 3 Magic-User spells")
+                && ShouldTryMonsterLevel1SpellCast()
+                && ResolveLevel3MagicUserSpell(monster, session, events))
+                continue;
 
             if (!isSilenced
                 && !isFeebleminded
@@ -1172,6 +1207,8 @@ public sealed class CombatResolver
         int attacks = GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
         if (session.IsHasted(member.Name))
             attacks *= 2;
+        if (session.IsPartySlowed(member.Name))
+            attacks = Math.Max(1, attacks / 2);
 
         for (int i = 0; i < attacks; i++)
         {
@@ -1262,6 +1299,88 @@ public sealed class CombatResolver
         var roundsAcid = _dice.Roll(3);
         session.SetPartyAcidArrow(target.Name, roundsAcid);
         events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+        return true;
+    }
+
+    private bool ResolveLevel3MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            var targetCount = Math.Min(Math.Max(1, monster.Template.HitDice), aliveParty.Count);
+            var targets = aliveParty
+                .OrderBy(_ => _dice.Roll(100))
+                .Take(targetCount)
+                .ToList();
+
+            var rounds = 3 + Math.Max(1, monster.Template.HitDice);
+            var affected = 0;
+
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Slow!"));
+
+            foreach (var target in targets)
+            {
+                if (target.IsMonkImmuneToDiseaseSlowHaste())
+                {
+                    events.Add(new CombatEvent($"{target.Name} is immune to Slow effects."));
+                    continue;
+                }
+
+                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveRoll = _dice.Roll(20);
+                if (saveRoll >= saveTarget)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Slow (save {saveRoll} vs {saveTarget})."));
+                    continue;
+                }
+
+                if (!session.IsPartySlowed(target.Name))
+                {
+                    session.SetPartySlow(target.Name, rounds, target.Move);
+                    target.Move = Math.Max(1, target.Move / 2);
+                }
+                else
+                {
+                    session.SetPartySlow(target.Name, rounds, session.GetPartySlowOriginalMove(target.Name));
+                }
+
+                affected++;
+                events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is slowed for {rounds} round(s)."));
+            }
+
+            events.Add(new CombatEvent($"Slow affects up to {Math.Max(1, monster.Template.HitDice)} target(s); {affected} affected."));
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Fireball!"));
+        var fireballDamageDice = Math.Min(10, Math.Max(1, monster.Template.HitDice));
+        foreach (var target in aliveParty)
+        {
+            var rolledDamage = _dice.RollMany(6, fireballDamageDice);
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveRoll = _dice.Roll(20);
+            var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            events.Add(new CombatEvent(saveRoll >= saveTarget
+                ? $"{target.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half fireball damage: {actual}. HP {before}->{target.CurrentHitPoints}."
+                : $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actual} fireball damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain by the fireball!"));
+            }
+        }
+
         return true;
     }
 

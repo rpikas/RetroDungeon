@@ -2,6 +2,404 @@
     "Level": 9,
   "Monsters": [
     {
+      "Name": "Lvl 9 Magic-User",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 6,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 8,
+        "Spell": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Magic-User spells",
+          "Description": "Access to 1st–5th level spells."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Cleric",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 8,
+        "Spell": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Cleric spells",
+          "Description": "Access to 1st–5th level spells."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Fighter",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 6,
+        "RodStaffWand": 8,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 9,
+        "Spell": 9
+      },
+      "Attacks": [
+        {
+          "Name": "Long sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1600,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Thief",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 9,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 4,
+        "BreathWeapon": 8,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Pick Pockets",
+          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab multiplier increases to ×4 at this level."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Monk",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 4,
+        "BreathWeapon": 8,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Unarmed Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Assassin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 9,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 4,
+        "BreathWeapon": 8,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Assassination",
+          "Description": "Improved assassination chance; uses thief saving throws."
+        }
+      ],
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Bard",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 9,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 6,
+        "PetrificationPolymorph": 4,
+        "BreathWeapon": 8,
+        "Spell": 7
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Bardic Music",
+          "Description": "Improved inspiration and charm abilities."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Druid",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 5,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 3,
+        "RodStaffWand": 7,
+        "PetrificationPolymorph": 6,
+        "BreathWeapon": 9,
+        "Spell": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Druid spells",
+          "Description": "Access to 1st–5th level druid spells."
+        }
+      ],
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Ranger",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 7,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 8,
+        "BreathWeapon": 10,
+        "Spell": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Long sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Druid level 1 spells",
+          "Description": "Druid level 1 spells"
+        },
+        {
+          "Name": "Magic-User level 1 spells",
+          "Description": "Magic-User level 1 spells"
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Illusionist",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 9,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 6,
+        "RodStaffWand": 7,
+        "PetrificationPolymorph": 4,
+        "BreathWeapon": 8,
+        "Spell": 5
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Illusionist spells",
+          "Description": "Access to 1st–5th level illusion spells."
+        }
+      ],
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 9 Paladin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 9,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 5,
+        "RodStaffWand": 7,
+        "PetrificationPolymorph": 6,
+        "BreathWeapon": 8,
+        "Spell": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lay on Hands",
+          "Description": "Heals 2 HP per level once per day."
+        },
+        {
+          "Name": "Cleric level 1 spells",
+          "Description": "Cleric level 1 spells"
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Devil, Pit Fiend",
       "Type": "Devil",
       "Frequency": "Very Rare",
