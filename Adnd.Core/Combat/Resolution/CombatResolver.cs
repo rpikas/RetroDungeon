@@ -229,6 +229,9 @@ public sealed class CombatResolver
                 case CombatActionType.LayOnHands:
                     ResolveLayOnHands(session, member, action, events);
                     break;
+                case CombatActionType.MonkBodyHeal:
+                    ResolveMonkBodyHeal(session, member, events);
+                    break;
                 case CombatActionType.Spell:
                 case CombatActionType.CastSpell:
                     ResolvePartySpell(session, member, action, events);
@@ -832,6 +835,38 @@ public sealed class CombatResolver
         events.Add(new CombatEvent(healed > 0
             ? $"{paladin.Name} lays on hands and heals {target.Name} for {healed} hit point(s)."
             : $"{paladin.Name} lays on hands on {target.Name}, but no healing is needed."));
+    }
+
+    private void ResolveMonkBodyHeal(CombatSession session, Character monk, List<CombatEvent> events)
+    {
+        if (!monk.IsMonk() || monk.GetMonkLevel() < 7)
+        {
+            events.Add(new CombatEvent($"{monk.Name} cannot use Body Heal."));
+            return;
+        }
+
+        if (monk.MonkBodyHealUsedToday)
+        {
+            events.Add(new CombatEvent($"{monk.Name} has already used Body Heal today."));
+            return;
+        }
+
+        if (monk.HasStatus(CharacterStatus.Dead) || monk.HasStatus(CharacterStatus.Ashes) || monk.HasStatus(CharacterStatus.Lost))
+        {
+            events.Add(new CombatEvent($"{monk.Name} cannot use Body Heal right now."));
+            return;
+        }
+
+        var healAmount = monk.RollMonkBodyHealAmount();
+        var before = monk.CurrentHitPoints;
+        monk.CurrentHitPoints = Math.Min(monk.MaxHitPoints, monk.CurrentHitPoints + healAmount);
+        var healed = monk.CurrentHitPoints - before;
+
+        monk.MonkBodyHealUsedToday = true;
+
+        events.Add(new CombatEvent(healed > 0
+            ? $"{monk.Name} heals own wounds for {healed} hit point(s)."
+            : $"{monk.Name} focuses inner discipline, but no healing is needed."));
     }
 
     private void ResolveDispellUndead(CombatSession session, Character actor, CombatAction action, List<CombatEvent> events)

@@ -291,6 +291,8 @@ public class PartyMenu
             Console.WriteLine("C)ast Spell");
             if (c.IsPaladin())
                 Console.WriteLine(c.LayOnHandsUsedToday ? "L)ay on Hands (used today)" : "L)ay on Hands");
+            if (c.IsMonk() && c.GetMonkLevel() >= 7)
+                Console.WriteLine(c.MonkBodyHealUsedToday ? "H)eal Body (used today)" : "H)eal Body");
             Console.WriteLine(c.IsPaladin() ? "↵)Leave" : "L<-eave");
 
             var key = Console.ReadKey(true).Key;
@@ -306,6 +308,7 @@ public class PartyMenu
             else if (key == ConsoleKey.M && CanUseMemorizeAction(c)) MemorizeSpellAction(c);
             else if (key == ConsoleKey.C) CastSpellAction(c, party);
             else if (key == ConsoleKey.L && c.IsPaladin()) LayOnHandsAction(c, party);
+            else if (key == ConsoleKey.H && c.IsMonk()) MonkBodyHealAction(c);
             else if ((key == ConsoleKey.L && !c.IsPaladin()) || key == ConsoleKey.Enter || key == ConsoleKey.Escape) break;
         }
     }
@@ -368,6 +371,43 @@ public class PartyMenu
         else
             Console.WriteLine($"{target.Name} is already at full health.");
 
+        Console.ReadKey(true);
+    }
+
+    private void MonkBodyHealAction(Character monk)
+    {
+        if (!monk.IsMonk() || monk.GetMonkLevel() < 7)
+        {
+            Console.WriteLine("Body Heal is not available yet.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        if (monk.MonkBodyHealUsedToday)
+        {
+            Console.WriteLine("Body Heal has already been used today.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        if (monk.HasStatus(CharacterStatus.Dead) || monk.HasStatus(CharacterStatus.Ashes) || monk.HasStatus(CharacterStatus.Lost))
+        {
+            Console.WriteLine("Body Heal cannot be used right now.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var healAmount = monk.RollMonkBodyHealAmount();
+        var before = monk.CurrentHitPoints;
+        monk.CurrentHitPoints = Math.Min(monk.MaxHitPoints, monk.CurrentHitPoints + healAmount);
+        var healed = monk.CurrentHitPoints - before;
+
+        monk.MonkBodyHealUsedToday = true;
+        _repo.Save(monk);
+
+        Console.WriteLine(healed > 0
+            ? $"{monk.Name} heals for {healed} HP."
+            : $"{monk.Name} is already at full health.");
         Console.ReadKey(true);
     }
 

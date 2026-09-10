@@ -954,4 +954,12 @@ Max number of humanoids affected for cleric spell is 3
 Max number of humanoids affected for magic user  spell is 4
 If only one humanoid is in the group save thow is -2 for cleric spell but -3 for magic user spell 49,3
 ______
-monk that are level 5 or higher should is not affected by disease or haste.
+
+At 7th level the monk gains the ability to heal damage on his or her body. The amount of damage which can be healed is 2–5 hit points (d4 + 1), 
+and this amount increases by 1 hit point with each experience level gained thereafter, i.e. 3–6 HP at 8th level, 4–7 at 9th, etc. This may be done once per day.
+PHB page 31, E. 50,3
+
+____
+
+Implement a level 3 magic user spell called Haste. I can be cast on one member of the party. The duration is 3+1 round per level of the caster. 
+The target can move and attack twice per round. the move speed is also doubled. 49,7

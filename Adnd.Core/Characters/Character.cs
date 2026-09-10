@@ -38,6 +38,7 @@ public class Character
     public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
     public int Level { get; set; } = 1;
     public bool LayOnHandsUsedToday { get; set; }
+    public bool MonkBodyHealUsedToday { get; set; }
     public int TemporaryStrengthBonus { get; set; }
     public int TemporaryStrengthRoundsRemaining { get; set; }
     public int TemporaryArmorClassBonusUntilDungeonExit { get; set; }
@@ -134,9 +135,25 @@ public class Character
 
     public bool IsPaladin() => Classes.Contains(CharacterClass.Paladin);
 
+    public bool IsMonk() => Classes.Contains(CharacterClass.Monk);
+
     public int GetPaladinLevel() => IsPaladin()
         ? GetClassLevel(CharacterClass.Paladin)
         : 0;
+
+    public int GetMonkLevel() => IsMonk()
+        ? GetClassLevel(CharacterClass.Monk)
+        : 0;
+
+    public bool CanUseMonkBodyHeal() => IsMonk() && GetMonkLevel() >= 7 && !MonkBodyHealUsedToday;
+
+    public int RollMonkBodyHealAmount(Random? rng = null)
+    {
+        var monkLevel = Math.Max(0, GetMonkLevel());
+        var bonus = Math.Max(1, monkLevel - 6);
+        var roller = rng ?? Random.Shared;
+        return roller.Next(1, 5) + bonus;
+    }
 
     public void EnsureClassProgressions()
     {

@@ -7,6 +7,7 @@ public enum CombatActionType
     UseItem,
     DispellUndead,
     LayOnHands,
+    MonkBodyHeal,
     Run,
     Spell,
     CastSpell

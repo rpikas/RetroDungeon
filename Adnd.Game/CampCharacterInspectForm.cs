@@ -28,6 +28,7 @@ public sealed class CampCharacterInspectForm : Form
     private readonly FlowLayoutPanel _buttonsPanel;
     private readonly Label _oldStyleFooterLabel;
     private readonly Button _layOnHandsButton;
+    private readonly Button _monkBodyHealButton;
 
     /// <summary>
     /// Where this screen puts its questions so the tabletop can answer them. Null when nobody is watching the
@@ -149,6 +150,8 @@ public sealed class CampCharacterInspectForm : Form
 
         _layOnHandsButton = MakeButton("L)ay on Hands", (_, _) => LayOnHandsAction());
         _buttonsPanel.Controls.Add(_layOnHandsButton);
+        _monkBodyHealButton = MakeButton("H)eal Body", (_, _) => MonkBodyHealAction());
+        _buttonsPanel.Controls.Add(_monkBodyHealButton);
         _buttonsPanel.Controls.Add(MakeButton("L↵eave", (_, _) => Close()));
 
         _oldStyleFooterLabel = new Label
@@ -204,6 +207,8 @@ public sealed class CampCharacterInspectForm : Form
         var c = GetCharacter();
         if (c?.IsPaladin() == true)
             actions.Add(("layOnHands", c.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
+        if (c?.IsMonk() == true && c.GetMonkLevel() >= 7)
+            actions.Add(("monkBodyHeal", c.MonkBodyHealUsedToday ? "Body Heal (used today)" : "Body Heal"));
 
         actions.Add(("leave", "Leave"));
         return actions;
@@ -228,6 +233,8 @@ public sealed class CampCharacterInspectForm : Form
                 case "spell": CastSpellAction(); break;
                 case "useItem": UseItemAction(); break;
                 case "characterSheet": ShowCharacterSheetAction(); break;
+                case "layOnHands": LayOnHandsAction(); break;
+                case "monkBodyHeal": MonkBodyHealAction(); break;
                 case "leave": Close(); return;
                 default: return;
             }
@@ -351,14 +358,19 @@ public sealed class CampCharacterInspectForm : Form
         {
             _detailsBox.Text = "Character no longer exists.";
             _layOnHandsButton.Visible = false;
+            _monkBodyHealButton.Visible = false;
             return;
         }
 
         _layOnHandsButton.Visible = c.IsPaladin();
         _layOnHandsButton.Text = c.LayOnHandsUsedToday ? "L)ay Hands (used)" : "L)ay on Hands";
+        _monkBodyHealButton.Visible = c.IsMonk() && c.GetMonkLevel() >= 7;
+        _monkBodyHealButton.Text = c.MonkBodyHealUsedToday ? "H)eal Body (used)" : "H)eal Body";
         _oldStyleFooterLabel.Text = c.IsPaladin()
             ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER L)AY ON HANDS"
-            : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  C)HARACTER SHEET";
+            : c.IsMonk() && c.GetMonkLevel() >= 7
+                ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER H)EAL BODY"
+                : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  C)HARACTER SHEET";
 
         if (GameRulesProvider.Current.UIOldStyle)
         {
@@ -469,6 +481,44 @@ public sealed class CampCharacterInspectForm : Form
         SayOnBoth("Lay on Hands", healed > 0
             ? $"{paladin.Name} heals {target.Name} for {healed} HP."
             : $"{target.Name} is already at full health.");
+    }
+
+    private void MonkBodyHealAction()
+    {
+        var monk = GetCharacter();
+        if (monk == null)
+            return;
+
+        if (!monk.IsMonk() || monk.GetMonkLevel() < 7)
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} cannot use Body Heal yet.");
+            return;
+        }
+
+        if (monk.MonkBodyHealUsedToday)
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} has already used Body Heal today.");
+            return;
+        }
+
+        if (monk.HasStatus(CharacterStatus.Dead) || monk.HasStatus(CharacterStatus.Ashes) || monk.HasStatus(CharacterStatus.Lost))
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} cannot use Body Heal right now.");
+            return;
+        }
+
+        var healAmount = monk.RollMonkBodyHealAmount();
+        var before = monk.CurrentHitPoints;
+        monk.CurrentHitPoints = Math.Min(monk.MaxHitPoints, monk.CurrentHitPoints + healAmount);
+        var healed = monk.CurrentHitPoints - before;
+
+        monk.MonkBodyHealUsedToday = true;
+        _characterRepository.Save(monk);
+
+        RefreshView();
+        SayOnBoth("Body Heal", healed > 0
+            ? $"{monk.Name} heals for {healed} HP."
+            : $"{monk.Name} is already at full health.");
     }
 
     private static string BuildOldStyleInspectView(Character c)

@@ -269,13 +269,26 @@ public class MainMenu
         var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
         foreach (var name in party.Members)
         {
-            if (!roster.TryGetValue(name, out var member) || !member.IsPaladin())
+            if (!roster.TryGetValue(name, out var member))
                 continue;
 
-            if (!member.LayOnHandsUsedToday)
+            var changed = false;
+
+            if (member.IsPaladin() && member.LayOnHandsUsedToday)
+            {
+                member.LayOnHandsUsedToday = false;
+                changed = true;
+            }
+
+            if (member.IsMonk() && member.GetMonkLevel() >= 7 && member.MonkBodyHealUsedToday)
+            {
+                member.MonkBodyHealUsedToday = false;
+                changed = true;
+            }
+
+            if (!changed)
                 continue;
 
-            member.LayOnHandsUsedToday = false;
             _charRepo.Save(member);
         }
     }

@@ -522,6 +522,12 @@ public sealed class EncounterForm : Form
             return;
         }
 
+        if (string.Equals(command, "monkBodyHeal", StringComparison.OrdinalIgnoreCase))
+        {
+            ChooseMonkBodyHealAction();
+            return;
+        }
+
         // Auto has no branch here on purpose: it answers to Enter, which this form's own key handler already
         // understands, so the pump injects the key and the game decides. See the note on Enter in
         // EncounterForm_KeyDown -- one path for both surfaces, rather than a table-only shortcut that could
@@ -589,6 +595,8 @@ public sealed class EncounterForm : Form
             options.Add(new ViewerPromptOption("dispellUndead", "Dispell undead"));
         if (character.IsPaladin())
             options.Add(new ViewerPromptOption("layOnHands", character.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
+        if (CanUseMonkBodyHeal(character))
+            options.Add(new ViewerPromptOption("monkBodyHeal", character.MonkBodyHealUsedToday ? "Body Heal (used today)" : "Body Heal"));
         options.Add(new ViewerPromptOption("useItem", "Use an item"));
         options.Add(new ViewerPromptOption("run", "Run"));
         options.Add(new ViewerPromptOption("info", "Info"));
@@ -669,6 +677,9 @@ public sealed class EncounterForm : Form
                 break;
             case Keys.L:
                 ChooseLayOnHandsAction();
+                break;
+            case Keys.H:
+                ChooseMonkBodyHealAction();
                 break;
             case Keys.G:
                 if (_multipleGroups && _session != null)
@@ -1129,6 +1140,33 @@ public sealed class EncounterForm : Form
 
     private static bool CanUseLayOnHands(Character c) => c.IsPaladin() && !c.LayOnHandsUsedToday;
 
+    private static bool CanUseMonkBodyHeal(Character c) => c.IsMonk() && c.GetMonkLevel() >= 7 && !c.MonkBodyHealUsedToday;
+
+    private void ChooseMonkBodyHealAction()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count)
+            return;
+
+        var monk = _party[_currentIndex];
+        if (!IsActionable(monk))
+            return;
+
+        if (!monk.IsMonk() || monk.GetMonkLevel() < 7)
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} cannot use Body Heal yet.");
+            return;
+        }
+
+        if (monk.MonkBodyHealUsedToday)
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} has already used Body Heal today.");
+            return;
+        }
+
+        _actions[monk.Name] = CombatAction.OfType(CombatActionType.MonkBodyHeal);
+        AdvanceActor();
+    }
+
     private static bool CanUseDispellUndead(Character c)
     {
         var clericLevel = c.Classes.Contains(CharacterClass.Cleric) ? c.GetClassLevel(CharacterClass.Cleric) : 0;
@@ -1531,6 +1569,10 @@ public sealed class EncounterForm : Form
         var showLayOnHands = _currentIndex >= 0
                              && _currentIndex < _party.Count
                              && _party[_currentIndex].IsPaladin();
+        var showMonkBodyHeal = _currentIndex >= 0
+                               && _currentIndex < _party.Count
+                               && _party[_currentIndex].IsMonk()
+                               && _party[_currentIndex].GetMonkLevel() >= 7;
 
         // Determine which action is mapped to Enter
         string fightText, parryText;
@@ -1554,11 +1596,17 @@ public sealed class EncounterForm : Form
             ? $"S)PELL   L)AY HANDS  {parryText}      T)AKE BACK"
             : $"S)PELL   {parryText}      T)AKE BACK";
 
+        if (showMonkBodyHeal)
+            secondLine = $"S)PELL   H)EAL BODY  {parryText}      T)AKE BACK";
+
         if (_currentIndex >= 0 && _currentIndex < _party.Count && CanUseDispellUndead(_party[_currentIndex]))
             secondLine = $"S)PELL   D)ISPELL UNDEAD  {parryText}      T)AKE BACK";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count && showLayOnHands && CanUseDispellUndead(_party[_currentIndex]))
             secondLine = $"S)PELL   D)ISPELL UNDEAD  L)AY HANDS  {parryText}";
+
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && showMonkBodyHeal && CanUseDispellUndead(_party[_currentIndex]))
+            secondLine = $"S)PELL   D)ISPELL UNDEAD  H)EAL BODY  {parryText}";
 
         if (_multipleGroups)
         {
