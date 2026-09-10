@@ -965,4 +965,6 @@ Implement a level 3 magic user spell called Haste. I can be cast on one member o
 The target can move and attack twice per round. the move speed is also doubled. 50,7
 
 ______
-At level 5 and above monks can not be affected by disease, slow or haste. refer to PHB page 31, C.
+At level 5 and above monks can not be affected by disease, slow or haste. refer to PHB page 31, C. 51,1
+____
+At level 11 monks are immune to poison refer to PHB page 31, I. 

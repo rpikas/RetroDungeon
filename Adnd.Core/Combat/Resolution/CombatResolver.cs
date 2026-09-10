@@ -665,6 +665,12 @@ public sealed class CombatResolver
 
                             if (HasSpecialAbility(monster, "Poison"))
                             {
+                                if (target.IsMonkImmuneToPoison())
+                                {
+                                    events.Add(new CombatEvent($"{target.Name} is immune to poison."));
+                                    continue;
+                                }
+
                                 var poisonRoll = _dice.Roll(100);
                                 if (poisonRoll <= 70)
                                 {
@@ -1874,6 +1880,16 @@ public sealed class CombatResolver
     {
         foreach (var member in session.Party)
         {
+            if (member.IsMonkImmuneToPoison())
+            {
+                if (member.HasStatus(CharacterStatus.Poisoned))
+                {
+                    member.RemoveStatus(CharacterStatus.Poisoned);
+                    events.Add(new CombatEvent($"{member.Name}'s poison is negated by monk immunity."));
+                }
+                continue;
+            }
+
             if (!IsAlive(member) || !member.HasStatus(CharacterStatus.Poisoned))
                 continue;
 

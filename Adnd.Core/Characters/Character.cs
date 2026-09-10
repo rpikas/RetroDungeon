@@ -139,6 +139,8 @@ public class Character
 
     public bool IsMonkImmuneToDiseaseSlowHaste() => IsMonk() && GetMonkLevel() >= 5;
 
+    public bool IsMonkImmuneToPoison() => IsMonk() && GetMonkLevel() >= 11;
+
     public int GetPaladinLevel() => IsPaladin()
         ? GetClassLevel(CharacterClass.Paladin)
         : 0;
