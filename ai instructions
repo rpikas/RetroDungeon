@@ -967,4 +967,17 @@ The target can move and attack twice per round. the move speed is also doubled. 
 ______
 At level 5 and above monks can not be affected by disease, slow or haste. refer to PHB page 31, C. 51,1
 ____
-At level 11 monks are immune to poison refer to PHB page 31, I. 
+At level 11 monks are immune to poison refer to PHB page 31, I. 51,3
+_____
+
+Implementera spell Slow
+Level: 3
+Klass: Magic‑User
+Duration: 3 rounds + 1 round per caster level  
+Slow gör följande:
+Fiender rör sig med ½ hastighet
+Fiender får ½ attack rate (t.ex. 2 attacker/round → 1 attack/round)
+Påverkar 1 creature per caster level, upp till maxområdet
+Saving throw (negates) — lyckas de, påverkas de inte alls 52,0
+
+Fix: Slowed mobs hits every round, but only every second round they should be able to attack. 52,2

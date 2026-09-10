@@ -55,6 +55,7 @@ public class PartyMenu
             new SleepHandler(),
             new StrengthHandler(),
             new HasteHandler(),
+            new SlowHandler(),
             new MirrorImageHandler(),
             new InvisibilityHandler(),
             new ShieldSpellHandler(),

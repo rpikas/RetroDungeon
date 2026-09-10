@@ -1,0 +1,13 @@
+{
+  "Id": "slow",
+  "Name": "Slow",
+  "Class": "MagicUser",
+  "Level": 3,
+  "Description": "Alters time around enemies, reducing their speed and attack rate.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Affects up to one creature per caster level. Targets that fail save vs spell are slowed for 3 + 1 round per caster level: half movement and half attack rate."
+}

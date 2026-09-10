@@ -583,6 +583,28 @@ public sealed class CombatResolver
 
                 continue;
             }
+
+            var isSlowed = monster.HasStatus(MonsterStatus.Slowed);
+            if (isSlowed)
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Slowed);
+                if (remaining > 0)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is slowed ({remaining} round(s) remaining)."));
+                }
+                else
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is no longer slowed."));
+                    isSlowed = false;
+                }
+            }
+
+            if (isSlowed && session.RoundNumber % 2 != 0)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} is too slowed to attack this round."));
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.Unconscious))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Unconscious);
