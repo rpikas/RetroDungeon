@@ -248,6 +248,8 @@ public class CityMenu
         };
 
         character.EnsureClassProgressions();
+        character.RefreshMoveFromArmorAndClass();
+        character.RefreshMonkProgressionStats();
 
         InitializeSpellcasting(character);
 

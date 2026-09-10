@@ -856,7 +856,88 @@ Mirror image on them self and 50% chanse they cast Melf’s Acid Arrow 43,0
 
 Implement Magic user level 3 spell Phantasmal Force that should work exactly like level 1 Illustionist spell with the same name 43,4
 
-Implement Illustionist level 3 spell Improved Phantasmal Force that should work like level 1 Illustionist spell Phantasmal Force
+Implement Illusionist level 2 spell Improved Phantasmal Force that should work like level 1 Illustionist spell Phantasmal Force
 but this spell should be more affect all encountered groups. 43,7
 
 ____
+I changed my mind Improved Phantasmal Force should be a level 2 Illusionist spell, not level 3 Illusionist spell
+
+If an encounter got SpecialAbilities":"level 2 Illusionist spells" then let it be 50 % chanse the ecounters 
+cast Improved Phantasmal Forceand 50% chanse they cast Mirror Image. 44,3
+
+In the encounter dialog, when a character should select action, always show the alternative for I)nfo. 44,6
+I still dont see the I)nfo option in the Encounter dialog 45,1
+
+in the Item info dialog that could be accessed from identify, if inscpecting a weapon also show DamageType 45,3
+if  "SpecialDefenses":  "Half Damage from Sharp Weapons", then the enounter take half damage when hit by a weapon with damage type Piercing or Slashing 45,7
+
+In Encounter Info dialog check if there is a picture with a name that correspons to the monster, but with suffix MM located at 
+Adnd.Game\Assets\Monsters\MM1 if so, add a button in the dialog to show that picture 46,1
+
+För varje nivå som fighters, magic‑users och clerics har uppnått finns en 5 % chans per nivå att de har magiska föremål enligt tabellen nedan.
+Om ett “yes”‑resultat ger ett förbannat eller olämpligt föremål, får man slå om en gång.
+Om inget användbart föremål finns i kategorin, har karaktären inget föremål där.
+
+Item Category	Fighter	Magic‑user	Cleric	Thief
+Armor	yes	no	yes	no
+Shield	yes	no	yes	yes
+Sword	yes	no	no	yes
+Miscellaneous Weapon	yes	no	yes*	yes
+Potion	yes	no	yes	yes
+Scroll	no	yes	yes	no
+Ring	no	yes	no	yes
+Wand/Staff/Rod	no	yes	no*	no
+Miscellaneous Magic	no	yes	yes	yes
+
+
+🧩 Footnote
+If no miscellaneous weapon, or one with an edge, roll again for possibility of a wand/staff/rod; if one is indicated, but it is not usable by a cleric, there is no such item possessed.
+
+🧙 Example
+A 6th‑level cleric is being checked.
+There is a 30 % chance for the character to have magical armor, shield, miscellaneous weapon, potion, scroll, and miscellaneous magic. 47,3
+
+if Tresaure type is WornEquipment and Name contain "Bard" or "Assassin" or "Monk" then same treasure as Thief should be found
+If "Druid" the same as Cleric
+If "Illusionist" the same as Magic-User
+If Ranger or Paladin of somethingelse (default) then the same treasure as Fighter should be found if Tresaure type is WornEquipment.
+
+Kan du införa ett attibut på alla chars: Move.
+Alla ska ha 12 i move, det som kan påverka move är rustning enligt denna tabell:
+Rustning	Move
+No armor	12
+Leather	12
+Studded Leather	12
+Ring Mail	9
+Scale Mail	9
+Chain Mail	9
+Splint Mail	6
+Banded Mail	6
+Plate Mail	6
+Full Plate	6
+
+Monk får bättre move när de går upp level, de får även bättre ac, fler attacker och ger mer skada när de slår utan vapen enligt denna tabell, kan du implementera det?
+Level	Effective Armor Class	Move	Open Hand Attacks per Melee Round	Open Hand Damage
+1	10	15	1	1–3
+2	9	16	1	1–4
+3	8	17	1	1–6
+4	7	18	1,5	1–6
+5	7	19	1,5	2–7
+6	6	20	1,5	2–8
+7	5	21	1,5	2–9
+8	4	22	1,5	2–12
+9	3	23	2	2–12
+10	3	24	2	3–13
+11	2	25	2,5	4–14
+12	1	26	2,5	4–16
+13	0	27	2,5	5–17
+14	–1	28	3	6–20
+15	–1	29	3	6–24
+16	–2	30	4	7–30
+17	–3	32	4	8–32
+48,4
+dex ac bonus should be included when calculating monk ac without armor 48,5
+
+stength damage bonus should not be added when hitting with bare hands 48,6
+
+I have changed my mind, the monk should have 1,25 attacks per melee round, not 1,5 attacks per melee round when level 4 and 5. other should remain the same. 

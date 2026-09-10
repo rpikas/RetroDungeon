@@ -347,7 +347,7 @@
         }
       ],
       "BaseXPValue": 150,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -387,7 +387,7 @@
       ],
       "BaseXPValue": 150,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -418,7 +418,7 @@
       "SpecialAbilities": [],
       "BaseXPValue": 150,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -458,7 +458,7 @@
       ],
       "BaseXPValue": 150,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -494,7 +494,7 @@
       ],
       "BaseXPValue": 175,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -530,7 +530,7 @@
       ],
       "BaseXPValue": 175,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -566,7 +566,7 @@
       ],
       "BaseXPValue": 200,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -602,7 +602,7 @@
       ],
       "BaseXPValue": 175,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -638,7 +638,7 @@
       ],
       "BaseXPValue": 200,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -674,7 +674,7 @@
       ],
       "BaseXPValue": 175,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -714,7 +714,7 @@
       ],
       "BaseXPValue": 200,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
 

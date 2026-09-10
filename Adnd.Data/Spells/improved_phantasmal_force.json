@@ -2,7 +2,7 @@
   "Id": "improved_phantasmal_force",
   "Name": "Improved Phantasmal Force",
   "Class": "Illusionist",
-  "Level": 3,
+  "Level": 2,
   "Description": "A stronger phantasmal force that can overwhelm all encountered groups.",
   "RangeType": "Enemy",
   "Targeting": "Multiple",

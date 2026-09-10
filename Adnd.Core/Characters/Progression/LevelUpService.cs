@@ -71,6 +71,9 @@ public sealed class LevelUpService
 
         result.SpellSlotChanges = _spellProgressionService.RecalculateFromClassProgressions(character);
 
+        character.RefreshMoveFromArmorAndClass();
+        character.RefreshMonkProgressionStats();
+
         // Attempt to learn new spells for INT-based casters
         if (result.LeveledUp && availableSpells != null && availableSpells.Count > 0)
         {

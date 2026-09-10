@@ -34,6 +34,8 @@ public static class EquipmentManager
         c.Inventory.Remove(item);
 
         RecalculateDamage(c);
+        c.RefreshMoveFromArmorAndClass();
+        c.RefreshMonkProgressionStats();
 
         return true;
     }
@@ -49,6 +51,8 @@ public static class EquipmentManager
         c.Equipment[slot] = null;
 
         RecalculateDamage(c);
+        c.RefreshMoveFromArmorAndClass();
+        c.RefreshMonkProgressionStats();
 
         return true;
     }
@@ -71,6 +75,8 @@ public static class EquipmentManager
         c.Damage = hasOffHandWeapon
             ? $"{mainDamage}/{offHandWeapon!.Damage}"
             : mainDamage;
+
+        c.RefreshMonkProgressionStats();
     }
 
     public static int GetTotalArmorClassBonus(Character c)

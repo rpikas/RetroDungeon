@@ -1216,6 +1216,7 @@ public sealed class CampCharacterInspectForm : Form
                 $"Magic bonus: {item.MagicBonus}",
                 $"Damage: {item.Damage}",
                 $"Damage vs large: {item.DamageVsLarge}",
+                $"Damage type: {(item.Type == ItemType.Weapon ? (string.IsNullOrWhiteSpace(item.DamageType) ? "Unknown" : item.DamageType) : "N/A")}",
                 $"Special abilities: {(specialAbilities.Count > 0 ? string.Join(", ", specialAbilities) : "None")}",
                 $"Description: {item.Description}",
                 $"Source: {item.Source}",

@@ -53,6 +53,7 @@ public class Character
     public int PlatinumPieces { get; set; }
 
     public int ArmorClass { get; set; }
+    public int Move { get; set; } = 12;
     public Gender Gender { get; set; }
     public Alignment Alignment { get; set; }
     public int Age { get; set; }
@@ -107,7 +108,7 @@ public class Character
 
         var levelPart = Classes.Count > 1 ? string.Empty : $"Lvl {Level}, ";
 
-        return $"{Name} - {Race.ToDisplayString()} {alignment} {classes}{dualInfo} ({levelPart}HP {CurrentHitPoints}/{MaxHitPoints}, XP {Experience}, GP {GoldPieces}, SP {SilverPieces}, EP {ElectrumPieces}, CP {CopperPieces}, PP {PlatinumPieces}, AC {ArmorClass}, THAC0 {Thac0Display}, Attacks {NumberOfAttacks}, Dmg {DamageDisplay}){statusInfo}{classLevels}\n" +
+        return $"{Name} - {Race.ToDisplayString()} {alignment} {classes}{dualInfo} ({levelPart}HP {CurrentHitPoints}/{MaxHitPoints}, XP {Experience}, GP {GoldPieces}, SP {SilverPieces}, EP {ElectrumPieces}, CP {CopperPieces}, PP {PlatinumPieces}, AC {ArmorClass}, MV {Move}, THAC0 {Thac0Display}, Attacks {NumberOfAttacks}, Dmg {DamageDisplay}){statusInfo}{classLevels}\n" +
                $"STR {GetStrengthDisplay()}, INT {Abilities.Intelligence}, WIS {Abilities.Wisdom}, DEX {Abilities.Dexterity}, CON {Abilities.Constitution}, CHA {Abilities.Charisma}";
     }
 
@@ -495,6 +496,169 @@ public class Character
             return 0;
 
         return Math.Max(0, main.ToHitBonus);
+    }
+
+    public void RefreshMoveFromArmorAndClass()
+    {
+        EnsureClassProgressions();
+
+        var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
+        var effectiveLevel = GetClassLevel(primaryClass);
+
+        var baseMove = primaryClass == CharacterClass.Monk
+            ? GetMonkMove(effectiveLevel)
+            : 12;
+
+        var armorMove = GetArmorMoveLimit();
+        Move = IsWearingBodyArmor() ? Math.Min(baseMove, armorMove) : baseMove;
+    }
+
+    public void RefreshMonkProgressionStats()
+    {
+        EnsureClassProgressions();
+
+        var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
+        if (primaryClass != CharacterClass.Monk)
+            return;
+
+        var effectiveLevel = GetClassLevel(CharacterClass.Monk);
+
+        var dexterityAcModifier = IsWearingBodyArmor() ? 0 : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+        ArmorClass = GetMonkEffectiveArmorClass(effectiveLevel) + dexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);
+
+        if (!HasEquippedWeapon())
+        {
+            NumberOfAttacks = GetMonkOpenHandAttacks(effectiveLevel);
+            Damage = GetMonkOpenHandDamage(effectiveLevel);
+        }
+    }
+
+    private bool HasEquippedWeapon()
+    {
+        var mainHandWeapon = Equipment.TryGetValue(EquipmentSlot.MainHand, out var main)
+                             && main != null
+                             && main.Type == ItemType.Weapon;
+        var offHandWeapon = Equipment.TryGetValue(EquipmentSlot.OffHand, out var off)
+                            && off != null
+                            && off.Type == ItemType.Weapon;
+        return mainHandWeapon || offHandWeapon;
+    }
+
+    private bool IsWearingBodyArmor()
+    {
+        return Equipment.TryGetValue(EquipmentSlot.Body, out var body)
+               && body != null
+               && body.Type == ItemType.Armor;
+    }
+
+    private int GetArmorMoveLimit()
+    {
+        if (!Equipment.TryGetValue(EquipmentSlot.Body, out var body)
+            || body == null
+            || body.Type != ItemType.Armor)
+        {
+            return 12;
+        }
+
+        var name = body.Name ?? string.Empty;
+
+        if (name.Contains("Full Plate", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Plate Mail", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Banded Mail", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Splint Mail", StringComparison.OrdinalIgnoreCase))
+            return 6;
+
+        if (name.Contains("Chain Mail", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Scale Mail", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Ring Mail", StringComparison.OrdinalIgnoreCase))
+            return 9;
+
+        return 12;
+    }
+
+    private static int GetMonkEffectiveArmorClass(int level)
+    {
+        return level switch
+        {
+            <= 1 => 10,
+            2 => 9,
+            3 => 8,
+            4 => 7,
+            5 => 7,
+            6 => 6,
+            7 => 5,
+            8 => 4,
+            9 => 3,
+            10 => 3,
+            11 => 2,
+            12 => 1,
+            13 => 0,
+            14 => -1,
+            15 => -1,
+            16 => -2,
+            _ => -3
+        };
+    }
+
+    private static int GetMonkMove(int level)
+    {
+        return level switch
+        {
+            <= 1 => 15,
+            2 => 16,
+            3 => 17,
+            4 => 18,
+            5 => 19,
+            6 => 20,
+            7 => 21,
+            8 => 22,
+            9 => 23,
+            10 => 24,
+            11 => 25,
+            12 => 26,
+            13 => 27,
+            14 => 28,
+            15 => 29,
+            16 => 30,
+            _ => 32
+        };
+    }
+
+    private static float GetMonkOpenHandAttacks(int level)
+    {
+        return level switch
+        {
+            <= 3 => 1f,
+            <= 5 => 1.25f,
+            <= 8 => 1.5f,
+            <= 10 => 2f,
+            <= 13 => 2.5f,
+            <= 15 => 3f,
+            <= 17 => 4f,
+            _ => 4f
+        };
+    }
+
+    private static string GetMonkOpenHandDamage(int level)
+    {
+        return level switch
+        {
+            <= 1 => "1d3",
+            2 => "1d4",
+            3 or 4 => "1d6",
+            5 => "1d6+1",
+            6 => "1d7+1",
+            7 => "1d8+1",
+            8 or 9 => "1d11+1",
+            10 => "1d11+2",
+            11 => "1d11+3",
+            12 => "1d13+3",
+            13 => "1d13+4",
+            14 => "1d15+5",
+            15 => "1d19+5",
+            16 => "1d24+6",
+            _ => "1d25+7"
+        };
     }
 }
 

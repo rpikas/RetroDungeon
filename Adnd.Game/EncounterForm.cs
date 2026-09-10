@@ -137,7 +137,7 @@ public sealed class EncounterForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 16f, FontStyle.Bold),
-            Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK",
+            Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK   I)NFO",
             TextAlign = ContentAlignment.MiddleLeft
         };
 
@@ -381,7 +381,7 @@ public sealed class EncounterForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BackColor = Color.Black,
             Font = new Font("Consolas", 16f, FontStyle.Bold),
-            Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK\nG)ROUP   I)NFO",
+            Text = "F)IGHT   U)SE ITEM   R)UN\nS)PELL   P)ARRY      T)AKE BACK   G)ROUP   I)NFO",
             TextAlign = ContentAlignment.MiddleLeft
         };
 
@@ -1562,17 +1562,19 @@ public sealed class EncounterForm : Form
 
         if (_multipleGroups)
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}\nG)ROUP   I)NFO";
+            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}   G)ROUP   I)NFO";
         }
         else
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}\nI)NFO";
+            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}   I)NFO";
         }
     }
 
     private void ShowEncounterInfoWindow()
     {
         var text = BuildEncounterInfoText();
+        var mmMonsterName = ResolveEncounterMonsterNameForMmArt();
+        var mmImagePath = TryFindMonsterMmImagePath(mmMonsterName);
 
         using var form = new Form
         {
@@ -1602,6 +1604,49 @@ public sealed class EncounterForm : Form
             DialogResult = DialogResult.OK
         };
 
+        var showMmPicture = new Button
+        {
+            Text = "Show MM Pic",
+            Dock = DockStyle.Right,
+            Width = 110,
+            Visible = !string.IsNullOrWhiteSpace(mmImagePath)
+        };
+
+        showMmPicture.Click += (_, _) =>
+        {
+            if (string.IsNullOrWhiteSpace(mmImagePath))
+                return;
+
+            using var image = TryLoadImageFromPath(mmImagePath);
+            if (image == null)
+            {
+                ViewerMessage.Say(form, "Monster Image", "Could not load MM picture.", null);
+                return;
+            }
+
+            using var imageForm = new Form
+            {
+                Text = $"MM Picture - {mmMonsterName}",
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.Sizable,
+                ClientSize = new Size(820, 620),
+                MinimizeBox = false,
+                MaximizeBox = true
+            };
+
+            var picture = new PictureBox
+            {
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Image = (Image)image.Clone(),
+                BackColor = Color.Black
+            };
+
+            imageForm.Controls.Add(picture);
+            imageForm.ShowDialog(form);
+            picture.Image?.Dispose();
+        };
+
         var panel = new Panel
         {
             Dock = DockStyle.Bottom,
@@ -1609,6 +1654,7 @@ public sealed class EncounterForm : Form
             Padding = new Padding(8)
         };
         panel.Controls.Add(close);
+        panel.Controls.Add(showMmPicture);
 
         form.Controls.Add(details);
         form.Controls.Add(panel);
@@ -1617,6 +1663,97 @@ public sealed class EncounterForm : Form
 
         form.ShowDialog(this);
         UpdateHeader();
+    }
+
+    private string ResolveEncounterMonsterNameForMmArt()
+    {
+        if (_session != null)
+        {
+            var firstName = _session.Monsters
+                .GroupBy(m => m.GroupId)
+                .OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.FirstOrDefault()?.Template?.Name)
+                .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n));
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+                return firstName!;
+        }
+
+        if (!string.IsNullOrWhiteSpace(_singleMonsterTemplate?.Name))
+            return _singleMonsterTemplate.Name;
+
+        return _monsterName;
+    }
+
+    private static string? TryFindMonsterMmImagePath(string monsterName)
+    {
+        if (string.IsNullOrWhiteSpace(monsterName))
+            return null;
+
+        var trimmedName = monsterName.Trim();
+        var slug = trimmedName.ToLowerInvariant().Replace(" ", "_");
+        var camelCase = trimmedName.Replace(" ", "");
+        var noComma = trimmedName.Replace(",", string.Empty).Trim();
+        var noCommaSlug = noComma.ToLowerInvariant().Replace(" ", "_");
+        var noCommaCamelCase = noComma.Replace(" ", "");
+
+        var baseNames = new[]
+        {
+            trimmedName,
+            slug,
+            camelCase,
+            noComma,
+            noCommaSlug,
+            noCommaCamelCase
+        }
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToList();
+
+        var exts = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp" };
+        var folders = new[]
+        {
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Monsters", "MM1"),
+            Path.Combine("Adnd.Game", "Assets", "Monsters", "MM1"),
+            Path.Combine("Assets", "Monsters", "MM1")
+        };
+
+        foreach (var folder in folders)
+        {
+            foreach (var baseName in baseNames)
+            {
+                foreach (var ext in exts)
+                {
+                    var withMm = Path.Combine(folder, baseName + "MM" + ext);
+                    if (File.Exists(withMm))
+                        return withMm;
+
+                    var withUnderscoreMm = Path.Combine(folder, baseName + "_MM" + ext);
+                    if (File.Exists(withUnderscoreMm))
+                        return withUnderscoreMm;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static Image? TryLoadImageFromPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            return null;
+
+        try
+        {
+            using var imageSharp = ImageSharpImage.Load<ImageSharpRgba32>(path);
+            using var ms = new MemoryStream();
+            imageSharp.Save(ms, new ImageSharpPngEncoder());
+            ms.Position = 0;
+            return new Bitmap(ms);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private string BuildEncounterInfoText()

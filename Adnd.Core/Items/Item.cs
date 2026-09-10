@@ -18,7 +18,7 @@ public class Item
     public int ArmorClassBonus { get; set; } = 0;
     public string Damage { get; set; } = ""; // e.g. "1d6", "2d4"
     public string DamageVsLarge { get; set; } = ""; // e.g. "1d6", "2d4"
-    public string DamageType { get; set; } = ""; // e.g. "slashing", "piercing", "bludgeoning". TBD: should be enum
+    public string DamageType { get; set; } = ""; // e.g. "slashing", "piercing", "Blunt". TBD: should be enum
     public int SpeedFactor { get; set; } = 0;
     public string WeaponLength { get; set; } = ""; // e.g. "short", "medium", "long". TBD: should be enum
     public bool IsTwoHanded { get; set; } = false;
@@ -68,7 +68,7 @@ some explanation of some of the fields:
 1. Combat‑relevanta attribut (högt värde)
 Dessa är nästan alltid nödvändiga i AD&D‑liknande system.
 
-DamageType — "Bludgeoning", "Slashing", "Piercing"  
+DamageType — "Blunt", "Slashing", "Piercing"  
 Viktigt för resistances och immunities.
 
 SpeedFactor — AD&D‑specifikt initiativvärde för vapen

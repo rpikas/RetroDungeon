@@ -137,21 +137,7 @@
       "ArmorClass": 5,
       "HitDice": 7,
       "HitPoints": 45,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 10,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Morale": { "Value": 11 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Claw",
@@ -179,21 +165,7 @@
       "ArmorClass": 3,
       "HitDice": 7,
       "HitPoints": 42,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Morale": { "Value": 12 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Bite",
@@ -221,21 +193,7 @@
       "ArmorClass": 4,
       "HitDice": 8,
       "HitPoints": 50,
-      "Movement": {
-        "Walk": 0,
-        "Fly": 0,
-        "Swim": 40,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Morale": { "Value": 11 },
+      "Movement": 40,
       "Attacks": [
         {
           "Name": "Bite",
@@ -258,21 +216,7 @@
       "ArmorClass": 6,
       "HitDice": 8,
       "HitPoints": 48,
-      "Movement": {
-        "Walk": 10,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Morale": { "Value": 10 },
+      "Movement": 10,
       "Attacks": [
         {
           "Name": "Bite",
@@ -295,21 +239,7 @@
       "ArmorClass": 2,
       "HitDice": 7,
       "HitPoints": 42,
-      "Movement": {
-        "Walk": 0,
-        "Fly": 30,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 10,
-        "BreathWeapon": 11,
-        "Spell": 11
-      },
-      "Morale": { "Value": 13 },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Chilling Touch",
@@ -340,20 +270,7 @@
       "HitDice": 12,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 20
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
+      "Movement": 40,
       "Attacks": [
         {
           "Name": "Katana",
@@ -391,20 +308,7 @@
       "HitDice": 12,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 20
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
+      "Movement": 40,
       "Attacks": [
         {
           "Name": "Katana",
@@ -442,20 +346,7 @@
       "HitDice": 5,
       "HitDiceType": 10,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 20,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Bite",
@@ -476,20 +367,7 @@
       "NumberOfAppearancesMax": 4,
       "ArmorClass": 2,
       "HitDice": 9,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 40,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Claw",
@@ -540,20 +418,7 @@
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 9,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 20
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
+      "Movement": 40,
       "Attacks": [
         {
           "Name": "Dagger",

@@ -1,7 +1,7 @@
 {
   "Level": 2,
   "Monsters": [
-   
+
     {
       "Name": "Lvl 2 Magic-User",
       "Type": "Humanoid",
@@ -34,7 +34,7 @@
         }
       ],
       "BaseXPValue": 75,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -74,7 +74,7 @@
       ],
       "BaseXPValue": 75,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -105,7 +105,7 @@
       "SpecialAbilities": [],
       "BaseXPValue": 75,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -141,7 +141,7 @@
       ],
       "BaseXPValue": 75,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -162,15 +162,10 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Monk Abilities",
-          "Description": "Improved AC, faster movement, and Open Hand attack."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 90,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
 
@@ -773,7 +768,7 @@
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     }
   ]

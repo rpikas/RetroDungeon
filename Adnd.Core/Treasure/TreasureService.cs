@@ -147,6 +147,13 @@ public sealed class TreasureService
         bool suppressFailedRollLogs = false)
     {
         var (tableCode, repeats) = ParseTreasureToken(token);
+
+        if (string.Equals(tableCode, "WORNEQUIPMENT", StringComparison.OrdinalIgnoreCase))
+        {
+            result.LogLines.Add($"{monsterDisplayName}: {scope} treasure {token} deferred to worn equipment magic rules.");
+            return;
+        }
+
         if (!_tableProvider.TryGetTable(tableCode, out var table))
         {
             result.LogLines.Add($"{monsterDisplayName}: unknown {scope} treasure type '{token}'.");

@@ -75,8 +75,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "20",
-      "TreasureType": "A",
-      "IndividualTreasure": "M",
+      "TreasureType": "A,WornEquipment",
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -110,7 +109,7 @@
       "ExtraHitPoints": 1,
       "%InLair": "10",
       "TreasureType": "B",
-      "IndividualTreasure": "K",
+      "IndividualTreasure": "K,WornEquipment",
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -323,7 +322,7 @@
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "AI"
     },
     {
@@ -382,13 +381,7 @@
         }
       ],
       "SpecialAttacks": [],
-      "SpecialDefenses": [
-
-        {
-          "Name": "Piercing Resistance",
-          "Description": "Piercing weapons inflict only 1 point or half damage depending on interpretation."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Non-",
       "Alignment": "Neutral",
@@ -1008,7 +1001,7 @@
       "ArmorClass": 7,
       "Movement": 12,
       "HitDice": 1,
-      "HitDiceType": 1,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "Nil",
       "TreasureType": "Nil",
@@ -1024,7 +1017,7 @@
       "SpecialDefenses": [
         {
           "Name": "Half Damage from Sharp Weapons",
-          "Description": "Edged/slashing/piercing weapons deal half damage."
+          "Description": "Slashing and Piercing weapons deal half damage."
         }
       ],
       "MagicResistance": "Immune to charm, sleep, cold-based magic, and all willpower-affecting spells",
@@ -1070,7 +1063,7 @@
         }
       ],
       "BaseXPValue": 25,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
 
@@ -1107,7 +1100,7 @@
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1138,7 +1131,7 @@
       "SpecialAbilities": [],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1174,7 +1167,7 @@
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1205,7 +1198,7 @@
       "SpecialAbilities": [],
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1241,7 +1234,7 @@
       ],
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1277,7 +1270,7 @@
       ],
       "BaseXPValue": 40,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1313,7 +1306,7 @@
       ],
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1344,7 +1337,7 @@
       "SpecialAbilities": [],
       "BaseXPValue": 50,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1380,7 +1373,7 @@
       ],
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1416,7 +1409,7 @@
       ],
       "BaseXPValue": 40,
       "XPValuePerHitPoint": 2,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
     {
@@ -1510,7 +1503,7 @@
       ],
       "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
 
@@ -1541,7 +1534,7 @@
       ],
       "SpecialAbilities": [],
       "BaseXPValue": 5,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
     {
@@ -1577,7 +1570,7 @@
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
     {
@@ -1609,7 +1602,7 @@
       ],
       "BaseXPValue": 15,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J",
+      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     }
   ]

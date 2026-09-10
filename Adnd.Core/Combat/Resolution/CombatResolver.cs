@@ -287,6 +287,7 @@ public sealed class CombatResolver
                 if (HasAnySpecialAbility(monster,
                         "Level 1 Mage spells",
                         "Level 1 Magic-User spells",
+                        "Level 2 Illusionist spells",
                         "Level 1 Priest spells",
                         "Level 1 Cleric spells",
                         "Level 1 Druid spells",
@@ -304,6 +305,7 @@ public sealed class CombatResolver
                     "Level 1 Magic-User spells",
                     "Level 2 Mage spells",
                     "Level 2 Magic-User spells",
+                    "Level 2 Illusionist spells",
                     "Level 1 Priest spells",
                     "Level 1 Cleric spells",
                     "Level 1 Druid spells",
@@ -311,6 +313,13 @@ public sealed class CombatResolver
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
             }
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 2 Illusionist spells")
+                && ShouldTryMonsterLevel1SpellCast()
+                && ResolveLevel2IllusionistSpell(monster, session, events))
+                continue;
 
             if (!isSilenced
                 && !isFeebleminded
@@ -1110,16 +1119,29 @@ public sealed class CombatResolver
                 }
 
                 var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
-                int damage = RollDamage(damageExpression) + AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength);
+                var strengthDamageBonus = mainHand != null && mainHand.Type == ItemType.Weapon
+                    ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)
+                    : 0;
+                int damage = RollDamage(damageExpression) + strengthDamageBonus;
+
+                if (IsHalfDamageFromSharpWeapons(target, mainHand))
+                {
+                    var originalDamage = damage;
+                    damage = Math.Max(1, damage / 2);
+                    events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
+                }
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
                 WakeMonsterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
 
                 var weaponName = mainHand != null ? mainHand.Name : "bare hands";
+                var damageFormula = strengthDamageBonus == 0
+                    ? damageExpression
+                    : $"{damageExpression}+{strengthDamageBonus}";
 
                 events.Add(new CombatEvent(
-                    $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageExpression}+{AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
+                    $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
 
                 if (target.CurrentHitPoints <= 0)
                 {
@@ -1155,6 +1177,27 @@ public sealed class CombatResolver
         var roundsAcid = _dice.Roll(3);
         session.SetPartyAcidArrow(target.Name, roundsAcid);
         events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+        return true;
+    }
+
+    private bool ResolveLevel2IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Improved Phantasmal Force!"));
+            ResolveIllusionistPhantasmalForce(monster, session, events);
+            return true;
+        }
+
+        var imageCount = _dice.Roll(4);
+        var rounds = Math.Max(1, Math.Max(1, monster.Template.HitDice) * 2);
+        session.SetMonsterMirrorImage(monster, imageCount, rounds);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Mirror Image on itself. {imageCount} mirror image(s) appear for {rounds} round(s)."));
         return true;
     }
 
@@ -1847,5 +1890,24 @@ public sealed class CombatResolver
         }
 
         return string.IsNullOrWhiteSpace(member.Damage) ? "1d2" : member.Damage;
+    }
+
+    private static bool IsHalfDamageFromSharpWeapons(MonsterInstance target, Item? mainHand)
+    {
+        if (mainHand == null || mainHand.Type != ItemType.Weapon)
+            return false;
+
+        var damageType = mainHand.DamageType?.Trim();
+        if (string.IsNullOrWhiteSpace(damageType))
+            return false;
+
+        var isSharp = damageType.Equals("Piercing", StringComparison.OrdinalIgnoreCase)
+            || damageType.Equals("Slashing", StringComparison.OrdinalIgnoreCase);
+
+        if (!isSharp)
+            return false;
+
+        return target.Template.SpecialDefenses.Any(d =>
+            string.Equals(d.Name?.Trim(), "Half Damage from Sharp Weapons", StringComparison.OrdinalIgnoreCase));
     }
 }

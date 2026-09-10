@@ -530,6 +530,7 @@ public sealed class CombatCoordinator
         DistributeCoin(survivors, valuablesValueGp, (c, amount) => c.GoldPieces += amount);
 
         var magicAward = AwardMagicItemsFromPlaceholders(survivors, treasure.MagicPlaceholders, dungeonLevel);
+        var wornEquipmentAward = AwardWornEquipmentMagicItems(session, survivors, dungeonLevel);
         var randomItemsAward = AwardRandomItemsAfterCombat(survivors, dungeonLevel);
 
         // --- Logg ---
@@ -601,6 +602,20 @@ public sealed class CombatCoordinator
         {
             sb.AppendLine("- Unclaimed magic items:");
             foreach (var unassigned in magicAward.UnassignedItems)
+                sb.AppendLine($"    {unassigned}");
+        }
+
+        if (wornEquipmentAward.AssignedItems.Count > 0)
+        {
+            sb.AppendLine("- Worn equipment magic items:");
+            foreach (var assigned in wornEquipmentAward.AssignedItems)
+                sb.AppendLine($"    {assigned.ReceiverName}: {assigned.ItemName}");
+        }
+
+        if (wornEquipmentAward.UnassignedItems.Count > 0)
+        {
+            sb.AppendLine("- Unclaimed worn equipment magic items:");
+            foreach (var unassigned in wornEquipmentAward.UnassignedItems)
                 sb.AppendLine($"    {unassigned}");
         }
 
@@ -700,6 +715,85 @@ public sealed class CombatCoordinator
 
                 if (!assigned)
                     result.UnassignedItems.Add(item.Name + " (no one can carry)");
+            }
+        }
+
+        return result;
+    }
+
+    private MagicAwardResult AwardWornEquipmentMagicItems(CombatSession session, List<Character> survivors, int? dungeonLevel)
+    {
+        var result = new MagicAwardResult();
+        if (session.Monsters.Count == 0 || survivors.Count == 0)
+            return result;
+
+        var allItems = FilterItemsByDungeonLevelCostCap(_itemRepository.LoadAll().ToList(), dungeonLevel);
+        if (allItems.Count == 0)
+            return result;
+
+        var nextReceiverIndex = 0;
+
+        foreach (var monster in session.Monsters)
+        {
+            if (!HasWornEquipmentTreasure(monster.Template.TreasureType))
+                continue;
+
+            if (!TryResolveWornEquipmentClass(monster.Template, out var monsterClass))
+                continue;
+
+            var level = ResolveWornEquipmentLevel(monster.Template);
+            var chancePercent = Math.Clamp(level * 5, 0, 100);
+            if (chancePercent <= 0)
+                continue;
+
+            var hasMiscWeapon = false;
+            var miscWeaponIsEdged = false;
+
+            RollWornEquipmentCategory("Armor", chancePercent, IsWornEquipmentArmor, false);
+            RollWornEquipmentCategory("Shield", chancePercent, i => i.Type == ItemType.Shield, false);
+            RollWornEquipmentCategory("Sword", chancePercent, IsWornEquipmentSword, false);
+            RollWornEquipmentCategory("Miscellaneous Weapon", chancePercent, IsWornEquipmentMiscWeapon, true);
+            RollWornEquipmentCategory("Potion", chancePercent, i => i.Type == ItemType.Potion, false);
+            RollWornEquipmentCategory("Scroll", chancePercent, i => i.Type == ItemType.Scroll, false);
+            RollWornEquipmentCategory("Ring", chancePercent, IsRingItem, false);
+            RollWornEquipmentCategory("Miscellaneous Magic", chancePercent, IsMiscMagicItem, false);
+
+            if (monsterClass == CharacterClass.Cleric && (!hasMiscWeapon || miscWeaponIsEdged))
+            {
+                RollWornEquipmentCategory("Wand/Staff/Rod", chancePercent, IsRodStaffWandItem, false, forceCategoryForCleric: true);
+            }
+            else if (monsterClass == CharacterClass.MagicUser)
+            {
+                RollWornEquipmentCategory("Wand/Staff/Rod", chancePercent, IsRodStaffWandItem, false);
+            }
+
+            void RollWornEquipmentCategory(string categoryName, int categoryChancePercent, Func<Item, bool> categoryFilter, bool isMiscWeaponCategory, bool forceCategoryForCleric = false)
+            {
+                if (!forceCategoryForCleric && !IsCategoryAllowed(monsterClass, categoryName))
+                    return;
+
+                var chanceRoll = _dice.Roll(100);
+                if (chanceRoll > categoryChancePercent)
+                    return;
+
+                if (!TrySelectWornEquipmentItem(allItems, categoryFilter, monsterClass, out var selectedItem, out var rerollUsed))
+                    return;
+
+                if (isMiscWeaponCategory)
+                {
+                    hasMiscWeapon = selectedItem != null;
+                    miscWeaponIsEdged = selectedItem != null && IsEdgedWeapon(selectedItem);
+                }
+
+                if (selectedItem == null)
+                    return;
+
+                if (!TryAssignItemToSurvivors(survivors, selectedItem, result, ref nextReceiverIndex))
+                {
+                    result.UnassignedItems.Add($"{selectedItem.Name} (from WornEquipment: {monster.Template.Name}, {categoryName})");
+                }
+
+                RuleApplicationInfo.Publish($"WornEquipment: {monster.DisplayName} {categoryName} roll {chanceRoll}/100 <= {categoryChancePercent}%: yes. Item: {selectedItem.Name}{(rerollUsed ? " (rerolled once)" : string.Empty)}.");
             }
         }
 
@@ -903,6 +997,23 @@ public sealed class CombatCoordinator
         return item.Name.StartsWith("Ring", StringComparison.OrdinalIgnoreCase);
     }
 
+    private static bool IsWornEquipmentArmor(Item item)
+    {
+        return item.Type == ItemType.Armor;
+    }
+
+    private static bool IsWornEquipmentSword(Item item)
+    {
+        return item.Type == ItemType.Weapon
+               && item.Name.Contains("Sword", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsWornEquipmentMiscWeapon(Item item)
+    {
+        return item.Type == ItemType.Weapon
+               && !item.Name.Contains("Sword", StringComparison.OrdinalIgnoreCase);
+    }
+
     private static bool IsRodStaffWandItem(Item item)
     {
         if (item == null)
@@ -920,6 +1031,187 @@ public sealed class CombatCoordinator
             return false;
 
         return !IsRingItem(item) && !IsRodStaffWandItem(item);
+    }
+
+    private static bool HasWornEquipmentTreasure(string? treasureType)
+    {
+        if (string.IsNullOrWhiteSpace(treasureType))
+            return false;
+
+        return treasureType
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(t => t.Trim())
+            .Select(t =>
+            {
+                var idx = t.IndexOf('(');
+                return idx > 0 ? t[..idx].Trim() : t;
+            })
+            .Any(t => string.Equals(t, "WornEquipment", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static int ResolveWornEquipmentLevel(Monster monster)
+    {
+        if (monster.HitDice > 0)
+            return monster.HitDice;
+
+        var name = monster.Name ?? string.Empty;
+        var digits = new string(name.Where(char.IsDigit).ToArray());
+        if (int.TryParse(digits, out var parsed) && parsed > 0)
+            return parsed;
+
+        return 1;
+    }
+
+    private static bool TryResolveWornEquipmentClass(Monster monster, out CharacterClass characterClass)
+    {
+        var text = string.Join(" ", new[]
+        {
+            monster.Name,
+            string.Join(" ", monster.SpecialAbilities.Select(a => a.Name))
+        }).ToLowerInvariant();
+
+        if (text.Contains("bard") || text.Contains("assassin") || text.Contains("monk") || text.Contains("thief"))
+        {
+            characterClass = CharacterClass.Thief;
+            return true;
+        }
+
+        if (text.Contains("druid") || text.Contains("cleric") || text.Contains("priest"))
+        {
+            characterClass = CharacterClass.Cleric;
+            return true;
+        }
+
+        if (text.Contains("illusionist") || text.Contains("magic-user") || text.Contains("magic user") || text.Contains("mage"))
+        {
+            characterClass = CharacterClass.MagicUser;
+            return true;
+        }
+
+        if (text.Contains("ranger") || text.Contains("paladin") || text.Contains("fighter"))
+        {
+            characterClass = CharacterClass.Fighter;
+            return true;
+        }
+
+        // Default fallback for WornEquipment when no class marker is found.
+        characterClass = CharacterClass.Fighter;
+        return true;
+
+    }
+
+    private static bool IsCategoryAllowed(CharacterClass cls, string categoryName)
+    {
+        var key = categoryName.Trim().ToLowerInvariant();
+        return cls switch
+        {
+            CharacterClass.Fighter => key is "armor" or "shield" or "sword" or "miscellaneous weapon" or "potion",
+            CharacterClass.MagicUser => key is "scroll" or "ring" or "wand/staff/rod" or "miscellaneous magic",
+            CharacterClass.Cleric => key is "armor" or "shield" or "miscellaneous weapon" or "potion" or "scroll" or "miscellaneous magic",
+            CharacterClass.Thief => key is "shield" or "sword" or "miscellaneous weapon" or "potion" or "ring" or "miscellaneous magic",
+            _ => false
+        };
+    }
+
+    private static bool TrySelectWornEquipmentItem(List<Item> allItems, Func<Item, bool> categoryFilter, CharacterClass ownerClass, out Item? selected, out bool rerollUsed)
+    {
+        selected = null;
+        rerollUsed = false;
+
+        var categoryPool = allItems
+            .Where(categoryFilter)
+            .Where(IsMagicalForWornEquipment)
+            .ToList();
+
+        if (categoryPool.Count == 0)
+            return false;
+
+        selected = PickRandom(categoryPool);
+        if (selected == null)
+            return false;
+
+        if (!IsWornEquipmentItemUsableBy(ownerClass, selected))
+        {
+            rerollUsed = true;
+            var firstPick = selected;
+            var rerollPool = categoryPool
+                .Where(i => !ReferenceEquals(i, firstPick))
+                .ToList();
+
+            selected = PickRandom(rerollPool);
+            if (selected == null || !IsWornEquipmentItemUsableBy(ownerClass, selected))
+            {
+                selected = null;
+                return false;
+            }
+        }
+
+        selected = CloneItem(selected);
+        return true;
+    }
+
+    private static bool IsMagicalForWornEquipment(Item item)
+    {
+        return item.Type is ItemType.Potion or ItemType.Scroll or ItemType.MagicItem
+               || IsRingItem(item)
+               || IsRodStaffWandItem(item)
+               || item.MagicBonus != 0
+               || item.ToHitBonus != 0
+               || item.ArmorClassBonus != 0
+               || item.SpecialAbilities.Count > 0
+               || item.IsCursed;
+    }
+
+    private static bool IsWornEquipmentItemUsableBy(CharacterClass ownerClass, Item item)
+    {
+        if (item.IsCursed)
+            return false;
+
+        if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
+            return true;
+
+        return item.AllowedClasses.Contains(ownerClass);
+    }
+
+    private static bool IsEdgedWeapon(Item item)
+    {
+        var damageType = item.DamageType?.Trim();
+        if (string.IsNullOrWhiteSpace(damageType))
+            return false;
+
+        return damageType.Equals("Slashing", StringComparison.OrdinalIgnoreCase)
+               || damageType.Equals("Piercing", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static Item? PickRandom(List<Item> pool)
+    {
+        if (pool.Count == 0)
+            return null;
+
+        return pool[Random.Shared.Next(pool.Count)];
+    }
+
+    private static bool TryAssignItemToSurvivors(List<Character> survivors, Item item, MagicAwardResult result, ref int nextReceiverIndex)
+    {
+        for (int attempt = 0; attempt < survivors.Count; attempt++)
+        {
+            var idx = (nextReceiverIndex + attempt) % survivors.Count;
+            var receiver = survivors[idx];
+            if (!receiver.CanCarry(item))
+                continue;
+
+            receiver.Inventory.Add(item);
+            result.AssignedItems.Add(new AssignedMagicItem
+            {
+                ReceiverName = receiver.Name,
+                ItemName = item.Name
+            });
+
+            nextReceiverIndex = (idx + 1) % survivors.Count;
+            return true;
+        }
+
+        return false;
     }
 
     private static Item CloneItem(Item source)
