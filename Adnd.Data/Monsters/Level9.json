@@ -493,7 +493,7 @@
       ],
       "BaseXPValue": 7000,
       "XPValuePerHitPoint": 14,
-      "TreasureType": "H",
+      "TreasureType": "E,Q(x10),R",
       "Source": "Adnd"
     },
     {
@@ -530,7 +530,8 @@
       ],
       "BaseXPValue": 4500,
       "XPValuePerHitPoint": 10,
-      "TreasureType": "H",
+      "InLair": 10,
+      "TreasureType": "E,Q(x10),R",
       "Source": "Adnd"
     },
 
@@ -573,7 +574,8 @@
       ],
       "BaseXPValue": 5000,
       "XPValuePerHitPoint": 15,
-      "TreasureType": "H",
+      "InLair": 30,
+      "TreasureType": "B,Q(x5),X",
       "Source": "Adnd"
     },
     {

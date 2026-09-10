@@ -984,3 +984,25 @@ Fix: Slowed mobs hits every round, but only every second round they should be ab
 __________
 
 If "SpecialAbilities":  "Level 3 Magic-User spells" then let it be 50 % chanse the ecounters cast Slow and 50% chanse they cast Fireball. 53,8
+Added level 6-9 all classes to the encounter table manually
+____
+
+when finding gems use the following table to determine the value of the gem is found one by one, write to the dice and rule log what what you rolled and the value of each gem.
+Dice Score	Base Value
+01–25	10 g.p. each
+26–50	50 g.p. each
+51–70	100 g.p. each
+71–90	500 g.p. each
+91–99	1,000 g.p. each
+100	    5,000 g.p. each
+
+If finding jewelry, use the following table to determine the value of the jewelry found one by one, write to the dice and rule log what what you rolled and the value of each jewelry.
+Dice Roll	Base Value
+01–10	100–1,000 g.p.
+11–20	200–1,200 g.p.
+21–40	300–1,800 g.p.
+41–50	500–3,000 g.p.
+51–70	1,000–6,000 g.p.
+71–90	2,000–8,000 g.p.
+91–00	2,000–12,000 g.p.
+

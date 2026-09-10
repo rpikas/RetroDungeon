@@ -292,21 +292,14 @@ public sealed class TreasureService
         if (count <= 0)
             return;
 
-        var min = Math.Min(rule.MinValueGp, rule.MaxValueGp);
-        var max = Math.Max(rule.MinValueGp, rule.MaxValueGp);
-
         for (int i = 0; i < count; i++)
         {
-            var value = max <= 0 ? 0 : _random.Next(min, max + 1);
+            var value = RollValuableBaseValue(category, rule, logs, i + 1);
             var scaledValue = value;
             if (Math.Abs(valueScaleFactor - 1d) > 0.0001d)
             {
                 scaledValue = Math.Max(0, (int)Math.Round(value * Math.Max(0d, valueScaleFactor), MidpointRounding.AwayFromZero));
-                logs.Add($"    {category} #{i + 1}: value before Lootfactor {value} gp, after Lootfactor x{valueScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {scaledValue} gp (range {min}-{max})");
-            }
-            else
-            {
-                logs.Add($"    {category} #{i + 1}: value roll {value} gp (range {min}-{max})");
+                logs.Add($"    {category} #{i + 1}: value before Lootfactor {value} gp, after Lootfactor x{valueScaleFactor.ToString("0.###", CultureInfo.InvariantCulture)} => {scaledValue} gp");
             }
 
             target.Add(new TreasureValuableResult
@@ -319,6 +312,57 @@ public sealed class TreasureService
 
         var total = target.Where(x => x.SourceTable == source && x.Category == category).TakeLast(count).Sum(x => x.ValueGp);
         logs.Add($"  + {category}: {count} item(s), total {total} gp");
+    }
+
+    private int RollValuableBaseValue(string category, TreasureValuablesRule rule, List<string> logs, int itemNumber)
+    {
+        if (string.Equals(category, "Gem", StringComparison.OrdinalIgnoreCase))
+            return RollGemBaseValue(logs, itemNumber);
+
+        if (string.Equals(category, "Jewelry", StringComparison.OrdinalIgnoreCase))
+            return RollJewelryBaseValue(logs, itemNumber);
+
+        var min = Math.Min(rule.MinValueGp, rule.MaxValueGp);
+        var max = Math.Max(rule.MinValueGp, rule.MaxValueGp);
+        var value = max <= 0 ? 0 : _random.Next(min, max + 1);
+        logs.Add($"    {category} #{itemNumber}: value roll {value} gp (range {min}-{max})");
+        return value;
+    }
+
+    private int RollGemBaseValue(List<string> logs, int itemNumber)
+    {
+        var roll = _random.Next(1, 101);
+        var value = roll switch
+        {
+            <= 25 => 10,
+            <= 50 => 50,
+            <= 70 => 100,
+            <= 90 => 500,
+            <= 99 => 1000,
+            _ => 5000
+        };
+
+        logs.Add($"    Gem #{itemNumber}: d100 roll {roll} => base value {value} gp");
+        return value;
+    }
+
+    private int RollJewelryBaseValue(List<string> logs, int itemNumber)
+    {
+        var roll = _random.Next(1, 101);
+        var (min, max) = roll switch
+        {
+            <= 10 => (100, 1000),
+            <= 20 => (200, 1200),
+            <= 40 => (300, 1800),
+            <= 50 => (500, 3000),
+            <= 70 => (1000, 6000),
+            <= 90 => (2000, 8000),
+            _ => (2000, 12000)
+        };
+
+        var value = _random.Next(min, max + 1);
+        logs.Add($"    Jewelry #{itemNumber}: d100 roll {roll} => base range {min}-{max} gp, value {value} gp");
+        return value;
     }
 
     private bool RollChance(int chancePercent, string context, List<string> logs, double chanceScaleFactor = 1d, bool suppressFailureLog = false)
