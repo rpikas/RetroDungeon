@@ -23,6 +23,8 @@ public sealed class CombatSession
     public Dictionary<string, int> BarkskinBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> StrengthBuffRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> StrengthBuffBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> HasteRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> HasteOriginalMove { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterMirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -176,6 +178,55 @@ public sealed class CombatSession
 
         StrengthBuffRounds[characterName] = rounds;
         return rounds;
+    }
+
+    public bool IsHasted(string characterName) => HasteRounds.TryGetValue(characterName, out var rounds) && rounds > 0;
+
+    public void SetHaste(string characterName, int rounds, int originalMove)
+    {
+        if (rounds <= 0)
+        {
+            HasteRounds.Remove(characterName);
+            HasteOriginalMove.Remove(characterName);
+            return;
+        }
+
+        if (!HasteOriginalMove.ContainsKey(characterName))
+            HasteOriginalMove[characterName] = Math.Max(1, originalMove);
+
+        HasteRounds[characterName] = rounds;
+    }
+
+    public int GetHasteRounds(string characterName)
+    {
+        return HasteRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int GetHasteOriginalMove(string characterName)
+    {
+        return HasteOriginalMove.TryGetValue(characterName, out var move) ? Math.Max(1, move) : 0;
+    }
+
+    public int TickHaste(string characterName)
+    {
+        if (!HasteRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            HasteRounds.Remove(characterName);
+            return 0;
+        }
+
+        HasteRounds[characterName] = rounds;
+        return rounds;
+    }
+
+    public void ClearHaste(string characterName)
+    {
+        HasteRounds.Remove(characterName);
+        HasteOriginalMove.Remove(characterName);
     }
 
     public void ClearStrengthBuff(string characterName)

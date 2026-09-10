@@ -101,6 +101,7 @@ public sealed class CombatCoordinator
             new BlessHandler(),
             new SleepHandler(),
             new StrengthHandler(),
+            new HasteHandler(),
             new MirrorImageHandler(),
             new InvisibilityHandler(),
             new ShieldSpellHandler(),

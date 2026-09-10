@@ -962,4 +962,7 @@ PHB page 31, E. 50,3
 ____
 
 Implement a level 3 magic user spell called Haste. I can be cast on one member of the party. The duration is 3+1 round per level of the caster. 
-The target can move and attack twice per round. the move speed is also doubled. 49,7
+The target can move and attack twice per round. the move speed is also doubled. 50,7
+
+______
+At level 5 and above monks can not be affected by disease, slow or haste

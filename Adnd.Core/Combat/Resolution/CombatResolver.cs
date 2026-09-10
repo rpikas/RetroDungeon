@@ -130,6 +130,21 @@ public sealed class CombatResolver
                         events.Add(new CombatEvent($"{member.Name}'s Barkskin fades (+{bonus} AC removed)."));
                     }
                 }
+
+            var hasteRounds = session.GetHasteRounds(member.Name);
+            if (hasteRounds > 0)
+            {
+                var hasteRemaining = session.TickHaste(member.Name);
+                if (hasteRemaining <= 0)
+                {
+                    var originalMove = session.GetHasteOriginalMove(member.Name);
+                    if (originalMove > 0)
+                        member.Move = originalMove;
+
+                    session.ClearHaste(member.Name);
+                    events.Add(new CombatEvent($"{member.Name}'s Haste fades."));
+                }
+            }
             }
 
             var strengthRounds = session.GetStrengthBuffRounds(member.Name);
@@ -1127,6 +1142,8 @@ public sealed class CombatResolver
 
 
         int attacks = GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
+        if (session.IsHasted(member.Name))
+            attacks *= 2;
 
         for (int i = 0; i < attacks; i++)
         {
