@@ -957,7 +957,7 @@
       "Type": "Aberration",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 0,
       "HitDice": 10,
       "HitDiceType": 8,
@@ -995,7 +995,7 @@
         }
       ],
       "BaseXPValue": 3000,
-      "TreasureType": "E",
+      "TreasureType": "Qx5",
       "Source": "Adnd"
     },
 

@@ -1372,36 +1372,47 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 3,
       "ArmorClass": 8,
+      "Movement": 1,
       "HitDice": 3,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 10,
+      "ExtraHitPoints": 3,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Pseudopod",
+          "Name": "Slam",
           "NumberOfAttacks": 1,
           "Damage": "2d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Acid",
-          "Description": "Dissolves metal and organic material; stone is unaffected."
+          "Name": "Corrosive Properties",
+          "Description": "Corrodes metal; chainmail dissolves in one round."
         },
         {
-          "Name": "Immunity",
-          "Description": "Immune to cold and most spells; takes half damage from fire."
-        },
-        {
-          "Name": "Ambush",
-          "Description": "Often hides on floors or ceilings, surprising on 1–3 in 6."
+          "Name": "Psionics (Possible)",
+          "Description": "Large specimens may possess psionic ability (21–121)."
         }
       ],
-      "BaseXPValue": 135,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Spell Immunity",
+          "Description": "Immune to most spells; unaffected by heat and cold."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Medium",
+      "BaseXPValue": 200,
+      "XPValuePerHitPoint": 5,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/grayooze.htm"
     },
+
+
     {
       "Name": "Pyrohydra 5 Heads",
       "Type": "Monstrous Beast",
@@ -1447,58 +1458,66 @@
 
     {
       "Name": "Hell Hound",
-      "Type": "Extraplanar Beast",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
+      "Type": "Canine",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 4,
-      "HitDice": 4,
+      "Movement": 12,
+      "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 40,
+      "%InLair": "30",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Fire Breath",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "1d10"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Fire Breath",
-          "Description": "Can exhale a cone of flame; damage scales with hit dice."
-        },
-        {
-          "Name": "Heat Sense",
-          "Description": "Can detect warm-blooded creatures up to 60 feet away."
-        },
-        {
-          "Name": "Fire Resistance",
-          "Description": "Takes minimal damage from fire-based attacks."
-        },
-        {
-          "Name": "Pack Tactics",
-          "Description": "Gains advantage when attacking with other Hell Hounds."
+          "Name": "Breathe Fire",
+          "Description": "Breathes scorching fire up to 1\"; deals 1 HP per HD, half on save vs. Dragon Breath."
         }
       ],
-      "BaseXPValue": 165,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Exceptional Senses",
+          "Description": "Locates hidden or invisible creatures 50% of the time."
+        },
+        {
+          "Name": "Stealth",
+          "Description": "Surprises opponents on 1–4 out of 6; surprised only on 1."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Size": "Medium",
+      "BaseXPValue": 250,
+      "XPValuePerHitPoint": 8,
+      "Alignment": "Lawful evil",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hellhound.htm"
     },
+
 
     {
       "Name": "Ghast",
       "Type": "Undead",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
       "ArmorClass": 4,
+      "Movement": 15,
       "HitDice": 4,
-      "HitPoints": 18,
-      "Movement": 30,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "B, Q, R, S, T",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
@@ -1508,37 +1527,58 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Paralyzing Stench",
-          "Description": "Creatures within 10 ft must save vs paralysis or be paralyzed 1d6 rounds."
+          "Name": "Nausea",
+          "Description": "Carrion stench in 10’ radius causes nausea unless save vs. poison is made; failure imposes -2 to hit."
         },
         {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold."
+          "Name": "Paralyzation",
+          "Description": "Paralyzes like a ghoul, but duration is doubled (6–24 turns); affects elves."
         }
       ],
-      "BaseXPValue": 200,
-      "XPValuePerHitPoint": 5,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Immune to Sleep & Charm",
+          "Description": "As undead, ghasts cannot be affected by sleep or charm spells."
+        },
+        {
+          "Name": "Cold Iron Vulnerability",
+          "Description": "Cold iron weapons deal double damage."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Very",
+      "Size": "Medium",
+      "BaseXPValue": 190,
+      "XPValuePerHitPoint": 4,
+      "Alignment": "Chaotic evil",
+      "Source": "Adnd",
+      "Other": "Often found with packs of ghouls; can be turned by clerics."
     },
 
     {
-      "Name": "Giant Scorpion",
+      "Name": "Scorpion, Giant",
       "Type": "Vermin",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 3,
-      "HitDice": 4,
-      "HitPoints": 20,
-      "Movement": 30,
+      "Movement": 15,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 5,
+      "%InLair": "50",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "Damage": "1d10"
         },
         {
           "Name": "Sting",
@@ -1546,91 +1586,177 @@
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Deadly Poison",
-          "Description": "Sting forces save vs poison or death."
+          "Description": "Victim must save vs. poison or die."
         }
       ],
-      "BaseXPValue": 175,
-      "XPValuePerHitPoint": 5,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Medium",
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 6,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/scorpion.giant.htm"
     },
 
     {
       "Name": "Harpy",
-      "Type": "Monstrous Humanoid",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 7,
+      "Movement": 15,
       "HitDice": 3,
-      "HitPoints": 13,
-      "Movement": 20,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "25",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "Damage": "1d3"
         },
         {
-          "Name": "Bite",
+          "Name": "Weapon or Club",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Luring Song",
-          "Description": "Creatures hearing must save vs spell or be charmed and approach."
+          "Name": "Singing",
+          "Description": "Creatures hearing the harpy’s song must save vs. Magic or be irresistibly drawn toward her."
+        },
+        {
+          "Name": "Charm Touch",
+          "Description": "A harpy’s touch charms creatures failing a save vs. Magic; charmed victims are tortured and devoured."
         }
       ],
-      "BaseXPValue": 120,
-      "XPValuePerHitPoint": 4,
-      "TreasureType": "D",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Size": "Medium",
+      "BaseXPValue": 145,
+      "XPValuePerHitPoint": 3,
+      "Alignment": "Chaotic evil",
+      "Source": "Adnd",
+      "Other": "Aerial combat class C; can plummet like an eagle."
     },
     {
       "Name": "Toad, Ice",
-      "Type": "Amphibian",
+      "Type": "Animal",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 4,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 4,
+      "Movement": 9,
+      "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 30,
+      "%InLair": "40",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        },
-        {
-          "Name": "Tongue Lash",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4 + Freeze"
+          "Damage": "3d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Freeze Touch",
-          "Description": "Victims struck by tongue or bite must save vs cold or be slowed by frostbite."
-        },
-        {
-          "Name": "Cold Aura",
-          "Description": "Emits chilling air; creatures within 10 feet take 1 point of cold damage per round."
-        },
-        {
-          "Name": "Camouflage",
-          "Description": "Blends with icy terrain; surprise opponents on 1–3 in 6."
+          "Name": "Cold Radiation",
+          "Description": "Creatures within close proximity suffer cold damage; prolonged exposure can be lethal."
         }
       ],
-      "BaseXPValue": 270,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Large",
+      "BaseXPValue": 205,
+      "XPValuePerHitPoint": 4,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Ice toads inhabit frozen caverns and lairs; their bodies radiate intense cold."
     },
 
+    {
+      "Name": "Toad, Poisonous",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "Movement": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or die."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Medium",
+      "BaseXPValue": 155,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Indistinguishable from non-poisonous giant toads."
+    },
+
+    {
+      "Name": "Toad, Giant",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 6,
+      "Movement": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Medium",
+      "BaseXPValue": 50,
+      "XPValuePerHitPoint": 3,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Giant frogs can leap great distances and often inhabit swamps or marshes."
+    },
 
     {
       "Name": "Giant Toad",

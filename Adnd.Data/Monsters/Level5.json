@@ -831,81 +831,82 @@
     },
 
     {
-      "Name": "Wight Captain",
-      "Type": "Undead",
-      "ArmorClass": 4,
-      "HitDice": 5,
-      "HitPoints": 28,
-      "Movement":30,
-      "Attacks": [
-        {
-          "Name": "Energy Drain Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Energy Drain",
-          "Description": "Target loses 1 level unless save vs death."
-        },
-        {
-          "Name": "Command Undead",
-          "Description": "Leads lesser undead; they gain +1 morale."
-        }
-      ],
-      "BaseXPValue": 650,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "D"
-    },
-    {
-      "Name": "Giant Boar",
+      "Name": "Boar, Giant",
       "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 6,
-      "HitDice": 5,
-      "HitPoints": 30,
-      "Movement":40,
+      "Movement": 12,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Gore",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "3d6"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Ferocious Charge",
-          "Description": "On a charge, damage increases to 3d6."
-        }
-      ],
-      "BaseXPValue": 300,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "None"
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Large",
+      "BaseXPValue": 225,
+      "XPValuePerHitPoint": 8,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Stands 5 feet at the shoulder; extremely aggressive when wounded."
     },
+
     {
       "Name": "Ogre Mage",
-      "Type": "Giant",
-      "ArmorClass": 5,
+      "Type": "Lesser Spirit",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "Movement": 9,
       "HitDice": 5,
-      "HitPoints": 27,
-      "Movement":30,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "35",
+      "TreasureType": "G, R, S",
+      "IndividualTreasure": "Magic items possible",
       "Attacks": [
         {
-          "Name": "Katana",
+          "Name": "Weapon (Spear/Halberd)",
           "NumberOfAttacks": 1,
-          "Damage": "1d10"
+          "Damage": "1d12"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Innate Spells",
-          "Description": "Can cast invisibility, charm person, and sleep 1/day each."
+          "Name": "Magic & Spell Use",
+          "Description": "Can fly, become invisible, create darkness, polymorph, regenerate, charm person, sleep, gaseous form, and cast cold ray (8d8 damage)."
         }
       ],
-      "BaseXPValue": 700,
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 1 HP per melee round; severed limbs must be reattached."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average to exceptional",
+      "Size": "Large",
+      "BaseXPValue": 900,
       "XPValuePerHitPoint": 6,
-      "TreasureType": "F"
+      "Alignment": "Lawful evil",
+      "Source": "Adnd",
+      "Other": "Stands 10.5 feet tall; uses huge spear/halberd; can fight with monk-style open-hand attacks depending on rank."
     },
+
+
     {
       "Name": "Snake, Giant",
       "Type": "Animal",
@@ -936,222 +937,247 @@
       "Source": "Adnd"
     },
     {
-      "Name": "Snake, Giant, Amphisbaena",
+      "Name": "Snake, Giant Amphisbaena",
       "Type": "Animal",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 5,
-      "HitDice": 4,
-      "Size": "Large",
-      "Movement": 12,
-      "Morale": { "Value": 10 },
-      "Attacks": [
-        {
-          "Name": "Bite (Head 1)",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Bite (Head 2)",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Dual Heads",
-          "Description": "Can attack two different targets each round."
-        }
-      ],
-      "BaseXPValue": 135,
-      "XPValuePerHitPoint": 4,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Snake, Giant, Poisonous",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
+      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 3,
-      "ArmorClass": 6,
-      "HitDice": 4,
-      "Size": "Large",
+      "ArmorClass": 3,
       "Movement": 12,
-      "Morale": { "Value": 9 },
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3 + poison"
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Poison",
-          "Description": "Victims must save vs. poison or suffer lethal effects."
+          "Description": "Both heads can bite; victims failing save vs. poison die instantly."
         }
       ],
-      "BaseXPValue": 190,
-      "XPValuePerHitPoint": 4,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Snake, Giant, Spitting",
-      "Type": "Animal",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 6,
-      "HitDice": 3,
+      "SpecialDefenses": [
+        {
+          "Name": "Cold Immunity",
+          "Description": "Not harmed by cold-based attacks."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
       "Size": "Medium",
-      "Movement": 12,
-      "Morale": { "Value": 8 },
+      "BaseXPValue": 475,
+      "XPValuePerHitPoint": 6,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Moves by grasping one neck with the other head and rolling like a hoop."
+    },
+
+    {
+      "Name": "Snake, Giant Poisonous",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 5,
+      "Movement": 15,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "1d3"
-        },
-        {
-          "Name": "Spit",
-          "NumberOfAttacks": 1,
-          "Damage": "Special"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Blinding Spit",
-          "Description": "Spits venom into eyes; target must save or be blinded."
+          "Name": "Poison",
+          "Description": "Victim takes 3–18 damage even on a successful save vs. poison."
         }
       ],
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Large",
+      "BaseXPValue": 390,
+      "XPValuePerHitPoint": 5,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Large venomous serpent; extremely fast-moving."
     },
-
-
     {
-      "Name": "Giant Snake Constrictor",
+      "Name": "Snake, Giant Spitting",
       "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 5,
-      "HitDice": 5,
-      "HitPoints": 32,
-      "Movement":20,
-      "Morale": { "Value": 9 },
+      "Movement": 12,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison; bite is lethal."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Medium",
+      "BaseXPValue": 390,
+      "XPValuePerHitPoint": 5,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "A giant spitting cobra variant."
+    },
+
+    {
+      "Name": "Snake, Giant Constrictor",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
         },
         {
           "Name": "Constrict",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "2d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Constricting Coils",
-          "Description": "On hit, target is held; must win STR check to escape."
+          "Name": "Constriction",
+          "Description": "On a successful bite, the snake wraps around the victim and deals 2–8 constriction damage each round."
         }
       ],
-      "BaseXPValue": 350,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "None"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Large",
+      "BaseXPValue": 225,
+      "XPValuePerHitPoint": 8,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Large constrictor snake; kills prey by crushing."
     },
+
     {
-      "Name": "Giant Beetle Fire",
-      "Type": "Vermin",
+      "Name": "Beetle, Giant",
+      "Type": "Animal",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 4,
-      "HitDice": 4,
-      "HitPoints": 24,
-      "Movement":20,
+      "Movement": 12,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Mandibles",
+          "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Glowing Glands",
-          "Description": "Sheds light in 20 ft radius; can blind on a failed save (1 round)."
-        }
-      ],
-      "BaseXPValue": 250,
-      "XPValuePerHitPoint": 5,
-      "TreasureType": "None"
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Approximately 2½ feet long; aggressive scavenger."
     },
     {
       "Name": "Gargoyle",
-      "Type": "Monstrous",
+      "Type": "Magical Creature",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 16,
       "ArmorClass": 5,
+      "Movement": 9,
+      "MovementFlying": 15,
       "HitDice": 4,
-      "HitPoints": 22,
-      "Movement":30,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "%InLair": "20",
+      "TreasureType": "C",
+      "IndividualTreasure": "M (x10)",
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "Damage": "1d3"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
+        },
         {
-          "Name": "Stone Skin",
-          "Description": "Half damage from non-magical weapons."
-        }
-      ],
-      "BaseXPValue": 300,
-      "XPValuePerHitPoint": 5,
-      "TreasureType": "C"
-    },
-    {
-      "Name": "Level 7 Mage",
-      "Type": "Humanoid",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 8,
-      "HitDice": 7,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 0,
-      "Movement":30,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
+          "Name": "Horn",
           "NumberOfAttacks": 1,
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Slept",
-          "Description": "Can be affected by sleep effects."
+          "Name": "Magic Weapon Immunity",
+          "Description": "Only hit by magic weapons."
         }
       ],
-      "BaseXPValue": 450,
-      "XPValuePerHitPoint": 10,
-      "TreasureType": "B",
-      "Source": "Wizardry"
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Size": "Medium",
+      "BaseXPValue": 165,
+      "XPValuePerHitPoint": 5,
+      "Alignment": "Chaotic evil",
+      "Source": "Adnd",
+      "Other": "If flying: either 1 horn attack OR 2 claw attacks. 20% found with margoyles."
     },
+
 
     {
       "Name": "Shade",
