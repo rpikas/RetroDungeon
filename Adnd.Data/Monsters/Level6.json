@@ -458,50 +458,47 @@
 
     {
       "Name": "Hydra 8 Heads",
-      "Type": "Monstrous Beast",
-      "Frequency": "Rare",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 8,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 13
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 8,
-          "Damage": "1d10"
+          "NumberOfAttacks": 12,
+          "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Multiple Heads",
-          "Description": "Each head attacks independently; all heads can strike the same or different targets."
-        },
-        {
-          "Name": "Increased Awareness",
-          "Description": "Hydras cannot be surprised due to multiple heads watching in all directions."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant (not applicable to standard hydra)."
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "BaseXPValue": 750,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 10,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
     },
+
     {
       "Name": "Jackalwere",
       "Type": "Shapechanger",

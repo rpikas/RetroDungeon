@@ -10,6 +10,8 @@
       "ArmorClass": 6,
       "Movement": 9,
       "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
       "%InLair": "35",
       "TreasureType": "C,O,Q(x10), S",
       "IndividualTreasure": "L",
@@ -20,7 +22,12 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAttacks": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or suffer effects"
+        }
+      ],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Average",
@@ -148,7 +155,7 @@
       "Movement": 30,
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Long sword",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
@@ -672,7 +679,7 @@
       "IndividualTreasure": "M(x3)",
       "Attacks": [
         {
-          "Name": "Weapon",
+          "Name": "Short sword",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
         }

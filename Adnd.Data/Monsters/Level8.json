@@ -393,49 +393,87 @@
 
     {
       "Name": "Hydra 13 Heads",
-      "Type": "Monstrous Beast",
-      "Frequency": "Rare",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 13,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 11
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 13,
+          "NumberOfAttacks": 9,
           "Damage": "1d10"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Multiple Heads",
-          "Description": "Each head attacks independently; all heads may strike the same or different targets."
-        },
-        {
-          "Name": "Increased Awareness",
-          "Description": "Hydras are nearly impossible to surprise due to multiple heads watching all directions."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant."
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "BaseXPValue": 1400,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 3000,
+      "XPValuePerHitPoint": 18,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
+    },
+    {
+      "Name": "Hydra 14 Heads",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 14,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 8,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 3950,
+      "XPValuePerHitPoint": 18,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
     },
 
     {

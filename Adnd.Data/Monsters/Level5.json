@@ -1,17 +1,20 @@
 {
-    "Level": 5,
+  "Level": 5,
   "Monsters": [
     {
-      "Name": "Lycanthrope, Wereboar",
+      "Name": "Lycanthrope Wereboar",
       "Type": "Lycanthrope",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 6,
-      "HitDice": 4,
-      "Size": "Medium",
+      "Frequency": "Rare (dense woodlands and similar areas)",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
       "Movement": 12,
-      "Morale": { "Value": 10 },
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "20",
+      "TreasureType": "B,S",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Gore",
@@ -19,70 +22,80 @@
           "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Lycanthropy",
-          "Description": "Can shift between human and boar‑hybrid form."
-        },
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates damage except from silver or magic weapons."
+          "Name": "Lycanthrope Immunity",
+          "Description": "Hit only by silver or magic weapons"
         }
       ],
-      "BaseXPValue": 190,
-      "XPValuePerHitPoint": 4,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Large",
+      "BaseXPValue": 275,
+      "XPValuePerHitPoint": 6,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/wereboar.htm"
     },
+
     {
       "Name": "Slithering Tracker",
       "Type": "Ooze",
-      "Frequency": "Very Rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
-      "HitDice": 5,
-      "Size": "Small",
+      "ArmorClass": 5,
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Engulf",
-          "NumberOfAttacks": 1,
-          "Damage": "Special"
+          "Name": "Contact",
+          "NumberOfAttacks": 0,
+          "Damage": "Nil"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Paralysis",
-          "Description": "Contact can paralyze victims, allowing the tracker to suffocate them."
-        },
-        {
-          "Name": "Fluid Body",
-          "Description": "Can slip through cracks and under doors; immune to most physical attacks."
-        },
-        {
-          "Name": "Tracking",
-          "Description": "Unerringly follows a designated target."
+          "Name": "Paralyzation",
+          "Description": "Secretions paralyze unless save vs. paralyzation is made."
         }
       ],
-      "BaseXPValue": 275,
+      "SpecialDefenses": [
+        {
+          "Name": "Transparency",
+          "Description": "95% undetectable."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Small",
+      "BaseXPValue": 280,
       "XPValuePerHitPoint": 5,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/slitheringtracker.htm"
     },
 
     {
       "Name": "Quasit",
       "Type": "Demon",
-      "Frequency": "Very Rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "HitDice": 3,
-      "Size": "Small",
+      "ArmorClass": 2,
       "Movement": 15,
-      "Morale": { "Value": 12 },
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "100",
+      "TreasureType": "Q(x3)",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
@@ -95,140 +108,161 @@
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Poison",
-          "Description": "Claw attacks deliver a weak poison requiring a saving throw."
+          "Description": "Claw wounds drain 1 Dexterity unless save vs. poison is made."
         },
         {
-          "Name": "Invisibility",
-          "Description": "Can become invisible at will."
-        },
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates 1 hit point per round."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "High resistance to magical effects."
+          "Name": "Spell Use",
+          "Description": "Detect good/magic, invisibility at will, fear 3\" radius once/day."
         }
       ],
-      "BaseXPValue": 135,
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 1 HP per melee round."
+        },
+        {
+          "Name": "Partial Spell Immunity",
+          "Description": "Unaffected by cold, fire, lightning; saves as 7 HD monster."
+        },
+        {
+          "Name": "Magic or Cold Iron Weapons",
+          "Description": "Only harmed by magic or cold iron weapons."
+        }
+      ],
+      "MagicResistance": "25%",
+      "Intelligence": "Low",
+      "Size": "Small",
+      "BaseXPValue": 325,
       "XPValuePerHitPoint": 3,
-      "TreasureType": "Q",
-      "Source": "Adnd"
+      "Alignment": "Chaotic evil",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/quasit.htm"
+    },
+
+
+    {
+      "Name": "Subterranean Lizard",
+      "Type": "Reptile",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 5,
+      "Movement": 12,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "O,P,Q(x5)",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Double Damage on Natural 20",
+          "Description": "A natural 20 indicates the lizard clamps both jaws, dealing 4d6 damage."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Large",
+      "BaseXPValue": 350,
+      "XPValuePerHitPoint": 6,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/lizard.subterranean.htm"
     },
 
     {
-      "Name": "Lizard, Subterranean",
-      "Type": "Reptile",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 5,
-      "HitDice": 3,
-      "Size": "Medium",
-      "Movement": 9,
-      "Morale": { "Value": 8 },
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Ambush Predator",
-          "Description": "Lies in wait in caverns and tunnels, surprising prey."
-        }
-      ],
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
-    },
-    {
       "Name": "Cockatrice",
       "Type": "Magical Beast",
-      "Frequency": "Rare",
+      "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 6,
       "ArmorClass": 6,
+      "Movement": 30,
       "HitDice": 5,
-      "Size": "Small",
-      "Movement": 6,
-      "Morale": { "Value": 11 },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "30",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Bite",
+          "Name": "Beak",
           "NumberOfAttacks": 1,
           "Damage": "1d3"
-        },
-        {
-          "Name": "Petrifying Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "Special"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Petrification",
-          "Description": "Touch can turn victims to stone unless they save vs. petrification."
+          "Name": "Petrification Touch",
+          "Description": "Touch petrifies; save vs. stone or be turned to stone."
         }
       ],
-      "BaseXPValue": 275,
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Small",
+      "BaseXPValue": 315,
       "XPValuePerHitPoint": 5,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/cockatrice.htm"
     },
 
     {
       "Name": "Hydra 7 Heads",
-      "Type": "Monstrous Beast",
-      "Frequency": "Rare",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 14
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 7,
-          "Damage": "1d10"
+          "NumberOfAttacks": 13,
+          "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Multiple Heads",
-          "Description": "Each head attacks independently; all heads may strike the same or different targets."
-        },
-        {
-          "Name": "Increased Awareness",
-          "Description": "Hydras are nearly impossible to surprise due to multiple heads watching all directions."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant."
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "BaseXPValue": 600,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 400,
+      "XPValuePerHitPoint": 8,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
     },
+
+
     {
       "Name": "Doppelganger",
       "Type": "Shapechanger",
@@ -236,10 +270,10 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 4,
       "ArmorClass": 5,
-      "HitDice": 4,
-      "Size": "Medium",
       "Movement": 9,
-      "Morale": { "Value": 11 },
+      "HitDice": 4,
+      "%InLair": "20",
+      "TreasureType": "E",
       "Attacks": [
         {
           "Name": "Slam",
@@ -257,82 +291,105 @@
           "Description": "Can sense surface thoughts of nearby creatures."
         }
       ],
+      "Size": "Medium",
       "BaseXPValue": 190,
       "XPValuePerHitPoint": 4,
-      "TreasureType": "C",
+      "Alignment": "Neutral",
       "Source": "Adnd"
     },
     {
       "Name": "Displacer Beast",
       "Type": "Beast",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
-      "HitDice": 6,
-      "Size": "Large",
       "Movement": 15,
-      "Morale": { "Value": 10 },
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "25",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Tentacle",
           "NumberOfAttacks": 2,
-          "Damage": "1d4+1"
+          "Damage": "2d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
           "Name": "Displacement",
-          "Description": "Appears 1–2 feet away from its true position, causing attackers to suffer penalties."
+          "Description": "-2 on opponent's attack rolls due to optical distortion."
         }
       ],
-      "BaseXPValue": 500,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "MagicResistance": "Save as Lord (F12) with +2 bonus",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 475,
+      "XPValuePerHitPoint": 8,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/displacerbeast.htm"
     },
+
     {
       "Name": "Imp",
       "Type": "Devil",
-      "Frequency": "Very Rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 2,
-      "HitDice": 2,
-      "Size": "Small",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "0",
+      "TreasureType": "0",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Sting",
+          "Name": "Tail",
           "NumberOfAttacks": 1,
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Invisibility",
-          "Description": "Can turn invisible at will."
-        },
+      "SpecialAttacks": [
         {
           "Name": "Poison",
-          "Description": "Can poison its target."
+          "Description": "Tail strike requires save vs. poison or die."
         },
-
         {
-          "Name": "Polymorph",
-          "Description": "Can assume animal forms."
+          "Name": "Magic Use",
+          "Description": "Detect good, detect magic, invisibility at will, suggestion 1/day."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapons Required",
+          "Description": "Only silver or magical weapons can harm an imp."
         },
         {
           "Name": "Regeneration",
-          "Description": "Regenerates 1 hit point per round."
+          "Description": "Regenerates 1 HP per melee round."
+        },
+        {
+          "Name": "Magic Immunities",
+          "Description": "Immune to cold, fire, electricity; saves as 7 HD creature."
         }
       ],
-      "BaseXPValue": 65,
+      "MagicResistance": "25%",
+      "Intelligence": "Average",
+      "Size": "Small",
+      "BaseXPValue": 275,
       "XPValuePerHitPoint": 3,
-      "TreasureType": "Q",
-      "Source": "Adnd"
+      "Alignment": "Lawful evil",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/imp.htm"
     },
+
 
     {
       "Name": "Lvl 5 Magic-User",
@@ -722,68 +779,64 @@
 
     {
       "Name": "Troll",
-      "Type": "Giant",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 4,
+      "Movement": 12,
       "HitDice": 6,
-      "HitPoints": 33,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 11 },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 6,
+      "%InLair": "40",
+      "TreasureType": "D",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d4+2"
+          "Damage": "1d4+4"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d8"
+          "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
+        {
+          "Name": "Multiattack",
+          "Description": "Two claw attacks and one bite each round."
+        }
+      ],
+      "SpecialDefenses": [
         {
           "Name": "Regeneration",
-          "Description": "Heals 3 hp per round; only fire/acid prevents regeneration."
+          "Description": "Regenerates 3 hit points per round; only fire or acid prevents regeneration."
+        },
+        {
+          "Name": "Surprise Resistance",
+          "Description": "Surprised only on a roll of 1."
         }
       ],
-      "BaseXPValue": 450,
-      "XPValuePerHitPoint": 10,
-      "TreasureType": "E"
+      "MagicResistance": "Standard",
+      "Strength": 21,
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Large",
+      "BaseXPValue": 525,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity."
     },
+
     {
       "Name": "Wight Captain",
       "Type": "Undead",
       "ArmorClass": 4,
       "HitDice": 5,
       "HitPoints": 28,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Morale": { "Value": 12 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Energy Drain Touch",
@@ -811,21 +864,7 @@
       "ArmorClass": 6,
       "HitDice": 5,
       "HitPoints": 30,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 10 },
+      "Movement":40,
       "Attacks": [
         {
           "Name": "Gore",
@@ -849,21 +888,7 @@
       "ArmorClass": 5,
       "HitDice": 5,
       "HitPoints": 27,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 11 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Katana",
@@ -1015,20 +1040,7 @@
       "ArmorClass": 5,
       "HitDice": 5,
       "HitPoints": 32,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 10,
-        "Burrow": 0,
-        "Climb": 10
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
+      "Movement":20,
       "Morale": { "Value": 9 },
       "Attacks": [
         {
@@ -1058,21 +1070,7 @@
       "ArmorClass": 4,
       "HitDice": 4,
       "HitPoints": 24,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 8 },
+      "Movement":20,
       "Attacks": [
         {
           "Name": "Mandibles",
@@ -1096,21 +1094,7 @@
       "ArmorClass": 5,
       "HitDice": 4,
       "HitPoints": 22,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 30,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 11 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Claw",
@@ -1142,13 +1126,7 @@
       "HitDice": 7,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
+      "Movement":30,
       "SavingThrows": {
         "ParalyzationPoisonDeath": 12,
         "RodStaffWand": 13,
@@ -1156,7 +1134,6 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 8 },
       "Attacks": [
         {
           "Name": "Dagger",
@@ -1185,21 +1162,7 @@
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 3,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 20,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
-      "Morale": { "Value": 9 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Shadow Touch",
@@ -1228,21 +1191,7 @@
       "HitDice": 3,
       "HitDiceType": 10,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 8 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Sword",
@@ -1269,21 +1218,7 @@
       "NumberOfAppearancesMax": 4,
       "ArmorClass": -1,
       "HitDice": 4,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 10 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Bite",
@@ -1318,21 +1253,7 @@
       "NumberOfAppearancesMax": 6,
       "ArmorClass": 1,
       "HitDice": 4,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": { "Value": 7 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Bite",
@@ -1363,21 +1284,7 @@
       "NumberOfAppearancesMax": 2,
       "ArmorClass": 4,
       "HitDice": 4,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 8 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Staff",
@@ -1414,21 +1321,7 @@
       "NumberOfAppearancesMax": 3,
       "ArmorClass": 4,
       "HitDice": 4,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 20,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 15,
-        "PetrificationPolymorph": 16,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
-      "Morale": { "Value": 9 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Mist Lash",
@@ -1467,21 +1360,7 @@
       "HitDice": 8,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 20
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 10 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Katana",
@@ -1515,21 +1394,7 @@
       "HitDice": 4,
       "HitDiceType": 8,
       "ExtraHitPoints": 1,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 9 },
+      "Movement":30,
       "Attacks": [
         {
           "Name": "Club",

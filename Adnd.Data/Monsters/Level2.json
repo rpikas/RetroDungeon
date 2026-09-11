@@ -625,9 +625,6 @@
       "ExtraHitPoints": 1,
       "Size": "Medium",
       "Movement": 40,
-      "Morale": {
-        "Value": 8
-      },
       "Attacks": [
         {
           "Name": "Poison attack",

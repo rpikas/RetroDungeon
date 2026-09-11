@@ -673,50 +673,47 @@
 
     {
       "Name": "Hydra 17 Heads",
-      "Type": "Monstrous Beast",
-      "Frequency": "Rare",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 17,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 7,
-        "RodStaffWand": 8,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 10,
-        "Spell": 10
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 17,
-          "Damage": "1d10"
+          "NumberOfAttacks": 16,
+          "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Multiple Heads",
-          "Description": "Each head attacks independently; all heads may strike the same or different targets."
-        },
-        {
-          "Name": "Increased Awareness",
-          "Description": "Hydras are nearly impossible to surprise due to multiple heads watching all directions."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant."
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "BaseXPValue": 1800,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 6250,
+      "XPValuePerHitPoint": 12,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
     },
+
 
     {
       "Name": "Fire Giant",

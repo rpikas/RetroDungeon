@@ -1185,26 +1185,19 @@
     },
 
     {
-      "Name": "Hydra 10 Heads",
-      "Type": "Monstrous Beast",
-      "Frequency": "Rare",
+      "Name": "Hydra (11 Heads)",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
-      "HitDice": 10,
+      "Movement": 9,
+      "HitDice": 11,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 12
-      },
-      "Movement": {
-        "Walk": 9
-      },
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
@@ -1212,24 +1205,28 @@
           "Damage": "1d10"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Multiple Heads",
-          "Description": "Each head attacks independently; all heads can strike the same or different targets."
-        },
-        {
-          "Name": "Increased Awareness",
-          "Description": "Hydras cannot be surprised due to multiple heads watching in all directions."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant (not applicable to standard hydra)."
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "BaseXPValue": 950,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 2150,
+      "XPValuePerHitPoint": 16,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
     },
+
 
     {
       "Name": "Lurker Above",
