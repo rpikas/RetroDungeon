@@ -392,149 +392,196 @@
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 8,
-      "ArmorClass": 4,
-      "HitDice": 12,
-      "Size": "Large (18 ft tall)",
+      "ArmorClass": 0,
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "30",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Rock Throw",
+          "Name": "Strike",
           "NumberOfAttacks": 1,
-          "Damage": "3d8"
-        },
-        {
-          "Name": "Club",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
+          "Damage": "3d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Rock Throwing",
-          "Description": "Can hurl rocks with great accuracy at long range."
+          "Description": "Can hurl rocks for 3–30 damage at ranges from 1” to 30”."
         }
       ],
-      "BaseXPValue": 2000,
-      "XPValuePerHitPoint": 12,
-      "TreasureType": "E",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Camouflage",
+          "Description": "Gray skin and rock-colored garments allow blending into stony terrain."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Strength": 23,
+      "Intelligence": "Average",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "Other": "Fond of cave bears (75% chance of 1–4 in lair); can catch thrown boulders 90% of the time; females fight as hill giants; young vary by size."
     },
+
     {
       "Name": "Trapper",
-      "Type": "Creature",
+      "Type": "Monster",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 3,
-      "HitDice": 12,
-      "Size": "Large",
       "Movement": 3,
-      "Morale": { "Value": 12 },
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "85",
+      "TreasureType": "G",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Smother",
+          "Name": "Crush",
           "NumberOfAttacks": 1,
-          "Damage": "4d4"
+          "Damage": "3d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Camouflage",
-          "Description": "Perfectly mimics stone floors; nearly impossible to detect."
+          "Name": "Undetectable",
+          "Description": "95% undetectable due to stone‑like body and coloration."
         },
         {
-          "Name": "Engulf",
-          "Description": "Drops onto victims and smothers them, preventing movement."
+          "Name": "Smother",
+          "Description": "Victims are smothered in 6 rounds regardless of damage."
+        },
+        {
+          "Name": "Weapon Prevention",
+          "Description": "Entrapped victims cannot use weapons."
         }
       ],
-      "BaseXPValue": 2000,
-      "XPValuePerHitPoint": 12,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Cold & Fire Resistance",
+          "Description": "Partial immunity to cold and fire (half or no damage)."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Highly",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2850,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "Other": "Covers up to 400 sq ft (600 sq ft for giant specimens); mimics stone floors; creates chest‑like lure to attract prey."
     },
+
     {
       "Name": "Fire Lizard",
-      "Type": "Reptile",
-      "Frequency": "Rare",
+      "Type": "Monster",
+      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 3,
-      "HitDice": 10,
-      "Size": "Large (up to 30 ft long)",
       "Movement": 9,
-      "Morale": { "Value": 10 },
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "B,Q(x10),S,T",
+      "IndividualTreasure": "",
       "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
-        {
-          "Name": "Tail Lash",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "2d16"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Heat Aura",
-          "Description": "Body radiates intense heat; close contact causes damage."
-        },
-        {
-          "Name": "Molten Blood",
-          "Description": "Creatures striking the Fire Lizard risk burn damage."
+          "Name": "Fire Puff",
+          "Description": "Breathes a short cone of flame (2–12 damage, or 1–6 on save)."
         }
       ],
-      "BaseXPValue": 2000,
-      "XPValuePerHitPoint": 10,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Fire Immunity",
+          "Description": "Unaffected by all fire‑based attacks."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
     },
+
     {
       "Name": "Chimera",
-      "Type": "Monstrous Beast",
+      "Type": "Monster",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 4,
-      "ArmorClass": 6,
+      "ArmorClass": "6/5/2",
+      "Movement": "9/18",
       "HitDice": 9,
-      "Size": "Large",
-      "Movement": 9,
-      "Morale": { "Value": 11 },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "40",
+      "TreasureType": "F",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Lion Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
         },
         {
           "Name": "Goat Horns",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Lion Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "3d12"
         },
         {
           "Name": "Dragon Bite",
           "NumberOfAttacks": 1,
-          "Damage": "3d4"
-        },
-        {
-          "Name": "Dragon Breath",
-          "NumberOfAttacks": 1,
-          "Damage": "3d8"
+          "Damage": "3d12"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Dragon Breath",
-          "Description": "Short-range fire breath from the dragon head."
+          "Name": "Breath Weapon",
+          "Description": "Dragon head breathes fire for 3–24 damage, range 5\", 50% chance to use."
         }
       ],
-      "BaseXPValue": 1800,
-      "XPValuePerHitPoint": 9,
-      "TreasureType": "E",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "Other": "Three-headed monster: goat hindquarters, lion forequarters, dragon wings and head; clumsy flyer (18\", class E); speaks limited red dragon tongue."
     },
+
     {
       "Name": "Dragon, Green",
       "Type": "Dragon",
@@ -689,113 +736,122 @@
     {
       "Name": "Ettin",
       "Type": "Giant",
-      "Frequency": "Rare",
+      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 3,
-      "HitDice": 10,
-      "Size": "Large",
       "Movement": 12,
-      "Morale": { "Value": 11 },
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "O,C,Y",
+      "IndividualTreasure": "O",
       "Attacks": [
         {
-          "Name": "Left Club",
+          "Name": "Left Arm",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "2d16"
         },
         {
-          "Name": "Right Club",
+          "Name": "Right Arm",
           "NumberOfAttacks": 1,
-          "Damage": "3d6"
+          "Damage": "3d18"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Two Heads",
-          "Description": "Immune to surprise; gains bonuses to detect threats."
-        },
-        {
-          "Name": "Night Vision",
-          "Description": "Excellent vision in darkness."
+          "Name": "Alertness",
+          "Description": "Surprised only on a roll of 1 due to two heads."
         }
       ],
-      "BaseXPValue": 3000,
-      "XPValuePerHitPoint": 10,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1950,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "Other": "Two-headed nocturnal giant; lairs underground; uses spiked clubs; one head always alert; strength 19 grants +6 damage bonus."
     },
 
     {
       "Name": "Invisible Stalker",
-      "Type": "Elemental (Air)",
-      "Frequency": "Rare",
+      "Type": "Elemental",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 3,
-      "HitDice": 8,
-      "Size": "Large",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Blow/Strike",
+          "Name": "Strike",
           "NumberOfAttacks": 1,
           "Damage": "4d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Invisibility",
-          "Description": "Permanently invisible; can only be detected by special means."
-        },
-        {
-          "Name": "Tracking",
-          "Description": "Unerringly tracks its assigned target across any distance."
-        },
-        {
-          "Name": "Summoned Task",
-          "Description": "Obeys the summoner’s command until the task is completed or it is destroyed."
-        },
-        {
-          "Name": "Immunity",
-          "Description": "Immune to most physical attacks; harmed only by magic or magical weapons."
+          "Name": "Surprise",
+          "Description": "Surprises on a roll of 1–5 due to near‑perfect invisibility."
         }
       ],
-      "BaseXPValue": 1900,
-      "XPValuePerHitPoint": 8,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Invisibility",
+          "Description": "Permanently invisible; only detectable by special means."
+        }
+      ],
+      "MagicResistance": "30%",
+      "Intelligence": "High",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2850,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "Other": "Summoned from the Elemental Plane of Air; obeys conjurer until task is completed; strength 19 represents grasping strength only."
     },
-
     {
       "Name": "Hill Giant",
       "Type": "Giant",
       "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMax": 10,
       "ArmorClass": 4,
-      "HitDice": 8,
-      "Size": "Large (16 ft tall)",
       "Movement": 12,
-      "Morale": { "Value": 10 },
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "25",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Club",
+          "Name": "Throw rock",
           "NumberOfAttacks": 1,
-          "Damage": "2d8"
+          "Damage": "2d16"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Rock Throwing",
-          "Description": "Can throw rocks, though less accurately than other giants."
-        }
-      ],
-      "BaseXPValue": 1350,
-      "XPValuePerHitPoint": 8,
-      "TreasureType": "D",
-      "Source": "Adnd"
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": 22,
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1400,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "Other": "Adult hill giants can hurl rocks from 1” to 20” range ; lairs are caves or similar underground places ; often accompanied by dire wolves, giant lizards, or ogres as guards ."
     },
+
     {
       "Name": "Fire Giant",
       "Type": "Giant",
@@ -803,111 +859,134 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 3,
-      "HitDice": 11,
-      "ExtraHitPoints": 4,
-      "Size": "Large (18 ft tall)",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "35",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Sword",
+          "Name": "Strike",
           "NumberOfAttacks": 1,
           "Damage": "5d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Fire Resistance",
-          "Description": "Takes reduced damage from fire-based attacks."
-        },
-        {
-          "Name": "Rock Throwing",
-          "Description": "Can hurl rocks with great accuracy."
+          "Name": "Fire Immunity",
+          "Description": "Completely impervious to fire."
         }
       ],
-      "BaseXPValue": 3000,
-      "XPValuePerHitPoint": 13,
-      "TreasureType": "E",
-      "Source": "Adnd"
+      "MagicResistance": "Standard",
+      "Strength": 25,
+      "Intelligence": "Average",
+      "Alignment": "Lawful evil",
+      "Size": "Large",
+      "BaseXPValue": 2700,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "Other": "Typically 12 feet tall; weighs about 1,510 lbs; chest size 80 inches; torso length 38 inches; often found in volcanic or mountainous regions."
     },
+
     {
       "Name": "Frost Giant",
       "Type": "Giant",
-      "Frequency": "Uncommon",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 8,
       "ArmorClass": 4,
-      "HitDice": 10,
-      "ExtraHitPoints": 2,
-      "Size": "Large (21 ft tall)",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "30",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Axe",
+          "Name": "Strike",
           "NumberOfAttacks": 1,
-          "Damage": "3d10"
+          "Damage": "4d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
         {
-          "Name": "Cold Resistance",
-          "Description": "Takes reduced damage from cold-based attacks."
-        },
-        {
-          "Name": "Rock Throwing",
-          "Description": "Can throw rocks with great force."
+          "Name": "Cold Immunity",
+          "Description": "Impervious to cold, including white dragon breath."
         }
       ],
-      "BaseXPValue": 2500,
-      "XPValuePerHitPoint": 12,
-      "TreasureType": "D",
-      "Source": "Adnd"
+      "MagicResistance": "Standard",
+      "Strength": 24,
+      "Intelligence": "Average to low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 2250,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "Other": "Typically 15 feet tall; often accompanied by 1–6 winter wolves; females fight as stone giants; young vary by size; can catch missiles 40% of the time."
     },
-
 
     {
       "Name": "Mummy",
       "Type": "Undead",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 3,
+      "Movement": 6,
       "HitDice": 6,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 60,
+      "ExtraHitPoints": 3,
+      "%InLair": "80",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Fist",
+          "Name": "Smash",
           "NumberOfAttacks": 1,
           "Damage": "1d12"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Mummy Rot",
-          "Description": "Victim must save or suffer a rotting curse; healing is drastically slowed and wounds do not naturally recover."
+          "Name": "Fear",
+          "Description": "Creatures within 6\" must save vs magic or be paralyzed for 1–4 rounds."
         },
         {
-          "Name": "Fear Aura",
-          "Description": "Creatures within 30 ft must save vs. fear or flee in panic."
+          "Name": "Paralyzation",
+          "Description": "Fear effect causes paralysis on failed save."
+        },
+        {
+          "Name": "Rotting Disease",
+          "Description": "Victim rots; loses 2 CHA per month; dies in 1–6 months; cure disease required."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapons Only",
+          "Description": "Takes half damage from magical weapons; immune to sleep, charm, hold, cold."
         },
         {
           "Name": "Fire Vulnerability",
-          "Description": "Takes double damage from fire-based attacks."
+          "Description": "Takes extra damage from fire; torches 1–3, burning oil 1–8 then double."
         },
         {
-          "Name": "Weapon Resistance",
-          "Description": "Takes half damage from non-magical weapons."
+          "Name": "Holy Water Vulnerability",
+          "Description": "Holy water deals 2–8 damage per vial."
         }
       ],
-      "Alignment": "Lawful Evil",
+      "MagicResistance": "See text",
       "Intelligence": "Low",
-      "TreasureType": "C",
-      "BaseXPValue": 650,
-      "Source": "Adnd"
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1050,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Created as tomb guardians; negative energy animates them; victims killed by mummies rot and require both cure disease and raise dead within 6 turns."
     },
 
     {
@@ -915,102 +994,129 @@
       "Type": "Ooze",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 6,
+      "Movement": 6,
       "HitDice": 10,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large (15 ft diameter)",
-      "Movement": 20,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Pseudopod",
+          "Name": "Corrosive Touch",
           "NumberOfAttacks": 1,
           "Damage": "3d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Acid",
-          "Description": "Dissolves wood, metal, leather, and flesh; stone is unaffected."
+          "Name": "Dissolve Wood",
+          "Description": "Can dissolve 2 inches of wood equal to its diameter in 1 round."
         },
         {
-          "Name": "Split When Struck",
-          "Description": "Slashing or lightning attacks divide the pudding into smaller puddings."
-        },
-        {
-          "Name": "Climb",
-          "Description": "Can move on walls and ceilings without penalty."
-        },
-        {
-          "Name": "Immunity",
-          "Description": "Immune to cold; takes half damage from fire."
+          "Name": "Dissolve Metal",
+          "Description": "Chainmail in 1 round; plate mail in 2; magical armor requires +1 round per plus."
         }
       ],
-      "BaseXPValue": 3000,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Immunity to Blows",
+          "Description": "Physical blows split it into multiple attacking puddings."
+        },
+        {
+          "Name": "Immunity to Cold",
+          "Description": "Cold has no effect."
+        },
+        {
+          "Name": "Immunity to Lightning",
+          "Description": "Lightning splits it into multiple attacking puddings."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small to Large",
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "Other": "Flows through 1\" cracks; moves on walls and ceilings; fire deals normal damage; color variants include grey, brown, and white; size correlates with hit points."
     },
 
     {
       "Name": "Roper",
       "Type": "Aberration",
-      "Frequency": "Very Rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 3,
       "ArmorClass": 0,
-      "HitDice": 10,
+      "Movement": 3,
+      "HitDice": 11,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 30,
+      "%InLair": "90",
+      "TreasureType": "Qx5",
+      "IndividualTreasure": "",
       "Attacks": [
-        {
-          "Name": "Tentacle",
-          "NumberOfAttacks": 6,
-          "Damage": "1d4 + Strength Drain"
-        },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "5d4"
         }
       ],
-      "SpecialAbilities": [
+      "THAC0": {
+        "HD10to11": 10,
+        "HD12": 9
+      },
+      "SpecialAttacks": [
         {
-          "Name": "Strength Drain",
-          "Description": "Tentacle hits drain 1–3 Strength per strike; reaching 0 Strength renders the victim helpless."
-        },
-        {
-          "Name": "Tentacle Grapple",
-          "Description": "Tentacles extend up to 50 feet and can reel in victims at 10 feet per round."
-        },
-        {
-          "Name": "Camouflage",
-          "Description": "Appears identical to a stalagmite until it attacks."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "High resistance to magic; many spells fail to affect it."
+          "Name": "Poisonous Strands",
+          "Description": "Six strands (2\"–5\" range) cause weakness, reducing Strength by 50% in 1–3 rounds."
         }
       ],
-      "BaseXPValue": 3000,
-      "TreasureType": "Qx5",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Disguise",
+          "Description": "Can appear as a pillar, stalagmite, or floor hump."
+        },
+        {
+          "Name": "Lightning Immunity",
+          "Description": "Unaffected by lightning."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Takes half damage from cold."
+        },
+        {
+          "Name": "Fire Vulnerability",
+          "Description": "Very susceptible to fire; –4 on saving throws."
+        }
+      ],
+      "MagicResistance": "80%",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 2750,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "Other": "Has a gizzard-like organ containing 3–18 platinum pieces and possibly 5–20 gems (35% chance); cigar-shaped, 9' long and 3' thick; drags victims 10' per round once ensnared."
     },
 
     {
       "Name": "Shambling Mound",
-      "Type": "Plant Monster",
+      "Type": "Plant Creature",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 0,
+      "Movement": 6,
       "HitDice": 10,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 20,
+      "%InLair": "30",
+      "TreasureType": "B,T,X",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Slam",
@@ -1018,83 +1124,101 @@
           "Damage": "2d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Constrict",
-          "Description": "On a successful hit, the mound wraps around its target, dealing automatic damage each round."
-        },
-        {
-          "Name": "Electricity Absorption",
-          "Description": "Electric attacks heal the Shambling Mound instead of harming it."
-        },
-        {
-          "Name": "Fire Resistance",
-          "Description": "Takes only half damage from fire-based attacks."
-        },
-        {
-          "Name": "Camouflage",
-          "Description": "Appears as normal vegetation until it moves or attacks."
+          "Name": "Suffocation",
+          "Description": "On a successful hit, can envelop and suffocate a victim in 2–5 rounds."
         }
       ],
-      "BaseXPValue": 2000,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Partially immune to magic; electrical attacks cause growth instead of damage."
+        },
+        {
+          "Name": "Spell Immunity",
+          "Description": "Immune to fire, cold, and many control spells."
+        }
+      ],
+      "MagicResistance": "See text",
+      "Intelligence": "Low",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Can move through dense vegetation; electrical attacks increase its size; extremely tough and difficult to kill; often found in swamps and jungles."
     },
 
     {
       "Name": "Groaning Spirit",
-      "Type": "Undead",
-      "Frequency": "Very Rare",
+      "Type": "Spirit",
+      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 0,
+      "Movement": 15,
       "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": {
-        "Walk": 15,
-        "Fly": 18
-      },
+      "%InLair": "10",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Touch",
+          "Name": "Chilling Touch",
           "NumberOfAttacks": 1,
-          "Damage": "1d8 + energy drain"
+          "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Wail of Death",
-          "Description": "Once per night, emits a terrifying wail; all within 30 feet must save vs death or die instantly."
+          "Name": "Death Groan",
+          "Description": "Once per night, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
         },
         {
-          "Name": "Ethereal Form",
-          "Description": "Can pass through solid objects and is immune to non-magical weapons."
-        },
-        {
-          "Name": "Fear Aura",
-          "Description": "Creatures within 30 feet must save vs spell or flee in terror."
+          "Name": "Fear",
+          "Description": "The sight of a groaning spirit causes fear unless a save is made."
         }
       ],
-      "BaseXPValue": 1500,
-      "TreasureType": "E",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapons Only",
+          "Description": "Can only be harmed by magic weapons."
+        },
+        {
+          "Name": "Spell Immunity",
+          "Description": "Immune to charm, sleep, and hold spells."
+        },
+        {
+          "Name": "Cold & Electricity Immunity",
+          "Description": "Impervious to cold and electricity."
+        }
+      ],
+      "MagicResistance": "50%",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 2450,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Spirit of an evil female elf; not subject to clerical turning; exorcism destroys them."
     },
+
     {
-      "Name": "Neo-otyugh",
-      "Type": "Monstrous Vermin",
+      "Name": "Neo-Otyugh",
+      "Type": "Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "HitDice": 11,
+      "ArmorClass": 0,
+      "Movement": 6,
+      "HitDice": 12,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": {
-        "Walk": 6
-      },
+      "%InLair": "Nil",
+      "TreasureType": "Special",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
@@ -1107,52 +1231,42 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Disease",
-          "Description": "Victims struck by bite must save vs poison or contract a severe wasting disease."
-        },
-        {
-          "Name": "Tentacle Grab",
-          "Description": "Tentacles can grapple and hold targets; restrained creatures suffer automatic bite damage."
-        },
-        {
-          "Name": "Filth Habitat",
-          "Description": "Thrives in refuse pits; immune to most mundane diseases and poisons."
-        },
-        {
-          "Name": "Limited Telepathy",
-          "Description": "Can communicate simple concepts telepathically within 30 feet."
+          "Description": "Tentacle wounds can transmit disease."
         }
       ],
-      "BaseXPValue": 2000,
-      "TreasureType": "C",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "Never Surprised",
+          "Description": "Neo-otyugh are never surprised."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1500,
+      "XPValuePerHitPoint": 15,
+      "Source": "Adnd",
+      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh."
     },
-
 
     {
       "Name": "Umber Hulk",
-      "Type": "Monstrous Humanoid",
+      "Type": "Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 2,
+      "Movement": 6,
       "HitDice": 8,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Large (9 ft tall)",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 12
-      },
-      "Movement": {
-        "Walk": 6,
-        "Burrow": 1
-      },
+      "ExtraHitPoints": 8,
+      "%InLair": "30",
+      "TreasureType": "G",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
@@ -1160,28 +1274,26 @@
           "Damage": "3d4"
         },
         {
-          "Name": "Bite",
+          "Name": "Mandibles",
           "NumberOfAttacks": 1,
-          "Damage": "2d8"
+          "Damage": "2d5"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Confusion Gaze",
-          "Description": "Creatures meeting its gaze must save vs spell or become confused for 3 rounds."
-        },
-        {
-          "Name": "Burrowing",
-          "Description": "Can tunnel through solid earth and stone at slow speed, leaving rough passages."
-        },
-        {
-          "Name": "Darkvision",
-          "Description": "Sees perfectly in total darkness up to 60 feet."
+          "Name": "Confusing Gaze",
+          "Description": "Creatures viewing all four eyes must save or be confused for 3–12 rounds."
         }
       ],
-      "BaseXPValue": 975,
-      "TreasureType": "C",
-      "Source": "AD&D Monster Manual"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1300,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "Other": "Burrows through solid stone at 1” per turn; through loam at 6× that rate; often mistaken for humanoids at 40’ distance; powerful claws and mandibles; subterranean predator."
     },
 
     {
@@ -1227,304 +1339,296 @@
       "Other": "https://1eonline.info/1mm/hydra.htm"
     },
 
-
     {
       "Name": "Lurker Above",
       "Type": "Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 6,
+      "Movement": 9,
       "HitDice": 10,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 12
-      },
-      "Movement": {
-        "Fly": 3
-      },
+      "%InLair": "50",
+      "TreasureType": "C,Y",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Smother",
           "NumberOfAttacks": 1,
-          "Damage": "1d8 per round"
+          "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Camouflage",
-          "Description": "Appears as part of the ceiling; surprises on 1–4 on d6."
+          "Name": "Surprise",
+          "Description": "Surprises on a roll of 1–4 due to camouflage."
         },
         {
-          "Name": "Smothering Attack",
-          "Description": "Drops onto victims, enveloping them; victims suffocate unless freed."
-        },
-        {
-          "Name": "Crushing Weight",
-          "Description": "If it lands on a target, deals 1d8 damage per round until removed."
+          "Name": "Smother Prey",
+          "Description": "Drops onto victims and smothers them in 2–5 rounds."
         }
       ],
-      "BaseXPValue": 1900,
-      "TreasureType": "None",
-      "Source": "Adnd"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1500,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "Other": "Camouflages as a ceiling; drops onto prey; leathery body; often found in caverns and ruins."
     },
 
     {
       "Name": "Manticore",
-      "Type": "Monstrous",
+      "Type": "Monstrous Beast",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 4,
+      "Movement": 18,
       "HitDice": 6,
-      "HitPoints": 36,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 30,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Morale": { "Value": 11 },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "20",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
       "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        },
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "Damage": "1d3"
         },
-        {
-          "Name": "Tail Spikes",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6 (up to 6 spikes)"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spike Volley",
-          "Description": "Can fire tail spikes at range; each volley counts as one attack."
-        }
-      ],
-      "BaseXPValue": 950,
-      "TreasureType": "G"
-    },
-
-    {
-      "Name": "Giant Snake (Giant Python)",
-      "Type": "Animal",
-      "ArmorClass": 5,
-      "HitDice": 7,
-      "HitPoints": 42,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 10,
-        "Burrow": 0,
-        "Climb": 10
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Morale": { "Value": 10 },
-      "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Tail Spikes",
+          "Description": "Fires volleys of 6 iron spikes (18\" range, 1–6 damage each). Can fire 4 volleys."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Lawful evil",
+      "Size": "Large",
+      "BaseXPValue": 525,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Clumsy flyer (MC E); coloration: lion body, bat wings, human-like head; prefers warm climates; hunts humans as primary prey."
+    },
+
+    {
+      "Name": "Giant Snake",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
         },
         {
           "Name": "Constrict",
           "NumberOfAttacks": 1,
-          "Damage": "3d6"
+          "Damage": "2d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Crushing Coils",
-          "Description": "Held targets take automatic constrict damage each round."
+          "Name": "Constriction",
+          "Description": "On a successful hit, the snake coils around the target and deals constriction damage each round."
         }
       ],
-      "BaseXPValue": 750,
-      "TreasureType": "None"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 225,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Typically 15' long; aggressive when hungry; often found in warm climates, jungles, or underground caverns."
     },
+
     {
       "Name": "Giant Troll",
       "Type": "Giant",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 4,
-      "HitDice": 7,
-      "HitPoints": 40,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Morale": { "Value": 12 },
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "30",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d6+2"
+          "Name": "Spiked Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 2 HP per melee round; cannot re-bond severed limbs."
         },
         {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
+          "Name": "Fire Vulnerability",
+          "Description": "Requires at least 10 HP of fire damage before it can be killed."
+        },
         {
-          "Name": "Greater Regeneration",
-          "Description": "Heals 4 hp per round; fire/acid needed to kill."
+          "Name": "Missile Catching",
+          "Description": "Can catch missiles 25% of the time if within reach."
         }
       ],
-      "BaseXPValue": 900,
-      "TreasureType": "E"
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 725,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Hill giant/troll crossbreed; red-brown skin; red-rimmed eyes; extremely strong; acute smell; 90' infravision; found in nearly every clime except extreme arctic/tropical."
     },
+
+
     {
-      "Name": "Giant Spider (Huge)",
-      "Type": "Vermin",
-      "ArmorClass": 3,
-      "HitDice": 6,
-      "HitPoints": 34,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 40
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 9 },
+      "Name": "Huge Spider",
+      "Type": "Arachnid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 6,
+      "Movement": 18,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "50",
+      "TreasureType": "J,K,L,M,N,Q",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Deadly Poison",
-          "Description": "Bite forces save vs poison or death."
+          "Name": "Surprise",
+          "Description": "Surprises on a roll of 1–5 due to silent movement and ambush behavior."
         },
         {
-          "Name": "Web Trap",
-          "Description": "Can entangle targets; save vs spell to avoid being stuck."
+          "Name": "Poison",
+          "Description": "Victim must save at +1 or die."
         }
       ],
-      "BaseXPValue": 800,
-      "TreasureType": "None"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 145,
+      "XPValuePerHitPoint": 3,
+      "Source": "Adnd",
+      "Other": "Fast-moving hunting spider; capable of jumping 3'; often found in dark ruins, forests, or caverns."
     },
+
     {
       "Name": "Giant Hyena",
       "Type": "Animal",
-      "ArmorClass": 6,
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "Movement": 12,
       "HitDice": 5,
-      "HitPoints": 30,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Morale": { "Value": 9 },
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d4"
+          "Damage": "3d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Pack Hunter",
-          "Description": "If fighting with allies, gains +1 to hit."
-        }
-      ],
-      "BaseXPValue": 350,
-      "TreasureType": "None"
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 90,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Found in tropical wilderness swamps and plains; aggressive scavenger and pack hunter."
     },
+
     {
       "Name": "Lamia",
-      "Type": "Monstrous",
+      "Type": "Humanoid",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 3,
-      "HitDice": 7,
-      "HitPoints": 40,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Morale": { "Value": 12 },
+      "Movement": 24,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "60",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Charm",
-          "Description": "Can cast charm person 3/day."
-        },
+      "SpecialAttacks": [
         {
           "Name": "Wisdom Drain",
-          "Description": "On hit, target loses 1 point of Wisdom (temporary)."
+          "Description": "Touch drains 1 point of WIS per hit."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast charm person, suggestion, mirror image, and illusionary abilities depending on variant."
         }
       ],
-      "BaseXPValue": 1100,
-      "TreasureType": "H"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "High",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 1700,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "Other": "Found in tropical wilderness deserts; lion‑body with human female torso; highly deceptive and predatory."
     },
     {
       "Name": "Master Ninja",
