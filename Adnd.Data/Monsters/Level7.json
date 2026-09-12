@@ -1233,8 +1233,489 @@
       "BaseXPValue": 2380,
       "XPValuePerHitPoint": 0,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 39",
       "Other": "7.5' tall; created by high-level magic-users; extremely strong; can smash through doors and wooden structures."
     },
+
+    {
+      "Name": "Gorgon",
+      "Type": "Magical Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 2,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "40",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Trample",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Petrifying Breath",
+          "Description": "Breath weapon turns creatures to stone; truncated cone ½\" at mouth, 6\" long, 2\" wide at end; usable 4 times per day."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "None",
+          "Description": "No special defensive abilities."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1750,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 40-41",
+      "Other": "Bull-like creature covered in thick metal scales; awareness and breath weapon effects extend into astral and ethereal planes."
+    },
+    {
+      "Name": "Groaning Spirit",
+      "Type": "Spirit",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "Movement": 15,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Chilling Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Death Groan",
+          "Description": "Once per night, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
+        },
+        {
+          "Name": "Fear",
+          "Description": "The sight of a groaning spirit causes fear unless a save is made."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapons Only",
+          "Description": "Can only be harmed by magic weapons."
+        },
+        {
+          "Name": "Spell Immunity",
+          "Description": "Immune to charm, sleep, and hold spells."
+        },
+        {
+          "Name": "Cold & Electricity Immunity",
+          "Description": "Impervious to cold and electricity."
+        }
+      ],
+      "MagicResistance": "50%",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 2450,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 42-43",
+      "Other": "Spirit of an evil female elf; not subject to clerical turning; exorcism destroys them."
+    },
+
+    {
+      "Name": "Hydra 11 Heads",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 10,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 2150,
+      "XPValuePerHitPoint": 16,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 44-46",
+      "Other": "https://1eonline.info/1mm/hydra.htm"
+    },
+
+    {
+      "Name": "Hydra, pyro-, 8 heads",
+      "Type": "Hydra",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 12,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Multi‑Attack",
+          "Description": "Up to 4 heads may attack the same opponent."
+        },
+        {
+          "Name": "Breath Weapon",
+          "Description": "Each head may breathe for 1–8 damage."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Multiple Heads",
+          "Description": "All heads must be killed to slay the hydra."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1850,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 47",
+      "Other": "Damage per attack depends on head count; 8‑headed hydra deals 1–8 damage per bite."
+    },
+    {
+      "Name": "Intellect Devourer",
+      "Type": "Lamia",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "Movement": 15,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 6,
+      "%InLair": "60",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 4,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Hide in Shadows",
+          "Description": "Can conceal itself exceptionally well, surprising opponents."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 200; attack/defense modes C, E/F, G."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Weapon & Magic Immunity",
+          "Description": "Immune to most weapons and magical effects."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Very",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 1510,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 48-49",
+      "Other": "Highly dangerous variant of lamia; combines stealth, psionics, and strong resistances."
+    },
+    {
+      "Name": "Invisible Stalker",
+      "Type": "Elemental",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "Surprises on a roll of 1–5 due to near‑perfect invisibility."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Invisibility",
+          "Description": "Permanently invisible; only detectable by special means."
+        }
+      ],
+      "MagicResistance": "30%",
+      "Intelligence": "High",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2850,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 50",
+      "Other": "Summoned from the Elemental Plane of Air; obeys conjurer until task is completed; strength 19 represents grasping strength only."
+    },
+    {
+      "Name": "Lamia",
+      "Type": "Humanoid",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "Movement": 24,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "60",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Wisdom Drain",
+          "Description": "Touch drains 1 point of WIS per hit."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast charm person, suggestion, mirror image, and illusionary abilities depending on variant."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "High",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 1700,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 51-52",
+      "Other": "Found in tropical wilderness deserts; lion‑body with human female torso; highly deceptive and predatory."
+    },
+
+    {
+      "Name": "Fire Lizard",
+      "Type": "Monster",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 3,
+      "Movement": 9,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "B,Q(x10),S,T",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d16"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Fire Puff",
+          "Description": "Breathes a short cone of flame (2–12 damage, or 1–6 on save)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Fire Immunity",
+          "Description": "Unaffected by all fire‑based attacks."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 53-56",
+      "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
+    },
+
+    {
+      "Name": "Lurker Above",
+      "Type": "Aberration",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "Movement": 9,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "C,Y",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Smother",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "Surprises on a roll of 1–4 due to camouflage."
+        },
+        {
+          "Name": "Smother Prey",
+          "Description": "Drops onto victims and smothers them in 2–5 rounds."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1500,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 57-59",
+      "Other": "Camouflages as a ceiling; drops onto prey; leathery body; often found in caverns and ruins."
+    },
+    {
+      "Name": "Mezzodaemon",
+      "Type": "Daemon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": -3,
+      "Movement": 15,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 40,
+      "%InLair": "0",
+      "TreasureType": "Q(x5), X",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "7-12"
+        },
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "Weapon +6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Innate Spell‑Like Abilities",
+          "Description": "Dimension door (2/day), become ethereal (1/day), magic jar (1/day), passwall (4/day), repulsion (1/day), wind walk (1/day), word of recall (1/day)."
+        },
+        {
+          "Name": "At‑Will Abilities",
+          "Description": "Comprehend languages, detect invisibility, detect magic, ESP, invisibility, levitate, polymorph self, read magic."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Weapon Immunity",
+          "Description": "Unaffected by non-magical weapons including iron and silver."
+        },
+        {
+          "Name": "Elemental Resistances",
+          "Description": "Acid, cold, and fire deal half damage."
+        },
+        {
+          "Name": "Spell Immunities",
+          "Description": "Cannot be charmed; suggestion never works."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "95% vs 1st level spells, decreasing by 5% per spell level to 55% vs 9th level spells."
+        }
+      ],
+      "MagicResistance": "Special",
+      "Intelligence": "High–Exceptional",
+      "Alignment": "Neutral Evil",
+      "Size": "Medium",
+      "BaseXPValue": 2700,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 60",
+      "Other": "18(00) Strength; often uses magical weapons and shields; can use most magical items; sees infrared and ultraviolet; limited telepathy; keeps true names secret."
+    },
+
 
     {
       "Name": "Trapper",
@@ -1287,54 +1768,6 @@
       "Other": "Covers up to 400 sq ft (600 sq ft for giant specimens); mimics stone floors; creates chest‑like lure to attract prey."
     },
 
-    {
-      "Name": "Fire Lizard",
-      "Type": "Monster",
-      "Frequency": "Very rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 3,
-      "Movement": 9,
-      "HitDice": 10,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "B,Q(x10),S,T",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d16"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Fire Puff",
-          "Description": "Breathes a short cone of flame (2–12 damage, or 1–6 on save)."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Fire Immunity",
-          "Description": "Unaffected by all fire‑based attacks."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 1350,
-      "XPValuePerHitPoint": 14,
-      "Source": "Adnd",
-      "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
-    },
-
 
 
     {
@@ -1384,6 +1817,7 @@
       "TreasureType": "H",
       "Source": "Adnd"
     },
+
     {
       "Name": "Dragon, Red",
       "Type": "Dragon",
@@ -1488,50 +1922,6 @@
       "Source": "Adnd"
     },
 
-
-
-    {
-      "Name": "Invisible Stalker",
-      "Type": "Elemental",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "Movement": 12,
-      "HitDice": 8,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "4d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Surprises on a roll of 1–5 due to near‑perfect invisibility."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Invisibility",
-          "Description": "Permanently invisible; only detectable by special means."
-        }
-      ],
-      "MagicResistance": "30%",
-      "Intelligence": "High",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 2850,
-      "XPValuePerHitPoint": 16,
-      "Source": "Adnd",
-      "Other": "Summoned from the Elemental Plane of Air; obeys conjurer until task is completed; strength 19 represents grasping strength only."
-    },
 
 
     {
@@ -1696,60 +2086,7 @@
       "Other": "Can move through dense vegetation; electrical attacks increase its size; extremely tough and difficult to kill; often found in swamps and jungles."
     },
 
-    {
-      "Name": "Groaning Spirit",
-      "Type": "Spirit",
-      "Frequency": "Very rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
-      "Movement": 15,
-      "HitDice": 7,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "10",
-      "TreasureType": "D",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Chilling Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Death Groan",
-          "Description": "Once per night, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
-        },
-        {
-          "Name": "Fear",
-          "Description": "The sight of a groaning spirit causes fear unless a save is made."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Magic Weapons Only",
-          "Description": "Can only be harmed by magic weapons."
-        },
-        {
-          "Name": "Spell Immunity",
-          "Description": "Immune to charm, sleep, and hold spells."
-        },
-        {
-          "Name": "Cold & Electricity Immunity",
-          "Description": "Impervious to cold and electricity."
-        }
-      ],
-      "MagicResistance": "50%",
-      "Intelligence": "Exceptional",
-      "Alignment": "Chaotic evil",
-      "Size": "Medium",
-      "BaseXPValue": 2450,
-      "XPValuePerHitPoint": 10,
-      "Source": "Adnd",
-      "Other": "Spirit of an evil female elf; not subject to clerical turning; exorcism destroys them."
-    },
+
 
     {
       "Name": "Neo-Otyugh",
@@ -1842,90 +2179,8 @@
       "Other": "Burrows through solid stone at 1” per turn; through loam at 6× that rate; often mistaken for humanoids at 40’ distance; powerful claws and mandibles; subterranean predator."
     },
 
-    {
-      "Name": "Hydra (11 Heads)",
-      "Type": "Reptile",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 5,
-      "Movement": 9,
-      "HitDice": 11,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "20",
-      "TreasureType": "B",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 10,
-          "Damage": "1d10"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Multi‑Headed Assault",
-          "Description": "Up to 4 heads may attack the same opponent simultaneously."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "All Heads Must Be Slain",
-          "Description": "The hydra dies only when every head is reduced to 0 HP."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Semi-",
-      "Size": "Large",
-      "BaseXPValue": 2150,
-      "XPValuePerHitPoint": 16,
-      "Alignment": "Neutral",
-      "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/hydra.htm"
-    },
 
-    {
-      "Name": "Lurker Above",
-      "Type": "Aberration",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 6,
-      "Movement": 9,
-      "HitDice": 10,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "C,Y",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Smother",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Surprises on a roll of 1–4 due to camouflage."
-        },
-        {
-          "Name": "Smother Prey",
-          "Description": "Drops onto victims and smothers them in 2–5 rounds."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 1500,
-      "XPValuePerHitPoint": 14,
-      "Source": "Adnd",
-      "Other": "Camouflages as a ceiling; drops onto prey; leathery body; often found in caverns and ruins."
-    },
+
 
     {
       "Name": "Manticore",
@@ -2135,47 +2390,7 @@
       "Other": "Found in tropical wilderness swamps and plains; aggressive scavenger and pack hunter."
     },
 
-    {
-      "Name": "Lamia",
-      "Type": "Humanoid",
-      "Frequency": "Very rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "Movement": 24,
-      "HitDice": 9,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "60",
-      "TreasureType": "D",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Wisdom Drain",
-          "Description": "Touch drains 1 point of WIS per hit."
-        },
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast charm person, suggestion, mirror image, and illusionary abilities depending on variant."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "High",
-      "Alignment": "Chaotic evil",
-      "Size": "Medium",
-      "BaseXPValue": 1700,
-      "XPValuePerHitPoint": 12,
-      "Source": "Adnd",
-      "Other": "Found in tropical wilderness deserts; lion‑body with human female torso; highly deceptive and predatory."
-    },
+
     {
       "Name": "Master Ninja",
       "Type": "Humanoid",
