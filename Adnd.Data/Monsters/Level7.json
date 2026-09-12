@@ -1,6 +1,62 @@
 {
-    "Level": 7,
+ "Level": 7,
   "Monsters": [
+    {
+      "Name": "Black Pudding",
+      "Type": "Ooze",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "Movement": 6,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Corrosive Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Dissolve Wood",
+          "Description": "Can dissolve 2 inches of wood equal to its diameter in 1 round."
+        },
+        {
+          "Name": "Dissolve Metal",
+          "Description": "Chainmail in 1 round; plate mail in 2; magical armor requires +1 round per plus."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Immunity to Blows",
+          "Description": "Physical blows split it into multiple attacking puddings."
+        },
+        {
+          "Name": "Immunity to Cold",
+          "Description": "Cold has no effect."
+        },
+        {
+          "Name": "Immunity to Lightning",
+          "Description": "Lightning splits it into multiple attacking puddings."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small to Large",
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 01-05",
+      "Other": "Flows through 1\" cracks; moves on walls and ceilings; fire deals normal damage; color variants include grey, brown, and white; size correlates with hit points."
+    },
+
     {
       "Name": "Lvl 7 Magic-User",
       "Type": "Humanoid",
@@ -34,8 +90,10 @@
       ],
       "BaseXPValue": 900,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Cleric",
       "Type": "Humanoid",
@@ -70,8 +128,10 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Fighter",
       "Type": "Humanoid",
@@ -141,8 +201,10 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Monk",
       "Type": "Humanoid",
@@ -172,8 +234,10 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Assassin",
       "Type": "Humanoid",
@@ -208,8 +272,10 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Bard",
       "Type": "Humanoid",
@@ -244,8 +310,10 @@
       "BaseXPValue": 1100,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Druid",
       "Type": "Humanoid",
@@ -280,8 +348,10 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
+
     {
       "Name": "Lvl 7 Ranger",
       "Type": "Humanoid",
@@ -311,6 +381,7 @@
       "BaseXPValue": 1100,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
     {
@@ -347,6 +418,7 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
     {
@@ -383,11 +455,584 @@
       "BaseXPValue": 1100,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
       "Source": "Adnd"
     },
 
     {
-      "Name": "Stone Giant",
+      "Name": "Chimera",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 5,
+      "Movement": 18,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "40",
+      "TreasureType": "F",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Goat Horns",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Lion Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        },
+        {
+          "Name": "Dragon Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Dragon head breathes fire for 3–24 damage, range 5\", 50% chance to use."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 11-14",
+      "Other": "Three-headed monster: goat hindquarters, lion forequarters, dragon wings and head; clumsy flyer (18\", class E); speaks limited red dragon tongue."
+    },
+    {
+      "Name": "Demon, Succubus",
+      "Type": "Demon",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "Movement": 18,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "5",
+      "TreasureType": "I,Q",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Drains life energy; see DMG 54.22."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "Charm person, ESP, suggestion, shapechange, and other demon spell-like abilities."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 200; attack/defense modes D/G, I."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapon Immunity",
+          "Description": "Can only be hit by magic weapons."
+        }
+      ],
+      "MagicResistance": "70%",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 2100,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 15",
+      "Other": "6' tall; seductive infiltrator demon; often found in forest wilderness; highly dangerous due to charm and energy drain."
+    },
+    {
+      "Name": "Demon, Type I",
+      "Type": "Demon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 0,
+      "Movement": 18,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "5",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Claw (Rear)",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Magic Use",
+          "Description": "Can use demon spell-like abilities such as darkness, telekinesis, and others."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapon Immunity",
+          "Description": "Can only be hit by magic weapons."
+        }
+      ],
+      "MagicResistance": "50%",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1275,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 16",
+      "Other": " (Vrock) 8.5' tall; vulture-like demon; vicious melee attacker with five natural attacks."
+    },
+
+    {
+      "Name": "Demon, Type II ",
+      "Type": "Demon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": -2,
+      "Movement": 12,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "4d16"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Magic Use",
+          "Description": "Can use demon spell-like abilities such as darkness, fear, telekinesis, and others."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 100; attack/defense modes E/F, G."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Demon Traits",
+          "Description": "Includes immunities and resistances typical of Type II demons; can only be hit by magic weapons."
+        }
+      ],
+      "MagicResistance": "55%",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 17",
+      "Other": "(Hezrou) 7'+ tall; hulking, toad-like demon; extremely strong and durable."
+    },
+
+    {
+      "Name": "Demon, Type III",
+      "Type": "Demon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": -4,
+      "Movement": 9,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "15",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Pincer",
+          "NumberOfAttacks": 2,
+          "Damage": "2d12"
+        },
+        {
+          "Name": "Arm Strike",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d5"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Magic Use",
+          "Description": "Fear, darkness 10' radius, levitate, pyrotechnics, polymorph self, telekinesis (4000 gp weight), gate (Type I–III)."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 100; attack/defense modes E/F."
+        },
+        {
+          "Name": "Seize & Teleport",
+          "Description": "If both pincers grasp for 1 full round, can teleport victim away."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Demon Traits",
+          "Description": "Normal attacks affect this demon type; additional resistances typical of Type III demons."
+        }
+      ],
+      "MagicResistance": "60%",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 2400,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 18",
+      "Other": "(Glabrezu) 9.5' tall; goat‑horned dog‑like head; massive pincers; two small human arms on chest; extremely dangerous melee and spell‑using demon."
+    },
+
+    {
+      "Name": "Devil, Barbed",
+      "Type": "Devil",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 0,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Fear",
+          "Description": "Victims must save or flee in terror."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "Can use various devil spell-like abilities."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Never Surprised",
+          "Description": "Always aware of surroundings; cannot be caught off guard."
+        }
+      ],
+      "MagicResistance": "35%",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1425,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 19",
+      "Other": "7' tall; covered in barbs; extremely aggressive; serves higher devils as shock troops."
+    },
+    {
+      "Name": "Devil, Bone",
+      "Type": "Devil",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": -1,
+      "Movement": 15,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "55",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Bone Hook",
+          "Description": "Hooks and tears flesh; extremely painful."
+        },
+        {
+          "Name": "Tail",
+          "Description": "Tail strike deals 2d8 damage and drains 1–4 strength points."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "Can use various devil spell-like abilities."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Devil Traits",
+          "Description": "Includes immunities and resistances typical of greater devils."
+        }
+      ],
+      "MagicResistance": "40%",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "Size": "Large",
+      "BaseXPValue": 2800,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 20",
+      "Other": "9½' tall; extremely cruel; powerful enforcer among devils."
+    },
+    {
+      "Name": "Devil, Horned",
+      "Type": "Devil",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": -5,
+      "Movement": 18,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 5,
+      "%InLair": "55",
+      "TreasureType": "I",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Gore",
+          "NumberOfAttacks": 1,
+          "Damage": "2d5"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Tail Strike",
+          "Description": "Deals 2d8 damage and drains 1–4 strength points."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can use various devil spell-like abilities."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability score 113; attack/defense modes B, C / F, G, H."
+        },
+        {
+          "Name": "Special Weapons",
+          "Description": "Fork (2d12 damage) or whip (1d4 damage + stun)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapon Immunity",
+          "Description": "Can only be hit by magic weapons."
+        }
+      ],
+      "MagicResistance": "50%",
+      "Intelligence": "High",
+      "Alignment": "Lawful evil",
+      "Size": "Large",
+      "BaseXPValue": 1320,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 21",
+      "Other": "9' tall; extremely powerful greater devil; feared enforcer of the Nine Hells."
+    },
+    {
+      "Name": "Efreeti",
+      "Type": "Genie",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "Movement": 24,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Magic Use",
+          "Description": "Can use genie spell-like abilities including illusions, wall of fire, and limited wishes."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Fire Resistance",
+          "Description": "Takes reduced damage from fire; immune to normal fire."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Very",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1950,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 24",
+      "Other": "12' tall; native to the City of Brass; extremely strong and dangerous; can fly using fiery propulsion."
+    },
+
+    {
+      "Name": "Elemental, Air",
+      "Type": "Elemental",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "Movement": 36,
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Air Slam",
+          "NumberOfAttacks": 1,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Whirlwind",
+          "Description": "Forms a whirlwind equal in height to its HD; kills creatures under 3 HD and deals 2–16 damage to non‑aerial creatures."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+2 Weapon Immunity",
+          "Description": "Requires +2 or better weapon to hit."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2850,
+      "XPValuePerHitPoint": 15,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 25-26",
+      "Other": "Gains +1 to hit and +2 damage per die when fighting in the air; moves like a djinni."
+    },
+    {
+      "Name": "Ettin",
+      "Type": "Giant",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 3,
+      "Movement": 12,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "O,C,Y",
+      "IndividualTreasure": "O",
+      "Attacks": [
+        {
+          "Name": "Left Arm",
+          "NumberOfAttacks": 1,
+          "Damage": "2d16"
+        },
+        {
+          "Name": "Right Arm",
+          "NumberOfAttacks": 1,
+          "Damage": "3d18"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Alertness",
+          "Description": "Surprised only on a roll of 1 due to two heads."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1950,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 27-30",
+      "Other": "Two-headed nocturnal giant; lairs underground; uses spiked clubs; one head always alert; strength 19 grants +6 damage bonus."
+    },
+
+    {
+      "Name": "Giant, Stone",
       "Type": "Giant",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
@@ -427,7 +1072,168 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 14,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 31-35",
       "Other": "Fond of cave bears (75% chance of 1–4 in lair); can catch thrown boulders 90% of the time; females fight as hill giants; young vary by size."
+    },
+    {
+      "Name": "Giant, Hill",
+      "Type": "Giant",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 10,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "25",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Throw rock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d16"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": 22,
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1400,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 31-35",
+      "Other": "Adult hill giants can hurl rocks from 1” to 20” range ; lairs are caves or similar underground places ; often accompanied by dire wolves, giant lizards, or ogres as guards ."
+    },
+
+    {
+      "Name": "Fire Giant",
+      "Type": "Giant",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 3,
+      "Movement": 12,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "35",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "5d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Fire Immunity",
+          "Description": "Completely impervious to fire."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Strength": 25,
+      "Intelligence": "Average",
+      "Alignment": "Lawful evil",
+      "Size": "Large",
+      "BaseXPValue": 2700,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 36-38",
+      "Other": "Typically 12 feet tall; weighs about 1,510 lbs; chest size 80 inches; torso length 38 inches; often found in volcanic or mountainous regions."
+    },
+
+    {
+      "Name": "Frost Giant",
+      "Type": "Giant",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "30",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "4d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Cold Immunity",
+          "Description": "Impervious to cold, including white dragon breath."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Strength": 24,
+      "Intelligence": "Average to low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 2250,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 36-38",
+      "Other": "Typically 15 feet tall; often accompanied by 1–6 winter wolves; females fight as stone giants; young vary by size; can catch missiles 40% of the time."
+    },
+    {
+      "Name": "Flesh Golem",
+      "Type": "Golem",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 9,
+      "Movement": 8,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Berserk",
+          "Description": "1% cumulative chance per melee round to go berserk and attack anything in sight."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapon Immunity",
+          "Description": "Normal weapons do not harm flesh golems; magical weapons have normal effect."
+        },
+        {
+          "Name": "Spell Immunity",
+          "Description": "Most spells have no effect; fire or cold spells slow the golem by 50% for 2–12 rounds; electrical attacks heal damage equal to the number of dice rolled."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2380,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "Other": "7.5' tall; created by high-level magic-users; extremely strong; can smash through doors and wooden structures."
     },
 
     {
@@ -529,58 +1335,7 @@
       "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
     },
 
-    {
-      "Name": "Chimera",
-      "Type": "Monster",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": "6/5/2",
-      "Movement": "9/18",
-      "HitDice": 9,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "40",
-      "TreasureType": "F",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d3"
-        },
-        {
-          "Name": "Goat Horns",
-          "NumberOfAttacks": 2,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Lion Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d12"
-        },
-        {
-          "Name": "Dragon Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d12"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Breath Weapon",
-          "Description": "Dragon head breathes fire for 3–24 damage, range 5\", 50% chance to use."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Semi-",
-      "Alignment": "Chaotic evil",
-      "Size": "Large",
-      "BaseXPValue": 1000,
-      "XPValuePerHitPoint": 12,
-      "Source": "Adnd",
-      "Other": "Three-headed monster: goat hindquarters, lion forequarters, dragon wings and head; clumsy flyer (18\", class E); speaks limited red dragon tongue."
-    },
+
 
     {
       "Name": "Dragon, Green",
@@ -733,48 +1488,7 @@
       "Source": "Adnd"
     },
 
-    {
-      "Name": "Ettin",
-      "Type": "Giant",
-      "Frequency": "Very rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 3,
-      "Movement": 12,
-      "HitDice": 10,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "20",
-      "TreasureType": "O,C,Y",
-      "IndividualTreasure": "O",
-      "Attacks": [
-        {
-          "Name": "Left Arm",
-          "NumberOfAttacks": 1,
-          "Damage": "2d16"
-        },
-        {
-          "Name": "Right Arm",
-          "NumberOfAttacks": 1,
-          "Damage": "3d18"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Alertness",
-          "Description": "Surprised only on a roll of 1 due to two heads."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic evil",
-      "Size": "Large",
-      "BaseXPValue": 1950,
-      "XPValuePerHitPoint": 14,
-      "Source": "Adnd",
-      "Other": "Two-headed nocturnal giant; lairs underground; uses spiked clubs; one head always alert; strength 19 grants +6 damage bonus."
-    },
+
 
     {
       "Name": "Invisible Stalker",
@@ -818,117 +1532,7 @@
       "Source": "Adnd",
       "Other": "Summoned from the Elemental Plane of Air; obeys conjurer until task is completed; strength 19 represents grasping strength only."
     },
-    {
-      "Name": "Hill Giant",
-      "Type": "Giant",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 10,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 8,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "25",
-      "TreasureType": "D",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Throw rock",
-          "NumberOfAttacks": 1,
-          "Damage": "2d16"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Strength": 22,
-      "Intelligence": "Low",
-      "Alignment": "Chaotic evil",
-      "Size": "Large",
-      "BaseXPValue": 1400,
-      "XPValuePerHitPoint": 12,
-      "Source": "Adnd",
-      "Other": "Adult hill giants can hurl rocks from 1” to 20” range ; lairs are caves or similar underground places ; often accompanied by dire wolves, giant lizards, or ogres as guards ."
-    },
 
-    {
-      "Name": "Fire Giant",
-      "Type": "Giant",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 3,
-      "Movement": 12,
-      "HitDice": 11,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "35",
-      "TreasureType": "E",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "5d6"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Fire Immunity",
-          "Description": "Completely impervious to fire."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Strength": 25,
-      "Intelligence": "Average",
-      "Alignment": "Lawful evil",
-      "Size": "Large",
-      "BaseXPValue": 2700,
-      "XPValuePerHitPoint": 16,
-      "Source": "Adnd",
-      "Other": "Typically 12 feet tall; weighs about 1,510 lbs; chest size 80 inches; torso length 38 inches; often found in volcanic or mountainous regions."
-    },
-
-    {
-      "Name": "Frost Giant",
-      "Type": "Giant",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 10,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "30",
-      "TreasureType": "E",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "4d6"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Cold Immunity",
-          "Description": "Impervious to cold, including white dragon breath."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Strength": 24,
-      "Intelligence": "Average to low",
-      "Alignment": "Chaotic evil",
-      "Size": "Large",
-      "BaseXPValue": 2250,
-      "XPValuePerHitPoint": 14,
-      "Source": "Adnd",
-      "Other": "Typically 15 feet tall; often accompanied by 1–6 winter wolves; females fight as stone giants; young vary by size; can catch missiles 40% of the time."
-    },
 
     {
       "Name": "Mummy",
@@ -989,60 +1593,6 @@
       "Other": "Created as tomb guardians; negative energy animates them; victims killed by mummies rot and require both cure disease and raise dead within 6 turns."
     },
 
-    {
-      "Name": "Black Pudding",
-      "Type": "Ooze",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 6,
-      "Movement": 6,
-      "HitDice": 10,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Corrosive Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "3d8"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Dissolve Wood",
-          "Description": "Can dissolve 2 inches of wood equal to its diameter in 1 round."
-        },
-        {
-          "Name": "Dissolve Metal",
-          "Description": "Chainmail in 1 round; plate mail in 2; magical armor requires +1 round per plus."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Immunity to Blows",
-          "Description": "Physical blows split it into multiple attacking puddings."
-        },
-        {
-          "Name": "Immunity to Cold",
-          "Description": "Cold has no effect."
-        },
-        {
-          "Name": "Immunity to Lightning",
-          "Description": "Lightning splits it into multiple attacking puddings."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Small to Large",
-      "BaseXPValue": 1350,
-      "XPValuePerHitPoint": 14,
-      "Source": "Adnd",
-      "Other": "Flows through 1\" cracks; moves on walls and ceilings; fire deals normal damage; color variants include grey, brown, and white; size correlates with hit points."
-    },
 
     {
       "Name": "Roper",
@@ -1065,10 +1615,6 @@
           "Damage": "5d4"
         }
       ],
-      "THAC0": {
-        "HD10to11": 10,
-        "HD12": 9
-      },
       "SpecialAttacks": [
         {
           "Name": "Poisonous Strands",

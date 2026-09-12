@@ -476,96 +476,64 @@
       "Other": "https://1eonline.info/1mm/hydra.htm"
     },
 
+
     {
-      "Name": "Stone Giant",
-      "Type": "Giant",
-      "ArmorClass": 3,
-      "HitDice": 8,
-      "HitPoints": 48,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Rock Throw",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
-        {
-          "Name": "Club",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Rock Mastery",
-          "Description": "+2 to hit with thrown rocks."
-        }
-      ],
-      "BaseXPValue": 1500,
-      "TreasureType": "I"
-    },
-    {
-      "Name": "Giant Spider (Phase)",
-      "Type": "Vermin",
-      "ArmorClass": 2,
-      "HitDice": 7,
-      "HitPoints": 40,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 40
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Morale": { "Value": 10 },
+      "Name": "Phase Spider",
+      "Type": "Arachnid",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 7,
+      "Movement": 15,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 5,
+      "%InLair": "75",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Phase Shift",
-          "Description": "Can become ethereal for 1 round, 3/day."
-        },
-        {
-          "Name": "Poison Bite",
-          "Description": "Save vs poison or death."
+          "Name": "Poison",
+          "Description": "Victim must save at -2 or die."
         }
       ],
-      "BaseXPValue": 1200,
-      "TreasureType": "None"
+      "SpecialDefenses": [
+        {
+          "Name": "Phasing",
+          "Description": "Can shift in and out of the ethereal plane, avoiding attacks and repositioning."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 700,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "Other": "Ambush predator; phases to strike and retreat; extremely dangerous due to poison and ethereal movement."
     },
+
     {
-      "Name": "Giant Bear (Cave)",
+      "Name": "Giant Cave Bear",
       "Type": "Animal",
-      "ArmorClass": 5,
-      "HitDice": 7,
-      "HitPoints": 45,
-      "Movement": 30,
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "Movement": 12,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 6,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
@@ -575,118 +543,157 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "1d12"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Mauling Frenzy",
-          "Description": "If both claws hit, extra 2d8 damage."
+          "Name": "Hug",
+          "Description": "If both claws hit, the bear hugs for 2d8 damage."
         }
       ],
-      "BaseXPValue": 900,
-      "TreasureType": "None"
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 475,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Typically 12'+ tall; extremely aggressive; found in hills and rugged terrain."
     },
+
     {
       "Name": "Wyvern",
       "Type": "Dragonkin",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
       "ArmorClass": 3,
+      "Movement": 24,
       "HitDice": 7,
-      "HitPoints": 42,
-      "Movement": 30,
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        },
-        {
-          "Name": "Sting",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Venomous Sting",
-          "Description": "Sting forces save vs poison or death."
-        }
-      ],
-      "BaseXPValue": 1300,
-      "TreasureType": "J"
-    },
-    {
-      "Name": "Giant Snake (Sea Serpent)",
-      "Type": "Animal",
-      "ArmorClass": 4,
-      "HitDice": 8,
-      "HitPoints": 50,
-      "Movement": 40,
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Capsize",
-          "Description": "Can attempt to overturn small boats; crew must save vs death or fall overboard."
-        }
-      ],
-      "BaseXPValue": 1400,
-      "TreasureType": "None"
-    },
-    {
-      "Name": "Giant Slug",
-      "Type": "Monstrous",
-      "ArmorClass": 6,
-      "HitDice": 8,
-      "HitPoints": 48,
-      "Movement": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "%InLair": "30",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
           "Damage": "2d8"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
+        {
+          "Name": "Deadly Poison",
+          "Description": "Victim must save or die; delivered by the tail stinger."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral evil",
+      "Size": "Large",
+      "BaseXPValue": 925,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Aerial predator; clumsy flyer (MC E); extremely aggressive; tail can strike over its back to hit opponents."
+    },
+
+    {
+      "Name": "Giant Slug",
+      "Type": "Vermin",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 8,
+      "Movement": 6,
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAttacks": [
         {
           "Name": "Acid Spit",
-          "Description": "Ranged attack, 2d6 damage; metal armor suffers corrosion."
+          "Description": "Spits acid for 4d8 damage; save vs. Breath for half damage."
         }
       ],
+      "SpecialDefenses": [
+        {
+          "Name": "Blunt Weapon Immunity",
+          "Description": "Not affected by blunt weapons; must be harmed by edged or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Large",
       "BaseXPValue": 1200,
-      "TreasureType": "None"
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Can squeeze through narrow openings; inaccurate on first acid spit; thick rubbery hide; can break down doors; spits acid up to 6\" range with variable accuracy."
     },
+
     {
       "Name": "Spectre",
       "Type": "Undead",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
       "ArmorClass": 2,
-      "HitDice": 7,
-      "HitPoints": 42,
       "Movement": 30,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "20",
+      "TreasureType": "Q,Q,Q,X,Y",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Chilling Touch",
+          "Name": "Touch",
           "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
           "Name": "Energy Drain",
-          "Description": "Target loses 2 levels unless save vs death."
-        },
-        {
-          "Name": "Incorporeal",
-          "Description": "Immune to non-magical weapons."
+          "Description": "Touch drains 2 experience levels."
         }
       ],
-      "BaseXPValue": 2000,
-      "TreasureType": "K"
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapon Immunity",
+          "Description": "Can only be hit by magic weapons."
+        },
+        {
+          "Name": "Partial Magic Resistance",
+          "Description": "Resists some spells and magical effects."
+        }
+      ],
+      "MagicResistance": "Partial",
+      "Intelligence": "High",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1650,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Semi-corporeal undead; often found in desolate steppes; extremely dangerous due to level drain."
     },
 
     {

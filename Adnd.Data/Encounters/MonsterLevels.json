@@ -922,7 +922,7 @@
       {
         "DiceMin": 25,
         "DiceMax": 26,
-        "Creature": "Elemental*",
+        "Creature": "Elemental, air",
         "CountMin": 1,
         "CountMax": 1
       },
@@ -935,15 +935,29 @@
       },
       {
         "DiceMin": 31,
+        "DiceMax": 33,
+        "Creature": "Giant, hill",
+        "CountMin": 1,
+        "CountMax": 3
+      },
+      {
+        "DiceMin": 34,
         "DiceMax": 35,
-        "Creature": "Giant, hill or stone",
+        "Creature": "Giant, stone",
         "CountMin": 1,
         "CountMax": 3
       },
       {
         "DiceMin": 36,
+        "DiceMax": 37,
+        "Creature": "Giant, fire",
+        "CountMin": 1,
+        "CountMax": 2
+      },
+      {
+        "DiceMin": 38,
         "DiceMax": 38,
-        "Creature": "Giant, fire or frost",
+        "Creature": "Giant, frost",
         "CountMin": 1,
         "CountMax": 2
       },
