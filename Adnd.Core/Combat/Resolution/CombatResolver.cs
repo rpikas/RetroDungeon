@@ -669,6 +669,22 @@ public sealed class CombatResolver
                 continue;
             }
 
+            var isPiercer = IsPiercer(monster);
+            if (isPiercer)
+            {
+                var climbRounds = session.GetPiercerClimbRounds(monster);
+                if (climbRounds > 0)
+                {
+                    var remainingClimb = session.TickPiercerClimbRounds(monster);
+                    if (remainingClimb > 0)
+                        events.Add(new CombatEvent($"{monster.DisplayName} climbs up the wall ({remainingClimb} round(s) remaining) and cannot attack."));
+                    else
+                        events.Add(new CombatEvent($"{monster.DisplayName} finishes climbing and can attack next round."));
+
+                    continue;
+                }
+            }
+
             if (TryResolveMonsterLayOnHands(session, monster, events))
                 continue;
 
@@ -755,6 +771,12 @@ public sealed class CombatResolver
                                         events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
                                     }
                                 }
+
+            if (isPiercer)
+            {
+                session.SetPiercerClimbRounds(monster, 4);
+                events.Add(new CombatEvent($"{monster.DisplayName} starts climbing up the wall and cannot attack for 4 rounds."));
+            }
                             }
 
                             if (HasAnySpecialAbility(monster, "Paralyze", "Paralyzation", "Paralysis"))
@@ -2027,6 +2049,11 @@ public sealed class CombatResolver
     {
         return string.Equals(monster.Template.Name, "Shrieker", StringComparison.OrdinalIgnoreCase)
                || HasSpecialAbility(monster, "Shriek");
+    }
+
+    private static bool IsPiercer(MonsterInstance monster)
+    {
+        return monster.Template.Name.StartsWith("Piercer", StringComparison.OrdinalIgnoreCase);
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

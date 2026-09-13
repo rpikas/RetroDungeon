@@ -101,8 +101,22 @@
       },
       {
         "DiceMin": 67,
+        "DiceMax": 68,
+        "Creature": "Piercer Small",
+        "CountMin": 1,
+        "CountMax": 3
+      },
+      {
+        "DiceMin": 69,
+        "DiceMax": 69,
+        "Creature": "Piercer Medium",
+        "CountMin": 1,
+        "CountMax": 3
+      },
+      {
+        "DiceMin": 70,
         "DiceMax": 70,
-        "Creature": "Piercer",
+        "Creature": "Piercer Large",
         "CountMin": 1,
         "CountMax": 3
       },
@@ -187,10 +201,31 @@
       },
       {
         "DiceMin": 39,
-        "DiceMax": 46,
-        "Creature": "Piercer",
+        "DiceMax": 39,
+        "Creature": "Piercer Small",
         "CountMin": 1,
-        "CountMax": 4
+        "CountMax": 3
+      },
+      {
+        "DiceMin": 40,
+        "DiceMax": 42,
+        "Creature": "Piercer Medium",
+        "CountMin": 1,
+        "CountMax": 3
+      },
+      {
+        "DiceMin": 43,
+        "DiceMax": 45,
+        "Creature": "Piercer Large",
+        "CountMin": 1,
+        "CountMax": 3
+      },
+      {
+        "DiceMin": 46,
+        "DiceMax": 46,
+        "Creature": "Piercer Huge",
+        "CountMin": 1,
+        "CountMax": 3
       },
       {
         "DiceMin": 47,
@@ -315,8 +350,15 @@
       },
       {
         "DiceMin": 73,
+        "DiceMax": 73,
+        "Creature": "Piercer Medium",
+        "CountMin": 2,
+        "CountMax": 5
+      },
+      {
+        "DiceMin": 74,
         "DiceMax": 74,
-        "Creature": "Piercer",
+        "Creature": "Piercer Large",
         "CountMin": 2,
         "CountMax": 5
       },

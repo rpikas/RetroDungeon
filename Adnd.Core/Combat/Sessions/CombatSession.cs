@@ -35,6 +35,7 @@ public sealed class CombatSession
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
     public bool SurpriseResolved { get; set; }
@@ -50,6 +51,40 @@ public sealed class CombatSession
     public void MarkMonsterLayOnHandsUsed(MonsterInstance monster)
     {
         MonsterLayOnHandsUsed.Add(MonsterKey(monster));
+    }
+
+    public int GetPiercerClimbRounds(MonsterInstance monster)
+    {
+        return PiercerClimbRounds.TryGetValue(MonsterKey(monster), out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public void SetPiercerClimbRounds(MonsterInstance monster, int rounds)
+    {
+        var key = MonsterKey(monster);
+        if (rounds <= 0)
+        {
+            PiercerClimbRounds.Remove(key);
+            return;
+        }
+
+        PiercerClimbRounds[key] = rounds;
+    }
+
+    public int TickPiercerClimbRounds(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        if (!PiercerClimbRounds.TryGetValue(key, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            PiercerClimbRounds.Remove(key);
+            return 0;
+        }
+
+        PiercerClimbRounds[key] = rounds;
+        return rounds;
     }
 
     private static string MonsterKey(MonsterInstance monster)
