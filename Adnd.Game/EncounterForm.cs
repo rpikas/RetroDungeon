@@ -478,7 +478,7 @@ public sealed class EncounterForm : Form
 
         if (_session != null && _session.RoundNumber == 1 && _session.PartySurprisedRound1)
         {
-            ViewerMessage.Show(this, "Surprise", "The party has been surprised and cannot act in round 1.");
+            ShowTimedSurpriseDialog(this, "SURPRISE", "PARTY SURPRISED", 3000);
 
             foreach (var member in _party)
             {
@@ -491,8 +491,88 @@ public sealed class EncounterForm : Form
             return;
         }
 
+        if (_session != null && _session.RoundNumber == 1 && _session.MonstersSurprisedRound1)
+            ShowTimedSurpriseDialog(this, "SURPRISE", "MONSTERS SURPRISED", 3000);
+
         _viewerControl = ViewerControlPump.Start(this, ViewerCommands.Combat, InjectViewerKey, HandleViewerCommand);
         ViewerPromptChanged?.Invoke(BuildViewerPrompt());
+    }
+
+    private static void ShowTimedSurpriseDialog(IWin32Window owner, string titleText, string messageText, int autoCloseMilliseconds)
+    {
+        using var form = new Form
+        {
+            Text = titleText,
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(520, 120),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = titleText,
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var messageLabel = new Label
+        {
+            Left = 0,
+            Top = 48,
+            Width = framePanel.ClientSize.Width,
+            Height = 34,
+            Text = messageText,
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var closeTimer = new System.Windows.Forms.Timer { Interval = Math.Max(1, autoCloseMilliseconds) };
+        closeTimer.Tick += (_, _) =>
+        {
+            closeTimer.Stop();
+            form.Close();
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            {
+                closeTimer.Stop();
+                form.Close();
+            }
+        };
+
+        form.Shown += (_, _) => closeTimer.Start();
+        form.FormClosed += (_, _) => closeTimer.Dispose();
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(messageLabel);
+        form.Controls.Add(framePanel);
+        form.ShowDialog(owner);
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)

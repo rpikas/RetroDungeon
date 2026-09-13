@@ -1049,4 +1049,8 @@ måste klättra upp för väggen innan de kan attackera partyt efter första att
 Det tar 4 rundor för Piercer att klättra upp för väggen. 60,4
 ___________
 
-Implement SpecialAbilities "Level 3 Druid spells" give it a 50% chanse to cast Call Lightning and 50% chanse to cast Summon Insects. 
+Implement SpecialAbilities "Level 3 Druid spells" give it a 50% chanse to cast Call Lightning and 50% chanse to cast Summon Insects. 61,7
+
+I want The dialog shown when you have been surprised by the moster to automatically close after 3 secounds or before that if enter or escape is pressed, 
+I want the dialog to have the same styling as when entering the stairs. I also want I dialog with the same styling to be shown and autoatically 
+closed when the party has surprised the monsters 61,9
