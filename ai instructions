@@ -642,7 +642,7 @@ If the encounter makes a save vs. spell, they only take half damage. 15,3
 Implement a level 6 druid spell called Feeblemind. It causes one encounter in one group to be Feebleminded permanently if they fail their save vs. spell. 
 If they make their save, they are not feebleminded. When feebleminded, the encounter can not cast spells and they have. 15,8
 
-cure serious wounds that currently is a level 3 celice spell should also be a level 4 druid spell working in the exactly same way. 16,2
+cure serious wounds that currently is a level 3 cleric spell should also be a level 4 druid spell working in the exactly same way. 16,2
 
 implement a level 3 druid spell called Summon Insects. It cause all groups of encounters to be attacked by insects. The insects do 2 damage per round for 1 rounds per level of the caster. 
 There is no save throw vs this spell. 17,2
@@ -1046,6 +1046,7 @@ Piercer Large
 Piercer Huge
 
 måste klättra upp för väggen innan de kan attackera partyt efter första attacken. När de klättrar upp för väggen så kan de inte attackera partyt. 
-Det tar 4 rundor för Piercer att klättra upp för väggen. 
+Det tar 4 rundor för Piercer att klättra upp för väggen. 60,4
+___________
 
-
+Implement SpecialAbilities "Level 3 Druid spells" give it a 50% chanse to cast Call Lightning and 50% chanse to cast Summon Insects. 

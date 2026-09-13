@@ -367,6 +367,7 @@ public sealed class CombatResolver
                     "Level 1 Priest spells",
                     "Level 1 Cleric spells",
                     "Level 1 Druid spells",
+                    "Level 3 Druid spells",
                     "Level 1 Illusionist spells"))
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
@@ -407,6 +408,12 @@ public sealed class CombatResolver
                 && HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1PriestSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 3 Druid spells")
+                && ResolveLevel3DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
@@ -1333,6 +1340,49 @@ public sealed class CombatResolver
         var roundsAcid = _dice.Roll(3);
         session.SetPartyAcidArrow(target.Name, roundsAcid);
         events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+        return true;
+    }
+
+    private bool ResolveLevel3DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Call Lightning!"));
+            var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+            var rolledDamage = _dice.RollMany(6, 8);
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveRoll = _dice.Roll(20);
+            var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            events.Add(new CombatEvent(saveRoll >= saveTarget
+                ? $"{target.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half lightning damage: {actual}. HP {before}->{target.CurrentHitPoints}."
+                : $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actual} lightning damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain by call lightning!"));
+            }
+
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Summon Insects!"));
+        var insectTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var rounds = Math.Max(1, monster.Template.HitDice);
+        insectTarget.AddStatus(CharacterStatus.Paralyzed);
+        session.SetPartyAsleep(insectTarget.Name, 0);
+        events.Add(new CombatEvent($"{insectTarget.Name} is swarmed by summoned insects and cannot act for {rounds} round(s)."));
         return true;
     }
 
