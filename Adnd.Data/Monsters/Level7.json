@@ -901,6 +901,160 @@
       "Other": "9' tall; extremely powerful greater devil; feared enforcer of the Nine Hells."
     },
     {
+      "Name": "Dragon, Green",
+      "Type": "Dragon",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Huge",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (chlorine gas)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales a cone of poisonous chlorine gas."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a magic‑user and cleric of moderate level."
+        },
+        {
+          "Name": "Speak and Charm",
+          "Description": "Can speak and use charm person at will."
+        }
+      ],
+      "BaseXPValue": 6000,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "H",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Dragon, Red",
+      "Type": "Dragon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Huge",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (fire cone)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales a massive cone of fire."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level magic‑user and cleric."
+        },
+        {
+          "Name": "Speak and Charm",
+          "Description": "Can speak and use charm person at will."
+        },
+        {
+          "Name": "Fire Immunity",
+          "Description": "Completely immune to fire and heat."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Dragon, Silver",
+      "Type": "Dragon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Huge",
+      "Movement": 12,
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (cold or paralyzing gas)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales either cold or paralyzing gas."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level magic‑user and cleric."
+        },
+        {
+          "Name": "Shapechange",
+          "Description": "Can assume human form at will."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Efreeti",
       "Type": "Genie",
       "Frequency": "Uncommon",
@@ -1716,213 +1870,101 @@
       "Other": "18(00) Strength; often uses magical weapons and shields; can use most magical items; sees infrared and ultraviolet; limited telepathy; keeps true names secret."
     },
 
-
     {
-      "Name": "Trapper",
-      "Type": "Monster",
+      "Name": "Mimic",
+      "Type": "Shapechanging Creature",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
+      "ArmorClass": 7,
       "Movement": 3,
-      "HitDice": 12,
+      "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "85",
-      "TreasureType": "G",
+      "%InLair": "0",
+      "TreasureType": "Nil",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Crush",
+          "Name": "Pseudopod",
           "NumberOfAttacks": 1,
           "Damage": "3d4"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Undetectable",
-          "Description": "95% undetectable due to stone‑like body and coloration."
-        },
-        {
-          "Name": "Smother",
-          "Description": "Victims are smothered in 6 rounds regardless of damage."
-        },
-        {
-          "Name": "Weapon Prevention",
-          "Description": "Entrapped victims cannot use weapons."
+          "Name": "Glue",
+          "Description": "When touched, the mimic lashes out with a pseudopod and excretes glue that holds fast the touched limb."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Cold & Fire Resistance",
-          "Description": "Partial immunity to cold and fire (half or no damage)."
+          "Name": "Camouflage",
+          "Description": "Perfectly mimics stonework, doors, chests, or other objects."
         }
       ],
       "MagicResistance": "Standard",
-      "Intelligence": "Highly",
+      "Intelligence": "Semi- to average",
       "Alignment": "Neutral",
       "Size": "Large",
-      "BaseXPValue": 2850,
-      "XPValuePerHitPoint": 16,
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 10,
       "Source": "Adnd",
-      "Other": "Covers up to 400 sq ft (600 sq ft for giant specimens); mimics stone floors; creates chest‑like lure to attract prey."
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 61-63",
+      "Other": "Subterranean; cannot stand sunlight; intelligent mimics speak several languages; killer mimics are larger and carnivorous."
     },
 
-
-
     {
-      "Name": "Dragon, Green",
-      "Type": "Dragon",
+      "Name": "Mind Flayer",
+      "Type": "Psionic Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -1,
-      "HitDice": 12,
-      "Size": "Huge",
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 5,
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "%InLair": "50",
+      "TreasureType": "B, S, T, X",
+      "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10"
-        },
-        {
-          "Name": "Breath Weapon",
-          "NumberOfAttacks": 1,
-          "Damage": "12d6 (chlorine gas)"
+          "Name": "Tentacle",
+          "NumberOfAttacks": 4,
+          "Damage": "2"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Breath Weapon",
-          "Description": "Exhales a cone of poisonous chlorine gas."
+          "Name": "Mind Blast",
+          "Description": "Psionic blast in a 6\" cone; identical to psionic attack mode A; usable once per round."
         },
         {
-          "Name": "Spell Use",
-          "Description": "Can cast spells as a magic‑user and cleric of moderate level."
+          "Name": "Psionics",
+          "Description": "Psionic ability 241–340; attack/defense modes A/F, G, H."
         },
         {
-          "Name": "Speak and Charm",
-          "Description": "Can speak and use charm person at will."
+          "Name": "Brain Extraction",
+          "Description": "Tentacle hit reaches the victim’s brain in 1–4 rounds, killing instantly."
         }
       ],
-      "BaseXPValue": 6000,
-      "XPValuePerHitPoint": 14,
-      "TreasureType": "H",
-      "Source": "Adnd"
+      "SpecialDefenses": [
+        {
+          "Name": "None",
+          "Description": "No special defensive abilities."
+        }
+      ],
+      "MagicResistance": "90%",
+      "Intelligence": "Genius",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1800,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 64-65",
+      "Other": "Detests sunlight; subterranean only; speaks its own arcane tongue and several deep-underdark languages."
     },
-
-    {
-      "Name": "Dragon, Red",
-      "Type": "Dragon",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -1,
-      "HitDice": 12,
-      "Size": "Huge",
-      "Movement": 12,
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10"
-        },
-        {
-          "Name": "Breath Weapon",
-          "NumberOfAttacks": 1,
-          "Damage": "12d6 (fire cone)"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Breath Weapon",
-          "Description": "Exhales a massive cone of fire."
-        },
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast spells as a high‑level magic‑user and cleric."
-        },
-        {
-          "Name": "Speak and Charm",
-          "Description": "Can speak and use charm person at will."
-        },
-        {
-          "Name": "Fire Immunity",
-          "Description": "Completely immune to fire and heat."
-        }
-      ],
-      "BaseXPValue": 7000,
-      "XPValuePerHitPoint": 15,
-      "TreasureType": "H",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Dragon, Silver",
-      "Type": "Dragon",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -1,
-      "HitDice": 12,
-      "Size": "Huge",
-      "Movement": 12,
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10"
-        },
-        {
-          "Name": "Breath Weapon",
-          "NumberOfAttacks": 1,
-          "Damage": "12d6 (cold or paralyzing gas)"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Breath Weapon",
-          "Description": "Exhales either cold or paralyzing gas."
-        },
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast spells as a high‑level magic‑user and cleric."
-        },
-        {
-          "Name": "Shapechange",
-          "Description": "Can assume human form at will."
-        },
-        {
-          "Name": "Flight",
-          "Description": "Can fly magically at will."
-        }
-      ],
-      "BaseXPValue": 7000,
-      "XPValuePerHitPoint": 15,
-      "TreasureType": "H",
-      "Source": "Adnd"
-    },
-
-
 
     {
       "Name": "Mummy",
@@ -1980,9 +2022,174 @@
       "BaseXPValue": 1050,
       "XPValuePerHitPoint": 8,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 66-69",
       "Other": "Created as tomb guardians; negative energy animates them; victims killed by mummies rot and require both cure disease and raise dead within 6 turns."
     },
 
+    {
+      "Name": "Naga Spirit",
+      "Type": "Naga",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "60",
+      "TreasureType": "B, T, X",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison Bite",
+          "Description": "Bite deals 1–3 damage and delivers lethal poison."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Uses magic-user spells at 5th level and cleric spells at 4th level."
+        },
+        {
+          "Name": "Gaze Charm",
+          "Description": "Gaze permanently charms humanoids unless they save vs. paralyzation."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "High",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 2700,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 70",
+      "Other": "Black-scaled with crimson bands; bulbous human-like head; prefers ruined or subterranean lairs."
+    },
+
+    {
+      "Name": "Neo-Otyugh",
+      "Type": "Aberration",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "Movement": 6,
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Special",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Tentacle",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Disease",
+          "Description": "Tentacle wounds can transmit disease."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Never Surprised",
+          "Description": "Neo-otyugh are never surprised."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1500,
+      "XPValuePerHitPoint": 15,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 71-73",
+      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh."
+    },
+
+    {
+      "Name": "Night Hag",
+      "Type": "Fiend",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 9,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Sleep Magic",
+          "Description": "Powerful sleep spell affecting even 12th‑level humans unless they save vs. magic."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Magic missile (3/day, 2–16 damage), ray of enfeeblement (3/day)."
+        },
+        {
+          "Name": "Dream Riding",
+          "Description": "If sleep fails, hag becomes ethereal, invades dreams, forces victim to become ethereal, then rides them nightly draining 1 CON permanently."
+        },
+        {
+          "Name": "Strangulation",
+          "Description": "If victim is asleep, hag strangles them immediately."
+        },
+        {
+          "Name": "Gate",
+          "Description": "May attempt to gate in a Type I demon or barbed devil (50% chance)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Weapon Immunity",
+          "Description": "Only harmed by silver, iron, or +3 weapons."
+        },
+        {
+          "Name": "Spell Immunities",
+          "Description": "Totally invulnerable to sleep, charm, fear, fire, and cold spells."
+        },
+        {
+          "Name": "Etherealness",
+          "Description": "Can become ethereal at will."
+        }
+      ],
+      "MagicResistance": "65%",
+      "Intelligence": "Exceptional",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "PsionicAbility": "Astral projection",
+      "BaseXPValue": 1750,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 74",
+      "Other": "Requires a special periapt to astrally project; periapt grants disease immunity and +2 saves; decays in hands of good creatures."
+    },
 
     {
       "Name": "Roper",
@@ -2036,6 +2243,7 @@
       "BaseXPValue": 2750,
       "XPValuePerHitPoint": 16,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 75-78",
       "Other": "Has a gizzard-like organ containing 3–18 platinum pieces and possibly 5–20 gems (35% chance); cigar-shaped, 9' long and 3' thick; drags victims 10' per round once ensnared."
     },
 
@@ -2083,57 +2291,196 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 10,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 79-82",
       "Other": "Can move through dense vegetation; electrical attacks increase its size; extremely tough and difficult to kill; often found in swamps and jungles."
     },
 
-
-
     {
-      "Name": "Neo-Otyugh",
-      "Type": "Aberration",
+      "Name": "Shedu",
+      "Type": "Outsider",
       "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 9,
+      "%InLair": "25",
+      "TreasureType": "G",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Hoof",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Psionics",
+          "Description": "Full psionic ability; attack and defense modes: all/all."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Etherealness",
+          "Description": "Can become ethereal at will."
+        }
+      ],
+      "MagicResistance": "25%",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good",
+      "Size": "Large",
+      "PsionicAbility": "70–100",
+      "BaseXPValue": 1950,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 83-86",
+      "Other": "If 6 or more appear, one is a greater shedu."
+    },
+    {
+      "Name": "Slug Giant",
+      "Type": "Vermin",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
+      "ArmorClass": 8,
       "Movement": 6,
       "HitDice": 12,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Special",
+      "%InLair": "0",
+      "TreasureType": "Nil",
       "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAttacks": [
         {
-          "Name": "Tentacle",
-          "NumberOfAttacks": 2,
+          "Name": "Acid Spit",
+          "Description": "Spits acid for 4d8 damage; save vs. breath weapon for half damage."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Blunt Weapon Immunity",
+          "Description": "Unaffected by blunt weapons; must be harmed by edged or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 87",
+      "Other": "Can squeeze through narrow openings; first acid spit has only 10% chance to hit; thick rubbery hide; spit range up to 6\" with variable accuracy."
+    },
+
+    {
+      "Name": "Spectre",
+      "Type": "Undead",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "Movement": 15,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "20",
+      "TreasureType": "Q (x3), X, Y",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Disease",
-          "Description": "Tentacle wounds can transmit disease."
+          "Name": "Energy Drain",
+          "Description": "Touch drains 2 life levels from the victim."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Never Surprised",
-          "Description": "Neo-otyugh are never surprised."
+          "Name": "Magic Weapon Immunity",
+          "Description": "Can only be hit by magic weapons."
+        },
+        {
+          "Name": "Partial Spell Immunity",
+          "Description": "Immune to sleep, charm, hold, cold-based spells, poison, and paralysis."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "High",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1650,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 88-91",
+      "Other": "Daylight renders spectres powerless; holy water deals 2–8 damage; raise dead destroys them unless they save; humans drained become half-strength spectres."
+    },
+
+    {
+      "Name": "Trapper",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "Movement": 3,
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "85",
+      "TreasureType": "G",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Crush",
+          "NumberOfAttacks": 1,
+          "Damage": "3d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Undetectable",
+          "Description": "95% undetectable due to stone‑like body and coloration."
+        },
+        {
+          "Name": "Smother",
+          "Description": "Victims are smothered in 6 rounds regardless of damage."
+        },
+        {
+          "Name": "Weapon Prevention",
+          "Description": "Entrapped victims cannot use weapons."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Cold & Fire Resistance",
+          "Description": "Partial immunity to cold and fire (half or no damage)."
         }
       ],
       "MagicResistance": "Standard",
-      "Intelligence": "Average",
+      "Intelligence": "Highly",
       "Alignment": "Neutral",
       "Size": "Large",
-      "BaseXPValue": 1500,
-      "XPValuePerHitPoint": 15,
+      "BaseXPValue": 2850,
+      "XPValuePerHitPoint": 16,
       "Source": "Adnd",
-      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh."
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 92-93",
+      "Other": "Covers up to 400 sq ft (600 sq ft for giant specimens); mimics stone floors; creates chest‑like lure to attract prey."
     },
 
     {
@@ -2176,7 +2523,60 @@
       "BaseXPValue": 1300,
       "XPValuePerHitPoint": 12,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 94-95",
       "Other": "Burrows through solid stone at 1” per turn; through loam at 6× that rate; often mistaken for humanoids at 40’ distance; powerful claws and mandibles; subterranean predator."
+    },
+    {
+      "Name": "Xorn",
+      "Type": "Elemental",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -2,
+      "Movement": 9,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "%InLair": "40",
+      "TreasureType": "O, P, Q(x5), X",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 3,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "6d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "Xorn surprises opponents on a roll of 1–5 due to its ability to move through earth and stone."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Earth Glide",
+          "Description": "Can pass through earth and stone as easily as air."
+        },
+        {
+          "Name": "Partial Magic Immunity",
+          "Description": "Immune to fire; takes half damage from cold; lightning does normal damage."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Neutral",
+      "Size": "Medium (5' tall)",
+      "BaseXPValue": 1275,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 98-100",
+      "Other": "Xorn are attracted to precious metals and gems; often negotiate rather than fight."
     },
 
 
