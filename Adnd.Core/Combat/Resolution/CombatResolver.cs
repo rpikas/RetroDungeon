@@ -97,6 +97,12 @@ public sealed class CombatResolver
             if (!IsAlive(member))
                 continue;
 
+            if (session.RoundNumber == 1 && session.PartySurprisedRound1)
+            {
+                events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
+                continue;
+            }
+
             var regeneration = GetEquippedRegeneration(member);
             if (regeneration > 0 && member.CurrentHitPoints < member.MaxHitPoints)
             {
@@ -319,6 +325,12 @@ public sealed class CombatResolver
         {
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
                 continue;
+
+            if (session.RoundNumber == 1 && session.MonstersSurprisedRound1)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} is surprised and cannot act in round 1."));
+                continue;
+            }
 
             var isFeebleminded = monster.HasStatus(MonsterStatus.Feebleminded);
             var isSilenced = monster.HasStatus(MonsterStatus.Silenced);

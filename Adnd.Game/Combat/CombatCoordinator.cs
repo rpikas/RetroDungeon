@@ -142,6 +142,7 @@ public sealed class CombatCoordinator
         var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount);
         var session = new CombatSession(party, monsters);
         RestorePersistedRoundEffects(session);
+        ResolveEncounterSurprise(session);
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
@@ -224,6 +225,7 @@ public sealed class CombatCoordinator
         var monsters = _monsterFactory.CreateMultipleGroups(normalized);
         var session = new CombatSession(party, monsters);
         RestorePersistedRoundEffects(session);
+        ResolveEncounterSurprise(session);
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
@@ -288,6 +290,7 @@ public sealed class CombatCoordinator
         var monsters = _monsterFactory.CreateMultipleGroups(groups);
         var session = new CombatSession(party, monsters);
         RestorePersistedRoundEffects(session);
+        ResolveEncounterSurprise(session);
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
@@ -331,6 +334,95 @@ public sealed class CombatCoordinator
         MoveDeadPartyMembersToEnd(session.Party);
         ShowFinalOutcome(owner, session.Outcome, session);
         return session.Outcome;
+    }
+
+    private void ResolveEncounterSurprise(CombatSession session)
+    {
+        if (session.SurpriseResolved)
+            return;
+
+        var partyRoll = _dice.Roll(6);
+        var partyThreshold = 2;
+        var partySurprisesMonsters = partyRoll <= partyThreshold;
+
+        var specialThreshold = GetMonsterSpecialSurpriseThreshold(session.Monsters);
+        var monstersRollUsesD100 = specialThreshold.HasValue && specialThreshold.Value >= 95;
+
+        var monstersRoll = monstersRollUsesD100 ? _dice.Roll(100) : _dice.Roll(6);
+        var monsterThreshold = monstersRollUsesD100
+            ? specialThreshold!.Value
+            : Math.Max(2, specialThreshold ?? 2);
+        var monstersSurpriseParty = monstersRoll <= monsterThreshold;
+
+        if (partySurprisesMonsters && monstersSurpriseParty)
+        {
+            partySurprisesMonsters = false;
+            monstersSurpriseParty = false;
+        }
+
+        session.PartySurprisedRound1 = monstersSurpriseParty;
+        session.MonstersSurprisedRound1 = partySurprisesMonsters;
+        session.SurpriseResolved = true;
+
+        var monsterRollDice = monstersRollUsesD100 ? "1d100" : "1d6";
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Surprise",
+            "Encounter start",
+            "Before round 1, party rolls 1d6. Monster side rolls 1d6, except special monsters may improve surprise chance. If both surprise each other, treat as no surprise.",
+            "1",
+            "6",
+            partyRoll.ToString(),
+            partySurprisesMonsters ? "Party surprises monsters." : "Party does not surprise monsters.");
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Surprise",
+            "Encounter start",
+            $"Monster side roll uses {monsterRollDice}. Threshold is {monsterThreshold}.",
+            "1",
+            monstersRollUsesD100 ? "100" : "6",
+            monstersRoll.ToString(),
+            monstersSurpriseParty ? "Monsters surprise party." : "Monsters do not surprise party.");
+
+        if (session.PartySurprisedRound1 || session.MonstersSurprisedRound1)
+        {
+            session.SurpriseSummary = session.PartySurprisedRound1
+                ? "Party surprised"
+                : "Monsters surprised";
+        }
+        else
+        {
+            session.SurpriseSummary = "No surprise";
+        }
+    }
+
+    private static int? GetMonsterSpecialSurpriseThreshold(IEnumerable<MonsterInstance> monsters)
+    {
+        var threshold = 0;
+
+        foreach (var monster in monsters)
+        {
+            var name = monster.Template.Name?.Trim() ?? string.Empty;
+            if (name.Equals("Piercer", StringComparison.OrdinalIgnoreCase)
+                || name.StartsWith("Piercer ", StringComparison.OrdinalIgnoreCase))
+            {
+                threshold = Math.Max(threshold, 95);
+                continue;
+            }
+
+            if (name.Equals("Xorn", StringComparison.OrdinalIgnoreCase))
+                threshold = Math.Max(threshold, 5);
+            else if (name.Equals("Bugbear", StringComparison.OrdinalIgnoreCase)
+                     || name.Equals("Ghoul", StringComparison.OrdinalIgnoreCase)
+                     || name.Equals("Su-Monster", StringComparison.OrdinalIgnoreCase)
+                     || name.Equals("Su Monster", StringComparison.OrdinalIgnoreCase))
+                threshold = Math.Max(threshold, 3);
+            else if (name.Equals("Giant Spider", StringComparison.OrdinalIgnoreCase))
+                threshold = Math.Max(threshold, 4);
+        }
+
+        return threshold > 0 ? threshold : null;
     }
 
     private static void RestorePersistedRoundEffects(CombatSession session)

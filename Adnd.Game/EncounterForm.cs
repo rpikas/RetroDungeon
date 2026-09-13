@@ -476,6 +476,21 @@ public sealed class EncounterForm : Form
     {
         base.OnShown(e);
 
+        if (_session != null && _session.RoundNumber == 1 && _session.PartySurprisedRound1)
+        {
+            ViewerMessage.Show(this, "Surprise", "The party has been surprised and cannot act in round 1.");
+
+            foreach (var member in _party)
+            {
+                if (IsActionable(member))
+                    _actions[member.Name] = CombatAction.OfType(CombatActionType.Parry);
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
+            return;
+        }
+
         _viewerControl = ViewerControlPump.Start(this, ViewerCommands.Combat, InjectViewerKey, HandleViewerCommand);
         ViewerPromptChanged?.Invoke(BuildViewerPrompt());
     }
@@ -1542,11 +1557,17 @@ public sealed class EncounterForm : Form
         var unconsciousText = !_multipleGroups && unconsciousCount > 0
             ? $"  ({unconsciousCount} UNCONSCIOUS)"
             : string.Empty;
+        var surpriseText = _session != null
+            && _session.RoundNumber == 1
+            && !string.IsNullOrWhiteSpace(_session.SurpriseSummary)
+        //    ? $"  (SURPRISE: {_session.SurpriseSummary!.ToUpperInvariant()})"
+            ? $"  ({_session.SurpriseSummary!.ToUpperInvariant()})"
+            : string.Empty;
         var headerMonsterName = (!_multipleGroups && _monsterCount > 1)
             ? _monsterName.ToUpperInvariant() + "S"
             : _monsterName.ToUpperInvariant();
 
-        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}";
+        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}{surpriseText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

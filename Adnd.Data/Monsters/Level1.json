@@ -740,7 +740,7 @@
     },
 
     {
-      "Name": "Piercer (Small)",
+      "Name": "Piercer Small",
       "Type": "Monster",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 3,
@@ -777,7 +777,7 @@
       "Other": "Piercers drop from ceilings; no further attacks after landing."
     },
     {
-      "Name": "Piercer (Medium)",
+      "Name": "Piercer Medium",
       "Type": "Monster",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 3,
@@ -814,7 +814,7 @@
       "Other": "Piercers drop from ceilings; no further attacks after landing."
     },
     {
-      "Name": "Piercer (Large)",
+      "Name": "Piercer Large",
       "Type": "Monster",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 3,
@@ -852,7 +852,7 @@
     },
 
     {
-      "Name": "Piercer (Largest)",
+      "Name": "Piercer Huge",
       "Type": "Monster",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 3,

@@ -1,9 +1,10 @@
+
 # Copilot Instructions
 
 ## Project Guidelines
 - Use the return-style arrow symbol (↵) instead of '<-' in UI labels where applicable.
-
 ## Game Mechanics
+- At encounter start (before round 1 only), party and monsters roll surprise; if only one side is surprised, it cannot act in round 1. Surprise must be shown in AD&D rule/dice info and encounter dialog.
 - When adjusting Blade Barrier in this project, use Cleric level 6 (not level 8).
 - Finger of Death should be a Druid spell at level 7 (not a Magic-User spell).
 - Cure Serious Wounds should exist as a level 4 Druid spell and work exactly like the Cleric version (same healing behavior).

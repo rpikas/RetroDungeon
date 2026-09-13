@@ -1005,4 +1005,40 @@ Dice Roll	Base Value
 51–70	1,000–6,000 g.p.
 71–90	2,000–8,000 g.p.
 91–00	2,000–12,000 g.p.
+_________________________
+Manuellt uppdaterat monster 54,1
+______________________
+När en party stöter på en eller flera grupper av monster ska man börja med innan första rundan och bara innan första rundan 
+att party gruppen slår 1d6 och alla monster grupper slår en gemensam 1d6 för att 
+avgöra om någon av grupperna blivt överraskade. Normalt betyder 1-2 på 1d6 att man överraksar. visa i ADnD Rule and Dice info vad man slog på 1d6 och 
+om partyt eller monster grupperna blev överraskade.
+ifall båda överraskar blir det precis som att ingen överraskat. 
+Om bara partyt överraskas, så får partyt inte agera i den första rundan och ifall monster grupperna överraskas så får de inte agera i den första rundan.
+En del monster har större chans att överraska partyt
+Xorn: överraskar på 1–5
+Bugbear: överraskar på 1–3
+Ghoul: överraskar på 1–3
+Piercer: överraskar med 95% chanse
+Su‑Monster: överraskar på 1–3
+Giant spider: överraskar på 1–4
+ifall någon av sidorana har överraskat, visa det i enounter dialogen. 56,9
+
+the surprise message should only be there during the 1st round in the enounter dialog 57,0
+
+When pary is surprised, instead of showing (Round 1: Party can not act) in the encounter dialog and asking what actions the party members should take, 
+show a separate dialog with the info that the party has been surprised and  Party can not act 58,2
+
+show the separate dialog with the info that the party has been surprised after the enounter dialog has been shown, but before the party is asked what actions they should take.
+And dont ask what actions the party members should take they when surprised before the 1 st round, they will all automatically just parry once ok is pressed in the dialog. 59,0
+
+ifall man träffar på en Piercer, ska man slumpa ut vilken typ av Piercer det är, det finns 4 olika typer av Piercer.
+Piercer Small
+Piercer Medium
+Piercer Large
+Piercer Huge
+
+
+Piercer måste klättra upp för väggen innan de kan attackera partyt efter första attacken. När de klättrar upp för väggen så kan de inte attackera partyt. 
+Det tar 4 rundor för Piercer att klättra upp för väggen. 
+
 

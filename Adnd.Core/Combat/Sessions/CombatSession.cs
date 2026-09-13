@@ -37,6 +37,10 @@ public sealed class CombatSession
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
+    public bool SurpriseResolved { get; set; }
+    public bool PartySurprisedRound1 { get; set; }
+    public bool MonstersSurprisedRound1 { get; set; }
+    public string? SurpriseSummary { get; set; }
 
     public bool HasMonsterUsedLayOnHands(MonsterInstance monster)
     {

@@ -86,7 +86,8 @@ public sealed class EncounterMonsterFactory
         }
 
         var allMonsters = _monsterRepository.GetAll().ToList();
-        var template = FindMonsterByName(allMonsters, monsterName)
+        var template = TryResolvePiercerVariant(allMonsters, monsterName)
+            ?? FindMonsterByName(allMonsters, monsterName)
             ?? allMonsters.FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
 
         if (template == null)
@@ -131,6 +132,26 @@ public sealed class EncounterMonsterFactory
         }
 
         return list;
+    }
+
+    private Monster? TryResolvePiercerVariant(IReadOnlyList<Monster> monsters, string requestedName)
+    {
+        if (!string.Equals(requestedName?.Trim(), "Piercer", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        var variants = monsters
+            .Where(m => string.Equals(m.Name, "Piercer Small", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(m.Name, "Piercer Medium", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(m.Name, "Piercer Large", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(m.Name, "Piercer Huge", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (variants.Count == 0)
+            return null;
+
+        var selected = variants[_random.Next(variants.Count)];
+        RuleApplicationInfo.Publish($"Encounter roll: '{requestedName}' resolved to variant '{selected.Name}'.");
+        return selected;
     }
 
     private static Monster? FindMonsterByName(IEnumerable<Monster> monsters, string requestedName)
