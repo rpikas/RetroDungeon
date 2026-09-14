@@ -1054,3 +1054,55 @@ Implement SpecialAbilities "Level 3 Druid spells" give it a 50% chanse to cast C
 I want The dialog shown when you have been surprised by the moster to automatically close after 3 secounds or before that if enter or escape is pressed, 
 I want the dialog to have the same styling as when entering the stairs. I also want I dialog with the same styling to be shown and autoatically 
 closed when the party has surprised the monsters 61,9
+____________
+
+if treasure is found in lair, then show a picture of a treasure chest in the encounter dialog. Use this Adnd.Game\Assets\ScenPictures\TreasureChest.png
+Show a dialog in the same style as shown when entering the stairs in a dialog as if the party wants to 
+O)pen 
+C)ast spell Find traps, 
+L)eave alone 
+I)nspect
+The chest might have on of the following traps:
+Poinson Needle, 
+Explosding Box, 
+Gas Bomb, 
+Crossbow Bolt, 
+Alarm, 
+Mage Blaster,
+Priest Blaster
+No trap
+Create a json file with the traps and their probability to be found in the on different levls of the dungeon.
+
+If choosing to OPEN then ask what party member should open the chest. If the chest is opened without successfully disarming the trap, then roll 1d100 to see if the trap is triggered. 
+If Poinson Needle trap is triggered, then the person opening the chest will be poisoned.
+If Explosding Box trap is triggered, then every body in the party will take 1d6 damage multiplied with the level of the dungon. 
+If Gas Bomb trap is triggered, then everybody should roll a save vs. poison and everybody that failed saving in the party will be poisoned. 
+If Crossbow Bolt trap is triggered, then the person opening the chest will take 1d6 damage.
+If Alarm trap is triggered, then a new monster group will arrive. 
+If Mage Blaster trap is triggered, then all magic-users and illusionists in the party will take 1d6 damage and be paralyzed until leaving the dungeon or until cured by a spell.
+If Priest Blaster trap is triggered, then all Clerics and Druids in the party will take 1d6 damage and be paralyzed until leaving the dungeon or until cured by a spell.
+If No trap is found, then nothing happens.
+
+If choosing to INSPECT then ask what party member should inspect the chest. If the party member has a thief class, 
+then roll 1d100 to see if the trap is found using their thief skills Find Traps also shown in the charater sheet. Show the result of the roll in the ADnD Rule and Dice info.
+If the trap is found, then the party member can chose to Disarm the trap or not. If chosing to try to disarm the trap and the charater is a thief class,
+then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the charater sheet. 
+Show the result of the roll in the ADnD Rule and Dice info. If the trap is disarmed, then nothing happens when opening the chest.
+
+If the party chooses to cast spell Find Traps, then ask what party member should cast the spell. 
+If the party has a member with the spell Find Traps then it is cast and the info what trap is found is shown. in the encounter dialog.
+the party chan chose then disarm the trap or not. If chosing to try to disarm the trap and a charater is a thief class exists, 
+then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the charater sheet. Show the result of the roll in the ADnD Rule and Dice info.
+
+After the trap is opend go the the reward summary dialog and show the treasure found in the chest. 
+If choosing to leave the chest alone, then go the the reward summary dialog but leave out all in lair treasure found in the chest. 64,8
+
+Implement a new level 2 cleric spell called Find Traps that could be used to find traps in the treasure chest. 65,3
+
+in the treasure chest dialog I want to show a picture of the chest. Use the following picture Adnd.Game\Assets\ScenPictures\TreasureChest.png 65,5
+
+when chosing party member to open or inspect the chest, only show party members that are alive and not paralyzed also  make it bigger, so all party members can be seen without scrolling.65,6
+
+Show in ADnD Rule and Dice info what the d100 role was and if the trap was found in the chest and if it was disarmed or not. 66,1
+
+

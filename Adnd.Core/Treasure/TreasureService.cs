@@ -45,6 +45,8 @@ public sealed class TreasureService
                 RuleApplicationInfo.Publish(line);
         }
 
+        PopulateTotalBucketFromLegacy(result);
+
         return result;
     }
 
@@ -79,6 +81,8 @@ public sealed class TreasureService
         }
 
         foreach (var token in tokens)
+        {
+            var before = CaptureSnapshot(result);
             RollTreasureToken(
                 token,
                 monster.DisplayName,
@@ -90,6 +94,8 @@ public sealed class TreasureService
                 gemJewelryMagicChanceScaleFactor: itemChanceScale,
                 gemJewelryValueScaleFactor: lootFactor,
                 adjustArtAmountByScale: false);
+            ApplyDeltaToBucket(before, result, result.Lair);
+        }
     }
 
     private void RollIndividualTreasure(MonsterInstance monster, TreasureResult result)
@@ -116,6 +122,8 @@ public sealed class TreasureService
                 gemJewelryValueScaleFactor: 1d,
                 adjustArtAmountByScale: false,
                 suppressFailedRollLogs: true);
+
+            ApplyDeltaToBucket(snapshot, result, result.NonLair);
 
             if (!HasFoundTreasure(snapshot, result))
             {
@@ -406,6 +414,55 @@ public sealed class TreasureService
             result.Jewelry.Count,
             result.Art.Count,
             result.MagicPlaceholders.Count);
+    }
+
+    private static void ApplyDeltaToBucket(TreasureSnapshot before, TreasureResult after, TreasureBucket bucket)
+    {
+        var cp = after.CopperPieces - before.CopperPieces;
+        var sp = after.SilverPieces - before.SilverPieces;
+        var ep = after.ElectrumPieces - before.ElectrumPieces;
+        var gp = after.GoldPieces - before.GoldPieces;
+        var pp = after.PlatinumPieces - before.PlatinumPieces;
+
+        if (cp > 0) bucket.CopperPieces += cp;
+        if (sp > 0) bucket.SilverPieces += sp;
+        if (ep > 0) bucket.ElectrumPieces += ep;
+        if (gp > 0) bucket.GoldPieces += gp;
+        if (pp > 0) bucket.PlatinumPieces += pp;
+
+        for (var i = before.GemsCount; i < after.Gems.Count; i++)
+            bucket.Gems.Add(new TreasureValuableResult { Category = after.Gems[i].Category, ValueGp = after.Gems[i].ValueGp, SourceTable = after.Gems[i].SourceTable });
+
+        for (var i = before.JewelryCount; i < after.Jewelry.Count; i++)
+            bucket.Jewelry.Add(new TreasureValuableResult { Category = after.Jewelry[i].Category, ValueGp = after.Jewelry[i].ValueGp, SourceTable = after.Jewelry[i].SourceTable });
+
+        for (var i = before.ArtCount; i < after.Art.Count; i++)
+            bucket.Art.Add(new TreasureValuableResult { Category = after.Art[i].Category, ValueGp = after.Art[i].ValueGp, SourceTable = after.Art[i].SourceTable });
+
+        for (var i = before.MagicPlaceholdersCount; i < after.MagicPlaceholders.Count; i++)
+            bucket.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult { Table = after.MagicPlaceholders[i].Table, Count = after.MagicPlaceholders[i].Count, SourceTable = after.MagicPlaceholders[i].SourceTable });
+    }
+
+    private static void PopulateTotalBucketFromLegacy(TreasureResult result)
+    {
+        result.Total.CopperPieces = result.CopperPieces;
+        result.Total.SilverPieces = result.SilverPieces;
+        result.Total.ElectrumPieces = result.ElectrumPieces;
+        result.Total.GoldPieces = result.GoldPieces;
+        result.Total.PlatinumPieces = result.PlatinumPieces;
+
+        result.Total.Gems = result.Gems
+            .Select(g => new TreasureValuableResult { Category = g.Category, ValueGp = g.ValueGp, SourceTable = g.SourceTable })
+            .ToList();
+        result.Total.Jewelry = result.Jewelry
+            .Select(j => new TreasureValuableResult { Category = j.Category, ValueGp = j.ValueGp, SourceTable = j.SourceTable })
+            .ToList();
+        result.Total.Art = result.Art
+            .Select(a => new TreasureValuableResult { Category = a.Category, ValueGp = a.ValueGp, SourceTable = a.SourceTable })
+            .ToList();
+        result.Total.MagicPlaceholders = result.MagicPlaceholders
+            .Select(m => new TreasureMagicPlaceholderResult { Table = m.Table, Count = m.Count, SourceTable = m.SourceTable })
+            .ToList();
     }
 
     private static bool HasFoundTreasure(TreasureSnapshot before, TreasureResult after)

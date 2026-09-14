@@ -1,0 +1,60 @@
+{
+  "levelBands": [
+    {
+      "minLevel": 1,
+      "maxLevel": 2,
+      "weights": {
+        "No trap": 35,
+        "Poison Needle": 20,
+        "Crossbow Bolt": 18,
+        "Alarm": 12,
+        "Gas Bomb": 8,
+        "Exploding Box": 4,
+        "Mage Blaster": 2,
+        "Priest Blaster": 1
+      }
+    },
+    {
+      "minLevel": 3,
+      "maxLevel": 5,
+      "weights": {
+        "No trap": 20,
+        "Poison Needle": 18,
+        "Crossbow Bolt": 14,
+        "Alarm": 12,
+        "Gas Bomb": 14,
+        "Exploding Box": 10,
+        "Mage Blaster": 7,
+        "Priest Blaster": 5
+      }
+    },
+    {
+      "minLevel": 6,
+      "maxLevel": 8,
+      "weights": {
+        "No trap": 10,
+        "Poison Needle": 12,
+        "Crossbow Bolt": 8,
+        "Alarm": 12,
+        "Gas Bomb": 18,
+        "Exploding Box": 17,
+        "Mage Blaster": 12,
+        "Priest Blaster": 11
+      }
+    },
+    {
+      "minLevel": 9,
+      "maxLevel": 99,
+      "weights": {
+        "No trap": 5,
+        "Poison Needle": 8,
+        "Crossbow Bolt": 6,
+        "Alarm": 10,
+        "Gas Bomb": 20,
+        "Exploding Box": 21,
+        "Mage Blaster": 16,
+        "Priest Blaster": 14
+      }
+    }
+  ]
+}

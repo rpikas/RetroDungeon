@@ -10,6 +10,7 @@ using Adnd.Core.Diagnostics;
 using Adnd.Core.Experience;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
+using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
 using Adnd.Core.Treasure;
@@ -32,10 +33,13 @@ public sealed class CombatCoordinator
 {
     private readonly EncounterMonsterFactory _monsterFactory = new();
     private readonly CombatResolver _combatResolver;
+    private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly PartyRepository _partyRepository = new();
     private readonly LevelUpService _levelUpService = new();
     private readonly SpellRepository _spellRepository = new("Data/Spells");
+    private readonly SpellCastingService _spellCastingService;
     private readonly TreasureService _treasureService;
+    private readonly ChestTrapTableProvider _chestTrapTableProvider;
     private readonly ItemRepository _itemRepository = new("Data/Items");
     private readonly MonsterRepository _monsterRepository = new();
     private readonly Random _random = new();
@@ -89,6 +93,7 @@ public sealed class CombatCoordinator
             new CallLightningHandler(),
             new EntangleHandler(),
             new Silence15RadiusHandler(),
+            new FindTrapsHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
@@ -130,11 +135,12 @@ public sealed class CombatCoordinator
             new PhantasmalForceHandler(),
         });
 
-        var spellCastingService = new SpellCastingService(resolver, spellRepo.LoadAll());
-        _combatResolver = new CombatResolver(spellCastingService: spellCastingService);
+        _spellCastingService = new SpellCastingService(resolver, spellRepo.LoadAll());
+        _combatResolver = new CombatResolver(spellCastingService: _spellCastingService);
 
         var treasureRepo = new TreasureTableRepository("Data/Treasure");
         _treasureService = new TreasureService(treasureRepo, _random);
+        _chestTrapTableProvider = new ChestTrapTableProvider(Path.Combine("Data", "Treasure", "chest-traps.json"));
     }
 
     public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null)
@@ -199,7 +205,7 @@ public sealed class CombatCoordinator
 
         if (session.Outcome == CombatOutcome.Victory)
         {
-            ApplyVictoryRewards(owner, session, dungeonLevel);
+            ApplyVictoryRewards(owner, session, characterRepository, dungeonLevel);
         }
 
         RemoveTemporaryCombatEffects(session);
@@ -257,7 +263,7 @@ public sealed class CombatCoordinator
         }
 
         if (session.Outcome == CombatOutcome.Victory)
-            ApplyVictoryRewards(owner, session, dungeonLevel);
+            ApplyVictoryRewards(owner, session, characterRepository, dungeonLevel);
 
         RemoveTemporaryCombatEffects(session);
 
@@ -323,7 +329,7 @@ public sealed class CombatCoordinator
 
         if (session.Outcome == CombatOutcome.Victory)
         {
-            ApplyVictoryRewards(owner, session, dungeonLevel);
+            ApplyVictoryRewards(owner, session, characterRepository, dungeonLevel);
         }
 
         RemoveTemporaryCombatEffects(session);
@@ -516,7 +522,7 @@ public sealed class CombatCoordinator
         session.MirrorImageRounds.Clear();
     }
    
-    private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, int? dungeonLevel)
+    private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel)
     {
         var survivors = session.Party
             .Where(c => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead))
@@ -577,13 +583,34 @@ public sealed class CombatCoordinator
 
         // --- Treasure ---
         var treasure = _treasureService.RollTreasureForEncounter(session.Monsters);
+        var hasInLairTreasure = treasure.Lair.CopperPieces > 0
+                               || treasure.Lair.SilverPieces > 0
+                               || treasure.Lair.ElectrumPieces > 0
+                               || treasure.Lair.GoldPieces > 0
+                               || treasure.Lair.PlatinumPieces > 0
+                               || treasure.Lair.Gems.Count > 0
+                               || treasure.Lair.Jewelry.Count > 0
+                               || treasure.Lair.Art.Count > 0
+                               || treasure.Lair.MagicPlaceholders.Count > 0;
+
+        var dungeonDepth = Math.Max(1, dungeonLevel ?? 1);
+        var chestResolution = new LairChestResolutionResult { IncludeLairTreasure = true, TrapType = ChestTrapType.None };
+
+        if (hasInLairTreasure)
+        {
+            var rolledTrap = _chestTrapTableProvider.RollTrap(dungeonDepth, _random, out var trapRollInfo);
+            RuleApplicationInfo.Publish(trapRollInfo);
+            chestResolution = ResolveLairChestInteraction(owner, session, survivors, dungeonDepth, rolledTrap);
+        }
+
+        var effectiveTreasure = BuildEffectiveTreasure(treasure, chestResolution.IncludeLairTreasure);
 
         // --- XP-fördelning ---
         var xpMultiplier = GameRulesProvider.Current.XpMultiplier;
         int xpEach = (int)Math.Round(totalMonsterXp * xpMultiplier / survivors.Count);
         int xpRemainder = totalMonsterXp % survivors.Count;
-        int gemJewelryXpPool = Math.Max(0, treasure.TotalGemValueGp + treasure.TotalJewelryValueGp);
-        int goldXpPool = Math.Max(0, treasure.GoldPieces) + gemJewelryXpPool;
+        int gemJewelryXpPool = Math.Max(0, effectiveTreasure.TotalGemValueGp + effectiveTreasure.TotalJewelryValueGp);
+        int goldXpPool = Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool;
         int goldXpEach = goldXpPool / survivors.Count;
         int goldXpRemainder = goldXpPool % survivors.Count;
 
@@ -615,18 +642,23 @@ public sealed class CombatCoordinator
 
         var totalAwardedXp = levelUpResults.Sum(r => r.ExperienceAfter - r.ExperienceBefore);
 
-        DistributeCoin(survivors, treasure.CopperPieces, (c, amount) => c.CopperPieces += amount);
-        DistributeCoin(survivors, treasure.SilverPieces, (c, amount) => c.SilverPieces += amount);
-        DistributeCoin(survivors, treasure.ElectrumPieces, (c, amount) => c.ElectrumPieces += amount);
-        DistributeCoin(survivors, treasure.GoldPieces, (c, amount) => c.GoldPieces += amount);
-        DistributeCoin(survivors, treasure.PlatinumPieces, (c, amount) => c.PlatinumPieces += amount);
+        DistributeCoin(survivors, effectiveTreasure.CopperPieces, (c, amount) => c.CopperPieces += amount);
+        DistributeCoin(survivors, effectiveTreasure.SilverPieces, (c, amount) => c.SilverPieces += amount);
+        DistributeCoin(survivors, effectiveTreasure.ElectrumPieces, (c, amount) => c.ElectrumPieces += amount);
+        DistributeCoin(survivors, effectiveTreasure.GoldPieces, (c, amount) => c.GoldPieces += amount);
+        DistributeCoin(survivors, effectiveTreasure.PlatinumPieces, (c, amount) => c.PlatinumPieces += amount);
 
-        var valuablesValueGp = treasure.TotalGemValueGp + treasure.TotalJewelryValueGp + treasure.TotalArtValueGp;
+        var valuablesValueGp = effectiveTreasure.TotalGemValueGp + effectiveTreasure.TotalJewelryValueGp + effectiveTreasure.TotalArtValueGp;
         DistributeCoin(survivors, valuablesValueGp, (c, amount) => c.GoldPieces += amount);
 
-        var magicAward = AwardMagicItemsFromPlaceholders(survivors, treasure.MagicPlaceholders, dungeonLevel);
+        var magicAward = AwardMagicItemsFromPlaceholders(survivors, effectiveTreasure.MagicPlaceholders, dungeonLevel);
         var wornEquipmentAward = AwardWornEquipmentMagicItems(session, survivors, dungeonLevel);
         var randomItemsAward = AwardRandomItemsAfterCombat(survivors, dungeonLevel);
+
+        if (chestResolution.TriggeredAlarmEncounter)
+        {
+            TriggerAlarmEncounter(owner, session, characterRepository, dungeonLevel);
+        }
 
         // --- Logg ---
         var sb = new StringBuilder();
@@ -651,7 +683,7 @@ public sealed class CombatCoordinator
         }
         sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");
         sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
-        sb.AppendLine($"Gold XP bonus: {goldXpPool} XP total (1 XP per GP found; includes {treasure.GoldPieces} from GP coins and {gemJewelryXpPool} from gem/jewelry value), split {goldXpEach} each with {goldXpRemainder} remainder");
+        sb.AppendLine($"Gold XP bonus: {goldXpPool} XP total (1 XP per GP found; includes {effectiveTreasure.GoldPieces} from GP coins and {gemJewelryXpPool} from gem/jewelry value), split {goldXpEach} each with {goldXpRemainder} remainder");
         sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
         sb.AppendLine($"Survivors: {survivors.Count}");
         sb.AppendLine();
@@ -674,15 +706,18 @@ public sealed class CombatCoordinator
 
         sb.AppendLine();
         sb.AppendLine("Treasure found:");
-        sb.AppendLine($"- Coins: {treasure.CopperPieces} cp, {treasure.SilverPieces} sp, {treasure.ElectrumPieces} ep, {treasure.GoldPieces} gp, {treasure.PlatinumPieces} pp");
-        sb.AppendLine($"- XP from GP value: {goldXpPool} XP total (1 XP per GP; {treasure.GoldPieces} from GP coins + {gemJewelryXpPool} from gem/jewelry value)");
+        sb.AppendLine($"- Coins: {effectiveTreasure.CopperPieces} cp, {effectiveTreasure.SilverPieces} sp, {effectiveTreasure.ElectrumPieces} ep, {effectiveTreasure.GoldPieces} gp, {effectiveTreasure.PlatinumPieces} pp");
+        sb.AppendLine($"- XP from GP value: {goldXpPool} XP total (1 XP per GP; {effectiveTreasure.GoldPieces} from GP coins + {gemJewelryXpPool} from gem/jewelry value)");
 
-        if (treasure.Gems.Count > 0)
-            sb.AppendLine($"- Gems: {treasure.Gems.Count} (total {treasure.TotalGemValueGp} gp)");
-        if (treasure.Jewelry.Count > 0)
-            sb.AppendLine($"- Jewelry: {treasure.Jewelry.Count} (total {treasure.TotalJewelryValueGp} gp)");
-        if (treasure.Art.Count > 0)
-            sb.AppendLine($"- Art: {treasure.Art.Count} (total {treasure.TotalArtValueGp} gp)");
+        if (effectiveTreasure.Gems.Count > 0)
+            sb.AppendLine($"- Gems: {effectiveTreasure.Gems.Count} (total {effectiveTreasure.TotalGemValueGp} gp)");
+        if (effectiveTreasure.Jewelry.Count > 0)
+            sb.AppendLine($"- Jewelry: {effectiveTreasure.Jewelry.Count} (total {effectiveTreasure.TotalJewelryValueGp} gp)");
+        if (effectiveTreasure.Art.Count > 0)
+            sb.AppendLine($"- Art: {effectiveTreasure.Art.Count} (total {effectiveTreasure.TotalArtValueGp} gp)");
+
+        if (hasInLairTreasure && !chestResolution.IncludeLairTreasure)
+            sb.AppendLine("- In-lair chest treasure was left behind.");
         if (valuablesValueGp > 0)
             sb.AppendLine($"- Valuables value distributed as gp: {valuablesValueGp} gp");
 
@@ -1664,6 +1699,438 @@ public sealed class CombatCoordinator
 
         var last = lines[lines.Length - 1].Trim();
         return lines.Length == 1 ? last : $"{last}  (+{lines.Length - 1} more)";
+    }
+
+    private static TreasureResult BuildEffectiveTreasure(TreasureResult source, bool includeLairTreasure)
+    {
+        if (includeLairTreasure)
+            return source;
+
+        var result = new TreasureResult();
+
+        result.NonLair.CopperPieces = source.NonLair.CopperPieces;
+        result.NonLair.SilverPieces = source.NonLair.SilverPieces;
+        result.NonLair.ElectrumPieces = source.NonLair.ElectrumPieces;
+        result.NonLair.GoldPieces = source.NonLair.GoldPieces;
+        result.NonLair.PlatinumPieces = source.NonLair.PlatinumPieces;
+        result.NonLair.Gems = source.NonLair.Gems.Select(CloneValuable).ToList();
+        result.NonLair.Jewelry = source.NonLair.Jewelry.Select(CloneValuable).ToList();
+        result.NonLair.Art = source.NonLair.Art.Select(CloneValuable).ToList();
+        result.NonLair.MagicPlaceholders = source.NonLair.MagicPlaceholders.Select(CloneMagicPlaceholder).ToList();
+
+        result.Total.CopperPieces = result.NonLair.CopperPieces;
+        result.Total.SilverPieces = result.NonLair.SilverPieces;
+        result.Total.ElectrumPieces = result.NonLair.ElectrumPieces;
+        result.Total.GoldPieces = result.NonLair.GoldPieces;
+        result.Total.PlatinumPieces = result.NonLair.PlatinumPieces;
+        result.Total.Gems = result.NonLair.Gems.Select(CloneValuable).ToList();
+        result.Total.Jewelry = result.NonLair.Jewelry.Select(CloneValuable).ToList();
+        result.Total.Art = result.NonLair.Art.Select(CloneValuable).ToList();
+        result.Total.MagicPlaceholders = result.NonLair.MagicPlaceholders.Select(CloneMagicPlaceholder).ToList();
+
+        result.SyncLegacyTotalsFromBuckets();
+        return result;
+    }
+
+    private static TreasureValuableResult CloneValuable(TreasureValuableResult value)
+        => new() { Category = value.Category, ValueGp = value.ValueGp, SourceTable = value.SourceTable };
+
+    private static TreasureMagicPlaceholderResult CloneMagicPlaceholder(TreasureMagicPlaceholderResult value)
+        => new() { Table = value.Table, Count = value.Count, SourceTable = value.SourceTable };
+
+    private void TriggerAlarmEncounter(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel)
+    {
+        var aliveParty = session.Party.Where(c => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead)).ToList();
+        if (aliveParty.Count == 0)
+            return;
+
+        var level = Math.Max(1, dungeonLevel ?? 1);
+        var candidates = _monsterRepository.GetAll()
+            .Where(m => m.Source == Sources.Adnd)
+            .Where(m => m.DungeonLevel == level)
+            .ToList();
+
+        if (candidates.Count == 0)
+            return;
+
+        var selected = candidates[_random.Next(candidates.Count)];
+        var min = Math.Max(1, selected.NumberOfAppearancesMin);
+        var max = Math.Max(min, selected.NumberOfAppearancesMax);
+        var count = _random.Next(min, max + 1);
+
+        Say(owner, "Treasure Chest", $"Alarm summons {count} {selected.Name}{(count > 1 ? "s" : string.Empty)}!", session);
+        StartEncounter(owner, selected.Name, count, session.Party, characterRepository, dungeonLevel);
+    }
+
+    private sealed class LairChestResolutionResult
+    {
+        public bool IncludeLairTreasure { get; set; }
+        public bool TriggeredAlarmEncounter { get; set; }
+        public ChestTrapType TrapType { get; set; }
+        public bool TrapFound { get; set; }
+        public bool TrapDisarmed { get; set; }
+    }
+
+    private LairChestResolutionResult ResolveLairChestInteraction(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, ChestTrapType trapType)
+    {
+        var result = new LairChestResolutionResult
+        {
+            IncludeLairTreasure = true,
+            TrapType = trapType
+        };
+
+        using var dialog = new LairTreasureChestDialog(p => ViewerPromptChanged?.Invoke(session, p));
+        dialog.ShowDialog(owner);
+
+        switch (dialog.Choice)
+        {
+            case LairChestChoice.LeaveAlone:
+                result.IncludeLairTreasure = false;
+                RuleApplicationInfo.Publish("Treasure chest left alone. In-lair treasure not collected.");
+                return result;
+
+            case LairChestChoice.CastFindTraps:
+                HandleCastFindTraps(owner, session, survivors, result);
+                break;
+
+            case LairChestChoice.Inspect:
+                HandleInspectTrap(owner, session, survivors, result);
+                break;
+        }
+
+        if (dialog.Choice == LairChestChoice.Open || dialog.Choice == LairChestChoice.CastFindTraps || dialog.Choice == LairChestChoice.Inspect)
+        {
+            var opener = PromptSelectPartyMember(owner, session, survivors, "Open chest", "Choose who opens the chest:");
+            if (opener == null)
+                return result;
+
+            var shouldTrigger = !result.TrapDisarmed && trapType != ChestTrapType.None;
+            if (!shouldTrigger)
+                return result;
+
+            var triggerRoll = _dice.Roll(100);
+            var triggered = triggerRoll <= 50;
+            RuleApplicationInfo.Publish($"Chest trap trigger roll: 1d100={triggerRoll}; trigger on 1-50 => {(triggered ? "TRIGGERED" : "safe")}");
+            if (!triggered)
+                return result;
+
+            ApplyChestTrapEffect(owner, session, survivors, opener, dungeonLevel, trapType, result);
+        }
+
+        return result;
+    }
+
+    private void HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    {
+        var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:");
+        if (caster == null)
+            return;
+
+        var findTrapsSpell = _spellRepository.LoadAll()
+            .FirstOrDefault(s => string.Equals(s.Name, "Find Traps", StringComparison.OrdinalIgnoreCase));
+
+        if (findTrapsSpell == null)
+        {
+            Say(owner, "Treasure Chest", "Find Traps spell is not available in spell data.", session);
+            return;
+        }
+
+        var cast = _spellCastingService.Cast(new SpellCastRequest
+        {
+            Caster = caster,
+            SpellId = findTrapsSpell.Id,
+            Context = SpellUseContext.Exploration,
+            Targets = new List<SpellCastTarget> { SpellCastTarget.Ally(caster) },
+            PartyTargets = survivors,
+            MonsterTargets = new List<MonsterInstance>()
+        });
+
+        if (!cast.Success)
+        {
+            Say(owner, "Treasure Chest", $"{caster.Name} fails to cast Find Traps.{Environment.NewLine}{string.Join(Environment.NewLine, cast.Events)}", session);
+            return;
+        }
+
+        Say(owner, "Treasure Chest", $"{caster.Name} casts Find Traps and detects: {FormatTrapName(result.TrapType)}.", session);
+        result.TrapFound = result.TrapType != ChestTrapType.None;
+        RuleApplicationInfo.Publish($"Find Traps spell result: trap {(result.TrapFound ? "found" : "not found")} ({FormatTrapName(result.TrapType)}).");
+
+        if (result.TrapType == ChestTrapType.None)
+            return;
+
+        var attempt = AskYesNoOnBoth(owner, session, "Disarm Trap", "A trap is found. Attempt to disarm it?");
+        if (attempt != DialogResult.Yes)
+        {
+            RuleApplicationInfo.Publish("Disarm Traps result: not attempted (trap remains armed).");
+            return;
+        }
+
+        TryDisarmByAnyThief(owner, session, survivors, result);
+    }
+
+    private void HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    {
+        var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:");
+        if (inspector == null)
+            return;
+
+        if (!IsThiefClass(inspector))
+        {
+            Say(owner, "Treasure Chest", $"{inspector.Name} is not a thief class and cannot inspect for traps effectively.", session);
+            return;
+        }
+
+        var chance = Math.Clamp(AbilitiesTables.DexterityLocateRemoveTraps(inspector.Abilities.Dexterity), 1, 95);
+        var roll = _dice.Roll(100);
+        var found = roll <= chance && result.TrapType != ChestTrapType.None;
+        RuleApplicationInfo.Publish($"Find Traps check ({inspector.Name}): 1d100={roll} vs {chance}% => {(found ? "found" : "not found")}");
+
+        if (!found)
+        {
+            RuleApplicationInfo.Publish($"Find Traps result: trap not found by {inspector.Name}.");
+            Say(owner, "Treasure Chest", $"{inspector.Name} does not find any trap.", session);
+            return;
+        }
+
+        result.TrapFound = true;
+        RuleApplicationInfo.Publish($"Find Traps result: trap found by {inspector.Name} ({FormatTrapName(result.TrapType)}).");
+        Say(owner, "Treasure Chest", $"{inspector.Name} finds trap: {FormatTrapName(result.TrapType)}.", session);
+        var attempt = AskYesNoOnBoth(owner, session, "Disarm Trap", "Attempt to disarm the trap?");
+        if (attempt != DialogResult.Yes)
+        {
+            RuleApplicationInfo.Publish("Disarm Traps result: not attempted (trap remains armed).");
+            return;
+        }
+
+        var disarmChance = Math.Clamp(AbilitiesTables.DexterityLocateRemoveTraps(inspector.Abilities.Dexterity), 1, 95);
+        var disarmRoll = _dice.Roll(100);
+        var disarmed = disarmRoll <= disarmChance;
+        RuleApplicationInfo.Publish($"Disarm Traps check ({inspector.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
+        result.TrapDisarmed = disarmed;
+        if (disarmed)
+            Say(owner, "Treasure Chest", $"{inspector.Name} disarms the trap.", session);
+        else
+            Say(owner, "Treasure Chest", $"{inspector.Name} fails to disarm the trap.", session);
+    }
+
+    private void TryDisarmByAnyThief(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    {
+        var thieves = survivors.Where(IsThiefClass).ToList();
+        if (thieves.Count == 0)
+        {
+            Say(owner, "Treasure Chest", "No thief-class member is available to disarm the trap.", session);
+            return;
+        }
+
+        var disarmer = PromptSelectPartyMember(owner, session, thieves, "Disarm Trap", "Choose who attempts to disarm:");
+        if (disarmer == null)
+            return;
+
+        var disarmChance = Math.Clamp(AbilitiesTables.DexterityLocateRemoveTraps(disarmer.Abilities.Dexterity), 1, 95);
+        var disarmRoll = _dice.Roll(100);
+        var disarmed = disarmRoll <= disarmChance;
+        RuleApplicationInfo.Publish($"Disarm Traps check ({disarmer.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
+
+        result.TrapDisarmed = disarmed;
+        if (disarmed)
+            Say(owner, "Treasure Chest", $"{disarmer.Name} disarms the trap.", session);
+        else
+            Say(owner, "Treasure Chest", $"{disarmer.Name} fails to disarm the trap.", session);
+    }
+
+    private void ApplyChestTrapEffect(IWin32Window owner, CombatSession session, List<Character> survivors, Character opener, int dungeonLevel, ChestTrapType trapType, LairChestResolutionResult result)
+    {
+        switch (trapType)
+        {
+            case ChestTrapType.PoisonNeedle:
+                opener.AddStatus(CharacterStatus.Poisoned);
+                Say(owner, "Treasure Chest", $"Poison Needle triggers. {opener.Name} is poisoned.", session);
+                break;
+
+            case ChestTrapType.ExplodingBox:
+                var mult = Math.Max(1, dungeonLevel);
+                var dmg = _dice.Roll(6) * mult;
+                foreach (var c in survivors)
+                    c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - dmg);
+                Say(owner, "Treasure Chest", $"Exploding Box triggers. Everyone takes {dmg} damage.", session);
+                break;
+
+            case ChestTrapType.GasBomb:
+                foreach (var c in survivors)
+                {
+                    var saveTarget = _savingThrowService.GetSaveTarget(c, SaveThrowType.ParalyzationPoisonDeath);
+                    var saveRoll = _dice.Roll(20);
+                    if (saveRoll < saveTarget)
+                        c.AddStatus(CharacterStatus.Poisoned);
+                }
+                Say(owner, "Treasure Chest", "Gas Bomb triggers. Failed poison saves are poisoned.", session);
+                break;
+
+            case ChestTrapType.CrossbowBolt:
+                var boltDamage = _dice.Roll(6);
+                opener.CurrentHitPoints = Math.Max(0, opener.CurrentHitPoints - boltDamage);
+                Say(owner, "Treasure Chest", $"Crossbow Bolt triggers. {opener.Name} takes {boltDamage} damage.", session);
+                break;
+
+            case ChestTrapType.Alarm:
+                result.TriggeredAlarmEncounter = true;
+                Say(owner, "Treasure Chest", "Alarm triggers. Another monster group approaches!", session);
+                break;
+
+            case ChestTrapType.MageBlaster:
+                foreach (var c in survivors.Where(IsMageOrIllusionist))
+                {
+                    var d = _dice.Roll(6);
+                    c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - d);
+                    c.ApplyParalysis(999999);
+                }
+                Say(owner, "Treasure Chest", "Mage Blaster triggers. Magic-users and illusionists are blasted and paralyzed.", session);
+                break;
+
+            case ChestTrapType.PriestBlaster:
+                foreach (var c in survivors.Where(IsClericOrDruid))
+                {
+                    var d = _dice.Roll(6);
+                    c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - d);
+                    c.ApplyParalysis(999999);
+                }
+                Say(owner, "Treasure Chest", "Priest Blaster triggers. Clerics and druids are blasted and paralyzed.", session);
+                break;
+
+            default:
+                Say(owner, "Treasure Chest", "No trap triggers.", session);
+                break;
+        }
+    }
+
+    private Character? PromptSelectPartyMember(IWin32Window owner, CombatSession session, List<Character> candidates, string title, string promptText)
+    {
+        var selectable = candidates
+            .Where(c => c.CurrentHitPoints > 0)
+            .Where(c => !c.HasStatus(CharacterStatus.Dead))
+            .Where(c => !c.HasStatus(CharacterStatus.Paralyzed))
+            .ToList();
+
+        if (selectable.Count == 0)
+            return null;
+
+        using var form = new Form
+        {
+            Text = title,
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(820, 360),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 12,
+            Width = framePanel.ClientSize.Width,
+            Height = 28,
+            Text = title.ToUpperInvariant(),
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 16f, FontStyle.Bold)
+        };
+
+        var body = new Label
+        {
+            Left = 16,
+            Top = 48,
+            Width = framePanel.ClientSize.Width - 32,
+            Height = 250,
+            Text = promptText + Environment.NewLine + string.Join(Environment.NewLine, selectable.Select((c, i) => $"{i + 1}) {c.Name}")),
+            TextAlign = ContentAlignment.TopLeft,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 11f, FontStyle.Bold)
+        };
+
+        int selectedIndex = -1;
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                form.DialogResult = DialogResult.Cancel;
+                form.Close();
+                return;
+            }
+
+            if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
+            {
+                var idx = (int)e.KeyCode - (int)Keys.D1;
+                if (idx >= 0 && idx < selectable.Count)
+                {
+                    selectedIndex = idx;
+                    form.DialogResult = DialogResult.OK;
+                    form.Close();
+                }
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(body);
+        form.Controls.Add(framePanel);
+
+        var options = selectable
+            .Select((c, i) => new ViewerPromptOption($"pick:{i + 1}", c.Name))
+            .ToList();
+
+        var prompt = new ViewerPrompt("choice", promptText, null, options);
+        var answers = selectable
+            .Select((c, i) => new { Key = $"pick:{i + 1}", Value = DialogResult.OK })
+            .ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+
+        var viewerPick = ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
+        ViewerPromptChanged?.Invoke(session, null);
+
+        if (viewerPick == DialogResult.OK && selectedIndex < 0)
+            selectedIndex = 0;
+
+        return selectedIndex >= 0 && selectedIndex < selectable.Count ? selectable[selectedIndex] : null;
+    }
+
+    private static bool IsThiefClass(Character c)
+        => c.Classes.Contains(CharacterClass.Thief) || c.Classes.Contains(CharacterClass.Assassin);
+
+    private static bool IsMageOrIllusionist(Character c)
+        => c.Classes.Contains(CharacterClass.MagicUser) || c.Classes.Contains(CharacterClass.Illusionist);
+
+    private static bool IsClericOrDruid(Character c)
+        => c.Classes.Contains(CharacterClass.Cleric) || c.Classes.Contains(CharacterClass.Druid);
+
+    private static string FormatTrapName(ChestTrapType trap)
+    {
+        return trap switch
+        {
+            ChestTrapType.None => "No trap",
+            ChestTrapType.PoisonNeedle => "Poison Needle",
+            ChestTrapType.ExplodingBox => "Exploding Box",
+            ChestTrapType.GasBomb => "Gas Bomb",
+            ChestTrapType.CrossbowBolt => "Crossbow Bolt",
+            ChestTrapType.Alarm => "Alarm",
+            ChestTrapType.MageBlaster => "Mage Blaster",
+            ChestTrapType.PriestBlaster => "Priest Blaster",
+            _ => "No trap"
+        };
     }
 
     private static void DistributeCoin(List<Character> survivors, int totalAmount, Action<Character, int> add)

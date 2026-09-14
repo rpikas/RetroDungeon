@@ -68,6 +68,7 @@ public sealed class CampCharacterInspectForm : Form
             new CallLightningHandler(),
             new EntangleHandler(),
             new Silence15RadiusHandler(),
+            new FindTrapsHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),

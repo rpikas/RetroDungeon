@@ -1,0 +1,13 @@
+{
+  "Id": "find_traps",
+  "Name": "Find Traps",
+  "Class": "Cleric",
+  "Level": 2,
+  "Description": "Reveals nearby traps to the caster.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Heal",
+  "EffectDescription": "The caster can detect hidden chest traps."
+}
