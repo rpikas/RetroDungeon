@@ -2608,6 +2608,22 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 var creature = creatureEl.GetString();
                 var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
                 int? countOverride = null;
+
+                RuleApplicationInfo.Publish(
+                    "DMG",
+                    "175-177",
+//                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
+                    $"Encounter creature (monster level {monsterLevel})",
+                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                    "1",
+                    "100",
+                    roll.ToString(),
+                    string.IsNullOrWhiteSpace(resolved)
+                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
+                        : $"Matched '{creature}', mapped to '{resolved}'.");
+
+
+
                 if (entry.TryGetProperty("CountMin", out var countMinEl)
                     && entry.TryGetProperty("CountMax", out var countMaxEl)
                     && countMinEl.ValueKind == JsonValueKind.Number
@@ -2625,29 +2641,33 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     RuleApplicationInfo.Publish(
                         "DMG",
                         "175-177",
-                        $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
+         //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
+                        $"Number of '{creature}s'",
                         "Use CountMin-CountMax from MonsterLevels entry.",
                         "1",
                         (countMax - countMin + 1).ToString(),
-                        (countOverride.Value - countMin + 1).ToString(),
-                        $"Count {countOverride.Value} (range {countMin}-{countMax}).");
-                }
+                        "+"+(countMin-1).ToString(),
+                        (countOverride.Value - countMin + 1).ToString()
+                       );
+             //      $"Count {countOverride.Value} (range {countMin}-{countMax}).");
+    }
+                /*
+                                RuleApplicationInfo.Publish(
+                                    "DMG",
+                                    "175-177",
+                //                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
+                                    $"Encounter creature (monster level {monsterLevel})",
+                                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                                    "1",
+                                    "100",
+                                    roll.ToString(),
+                                    string.IsNullOrWhiteSpace(resolved)
+                                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
+                                        : $"Matched '{creature}', mapped to '{resolved}'.");
 
-                RuleApplicationInfo.Publish(
-                    "DMG",
-                    "175-177",
-                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
-                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-                    "1",
-                    "100",
-                    roll.ToString(),
-                    string.IsNullOrWhiteSpace(resolved)
-                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
-                        : $"Matched '{creature}', mapped to '{resolved}'.");
-
+                                */
                 if (!string.IsNullOrWhiteSpace(resolved))
                     return new EncounterRoll(resolved, countOverride);
-
                 break;
             }
         }

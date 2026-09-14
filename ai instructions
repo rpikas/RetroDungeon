@@ -644,13 +644,17 @@ If they make their save, they are not feebleminded. When feebleminded, the encou
 
 cure serious wounds that currently is a level 3 cleric spell should also be a level 4 druid spell working in the exactly same way. 16,2
 
-implement a level 3 druid spell called Summon Insects. It cause all groups of encounters to be attacked by insects. The insects do 2 damage per round for 1 rounds per level of the caster. 
+implement a level 3 druid spell called Summon Insects. It cause all groups of encounters to be attacked by insects. The insects do 
+2 damage per round for 1 rounds per level of the caster. 
 There is no save throw vs this spell. 17,2
 
-implement a level 3 druid spell called Snare. it causes one group 1d6 of damage to one group. If the party tries to run whan all encounters are snared, they will always escpe. There is no save throw vs this spell. 17,5
+implement a level 3 druid spell called Snare. it causes one group 1d6 of damage to one group. If the party tries to run whan all encounters 
+are snared, they will always escpe. There is no save throw vs this spell. 17,5
 
-implement a level 4 druid spell called pyrotechnics. It causes one group to be blinded 1 round per level of the spell caster. There is no save throw vs this spell. when the group is blinded, they have -4 thac0.
-The spell does not stack with other spells that causes blindness. also, when hitting an invisibel target, the invisibel target thac0 is not affected by the -4 thac0. 17,9
+implement a level 4 druid spell called pyrotechnics. It causes one group to be blinded 1 round per level of the spell caster. 
+There is no save throw vs this spell. when the group is blinded, they have -4 thac0.
+The spell does not stack with other spells that causes blindness. also, when hitting an invisibel target, the invisibel target thac0 is 
+not affected by the -4 thac0. 17,9
 
 I want MagicItem json be devided into 3 json files Rings.json, RodsStavesWands.json and MiscMagic.json 18,1
 
@@ -692,7 +696,8 @@ only difference is that the lvl of the chartars should correspond to the level o
 
 when encountering demon price, I want to randomly pick one of the monsters with   "Type": "Demon Prince", (currently Orcus and Demagorgon) 25,4
 
-When encountering a level 8 dragon, roll 1d100 and use the following table to determin what dragon the group encounters. (the numer in parentasis is the number of HitDice the dragon got)
+When encountering a level 8 dragon, roll 1d100 and use the following table to determin what dragon the group encounters. 
+(the numer in parentasis is the number of HitDice the dragon got)
 DMG page 179
 01–13  Black  ancient (8)
 14–24  Blue  very old (7)
@@ -736,13 +741,15 @@ Make sure to parse the following fields that I plan to introduce in monster json
 Default if tags does not exist should be
       "%InLair": "50",
       "MagicResistance": "Standard",
-If MagicResistance is Standard there is no effect. If there is a number, for example 20%, then besides the normal save that is applicable for some spells, there is also a 20% chanse that the spell effect is totaly avoidid.
+If MagicResistance is Standard there is no effect. If there is a number, for example 20%, then besides the normal save that is applicable for some spells, 
+there is also a 20% chanse that the spell effect is totaly avoidid.
 If the monster is not InLair, then no treasure can be found. 26,9
 
 write in ADnD Rule and Dice Info when roling if monster is inLair or not. Also when rolling Magic resistance inform in the same dialog 27,1
 The inLair roll should not be done per monster but per group of encounters 27,2
 
-When CountMin and CountMax is defined in MonsterLevels, use that instead to figure out how many monsters are in the group, show what you are radomizing in the log and rule window 28,7
+When CountMin and CountMax is defined in MonsterLevels, use that instead to figure out how many monsters are in the group, show what you are 
+radomizing in the log and rule window 28,7
 
 in rules and dice info inform what treasures has been found and what rolls are beeing made with probablity and amount of coins, gems etc 30,1
 make sure individual treasure is parsed when parsing monster json also individial treasure allways appear for the mobs with individual treasure even if not in lair 30,3
@@ -768,13 +775,15 @@ Dice Roll	Result
 76–100	Weapons 31,0
 _________________
 
-the ExpectedAverageNumberOfMonsters in the group is calculated by (NumberOfAppearancesMin+NumberOfAppearancesMax)/2 calculate that and write it to the dice and rule log.
+the ExpectedAverageNumberOfMonsters in the group is calculated by (NumberOfAppearancesMin+NumberOfAppearancesMax)/2 calculate that 
+and write it to the dice and rule log.
 probability to find items should be divided by ExpectedAverageNumberOfMonsters. so for exampel for Orcs
       "NumberOfAppearancesMin": 30,
       "NumberOfAppearancesMax": 300,
 that menan ExpectedAverageNumberOfMonsters=165.
 If in lair they find treasure tyep C.
-Treasure type C got a 10% chanse of finding 2 items from Any, that probablity should be divided by 165, that is abtou 0,06 & chanse. write that to the dice and rule log also 31,2
+Treasure type C got a 10% chanse of finding 2 items from Any, that probablity should be divided by 165, that is abtou 0,06 & chanse. 
+write that to the dice and rule log also 31,2
 
 the probability to find gems and jewely should alsso be divided by 	ExpectedAverageNumberOfMonsters just like for magic items 31,3
 Then number of coins found when in lair should be divided by ExpectedAverageNumberOfMonsters 31,4
@@ -891,7 +900,8 @@ Miscellaneous Magic	no	yes	yes	yes
 
 
 🧩 Footnote
-If no miscellaneous weapon, or one with an edge, roll again for possibility of a wand/staff/rod; if one is indicated, but it is not usable by a cleric, there is no such item possessed.
+If no miscellaneous weapon, or one with an edge, roll again for possibility of a wand/staff/rod; if one is indicated, 
+but it is not usable by a cleric, there is no such item possessed.
 
 🧙 Example
 A 6th‑level cleric is being checked.
@@ -996,7 +1006,8 @@ Dice Score	Base Value
 91–99	1,000 g.p. each
 100	    5,000 g.p. each
 
-If finding jewelry, use the following table to determine the value of the jewelry found one by one, write to the dice and rule log what what you rolled and the value of each jewelry.
+If finding jewelry, use the following table to determine the value of the jewelry found one by one, write to the dice and rule log what what you 
+rolled and the value of each jewelry.
 Dice Roll	Base Value
 01–10	100–1,000 g.p.
 11–20	200–1,200 g.p.
@@ -1073,7 +1084,8 @@ Priest Blaster
 No trap
 Create a json file with the traps and their probability to be found in the on different levls of the dungeon.
 
-If choosing to OPEN then ask what party member should open the chest. If the chest is opened without successfully disarming the trap, then roll 1d100 to see if the trap is triggered. 
+If choosing to OPEN then ask what party member should open the chest. If the chest is opened without successfully disarming the trap, 
+then roll 1d100 to see if the trap is triggered. 
 If Poinson Needle trap is triggered, then the person opening the chest will be poisoned.
 If Explosding Box trap is triggered, then every body in the party will take 1d6 damage multiplied with the level of the dungon. 
 If Gas Bomb trap is triggered, then everybody should roll a save vs. poison and everybody that failed saving in the party will be poisoned. 
@@ -1092,7 +1104,8 @@ Show the result of the roll in the ADnD Rule and Dice info. If the trap is disar
 If the party chooses to cast spell Find Traps, then ask what party member should cast the spell. 
 If the party has a member with the spell Find Traps then it is cast and the info what trap is found is shown. in the encounter dialog.
 the party chan chose then disarm the trap or not. If chosing to try to disarm the trap and a charater is a thief class exists, 
-then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the charater sheet. Show the result of the roll in the ADnD Rule and Dice info.
+then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the charater sheet. Show the result of the roll 
+in the ADnD Rule and Dice info.
 
 After the trap is opend go the the reward summary dialog and show the treasure found in the chest. 
 If choosing to leave the chest alone, then go the the reward summary dialog but leave out all in lair treasure found in the chest. 64,8
@@ -1101,7 +1114,8 @@ Implement a new level 2 cleric spell called Find Traps that could be used to fin
 
 in the treasure chest dialog I want to show a picture of the chest. Use the following picture Adnd.Game\Assets\ScenPictures\TreasureChest.png 65,5
 
-when chosing party member to open or inspect the chest, only show party members that are alive and not paralyzed also  make it bigger, so all party members can be seen without scrolling.65,6
+when chosing party member to open or inspect the chest, only show party members that are alive and not paralyzed also  make it bigger, so all party members 
+can be seen without scrolling.65,6
 
 Show in ADnD Rule and Dice info what the d100 role was and if the trap was found in the chest and if it was disarmed or not. 66,1
 __________
@@ -1109,7 +1123,8 @@ in the cast find traps dilaog where you select charater to cast that spell also 
 in inspct chest dialog selecting char to inspect, also show class66,8
 ___
 
-when the trap thats summons monsters and when Shriekers summon monsters, use the same way to randomize what level monsters that should appear, what monster that should appear 
+when the trap thats summons monsters and when Shriekers summon monsters, use the same way to randomize what level monsters that should appear, 
+what monster that should appear 
 and how many monsters that should appear first MonsterEncounter.json for what level of the monsters and then MonsterLevels to see what monsters and how many 67,5
 ____
 
@@ -1117,7 +1132,7 @@ when the trap i triggereds show a dialog whith the same look and feel as when en
 
 update the thief skills depening on level of the thies and race of the thief according to thse tables Level of the Thief	
 Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	Climb Walls	Read Languages 1	
-30%	25%	20%	15%	10%	10%	85%	-0 2	35%	29%	25%	21%	15%	10%	86%	-0 3	40%	33%	30%	27%	20%	15%	87%	-0 4	45%	37%	35%	33%	25%	15%	88%	20% 5	50%	42%	40%	40%	31%	20%	90%	25% 6	55%	47%	45%	47%	37%	20%	92%	30% 7	60%	52%	50%	55%	43%	25%	94%	35% 8	65%	57%	55%	62%	49%	25%	96%	40% 9	70%	62%	60%	70%	56%	30%	98%	45% 10	80%	67%	65%	78%	63%	30%	99%	50% 11	90%	72%	70%	86%	70%	35%	99.1%	55% 12	100%	77%	75%	94%	77%	35%	99.2%	60% 13	105%	82%	80%	99%	85%	40%	99.3%	65% 14	110%	87%	85%	99%	93%	40%	99.4%	70% 15	115%	92%	90%	99%	99%	50%	99.5%	75% 16	125%	97%	95%	99%	99%	50%	99.6%	80% 17	125%	99%	99%	99%	99%	55%	99.7%	80% 
+30%	25%	20%	15%	10%	10%	85%	-0 2	35%	29%	25%	21%	15%	10%	86%	-0 3	40%	33%	30%	27%	20%	15%	87%	-0 4	etc
 Race of the Thief	Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	Climb Walls	Read Languages 
 Dwarf		+15%			+10%	-10%	-5% 
 Elf         +5%	-5%		+5%	+10%			-0 
@@ -1132,3 +1147,5 @@ add the dex bonus to the probablity for the thief skills also 68,7
 In line 705 in CombatCoordinator.cs (in combat reward dialog when printing how much xp the char got and need), if the char is multi class, 
 print what he has and what is needed for both clases 69,0
 in combat rewad dialog if a multiclass char levels up in one of the class show the same message as when a singel class char levels up 69,3
+_____
+In AdnD Rule and Dice info

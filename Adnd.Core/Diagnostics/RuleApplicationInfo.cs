@@ -24,9 +24,12 @@ public static class RuleApplicationInfo
 
         var nl = Environment.NewLine;
         string message =
-            $"Source: {source}, Page: {page}, Context: {context}.{nl} Rule: {rule}.{nl}" +
-            $"Roll: {numberOfDices}d{sidesOnDices} => Result: {resultOfRoll}.{nl}" +
-            $"Consequence: {consequenceOfRoll}";
+   //         $"Source: {source}, Page: {page}, Context: {context}.{nl} Rule: {rule}.{nl}" +
+            $"{source}, {page}, {context}:" +
+          //  $"Roll: {numberOfDices}d{sidesOnDices} => Result: {resultOfRoll}.{nl}" +
+            $"{numberOfDices}d{sidesOnDices}({resultOfRoll}) -> " +
+            $"{consequenceOfRoll}";
+//        $"Consequence: {consequenceOfRoll}";
 
         InfoPublished?.Invoke($"[{DateTime.Now:HH:mm:ss}] {message}");
     }
