@@ -1148,4 +1148,6 @@ In line 705 in CombatCoordinator.cs (in combat reward dialog when printing how m
 print what he has and what is needed for both clases 69,0
 in combat rewad dialog if a multiclass char levels up in one of the class show the same message as when a singel class char levels up 69,3
 _____
-In AdnD Rule and Dice info
+in the Publish method I want this part to be clickable $"{source}, {page} if a file named $"{source}{page}.png could be found in 
+Adnd.Game\Assets\Rules for example is the file DMG174.png there 70,7
+The links where clickable but I expected the contetn of the DMG174.png to be shown to the user when link was clicked 70,9
