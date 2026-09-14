@@ -1104,5 +1104,8 @@ in the treasure chest dialog I want to show a picture of the chest. Use the foll
 when chosing party member to open or inspect the chest, only show party members that are alive and not paralyzed also  make it bigger, so all party members can be seen without scrolling.65,6
 
 Show in ADnD Rule and Dice info what the d100 role was and if the trap was found in the chest and if it was disarmed or not. 66,1
-
+__________
+in the cast find traps dilaog where you select charater to cast that spell also show the class of the charaters
+in inspct chest dialog selecting char to inspect, also show class66,8
+___
 

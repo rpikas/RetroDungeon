@@ -1822,7 +1822,7 @@ public sealed class CombatCoordinator
 
     private void HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
     {
-        var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:");
+        var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:", includeClassInList: true);
         if (caster == null)
             return;
 
@@ -1870,7 +1870,7 @@ public sealed class CombatCoordinator
 
     private void HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
     {
-        var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:");
+        var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true);
         if (inspector == null)
             return;
 
@@ -2003,7 +2003,7 @@ public sealed class CombatCoordinator
         }
     }
 
-    private Character? PromptSelectPartyMember(IWin32Window owner, CombatSession session, List<Character> candidates, string title, string promptText)
+    private Character? PromptSelectPartyMember(IWin32Window owner, CombatSession session, List<Character> candidates, string title, string promptText, bool includeClassInList = false)
     {
         var selectable = candidates
             .Where(c => c.CurrentHitPoints > 0)
@@ -2057,7 +2057,13 @@ public sealed class CombatCoordinator
             Top = 48,
             Width = framePanel.ClientSize.Width - 32,
             Height = 250,
-            Text = promptText + Environment.NewLine + string.Join(Environment.NewLine, selectable.Select((c, i) => $"{i + 1}) {c.Name}")),
+            Text = promptText + Environment.NewLine + string.Join(Environment.NewLine, selectable.Select((c, i) =>
+            {
+                var classText = includeClassInList
+                    ? $" ({string.Join("/", c.Classes.Select(cls => cls.ToDisplayString()))})"
+                    : string.Empty;
+                return $"{i + 1}) {c.Name}{classText}";
+            })),
             TextAlign = ContentAlignment.TopLeft,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
