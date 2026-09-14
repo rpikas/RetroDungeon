@@ -196,14 +196,15 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
-            ApplyShriekReinforcements(session, roundEvents);
+            ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
 
-        if (session.Outcome == CombatOutcome.Victory)
+        if (session.Outcome == CombatOutcome.Victory
+)
         {
             ApplyVictoryRewards(owner, session, characterRepository, dungeonLevel);
         }
@@ -255,7 +256,7 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
-            ApplyShriekReinforcements(session, roundEvents);
+            ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
 
@@ -320,7 +321,7 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
-            ApplyShriekReinforcements(session, roundEvents);
+            ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
 
@@ -1616,7 +1617,7 @@ public sealed class CombatCoordinator
         return result;
     }
 
-    private void ApplyShriekReinforcements(CombatSession session, List<CombatEvent> roundEvents)
+    private void ApplyShriekReinforcements(CombatSession session, List<CombatEvent> roundEvents, int? dungeonLevel)
     {
         var hasShriek = session.AliveMonsters.Any(m =>
             string.Equals(m.Template.Name, "Shrieker", StringComparison.OrdinalIgnoreCase)
@@ -1630,25 +1631,18 @@ public sealed class CombatCoordinator
         var roll = _dice.Roll(100);
         if (roll <= 50)
         {
-            var candidates = _monsterRepository.GetAll()
-                .Where(m => m.Source == Sources.Adnd)
-                .Where(m => m.DungeonLevel == 2)
-                .Where(m => !string.Equals(m.Name, "Shrieker", StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            var depth = Math.Max(1, dungeonLevel ?? 1);
+            var existingGroups = session.GetDistinctGroupIds().ToList();
+            var nextGroupNumber = 1;
+            while (existingGroups.Contains($"Group{nextGroupNumber}", StringComparer.OrdinalIgnoreCase))
+                nextGroupNumber++;
 
-            if (candidates.Count > 0)
+            var groupId = $"Group{nextGroupNumber}";
+            if (TryRollReinforcementEncounter(depth, out var selectedName, out var selectedCount))
             {
-                var selected = candidates[_random.Next(candidates.Count)];
-                var count = _random.Next(Math.Max(1, selected.NumberOfAppearancesMin), Math.Max(selected.NumberOfAppearancesMin, selected.NumberOfAppearancesMax) + 1);
-                var existingGroups = session.GetDistinctGroupIds().ToList();
-                var nextGroupNumber = 1;
-                while (existingGroups.Contains($"Group{nextGroupNumber}", StringComparer.OrdinalIgnoreCase))
-                    nextGroupNumber++;
-
-                var groupId = $"Group{nextGroupNumber}";
-                var reinforcements = _monsterFactory.CreateGroup(selected.Name, count, groupId);
+                var reinforcements = _monsterFactory.CreateGroup(selectedName, selectedCount, groupId);
                 session.Monsters.AddRange(reinforcements);
-                roundEvents.Add(new CombatEvent($"Shriek attracts reinforcements: {count} {selected.Name}{(count > 1 ? "s" : string.Empty)} join the fight ({groupId})."));
+                roundEvents.Add(new CombatEvent($"Shriek attracts reinforcements: {selectedCount} {selectedName}{(selectedCount > 1 ? "s" : string.Empty)} join the fight ({groupId})."));
             }
         }
         else
@@ -1667,7 +1661,9 @@ public sealed class CombatCoordinator
             _ => "Combat ended."
         };
 
-        Say(owner, "Combat Result", text, session);
+    //    Say(owner, "Combat Result", text, session);
+        if (outcome != CombatOutcome.Victory)
+            Say(owner, "Combat Result", text, session);
     }
 
     /// <summary>
@@ -1745,21 +1741,238 @@ public sealed class CombatCoordinator
             return;
 
         var level = Math.Max(1, dungeonLevel ?? 1);
-        var candidates = _monsterRepository.GetAll()
-            .Where(m => m.Source == Sources.Adnd)
-            .Where(m => m.DungeonLevel == level)
-            .ToList();
-
-        if (candidates.Count == 0)
+        if (!TryRollReinforcementEncounter(level, out var selectedName, out var count))
             return;
 
-        var selected = candidates[_random.Next(candidates.Count)];
-        var min = Math.Max(1, selected.NumberOfAppearancesMin);
-        var max = Math.Max(min, selected.NumberOfAppearancesMax);
-        var count = _random.Next(min, max + 1);
+        Say(owner, "Treasure Chest", $"Alarm summons {count} {selectedName}{(count > 1 ? "s" : string.Empty)}!", session);
+        StartEncounter(owner, selectedName, count, session.Party, characterRepository, dungeonLevel);
+    }
 
-        Say(owner, "Treasure Chest", $"Alarm summons {count} {selected.Name}{(count > 1 ? "s" : string.Empty)}!", session);
-        StartEncounter(owner, selected.Name, count, session.Party, characterRepository, dungeonLevel);
+    private bool TryRollReinforcementEncounter(int dungeonLevel, out string monsterName, out int count)
+    {
+        monsterName = string.Empty;
+        count = 1;
+
+        var monsterLevel = RollMonsterLevelFromEncounterTable(dungeonLevel);
+        var rolled = RollFromMonsterLevels(monsterLevel, dungeonLevel);
+        if (rolled == null)
+            return false;
+
+        monsterName = rolled.Value.MonsterName;
+        count = rolled.Value.Count;
+        return true;
+    }
+
+    private int RollMonsterLevelFromEncounterTable(int dungeonLevel)
+    {
+        var tablePath = Path.Combine("Data", "Encounters", "MonsterEncounter.json");
+        if (!File.Exists(tablePath))
+            return Math.Max(1, dungeonLevel);
+
+        using var document = JsonDocument.Parse(File.ReadAllText(tablePath));
+        if (!document.RootElement.TryGetProperty("monsterEncounterTable", out var tableRoot)
+            || tableRoot.ValueKind != JsonValueKind.Object)
+            return Math.Max(1, dungeonLevel);
+
+        var levelKey = dungeonLevel.ToString();
+        if (!tableRoot.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
+            return Math.Max(1, dungeonLevel);
+
+        var roll = _random.Next(1, 21);
+        foreach (var entry in entries.EnumerateArray())
+        {
+            if (!entry.TryGetProperty("roll", out var rollEl)
+                || !entry.TryGetProperty("monsterLevel", out var levelEl))
+                continue;
+
+            var range = rollEl.GetString();
+            if (!TryParseRollRange(range, out var min, out var max))
+                continue;
+
+            if (roll < min || roll > max)
+                continue;
+
+            var monsterLevel = levelEl.GetInt32();
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "174",
+                $"Roll monster level for reinforcement at dungeon level {dungeonLevel}",
+                "Use MonsterEncounterTable: roll 1d20 and map to encounter monster level.",
+                "1",
+                "20",
+                roll.ToString(),
+                $"Monster level {monsterLevel}.");
+            return monsterLevel;
+        }
+
+        return Math.Max(1, dungeonLevel);
+    }
+
+    private (string MonsterName, int Count)? RollFromMonsterLevels(int monsterLevel, int dungeonLevel)
+    {
+        var tablePath = Path.Combine("Data", "Encounters", "MonsterLevels.json");
+        if (!File.Exists(tablePath))
+            return null;
+
+        using var document = JsonDocument.Parse(File.ReadAllText(tablePath));
+        if (!document.RootElement.TryGetProperty("MonsterLevels", out var allLevels))
+            return null;
+
+        var levelKey = $"Level{monsterLevel}";
+        if (!allLevels.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
+            return null;
+
+        for (var attempt = 0; attempt < 20; attempt++)
+        {
+            var roll = _random.Next(1, 101);
+            foreach (var entry in entries.EnumerateArray())
+            {
+                if (!entry.TryGetProperty("DiceMin", out var minEl)
+                    || !entry.TryGetProperty("DiceMax", out var maxEl)
+                    || !entry.TryGetProperty("Creature", out var creatureEl))
+                    continue;
+
+                var min = minEl.GetInt32();
+                var max = maxEl.GetInt32();
+                if (roll < min || roll > max)
+                    continue;
+
+                var creature = creatureEl.GetString();
+                var resolved = ResolveEncounterCreatureToMonsterName(creature, monsterLevel);
+                RuleApplicationInfo.Publish(
+                    "DMG",
+                    "175-177",
+                    $"Roll reinforcement creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
+                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                    "1",
+                    "100",
+                    roll.ToString(),
+                    string.IsNullOrWhiteSpace(resolved)
+                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
+                        : $"Matched '{creature}', mapped to '{resolved}'.");
+
+                if (string.IsNullOrWhiteSpace(resolved))
+                    break;
+
+                var count = RollEncounterCount(entry, resolved);
+                return (resolved, count);
+            }
+        }
+
+        return null;
+    }
+
+    private int RollEncounterCount(JsonElement entry, string resolvedMonster)
+    {
+        if (entry.TryGetProperty("CountMin", out var countMinEl)
+            && entry.TryGetProperty("CountMax", out var countMaxEl)
+            && countMinEl.ValueKind == JsonValueKind.Number
+            && countMaxEl.ValueKind == JsonValueKind.Number)
+        {
+            var countMin = countMinEl.GetInt32();
+            var countMax = countMaxEl.GetInt32();
+            if (countMax < countMin)
+                (countMin, countMax) = (countMax, countMin);
+
+            countMin = Math.Max(1, countMin);
+            countMax = Math.Max(1, countMax);
+            var rolledCount = _random.Next(countMin, countMax + 1);
+
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "175-177",
+                $"Roll reinforcement count for '{resolvedMonster}'",
+                "Use CountMin-CountMax from MonsterLevels entry.",
+                "1",
+                (countMax - countMin + 1).ToString(),
+                (rolledCount - countMin + 1).ToString(),
+                $"Count {rolledCount} (range {countMin}-{countMax}).");
+
+            return rolledCount;
+        }
+
+        var template = FindMonsterTemplateByName(resolvedMonster);
+        if (template == null)
+            return 1;
+
+        var min = Math.Max(1, template.NumberOfAppearancesMin);
+        var max = Math.Max(min, template.NumberOfAppearancesMax);
+        return _random.Next(min, max + 1);
+    }
+
+    private string? ResolveEncounterCreatureToMonsterName(string? creature, int monsterLevel)
+    {
+        if (string.IsNullOrWhiteSpace(creature))
+            return null;
+
+        var raw = creature.Trim();
+        if (string.Equals(raw, "Human", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(raw, "Humans", StringComparison.OrdinalIgnoreCase)
+            || raw.Contains("Character", StringComparison.OrdinalIgnoreCase))
+        {
+            var roll = _random.Next(1, 101);
+            return roll switch
+            {
+                <= 25 => "Bandit",
+                <= 30 => "Berserker",
+                <= 45 => "Brigand",
+                _ => "Adventurer"
+            };
+        }
+
+        var candidates = new List<string> { raw };
+        var comma = raw.IndexOf(',');
+        if (comma > 0 && comma < raw.Length - 1)
+        {
+            var left = raw[..comma].Trim();
+            var right = raw[(comma + 1)..].Trim();
+            if (!string.IsNullOrWhiteSpace(left) && !string.IsNullOrWhiteSpace(right))
+                candidates.Add($"{right} {left}");
+        }
+
+        foreach (var candidate in candidates)
+        {
+            if (FindMonsterTemplateByName(candidate) != null)
+                return candidate;
+        }
+
+        return null;
+    }
+
+    private Monster? FindMonsterTemplateByName(string name)
+    {
+        return _monsterRepository.GetAll()
+            .FirstOrDefault(m => string.Equals(m.Name, name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool TryParseRollRange(string? range, out int min, out int max)
+    {
+        min = 0;
+        max = 0;
+        if (string.IsNullOrWhiteSpace(range))
+            return false;
+
+        var trimmed = range.Trim();
+        var dash = trimmed.IndexOf('-');
+        if (dash <= 0 || dash >= trimmed.Length - 1)
+        {
+            if (!int.TryParse(trimmed, out var single))
+                return false;
+
+            min = single;
+            max = single;
+            return true;
+        }
+
+        var left = trimmed[..dash].Trim();
+        var right = trimmed[(dash + 1)..].Trim();
+        if (!int.TryParse(left, out min) || !int.TryParse(right, out max))
+            return false;
+
+        if (max < min)
+            (min, max) = (max, min);
+
+        return true;
     }
 
     private sealed class LairChestResolutionResult

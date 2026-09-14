@@ -1109,3 +1109,8 @@ in the cast find traps dilaog where you select charater to cast that spell also 
 in inspct chest dialog selecting char to inspect, also show class66,8
 ___
 
+when the trap thats summons monsters and when Shriekers summon monsters, use the same way to randomize what level monsters that should appear, what monster that should appear 
+and how many monsters that should appear first MonsterEncounter.json for what level of the monsters and then MonsterLevels to see what monsters and how many 67,5
+____
+
+when the trap i triggereds show a dialog whith the same look
