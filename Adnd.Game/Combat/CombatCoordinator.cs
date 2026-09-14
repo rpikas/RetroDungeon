@@ -620,11 +620,16 @@ public sealed class CombatCoordinator
         var baseXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var bonusXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var goldXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var classLevelsBeforeByCharacter = new Dictionary<string, Dictionary<CharacterClass, int>>(StringComparer.OrdinalIgnoreCase);
         var allSpells = _spellRepository.LoadAll();
 
         for (int i = 0; i < survivors.Count; i++)
         {
             var survivor = survivors[i];
+            classLevelsBeforeByCharacter[survivor.Name] = survivor.Classes
+                .Distinct()
+                .ToDictionary(cls => cls, cls => survivor.GetClassLevel(cls));
+
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
             var goldXpGain = goldXpEach + (i < goldXpRemainder ? 1 : 0);
             var xpModifierPercent = XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
@@ -698,11 +703,27 @@ public sealed class CombatCoordinator
             bonusXpByCharacter.TryGetValue(r.CharacterName, out var bonusGain);
             goldXpByCharacter.TryGetValue(r.CharacterName, out var goldXpGain);
 
-            var classForProgress = survivor?.Class ?? CharacterClass.Fighter;
-            var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
-            var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
+            if (survivor != null && survivor.Classes.Count > 1)
+            {
+                var classProgress = survivor.Classes
+                    .Select(cls =>
+                    {
+                        var classLevel = survivor.GetClassLevel(cls);
+                        var classXp = survivor.GetClassExperience(cls);
+                        var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, classLevel + 1);
+                        var need = Math.Max(0, nextThreshold - classXp);
+                        return $"{cls.ToDisplayString()}: has {classXp} XP, needs {need} XP";
+                    });
 
-            sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + GP XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
+                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + GP XP {goldXpGain}; total {r.ExperienceAfter}; {string.Join(" | ", classProgress)})");
+            }
+            else
+            {
+                var classForProgress = survivor?.Class ?? CharacterClass.Fighter;
+                var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
+                var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
+                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + GP XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
+            }
         }
 
         sb.AppendLine();
@@ -764,15 +785,55 @@ public sealed class CombatCoordinator
                 sb.AppendLine($"    {unassigned}");
         }
 
-        var leveled = levelUpResults.Where(x => x.LeveledUp).ToList();
+        var leveled = levelUpResults
+            .Select(r =>
+            {
+                var survivor = survivors.FirstOrDefault(s => string.Equals(s.Name, r.CharacterName, StringComparison.OrdinalIgnoreCase));
+                if (survivor == null)
+                    return new { Result = r, Survivor = (Character?)null, ClassChanges = new List<(CharacterClass Class, int OldLevel, int NewLevel)>() };
+
+                var beforeLevels = classLevelsBeforeByCharacter.TryGetValue(r.CharacterName, out var map)
+                    ? map
+                    : new Dictionary<CharacterClass, int>();
+
+                var classChanges = survivor.Classes
+                    .Distinct()
+                    .Select(cls =>
+                    {
+                        var oldLevel = beforeLevels.TryGetValue(cls, out var lvl) ? lvl : survivor.GetClassLevel(cls);
+                        var newLevel = survivor.GetClassLevel(cls);
+                        return (Class: cls, OldLevel: oldLevel, NewLevel: newLevel);
+                    })
+                    .Where(x => x.NewLevel > x.OldLevel)
+                    .ToList();
+
+                return new { Result = r, Survivor = survivor, ClassChanges = classChanges };
+            })
+            .Where(x => x.ClassChanges.Count > 0)
+            .ToList();
+
         if (leveled.Count > 0)
         {
             sb.AppendLine();
             sb.AppendLine("Level ups:");
 
-            foreach (var r in leveled)
+            foreach (var entry in leveled)
             {
-                sb.AppendLine($"- {r.CharacterName}: L{r.OldLevel} -> L{r.NewLevel} (HP +{r.HitPointsGained})");
+                var r = entry.Result;
+                if (entry.Survivor == null || entry.Survivor.Classes.Count <= 1)
+                {
+                    sb.AppendLine($"- {r.CharacterName}: L{r.OldLevel} -> L{r.NewLevel} (HP +{r.HitPointsGained})");
+                }
+                else
+                {
+                    var first = true;
+                    foreach (var change in entry.ClassChanges)
+                    {
+                        var hpGain = first ? r.HitPointsGained : 0;
+                        sb.AppendLine($"- {r.CharacterName}: {change.Class.ToDisplayString()} L{change.OldLevel} -> L{change.NewLevel} (HP +{hpGain})");
+                        first = false;
+                    }
+                }
 
                 foreach (var change in r.SpellSlotChanges)
                 {
@@ -2093,7 +2154,8 @@ public sealed class CombatCoordinator
             return;
         }
 
-        var chance = Math.Clamp(AbilitiesTables.DexterityLocateRemoveTraps(inspector.Abilities.Dexterity), 1, 95);
+        var thiefLevel = Math.Max(1, inspector.GetClassLevel(CharacterClass.Thief));
+        var chance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var roll = _dice.Roll(100);
         var found = roll <= chance && result.TrapType != ChestTrapType.None;
         RuleApplicationInfo.Publish($"Find Traps check ({inspector.Name}): 1d100={roll} vs {chance}% => {(found ? "found" : "not found")}");
@@ -2115,7 +2177,7 @@ public sealed class CombatCoordinator
             return;
         }
 
-        var disarmChance = Math.Clamp(AbilitiesTables.DexterityLocateRemoveTraps(inspector.Abilities.Dexterity), 1, 95);
+        var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var disarmRoll = _dice.Roll(100);
         var disarmed = disarmRoll <= disarmChance;
         RuleApplicationInfo.Publish($"Disarm Traps check ({inspector.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
@@ -2139,7 +2201,8 @@ public sealed class CombatCoordinator
         if (disarmer == null)
             return;
 
-        var disarmChance = Math.Clamp(AbilitiesTables.DexterityLocateRemoveTraps(disarmer.Abilities.Dexterity), 1, 95);
+        var disarmerThiefLevel = Math.Max(1, disarmer.GetClassLevel(CharacterClass.Thief));
+        var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(disarmerThiefLevel, disarmer.Race, disarmer.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var disarmRoll = _dice.Roll(100);
         var disarmed = disarmRoll <= disarmChance;
         RuleApplicationInfo.Publish($"Disarm Traps check ({disarmer.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
@@ -2157,7 +2220,7 @@ public sealed class CombatCoordinator
         {
             case ChestTrapType.PoisonNeedle:
                 opener.AddStatus(CharacterStatus.Poisoned);
-                Say(owner, "Treasure Chest", $"Poison Needle triggers. {opener.Name} is poisoned.", session);
+                ShowTrapTriggeredDialog(owner, session, "Poison Needle", $"{opener.Name} is poisoned.");
                 break;
 
             case ChestTrapType.ExplodingBox:
@@ -2165,7 +2228,7 @@ public sealed class CombatCoordinator
                 var dmg = _dice.Roll(6) * mult;
                 foreach (var c in survivors)
                     c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - dmg);
-                Say(owner, "Treasure Chest", $"Exploding Box triggers. Everyone takes {dmg} damage.", session);
+                ShowTrapTriggeredDialog(owner, session, "Exploding Box", $"Everyone takes {dmg} damage.");
                 break;
 
             case ChestTrapType.GasBomb:
@@ -2176,18 +2239,18 @@ public sealed class CombatCoordinator
                     if (saveRoll < saveTarget)
                         c.AddStatus(CharacterStatus.Poisoned);
                 }
-                Say(owner, "Treasure Chest", "Gas Bomb triggers. Failed poison saves are poisoned.", session);
+                ShowTrapTriggeredDialog(owner, session, "Gas Bomb", "Failed poison saves are poisoned.");
                 break;
 
             case ChestTrapType.CrossbowBolt:
                 var boltDamage = _dice.Roll(6);
                 opener.CurrentHitPoints = Math.Max(0, opener.CurrentHitPoints - boltDamage);
-                Say(owner, "Treasure Chest", $"Crossbow Bolt triggers. {opener.Name} takes {boltDamage} damage.", session);
+                ShowTrapTriggeredDialog(owner, session, "Crossbow Bolt", $"{opener.Name} takes {boltDamage} damage.");
                 break;
 
             case ChestTrapType.Alarm:
                 result.TriggeredAlarmEncounter = true;
-                Say(owner, "Treasure Chest", "Alarm triggers. Another monster group approaches!", session);
+                ShowTrapTriggeredDialog(owner, session, "Alarm", "Another monster group approaches!");
                 break;
 
             case ChestTrapType.MageBlaster:
@@ -2197,7 +2260,7 @@ public sealed class CombatCoordinator
                     c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - d);
                     c.ApplyParalysis(999999);
                 }
-                Say(owner, "Treasure Chest", "Mage Blaster triggers. Magic-users and illusionists are blasted and paralyzed.", session);
+                ShowTrapTriggeredDialog(owner, session, "Mage Blaster", "Magic-users and illusionists are blasted and paralyzed.");
                 break;
 
             case ChestTrapType.PriestBlaster:
@@ -2207,13 +2270,93 @@ public sealed class CombatCoordinator
                     c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - d);
                     c.ApplyParalysis(999999);
                 }
-                Say(owner, "Treasure Chest", "Priest Blaster triggers. Clerics and druids are blasted and paralyzed.", session);
+                ShowTrapTriggeredDialog(owner, session, "Priest Blaster", "Clerics and druids are blasted and paralyzed.");
                 break;
 
             default:
                 Say(owner, "Treasure Chest", "No trap triggers.", session);
                 break;
         }
+    }
+
+    private void ShowTrapTriggeredDialog(IWin32Window owner, CombatSession session, string trapName, string outcome)
+    {
+        using var form = new Form
+        {
+            Text = "Trap Triggered",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(760, 180),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 34,
+            Text = "TRAP TRIGGERED",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var detailsLabel = new Label
+        {
+            Left = 0,
+            Top = 58,
+            Width = framePanel.ClientSize.Width,
+            Height = 74,
+            Text = $"{trapName.ToUpperInvariant()}\n{outcome}",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 14f, FontStyle.Bold)
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            {
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(detailsLabel);
+        form.Controls.Add(framePanel);
+
+        var prompt = new ViewerPrompt(
+            "choice",
+            $"Trap triggered: {trapName}. {outcome}",
+            null,
+            new[] { new ViewerPromptOption("continue", "Continue") });
+
+        var answers = new Dictionary<string, DialogResult>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["continue"] = DialogResult.OK
+        };
+
+        ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
+        ViewerPromptChanged?.Invoke(session, null);
     }
 
     private Character? PromptSelectPartyMember(IWin32Window owner, CombatSession session, List<Character> candidates, string title, string promptText, bool includeClassInList = false)

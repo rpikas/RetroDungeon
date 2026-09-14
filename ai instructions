@@ -1113,4 +1113,22 @@ when the trap thats summons monsters and when Shriekers summon monsters, use the
 and how many monsters that should appear first MonsterEncounter.json for what level of the monsters and then MonsterLevels to see what monsters and how many 67,5
 ____
 
-when the trap i triggereds show a dialog whith the same look
+when the trap i triggereds show a dialog whith the same look and feel as when entering the stairs. The dialog should show what trap was triggered and what happened. 67,7
+
+update the thief skills depening on level of the thies and race of the thief according to thse tables Level of the Thief	
+Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	Climb Walls	Read Languages 1	
+30%	25%	20%	15%	10%	10%	85%	-0 2	35%	29%	25%	21%	15%	10%	86%	-0 3	40%	33%	30%	27%	20%	15%	87%	-0 4	45%	37%	35%	33%	25%	15%	88%	20% 5	50%	42%	40%	40%	31%	20%	90%	25% 6	55%	47%	45%	47%	37%	20%	92%	30% 7	60%	52%	50%	55%	43%	25%	94%	35% 8	65%	57%	55%	62%	49%	25%	96%	40% 9	70%	62%	60%	70%	56%	30%	98%	45% 10	80%	67%	65%	78%	63%	30%	99%	50% 11	90%	72%	70%	86%	70%	35%	99.1%	55% 12	100%	77%	75%	94%	77%	35%	99.2%	60% 13	105%	82%	80%	99%	85%	40%	99.3%	65% 14	110%	87%	85%	99%	93%	40%	99.4%	70% 15	115%	92%	90%	99%	99%	50%	99.5%	75% 16	125%	97%	95%	99%	99%	50%	99.6%	80% 17	125%	99%	99%	99%	99%	55%	99.7%	80% 
+Race of the Thief	Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	Climb Walls	Read Languages 
+Dwarf		+15%			+10%	-10%	-5% 
+Elf         +5%	-5%		+5%	+10%			-0 
+Gnome		+5%	+10%	+5%	+5%	+10%	-15%	 
+Half-Elf	+10%		+5%	+10%	+5%			-0 
+Halfling	+5%	+5%	+5%		+15%	+5%	-15%	-5% 
+Half-Orc	-5%	+5%	+5%			+5%		-10%
+68,4
+
+add the dex bonus to the probablity for the thief skills also 68,7
+
+In line 705 in CombatCoordinator.cs (in combat reward dialog when printing how much xp the char got and need), if the char is multi class, 
+print what he has and what is needed for both clases 69,0
+in combat rewad dialog if a multiclass char levels up in one of the class show the same message as when a singel class char levels up 69,3

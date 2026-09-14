@@ -3,6 +3,54 @@
 
 public static class AbilitiesTables
 {
+    private static readonly Dictionary<int, double> ThiefPickPocketsByLevel = new()
+    {
+        [1] = 30, [2] = 35, [3] = 40, [4] = 45, [5] = 50, [6] = 55, [7] = 60, [8] = 65, [9] = 70,
+        [10] = 80, [11] = 90, [12] = 100, [13] = 105, [14] = 110, [15] = 115, [16] = 125, [17] = 125
+    };
+
+    private static readonly Dictionary<int, double> ThiefOpenLocksByLevel = new()
+    {
+        [1] = 25, [2] = 29, [3] = 33, [4] = 37, [5] = 42, [6] = 47, [7] = 52, [8] = 57, [9] = 62,
+        [10] = 67, [11] = 72, [12] = 77, [13] = 82, [14] = 87, [15] = 92, [16] = 97, [17] = 99
+    };
+
+    private static readonly Dictionary<int, double> ThiefFindRemoveTrapsByLevel = new()
+    {
+        [1] = 20, [2] = 25, [3] = 30, [4] = 35, [5] = 40, [6] = 45, [7] = 50, [8] = 55, [9] = 60,
+        [10] = 65, [11] = 70, [12] = 75, [13] = 80, [14] = 85, [15] = 90, [16] = 95, [17] = 99
+    };
+
+    private static readonly Dictionary<int, double> ThiefMoveSilentlyByLevel = new()
+    {
+        [1] = 15, [2] = 21, [3] = 27, [4] = 33, [5] = 40, [6] = 47, [7] = 55, [8] = 62, [9] = 70,
+        [10] = 78, [11] = 86, [12] = 94, [13] = 99, [14] = 99, [15] = 99, [16] = 99, [17] = 99
+    };
+
+    private static readonly Dictionary<int, double> ThiefHideInShadowsByLevel = new()
+    {
+        [1] = 10, [2] = 15, [3] = 20, [4] = 25, [5] = 31, [6] = 37, [7] = 43, [8] = 49, [9] = 56,
+        [10] = 63, [11] = 70, [12] = 77, [13] = 85, [14] = 93, [15] = 99, [16] = 99, [17] = 99
+    };
+
+    private static readonly Dictionary<int, double> ThiefHearNoiseByLevel = new()
+    {
+        [1] = 10, [2] = 10, [3] = 15, [4] = 15, [5] = 20, [6] = 20, [7] = 25, [8] = 25, [9] = 30,
+        [10] = 30, [11] = 35, [12] = 35, [13] = 40, [14] = 40, [15] = 50, [16] = 50, [17] = 55
+    };
+
+    private static readonly Dictionary<int, double> ThiefClimbWallsByLevel = new()
+    {
+        [1] = 85, [2] = 86, [3] = 87, [4] = 88, [5] = 90, [6] = 92, [7] = 94, [8] = 96, [9] = 98,
+        [10] = 99, [11] = 99.1, [12] = 99.2, [13] = 99.3, [14] = 99.4, [15] = 99.5, [16] = 99.6, [17] = 99.7
+    };
+
+    private static readonly Dictionary<int, double> ThiefReadLanguagesByLevel = new()
+    {
+        [1] = 0, [2] = 0, [3] = 0, [4] = 20, [5] = 25, [6] = 30, [7] = 35, [8] = 40, [9] = 45,
+        [10] = 50, [11] = 55, [12] = 60, [13] = 65, [14] = 70, [15] = 75, [16] = 80, [17] = 80
+    };
+
     // -----------------------------
     //  STRENGTH (AD&D 1e)
     // -----------------------------
@@ -38,6 +86,79 @@ public static class AbilitiesTables
             24 => 12,
             _ => 14 // 25
         };
+    }
+
+    public static double ThiefPickPockets(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefPickPocketsByLevel, level, race, dexterity, DexterityPickingPockets, pp: true);
+
+    public static double ThiefOpenLocks(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefOpenLocksByLevel, level, race, dexterity, DexterityOpenLocks, ol: true);
+
+    public static double ThiefFindRemoveTraps(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefFindRemoveTrapsByLevel, level, race, dexterity, DexterityLocateRemoveTraps, frt: true);
+
+    public static double ThiefMoveSilently(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefMoveSilentlyByLevel, level, race, dexterity, DexterityMoveSilently, ms: true);
+
+    public static double ThiefHideInShadows(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefHideInShadowsByLevel, level, race, dexterity, DexterityHideInShadows, hs: true);
+
+    public static double ThiefHearNoise(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefHearNoiseByLevel, level, race, dexterity, _ => 0, hn: true);
+
+    public static double ThiefClimbWalls(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefClimbWallsByLevel, level, race, dexterity, _ => 0, cw: true);
+
+    public static double ThiefReadLanguages(int level, Race race, int? dexterity = null)
+        => ApplyThiefRaceAndDexModifier(ThiefReadLanguagesByLevel, level, race, dexterity, _ => 0, rl: true);
+
+    private static double ApplyThiefRaceAndDexModifier(
+        Dictionary<int, double> table,
+        int level,
+        Race race,
+        int? dexterity,
+        Func<int, int> dexModifier,
+        bool pp = false,
+        bool ol = false,
+        bool frt = false,
+        bool ms = false,
+        bool hs = false,
+        bool hn = false,
+        bool cw = false,
+        bool rl = false)
+    {
+        var raceAdjusted = ApplyThiefRaceModifier(table, level, race, pp, ol, frt, ms, hs, hn, cw, rl);
+        var dexAdjusted = raceAdjusted + (dexterity.HasValue ? dexModifier(dexterity.Value) : 0);
+        return Math.Max(0, dexAdjusted);
+    }
+
+    private static double ApplyThiefRaceModifier(
+        Dictionary<int, double> table,
+        int level,
+        Race race,
+        bool pp = false,
+        bool ol = false,
+        bool frt = false,
+        bool ms = false,
+        bool hs = false,
+        bool hn = false,
+        bool cw = false,
+        bool rl = false)
+    {
+        var clampedLevel = Math.Clamp(level, 1, 17);
+        var baseValue = table[clampedLevel];
+        var modifier = race switch
+        {
+            Race.Dwarf => (frt ? 15 : 0) + (hs ? 10 : 0) + (hn ? -10 : 0) + (cw ? -5 : 0),
+            Race.Elf => (pp ? 5 : 0) + (ol ? -5 : 0) + (ms ? 5 : 0) + (hs ? 10 : 0),
+            Race.Gnome => (ol ? 5 : 0) + (frt ? 10 : 0) + (ms ? 5 : 0) + (hs ? 5 : 0) + (hn ? 10 : 0) + (cw ? -15 : 0),
+            Race.HalfElf => (pp ? 10 : 0) + (frt ? 5 : 0) + (ms ? 10 : 0) + (hs ? 5 : 0),
+            Race.Halfling => (pp ? 5 : 0) + (ol ? 5 : 0) + (frt ? 5 : 0) + (hs ? 15 : 0) + (hn ? 5 : 0) + (cw ? -15 : 0) + (rl ? -5 : 0),
+            Race.HalfOrc => (pp ? -5 : 0) + (ol ? 5 : 0) + (frt ? 5 : 0) + (hn ? 5 : 0) + (rl ? -10 : 0),
+            _ => 0
+        };
+
+        return Math.Max(0, baseValue + modifier);
     }
 
     public static int StrengthTHModifier(int strength, int? exceptional = null)

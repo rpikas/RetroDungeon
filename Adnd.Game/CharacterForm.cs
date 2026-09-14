@@ -119,11 +119,12 @@ namespace Adnd.Game.Windows
             }
             else
             {
-                DrawInBox(g, AbilitiesTables.DexterityPickingPockets(_character.Abilities.Dexterity).ToString() + "%", new Rectangle(660, 537, 95, 66));
-                DrawInBox(g, AbilitiesTables.DexterityOpenLocks(_character.Abilities.Dexterity).ToString() + "%", new Rectangle(660, 578, 95, 66));
-                DrawInBox(g, AbilitiesTables.DexterityLocateRemoveTraps(_character.Abilities.Dexterity).ToString() + "%", new Rectangle(560, 618, 95, 66));
-                DrawInBox(g, AbilitiesTables.DexterityMoveSilently(_character.Abilities.Dexterity).ToString() + "%", new Rectangle(660, 618, 95, 66));
-                DrawInBox(g, AbilitiesTables.DexterityHideInShadows(_character.Abilities.Dexterity).ToString() + "%", new Rectangle(800, 618, 95, 66));
+                var thiefLevel = Math.Max(1, _character.GetClassLevel(CharacterClass.Thief));
+                DrawInBox(g, AbilitiesTables.ThiefPickPockets(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(660, 537, 95, 66));
+                DrawInBox(g, AbilitiesTables.ThiefOpenLocks(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(660, 578, 95, 66));
+                DrawInBox(g, AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(560, 618, 95, 66));
+                DrawInBox(g, AbilitiesTables.ThiefMoveSilently(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(660, 618, 95, 66));
+                DrawInBox(g, AbilitiesTables.ThiefHideInShadows(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(800, 618, 95, 66));
             }
 
             //CHARISMA MODIFIER
