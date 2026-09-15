@@ -1722,8 +1722,35 @@ public sealed class EncounterForm : Form
     private void ShowEncounterInfoWindow()
     {
         var text = BuildEncounterInfoText();
-        var mmMonsterName = ResolveEncounterMonsterNameForMmArt();
-        var mmImagePath = TryFindMonsterMmImagePath(mmMonsterName);
+        var mmEntries = new List<(string ButtonText, string MonsterName, string ImagePath)>();
+
+        if (_session != null)
+        {
+            var groups = _session.Monsters
+                .GroupBy(m => m.GroupId)
+                .OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            foreach (var group in groups)
+            {
+                var templateName = group.FirstOrDefault()?.Template?.Name;
+                if (string.IsNullOrWhiteSpace(templateName))
+                    continue;
+
+                var imagePath = TryFindMonsterMmImagePath(templateName);
+                if (string.IsNullOrWhiteSpace(imagePath))
+                    continue;
+
+                mmEntries.Add(($"{templateName} info", templateName, imagePath));
+            }
+        }
+        else
+        {
+            var mmMonsterName = ResolveEncounterMonsterNameForMmArt();
+            var mmImagePath = TryFindMonsterMmImagePath(mmMonsterName);
+            if (!string.IsNullOrWhiteSpace(mmImagePath))
+                mmEntries.Add(($"{mmMonsterName} info", mmMonsterName, mmImagePath));
+        }
 
         using var form = new Form
         {
@@ -1753,48 +1780,58 @@ public sealed class EncounterForm : Form
             DialogResult = DialogResult.OK
         };
 
-        var showMmPicture = new Button
+        var buttonsPanel = new FlowLayoutPanel
         {
-            Text = "Show MM Pic",
-            Dock = DockStyle.Right,
-            Width = 110,
-            Visible = !string.IsNullOrWhiteSpace(mmImagePath)
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = true,
+            AutoScroll = true
         };
 
-        showMmPicture.Click += (_, _) =>
+        foreach (var entry in mmEntries)
         {
-            if (string.IsNullOrWhiteSpace(mmImagePath))
-                return;
-
-            using var image = TryLoadImageFromPath(mmImagePath);
-            if (image == null)
+            var showMmPicture = new Button
             {
-                ViewerMessage.Say(form, "Monster Image", "Could not load MM picture.", null);
-                return;
-            }
-
-            using var imageForm = new Form
-            {
-                Text = $"MM Picture - {mmMonsterName}",
-                StartPosition = FormStartPosition.CenterParent,
-                FormBorderStyle = FormBorderStyle.Sizable,
-                ClientSize = new Size(820, 620),
-                MinimizeBox = false,
-                MaximizeBox = true
+                Text = entry.ButtonText,
+                Width = 170,
+                Height = 28,
+                Margin = new Padding(0, 0, 8, 8)
             };
 
-            var picture = new PictureBox
+            showMmPicture.Click += (_, _) =>
             {
-                Dock = DockStyle.Fill,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Image = (Image)image.Clone(),
-                BackColor = Color.Black
+                using var image = TryLoadImageFromPath(entry.ImagePath);
+                if (image == null)
+                {
+                    ViewerMessage.Say(form, "Monster Image", "Could not load MM picture.", null);
+                    return;
+                }
+
+                using var imageForm = new Form
+                {
+                    Text = $"MM Picture - {entry.MonsterName}",
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.Sizable,
+                    ClientSize = new Size(820, 620),
+                    MinimizeBox = false,
+                    MaximizeBox = true
+                };
+
+                var picture = new PictureBox
+                {
+                    Dock = DockStyle.Fill,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Image = (Image)image.Clone(),
+                    BackColor = Color.Black
+                };
+
+                imageForm.Controls.Add(picture);
+                imageForm.ShowDialog(form);
+                picture.Image?.Dispose();
             };
 
-            imageForm.Controls.Add(picture);
-            imageForm.ShowDialog(form);
-            picture.Image?.Dispose();
-        };
+            buttonsPanel.Controls.Add(showMmPicture);
+        }
 
         var panel = new Panel
         {
@@ -1802,8 +1839,8 @@ public sealed class EncounterForm : Form
             Height = 44,
             Padding = new Padding(8)
         };
+        panel.Controls.Add(buttonsPanel);
         panel.Controls.Add(close);
-        panel.Controls.Add(showMmPicture);
 
         form.Controls.Add(details);
         form.Controls.Add(panel);

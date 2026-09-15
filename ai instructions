@@ -1151,3 +1151,7 @@ _____
 in the Publish method I want this part to be clickable $"{source}, {page} if a file named $"{source}{page}.png could be found in 
 Adnd.Game\Assets\Rules for example is the file DMG174.png there 70,7
 The links where clickable but I expected the contetn of the DMG174.png to be shown to the user when link was clicked 70,9
+
+In the encounter info when several enouter groups are shown also add one Show MM Pic button per encounter and name the buttons the same 
+thing as the encounters with suffix info 73,7
+______
