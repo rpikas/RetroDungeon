@@ -347,7 +347,7 @@ public sealed class CombatCoordinator
     {
         if (session.SurpriseResolved)
             return;
-
+      
         var partyRoll = _dice.Roll(6);
         var partyThreshold = 2;
         var partySurprisesMonsters = partyRoll <= partyThreshold;
@@ -360,7 +360,37 @@ public sealed class CombatCoordinator
             ? specialThreshold!.Value
             : Math.Max(2, specialThreshold ?? 2);
         var monstersSurpriseParty = monstersRoll <= monsterThreshold;
+        /*
+      if (partySurprisesMonsters && monstersSurpriseParty)
+      {
+          partySurprisesMonsters = false;
+          monstersSurpriseParty = false;
+      }
+      */
 
+        // --- NEW RULE: If one rolls 1 and the other rolls 2, the one with 2 wins surprise ---
+        if (!monstersRollUsesD100) // only applies to d6 logic
+        {
+            bool partyLow = partyRoll == 1;
+            bool monsterLow = monstersRoll == 1;
+            bool partyMid = partyRoll == 2;
+            bool monsterMid = monstersRoll == 2;
+
+            if (partyLow && monsterMid)
+            {
+                // Monster wins surprise
+                partySurprisesMonsters = false;
+                monstersSurpriseParty = true;
+            }
+            else if (monsterLow && partyMid)
+            {
+                // Party wins surprise
+                partySurprisesMonsters = true;
+                monstersSurpriseParty = false;
+            }
+        }
+
+        // Original rule: if both surprise each other, cancel surprise
         if (partySurprisesMonsters && monstersSurpriseParty)
         {
             partySurprisesMonsters = false;
