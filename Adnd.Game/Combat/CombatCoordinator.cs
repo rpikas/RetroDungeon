@@ -373,9 +373,9 @@ public sealed class CombatCoordinator
 
         var monsterRollDice = monstersRollUsesD100 ? "1d100" : "1d6";
         RuleApplicationInfo.Publish(
-            "AD&D",
-            "Surprise",
-            "Encounter start",
+            "DMG",
+            "62",
+            "Party start",
             "Before round 1, party rolls 1d6. Monster side rolls 1d6, except special monsters may improve surprise chance. If both surprise each other, treat as no surprise.",
             "1",
             "6",
@@ -383,8 +383,8 @@ public sealed class CombatCoordinator
             partySurprisesMonsters ? "Party surprises monsters." : "Party does not surprise monsters.");
 
         RuleApplicationInfo.Publish(
-            "AD&D",
-            "Surprise",
+            "DMG",
+            "62",
             "Encounter start",
             $"Monster side roll uses {monsterRollDice}. Threshold is {monsterThreshold}.",
             "1",
