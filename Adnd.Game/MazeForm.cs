@@ -2649,6 +2649,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     int numberOfSides = diceFormula?.DiceSides ?? 1;
                     int extra = diceFormula?.Extra ?? (countMin - 1);
 
+                    string numberOfSidesText = numberOfSides.ToString();
+                    if (extra > 0)
+                        numberOfSidesText += "+" + extra.ToString();
+
                     if (creature != "Human")
                     {
                         //    public static void Publish(string source, string page, string context, string rule, string numberOfDices, 
@@ -2660,7 +2664,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                         $"Number of '{creature}s'",//context
                         "Use CountMin-CountMax from MonsterLevels entry.",//rule
                         NumberOfDices.ToString(),//numberOfDices
-                        numberOfSides.ToString()+"+"+extra.ToString(),//sidesOnDices+
+                        numberOfSidesText,//sidesOnDices
                         countOverride.Value.ToString(),//resultOfRoll
                         countOverride.Value.ToString()+" "+ creature+"s"//resultOfRoll
                                                                     //  ""//consequenceOfRoll

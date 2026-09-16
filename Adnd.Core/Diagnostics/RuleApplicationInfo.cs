@@ -42,11 +42,17 @@ public static class RuleApplicationInfo
         var sourceToken = (source ?? string.Empty).Trim().Replace(" ", string.Empty);
         var pageToken = (page ?? string.Empty).Trim().Replace(" ", string.Empty);
         var fileName = $"{sourceToken}{pageToken}.png";
-        if (string.IsNullOrWhiteSpace(sourceToken) || string.IsNullOrWhiteSpace(pageToken))
+        wwif (string.IsNullOrWhiteSpace(sourceToken) || string.IsNullOrWhiteSpace(pageToken))
             return false;
 
         var candidates = new[]
         {
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Monsters","MM1", fileName),
+            Path.Combine(AppContext.BaseDirectory,  "..", "..", "..", "Assets", "Monsters","MM1", fileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Monsters","MM1", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Monsters","MM1", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets",  "Monsters","MM1", fileName),
+
             Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", fileName),
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", fileName),
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", fileName),

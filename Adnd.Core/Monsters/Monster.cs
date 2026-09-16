@@ -23,7 +23,7 @@ public class Monster
     public int NumberOfAttacks { get; set; }
     public string MagicResistance { get; set; } = string.Empty;//TBD string should be an enum
     public int? MagicResistancePercent { get; set; }
-    public int InLairPercent { get; set; } = 50;
+    public int InLairPercent { get; set; } = 0;
     public MonsterSize Size { get; set; } = MonsterSize.Medium;
     public int HitPoints { get; set; }
     public int DungeonLevel { get; set; } // Dungeon level where this monster appears

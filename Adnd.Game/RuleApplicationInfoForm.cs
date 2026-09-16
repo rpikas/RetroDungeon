@@ -59,7 +59,8 @@ public sealed class RuleApplicationInfoForm : Form
                 StartPosition = FormStartPosition.CenterParent,
                 Size = new Size(900, 700),
                 BackColor = Color.Black,
-                ForeColor = GameRulesProvider.Current.DefaultColor
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                TopMost = true
             };
 
             var picture = new PictureBox

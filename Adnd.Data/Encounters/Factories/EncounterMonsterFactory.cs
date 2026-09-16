@@ -112,9 +112,9 @@ public sealed class EncounterMonsterFactory
         var isInLair = inLairRoll <= inLairChance;
 
         RuleApplicationInfo.Publish(
-            "AD&D",
-            "Monster Lair %",
-            $"Determine if {lairTemplate.Name} group ({groupId}) is in lair",
+            lairTemplate.Name,
+            "MM",
+            $"Monster Lair % Determine if {lairTemplate.Name} group ({groupId}) is in lair",
             "Roll 1d100 once per encounter group. If result is less than or equal to %InLair, the group is in lair.",
             "1",
             "100",
