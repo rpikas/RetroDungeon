@@ -191,6 +191,47 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
+    {
+      "Name": "Gas Spore",
+      "Type": "Fungus",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 9,
+      "Movement": 3,
+      "HitDice": 0,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 1,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "Nil",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "Special"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Infestation",
+          "Description": "Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die and spawn 2-8 gas spores."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Explosion",
+          "Description": "If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Large",
+      "BaseXPValue": 33,
+      "XPValuePerHitPoint": 0,
+      "Source": "AD&D Monster Manual",
+      "Other": "https://1eonline.info/1mm/gasspore.htm"
+    },
 
     {
       "Name": "Gnoll",

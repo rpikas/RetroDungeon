@@ -3,6 +3,7 @@ using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
+using Adnd.Core.Dices;
 using Adnd.Core.Monsters;
 using Adnd.Data.Characters;
 using Adnd.Data.Encounters;
@@ -17,6 +18,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
+using static Adnd.Core.Dices.DiceFormulas;
 
 namespace Adnd.Game;
 
@@ -2606,21 +2608,22 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     continue;
 
                 var creature = creatureEl.GetString();
+                RuleApplicationInfo.Publish(
+    "DMG",
+    "175-177",
+    //                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
+    $"Rolling monster level {monsterLevel})",
+    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+    "1",
+    "100",
+    roll.ToString(), creature);
                 var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
                 int? countOverride = null;
 
-                RuleApplicationInfo.Publish(
-                    "DMG",
-                    "175-177",
-//                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
-                    $"Encounter creature (monster level {monsterLevel})",
-                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-                    "1",
-                    "100",
-                    roll.ToString(),
-                    string.IsNullOrWhiteSpace(resolved)
-                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
-                        : $"Matched '{creature}', mapped to '{resolved}'.");
+
+//                    string.IsNullOrWhiteSpace(resolved)
+  //                      ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
+    //                    : $"Matched '{creature}', mapped to '{resolved}'.");
 
 
 
@@ -2638,17 +2641,36 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     countMax = Math.Max(1, countMax);
                     countOverride = _random.Next(countMin, countMax + 1);
 
-                    RuleApplicationInfo.Publish(
-                        "DMG",
-                        "175-177",
-         //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
-                        $"Number of '{creature}s'",
-                        "Use CountMin-CountMax from MonsterLevels entry.",
-                        "1",
-                        (countMax - countMin + 1).ToString(),
-                        "+"+(countMin-1).ToString(),
-                        (countOverride.Value - countMin + 1).ToString()
+                    //        public record DiceFormula(int DiceCount, int DiceSides, int Extra);
+                    //        public static DiceFormula GetDiceFormula(int min, int max)
+
+                    DiceFormulas.DiceFormula? diceFormula = DiceFormulas.GetDiceFormula(countMin, countMax);
+                    int NumberOfDices = diceFormula?.DiceCount ?? countOverride.Value;
+                    int numberOfSides = diceFormula?.DiceSides ?? 1;
+                    int extra = diceFormula?.Extra ?? (countMin - 1);
+
+                    if (creature != "Human")
+                    {
+                        //    public static void Publish(string source, string page, string context, string rule, string numberOfDices, 
+                        //string sidesOnDices, string resultOfRoll, string consequenceOfRoll)
+                        RuleApplicationInfo.Publish(
+                        "DMG",//source
+                        "175-177",//page
+                        //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
+                        $"Number of '{creature}s'",//context
+                        "Use CountMin-CountMax from MonsterLevels entry.",//rule
+                        NumberOfDices.ToString(),//numberOfDices
+                        numberOfSides.ToString()+"+"+extra.ToString(),//sidesOnDices+
+                        countOverride.Value.ToString(),//resultOfRoll
+                        countOverride.Value.ToString()+" "+ creature+"s"//resultOfRoll
+                                                                    //  ""//consequenceOfRoll
+
+                       //                   "1",
+                       // (countMax - countMin + 1).ToString(),
+                       // "+" + (countMin - 1).ToString(),
+                       // (countOverride.Value - countMin + 1).ToString()
                        );
+                    }
              //      $"Count {countOverride.Value} (range {countMin}-{countMax}).");
     }
                 /*
