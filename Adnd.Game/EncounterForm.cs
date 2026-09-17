@@ -1758,8 +1758,18 @@ public sealed class EncounterForm : Form
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.Sizable,
             ClientSize = new Size(820, 620),
+            KeyPreview = true,
             MinimizeBox = false,
             MaximizeBox = true
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            {
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            }
         };
 
         var details = new TextBox

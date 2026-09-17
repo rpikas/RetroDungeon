@@ -1157,3 +1157,5 @@ thing as the encounters with suffix info 73,7
 ______
 kan du uppdatera koden så att ifall en slår 1 och den andra 2 så överraskar den som slår 2. 73,7 eftersom copilot i edge gjorde det.
 ___
+?74,6
+i want the monster info dialog to be closed when Esc or enter is pressed 75,2

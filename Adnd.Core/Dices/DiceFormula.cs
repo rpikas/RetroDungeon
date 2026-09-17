@@ -14,7 +14,7 @@ namespace Adnd.Core.Dices
             for (int dice = 1; dice <= 20; dice++)
             {
                 // Try common dice sizes
-                int[] sides = { 2, 3, 4, 6, 8, 10, 12, 20 };
+                int[] sides = {0,1, 2, 3, 4, 6, 8, 10, 12, 20 };
 
                 foreach (int side in sides)
                 {
