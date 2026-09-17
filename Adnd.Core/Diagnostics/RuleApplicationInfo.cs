@@ -42,7 +42,7 @@ public static class RuleApplicationInfo
         var sourceToken = (source ?? string.Empty).Trim().Replace(" ", string.Empty);
         var pageToken = (page ?? string.Empty).Trim().Replace(" ", string.Empty);
         var fileName = $"{sourceToken}{pageToken}.png";
-        wwif (string.IsNullOrWhiteSpace(sourceToken) || string.IsNullOrWhiteSpace(pageToken))
+        if (string.IsNullOrWhiteSpace(sourceToken) || string.IsNullOrWhiteSpace(pageToken))
             return false;
 
         var candidates = new[]

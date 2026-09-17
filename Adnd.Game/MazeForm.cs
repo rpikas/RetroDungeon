@@ -2608,10 +2608,23 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     continue;
 
                 var creature = creatureEl.GetString();
+                string page = monsterLevel switch
+                {
+                    1 => "175",
+                    2 => "177_Level2",
+                    3 => "177_Level3",
+                    4 => "177_Level4",
+                    5 => "177_Level5",
+                    6 => "178_Level6",
+                    7 => "178_Level7",
+                    8 => "178_Level8",
+                    9 => "179_Level9",
+                    10 => "179_Level10",
+                    _ => "175-177"
+                };
                 RuleApplicationInfo.Publish(
     "DMG",
-    "175-177",
-    //                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
+    page,
     $"Rolling monster level {monsterLevel})",
     $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
     "1",
