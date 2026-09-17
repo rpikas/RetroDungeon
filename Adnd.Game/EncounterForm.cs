@@ -1823,8 +1823,18 @@ public sealed class EncounterForm : Form
                     StartPosition = FormStartPosition.CenterParent,
                     FormBorderStyle = FormBorderStyle.Sizable,
                     ClientSize = new Size(820, 620),
+                    KeyPreview = true,
                     MinimizeBox = false,
                     MaximizeBox = true
+                };
+
+                imageForm.KeyDown += (_, e) =>
+                {
+                    if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+                    {
+                        imageForm.DialogResult = DialogResult.OK;
+                        imageForm.Close();
+                    }
                 };
 
                 var picture = new PictureBox

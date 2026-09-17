@@ -1159,3 +1159,5 @@ kan du uppdatera koden så att ifall en slår 1 och den andra 2 så överraskar 
 ___
 ?74,6
 i want the monster info dialog to be closed when Esc or enter is pressed 75,2
+_________
+I also want the info dialog that opens from the Encounter Info dialog to close if Esc or Enter is pressed. 75,4
