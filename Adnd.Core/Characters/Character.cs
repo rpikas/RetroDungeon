@@ -37,6 +37,7 @@ public class Character
     public int ParalyzedRoundsRemaining { get; set; }
     public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
     public int Level { get; set; } = 1;
+    public int GoodEncounterAttackWarningCount { get; set; }
     public bool LayOnHandsUsedToday { get; set; }
     public bool MonkBodyHealUsedToday { get; set; }
     public int TemporaryStrengthBonus { get; set; }
@@ -133,9 +134,37 @@ public class Character
         return entry?.Experience ?? Experience;
     }
 
-    public bool IsPaladin() => Classes.Contains(CharacterClass.Paladin);
+    public bool HasPaladinClass() => Classes.Contains(CharacterClass.Paladin);
 
-    public bool IsMonk() => Classes.Contains(CharacterClass.Monk);
+    public bool IsFallenPaladin() => HasPaladinClass() && Alignment != Alignment.LawfulGood;
+
+    public bool IsPaladin() => HasPaladinClass() && !IsFallenPaladin();
+
+    public bool HasMonkClass() => Classes.Contains(CharacterClass.Monk);
+
+    public static bool IsLawfulAlignment(Alignment alignment)
+        => alignment is Alignment.LawfulGood or Alignment.LawfulNeutral or Alignment.LawfulEvil;
+
+    public bool IsMonk() => HasMonkClass() && IsLawfulAlignment(Alignment);
+
+    public bool IsGoodAlignment()
+        => Alignment is Alignment.LawfulGood or Alignment.NeutralGood or Alignment.ChaoticGood;
+
+    public string GetClassDisplayName(CharacterClass cls)
+    {
+        if (cls == CharacterClass.Paladin && IsFallenPaladin())
+            return "Fallen Paladin";
+
+        return cls.ToDisplayString();
+    }
+
+    public string GetClassesDisplayText(string separator = "/")
+    {
+        if (Classes == null || Classes.Count == 0)
+            return GetClassDisplayName(Class);
+
+        return string.Join(separator, Classes.Select(GetClassDisplayName));
+    }
 
     public bool IsMonkImmuneToDiseaseSlowHaste() => IsMonk() && GetMonkLevel() >= 5;
 
@@ -529,7 +558,7 @@ public class Character
         var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
         var effectiveLevel = GetClassLevel(primaryClass);
 
-        var baseMove = primaryClass == CharacterClass.Monk
+        var baseMove = primaryClass == CharacterClass.Monk && IsMonk()
             ? GetMonkMove(effectiveLevel)
             : 12;
 
@@ -545,10 +574,24 @@ public class Character
         if (primaryClass != CharacterClass.Monk)
             return;
 
+        if (!IsMonk())
+        {
+            var nonMonkDexterityAcModifier = AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+            ArmorClass = 10 + nonMonkDexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);
+
+            if (!HasEquippedWeapon())
+            {
+                NumberOfAttacks = 1f;
+                Damage = "1d2";
+            }
+
+            return;
+        }
+
         var effectiveLevel = GetClassLevel(CharacterClass.Monk);
 
-        var dexterityAcModifier = IsWearingBodyArmor() ? 0 : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
-        ArmorClass = GetMonkEffectiveArmorClass(effectiveLevel) + dexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);
+        var monkDexterityAcModifier = IsWearingBodyArmor() ? 0 : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+        ArmorClass = GetMonkEffectiveArmorClass(effectiveLevel) + monkDexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);
 
         if (!HasEquippedWeapon())
         {

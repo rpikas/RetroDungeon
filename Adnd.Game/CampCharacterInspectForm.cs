@@ -526,8 +526,9 @@ public sealed class CampCharacterInspectForm : Form
 
     private static string BuildOldStyleInspectView(Character c)
     {
-        var classText = c.Classes.Count > 0 ? string.Join("/", c.Classes.Select(cls => cls.ToDisplayString().ToUpperInvariant())) : c.Class.ToDisplayString().ToUpperInvariant();
+        var classText = c.GetClassesDisplayText("/").ToUpperInvariant();
         var raceText = c.Race.ToDisplayString().ToUpperInvariant();
+        var alignmentText = c.Alignment.ToAbbreviation();
         var statusText = c.Status == CharacterStatus.None ? "OK" : c.Status.ToString().ToUpperInvariant();
         var levelText = c.Classes.Count > 1
             ? string.Join("/", c.Classes.Select(c.GetClassLevel))
@@ -538,7 +539,7 @@ public sealed class CampCharacterInspectForm : Form
         static string RowWithRightColumn(string left, string middle, string rightLabel, string rightValue)
             => $"{left,-20}{middle,-26}{rightLabel,-5}{rightValue,4}";
 
-        sb.AppendLine($"{c.Name.ToUpperInvariant(),-8} L {levelText,-3} {classText,-14} {raceText}");
+        sb.AppendLine($"{c.Name.ToUpperInvariant(),-8} L {levelText,-3} {classText,-14} {raceText} {alignmentText}");
         sb.AppendLine();
 
         var strDisplay = c.Abilities.Strength == 18 && c.ExceptionalStrengthPercentile.HasValue

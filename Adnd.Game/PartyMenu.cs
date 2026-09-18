@@ -112,19 +112,20 @@ public class PartyMenu
             else
             {
                 // Column headers
-                Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
-                Console.WriteLine(new string('-', 87));
+                Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Align",-5} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
+                Console.WriteLine(new string('-', 93));
 
                 for (int i = 0; i < activeMembers.Count; i++)
                 {
                     var name = activeMembers[i];
                     var c = rosterDict[name];
-                    var cls = c.Classes != null && c.Classes.Count > 0 ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString())) : c.Class.ToDisplayString();
+                    var cls = c.GetClassesDisplayText("/");
                     var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                     var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
                     var levelDisplay = GetLevelDisplay(c);
+                    var align = c.Alignment.ToAbbreviation();
 
-                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
                 }
                 Console.WriteLine();
             }
@@ -177,20 +178,19 @@ public class PartyMenu
 
         Console.Clear();
         Console.WriteLine("=== INSPECT MEMBER ===\n");
-        Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
-        Console.WriteLine(new string('-', 87));
+        Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Align",-5} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
+        Console.WriteLine(new string('-', 93));
 
         for (int i = 0; i < activeMembers.Count; i++)
         {
             var c = rosterDict[activeMembers[i]];
-            var cls = c.Classes != null && c.Classes.Count > 0
-                ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString()))
-                : c.Class.ToDisplayString();
+            var cls = c.GetClassesDisplayText("/");
             var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
             var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
             var levelDisplay = GetLevelDisplay(c);
+            var align = c.Alignment.ToAbbreviation();
 
-            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }
 
         Console.Write("\nChoose #: ");
@@ -1060,22 +1060,21 @@ public class PartyMenu
         Console.Clear();
         Console.WriteLine("=== ADD MEMBER ===");
         Console.WriteLine();
-        Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
-        Console.WriteLine(new string('-', 87));
+        Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Align",-5} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
+        Console.WriteLine(new string('-', 93));
 
         for (int i = 0; i < roster.Count; i++)
         {
             var c = roster[i];
-            var cls = c.Classes != null && c.Classes.Count > 0
-                ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString()))
-                : c.Class.ToDisplayString();
+            var cls = c.GetClassesDisplayText("/");
             var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
             var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
             if (party.Members.Any(m => m == c.Name))
                 statusInfo = statusInfo == "-" ? "Already in party" : $"{statusInfo}, In party";
             var levelDisplay = GetLevelDisplay(c);
+            var align = c.Alignment.ToAbbreviation();
 
-            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }
 
         Console.Write("\nChoose #: ");
@@ -1234,9 +1233,7 @@ public class PartyMenu
                     if (!rosterDict.TryGetValue(name, out var c))
                         continue;
 
-                    var cls = c.Classes != null && c.Classes.Count > 0
-                        ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString()))
-                        : c.Class.ToDisplayString();
+                    var cls = c.GetClassesDisplayText("/");
                     var hp = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                     var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
 
@@ -1260,9 +1257,7 @@ public class PartyMenu
                         if (!rosterDict.TryGetValue(name, out var c))
                             continue;
 
-                        var cls = c.Classes != null && c.Classes.Count > 0
-                            ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString()))
-                            : c.Class.ToDisplayString();
+                        var cls = c.GetClassesDisplayText("/");
                         var hp = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                         var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
 

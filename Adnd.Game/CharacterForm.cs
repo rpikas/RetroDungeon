@@ -77,7 +77,7 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.Race.ToString(), new Rectangle(340, 80, 98, 40));
             // DrawInBox(g, _character.Class.ToString(), new Rectangle(500, 80, 86, 40));
 //            DrawInBox(g, _character.Class.GetClassName().ToString(), new Rectangle(500, 80, 86, 40), _handFontSmall12);
-            DrawInBox(g, _character.Class.ToDisplayString().ToString(), new Rectangle(500, 80, 86, 40), false, StringAlignment.Center, _handFontSmall12);
+            DrawInBox(g, _character.GetClassDisplayName(_character.Class), new Rectangle(500, 80, 86, 40), false, StringAlignment.Center, _handFontSmall12);
             //c.Classes.Select(cc => cc.ToDisplayString())
             DrawInBox(g, _character.Level.ToString(), new Rectangle(640, 80, 46, 40));  
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
@@ -164,7 +164,7 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.NumberOfAttacks.ToString(), new Rectangle(17, 655, 155, 66));
 
             //Weight allowance
-            DrawInBox(g, _character.CurrentCarryWeight.ToString() + "/" + _character.MaxCarryWeight.ToString(), new Rectangle(7, 765, 155, 66), true, StringAlignment.Center, _handFontSmall12);
+            DrawInBox(g, _character.CurrentCarryWeight.ToString() + "/" + _character.MaxCarryWeight.ToString(), new Rectangle(7, 760, 155, 66), true, StringAlignment.Center, _handFontSmall12);
 
             int xpBonus = XpBonusCalculator.GetXpModifier(_character.Class, _character.Abilities);
             //XP

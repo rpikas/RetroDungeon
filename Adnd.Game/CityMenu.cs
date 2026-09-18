@@ -33,9 +33,7 @@ public class CityMenu
                 for (int i = 0; i < all.Count; i++)
                 {
                     var c = all[i];
-                    var cls = c.Classes != null && c.Classes.Count > 0
-                        ? string.Join("/", c.Classes.Select(cc => cc.ToDisplayString()))
-                        : c.Class.ToDisplayString();
+                    var cls = c.GetClassesDisplayText("/");
                     var alignment = c.Alignment.ToDisplayString();
                     var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                     var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
@@ -78,25 +76,43 @@ public class CityMenu
         }
 
         // Roll abilities before race selection so player can choose race with knowledge
-        // of the raw rolled stats.
-        var abilities = _creator.RollAbilities();
-        Console.WriteLine("\nRolled Abilities (raw):");
-        Console.WriteLine(abilities);
-
-        Console.WriteLine("Choose Race:");
+        // of the raw rolled stats. Allow rerolling here.
         var raceValues = Enum.GetValues<Race>();
         int raceCount = raceValues.Length;
-        for (int i = 0; i < raceCount; i++)
+        AbilityScores abilities;
+        Race race;
+
+        while (true)
         {
-            var r = (Race)raceValues.GetValue(i)!;
-            var label = (char)('A' + i);
-            Console.WriteLine($"{label}) {r.ToDisplayString()}");
+            abilities = _creator.RollAbilities();
+            Console.WriteLine("\nRolled Abilities (raw):");
+            Console.WriteLine(abilities);
+
+            Console.WriteLine("Choose Race:");
+            for (int i = 0; i < raceCount; i++)
+            {
+                var r = (Race)raceValues.GetValue(i)!;
+                var label = (char)('A' + i);
+                Console.WriteLine($"{label}) {r.ToDisplayString()}");
+            }
+
+            var rerollLabel = (char)('A' + raceCount);
+            Console.WriteLine($"{rerollLabel}) Reroll abilities");
+            Console.Write("Race: ");
+            var raceIdx = InputHelper.ReadLetterIndex(raceCount + 1);
+
+            if (raceIdx.HasValue && raceIdx.Value == raceCount)
+            {
+                Console.WriteLine("Rerolling abilities...\n");
+                continue;
+            }
+
+            race = Race.Human;
+            if (raceIdx.HasValue && raceIdx.Value < raceCount)
+                race = (Race)raceValues.GetValue(raceIdx.Value)!;
+
+            break;
         }
-        Console.Write("Race: ");
-        var raceIdx = InputHelper.ReadLetterIndex(raceCount);
-        Race race = Race.Human;
-        if (raceIdx.HasValue)
-            race = (Race)raceValues.GetValue(raceIdx.Value)!;
 
         // Confirm race selection and apply racial modifiers, then show modified stats
         Console.WriteLine($"Selected race: {race.ToDisplayString()}");

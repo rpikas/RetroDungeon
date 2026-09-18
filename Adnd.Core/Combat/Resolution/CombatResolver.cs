@@ -335,6 +335,22 @@ public sealed class CombatResolver
             var isFeebleminded = monster.HasStatus(MonsterStatus.Feebleminded);
             var isSilenced = monster.HasStatus(MonsterStatus.Silenced);
 
+            var monsterBarkskinRounds = session.GetMonsterBarkskinRounds(monster);
+            if (monsterBarkskinRounds > 0)
+            {
+                var remaining = session.TickMonsterBarkskin(monster);
+                if (remaining <= 0)
+                {
+                    var bonus = session.GetMonsterBarkskinBonus(monster);
+                    if (bonus > 0)
+                    {
+                        monster.AdjustArmorClass(bonus);
+                        session.ClearMonsterBarkskin(monster);
+                        events.Add(new CombatEvent($"{monster.DisplayName}'s Barkskin fades (+{bonus} AC removed)."));
+                    }
+                }
+            }
+
             if (isSilenced)
             {
                 var remainingSilence = monster.TickStatus(MonsterStatus.Silenced);
@@ -367,6 +383,7 @@ public sealed class CombatResolver
                     "Level 1 Priest spells",
                     "Level 1 Cleric spells",
                     "Level 1 Druid spells",
+                    "Level 2 Druid spells",
                     "Level 3 Druid spells",
                     "Level 1 Illusionist spells"))
             {
@@ -414,6 +431,12 @@ public sealed class CombatResolver
                 && !isFeebleminded
                 && HasSpecialAbility(monster, "Level 3 Druid spells")
                 && ResolveLevel3DruidSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 2 Druid spells")
+                && ResolveLevel2DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
@@ -1340,6 +1363,54 @@ public sealed class CombatResolver
         var roundsAcid = _dice.Roll(3);
         session.SetPartyAcidArrow(target.Name, roundsAcid);
         events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+        return true;
+    }
+
+    private bool ResolveLevel2DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var damagedAllies = session.AliveMonsters
+            .Where(m => m.CurrentHitPoints < m.MaxHitPoints)
+            .ToList();
+
+        var canCastCureLightWounds = damagedAllies.Count > 0;
+        var spellRoll = _dice.Roll(100);
+        var castBarkskin = !canCastCureLightWounds || spellRoll <= 50;
+
+        if (castBarkskin)
+        {
+            var barkskinCandidates = session.AliveMonsters
+                .Where(m => session.GetMonsterBarkskinRounds(m) <= 0)
+                .ToList();
+
+            if (barkskinCandidates.Count == 0)
+                barkskinCandidates = session.AliveMonsters.ToList();
+
+            if (barkskinCandidates.Count == 0)
+                return false;
+
+            var target = barkskinCandidates[_dice.Roll(barkskinCandidates.Count) - 1];
+            var bonus = 1;
+            var rounds = 4 + Math.Max(1, monster.Template.HitDice);
+
+            var existingBonus = session.GetMonsterBarkskinBonus(target);
+            if (existingBonus > 0)
+            {
+                target.AdjustArmorClass(existingBonus);
+                session.ClearMonsterBarkskin(target);
+            }
+
+            target.AdjustArmorClass(-bonus);
+            session.SetMonsterBarkskin(target, bonus, rounds);
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Barkskin on {target.DisplayName}. AC improves by {bonus} for {rounds} round(s)."));
+            return true;
+        }
+
+        var cureTarget = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
+        var healRoll = _dice.Roll(8);
+        var before = cureTarget.CurrentHitPoints;
+        cureTarget.CurrentHitPoints = Math.Min(cureTarget.MaxHitPoints, cureTarget.CurrentHitPoints + healRoll);
+        var actual = cureTarget.CurrentHitPoints - before;
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Light Wounds on {cureTarget.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{cureTarget.CurrentHitPoints}."));
         return true;
     }
 

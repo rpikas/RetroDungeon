@@ -131,6 +131,9 @@ public sealed class SpellCastingService
 
     private static bool CanCast(Character caster, Spell spell)
     {
+        if (caster.IsFallenPaladin() && spell.SpellClass == SpellClass.Cleric)
+            return false;
+
         var state = caster.Spellcasting.FirstOrDefault(s => s.SpellClass == spell.SpellClass);
         if (state == null)
             return false;

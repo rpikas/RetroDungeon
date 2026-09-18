@@ -31,6 +31,8 @@ public sealed class CombatSession
     public Dictionary<string, int> MirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterMirrorImageRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterMirrorImageCounts { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterBarkskinRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterBarkskinBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AcidArrowPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -435,6 +437,54 @@ public sealed class CombatSession
 
         MonsterMirrorImageCounts[key] = count;
         return count;
+    }
+
+    public void SetMonsterBarkskin(MonsterInstance monster, int bonus, int rounds)
+    {
+        var key = MonsterKey(monster);
+        if (bonus <= 0 || rounds <= 0)
+        {
+            MonsterBarkskinBonuses.Remove(key);
+            MonsterBarkskinRounds.Remove(key);
+            return;
+        }
+
+        MonsterBarkskinBonuses[key] = bonus;
+        MonsterBarkskinRounds[key] = rounds;
+    }
+
+    public int GetMonsterBarkskinBonus(MonsterInstance monster)
+    {
+        return MonsterBarkskinBonuses.TryGetValue(MonsterKey(monster), out var bonus) ? Math.Max(0, bonus) : 0;
+    }
+
+    public int GetMonsterBarkskinRounds(MonsterInstance monster)
+    {
+        return MonsterBarkskinRounds.TryGetValue(MonsterKey(monster), out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickMonsterBarkskin(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        if (!MonsterBarkskinRounds.TryGetValue(key, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            MonsterBarkskinRounds.Remove(key);
+            return 0;
+        }
+
+        MonsterBarkskinRounds[key] = rounds;
+        return rounds;
+    }
+
+    public void ClearMonsterBarkskin(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        MonsterBarkskinBonuses.Remove(key);
+        MonsterBarkskinRounds.Remove(key);
     }
 
     public void SetPartyAcidArrow(string characterName, int rounds)

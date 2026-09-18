@@ -1,0 +1,12 @@
+{
+  "Id": "cure_light_wounds_druid",
+  "Name": "Cure Light Wounds",
+  "Class": "Druid",
+  "Level": 1,
+  "Description": "Heals minor wounds.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Restores a small amount of hit points to one ally."
+}

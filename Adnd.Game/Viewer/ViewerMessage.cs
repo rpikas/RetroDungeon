@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Adnd.Core.Config;
 
 namespace Adnd.Game.Viewer;
 
@@ -66,24 +67,59 @@ public static class ViewerMessage
     public static void Show(IWin32Window? owner, string title, string text)
     {
         var isCombatRewards = string.Equals(title?.Trim(), "Combat Rewards", StringComparison.OrdinalIgnoreCase);
+        var isCombatRound = string.Equals(title?.Trim(), "Combat Round", StringComparison.OrdinalIgnoreCase);
+        Control? initialFocusControl = null;
+
+        static bool IsCloseKey(Keys key) => key == Keys.Enter || key == Keys.Escape;
+
+        void HandleCloseKeys(object? _, KeyEventArgs e, Form target)
+        {
+            if (!IsCloseKey(e.KeyCode))
+                return;
+
+            e.SuppressKeyPress = true;
+            target.DialogResult = DialogResult.OK;
+            target.Close();
+        }
+
+        void AttachCloseKeys(Control control, Form target)
+        {
+            control.PreviewKeyDown += (_, e) =>
+            {
+                if (IsCloseKey(e.KeyCode))
+                    e.IsInputKey = true;
+            };
+            control.KeyDown += (_, e) => HandleCloseKeys(_, e, target);
+
+            foreach (Control child in control.Controls)
+                AttachCloseKeys(child, target);
+        }
 
         using var form = new Form
         {
             Text = title,
-            FormBorderStyle = isCombatRewards ? FormBorderStyle.Sizable : FormBorderStyle.FixedDialog,
+            FormBorderStyle = (isCombatRewards || isCombatRound) ? FormBorderStyle.Sizable : FormBorderStyle.None,
             StartPosition = owner is null ? FormStartPosition.CenterScreen : FormStartPosition.CenterParent,
             MinimizeBox = false,
-            MaximizeBox = isCombatRewards,
+            MaximizeBox = isCombatRewards || isCombatRound,
             ShowInTaskbar = false,
-            AutoSize = !isCombatRewards,
-            AutoSizeMode = isCombatRewards ? AutoSizeMode.GrowOnly : AutoSizeMode.GrowAndShrink,
-            Padding = new Padding(16),
+            AutoSize = false,
+            AutoSizeMode = AutoSizeMode.GrowOnly,
+            Padding = (isCombatRewards || isCombatRound) ? new Padding(16) : new Padding(0),
+            BackColor = (isCombatRewards || isCombatRound) ? SystemColors.Control : Color.Black,
+            ForeColor = (isCombatRewards || isCombatRound) ? SystemColors.ControlText : GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
         };
 
         if (isCombatRewards)
         {
             form.ClientSize = new Size(642, 560);
             form.MinimumSize = new Size(642, 360);
+        }
+        else if (isCombatRound)
+        {
+            form.ClientSize = new Size(920, 680);
+            form.MinimumSize = new Size(700, 420);
         }
 
         var message = string.IsNullOrWhiteSpace(text) ? " " : text.TrimEnd();
@@ -96,17 +132,18 @@ public static class ViewerMessage
             Anchor = AnchorStyles.Right,
         };
 
-        if (isCombatRewards)
+        if (isCombatRewards || isCombatRound)
         {
             var body = new TextBox
             {
                 Text = message,
                 ReadOnly = true,
                 Multiline = true,
-                WordWrap = true,
-                ScrollBars = ScrollBars.Vertical,
+                WordWrap = false,
+                ScrollBars = ScrollBars.Both,
                 BorderStyle = BorderStyle.FixedSingle,
                 Dock = DockStyle.Fill,
+                TextAlign = HorizontalAlignment.Left,
             };
 
             var buttonPanel = new FlowLayoutPanel
@@ -125,38 +162,103 @@ public static class ViewerMessage
         }
         else
         {
-            var body = new Label
+            var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            var lineCount = Math.Max(1, lines.Length);
+            var maxLen = lines.Length == 0 ? 0 : lines.Max(l => l.Length);
+            var width = Math.Clamp(360 + (maxLen * 4), 420, 760);
+            var height = Math.Clamp(130 + (lineCount * 22), 120, 520);
+            form.ClientSize = new Size(width, height);
+
+            var framePanel = new Panel
             {
-                Text = message,
-                AutoSize = true,
-                MaximumSize = new Size(560, 0),
-                Margin = new Padding(0, 0, 0, 12),
+                Left = 4,
+                Top = 4,
+                Width = form.ClientSize.Width - 8,
+                Height = form.ClientSize.Height - 8,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.Black,
+                TabStop = true,
+                TabIndex = 0
+            };
+            initialFocusControl = framePanel;
+
+            var titleLabel = new Label
+            {
+                Left = 0,
+                Top = 10,
+                Width = framePanel.ClientSize.Width,
+                Height = 36,
+                Text = (title ?? string.Empty).ToUpperInvariant(),
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Black,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 20f, FontStyle.Bold)
             };
 
-            var layout = new FlowLayoutPanel
+            var body = new Label
             {
-                FlowDirection = FlowDirection.TopDown,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                WrapContents = false,
+                Left = 18,
+                Top = 54,
+                Width = framePanel.ClientSize.Width - 36,
+                Height = Math.Max(26, framePanel.ClientSize.Height - 98),
+                AutoSize = false,
+                Text = message,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Black,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 14f, FontStyle.Bold)
             };
-            layout.Controls.Add(body);
-            layout.Controls.Add(ok);
-            form.Controls.Add(layout);
+
+            var hint = new Label
+            {
+                Left = 0,
+                Top = framePanel.ClientSize.Height - 30,
+                Width = framePanel.ClientSize.Width,
+                Height = 20,
+                AutoSize = false,
+                Text = "↵ CONTINUE   ESC CLOSE",
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Black,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 9f, FontStyle.Bold)
+            };
+
+            ok.Visible = false;
+            ok.Size = new Size(1, 1);
+            ok.Location = new Point(-100, -100);
+
+            framePanel.Controls.Add(titleLabel);
+            framePanel.Controls.Add(body);
+            framePanel.Controls.Add(hint);
+            form.Controls.Add(framePanel);
+            form.Controls.Add(ok);
         }
 
         form.AcceptButton = ok;
         form.CancelButton = ok;   // Escape means the same as OK: there is nothing here to cancel
 
+        AttachCloseKeys(form, form);
+
         // Registered only while this dialog is up, and unregistered by Dispose on the way out, so the
         // fight underneath goes back to receiving the table's commands the moment this closes.
         ViewerControlPump? pump = null;
-        form.Shown += (_, _) => pump = ViewerControlPump.Start(form, Vocabulary, key =>
+        form.Shown += (_, _) =>
         {
-            if (key != Keys.Enter) return;
-            form.DialogResult = DialogResult.OK;
-            form.Close();
-        });
+            if (!isCombatRewards)
+            {
+                form.Activate();
+                if (initialFocusControl != null)
+                    form.ActiveControl = initialFocusControl;
+                form.Focus();
+            }
+
+            pump = ViewerControlPump.Start(form, Vocabulary, key =>
+            {
+                if (key != Keys.Enter) return;
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            });
+        };
         form.FormClosed += (_, _) => pump?.Dispose();
 
         form.ShowDialog(owner);

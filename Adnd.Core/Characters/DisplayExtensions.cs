@@ -46,4 +46,21 @@ public static class DisplayExtensions
             _ => a.ToString()
         };
     }
+
+    public static string ToAbbreviation(this Alignment a)
+    {
+        return a switch
+        {
+            Alignment.LawfulGood => "LG",
+            Alignment.NeutralGood => "NG",
+            Alignment.ChaoticGood => "CG",
+            Alignment.LawfulNeutral => "LN",
+            Alignment.TrueNeutral => "TN",
+            Alignment.ChaoticNeutral => "CN",
+            Alignment.LawfulEvil => "LE",
+            Alignment.NeutralEvil => "NE",
+            Alignment.ChaoticEvil => "CE",
+            _ => a.ToString()
+        };
+    }
 }

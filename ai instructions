@@ -1165,3 +1165,54 @@ _________
 Added  MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel); and Close windows with ecs. without AI. 75,4
 _________
 Can you pleaes make the elvevator dialog to have the same look and feel as the dialog when entering the stairs.76,9
+_________
+Implement a special ability druid spells level2 that gives the encounter a 50% chanse to cast Barkskin and 50% chanse to cast Cure Light Wounds. 
+It only cast cure light wounds if the encounter is damaged. 77,6
+
+when finding treasure inlair, instead of dividing the value of each gem jewelry with the loot factor, divide the number of total gems jewelry found with the loot factor, and round up.
+
+when rolling for individual treasure and the chanse is 0 for a specific coin type, do not write that to the Adnd Rule a roll log.77,9
+Also when rolling for Chance roll for Treasure Type inlair, also do not write that to the AndndRule and dice info 78,0
+For example this should not be written to the log since the proability is 0. 78,1
+instead of writing all this for every monster "[14:08:31]  Goblin #7: individual  Treasure Type K  Amount  3d6 [4,4,3] => 11 SP found."
+
+Do not write to adnd rule and dice info when probabilty is 0, for example do not write this
+ Chance roll for Treasure Type Q Gem chance: probability 0 => fail
+[14:36:05]     Chance roll for Treasure Type Q Jewelry chance: probability 0 => fail
+[14:36:05]     Chance roll for Treasure Type Q Art chance: probability 0 => fail
+when for exampel  Q(x20) appears, instead of rolling 20 times and dividing the proabilty  or amount with the loot factor divide the x20 with the loot factor 78,5
+I meant multiply the x20 with the loot factor, not divide...78,6
+The number of gems should not be divided by loot factor, but mulitplied 78,7
+
+
+Can you please redesign the look and feel of the following dialogs so they looks more like the dialog when entering the stairs:
+when succeding to disarm a trap, 
+when failing to disarm a trap, 
+when opening a chest with no trap, 
+when opening a chest with a trap, 
+when inspecting a chest with no trap and when inspecting a chest with a trap.
+Camp: party order updated
+Combat result: The party escaped
+Also other minor popups with messages like charaters has taken poison damage or generated hp while walking ín the dungeon 79,1
+
+make sure the combat result and other dialogs can be closed with enter and esc.79,9
+make the combat round much bigger and enable scrolling if needed so all text can be seen. left align all text in that dialog.80,0
+
+ifall ett party utan karaktärer som är evil stöter på 1 eller flera grupper monster som alla är good så visa en dialog 
+"A group of friendly <encounter name> is aproahing" do you L)eave them alon or A)ttack? 80,7
+
+when showing party or inspecting a char show alignemnt, use abbvreviations LG, , NG, CG, LN,TN, CN, LE, NE, CE. 81,0
+i want to see alignment as a column in gilgamesh party management and as a column in the maze form when all party member 
+stats are shown 81,5
+if neutral monsters are envountered give it a 50% chanse that they do not attack and if they do not attack shown the dialog 
+asking the party if they want to attack 81,8
+
+if a good charater is in a party that attacks good encounters, they get a 1s warning. If they do it again they get a 2nd and last warning. 
+and if they do it a 3rd time, they are randomly change alignment to either chaotic neutral or neutral evil. 
+If a paladin change alignemnt away from lawful good they loose the ability to lay on hands and cast cleric spells. 
+they will be called fallen paladin instead fo paladin after that. If a monk change alignment away from lawful they 
+will loose all their monk specific attributes such as lower ac better hand to hand damage and resistent to poison, slow and haste. 84,1
+
+in create charater after rolling abilites ans selecting race add a new option R)eroll so if that is pressed (r) then reroll 
+abilites instead of selecting a race
+when adding a party member show alignment in a column. 84,6

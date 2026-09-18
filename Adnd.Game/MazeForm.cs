@@ -1621,10 +1621,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         // Headings
         graphics.DrawString("#", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
         graphics.DrawString("Name", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
-        graphics.DrawString("Class", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 190f, y));
-        graphics.DrawString("Lvl", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 360f, y));
-        graphics.DrawString("HP", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 420f, y));
-        graphics.DrawString("AC", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 520f, y));
+        graphics.DrawString("Align", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 170f, y));
+        graphics.DrawString("Class", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 230f, y));
+        graphics.DrawString("Lvl", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 390f, y));
+        graphics.DrawString("HP", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 450f, y));
+        graphics.DrawString("AC", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 530f, y));
         graphics.DrawString("Status", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 600f, y));
 
         y += 18f;
@@ -1646,23 +1647,26 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             {
                 graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
                 graphics.DrawString(memberName, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
-                graphics.DrawString("(missing)", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 190f, y));
+                graphics.DrawString("--", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 170f, y));
+                graphics.DrawString("(missing)", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 230f, y));
                 y += 18f;
                 continue;
             }
 
             var classes = c.Classes.Count > 0
-                ? string.Join("/", c.Classes.Select(m => m.ToDisplayString()))
-                : c.Class.ToDisplayString();
+                ? c.GetClassesDisplayText("/")
+                : c.GetClassesDisplayText("/");
 
             var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
+            var alignment = c.Alignment.ToAbbreviation();
 
             graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
             graphics.DrawString(c.Name, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
-            graphics.DrawString(classes, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 190f, y));
-            graphics.DrawString(GetLevelDisplay(c), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 360f, y));
-            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 420f, y));
-            graphics.DrawString(c.ArmorClass.ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 520f, y));
+            graphics.DrawString(alignment, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 170f, y));
+            graphics.DrawString(classes, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 230f, y));
+            graphics.DrawString(GetLevelDisplay(c), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 390f, y));
+            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 450f, y));
+            graphics.DrawString(c.ArmorClass.ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 530f, y));
             graphics.DrawString(status, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 600f, y));
 
             y += 18f;
@@ -1690,10 +1694,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
 
             var classes = c.Classes.Count > 0
-                ? string.Join("/", c.Classes.Select(x => x.ToDisplayString()))
-                : c.Class.ToDisplayString();
+                ? c.GetClassesDisplayText("/")
+                : c.GetClassesDisplayText("/");
+            var alignment = c.Alignment.ToAbbreviation();
 
-            result.Add($"{c.Name}  {classes}  L{GetLevelDisplay(c)}  HP {c.CurrentHitPoints}/{c.MaxHitPoints}  AC {c.ArmorClass}");
+            result.Add($"{c.Name}  {alignment}  {classes}  L{GetLevelDisplay(c)}  HP {c.CurrentHitPoints}/{c.MaxHitPoints}  AC {c.ArmorClass}");
         }
 
         return result;
@@ -1856,6 +1861,284 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var result = ViewerDialog.RunModal(form, this, prompt, answers, PublishTable);
         PublishToViewer();
         return result;
+    }
+
+    private DialogResult AskNeutralEncounterOnBoth(string encounterName)
+    {
+        using var form = new Form
+        {
+            Text = "Neutral Encounter",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(780, 160),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = "NEUTRAL ENCOUNTER",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var messageLabel = new Label
+        {
+            Left = 12,
+            Top = 50,
+            Width = framePanel.ClientSize.Width - 24,
+            Height = 62,
+            Text = $"A group of neutral {encounterName} is aproahing.{Environment.NewLine}Do you L)eave them alon or A)ttack?",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 14f, FontStyle.Bold)
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.A)
+            {
+                e.SuppressKeyPress = true;
+                form.DialogResult = DialogResult.Yes;
+                form.Close();
+            }
+            else if (e.KeyCode == Keys.L || e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                form.DialogResult = DialogResult.No;
+                form.Close();
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(messageLabel);
+        form.Controls.Add(framePanel);
+
+        var prompt = new ViewerPrompt("choice", $"Neutral {encounterName} approach. Leave alone or attack?", null, new[]
+        {
+            new ViewerPromptOption("leave", "Leave alone"),
+            new ViewerPromptOption("attack", "Attack")
+        });
+
+        var answers = new Dictionary<string, DialogResult>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["leave"] = DialogResult.No,
+            ["attack"] = DialogResult.Yes
+        };
+
+        var result = ViewerDialog.RunModal(form, this, prompt, answers, PublishTable);
+        PublishToViewer();
+        return result;
+    }
+
+    private DialogResult AskFriendlyEncounterOnBoth(string encounterName)
+    {
+        using var form = new Form
+        {
+            Text = "Friendly Encounter",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(780, 160),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = "FRIENDLY ENCOUNTER",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var messageLabel = new Label
+        {
+            Left = 12,
+            Top = 50,
+            Width = framePanel.ClientSize.Width - 24,
+            Height = 62,
+            Text = $"A group of friendly {encounterName} is approaching.{Environment.NewLine}Do you L)eave them alone or A)ttack?",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 14f, FontStyle.Bold)
+        };
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.A)
+            {
+                e.SuppressKeyPress = true;
+                form.DialogResult = DialogResult.Yes;
+                form.Close();
+            }
+            else if (e.KeyCode == Keys.L || e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                form.DialogResult = DialogResult.No;
+                form.Close();
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(messageLabel);
+        form.Controls.Add(framePanel);
+
+        var prompt = new ViewerPrompt("choice", $"Friendly {encounterName} approach. Leave alone or attack?", null, new[]
+        {
+            new ViewerPromptOption("leave", "Leave alone"),
+            new ViewerPromptOption("attack", "Attack")
+        });
+
+        var answers = new Dictionary<string, DialogResult>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["leave"] = DialogResult.No,
+            ["attack"] = DialogResult.Yes
+        };
+
+        var result = ViewerDialog.RunModal(form, this, prompt, answers, PublishTable);
+        PublishToViewer();
+        return result;
+    }
+
+    private static bool PartyHasNoEvilCharacters(List<Character> party)
+    {
+        return party.All(c => c.Alignment != Alignment.LawfulEvil
+                              && c.Alignment != Alignment.NeutralEvil
+                              && c.Alignment != Alignment.ChaoticEvil);
+    }
+
+    private bool AreAllEncounterGroupsGood(IEnumerable<string> groupMonsterNames)
+    {
+        var allMonsters = _monsterRepository.GetAll().ToList();
+        var foundAny = false;
+
+        foreach (var name in groupMonsterNames)
+        {
+            var template = FindMonsterByName(allMonsters, name);
+            if (template == null)
+                return false;
+
+            foundAny = true;
+            if (string.IsNullOrWhiteSpace(template.Alignment)
+                || template.Alignment.IndexOf("good", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                return false;
+            }
+        }
+
+        return foundAny;
+    }
+
+    private bool ShouldOfferFriendlyEncounterChoice(List<Character> party, IEnumerable<string> groupMonsterNames)
+    {
+        return PartyHasNoEvilCharacters(party)
+               && AreAllEncounterGroupsGood(groupMonsterNames);
+    }
+
+    private void ApplyGoodEncounterAttackConsequences(List<Character> party, string encounterName)
+    {
+        var goodMembers = party.Where(c => c.IsGoodAlignment()).ToList();
+        if (goodMembers.Count == 0)
+            return;
+
+        var warningCandidates = goodMembers.Where(c => c.GoodEncounterAttackWarningCount < 2).ToList();
+        if (warningCandidates.Count > 0)
+        {
+            foreach (var member in warningCandidates)
+            {
+                member.GoodEncounterAttackWarningCount += 1;
+                _characterRepository.Save(member);
+            }
+
+            var warningNumber = warningCandidates.Max(c => c.GoodEncounterAttackWarningCount);
+            var text = warningNumber == 1
+                ? "1st warning"
+                : "2nd and last warning";
+
+            SayOnBoth("Alignment Warning", $"Attacking good {encounterName} gives good characters a {text}.");
+            return;
+        }
+
+        var changed = new List<string>();
+        foreach (var member in goodMembers)
+        {
+            var newAlignment = _random.Next(0, 2) == 0 ? Alignment.ChaoticNeutral : Alignment.NeutralEvil;
+            member.Alignment = newAlignment;
+            member.GoodEncounterAttackWarningCount = 3;
+
+            member.RefreshMoveFromArmorAndClass();
+            member.RefreshMonkProgressionStats();
+
+            _characterRepository.Save(member);
+            changed.Add($"{member.Name} -> {newAlignment.ToAbbreviation()}");
+        }
+
+        if (changed.Count > 0)
+            SayOnBoth("Alignment Shift", "Good characters attacked good encounters again and changed alignment: " + string.Join(", ", changed));
+    }
+
+    private bool AreAllEncounterGroupsNeutral(IEnumerable<string> groupMonsterNames)
+    {
+        var allMonsters = _monsterRepository.GetAll().ToList();
+        var foundAny = false;
+
+        foreach (var name in groupMonsterNames)
+        {
+            var template = FindMonsterByName(allMonsters, name);
+            if (template == null)
+                return false;
+
+            foundAny = true;
+            var alignment = template.Alignment ?? string.Empty;
+            var hasNeutral = alignment.IndexOf("neutral", StringComparison.OrdinalIgnoreCase) >= 0;
+            var hasGood = alignment.IndexOf("good", StringComparison.OrdinalIgnoreCase) >= 0;
+            var hasEvil = alignment.IndexOf("evil", StringComparison.OrdinalIgnoreCase) >= 0;
+            if (!hasNeutral || hasGood || hasEvil)
+                return false;
+        }
+
+        return foundAny;
     }
 
     /// <summary>
@@ -2211,6 +2494,43 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 groups.Add((additionalMonsterName, ResolveEncounterGroupCount(additionalMonsterName, additionalRoll?.CountOverride)));
             }
 
+            if (AreAllEncounterGroupsNeutral(groups.Select(g => g.name)) && _random.Next(1, 101) <= 50)
+            {
+                var distinctNames = groups.Select(g => g.name).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                var neutralName = distinctNames.Count == 1
+                    ? distinctNames[0]
+                    : string.Join(", ", distinctNames);
+
+                if (AskNeutralEncounterOnBoth(neutralName) == DialogResult.No)
+                {
+                    PublishToViewer();
+                    return;
+                }
+            }
+
+            var isFriendlyGoodEncounter = ShouldOfferFriendlyEncounterChoice(party, groups.Select(g => g.name));
+            if (isFriendlyGoodEncounter)
+            {
+                var distinctNames = groups.Select(g => g.name).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                var friendlyName = distinctNames.Count == 1
+                    ? distinctNames[0]
+                    : string.Join(", ", distinctNames);
+
+                if (AskFriendlyEncounterOnBoth(friendlyName) == DialogResult.No)
+                {
+                    PublishToViewer();
+                    return;
+                }
+
+                ApplyGoodEncounterAttackConsequences(party, friendlyName);
+            }
+
+            foreach (var member in party.Where(c => !c.IsGoodAlignment() && c.GoodEncounterAttackWarningCount > 0))
+            {
+                member.GoodEncounterAttackWarningCount = 0;
+                _characterRepository.Save(member);
+            }
+
             outcome = _combatCoordinator.StartEncounterWithGroupCounts(
                 this,
                 groups,
@@ -2221,6 +2541,34 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         else
         {
             var numberOfMonsters = ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride);
+
+            if (AreAllEncounterGroupsNeutral(new[] { monsterName }) && _random.Next(1, 101) <= 50)
+            {
+                if (AskNeutralEncounterOnBoth(monsterName) == DialogResult.No)
+                {
+                    PublishToViewer();
+                    return;
+                }
+            }
+
+            var isFriendlyGoodEncounter = ShouldOfferFriendlyEncounterChoice(party, new[] { monsterName });
+            if (isFriendlyGoodEncounter)
+            {
+                if (AskFriendlyEncounterOnBoth(monsterName) == DialogResult.No)
+                {
+                    PublishToViewer();
+                    return;
+                }
+
+                ApplyGoodEncounterAttackConsequences(party, monsterName);
+            }
+
+            foreach (var member in party.Where(c => !c.IsGoodAlignment() && c.GoodEncounterAttackWarningCount > 0))
+            {
+                member.GoodEncounterAttackWarningCount = 0;
+                _characterRepository.Save(member);
+            }
+
             outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel);
         }
 
