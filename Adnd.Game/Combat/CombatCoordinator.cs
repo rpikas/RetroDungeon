@@ -1948,7 +1948,7 @@ public sealed class CombatCoordinator
                 if (string.IsNullOrWhiteSpace(resolved))
                     break;
 
-                var count = RollEncounterCount(entry, resolved);
+                var count = RollEncounterCount(entry, resolved, monsterLevel);
                 return (resolved, count);
             }
         }
@@ -1956,7 +1956,7 @@ public sealed class CombatCoordinator
         return null;
     }
 
-    private int RollEncounterCount(JsonElement entry, string resolvedMonster)
+    private int RollEncounterCount(JsonElement entry, string resolvedMonster, int monsterLevel)
     {
         if (entry.TryGetProperty("CountMin", out var countMinEl)
             && entry.TryGetProperty("CountMax", out var countMaxEl)
@@ -1971,7 +1971,7 @@ public sealed class CombatCoordinator
             countMin = Math.Max(1, countMin);
             countMax = Math.Max(1, countMax);
             var rolledCount = _random.Next(countMin, countMax + 1);
-            string page = MazeForm.GetDMGpageForMonsterEncounterTable(rolledCount);
+            string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
 
             RuleApplicationInfo.Publish(
                 "DMG",

@@ -1161,3 +1161,7 @@ ___
 i want the monster info dialog to be closed when Esc or enter is pressed 75,2
 _________
 I also want the info dialog that opens from the Encounter Info dialog to close if Esc or Enter is pressed. 75,4
+_________
+Added  MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel); and Close windows with ecs. without AI. 75,4
+_________
+Can you pleaes make the elvevator dialog to have the same look and feel as the dialog when entering the stairs.76,9

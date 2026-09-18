@@ -3213,13 +3213,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private void ShowElevatorDialog()
     {
-        var sb = new StringBuilder();
-        sb.AppendLine("Dungeon elevator");
-        sb.AppendLine();
-        sb.AppendLine($"Current level: {_currentDungeonLevel}");
-        sb.AppendLine("Choose destination level (1-10):");
-
-        var selected = PromptForNumber("Elevator", sb.ToString(), 1, 10);
+        var selected = PromptElevatorLevelOnBoth();
         if (!selected.HasValue)
             return;
 
@@ -3235,5 +3229,154 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         // Publish here rather than waiting for the next keypress, so the table swaps levels as the
         // elevator doors close. The viewer clears the old level when it sees the new number.
         PublishToViewer();
+    }
+
+    private int? PromptElevatorLevelOnBoth()
+    {
+        using var form = new Form
+        {
+            Text = "Elevator",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(520, 180)
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = "ELEVATOR",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var questionLabel = new Label
+        {
+            Left = 0,
+            Top = 52,
+            Width = framePanel.ClientSize.Width,
+            Height = 28,
+            Text = $"CURRENT LEVEL {_currentDungeonLevel}  ↵  CHOOSE (1-10)",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 13f, FontStyle.Bold)
+        };
+
+        var input = new TextBox
+        {
+            Left = (framePanel.ClientSize.Width - 90) / 2,
+            Top = 90,
+            Width = 90,
+            MaxLength = 2,
+            TextAlign = HorizontalAlignment.Center,
+            Font = new Font("Consolas", 16f, FontStyle.Bold)
+        };
+
+        var hintLabel = new Label
+        {
+            Left = 0,
+            Top = 126,
+            Width = framePanel.ClientSize.Width,
+            Height = 24,
+            Text = "ENTER=CONFIRM   ESC=CANCEL",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 10f, FontStyle.Bold)
+        };
+
+        int? selected = null;
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                form.DialogResult = DialogResult.Cancel;
+                form.Close();
+                return;
+            }
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= 1 && parsed <= 10)
+                {
+                    selected = parsed;
+                    form.DialogResult = DialogResult.OK;
+                    form.Close();
+                }
+
+                return;
+            }
+
+            if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
+            {
+                e.SuppressKeyPress = true;
+                input.Text = ((int)e.KeyCode - (int)Keys.D0).ToString();
+                input.SelectionStart = input.TextLength;
+            }
+            else if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
+            {
+                e.SuppressKeyPress = true;
+                input.Text = ((int)e.KeyCode - (int)Keys.NumPad0).ToString();
+                input.SelectionStart = input.TextLength;
+            }
+            else if (e.KeyCode == Keys.D0 || e.KeyCode == Keys.NumPad0)
+            {
+                e.SuppressKeyPress = true;
+                input.Text = "10";
+                input.SelectionStart = input.TextLength;
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(questionLabel);
+        framePanel.Controls.Add(input);
+        framePanel.Controls.Add(hintLabel);
+        form.Controls.Add(framePanel);
+
+        var labels = Enumerable.Range(1, 10)
+            .Select(n => $"Level {n}")
+            .ToList();
+
+        var outcome = ViewerDialog.RunPick(form, this, "Elevator", null, labels, PublishTable);
+        PublishToViewer();
+
+        if (outcome.Picked.HasValue)
+            return outcome.Picked.Value + 1;
+
+        if (outcome.Result == DialogResult.OK)
+        {
+            if (selected.HasValue)
+                return selected.Value;
+
+            // Viewer choice path defaults to the first option if no keyboard value was entered.
+            if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= 1 && parsed <= 10)
+                return parsed;
+        }
+
+        return null;
     }
 }
