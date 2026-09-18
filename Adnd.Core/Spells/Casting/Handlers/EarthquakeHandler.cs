@@ -30,9 +30,7 @@ public sealed class EarthquakeHandler : ISpellEffectHandler
                 rolledDamage += rng.Next(1, 13); // 5d12
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
-            result.Events.Add(
-                $"{monster.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
-                $"Damage {rolledDamage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
+            result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome));
 
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is swallowed by the shattered earth!");

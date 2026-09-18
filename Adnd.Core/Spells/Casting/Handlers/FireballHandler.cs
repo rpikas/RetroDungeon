@@ -62,12 +62,10 @@ public sealed class FireballHandler : ISpellEffectHandler
             }
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, totalDamage, rng, spell.Name);
+            result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, totalDamage, outcome));
 
             if (outcome.ActualDamage > 0)
             {
-                result.Events.Add(
-                    $"{monster.DisplayName} save vs spell: rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
-                    $"Damage {totalDamage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
                 if (monster.CurrentHitPoints <= 0)
                 {
                     result.Events.Add($"{monster.DisplayName} is incinerated!");

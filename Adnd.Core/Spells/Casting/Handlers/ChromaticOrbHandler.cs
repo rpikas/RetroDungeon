@@ -47,9 +47,11 @@ public sealed class ChromaticOrbHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. Orb color: {profile.Color}.");
-        result.Events.Add(
-            $"{target.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
-            $"Damage {rolled} (from {profile.DiceCount}d{profile.DieSides}){(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
+        result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(
+            target.DisplayName,
+            rolled,
+            outcome,
+            $"{rolled} (from {profile.DiceCount}d{profile.DieSides})"));
         if (!target.IsAlive)
             result.Events.Add($"{target.DisplayName} is destroyed.");
 

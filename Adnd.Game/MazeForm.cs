@@ -1908,7 +1908,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Top = 50,
             Width = framePanel.ClientSize.Width - 24,
             Height = 62,
-            Text = $"A group of neutral {encounterName} is aproahing.{Environment.NewLine}Do you L)eave them alon or A)ttack?",
+            Text = $"A group of neutral {encounterName} is approaching.{Environment.NewLine}Do you L)eave them alone or A)ttack?",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,

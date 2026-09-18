@@ -57,9 +57,7 @@ public sealed class MagicMissileHandler : ISpellEffectHandler
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(target, damage, rng, spell.Name);
 
-            result.Events.Add(
-                $"Missile {i + 1}: {target.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
-                $"Damage {damage}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
+            result.Events.Add($"Missile {i + 1}: {SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, damage, outcome)}");
             if (!target.IsAlive)
                 result.Events.Add($"{target.DisplayName} is destroyed.");
 

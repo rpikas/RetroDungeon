@@ -6,13 +6,25 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 internal static class SpellDamageSaveHelper
 {
-    internal readonly record struct Outcome(int SaveTarget, int SaveRoll, bool Saved, int AppliedDamage, int BeforeHp, int AfterHp, int ActualDamage, bool MagicResisted);
+    internal readonly record struct Outcome(
+        int SaveTarget,
+        int SaveRoll,
+        bool Saved,
+        int AppliedDamage,
+        int BeforeHp,
+        int AfterHp,
+        int ActualDamage,
+        bool MagicResisted,
+        int? MagicResistanceRoll,
+        int? MagicResistancePercent);
 
-    internal static bool IsNegatedByMagicResistance(MonsterInstance monster, Random rng, string spellName)
+    internal readonly record struct MagicResistanceCheck(bool HasResistance, int ChancePercent, int Roll, bool Resisted);
+
+    internal static MagicResistanceCheck CheckMagicResistance(MonsterInstance monster, Random rng, string spellName)
     {
         var chancePercent = monster.Template.MagicResistancePercent;
         if (!chancePercent.HasValue || chancePercent.Value <= 0)
-            return false;
+            return new MagicResistanceCheck(false, 0, 0, false);
 
         var clampedChance = Math.Clamp(chancePercent.Value, 0, 100);
         var roll = rng.Next(1, 101);
@@ -22,7 +34,7 @@ internal static class SpellDamageSaveHelper
             "DMG",
             "Magic Resistance",
             $"{monster.DisplayName} magic resistance vs {spellName}",
-            $"When applicable, roll 1d100. If roll is <= magic resistance %, spell effect is totally avoided.",
+            "When applicable, roll 1d100. If roll is <= magic resistance %, spell effect is totally avoided.",
             "1",
             "100",
             roll.ToString(),
@@ -30,7 +42,27 @@ internal static class SpellDamageSaveHelper
                 ? $"Magic resistance succeeds ({clampedChance}%). Spell effect avoided."
                 : $"Magic resistance fails ({clampedChance}%). Spell proceeds.");
 
-        return resisted;
+        return new MagicResistanceCheck(true, clampedChance, roll, resisted);
+    }
+
+    internal static bool IsNegatedByMagicResistance(MonsterInstance monster, Random rng, string spellName)
+    {
+        return CheckMagicResistance(monster, rng, spellName).Resisted;
+    }
+
+    internal static string FormatSaveAndDamageLine(string targetDisplayName, int rolledDamage, Outcome outcome, string? rolledDamageText = null)
+    {
+        if (outcome.MagicResisted)
+        {
+            var mrRoll = outcome.MagicResistanceRoll ?? 0;
+            var mrChance = outcome.MagicResistancePercent ?? 0;
+            return $"{targetDisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+                   $"Magic resistance roll 1d100={mrRoll} vs {mrChance}% => NEGATED. No damage. HP {outcome.BeforeHp}->{outcome.AfterHp}.";
+        }
+
+        var damageText = rolledDamageText ?? rolledDamage.ToString();
+        return $"{targetDisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
+               $"Damage {damageText}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.";
     }
 
     internal static bool IsUndeadImmuneToSpell(MonsterInstance monster, string? spellIdOrName)
@@ -55,8 +87,8 @@ internal static class SpellDamageSaveHelper
         var saveRoll = rng.Next(1, 21);
         var saved = saveTarget > 0 && saveRoll >= saveTarget;
         var appliedDamage = saved ? rolledDamage / 2 : rolledDamage;
-        var magicResisted = IsNegatedByMagicResistance(monster, rng, spellName);
-        if (magicResisted)
+        var resistance = CheckMagicResistance(monster, rng, spellName);
+        if (resistance.Resisted)
             appliedDamage = 0;
 
         var before = monster.CurrentHitPoints;
@@ -80,12 +112,22 @@ internal static class SpellDamageSaveHelper
             "1",
             "20",
             saveRoll.ToString(),
-            magicResisted
+            resistance.Resisted
                 ? $"Save {(saved ? "made" : "failed")}, but magic resistance negated the spell."
                 : saved
                 ? $"Save made. Damage halved: {rolledDamage} -> {appliedDamage}."
                 : $"Save failed. Full damage: {appliedDamage}.");
 
-        return new Outcome(saveTarget, saveRoll, saved, appliedDamage, before, monster.CurrentHitPoints, actual, magicResisted);
+        return new Outcome(
+            saveTarget,
+            saveRoll,
+            saved,
+            appliedDamage,
+            before,
+            monster.CurrentHitPoints,
+            actual,
+            resistance.Resisted,
+            resistance.HasResistance ? resistance.Roll : null,
+            resistance.HasResistance ? resistance.ChancePercent : null);
     }
 }

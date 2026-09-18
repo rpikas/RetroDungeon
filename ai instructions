@@ -1216,3 +1216,7 @@ will loose all their monk specific attributes such as lower ac better hand to ha
 in create charater after rolling abilites ans selecting race add a new option R)eroll so if that is pressed (r) then reroll 
 abilites instead of selecting a race
 when adding a party member show alignment in a column. 84,6
+_____
+If a monster does not take damage or is not affected by a spell because they have magic resistance, write that in the combat log and
+in the adnd Rul and dice info. there you can also tell what the dice roll is.86,3
+____

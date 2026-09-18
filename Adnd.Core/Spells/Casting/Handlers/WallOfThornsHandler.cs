@@ -30,9 +30,8 @@ public sealed class WallOfThornsHandler : ISpellEffectHandler
                 rolledDamage = 1;
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
-            result.Events.Add(
-                $"{monster.DisplayName} AC {monster.ArmorClass}: damage {rolledDamage}. Save vs spell {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
-                $"Applied {outcome.AppliedDamage}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
+            var line = SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome);
+            result.Events.Add($"{monster.DisplayName} AC {monster.ArmorClass}: {line}");
 
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is torn apart by the wall of thorns!");

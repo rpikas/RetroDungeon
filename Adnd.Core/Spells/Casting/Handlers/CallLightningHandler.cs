@@ -42,9 +42,7 @@ public sealed class CallLightningHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add(
-            $"{target.DisplayName} save vs spell rolled {outcome.SaveRoll} vs {outcome.SaveTarget} => {(outcome.Saved ? "SUCCESS" : "FAIL")}. " +
-            $"Damage {rolled}{(outcome.Saved ? $" halved to {outcome.AppliedDamage}" : string.Empty)}. HP {outcome.BeforeHp}->{outcome.AfterHp}.");
+        result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, rolled, outcome));
         if (!target.IsAlive)
             result.Events.Add($"{target.DisplayName} is struck down.");
 
