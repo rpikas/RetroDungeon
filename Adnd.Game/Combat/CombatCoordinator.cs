@@ -1930,9 +1930,12 @@ public sealed class CombatCoordinator
 
                 var creature = creatureEl.GetString();
                 var resolved = ResolveEncounterCreatureToMonsterName(creature, monsterLevel);
+                string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
+
                 RuleApplicationInfo.Publish(
                     "DMG",
-                    "175-177",
+                    page,
+                   // "175-177",//TODO update to exact page reference
                     $"Roll reinforcement creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
                     $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
                     "1",
@@ -1968,10 +1971,11 @@ public sealed class CombatCoordinator
             countMin = Math.Max(1, countMin);
             countMax = Math.Max(1, countMax);
             var rolledCount = _random.Next(countMin, countMax + 1);
+            string page = MazeForm.GetDMGpageForMonsterEncounterTable(rolledCount);
 
             RuleApplicationInfo.Publish(
                 "DMG",
-                "175-177",
+                page,//TODO update to exact page reference
                 $"Roll reinforcement count for '{resolvedMonster}'",
                 "Use CountMin-CountMax from MonsterLevels entry.",
                 "1",

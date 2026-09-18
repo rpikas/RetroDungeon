@@ -63,6 +63,17 @@ public sealed class RuleApplicationInfoForm : Form
                 TopMost = true
             };
 
+            // --- ESC closes the viewer ---
+            viewer.KeyPreview = true;
+            viewer.KeyDown += (_, e) =>
+            {
+                if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Space || e.KeyCode == Keys.Enter)
+                {
+                    viewer.DialogResult = DialogResult.OK;
+                    viewer.Close();
+                }
+            };
+
             var picture = new PictureBox
             {
                 Dock = DockStyle.Fill,

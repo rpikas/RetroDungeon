@@ -21,6 +21,7 @@ namespace Adnd.Game.Windows
         private readonly Brush _ink = Brushes.Black;
         private readonly Image _sheetBackground;
 
+        /*
         public CharacterForm(Character character)
         {
             _character = character;
@@ -38,6 +39,33 @@ namespace Adnd.Game.Windows
             this.Text = $"{_character.Name} – Character Sheet";
             this.BackgroundImage = _sheetBackground;
             this.BackgroundImageLayout = ImageLayout.None;
+        }
+        */
+        public CharacterForm(Character character)
+        {
+            _character = character;
+
+            _sheetBackground = Image.FromFile(
+                @"C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\character_sheet.png");
+
+            // Window setup
+            this.DoubleBuffered = true;
+            this.ClientSize = new Size(_sheetBackground.Width, _sheetBackground.Height);
+            this.Text = $"{_character.Name} – Character Sheet";
+            this.BackgroundImage = _sheetBackground;
+            this.BackgroundImageLayout = ImageLayout.None;
+
+            // --- KEY HANDLING (ESC / ENTER CLOSES FORM) ---
+            KeyPreview = true;   // Important so the form gets key events first
+
+            this.KeyDown += (_, e) =>
+            {
+                if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape || e.KeyCode == Keys.Space)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+            };
         }
 
         protected override void OnPaint(PaintEventArgs e)

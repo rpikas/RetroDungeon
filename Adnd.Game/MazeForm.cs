@@ -2574,6 +2574,23 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         return true;
     }
+    public static string GetDMGpageForMonsterEncounterTable(int monsterLevel)
+    {
+        return monsterLevel switch
+        {
+            1 => "175",
+            2 => "177_Level2",
+            3 => "177_Level3",
+            4 => "177_Level4",
+            5 => "177_Level5",
+            6 => "178_Level6",
+            7 => "178_Level7",
+            8 => "178_Level8",
+            9 => "179_Level9",
+            10 => "179_Level10",
+            _ => "175-177"
+        };
+    }
 
     private EncounterRoll? RollFromDmgEncounterTable(int monsterLevel, int dungeonLevel)
     {
@@ -2608,38 +2625,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     continue;
 
                 var creature = creatureEl.GetString();
-                string page = monsterLevel switch
-                {
-                    1 => "175",
-                    2 => "177_Level2",
-                    3 => "177_Level3",
-                    4 => "177_Level4",
-                    5 => "177_Level5",
-                    6 => "178_Level6",
-                    7 => "178_Level7",
-                    8 => "178_Level8",
-                    9 => "179_Level9",
-                    10 => "179_Level10",
-                    _ => "175-177"
-                };
+                string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
                 RuleApplicationInfo.Publish(
-    "DMG",
-    page,
-    $"Rolling monster level {monsterLevel})",
-    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-    "1",
-    "100",
-    roll.ToString(), creature);
+                    "DMG",
+                    page,
+                    $"Rolling monster level {monsterLevel})",
+                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                    "1",
+                    "100",
+                    roll.ToString(), creature);
                 var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
                 int? countOverride = null;
-
-
-//                    string.IsNullOrWhiteSpace(resolved)
-  //                      ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
-    //                    : $"Matched '{creature}', mapped to '{resolved}'.");
-
-
-
                 if (entry.TryGetProperty("CountMin", out var countMinEl)
                     && entry.TryGetProperty("CountMax", out var countMaxEl)
                     && countMinEl.ValueKind == JsonValueKind.Number
@@ -2672,39 +2668,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                         //string sidesOnDices, string resultOfRoll, string consequenceOfRoll)
                         RuleApplicationInfo.Publish(
                         "DMG",//source
-                        "175-177",//page
+                        page,//page
                         //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
                         $"Number of '{creature}s'",//context
                         "Use CountMin-CountMax from MonsterLevels entry.",//rule
                         NumberOfDices.ToString(),//numberOfDices
                         numberOfSidesText,//sidesOnDices
                         countOverride.Value.ToString(),//resultOfRoll
-                        countOverride.Value.ToString()+" "+ creature+"s"//resultOfRoll
-                                                                    //  ""//consequenceOfRoll
-
-                       //                   "1",
-                       // (countMax - countMin + 1).ToString(),
-                       // "+" + (countMin - 1).ToString(),
-                       // (countOverride.Value - countMin + 1).ToString()
+                        countOverride.Value.ToString() + " " + creature + "s"//resultOfRoll
                        );
                     }
-             //      $"Count {countOverride.Value} (range {countMin}-{countMax}).");
-    }
-                /*
-                                RuleApplicationInfo.Publish(
-                                    "DMG",
-                                    "175-177",
-                //                    $"Roll encounter creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
-                                    $"Encounter creature (monster level {monsterLevel})",
-                                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-                                    "1",
-                                    "100",
-                                    roll.ToString(),
-                                    string.IsNullOrWhiteSpace(resolved)
-                                        ? $"Matched '{creature}', but no monster mapping was found. Rerolling on Level{monsterLevel}."
-                                        : $"Matched '{creature}', mapped to '{resolved}'.");
-
-                                */
+                }
                 if (!string.IsNullOrWhiteSpace(resolved))
                     return new EncounterRoll(resolved, countOverride);
                 break;
