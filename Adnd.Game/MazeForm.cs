@@ -2973,6 +2973,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     continue;
 
                 var creature = creatureEl.GetString();
+                var substituteBadgerWithHobgoblin = dungeonLevel >= 3
+                    && roll is >= 3 and <= 4
+                    && string.Equals(creature?.Trim(), "Badger", StringComparison.OrdinalIgnoreCase);
+
+                if (substituteBadgerWithHobgoblin)
+                {
+                    creature = "Hobgoblin";
+                    RuleApplicationInfo.Publish(
+                        "DMG special case: dungeon level 3+ and encounter roll 03-04 replaces Badger with 2-8 Hobgoblins.");
+                }
                 string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
                 RuleApplicationInfo.Publish(
                     "DMG",
@@ -2984,27 +2994,42 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     roll.ToString(), creature);
                 var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
                 int? countOverride = null;
-                if (entry.TryGetProperty("CountMin", out var countMinEl)
+                int? countMin = null;
+                int? countMax = null;
+
+                if (substituteBadgerWithHobgoblin)
+                {
+                    countMin = 2;
+                    countMax = 8;
+                }
+                else if (entry.TryGetProperty("CountMin", out var countMinEl)
                     && entry.TryGetProperty("CountMax", out var countMaxEl)
                     && countMinEl.ValueKind == JsonValueKind.Number
                     && countMaxEl.ValueKind == JsonValueKind.Number)
                 {
-                    var countMin = countMinEl.GetInt32();
-                    var countMax = countMaxEl.GetInt32();
-                    if (countMax < countMin)
-                        (countMin, countMax) = (countMax, countMin);
+                    countMin = countMinEl.GetInt32();
+                    countMax = countMaxEl.GetInt32();
+                }
 
-                    countMin = Math.Max(1, countMin);
-                    countMax = Math.Max(1, countMax);
-                    countOverride = _random.Next(countMin, countMax + 1);
+                if (countMin.HasValue && countMax.HasValue)
+                {
+                    var resolvedCountMin = countMin.Value;
+                    var resolvedCountMax = countMax.Value;
+
+                    if (resolvedCountMax < resolvedCountMin)
+                        (resolvedCountMin, resolvedCountMax) = (resolvedCountMax, resolvedCountMin);
+
+                    resolvedCountMin = Math.Max(1, resolvedCountMin);
+                    resolvedCountMax = Math.Max(1, resolvedCountMax);
+                    countOverride = _random.Next(resolvedCountMin, resolvedCountMax + 1);
 
                     //        public record DiceFormula(int DiceCount, int DiceSides, int Extra);
                     //        public static DiceFormula GetDiceFormula(int min, int max)
 
-                    DiceFormulas.DiceFormula? diceFormula = DiceFormulas.GetDiceFormula(countMin, countMax);
+                    DiceFormulas.DiceFormula? diceFormula = DiceFormulas.GetDiceFormula(resolvedCountMin, resolvedCountMax);
                     int NumberOfDices = diceFormula?.DiceCount ?? countOverride.Value;
                     int numberOfSides = diceFormula?.DiceSides ?? 1;
-                    int extra = diceFormula?.Extra ?? (countMin - 1);
+                    int extra = diceFormula?.Extra ?? (resolvedCountMin - 1);
 
                     string numberOfSidesText = numberOfSides.ToString();
                     if (extra > 0)

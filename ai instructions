@@ -1224,6 +1224,7 @@ Manually commented away code related to treasure Art with //
 Tried to manually implement BadgerPelt but needed help from ai 87,2
 implement a similar solution for WeaselPelt that drops from Giant Weasel. WeaselPelts sell from1000 to 6000 87,7
 
-if an item used with "SpecialAbilities": [ "Casts Regeneration" ], then the person drinking it start regenerating until they exit the dungeon
-
+if an item used with "SpecialAbilities": [ "Casts Regeneration" ], then the person drinking it start regenerating until they exit the dungeon 89,8
 ______
+DMG, pg175 if dungeon level is 3 or higher and encounter roll is 03-04 badger then the party should instead encounter a 2-8 Hobgoblin 90,7
+___

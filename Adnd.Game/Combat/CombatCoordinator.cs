@@ -1952,6 +1952,17 @@ public sealed class CombatCoordinator
                     continue;
 
                 var creature = creatureEl.GetString();
+                var substituteBadgerWithHobgoblin = dungeonLevel >= 3
+                    && roll is >= 3 and <= 4
+                    && string.Equals(creature?.Trim(), "Badger", StringComparison.OrdinalIgnoreCase);
+
+                if (substituteBadgerWithHobgoblin)
+                {
+                    creature = "Hobgoblin";
+                    RuleApplicationInfo.Publish(
+                        "DMG special case: dungeon level 3+ and encounter roll 03-04 replaces Badger with 2-8 Hobgoblins.");
+                }
+
                 var resolved = ResolveEncounterCreatureToMonsterName(creature, monsterLevel);
                 string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
 
@@ -1971,7 +1982,12 @@ public sealed class CombatCoordinator
                 if (string.IsNullOrWhiteSpace(resolved))
                     break;
 
-                var count = RollEncounterCount(entry, resolved, monsterLevel);
+                var count = RollEncounterCount(
+                    entry,
+                    resolved,
+                    monsterLevel,
+                    substituteBadgerWithHobgoblin ? 2 : null,
+                    substituteBadgerWithHobgoblin ? 8 : null);
                 return (resolved, count);
             }
         }
@@ -1979,8 +1995,35 @@ public sealed class CombatCoordinator
         return null;
     }
 
-    private int RollEncounterCount(JsonElement entry, string resolvedMonster, int monsterLevel)
+    private int RollEncounterCount(JsonElement entry, string resolvedMonster, int monsterLevel, int? countMinOverride = null, int? countMaxOverride = null)
     {
+        var hasOverride = countMinOverride.HasValue && countMaxOverride.HasValue;
+
+        if (hasOverride)
+        {
+            var countMin = countMinOverride!.Value;
+            var countMax = countMaxOverride!.Value;
+            if (countMax < countMin)
+                (countMin, countMax) = (countMax, countMin);
+
+            countMin = Math.Max(1, countMin);
+            countMax = Math.Max(1, countMax);
+            var rolledCount = _random.Next(countMin, countMax + 1);
+            string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
+
+            RuleApplicationInfo.Publish(
+                "DMG",
+                page,//TODO update to exact page reference
+                $"Roll reinforcement count for '{resolvedMonster}'",
+                "Use CountMin-CountMax from MonsterLevels entry.",
+                "1",
+                (countMax - countMin + 1).ToString(),
+                (rolledCount - countMin + 1).ToString(),
+                $"Count {rolledCount} (range {countMin}-{countMax}).");
+
+            return rolledCount;
+        }
+
         if (entry.TryGetProperty("CountMin", out var countMinEl)
             && entry.TryGetProperty("CountMax", out var countMaxEl)
             && countMinEl.ValueKind == JsonValueKind.Number
