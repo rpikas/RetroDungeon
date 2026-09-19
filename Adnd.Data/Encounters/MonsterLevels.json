@@ -45,7 +45,7 @@
       },
       {
         "DiceMin": 19,
-        "DiceMax": 99,
+        "DiceMax": 19,
         "Creature": "Elf",
         "CountMin": 3,
         "CountMax": 11

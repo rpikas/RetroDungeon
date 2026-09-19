@@ -175,7 +175,6 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
-      "Strength": "13–14",
       "Intelligence": "Very",
       "Size": "Small",
       "BaseXPValue": 18,
@@ -296,6 +295,78 @@
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 1, Roll 20-21",
       "Other": "Deity: Garl Glittergold; Morale 55%; Psionics Nil"
+    },
+
+    {
+      "Name": "Goblin",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
+      "ArmorClass": 6,
+      "Movement": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": -1,
+      "%InLair": "40",
+      "TreasureType": "C",
+      "IndividualTreasure": "K",
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": "10",
+      "Intelligence": "Average",
+      "Alignment": "Lawful Evil",
+      "Size": "Small",
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 22-26",
+      "Other": "Suffer -1 to hit in sunlight; normal infravision 60'; fair miners; hate dwarves and gnomes."
+    },
+    {
+      "Name": "Halfling",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 30,
+      "NumberOfAppearancesMax": 300,
+      "ArmorClass": 7,
+      "Movement": 9,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "%InLair": "70",
+      "TreasureType": "B",
+      "IndividualTreasure": "K",
+      "Attacks": [
+        {
+          "Name": "Short sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic & Poison Resistance 4 levels higher",
+          "Description": "Saves as if 4 levels higher"
+        }
+      ],
+      "MagicResistance": "Save at 4 levels higher",
+      "Intelligence": "Very",
+      "Alignment": "Lawful Good",
+      "Size": "Small",
+      "BaseXPValue": 22,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "Other": "Deity: Yondalla; Psionics Nil; Surprise on 1–4; Invisible in vegetation; Shun water"
     },
 
     {
@@ -772,52 +843,6 @@
       "Alignment": "Neutral",
       "Source": "Adnd",
       "Other": "Pelt worth 10–30 gp"
-    },
-
-
-
-
-    {
-      "Name": "Halfling",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 30,
-      "NumberOfAppearancesMax": 300,
-      "ArmorClass": 7,
-      "Movement": 9,
-      "HitDice": 1,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "%InLair": "70",
-      "TreasureType": "B",
-      "IndividualTreasure": "K",
-      "Attacks": [
-        {
-          "Name": "Short sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "+3 with bow or sling",
-          "Description": "Halflings gain +3 to hit when using bows or slings"
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Magic & Poison Resistance",
-          "Description": "Saves as if 4 levels higher"
-        }
-      ],
-      "MagicResistance": "Save at 4 levels higher",
-      "Intelligence": "Very",
-      "Alignment": "Lawful Good",
-      "Size": "Small",
-      "BaseXPValue": 22,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "Other": "Deity: Yondalla; Psionics Nil; Surprise on 1–4; Invisible in vegetation; Shun water"
     },
 
     {

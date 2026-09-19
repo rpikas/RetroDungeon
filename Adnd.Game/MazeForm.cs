@@ -2048,6 +2048,31 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                               && c.Alignment != Alignment.ChaoticEvil);
     }
 
+    private enum EncounterMoralAxis
+    {
+        Good,
+        Neutral,
+        Evil
+    }
+
+    private static EncounterMoralAxis? GetEncounterMoralAxis(Monster? monster)
+    {
+        var alignment = monster?.Alignment ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(alignment))
+            return null;
+
+        if (alignment.IndexOf("good", StringComparison.OrdinalIgnoreCase) >= 0)
+            return EncounterMoralAxis.Good;
+
+        if (alignment.IndexOf("evil", StringComparison.OrdinalIgnoreCase) >= 0)
+            return EncounterMoralAxis.Evil;
+
+        if (alignment.IndexOf("neutral", StringComparison.OrdinalIgnoreCase) >= 0)
+            return EncounterMoralAxis.Neutral;
+
+        return null;
+    }
+
     private bool AreAllEncounterGroupsGood(IEnumerable<string> groupMonsterNames)
     {
         var allMonsters = _monsterRepository.GetAll().ToList();
@@ -2479,6 +2504,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         CombatOutcome outcome;
         if (numberOfGroups > 1)
         {
+            var allMonsters = _monsterRepository.GetAll().ToList();
+            var primaryGroupAxis = GetEncounterMoralAxis(FindMonsterByName(allMonsters, monsterName));
+
             var groups = new List<(string name, int count)>
             {
                 (monsterName, ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride))
@@ -2486,10 +2514,33 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             for (int i = 1; i < numberOfGroups; i++)
             {
-                var additionalRoll = RollDungeonMonsterForLevelWithCountExcludingCharacter(_currentDungeonLevel);
-                var additionalMonsterName = additionalRoll?.MonsterName;
-                if (string.IsNullOrWhiteSpace(additionalMonsterName))
-                    additionalMonsterName = LevelOneMonsters[_random.Next(LevelOneMonsters.Length)];
+                EncounterRoll? additionalRoll = null;
+                string? additionalMonsterName = null;
+                var foundMatchingAlignment = false;
+
+                for (int reroll = 0; reroll < 30; reroll++)
+                {
+                    additionalRoll = RollDungeonMonsterForLevelWithCountExcludingCharacter(_currentDungeonLevel);
+                    additionalMonsterName = additionalRoll?.MonsterName;
+                    if (string.IsNullOrWhiteSpace(additionalMonsterName))
+                        additionalMonsterName = LevelOneMonsters[_random.Next(LevelOneMonsters.Length)];
+
+                    if (!primaryGroupAxis.HasValue)
+                    {
+                        foundMatchingAlignment = true;
+                        break;
+                    }
+
+                    var candidateAxis = GetEncounterMoralAxis(FindMonsterByName(allMonsters, additionalMonsterName));
+                    if (!candidateAxis.HasValue || candidateAxis.Value == primaryGroupAxis.Value)
+                    {
+                        foundMatchingAlignment = true;
+                        break;
+                    }
+                }
+
+                if (!foundMatchingAlignment || string.IsNullOrWhiteSpace(additionalMonsterName))
+                    break;
 
                 groups.Add((additionalMonsterName, ResolveEncounterGroupCount(additionalMonsterName, additionalRoll?.CountOverride)));
             }

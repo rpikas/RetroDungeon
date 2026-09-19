@@ -147,6 +147,8 @@ public class Character
 
     public bool IsMonk() => HasMonkClass() && IsLawfulAlignment(Alignment);
 
+    public bool IsExMonk() => HasMonkClass() && !IsLawfulAlignment(Alignment);
+
     public bool IsGoodAlignment()
         => Alignment is Alignment.LawfulGood or Alignment.NeutralGood or Alignment.ChaoticGood;
 
@@ -154,6 +156,9 @@ public class Character
     {
         if (cls == CharacterClass.Paladin && IsFallenPaladin())
             return "Fallen Paladin";
+
+        if (cls == CharacterClass.Monk && IsExMonk())
+            return "Ex-Monk";
 
         return cls.ToDisplayString();
     }
