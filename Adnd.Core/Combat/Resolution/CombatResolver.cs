@@ -1341,6 +1341,18 @@ public sealed class CombatResolver
                     }
                 }
 
+                if (RequiresPlusOneWeaponToHit(target) && !IsMagicalWeapon(mainHand))
+                {
+                    var blockedWeaponName = mainHand != null ? mainHand.Name : "bare hands";
+                    events.Add(new CombatEvent(
+                        $"{member.Name} hits {target.DisplayName} with {blockedWeaponName}, but the attack cannot harm it (+1 or better weapon required)."));
+
+                    RuleApplicationInfo.Publish(
+                        $"AD&D special defense: {target.DisplayName} requires '+1 or better weapons to hit'. " +
+                        $"{member.Name}'s attack with {blockedWeaponName} is non-magical (no '+' in name and no special abilities), so it deals no damage.");
+                    continue;
+                }
+
                 var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
                 var strengthDamageBonus = mainHand != null && mainHand.Type == ItemType.Weapon
                     ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)
@@ -2339,5 +2351,24 @@ public sealed class CombatResolver
 
         return target.Template.SpecialDefenses.Any(d =>
             string.Equals(d.Name?.Trim(), "Half Damage from Sharp Weapons", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool RequiresPlusOneWeaponToHit(MonsterInstance target)
+    {
+        return target.Template.SpecialDefenses.Any(d =>
+            string.Equals(d.Name?.Trim(), "+1 or better weapons to hit", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsMagicalWeapon(Item? mainHand)
+    {
+        if (mainHand == null || mainHand.Type != ItemType.Weapon)
+            return false;
+
+        var hasPlusInName = !string.IsNullOrWhiteSpace(mainHand.Name)
+            && mainHand.Name.Contains('+', StringComparison.Ordinal);
+        var hasSpecialAbilities = mainHand.SpecialAbilities != null
+            && mainHand.SpecialAbilities.Any(a => !string.IsNullOrWhiteSpace(a));
+
+        return hasPlusInName || hasSpecialAbilities;
     }
 }

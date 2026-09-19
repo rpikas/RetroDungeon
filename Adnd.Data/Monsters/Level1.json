@@ -75,6 +75,127 @@
     },
 
     {
+      "Name": "Fire Beetle",
+      "Type": "Insect",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 05-14",
+      "Other": "https://1eonline.info/1mm/beetle.giant.htm"
+    },
+    {
+      "Name": "Demon, Manes",
+      "Type": "Demon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 16,
+      "ArmorClass": 7,
+      "Movement": 3,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d2"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "+1 or better weapons to hit",
+          "Description": "+1 or better weapons to hit"
+        },
+        {
+          "Name": "Resistant to spells as undead",
+          "Description": "Resistant to spells as undead"
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Small",
+      "BaseXPValue": 18,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Chaotic Evil",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 15",
+      "Other": "https://1eonline.info/1mm/manes.htm"
+    },
+
+    {
+      "Name": "Dwarf",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
+      "ArmorClass": 4,
+      "Movement": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "G, Q(x20), R",
+      "IndividualTreasure": "M(x5)",
+      "Attacks": [
+        {
+          "Name": "Battle Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Save at 4 levels higher (magic & poison resistance)",
+          "Description": "Save at 4 levels higher (magic & poison resistance)"
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Strength": "13–14",
+      "Intelligence": "Very",
+      "Size": "Small",
+      "BaseXPValue": 18,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Lawful Good",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 16-17",
+      "Other": "https://1eonline.info/1mm/dwarf.htm"
+    },
+
+    {
       "Name": "Orc",
       "Type": "Humanoid",
       "Frequency": "Common",
@@ -549,91 +670,8 @@
       "Other": "Burrows into ear; cure disease required to prevent death"
     },
 
-    {
-      "Name": "Manes",
-      "Type": "Demon",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 4,
-      "NumberOfAppearancesMax": 16,
-      "ArmorClass": 7,
-      "Movement": 3,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d2"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d2"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "+1 or better weapons to hit",
-          "Description": "+1 or better weapons to hit"
-        },
-        {
-          "Name": "Resistant to spells as undead",
-          "Description": "Resistant to spells as undead"
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Semi-",
-      "Size": "Small",
-      "BaseXPValue": 18,
-      "XPValuePerHitPoint": 1,
-      "Alignment": "Chaotic Evil",
-      "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/manes.htm"
-    },
 
-    {
-      "Name": "Dwarf",
-      "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 40,
-      "NumberOfAppearancesMax": 400,
-      "ArmorClass": 4,
-      "Movement": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "G, Q(x20), R",
-      "IndividualTreasure": "M(x5)",
-      "Attacks": [
-        {
-          "Name": "Battle Axe",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Save at 4 levels higher (magic & poison resistance)",
-          "Description": "Save at 4 levels higher (magic & poison resistance)"
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Strength": "13–14",
-      "Intelligence": "Very",
-      "Size": "Small",
-      "BaseXPValue": 18,
-      "XPValuePerHitPoint": 1,
-      "Alignment": "Lawful Good",
-      "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/dwarf.htm"
-    },
+
 
     {
       "Name": "Elf",
@@ -704,38 +742,7 @@
       "Source": "Adnd",
       "Other": "Pelt worth 10–30 gp"
     },
-    {
-      "Name": "Fire Beetle",
-      "Type": "Insect",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 12,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "None",
-      "Intelligence": "Non-",
-      "Size": "Small",
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "Alignment": "Neutral",
-      "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/beetle.giant.htm"
-    },
+
 
     {
       "Name": "Gnome",

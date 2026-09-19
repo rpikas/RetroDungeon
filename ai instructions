@@ -1228,3 +1228,6 @@ if an item used with "SpecialAbilities": [ "Casts Regeneration" ], then the pers
 ______
 DMG, pg175 if dungeon level is 3 or higher and encounter roll is 03-04 badger then the party should instead encounter a 2-8 Hobgoblin 90,7
 ___
+Implement "SpecialDefenses": "Name": "+1 or better weapons to hit", It means that non magical weapons can not hit the monster. if some one tries, 
+please write that to the ADnD Rule and Dice Info dialog. Weapons without + in the name and without special abilities can not hit the monster. 91,3
+___
