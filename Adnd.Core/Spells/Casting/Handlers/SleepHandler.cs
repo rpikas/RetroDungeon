@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Diagnostics;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -67,6 +68,30 @@ public sealed class SleepHandler : ISpellEffectHandler
                 continue;
             }
 
+            if (HasNinetyPercentMagicResistanceVsSleep(monster))
+            {
+                var mrRoll = rng.Next(1, 101);
+                var resistedBySpecialDefense = mrRoll <= 90;
+
+                RuleApplicationInfo.Publish(
+                    "AD&D",
+                    "Monster Special Defenses",
+                    $"{monster.DisplayName} special defense vs Sleep",
+                    "Special defense '90% magic resistance vs sleep': roll 1d100; 01-90 avoids the spell.",
+                    "1",
+                    "100",
+                    mrRoll.ToString(),
+                    resistedBySpecialDefense
+                        ? "01-90: spell effect avoided."
+                        : "91-100: special defense fails; spell continues.");
+
+                if (resistedBySpecialDefense)
+                {
+                    result.Events.Add($"{monster.DisplayName} negates Sleep with special defense (90% magic resistance vs sleep). Roll {mrRoll}.");
+                    continue;
+                }
+            }
+
             var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
             var saveRoll = rng.Next(1, 21);
 
@@ -88,5 +113,11 @@ public sealed class SleepHandler : ISpellEffectHandler
         }
 
         return result;
+    }
+
+    private static bool HasNinetyPercentMagicResistanceVsSleep(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+            string.Equals(d.Name?.Trim(), "90% magic resistance vs sleep", StringComparison.OrdinalIgnoreCase));
     }
 }

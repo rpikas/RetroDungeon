@@ -138,10 +138,6 @@
         {
           "Name": "+1 or better weapons to hit",
           "Description": "+1 or better weapons to hit"
-        },
-        {
-          "Name": "Resistant to spells as undead",
-          "Description": "Resistant to spells as undead"
         }
       ],
       "MagicResistance": "Standard",
@@ -177,12 +173,7 @@
         }
       ],
       "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Save at 4 levels higher (magic & poison resistance)",
-          "Description": "Save at 4 levels higher (magic & poison resistance)"
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Strength": "13–14",
       "Intelligence": "Very",
@@ -193,6 +184,118 @@
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 1, Roll 16-17",
       "Other": "https://1eonline.info/1mm/dwarf.htm"
+    },
+
+    {
+      "Name": "Ear Seeker",
+      "Type": "Vermin",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 9,
+      "Movement": 1,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 0,
+      "%InLair": "90",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Burrow into ear",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Disease",
+          "Description": "Egg Infestation: Lays 9–16 eggs in warm cavities; larvae hatch in 4–24 hours and kill host 90% of the time unless cured."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Small",
+      "BaseXPValue": 0,
+      "XPValuePerHitPoint": 0,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 18",
+      "Other": "Burrows into ear; cure disease required to prevent death"
+    },
+
+    {
+      "Name": "Elf",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 20,
+      "NumberOfAppearancesMax": 200,
+      "ArmorClass": 5,
+      "Movement": 12,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "10",
+      "TreasureType": "G, S, T",
+      "IndividualTreasure": "N",
+      "Attacks": [
+        {
+          "Name": "Elven extra sharp Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "MagicResistance": "Standard",
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "90% magic resistance vs sleep",
+          "Description": "90% magic resistance vs sleep"
+        }
+      ],
+      "Intelligence": "High",
+      "Size": "Medium",
+      "BaseXPValue": 18,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Chaotic Good",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 19",
+      "Other": "https://1eonline.info/1mm/elf.htm"
+    },
+
+    {
+      "Name": "Gnome",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
+      "ArmorClass": 5,
+      "Movement": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "C, Q(x20)",
+      "IndividualTreasure": "M(x3)",
+      "Attacks": [
+        {
+          "Name": "Short sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Save at 4 levels higher",
+      "Intelligence": "Very",
+      "Alignment": "Neutral Good",
+      "Size": "Small",
+      "BaseXPValue": 22,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 20-21",
+      "Other": "Deity: Garl Glittergold; Morale 55%; Psionics Nil"
     },
 
     {
@@ -632,78 +735,6 @@
       "Other": "Rot grubs burrow into flesh; flame or cure disease required to survive"
     },
 
-    {
-      "Name": "Ear Seeker",
-      "Type": "Vermin",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 9,
-      "Movement": 1,
-      "HitDice": 1,
-      "HitDiceType": 1,
-      "ExtraHitPoints": 0,
-      "%InLair": "90",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Burrow into ear",
-          "NumberOfAttacks": 1,
-          "Damage": "1d1"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Disease",
-          "Description": "Egg Infestation: Lays 9–16 eggs in warm cavities; larvae hatch in 4–24 hours and kill host 90% of the time unless cured."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Size": "Small",
-      "BaseXPValue": 0,
-      "XPValuePerHitPoint": 0,
-      "Alignment": "Neutral",
-      "Source": "Adnd",
-      "Other": "Burrows into ear; cure disease required to prevent death"
-    },
-
-
-
-
-    {
-      "Name": "Elf",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 20,
-      "NumberOfAppearancesMax": 200,
-      "ArmorClass": 5,
-      "Movement": 12,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "10",
-      "TreasureType": "G, S, T",
-      "IndividualTreasure": "N",
-      "Attacks": [
-        {
-          "Name": "Elven extra sharp Longsword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d10"
-        }
-      ],
-      "MagicResistance": "90% vs charm and sleep",
-      "Strength": "12",
-      "Intelligence": "High",
-      "Size": "Medium",
-      "BaseXPValue": 18,
-      "XPValuePerHitPoint": 1,
-      "Alignment": "Chaotic Good",
-      "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/elf.htm"
-    },
 
     {
       "Name": "Badger",
@@ -744,38 +775,7 @@
     },
 
 
-    {
-      "Name": "Gnome",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 40,
-      "NumberOfAppearancesMax": 400,
-      "ArmorClass": 5,
-      "Movement": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "C, Q(x20)",
-      "IndividualTreasure": "M(x3)",
-      "Attacks": [
-        {
-          "Name": "Short sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Save at 4 levels higher",
-      "Intelligence": "Very",
-      "Alignment": "Neutral Good",
-      "Size": "Small",
-      "BaseXPValue": 22,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "Other": "Deity: Garl Glittergold; Morale 55%; Psionics Nil"
-    },
+
 
     {
       "Name": "Halfling",

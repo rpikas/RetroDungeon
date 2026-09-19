@@ -1231,3 +1231,11 @@ ___
 Implement "SpecialDefenses": "Name": "+1 or better weapons to hit", It means that non magical weapons can not hit the monster. if some one tries, 
 please write that to the ADnD Rule and Dice Info dialog. Weapons without + in the name and without special abilities can not hit the monster. 91,3
 ___
+implement  "SpecialDefenses":  "Name": "90% magic resistance vs sleep". If the encounter got that and is hit hit by s sleep spell roll 
+1d100 to determine if the 90% avoidance chanse hinders the spell for having effect on the encounter. 
+write the dice roll and consequense in the ADnD Rule and Dice Info dialog.
+
+I encountered Elfs with  "SpecialDefenses":  "90% magic resistance vs sleep", but still got this message when casting sleep, 
+Elf #5 fails save (4 vs 17) and falls asleep for 4 round(s). 
+I expected 90 chanse thaty they would resist it. 93,5
+_________
