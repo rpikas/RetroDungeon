@@ -1,0 +1,41 @@
+{
+  "Category": "WeaselPelt",
+  "Items": [
+    {
+      "Name": "Low quality Weasel Pelt",
+      "Type": "MagicItem",
+      "Cost": 1000,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "A low quality giant weasel pelt.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Medium quality Weasel Pelt",
+      "Type": "MagicItem",
+      "Cost": 3000,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "A medium quality giant weasel pelt.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "High quality Weasel Pelt",
+      "Type": "MagicItem",
+      "Cost": 6000,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "A high quality giant weasel pelt.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    }
+  ]
+}

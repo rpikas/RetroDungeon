@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Adnd.Core.Characters;
+using Adnd.Core.Items;
 using Adnd.Game.Viewer;
 using Adnd.Core.Config;
 using Adnd.Core.Spells;
@@ -288,6 +289,11 @@ public class MainMenu
 
             if (!changed)
                 continue;
+
+            var removedRegenMarkers = member.Inventory.RemoveAll(item =>
+                ItemSpecialAbilityParser.HasSpecialAbility(item, "Regeneration (Potion)"));
+            if (removedRegenMarkers > 0)
+                changed = true;
 
             _charRepo.Save(member);
         }

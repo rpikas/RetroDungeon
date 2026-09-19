@@ -877,8 +877,14 @@ public sealed class EncounterForm : Form
 
         var allSpells = _spellRepo.LoadAll();
         var usable = user.Inventory
-            .Select((item, index) => new { item, index, spell = ResolveItemSpell(item, allSpells) })
-            .Where(x => x.spell != null)
+            .Select((item, index) => new
+            {
+                item,
+                index,
+                spell = ResolveItemSpell(item, allSpells),
+                grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration")
+            })
+            .Where(x => x.spell != null || x.grantsRegeneration)
             .ToList();
 
         if (usable.Count == 0)
@@ -888,25 +894,31 @@ public sealed class EncounterForm : Form
         }
 
         var lines = string.Join(Environment.NewLine, usable.Select((x, i) =>
-            $"{i + 1}. {x.item.Name} (casts {x.spell!.Name})"));
+            x.spell != null
+                ? $"{i + 1}. {x.item.Name} (casts {x.spell!.Name})"
+                : $"{i + 1}. {x.item.Name} (grants regeneration)"));
         var selected = PromptForNumber("Use Item", $"{user.Name} - choose item:{Environment.NewLine}{Environment.NewLine}{lines}", 1, usable.Count);
         if (!selected.HasValue)
             return;
 
         var chosen = usable[selected.Value - 1];
-        var spell = chosen.spell!;
+        var spell = chosen.spell;
 
         SpellCastTarget? target;
-        if (spell.RangeType == SpellRangeType.Self)
+        if (spell != null && spell.RangeType == SpellRangeType.Self)
         {
             target = SpellCastTarget.Ally(user);
         }
-        else if (spell.RangeType == SpellRangeType.Ally)
+        else if (spell != null && spell.RangeType == SpellRangeType.Ally)
         {
             var ally = PromptAllyTarget(spell);
             if (ally == null)
                 return;
             target = SpellCastTarget.Ally(ally);
+        }
+        else if (spell == null)
+        {
+            target = null;
         }
         else
         {
@@ -959,7 +971,7 @@ public sealed class EncounterForm : Form
         {
             Type = CombatActionType.UseItem,
             ItemInventoryIndex = chosen.index,
-            SpellId = spell.Id,
+            SpellId = spell?.Id,
             Target = target
         };
 

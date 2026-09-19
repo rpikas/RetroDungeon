@@ -8,7 +8,7 @@ public sealed class TreasureTable
     public TreasureCoinsTable Coins { get; set; } = new();
     public TreasureValuablesRule Gems { get; set; } = new();
     public TreasureValuablesRule Jewelry { get; set; } = new();
-    public TreasureValuablesRule Art { get; set; } = new();
+   // public TreasureValuablesRule Art { get; set; } = new();
     public List<TreasureMagicRule> MagicRolls { get; set; } = new();
 }
 

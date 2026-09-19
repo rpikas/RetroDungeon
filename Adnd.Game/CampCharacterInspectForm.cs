@@ -950,8 +950,14 @@ public sealed class CampCharacterInspectForm : Form
         var user = partyMembers.FirstOrDefault(x => string.Equals(x.Name, c.Name, StringComparison.OrdinalIgnoreCase)) ?? c;
 
         var usableItems = user.Inventory
-            .Select((item, index) => new { item, index, spell = _spellCastingService.FindSpellFromItem(item) })
-            .Where(x => x.spell != null)
+            .Select((item, index) => new
+            {
+                item,
+                index,
+                spell = _spellCastingService.FindSpellFromItem(item),
+                grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration")
+            })
+            .Where(x => x.spell != null || x.grantsRegeneration)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -960,19 +966,23 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var itemIdx = PromptChoice("Use Item", usableItems.Select(x => $"{x.item.Name} (casts {x.spell!.Name})").ToList());
+        var itemIdx = PromptChoice("Use Item", usableItems.Select(x =>
+            x.spell != null
+                ? $"{x.item.Name} (casts {x.spell!.Name})"
+                : $"{x.item.Name} (grants regeneration)").ToList());
         if (!itemIdx.HasValue)
             return;
 
         var selected = usableItems[itemIdx.Value];
-        var spell = selected.spell!;
+        var spell = selected.spell;
+        var grantsRegenerationUntilDungeonExit = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var targets = new List<SpellCastTarget>();
 
-        if (spell.RangeType == SpellRangeType.Self)
+        if (spell != null && spell.RangeType == SpellRangeType.Self)
         {
             targets.Add(SpellCastTarget.Ally(user));
         }
-        else if (spell.RangeType == SpellRangeType.Ally)
+        else if (spell != null && spell.RangeType == SpellRangeType.Ally)
         {
             var targetIdx = PromptChoice("Choose Ally Target", partyMembers.Select(p =>
             {
@@ -986,19 +996,27 @@ public sealed class CampCharacterInspectForm : Form
             targets.Add(SpellCastTarget.Ally(partyMembers[targetIdx.Value]));
         }
 
-        var result = _spellCastingService.CastFromItem(new SpellCastRequest
-        {
-            Caster = user,
-            SpellId = spell.Id,
-            Context = SpellUseContext.Exploration,
-            Targets = targets,
-            PartyTargets = partyMembers,
-            MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
-        });
+        var result = spell != null
+            ? _spellCastingService.CastFromItem(new SpellCastRequest
+            {
+                Caster = user,
+                SpellId = spell.Id,
+                Context = SpellUseContext.Exploration,
+                Targets = targets,
+                PartyTargets = partyMembers,
+                MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
+            })
+            : new Adnd.Core.Spells.Casting.SpellCastResult { Success = true };
 
-        if (!result.Success)
+        if (spell != null && !result.Success)
         {
             SayOnBoth("Use Item", string.IsNullOrWhiteSpace(result.Error) ? "Could not use item." : result.Error);
+            return;
+        }
+
+        if (spell == null && !grantsRegenerationUntilDungeonExit)
+        {
+            SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
         }
 
@@ -1006,6 +1024,19 @@ public sealed class CampCharacterInspectForm : Form
         {
             user.Inventory.RemoveAt(selected.index);
             result.Events.Add($"{selected.item.Name} is consumed.");
+        }
+
+        if (grantsRegenerationUntilDungeonExit
+            && !user.Inventory.Any(item => Adnd.Core.Items.ItemSpecialAbilityParser.HasSpecialAbility(item, "Regeneration (Potion)")))
+        {
+            user.Inventory.Add(new Item
+            {
+                Name = "Regeneration (Potion Effect)",
+                Type = ItemType.MagicItem,
+                IsShopBuyable = false,
+                SpecialAbilities = new List<string> { "Regeneration (Potion)" }
+            });
+            result.Events.Add($"{user.Name} begins regenerating until leaving the dungeon.");
         }
 
         foreach (var member in partyMembers)

@@ -165,15 +165,15 @@ public sealed class TreasureService
 
         var gemsFound = after.Gems.Count - before.GemsCount;
         var jewelryFound = after.Jewelry.Count - before.JewelryCount;
-        var artFound = after.Art.Count - before.ArtCount;
+   //     var artFound = after.Art.Count - before.ArtCount;
         var magicFound = after.MagicPlaceholders.Count - before.MagicPlaceholdersCount;
 
         if (gemsFound > 0)
             lines.Add($"{monsterDisplayName}: individual {source} {gemsFound} Gem item(s) found.");
         if (jewelryFound > 0)
             lines.Add($"{monsterDisplayName}: individual {source} {jewelryFound} Jewelry item(s) found.");
-        if (artFound > 0)
-            lines.Add($"{monsterDisplayName}: individual {source} {artFound} Art item(s) found.");
+//        if (artFound > 0)
+     //       lines.Add($"{monsterDisplayName}: individual {source} {artFound} Art item(s) found.");
         if (magicFound > 0)
             lines.Add($"{monsterDisplayName}: individual {source} magic treasure found.");
 
@@ -342,7 +342,7 @@ public sealed class TreasureService
         var chanceScale = gemJewelryMagicChanceScaleFactor;
         RollValuables("Gem", table.Gems, source, result.Gems, result.LogLines, amountScaleFactor, chanceScale, gemJewelryValueScaleFactor, gemJewelryCountDivideFactor, suppressFailedRollLogs);
         RollValuables("Jewelry", table.Jewelry, source, result.Jewelry, result.LogLines, amountScaleFactor, chanceScale, gemJewelryValueScaleFactor, gemJewelryCountDivideFactor, suppressFailedRollLogs);
-        RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d, 1d, 1d, suppressFailedRollLogs);
+     //   RollValuables("Art", table.Art, source, result.Art, result.LogLines, adjustArtAmountByScale ? amountScaleFactor : 1d, 1d, 1d, 1d, suppressFailedRollLogs);
 
         foreach (var magicRule in table.MagicRolls)
         {
@@ -541,7 +541,7 @@ public sealed class TreasureService
             result.PlatinumPieces,
             result.Gems.Count,
             result.Jewelry.Count,
-            result.Art.Count,
+        //    result.Art.Count,
             result.MagicPlaceholders.Count);
     }
 
@@ -565,8 +565,8 @@ public sealed class TreasureService
         for (var i = before.JewelryCount; i < after.Jewelry.Count; i++)
             bucket.Jewelry.Add(new TreasureValuableResult { Category = after.Jewelry[i].Category, ValueGp = after.Jewelry[i].ValueGp, SourceTable = after.Jewelry[i].SourceTable });
 
-        for (var i = before.ArtCount; i < after.Art.Count; i++)
-            bucket.Art.Add(new TreasureValuableResult { Category = after.Art[i].Category, ValueGp = after.Art[i].ValueGp, SourceTable = after.Art[i].SourceTable });
+    //    for (var i = before.ArtCount; i < after.Art.Count; i++)
+    //        bucket.Art.Add(new TreasureValuableResult { Category = after.Art[i].Category, ValueGp = after.Art[i].ValueGp, SourceTable = after.Art[i].SourceTable });
 
         for (var i = before.MagicPlaceholdersCount; i < after.MagicPlaceholders.Count; i++)
             bucket.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult { Table = after.MagicPlaceholders[i].Table, Count = after.MagicPlaceholders[i].Count, SourceTable = after.MagicPlaceholders[i].SourceTable });
@@ -586,9 +586,9 @@ public sealed class TreasureService
         result.Total.Jewelry = result.Jewelry
             .Select(j => new TreasureValuableResult { Category = j.Category, ValueGp = j.ValueGp, SourceTable = j.SourceTable })
             .ToList();
-        result.Total.Art = result.Art
-            .Select(a => new TreasureValuableResult { Category = a.Category, ValueGp = a.ValueGp, SourceTable = a.SourceTable })
-            .ToList();
+   //     result.Total.Art = result.Art
+   //         .Select(a => new TreasureValuableResult { Category = a.Category, ValueGp = a.ValueGp, SourceTable = a.SourceTable })
+   //         .ToList();
         result.Total.MagicPlaceholders = result.MagicPlaceholders
             .Select(m => new TreasureMagicPlaceholderResult { Table = m.Table, Count = m.Count, SourceTable = m.SourceTable })
             .ToList();
@@ -603,7 +603,7 @@ public sealed class TreasureService
                || after.PlatinumPieces > before.PlatinumPieces
                || after.Gems.Count > before.GemsCount
                || after.Jewelry.Count > before.JewelryCount
-               || after.Art.Count > before.ArtCount
+        //       || after.Art.Count > before.ArtCount
                || after.MagicPlaceholders.Count > before.MagicPlaceholdersCount;
     }
 
@@ -615,7 +615,7 @@ public sealed class TreasureService
         int PlatinumPieces,
         int GemsCount,
         int JewelryCount,
-        int ArtCount,
+   //     int ArtCount,
         int MagicPlaceholdersCount);
 
     private static int ScaleAmount(int amount, double factor, string context, List<string> logs)

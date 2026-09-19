@@ -1059,6 +1059,7 @@
       "BaseXPValue": 500,
       "XPValuePerHitPoint": 6,
       "TreasureType": "C",
+      "Alignment": "Lawful evil",
       "Source": "Adnd"
     },
 

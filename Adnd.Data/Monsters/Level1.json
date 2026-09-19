@@ -2,6 +2,79 @@
   "Level": 1,
   "Monsters": [
     {
+      "Name": "Giant Ant",
+      "Type": "Insect",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 100,
+      "ArmorClass": 3,
+      "Movement": 18,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "70",
+      "TreasureType": "Q(x3),S",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Small",
+      "Alignment": "Neutral",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 01-02",
+      "Other": "Worker ant; 90% of all encounters are workers."
+    },
+
+    {
+      "Name": "Badger",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "Movement": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "BadgerPelt",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d2"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 03-04",
+      "Other": "Pelt worth 10–30 gp"
+    },
+
+    {
       "Name": "Orc",
       "Type": "Humanoid",
       "Frequency": "Common",
@@ -35,6 +108,7 @@
       "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 53-66",
       "Other": "https://1eonline.info/1mm/orc.htm"
     },
 
@@ -379,7 +453,7 @@
       "ExtraHitPoints": 0,
       "%InLair": "0",
       "TreasureType": "Nil",
-      "IndividualTreasure": "None",
+      "IndividualTreasure": "BadgerPelt",
       "Attacks": [
         {
           "Name": "Slam",

@@ -1148,7 +1148,7 @@ public sealed class CombatCoordinator
             return new List<Item>();
 
         var key = table.Trim().ToLowerInvariant();
-        return key switch
+        var pool = key switch
         {
             "potion" => allItems.Where(i => i.Type == ItemType.Potion).ToList(),
             "scroll" => allItems.Where(i => i.Type == ItemType.Scroll).ToList(),
@@ -1163,6 +1163,29 @@ public sealed class CombatCoordinator
             "magicitem" => allItems.Where(i => i.Type == ItemType.MagicItem).ToList(),
             _ => allItems.Where(i => i.Type == ItemType.MagicItem && i.Name.Contains(table, StringComparison.OrdinalIgnoreCase)).ToList()
         };
+
+        if (pool.Count > 0)
+            return pool;
+
+        var normalizedTable = NormalizeMatchKey(table);
+        if (normalizedTable.EndsWith("s", StringComparison.Ordinal) && normalizedTable.Length > 1)
+            normalizedTable = normalizedTable[..^1];
+
+        return allItems
+            .Where(i => i.Type == ItemType.MagicItem)
+            .Where(i => NormalizeMatchKey(i.Name).Contains(normalizedTable, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
+
+    private static string NormalizeMatchKey(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+        return new string(value
+            .Where(char.IsLetterOrDigit)
+            .Select(char.ToLowerInvariant)
+            .ToArray());
     }
 
     private static HashSet<string> LoadItemNamesFromFile(string fileName)

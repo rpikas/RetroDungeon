@@ -1,0 +1,41 @@
+{
+  "Category": "BadgerPelt",
+  "Items": [
+    {
+      "Name": "Low quality Badger Pelt",
+      "Type": "MagicItem",
+      "Cost": 20,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "A Low quality Badger Pelt.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Medium quality Badger Pelt",
+      "Type": "MagicItem",
+      "Cost": 40,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "A Medium quality Badger Pelt.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "High quality Badger Pelt",
+      "Type": "MagicItem",
+      "Cost": 60,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "A High quality Badger Pelt.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    }
+  ]
+}

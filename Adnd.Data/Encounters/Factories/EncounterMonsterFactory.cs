@@ -131,6 +131,29 @@ public sealed class EncounterMonsterFactory
             });
         }
 
+        if (isInLair && string.Equals(template.Name, "Giant Ant", StringComparison.OrdinalIgnoreCase))
+        {
+            var warriorTemplate = FindMonsterByName(allMonsters, "Giant Warrior Ant");
+            if (warriorTemplate != null)
+            {
+                var warrior = CloneMonster(warriorTemplate);
+                list.Add(new MonsterInstance(warrior, list.Count + 1, groupId)
+                {
+                    IsInLair = true
+                });
+
+                RuleApplicationInfo.Publish(
+                    "Giant Ant",
+                    "MM",
+                    "Giant ants in lair encounter support from giant warrior ant",
+                    "When giant ants are encountered in lair, one giant warrior ant is also present.",
+                    "-",
+                    "-",
+                    "-",
+                    $"Added 1 Giant Warrior Ant to group {groupId}.");
+            }
+        }
+
         return list;
     }
 

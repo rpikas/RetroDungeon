@@ -390,6 +390,58 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
+    {
+      "Name": "Demon, Type IV",
+      "Type": "Demon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": -1,
+      "Movement": 12,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "15",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Magic Use",
+          "Description": "Can use magical abilities, one per melee round."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 150; Attack/Defense modes: A, C, E/F, G, H."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+2 or Better Weapon Required",
+          "Description": "Can only be hit by magical weapons of +2 or better."
+        }
+      ],
+      "MagicResistance": "65%",
+      "Intelligence": "Very",
+      "Size": "Large",
+      "PsionicAbility": 150,
+      "Alignment": "Chaotic evil",
+      "BaseXPValue": 3000,
+      "XPValuePerHitPoint": 16,
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/demon.type4.htm"
+    },
 
     {
       "Name": "Hydra 13 Heads",

@@ -85,7 +85,7 @@ public sealed class TreasureTableRepository : ITreasureTableProvider
             },
             Gems = ToValuables(model.Gems),
             Jewelry = ToValuables(model.Jewelry),
-            Art = ToValuables(model.Art),
+       //     Art = ToValuables(model.Art),
             MagicRolls = model.Magic.Rolls.Select(r => new TreasureMagicRule
             {
                 Table = r.Table,

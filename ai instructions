@@ -1220,3 +1220,10 @@ _____
 If a monster does not take damage or is not affected by a spell because they have magic resistance, write that in the combat log and
 in the adnd Rul and dice info. there you can also tell what the dice roll is.86,3
 ____
+Manually commented away code related to treasure Art with //
+Tried to manually implement BadgerPelt but needed help from ai 87,2
+implement a similar solution for WeaselPelt that drops from Giant Weasel. WeaselPelts sell from1000 to 6000 87,7
+
+if an item used with "SpecialAbilities": [ "Casts Regeneration" ], then the person drinking it start regenerating until they exit the dungeon
+
+______

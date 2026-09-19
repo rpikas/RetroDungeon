@@ -893,6 +893,7 @@ public sealed class CombatResolver
 
         var item = user.Inventory[action.ItemInventoryIndex.Value];
         var spellId = action.SpellId;
+        var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
@@ -902,6 +903,28 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
+            if (grantsRegenerationUntilDungeonExit)
+            {
+                if (item.Type is ItemType.Potion or ItemType.Scroll)
+                    user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
+
+                if (!user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
+                {
+                    user.Inventory.Add(new Item
+                    {
+                        Name = "Regeneration (Potion Effect)",
+                        Type = ItemType.MagicItem,
+                        IsShopBuyable = false,
+                        SpecialAbilities = new List<string> { "Regeneration (Potion)" }
+                    });
+
+                    events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
+                }
+
+                events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
+                return;
+            }
+
             events.Add(new CombatEvent($"{item.Name} has no usable spell effect."));
             return;
         }
@@ -927,6 +950,20 @@ public sealed class CombatResolver
 
         if (item.Type is ItemType.Potion or ItemType.Scroll)
             user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
+
+        if (grantsRegenerationUntilDungeonExit
+            && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
+        {
+            user.Inventory.Add(new Item
+            {
+                Name = "Regeneration (Potion Effect)",
+                Type = ItemType.MagicItem,
+                IsShopBuyable = false,
+                SpecialAbilities = new List<string> { "Regeneration (Potion)" }
+            });
+
+            events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
+        }
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
@@ -2259,7 +2296,14 @@ public sealed class CombatResolver
             .Any(item => item!.SpecialAbilities.Any(a =>
                 string.Equals(a?.Trim(), "Regeneration (1)", StringComparison.OrdinalIgnoreCase)));
 
-        return hasRegeneration ? 1 : 0;
+        if (hasRegeneration)
+            return 1;
+
+        var hasRegenerationFromConsumable = member.Inventory
+            .Any(item => ItemSpecialAbilityParser.HasSpecialAbility(item, "Regeneration (1)")
+                         || ItemSpecialAbilityParser.HasSpecialAbility(item, "Regeneration (Potion)"));
+
+        return hasRegenerationFromConsumable ? 1 : 0;
     }
 
     private static bool IsAlive(Character c) => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead);

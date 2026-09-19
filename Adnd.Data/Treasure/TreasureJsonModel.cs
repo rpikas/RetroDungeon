@@ -6,7 +6,7 @@ public class TreasureJsonModel
     public TreasureCoinsJson Coins { get; set; } = new();
     public TreasureValuablesJson Gems { get; set; } = new();
     public TreasureValuablesJson Jewelry { get; set; } = new();
-    public TreasureValuablesJson Art { get; set; } = new();
+//    public TreasureValuablesJson Art { get; set; } = new();
 
     // Placeholder for future DMG-style magic item generation.
     public TreasureMagicJson Magic { get; set; } = new();

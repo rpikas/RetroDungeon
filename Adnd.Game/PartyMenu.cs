@@ -700,8 +700,14 @@ public class PartyMenu
         var user = partyMembers.FirstOrDefault(x => string.Equals(x.Name, c.Name, StringComparison.OrdinalIgnoreCase)) ?? c;
 
         var usableItems = user.Inventory
-            .Select((item, index) => new { item, index, spell = _spellCastingService.FindSpellFromItem(item) })
-            .Where(x => x.spell != null)
+            .Select((item, index) => new
+            {
+                item,
+                index,
+                spell = _spellCastingService.FindSpellFromItem(item),
+                grantsRegeneration = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration")
+            })
+            .Where(x => x.spell != null || x.grantsRegeneration)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -713,7 +719,12 @@ public class PartyMenu
 
         Console.WriteLine("\nUse which item:");
         for (int i = 0; i < usableItems.Count; i++)
-            Console.WriteLine($"{i + 1}. {usableItems[i].item.Name} (casts {usableItems[i].spell!.Name})");
+        {
+            var details = usableItems[i].spell != null
+                ? $"casts {usableItems[i].spell!.Name}"
+                : "grants regeneration";
+            Console.WriteLine($"{i + 1}. {usableItems[i].item.Name} ({details})");
+        }
 
         Console.Write("Choose #: ");
         var itemSel = InputHelper.ReadNumber(1, usableItems.Count);
@@ -721,14 +732,15 @@ public class PartyMenu
             return;
 
         var selected = usableItems[itemSel.Value - 1];
-        var spell = selected.spell!;
+        var spell = selected.spell;
+        var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var targets = new List<SpellCastTarget>();
 
-        if (spell.RangeType == SpellRangeType.Self)
+        if (spell != null && spell.RangeType == SpellRangeType.Self)
         {
             targets.Add(SpellCastTarget.Ally(user));
         }
-        else if (spell.RangeType == SpellRangeType.Ally)
+        else if (spell != null && spell.RangeType == SpellRangeType.Ally)
         {
             Console.WriteLine("\nChoose ally target:");
             for (int i = 0; i < partyMembers.Count; i++)
@@ -745,22 +757,31 @@ public class PartyMenu
             targets.Add(SpellCastTarget.Ally(partyMembers[targetSel.Value - 1]));
         }
 
-        var result = _spellCastingService.CastFromItem(new SpellCastRequest
+        if (spell != null)
         {
-            Caster = user,
-            SpellId = spell.Id,
-            Context = SpellUseContext.Exploration,
-            Targets = targets,
-            PartyTargets = partyMembers,
-            MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
-        });
+            var result = _spellCastingService.CastFromItem(new SpellCastRequest
+            {
+                Caster = user,
+                SpellId = spell.Id,
+                Context = SpellUseContext.Exploration,
+                Targets = targets,
+                PartyTargets = partyMembers,
+                MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
+            });
 
-        foreach (var line in result.Events)
-            Console.WriteLine($"\n{line}");
+            foreach (var line in result.Events)
+                Console.WriteLine($"\n{line}");
 
-        if (!result.Success)
+            if (!result.Success)
+            {
+                Console.WriteLine($"\n{result.Error}");
+                Console.ReadKey(true);
+                return;
+            }
+        }
+        else if (!grantsRegenerationUntilDungeonExit)
         {
-            Console.WriteLine($"\n{result.Error}");
+            Console.WriteLine($"\n{selected.item.Name} has no usable effect.");
             Console.ReadKey(true);
             return;
         }
@@ -770,6 +791,19 @@ public class PartyMenu
         {
             user.Inventory.RemoveAt(selected.index);
             Console.WriteLine($"\n{item.Name} is consumed.");
+        }
+
+        if (grantsRegenerationUntilDungeonExit
+            && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
+        {
+            user.Inventory.Add(new Item
+            {
+                Name = "Regeneration (Potion Effect)",
+                Type = ItemType.MagicItem,
+                IsShopBuyable = false,
+                SpecialAbilities = new List<string> { "Regeneration (Potion)" }
+            });
+            Console.WriteLine($"\n{user.Name} begins regenerating until leaving the dungeon.");
         }
 
         foreach (var member in partyMembers)

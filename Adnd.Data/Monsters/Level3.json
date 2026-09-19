@@ -119,7 +119,7 @@
       "ExtraHitPoints": 3,
       "%InLair": "15",
       "TreasureType": "Nil",
-      "IndividualTreasure": "None",
+      "IndividualTreasure": "WeaselPelt",
       "Attacks": [
         {
           "Name": "Bite",
