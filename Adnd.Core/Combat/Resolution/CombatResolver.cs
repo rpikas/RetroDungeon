@@ -1,20 +1,23 @@
-using System.Text.RegularExpressions;
-using System.Text.Json;
+using Adnd.Core.Assassination;
 using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
 using Adnd.Core.Combat.Sessions;
-using Adnd.Core.Dices;
 using Adnd.Core.Diagnostics;
+using Adnd.Core.Dices;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Adnd.Core.Combat.Resolution;
 
 public sealed class CombatResolver
 {
+    private readonly Random _rng = new();//for assassination rolls 
+
     private readonly IDice _dice;
     private readonly SpellCastingService? _spellCastingService;
     private readonly CharacterSavingThrowService _savingThrowService = new();
@@ -1266,6 +1269,46 @@ public sealed class CombatResolver
             if (named != null && named.IsAlive) target = named;
         }
 
+        // ---------------------------------------------------------
+        // ASSASSINATION (AD&D 1e) – korrekt placerad i ResolvePartyAttack
+        // ---------------------------------------------------------
+        if (member.Class == CharacterClass.Assassin && target != null && target.IsAlive)
+        {
+            var assassination = new AssassinationService("Adnd.Data/Assassination");
+
+            int monsterLevel = target.Template.HitDice;
+
+            // CombatResolver använder nu sin egen RNG
+            bool success = assassination.TryAssassinate(monsterLevel, _rng);
+
+            if (success)
+            {
+                RuleApplicationInfo.Publish(
+                            "HomeBrewAI",
+                            "NA",
+                            "assassination",
+                            "assassination success",
+                            "1",
+                            "6",
+                            "0",
+                            "Monster dies?");
+                target.CurrentHitPoints = 0;
+                events.Add(new CombatEvent($"{member.Name} assassinates {target.DisplayName} instantly!"));
+                return; // hoppa över hela attack-loopen
+            }
+            else
+            {
+                RuleApplicationInfo.Publish(
+                            "HomeBrewAI",
+                            "NA",
+                            "assassination",
+                            "assassination fail",
+                            "1",
+                            "6",
+                            "0",
+                            "Monster survives?");
+            }
+        }
         // Spread: take the next monster along, within the chosen group if one was named. The cursor is on the
         // session, so consecutive attackers asking to spread walk along the line instead of stacking up.
         if (target is null && action.SpreadTargets)

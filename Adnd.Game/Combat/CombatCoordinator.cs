@@ -1,3 +1,4 @@
+using Adnd.Core.Assassination;
 using Adnd.Core.Characters;
 using Adnd.Core.Characters.Progression;
 using Adnd.Core.Combat.Actions;
@@ -5,8 +6,8 @@ using Adnd.Core.Combat.Events;
 using Adnd.Core.Combat.Resolution;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
-using Adnd.Core.Dices;
 using Adnd.Core.Diagnostics;
+using Adnd.Core.Dices;
 using Adnd.Core.Experience;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
@@ -27,10 +28,15 @@ using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
 
+
 namespace Adnd.Game.Combat;
 
 public sealed class CombatCoordinator
 {
+    private readonly Random _rng = new Random();//inte säker på att detta är rätt... egge ai sa åt mig att lägga till det för att fixa AssassinationService,
+                                                //men jag är osäker på om det är korrekt. Det verkar som om AssassinationService redan har en Random-parameter i
+                                                //TryAssassinate-metoden. Jag ska kolla upp det.
+
     private readonly EncounterMonsterFactory _monsterFactory = new();
     private readonly CombatResolver _combatResolver;
     private readonly CharacterSavingThrowService _savingThrowService = new();
@@ -235,6 +241,35 @@ public sealed class CombatCoordinator
         ResolveEncounterSurprise(session);
         EncounterStarted?.Invoke(session);
 
+        
+              while (session.Outcome == CombatOutcome.InProgress)
+               {
+                   if (!session.AliveParty.Any())
+                   {
+                       session.Outcome = CombatOutcome.Defeat;
+                       break;
+                   }
+
+                   using var encounterForm = new EncounterForm(session, dungeonLevel);
+                   encounterForm.ViewerPromptChanged += prompt => ViewerPromptChanged?.Invoke(session, prompt);
+                   var dialogResult = encounterForm.ShowDialog(owner);
+                   if (dialogResult != DialogResult.OK)
+                   {
+                       session.Outcome = CombatOutcome.Escaped;
+                       break;
+                   }
+
+                   ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
+
+                   var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
+                   HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+                   ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
+                   RoundResolved?.Invoke(session);
+                   ShowRoundEvents(owner, roundEvents, session);
+
+                   MoveDeadPartyMembersToEnd(session.Party);
+               }
+        /*
         while (session.Outcome == CombatOutcome.InProgress)
         {
             if (!session.AliveParty.Any())
@@ -254,6 +289,57 @@ public sealed class CombatCoordinator
 
             ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
 
+            //TODO flytta denna till resovleRound
+            // ---------------------------------------------------------
+            // ASSASSINATION (AD&D 1e) – utan surprise-krav
+            // ---------------------------------------------------------
+            var assassinationEvents = new List<string>();
+
+            foreach (var assassin in session.Party.Where(p => p.Class == CharacterClass.Assassin))
+            {
+                var assassination = new AssassinationService("Adnd.Data/Assassination");
+
+                foreach (var monster in session.Monsters.Where(m => m.CurrentHitPoints > 0))
+                {
+                    int monsterLevel = monster.Template.HitDice;
+
+                    bool success = assassination.TryAssassinate(monsterLevel, _rng);
+
+                    if (success)
+                    {
+                        monster.CurrentHitPoints = 0;
+                        assassinationEvents.Add($"{assassin.Name} assassinates {monster.Template.Name} instantly!");
+                        RuleApplicationInfo.Publish(
+                              "HomeBrewAI",
+                              "Will never get here",
+                              "assassination",
+                              "assassination success",
+                              "1",
+                              "6",
+                              "0",
+                              "Monster dies?");
+                        //TODO rewrite this
+                    }
+                    else
+                    {
+                        RuleApplicationInfo.Publish(
+                              "HomeBrewAI",
+                              "Will never get here",
+                              "assassination",
+                              "assassination failure",
+                              "1",
+                              "6",
+                              "0",
+                              "Monster survives?");
+                    }
+                }
+            }
+
+
+
+            // ---------------------------------------------------------
+            // Vanlig stridsresolution
+            // ---------------------------------------------------------
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
@@ -262,6 +348,8 @@ public sealed class CombatCoordinator
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
+        */
+
 
         if (session.Outcome == CombatOutcome.Victory)
             ApplyVictoryRewards(owner, session, characterRepository, dungeonLevel);

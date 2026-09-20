@@ -404,46 +404,6 @@
     },
 
     {
-      "Name": "Orc",
-      "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 30,
-      "NumberOfAppearancesMax": 300,
-      "ArmorClass": 6,
-      "Movement": 9,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "35",
-      "TreasureType": "C,O,Q(x10), S",
-      "IndividualTreasure": "L",
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Poison",
-          "Description": "Victim must save vs. poison or suffer effects"
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
-      "Size": "Medium",
-      "BaseXPValue": 10,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 1, Roll 53-66",
-      "Other": "https://1eonline.info/1mm/orc.htm"
-    },
-
-
-
-    {
       "Name": "Bandit",
       "Type": "Humanoid",
       "Frequency": "Common",
@@ -472,6 +432,7 @@
       "XPValuePerHitPoint": 1,
       "Alignment": "Neutral",
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 01-25",
       "Other": "https://1eonline.info/1mm/bandit.htm"
     },
 
@@ -511,6 +472,7 @@
       "XPValuePerHitPoint": 1,
       "Alignment": "Neutral",
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 26-30",
       "Other": "https://1eonline.info/1mm/berserker.htm"
     },
 
@@ -538,126 +500,27 @@
       "XPValuePerHitPoint": 1,
       "TreasureType": "A",
       "Source": "AD&D",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 31-45",
       "DM comment": "Brigands are better armed and armored than Bandits; typically chaotic evil and more ruthless.  1e Dungeon Masters Guide p.175"
     },
-
     {
-      "Name": "Buccaneer",
+      "Name": "Lvl 1 Magic-User",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 50,
-      "NumberOfAppearancesMax": 300,
-      "ArmorClass": 6,
-      "Movement": 12,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
       "HitDice": 1,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "%InLair": "80",
-      "TreasureType": "W",
-      "IndividualTreasure": "K",
-      "Attacks": [
-        {
-          "Name": "Cutlass",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
       "Size": "Medium",
-      "BaseXPValue": 5,
-      "XPValuePerHitPoint": 1,
-      "Alignment": "Neutral",
-      "Source": "AI",
-      "Other": "https://1eonline.info/1mm/buccaneer.htm"
-    },
-
-    {
-      "Name": "Nomad",
-      "Type": "Humanoid",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 7,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Movement": 30,
-      "Attacks": [
-        {
-          "Name": "Scimitar",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 25,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AI"
-    },
-    {
-      "Name": "Tribesmen",
-      "Type": "Humanoid",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 7,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Attacks": [
-        {
-          "Name": "Spear",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AI"
-    },
-    {
-      "Name": "Dervish",
-      "Type": "Humanoid",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Attacks": [
-        {
-          "Name": "Scimitar",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 30,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AI"
-    },
-    {
-      "Name": "Merchant",
-      "Type": "Humanoid",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 8,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
       "Attacks": [
         {
           "Name": "Dagger",
@@ -667,26 +530,33 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Caravan Guards",
-          "Description": "Usually accompanied by 2–12 guards; may carry valuable goods."
+          "Name": "Level 1 Magic-User spells",
+          "Description": "Level 1 Magic-User spells"
         }
       ],
-      "BaseXPValue": 15,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AI"
+      "BaseXPValue": 25,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
     },
+
     {
-      "Name": "Pilgrim",
+      "Name": "Lvl 1 Cleric",
       "Type": "Humanoid",
-      "Frequency": "Very Rare",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 8,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
       "HitDice": 1,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
       "Attacks": [
         {
           "Name": "Mace",
@@ -696,26 +566,65 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Level 1 Priest spells",
-          "Description": "Level 1 Priest spells"
+          "Name": "Level 1 Cleric spells",
+          "Description": "Level 1 Cleric spells"
         }
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "AI"
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
+      "Source": "Adnd"
     },
     {
-      "Name": "Noble",
+      "Name": "Lvl 1 Fighter",
       "Type": "Humanoid",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 5,
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
       "HitDice": 1,
-      "HitDiceType": 8,
+      "HitDiceType": 10,
       "ExtraHitPoints": 0,
       "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 16,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Thief",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -725,19 +634,306 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Retinue",
-          "Description": "Always accompanied by guards, servants, and possibly a magic-user or cleric advisor."
-        },
+          "Name": "Pick pockets",
+          "Description": "Pick Pockets"
+        }
+      ],
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Monk",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 10,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
         {
-          "Name": "Wealth and Influence",
-          "Description": "Possesses fine equipment, jewelry, and may command loyalty from other humans."
+          "Name": "Unarmed Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Assassin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Assassination",
+          "Description": "Can attempt assassination attack; uses Thief saving throws."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Bard",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 12,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Druid spells",
+          "Description": "Access to 1st-level druid spells such as Entangle and Faerie Fire."
         }
       ],
       "BaseXPValue": 40,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "A",
-      "Source": "AI"
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
     },
+    {
+      "Name": "Lvl 1 Druid",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Druid spells",
+          "Description": "Access to 1st-level druid spells such as Entangle and Faerie Fire."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Ranger",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 14,
+        "RodStaffWand": 16,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 17,
+        "Spell": 17
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 50,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Illusionist",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 15,
+        "Spell": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Illusionist spells",
+          "Description": "Access to 1st-level illusionist spells such as Color Spray and Hypnotism."
+        }
+      ],
+      "BaseXPValue": 35,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Lvl 1 Paladin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 1,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lay on Hands",
+          "Description": "Paladin can heal 2 hit points per level once per day."
+        }
+      ],
+      "BaseXPValue": 40,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
+      "Source": "Adnd"
+    },
+
+    {
+      "Name": "Orc",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 30,
+      "NumberOfAppearancesMax": 300,
+      "ArmorClass": 6,
+      "Movement": 9,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "35",
+      "TreasureType": "C,O,Q(x10), S",
+      "IndividualTreasure": "L",
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or suffer effects"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 10,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 53-66",
+      "Other": "https://1eonline.info/1mm/orc.htm"
+    },
+
+
+
+
+
+
 
     {
       "Name": "Zombie",
@@ -1147,25 +1343,123 @@
       "Other": "Holy water deals 2d4 damage; blunt weapons deal full damage; fire deals normal damage."
     },
 
-
     {
-      "Name": "Lvl 1 Magic-User",
+      "Name": "Buccaneer",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
+      "NumberOfAppearancesMin": 50,
+      "NumberOfAppearancesMax": 300,
+      "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 1,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "%InLair": "80",
+      "TreasureType": "W",
+      "IndividualTreasure": "K",
+      "Attacks": [
+        {
+          "Name": "Cutlass",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
+      "BaseXPValue": 5,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral",
+      "Source": "AI",
+      "Other": "https://1eonline.info/1mm/buccaneer.htm"
+    },
+
+    {
+      "Name": "Nomad",
+      "Type": "Humanoid",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Movement": 30,
+      "Attacks": [
+        {
+          "Name": "Scimitar",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 25,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "A",
+      "Source": "AI"
+    },
+    {
+      "Name": "Tribesmen",
+      "Type": "Humanoid",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Spear",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "A",
+      "Source": "AI"
+    },
+    {
+      "Name": "Dervish",
+      "Type": "Humanoid",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Scimitar",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 30,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "A",
+      "Source": "AI"
+    },
+    {
+      "Name": "Merchant",
+      "Type": "Humanoid",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 8,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
       "Attacks": [
         {
           "Name": "Dagger",
@@ -1175,33 +1469,26 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Level 1 Magic-User spells",
-          "Description": "Level 1 Magic-User spells"
+          "Name": "Caravan Guards",
+          "Description": "Usually accompanied by 2–12 guards; may carry valuable goods."
         }
       ],
-      "BaseXPValue": 25,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "BaseXPValue": 15,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "A",
+      "Source": "AI"
     },
-
     {
-      "Name": "Lvl 1 Cleric",
+      "Name": "Pilgrim",
       "Type": "Humanoid",
-      "Frequency": "Uncommon",
+      "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
-      "ArmorClass": 4,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 8,
       "HitDice": 1,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
       "Attacks": [
         {
           "Name": "Mace",
@@ -1211,64 +1498,26 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Level 1 Cleric spells",
-          "Description": "Level 1 Cleric spells"
+          "Name": "Level 1 Priest spells",
+          "Description": "Level 1 Priest spells"
         }
       ],
       "BaseXPValue": 25,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "AI"
     },
     {
-      "Name": "Lvl 1 Fighter",
+      "Name": "Noble",
       "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
       "HitDice": 1,
-      "HitDiceType": 10,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 16,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
-      "Attacks": [
-        {
-          "Name": "Longsword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 25,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Thief",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 6,
-      "HitDice": 1,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 16,
-        "Spell": 15
-      },
       "Attacks": [
         {
           "Name": "Short Sword",
@@ -1278,257 +1527,20 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Pick pockets",
-          "Description": "Pick Pockets"
+          "Name": "Retinue",
+          "Description": "Always accompanied by guards, servants, and possibly a magic-user or cleric advisor."
+        },
+        {
+          "Name": "Wealth and Influence",
+          "Description": "Possesses fine equipment, jewelry, and may command loyalty from other humans."
         }
       ],
-      "BaseXPValue": 25,
+      "BaseXPValue": 40,
       "XPValuePerHitPoint": 1,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "TreasureType": "A",
+      "Source": "AI"
     },
-    {
-      "Name": "Lvl 1 Monk",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 10,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 16,
-        "Spell": 15
-      },
-      "Attacks": [
-        {
-          "Name": "Unarmed Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 35,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Assassin",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 1,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 16,
-        "Spell": 15
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Assassination",
-          "Description": "Can attempt assassination attack; uses Thief saving throws."
-        }
-      ],
-      "BaseXPValue": 35,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Bard",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 5,
-      "HitDice": 1,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 12,
-        "BreathWeapon": 16,
-        "Spell": 15
-      },
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 1 Druid spells",
-          "Description": "Access to 1st-level druid spells such as Entangle and Faerie Fire."
-        }
-      ],
-      "BaseXPValue": 40,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Druid",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
-      "ArmorClass": 5,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 16,
-        "Spell": 15
-      },
-      "Attacks": [
-        {
-          "Name": "Staff",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 1 Druid spells",
-          "Description": "Access to 1st-level druid spells such as Entangle and Faerie Fire."
-        }
-      ],
-      "BaseXPValue": 35,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Ranger",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 5,
-      "HitDice": 2,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 14,
-        "RodStaffWand": 16,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 17,
-        "Spell": 17
-      },
-      "Attacks": [
-        {
-          "Name": "Longsword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 50,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Illusionist",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 1,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 15,
-        "Spell": 12
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 1 Illusionist spells",
-          "Description": "Access to 1st-level illusionist spells such as Color Spray and Hypnotism."
-        }
-      ],
-      "BaseXPValue": 35,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 1 Paladin",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "HitDice": 1,
-      "HitDiceType": 10,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Attacks": [
-        {
-          "Name": "Longsword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Lay on Hands",
-          "Description": "Paladin can heal 2 hit points per level once per day."
-        }
-      ],
-      "BaseXPValue": 40,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
+
     {
       "Name": "Orc",
       "Type": "Humanoid",
