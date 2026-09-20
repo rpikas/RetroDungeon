@@ -1,84 +1,24 @@
 {
   "AssassinationTable": [
-    {
-      "VictimLevel": 1,
-      "ChancePercent": 60
-    },
-    {
-      "VictimLevel": 2,
-      "ChancePercent": 55
-    },
-    {
-      "VictimLevel": 3,
-      "ChancePercent": 50
-    },
-    {
-      "VictimLevel": 4,
-      "ChancePercent": 45
-    },
-    {
-      "VictimLevel": 5,
-      "ChancePercent": 40
-    },
-    {
-      "VictimLevel": 6,
-      "ChancePercent": 35
-    },
-    {
-      "VictimLevel": 7,
-      "ChancePercent": 30
-    },
-    {
-      "VictimLevel": 8,
-      "ChancePercent": 25
-    },
-    {
-      "VictimLevel": 9,
-      "ChancePercent": 20
-    },
-    {
-      "VictimLevel": 10,
-      "ChancePercent": 15
-    },
-    {
-      "VictimLevel": 11,
-      "ChancePercent": 15
-    },
-    {
-      "VictimLevel": 12,
-      "ChancePercent": 10
-    },
-    {
-      "VictimLevel": 13,
-      "ChancePercent": 10
-    },
-    {
-      "VictimLevel": 14,
-      "ChancePercent": 10
-    },
-    {
-      "VictimLevel": 15,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 16,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 17,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 18,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 19,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 20,
-      "ChancePercent": 5
-    }
+    { "VictimLevel": 1, "ChancePercent": 50 },
+    { "VictimLevel": 2, "ChancePercent": 48 },
+    { "VictimLevel": 3, "ChancePercent": 46 },
+    { "VictimLevel": 4, "ChancePercent": 44 },
+    { "VictimLevel": 5, "ChancePercent": 42 },
+    { "VictimLevel": 6, "ChancePercent": 40 },
+    { "VictimLevel": 7, "ChancePercent": 38 },
+    { "VictimLevel": 8, "ChancePercent": 36 },
+    { "VictimLevel": 9, "ChancePercent": 34 },
+    { "VictimLevel": 10, "ChancePercent": 32 },
+    { "VictimLevel": 11, "ChancePercent": 30 },
+    { "VictimLevel": 12, "ChancePercent": 28 },
+    { "VictimLevel": 13, "ChancePercent": 26 },
+    { "VictimLevel": 14, "ChancePercent": 24 },
+    { "VictimLevel": 15, "ChancePercent": 22 },
+    { "VictimLevel": 16, "ChancePercent": 20 },
+    { "VictimLevel": 17, "ChancePercent": 18 },
+    { "VictimLevel": 18, "ChancePercent": 16 },
+    { "VictimLevel": 19, "ChancePercent": 14 },
+    { "VictimLevel": 20, "ChancePercent": 12 }
   ]
 }

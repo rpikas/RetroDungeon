@@ -85,6 +85,9 @@
     <Content Include="..\..\..\..\..\..\dev\Images\Monsters\Level6\giantant(warrior).png" Link="Assets\Monsters\Level6\giantant%28warrior%29.png" />
     <Content Include="..\..\..\..\..\..\dev\Images\Monsters\Level6\minotaur.jpg" Link="Assets\Monsters\Level6\minotaur.jpg" />
     <Content Include="..\..\..\..\..\..\dev\Images\Monsters\Level6\wraith.png" Link="Assets\Monsters\Level6\wraith.png" />
+    <Content Include="..\Adnd.Data\Assassination\AssassinationTable.json" Link="Data\Assassination\AssassinationTable.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

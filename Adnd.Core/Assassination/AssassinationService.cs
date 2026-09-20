@@ -23,8 +23,17 @@ namespace Adnd.Core.Assassination
 
         public AssassinationService(string dataPath)
         {
-            var json = File.ReadAllText(Path.Combine(dataPath, "AssassinationTable.json"));
+            var path = Path.Combine(AppContext.BaseDirectory, dataPath, "AssassinationTable.json");
+            if (!File.Exists(path))
+            {
+                Console.WriteLine($"Warning: Assassination table not found at {path}. Assassination disabled.");
+                _table = new List<AssassinationEntry>();
+                return;
+            }
+
+            var json = File.ReadAllText(path);
             var model = JsonSerializer.Deserialize<AssassinationTableModel>(json);
+
 
             if (model == null || model.AssassinationTable == null || model.AssassinationTable.Count == 0)
                 throw new Exception("AssassinationTable.json is missing or invalid.");

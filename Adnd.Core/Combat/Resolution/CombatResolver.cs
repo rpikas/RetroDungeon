@@ -1269,46 +1269,7 @@ public sealed class CombatResolver
             if (named != null && named.IsAlive) target = named;
         }
 
-        // ---------------------------------------------------------
-        // ASSASSINATION (AD&D 1e) – korrekt placerad i ResolvePartyAttack
-        // ---------------------------------------------------------
-        if (member.Class == CharacterClass.Assassin && target != null && target.IsAlive)
-        {
-            var assassination = new AssassinationService("Adnd.Data/Assassination");
-
-            int monsterLevel = target.Template.HitDice;
-
-            // CombatResolver använder nu sin egen RNG
-            bool success = assassination.TryAssassinate(monsterLevel, _rng);
-
-            if (success)
-            {
-                RuleApplicationInfo.Publish(
-                            "HomeBrewAI",
-                            "NA",
-                            "assassination",
-                            "assassination success",
-                            "1",
-                            "6",
-                            "0",
-                            "Monster dies?");
-                target.CurrentHitPoints = 0;
-                events.Add(new CombatEvent($"{member.Name} assassinates {target.DisplayName} instantly!"));
-                return; // hoppa över hela attack-loopen
-            }
-            else
-            {
-                RuleApplicationInfo.Publish(
-                            "HomeBrewAI",
-                            "NA",
-                            "assassination",
-                            "assassination fail",
-                            "1",
-                            "6",
-                            "0",
-                            "Monster survives?");
-            }
-        }
+       
         // Spread: take the next monster along, within the chosen group if one was named. The cursor is on the
         // session, so consecutive attackers asking to spread walk along the line instead of stacking up.
         if (target is null && action.SpreadTargets)
@@ -1353,7 +1314,46 @@ public sealed class CombatResolver
             attacks *= 2;
         if (session.IsPartySlowed(member.Name))
             attacks = Math.Max(1, attacks / 2);
+        // ---------------------------------------------------------
+        // ASSASSINATION (AD&D 1e) – korrekt placerad i ResolvePartyAttack
+        // ---------------------------------------------------------
+        if (member.Class == CharacterClass.Assassin && target != null && target.IsAlive)
+        {
+            var assassination = new AssassinationService("Data/Assassination");
 
+            int monsterLevel = target.Template.HitDice;
+
+            // CombatResolver använder nu sin egen RNG
+            bool success = assassination.TryAssassinate(monsterLevel, _rng);
+
+            if (success)
+            {
+                RuleApplicationInfo.Publish(
+                            "HomeBrewAI",
+                            "NA",
+                            "assassination",
+                            "assassination success",
+                            "1",
+                            "6",
+                            "0",
+                            "Monster dies?");
+                target.CurrentHitPoints = 0;
+                events.Add(new CombatEvent($"{member.Name} assassinates {target.DisplayName} instantly!"));
+                return; // hoppa över hela attack-loopen
+            }
+            else
+            {
+                RuleApplicationInfo.Publish(
+                            "HomeBrewAI",
+                            "NA",
+                            "assassination",
+                            "assassination fail",
+                            "1",
+                            "6",
+                            "0",
+                            "Monster survives?");
+            }
+        }
         for (int i = 0; i < attacks; i++)
         {
             var thac0Modifier = session.IsBlessed(member.Name) ? 1 : 0;
