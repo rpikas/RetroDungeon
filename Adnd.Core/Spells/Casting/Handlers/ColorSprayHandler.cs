@@ -85,7 +85,7 @@ public sealed class ColorSprayHandler : ISpellEffectHandler
             else if (hdDifference <= 2)
             {
                 //Case B: Monster HD is 1-2 higher than caster level -> save for half duration
-                var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
+                var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 20);
                 var saveRoll = rng.Next(1, 21);
 
                 if (saveRoll >= saveTarget)
@@ -108,7 +108,7 @@ public sealed class ColorSprayHandler : ISpellEffectHandler
             else
             {
                 //Case C: Monster HD is more than 2 higher than caster level -> save for full duration
-                var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
+                    var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 20);
                 var saveRoll = rng.Next(1, 21);
 
                 if (saveRoll >= saveTarget)

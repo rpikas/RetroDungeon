@@ -41,7 +41,7 @@ public sealed class FearHandler : ISpellEffectHandler
 
         foreach (var monster in targetMonsters)
         {
-            var saveTarget = monster.Template.SavingThrows?.Spell ?? 0;
+            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 0);
             var saveRoll = rng.Next(1, 21);
             var saved = saveTarget > 0 && saveRoll >= saveTarget;
 

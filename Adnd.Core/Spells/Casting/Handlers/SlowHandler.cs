@@ -54,7 +54,7 @@ public sealed class SlowHandler : ISpellEffectHandler
 
         foreach (var monster in targets)
         {
-            var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
+            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 20);
             var saveRoll = rng.Next(1, 21);
             if (saveRoll >= saveTarget)
             {

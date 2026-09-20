@@ -74,7 +74,7 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
 
         foreach (var target in targets)
         {
-            var baseSaveTarget = target.Template.SavingThrows?.Spell ?? 20;
+            var baseSaveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
             var saveTarget = Math.Min(20, baseSaveTarget + savePenalty);
             var saveRoll = rng.Next(1, 21);
 

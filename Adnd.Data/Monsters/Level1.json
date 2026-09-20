@@ -355,8 +355,8 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Magic & Poison Resistance 4 levels higher",
-          "Description": "Saves as if 4 levels higher"
+          "Name": "Magic & Poison Saves as 4 levels higher",
+          "Description": "Magic & Poison Saves as 4 levels higher"
         }
       ],
       "MagicResistance": "Save at 4 levels higher",
@@ -366,7 +366,41 @@
       "BaseXPValue": 22,
       "XPValuePerHitPoint": 1,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 27-28",
       "Other": "Deity: Yondalla; Psionics Nil; Surprise on 1–4; Invisible in vegetation; Shun water"
+    },
+
+    {
+      "Name": "Hobgoblin",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 20,
+      "NumberOfAppearancesMax": 200,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 1,
+      "ExtraHitPoints": 1,
+      "%InLair": "25",
+      "TreasureType": "D, Q(x5)",
+      "IndividualTreasure": "J, M",
+      "Attacks": [
+        {
+          "Name": "Long Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Alignment": "Lawful Evil",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 29-33",
+      "Other": "https://1eonline.info/1mm/hobgoblin.htm"
     },
 
     {
@@ -407,37 +441,7 @@
       "Other": "https://1eonline.info/1mm/orc.htm"
     },
 
-    {
-      "Name": "Hobgoblin",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 20,
-      "NumberOfAppearancesMax": 200,
-      "ArmorClass": 5,
-      "Movement": 9,
-      "HitDice": 1,
-      "ExtraHitPoints": 1,
-      "%InLair": "25",
-      "TreasureType": "D, Q(x5)",
-      "IndividualTreasure": "J, M",
-      "Attacks": [
-        {
-          "Name": "Long Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
-      "Size": "Medium",
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "Alignment": "Lawful Evil",
-      "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/hobgoblin.htm"
-    },
+
 
     {
       "Name": "Bandit",

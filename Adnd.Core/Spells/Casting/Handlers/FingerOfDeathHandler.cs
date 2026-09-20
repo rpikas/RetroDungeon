@@ -38,7 +38,7 @@ public sealed class FingerOfDeathHandler : ISpellEffectHandler
         if (target == null)
             return SpellCastResult.Failure("No valid enemy target selected.");
 
-        var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+        var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
         var saveRoll = rng.Next(1, 21);
 
         var result = new SpellCastResult { Success = true };

@@ -92,7 +92,7 @@ public sealed class SleepHandler : ISpellEffectHandler
                 }
             }
 
-            var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
+            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 20);
             var saveRoll = rng.Next(1, 21);
 
             if (saveRoll >= saveTarget)

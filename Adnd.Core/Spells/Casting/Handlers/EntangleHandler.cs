@@ -37,7 +37,7 @@ public sealed class EntangleHandler : ISpellEffectHandler
 
         foreach (var target in targets)
         {
-            var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
             var saveRoll = rng.Next(1, 21);
 
             if (saveRoll >= saveTarget)

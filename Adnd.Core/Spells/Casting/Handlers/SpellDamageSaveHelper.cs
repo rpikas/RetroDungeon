@@ -50,6 +50,38 @@ internal static class SpellDamageSaveHelper
         return CheckMagicResistance(monster, rng, spellName).Resisted;
     }
 
+    internal static int GetMonsterMagicSaveTarget(MonsterInstance monster, int fallbackTarget = 20)
+    {
+        var baseTarget = monster.Template.SavingThrows?.Spell ?? fallbackTarget;
+        return AdjustMonsterSaveTargetForSpecialDefenses(monster, baseTarget, isMagicSave: true, isPoisonSave: false);
+    }
+
+    internal static int GetMonsterPoisonSaveTarget(MonsterInstance monster, int fallbackTarget = 20)
+    {
+        var baseTarget = monster.Template.SavingThrows?.ParalyzationPoisonDeath ?? fallbackTarget;
+        return AdjustMonsterSaveTargetForSpecialDefenses(monster, baseTarget, isMagicSave: false, isPoisonSave: true);
+    }
+
+    private static int AdjustMonsterSaveTargetForSpecialDefenses(MonsterInstance monster, int baseTarget, bool isMagicSave, bool isPoisonSave)
+    {
+        var adjusted = baseTarget;
+
+        if ((isMagicSave || isPoisonSave)
+            && HasSpecialDefense(monster, "Magic & Poison Saves as 4 levels higher"))
+        {
+            adjusted = Math.Max(1, adjusted - 4);
+        }
+
+        return adjusted;
+    }
+
+    private static bool HasSpecialDefense(MonsterInstance monster, string defenseName)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+            string.Equals(d.Name?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(d.Description?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
+    }
+
     internal static string FormatSaveAndDamageLine(string targetDisplayName, int rolledDamage, Outcome outcome, string? rolledDamageText = null)
     {
         if (outcome.MagicResisted)
@@ -83,7 +115,7 @@ internal static class SpellDamageSaveHelper
 
     internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName)
     {
-        var saveTarget = monster.Template.SavingThrows?.Spell ?? 0;
+        var saveTarget = GetMonsterMagicSaveTarget(monster, 0);
         var saveRoll = rng.Next(1, 21);
         var saved = saveTarget > 0 && saveRoll >= saveTarget;
         var appliedDamage = saved ? rolledDamage / 2 : rolledDamage;

@@ -33,7 +33,7 @@ public sealed class FeeblemindHandler : ISpellEffectHandler
             return SpellCastResult.Failure("No valid monsters in target group.");
 
         var target = candidates[rng.Next(candidates.Count)];
-        var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+        var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
         var saveRoll = rng.Next(1, 21);
 
         var result = new SpellCastResult { Success = true };

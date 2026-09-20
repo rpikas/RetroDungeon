@@ -70,7 +70,7 @@ public sealed class ParalyzationHandler : ISpellEffectHandler
 
         foreach (var target in selected)
         {
-            var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
             var saveRoll = rng.Next(1, 21);
 
             if (saveRoll >= saveTarget)
