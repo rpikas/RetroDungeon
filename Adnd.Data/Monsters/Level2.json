@@ -169,28 +169,7 @@
       "Source": "Adnd"
     },
 
-    {
-      "Name": "Shrieker",
-      "Type": "Fungus",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
-      "ArmorClass": 7,
-      "HitDice": 3,
-      "Size": "Large",
-      "Movement": 1,
-      "Attacks": [],
-      "SpecialAbilities": [
-        {
-          "Name": "Shriek",
-          "Description": "Emits a loud shriek when light or movement is nearby, attracting nearby monsters within 30–120 feet."
-        }
-      ],
-      "BaseXPValue": 5,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "None",
-      "Source": "Adnd"
-    },
+
     {
       "Name": "Gas Spore",
       "Type": "Fungus",

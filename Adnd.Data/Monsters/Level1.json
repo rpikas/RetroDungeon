@@ -890,6 +890,41 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 46-00",
       "Source": "Adnd"
     },
+    {
+      "Name": "Kobold",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 40,
+      "NumberOfAppearancesMax": 400,
+      "ArmorClass": 7,
+      "Movement": 6,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "%InLair": "40",
+      "TreasureType": "Q(x5), O",
+      "IndividualTreasure": "J",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": "9",
+      "Intelligence": "Average",
+      "Alignment": "Lawful Evil",
+      "Size": "Small",
+      "BaseXPValue": 5,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 49-54, Human subtable , Roll 46-00",
+      "Other": "Hate bright sunlight (-1 to hit); infravision 60'; tribal society; often accompanied by boars or giant weasels."
+    },
+
 
     {
       "Name": "Orc",
@@ -912,12 +947,7 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAttacks": [
-        {
-          "Name": "Poison",
-          "Description": "Victim must save vs. poison or suffer effects"
-        }
-      ],
+      "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Average",
@@ -927,122 +957,6 @@
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 1, Roll 53-66",
       "Other": "https://1eonline.info/1mm/orc.htm"
-    },
-
-
-
-
-
-
-
-    {
-      "Name": "Zombie",
-      "Type": "Undead",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 24,
-      "ArmorClass": 8,
-      "Movement": 6,
-      "HitDice": 2,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "0",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "BadgerPelt",
-      "Attacks": [
-        {
-          "Name": "Slam",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Medium",
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "Source": "Adnd",
-      "Other": "Always strikes last; holy water deals 2d8 damage."
-    },
-
-    {
-      "Name": "Rot Grub",
-      "Type": "Vermin",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 20,
-      "ArmorClass": 9,
-      "Movement": 1,
-      "HitDice": 1,
-      "HitDiceType": 1,
-      "ExtraHitPoints": 0,
-      "%InLair": "0",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Burrow into Flesh",
-          "NumberOfAttacks": 1,
-          "Damage": "1d1"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Disease",
-          "Description": "Rot Grub burrow into Flesh. If not treated immediately with flame or cure disease within 10 rounds, it will with cause death."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Size": "Small",
-      "BaseXPValue": 0,
-      "XPValuePerHitPoint": 0,
-      "Alignment": "Neutral",
-      "Source": "Adnd",
-      "Other": "Rot grubs burrow into flesh; flame or cure disease required to survive"
-    },
-
-
-    {
-      "Name": "Badger",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
-      "ArmorClass": 4,
-      "Movement": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d2"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Semi-",
-      "Size": "Small",
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "Alignment": "Neutral",
-      "Source": "Adnd",
-      "Other": "Pelt worth 10–30 gp"
     },
 
     {
@@ -1080,6 +994,7 @@
       "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70",
       "Other": "Piercers drop from ceilings; no further attacks after landing."
     },
     {
@@ -1117,6 +1032,7 @@
       "BaseXPValue": 20,
       "XPValuePerHitPoint": 2,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70",
       "Other": "Piercers drop from ceilings; no further attacks after landing."
     },
     {
@@ -1154,9 +1070,9 @@
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 3,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70",
       "Other": "Piercers drop from ceilings; no further attacks after landing."
     },
-
     {
       "Name": "Piercer Huge",
       "Type": "Monster",
@@ -1192,79 +1108,8 @@
       "BaseXPValue": 60,
       "XPValuePerHitPoint": 4,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70",
       "Other": "Piercers drop from ceilings; no further attacks after landing."
-    },
-
-    {
-      "Name": "Piercer",
-      "Type": "Monster",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 18,
-      "ArmorClass": 3,
-      "Movement": 1,
-      "HitDice": 2,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Drop Attack",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "95% likely to surprise"
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "None",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Small",
-      "BaseXPValue": 20,
-      "XPValuePerHitPoint": 2,
-      "Source": "Adnd",
-      "Other": " (Medium) Piercers drop from ceilings; no further attacks after landing."
-    },
-
-    {
-      "Name": "Goblin",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 40,
-      "NumberOfAppearancesMax": 400,
-      "ArmorClass": 6,
-      "Movement": 6,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": -1,
-      "%InLair": "40",
-      "TreasureType": "C",
-      "IndividualTreasure": "K",
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Strength": "10",
-      "Intelligence": "Average",
-      "Alignment": "Lawful Evil",
-      "Size": "Small",
-      "BaseXPValue": 10,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "Other": "Suffer -1 to hit in sunlight; normal infravision 60'; fair miners; hate dwarves and gnomes."
     },
 
     {
@@ -1302,8 +1147,156 @@
       "BaseXPValue": 7,
       "XPValuePerHitPoint": 1,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 71-83",
       "Other": "Fearful of fire; swim well; sacred to Gruumsh; often found in crypts and dungeons."
     },
+
+    {
+      "Name": "Rot Grub",
+      "Type": "Vermin",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 20,
+      "ArmorClass": 9,
+      "Movement": 1,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Burrow into Flesh",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Disease",
+          "Description": "Rot Grub burrow into Flesh. If not treated immediately with flame or cure disease within 10 rounds, it will with cause death."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Small",
+      "BaseXPValue": 0,
+      "XPValuePerHitPoint": 0,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 84-85",
+      "Other": "Rot grubs burrow into flesh; flame or cure disease required to survive"
+    },
+
+    {
+      "Name": "Shrieker",
+      "Type": "Fungus",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "Movement": 1,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Shriek",
+          "Description": "Emits a loud shriek when light or movement is nearby, attracting nearby monsters within 30–120 feet."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Small",
+      "BaseXPValue": 5,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 86-96",
+      "Other": "Shriekers are ambulatory fungus that react to light or movement by shrieking, potentially attracting monsters."
+    },
+
+    {
+      "Name": "Zombie",
+      "Type": "Undead",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 24,
+      "ArmorClass": 8,
+      "Movement": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "BadgerPelt",
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Always strikes last; holy water deals 2d8 damage."
+    },
+
+
+
+    {
+      "Name": "Piercer",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 3,
+      "Movement": 1,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Drop Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "95% likely to surprise"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "None",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 20,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70, should not be used, use the small, medium, large or Huge Piercer entries",
+      "Other": " (Medium) Piercers drop from ceilings; no further attacks after landing."
+    },
+
+   
 
     {
       "Name": "Skeleton",
@@ -1569,39 +1562,7 @@
       "TreasureType": "D",
       "Source": "Wizardry"
     },
-    {
-      "Name": "Kobold",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 40,
-      "NumberOfAppearancesMax": 400,
-      "ArmorClass": 7,
-      "Movement": 6,
-      "HitDice": 1,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 0,
-      "%InLair": "40",
-      "TreasureType": "Q(x5), O",
-      "IndividualTreasure": "J",
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Strength": "9",
-      "Intelligence": "Average",
-      "Alignment": "Lawful Evil",
-      "Size": "Small",
-      "BaseXPValue": 5,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "Other": "Hate bright sunlight (-1 to hit); infravision 60'; tribal society; often accompanied by boars or giant weasels."
-    },
+
 
     {
       "Name": "Kobold",
