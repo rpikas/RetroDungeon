@@ -1274,7 +1274,7 @@
       "ExtraHitPoints": 0,
       "%InLair": "0",
       "TreasureType": "Nil",
-      "IndividualTreasure": "BadgerPelt",
+      "IndividualTreasure": "Nil",
       "Attacks": [
         {
           "Name": "Slam",
@@ -1335,9 +1335,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70, should not be used, use the small, medium, large or Huge Piercer entries",
       "Other": " (Medium) Piercers drop from ceilings; no further attacks after landing."
     },
-
-
-
 
     {
       "Name": "Buccaneer",

@@ -455,6 +455,10 @@ public sealed class CombatResolver
                 && ResolveLevel1IllusionistSpell(monster, session, events))
                 continue;
 
+            if (HasSpecialAbility(monster, "Dragon breath")
+                && ResolveDragonBreathCurrentHp(monster, session, events))
+                continue;
+
             if (TryGetHpDamageBreathDamage(monster, out var breathDamage)
                 && ResolveHpDamageBreath(monster, breathDamage, session, events))
                 continue;
@@ -719,6 +723,9 @@ public sealed class CombatResolver
             }
 
             if (TryResolveMonsterLayOnHands(session, monster, events))
+                continue;
+
+            if (TryResolveMonsterAssassination(session, monster, events))
                 continue;
 
             var attacks = monster.Template.Attacks.Count > 0 ? monster.Template.Attacks : new List<Adnd.Core.Monsters.MonsterAttack> { new() { NumberOfAttacks = 1, Damage = "1d4", Name = "Claw" } };
@@ -1317,7 +1324,11 @@ public sealed class CombatResolver
         // ---------------------------------------------------------
         // ASSASSINATION (AD&D 1e) – korrekt placerad i ResolvePartyAttack
         // ---------------------------------------------------------
-        if (member.Class == CharacterClass.Assassin && target != null && target.IsAlive)
+        if (member.Class == CharacterClass.Assassin
+            && session.RoundNumber == 1
+            && session.MonstersSurprisedRound1
+            && target != null
+            && target.IsAlive)
         {
             var assassination = new AssassinationService("Data/Assassination");
 
@@ -1957,6 +1968,44 @@ public sealed class CombatResolver
         return true;
     }
 
+    private bool ResolveDragonBreathCurrentHp(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var breathDamage = Math.Max(0, monster.CurrentHitPoints);
+        if (breathDamage <= 0)
+            return false;
+
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Dragon breath for {breathDamage} damage!"));
+
+        foreach (var target in aliveParty)
+        {
+            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
+            var saveRoll = _dice.Roll(20);
+            var applied = saveRoll >= saveTarget ? breathDamage / 2 : breathDamage;
+
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            if (saveRoll >= saveTarget)
+                events.Add(new CombatEvent($"{target.Name} succeeds save vs Breath ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
+            else
+                events.Add(new CombatEvent($"{target.Name} fails save vs Breath ({saveRoll} vs {saveTarget}) and takes {actual} damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain by dragon breath!"));
+            }
+        }
+
+        return true;
+    }
+
     private static bool TryGetHpDamageBreathDamage(MonsterInstance monster, out int damage)
     {
         foreach (var ability in monster.Template.SpecialAbilities)
@@ -2144,6 +2193,36 @@ public sealed class CombatResolver
     {
         return GetMonsterAbilityNames(monster)
             .Any(name => abilityNames.Any(n => string.Equals(name, n, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private bool TryResolveMonsterAssassination(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (session.RoundNumber != 1 || !session.PartySurprisedRound1)
+            return false;
+
+        var isAssassinByName = monster.Template.Name?.IndexOf("assassin", StringComparison.OrdinalIgnoreCase) >= 0;
+        var isAssassinByAbility = HasAnySpecialAbility(monster, "Assassination", "Assassin", "Assassin Attack");
+        if (!isAssassinByName && !isAssassinByAbility)
+            return false;
+
+        var target = SelectMonsterTarget(session);
+        if (target == null)
+            return false;
+
+        var assassination = new AssassinationService("Data/Assassination");
+        var victimLevel = Math.Max(1, target.Level);
+        var success = assassination.TryAssassinate(victimLevel, _rng);
+
+        if (!success)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} attempts to assassinate {target.Name} but fails."));
+            return true;
+        }
+
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        events.Add(new CombatEvent($"{monster.DisplayName} assassinates {target.Name} instantly!"));
+        return true;
     }
 
     private void TryApplyMonsterParalyzation(MonsterInstance monster, Character target, List<CombatEvent> events)

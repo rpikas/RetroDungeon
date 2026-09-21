@@ -169,7 +169,7 @@ public sealed class EncounterForm : Form
 
         _partyList.Columns.Add("#", 50);
         _partyList.Columns.Add("Character Name", 220);
-        _partyList.Columns.Add("Class", 140);
+        _partyList.Columns.Add("Class", 220);
         _partyList.Columns.Add("AC", 80);
         _partyList.Columns.Add("Hits", 100);
         _partyList.Columns.Add("Status", 320);//This was 280, but I increased it to 320 to accommodate the new status
@@ -2235,8 +2235,14 @@ public sealed class EncounterForm : Form
 
     private static string GetClassCode(Character c)
     {
-        var cls = c.Classes.Count > 0 ? c.Classes[0].ToDisplayString() : c.Class.ToDisplayString();
-        var clsCode = cls.Length >= 3 ? cls[..3].ToUpperInvariant() : cls.ToUpperInvariant();
+        var classes = (c.Classes != null && c.Classes.Count > 0)
+            ? c.Classes
+            : new List<CharacterClass> { c.Class };
+
+        var clsCode = string.Join("/", classes
+            .Select(cls => cls.ToDisplayString())
+            .Select(name => name.Length >= 3 ? name[..3].ToUpperInvariant() : name.ToUpperInvariant()));
+
         var raceCode = c.Race.ToDisplayString();
         raceCode = raceCode.Length > 0 ? raceCode[..1].ToUpperInvariant() : "?";
         return $"{raceCode}-{clsCode}";

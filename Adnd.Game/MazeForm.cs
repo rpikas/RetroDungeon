@@ -2852,11 +2852,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (rolledMonsterLevel <= 0)
             return null;
 
-        if (GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyAdndDMGEncounterTable)
-        {
-            return RollFromDmgEncounterTable(rolledMonsterLevel, level);
-        }
+        // Primary flow: MonsterEncounter.json determines monster level,
+        // then MonsterLevels.json (1d100) determines creature and count.
+        var dmgRoll = RollFromDmgEncounterTable(rolledMonsterLevel, level);
+        if (dmgRoll != null)
+            return dmgRoll;
 
+        // Fallback when DMG table data is unavailable or cannot be mapped locally.
         var monstersForLevel = _monsterRepository.GetAll()
             .Where(m => m.DungeonLevel == rolledMonsterLevel)
             .ToList();
@@ -2977,7 +2979,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         return monsterLevel switch
         {
-            1 => "175",
+            1 => "175_Level1",
             2 => "177_Level2",
             3 => "177_Level3",
             4 => "177_Level4",
@@ -3005,111 +3007,110 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (!allLevels.TryGetProperty(levelKey, out var entries) || entries.ValueKind != JsonValueKind.Array)
             return null;
 
-        for (int attempt = 0; attempt < 20; attempt++)
+        var roll = _random.Next(1, 101);
+
+        foreach (var entry in entries.EnumerateArray())
         {
-            var roll = _random.Next(1, 101);
-
-            foreach (var entry in entries.EnumerateArray())
+            if (!entry.TryGetProperty("DiceMin", out var minEl)
+                || !entry.TryGetProperty("DiceMax", out var maxEl)
+                || !entry.TryGetProperty("Creature", out var creatureEl))
             {
-                if (!entry.TryGetProperty("DiceMin", out var minEl)
-                    || !entry.TryGetProperty("DiceMax", out var maxEl)
-                    || !entry.TryGetProperty("Creature", out var creatureEl))
-                {
-                    continue;
-                }
-
-                var min = minEl.GetInt32();
-                var max = maxEl.GetInt32();
-                if (roll < min || roll > max)
-                    continue;
-
-                var creature = creatureEl.GetString();
-                var substituteBadgerWithHobgoblin = dungeonLevel >= 3
-                    && roll is >= 3 and <= 4
-                    && string.Equals(creature?.Trim(), "Badger", StringComparison.OrdinalIgnoreCase);
-
-                if (substituteBadgerWithHobgoblin)
-                {
-                    creature = "Hobgoblin";
-                    RuleApplicationInfo.Publish(
-                        "DMG special case: dungeon level 3+ and encounter roll 03-04 replaces Badger with 2-8 Hobgoblins.");
-                }
-                string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
-                RuleApplicationInfo.Publish(
-                    "DMG",
-                    page,
-                    $"Rolling monster level {monsterLevel})",
-                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-                    "1",
-                    "100",
-                    roll.ToString(), creature);
-                var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
-                int? countOverride = null;
-                int? countMin = null;
-                int? countMax = null;
-
-                if (substituteBadgerWithHobgoblin)
-                {
-                    countMin = 2;
-                    countMax = 8;
-                }
-                else if (entry.TryGetProperty("CountMin", out var countMinEl)
-                    && entry.TryGetProperty("CountMax", out var countMaxEl)
-                    && countMinEl.ValueKind == JsonValueKind.Number
-                    && countMaxEl.ValueKind == JsonValueKind.Number)
-                {
-                    countMin = countMinEl.GetInt32();
-                    countMax = countMaxEl.GetInt32();
-                }
-
-                if (countMin.HasValue && countMax.HasValue)
-                {
-                    var resolvedCountMin = countMin.Value;
-                    var resolvedCountMax = countMax.Value;
-
-                    if (resolvedCountMax < resolvedCountMin)
-                        (resolvedCountMin, resolvedCountMax) = (resolvedCountMax, resolvedCountMin);
-
-                    resolvedCountMin = Math.Max(1, resolvedCountMin);
-                    resolvedCountMax = Math.Max(1, resolvedCountMax);
-                    countOverride = _random.Next(resolvedCountMin, resolvedCountMax + 1);
-
-                    //        public record DiceFormula(int DiceCount, int DiceSides, int Extra);
-                    //        public static DiceFormula GetDiceFormula(int min, int max)
-
-                    DiceFormulas.DiceFormula? diceFormula = DiceFormulas.GetDiceFormula(resolvedCountMin, resolvedCountMax);
-                    int NumberOfDices = diceFormula?.DiceCount ?? countOverride.Value;
-                    int numberOfSides = diceFormula?.DiceSides ?? 1;
-                    int extra = diceFormula?.Extra ?? (resolvedCountMin - 1);
-
-                    string numberOfSidesText = numberOfSides.ToString();
-                    if (extra > 0)
-                        numberOfSidesText += "+" + extra.ToString();
-
-                    if (creature != "Human")
-                    {
-                        //    public static void Publish(string source, string page, string context, string rule, string numberOfDices, 
-                        //string sidesOnDices, string resultOfRoll, string consequenceOfRoll)
-                        RuleApplicationInfo.Publish(
-                        "DMG",//source
-                        page,//page
-                        //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
-                        $"Number of '{creature}s'",//context
-                        "Use CountMin-CountMax from MonsterLevels entry.",//rule
-                        NumberOfDices.ToString(),//numberOfDices
-                        numberOfSidesText,//sidesOnDices
-                        countOverride.Value.ToString(),//resultOfRoll
-                        countOverride.Value.ToString() + " " + creature + "s"//resultOfRoll
-                       );
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(resolved))
-                    return new EncounterRoll(resolved, countOverride);
-                break;
+                continue;
             }
+
+            var min = minEl.GetInt32();
+            var max = maxEl.GetInt32();
+            if (roll < min || roll > max)
+                continue;
+
+            var creature = creatureEl.GetString();
+            var substituteBadgerWithHobgoblin = dungeonLevel >= 3
+                && roll is >= 3 and <= 4
+                && string.Equals(creature?.Trim(), "Badger", StringComparison.OrdinalIgnoreCase);
+
+            if (substituteBadgerWithHobgoblin)
+            {
+                creature = "Hobgoblin";
+                RuleApplicationInfo.Publish(
+                    "DMG special case: dungeon level 3+ and encounter roll 03-04 replaces Badger with 2-8 Hobgoblins.");
+            }
+            string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
+            RuleApplicationInfo.Publish(
+                "DMG",
+                page,
+                $"Rolling monster level {monsterLevel})",
+                $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                "1",
+                "100",
+                roll.ToString(), creature);
+            var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
+            int? countOverride = null;
+            int? countMin = null;
+            int? countMax = null;
+
+            if (substituteBadgerWithHobgoblin)
+            {
+                countMin = 2;
+                countMax = 8;
+            }
+            else if (entry.TryGetProperty("CountMin", out var countMinEl)
+                && entry.TryGetProperty("CountMax", out var countMaxEl)
+                && countMinEl.ValueKind == JsonValueKind.Number
+                && countMaxEl.ValueKind == JsonValueKind.Number)
+            {
+                countMin = countMinEl.GetInt32();
+                countMax = countMaxEl.GetInt32();
+            }
+
+            if (countMin.HasValue && countMax.HasValue)
+            {
+                var resolvedCountMin = countMin.Value;
+                var resolvedCountMax = countMax.Value;
+
+                if (resolvedCountMax < resolvedCountMin)
+                    (resolvedCountMin, resolvedCountMax) = (resolvedCountMax, resolvedCountMin);
+
+                resolvedCountMin = Math.Max(1, resolvedCountMin);
+                resolvedCountMax = Math.Max(1, resolvedCountMax);
+                countOverride = _random.Next(resolvedCountMin, resolvedCountMax + 1);
+
+                //        public record DiceFormula(int DiceCount, int DiceSides, int Extra);
+                //        public static DiceFormula GetDiceFormula(int min, int max)
+
+                DiceFormulas.DiceFormula? diceFormula = DiceFormulas.GetDiceFormula(resolvedCountMin, resolvedCountMax);
+                int NumberOfDices = diceFormula?.DiceCount ?? countOverride.Value;
+                int numberOfSides = diceFormula?.DiceSides ?? 1;
+                int extra = diceFormula?.Extra ?? (resolvedCountMin - 1);
+
+                string numberOfSidesText = numberOfSides.ToString();
+                if (extra > 0)
+                    numberOfSidesText += "+" + extra.ToString();
+
+                if (creature != "Human")
+                {
+                    //    public static void Publish(string source, string page, string context, string rule, string numberOfDices, 
+                    //string sidesOnDices, string resultOfRoll, string consequenceOfRoll)
+                    RuleApplicationInfo.Publish(
+                    "DMG",//source
+                    page,//page
+                    //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
+                    $"Number of '{creature}s'",//context
+                    "Use CountMin-CountMax from MonsterLevels entry.",//rule
+                    NumberOfDices.ToString(),//numberOfDices
+                    numberOfSidesText,//sidesOnDices
+                    countOverride.Value.ToString(),//resultOfRoll
+                    countOverride.Value.ToString() + " " + creature + "s"//resultOfRoll
+                   );
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(resolved))
+                return new EncounterRoll(resolved, countOverride);
+
+            break;
         }
 
-        RuleApplicationInfo.Publish($"DMG encounter table Level{monsterLevel} could not map a rolled creature to a local monster after multiple rerolls.");
+        RuleApplicationInfo.Publish($"DMG encounter table Level{monsterLevel} roll did not map to a local monster.");
         return null;
     }
 

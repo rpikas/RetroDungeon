@@ -2,7 +2,7 @@
   "Id": "cure_light_wounds_druid",
   "Name": "Cure Light Wounds",
   "Class": "Druid",
-  "Level": 1,
+  "Level": 2,
   "Description": "Heals minor wounds.",
   "RangeType": "Ally",
   "Targeting": "Single",

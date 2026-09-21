@@ -1253,3 +1253,28 @@ färdig JSON för RetroDungeon
 C#‑metod som räknar ut chansen automatiskt
 Bygg den. sen dubuggade med ai och det blev rätt till slut. 96,4
 ____
+After monsterEncounterTable has been used to detemine what level monster to encounter, then roll 1d100 and use
+MonsterLevels,json to determin what monste to encounter depnding on level of monster and dice roll
+
+First MonsterEncounter is used to determin have level the monster got, lets say it is a level 1 monster, 
+then a 1d100 is rolled to determine what monster, asume a 2 is rolled, then a the party should encounter 
+an Ant, ginat, according to "MonsterLevels": { "Level1": [ { "DiceMin": 1, "DiceMax": 2, "Creature": "Ant, giant", "CountMin": 1, "CountMax": 4 },97,4
+
+can you implement  "SpecialAbilities":  "Dragon breath", it gives damage to everyone in the party equal to the monsters current hp, 
+if they succed in saving vs. Breath blir det bara hälften av skadan.
+I similar logic exists for implementing the "20 hp damage breath" that has now been removed in the monster jsons, so the new Dragon breash also needs to be implemented now. 99,6
+updated subscription to copilot max so now 34,9 
+
+implement a cleric level 7  spell: Resurection, that can make a charater that is ashes alive again. same save as raise dead. If it succeds, 
+the the resurected person loose 1 point in con, if it fails, person is lost
+
+Implement a level 7 magic user spell called Finger of Death. It targets one humanoid and if it fails a save vs. death, it dies instantly. If it succeds.
+Allready implemented 35,4.
+
+Can you give me a complete list of all spells implemented sorted per class and level. 35,9
+
+implement special attack assassination for encounters. Both party assassins and encounter assassins can only be assassinate the first round and when attaer is surprising the oponent.
+Cure light wounds should be a level 2 druid spell and a level 1 cleric spell.
+
+in the Encounter dialog, in the table where the party members are shown, the column Class, make it a bit wider and show all classes that a multi class member got. 36,7
+

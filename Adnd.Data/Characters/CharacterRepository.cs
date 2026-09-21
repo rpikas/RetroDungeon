@@ -5,6 +5,7 @@ using System.Text.Json;
 using Adnd.Data.Party;
 using Adnd.Data.Items;
 using Adnd.Core.Characters;
+using Adnd.Core.Characters.Progression;
 using Adnd.Core.Items;
 
 namespace Adnd.Data.Characters;
@@ -34,6 +35,9 @@ public class CharacterRepository
             if (c != null)
             {
                 c.EnsureClassProgressions();
+                // Keep spell slots in sync with current class levels.
+                // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
+                _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
                 HydrateWeaponDamageVsLarge(c, itemLookup);
                 list.Add(c);
             }

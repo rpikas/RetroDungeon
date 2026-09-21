@@ -294,7 +294,7 @@
       },
       {
         "DiceMin": 31,
-        "DiceMax": 32,
+        "DiceMax": 99,
         "Creature": "Dragon",
         "CountMin": 1,
         "CountMax": 1

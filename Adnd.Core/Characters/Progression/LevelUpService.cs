@@ -34,6 +34,7 @@ public sealed class LevelUpService
             var entry = character.ClassProgressions.First();
             entry.Experience += gainedXp;
             LevelSingleClass(character, entry, ref result);
+            character.Level = Math.Max(1, entry.Level);
         }
         else
         {
@@ -53,14 +54,19 @@ public sealed class LevelUpService
             }
 
             var primaryEntry = character.ClassProgressions.First(e => e.Class == primaryClass);
-            while (primaryEntry.Level > character.Level)
+            // Award HP strictly by primary-class level gain this call, independent of
+            // any stale/desynced character.Level value.
+            for (int newLevel = primaryBefore + 1; newLevel <= primaryEntry.Level; newLevel++)
             {
-                character.Level++;
-                var gain = HitPointProgression.RollHitPointGain(character, character.Level);
+                character.Level = newLevel;
+                var gain = HitPointProgression.RollHitPointGain(character, newLevel);
                 result.HitPointsGained += gain;
                 character.MaxHitPoints += gain;
                 character.CurrentHitPoints += gain;
             }
+
+            // Always synchronize persisted character level to primary class level.
+            character.Level = Math.Max(1, primaryEntry.Level);
 
             ApplyBasicWarriorAttackProgression(character, primaryEntry.Level);
         }
@@ -97,6 +103,8 @@ public sealed class LevelUpService
             character.MaxHitPoints += gain;
             character.CurrentHitPoints += gain;
         }
+
+        character.Level = Math.Max(1, entry.Level);
 
         ApplyBasicWarriorAttackProgression(character, entry.Level);
     }

@@ -81,7 +81,47 @@
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/slitheringtracker.htm"
     },
-
+    {
+      "Name": "Giant Spider",
+      "Type": "Arachnid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "%InLair": "70",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Webs",
+          "Description": "Constructs sticky horizontal or vertical webs functioning like a web spell; STR 18 breaks free in 1 round, STR 17 in 2 rounds, etc. Webs are highly flammable."
+        },
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or die."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Large",
+      "BaseXPValue": 315,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Web‑building ambush predator; may drop from above; flees from superior foes and hides."
+    },
     {
       "Name": "Quasit",
       "Type": "Demon",
@@ -1188,7 +1228,7 @@
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 3,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Shadow Touch",
@@ -1217,7 +1257,7 @@
       "HitDice": 3,
       "HitDiceType": 10,
       "ExtraHitPoints": 0,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Sword",
@@ -1244,7 +1284,7 @@
       "NumberOfAppearancesMax": 4,
       "ArmorClass": -1,
       "HitDice": 4,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Bite",
@@ -1279,7 +1319,7 @@
       "NumberOfAppearancesMax": 6,
       "ArmorClass": 1,
       "HitDice": 4,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Bite",
@@ -1310,7 +1350,7 @@
       "NumberOfAppearancesMax": 2,
       "ArmorClass": 4,
       "HitDice": 4,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Staff",
@@ -1347,7 +1387,7 @@
       "NumberOfAppearancesMax": 3,
       "ArmorClass": 4,
       "HitDice": 4,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Mist Lash",
@@ -1386,7 +1426,7 @@
       "HitDice": 8,
       "HitDiceType": 4,
       "ExtraHitPoints": 0,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Katana",
@@ -1420,7 +1460,7 @@
       "HitDice": 4,
       "HitDiceType": 8,
       "ExtraHitPoints": 1,
-      "Movement":30,
+      "Movement": 30,
       "Attacks": [
         {
           "Name": "Club",

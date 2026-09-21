@@ -1,41 +1,81 @@
 {
   "Level": 2,
   "Monsters": [
-
     {
-      "Name": "Lvl 2 Magic-User",
-      "Type": "Humanoid",
+      "Name": "Giant Badger",
+      "Type": "Animal",
       "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 4,
-      "HitDice": 2,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 2,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
+      "Movement": 9,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "BadgerPelt",
       "Attacks": [
         {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
+          "Name": "Claws",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
         {
-          "Name": "Level 2 Magic-User spells",
-          "Description": "Access to 1st and 2nd-level spells."
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
         }
       ],
-      "BaseXPValue": 75,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "Alignment": "Neutral",
+      "Source": "AD&D",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 01",
+      "Other": "Giant Badgers are fierce burrowing animals; they attack with claws and bite, fighting to the death if threatened."
+    },
+    {
+      "Name": "Giant Centipede",
+      "Type": "Vermin",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 24,
+      "ArmorClass": 9,
+      "Movement": 15,
+      "HitDice": 1,
+      "HitDiceType": 2,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "0"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or suffer effects"
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 30,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 02-16",
+      "Other": "Bite causes no damage; poison is the threat."
     },
     {
       "Name": "Lvl 2 Cleric",
@@ -78,6 +118,42 @@
       "Source": "Adnd"
     },
     {
+      "Name": "Lvl 2 Druid",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 7,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 16,
+        "Spell": 15
+      },
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Druid Spells",
+          "Description": "Access to 1st-level druidic spells."
+        }
+      ],
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Lvl 2 Fighter",
       "Type": "Humanoid",
       "Frequency": "Common",
@@ -106,8 +182,160 @@
       "BaseXPValue": 75,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Source": "Adnd"
     },
+    {
+      "Name": "Lvl 2 Paladin",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "Movement": 9,
+      "HitDice": 2,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "J,WornEquipment",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lay on Hands",
+          "Description": "Can heal 4 hit points once per day."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Lawful Good",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
+      "Other": "Paladins are holy warriors devoted to law and good; they possess minor divine abilities even at low levels."
+    },
+    {
+      "Name": "Lvl 2 Ranger",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "Movement": 12,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "J,WornEquipment",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral Good",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
+      "Other": "Rangers are skilled wilderness fighters; they excel at tracking and hunting dangerous creatures."
+    },
+
+    {
+      "Name": "Lvl 2 Magic-User",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 10,
+      "Movement": 12,
+      "HitDice": 2,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "J,WornEquipment",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Magic-User spells",
+          "Description": "Access to 1st level Magic-User spells."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "High",
+      "Size": "Medium",
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
+      "Other": "Magic-Users rely on spellcasting and knowledge; they are physically weak but dangerous when prepared."
+    },
+
+    {
+      "Name": "Lvl 2 Illusionist",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 10,
+      "Movement": 12,
+      "HitDice": 2,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "J,WornEquipment",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Illusionist Spells",
+          "Description": "Access to 1st-level illusionist spells."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "High",
+      "Size": "Medium",
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
+      "Other": "Illusionists rely on deception and trickery; their magic manipulates sight, sound, and perception."
+    },
+
+
     {
       "Name": "Lvl 2 Thief",
       "Type": "Humanoid",
@@ -142,8 +370,49 @@
       "BaseXPValue": 75,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Source": "Adnd"
     },
+
+    {
+      "Name": "Lvl 2 Assassin",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "Movement": 12,
+      "HitDice": 2,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "J,WornEquipment",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Assassinate",
+          "Description": "When party is surprised, there is a chanse that one charater gets assasinated."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Medium",
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral Evil",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
+      "Other": "Assassins are stealthy killers trained in infiltration, disguise, and silent elimination."
+    },
+
     {
       "Name": "Lvl 2 Monk",
       "Type": "Humanoid",
@@ -166,7 +435,86 @@
       "BaseXPValue": 90,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Source": "Adnd"
+    },
+
+    {
+      "Name": "Lvl 2 Bard",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 7,
+      "Movement": 12,
+      "HitDice": 2,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "J,WornEquipment",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "High",
+      "Size": "Medium",
+      "BaseXPValue": 75,
+      "XPValuePerHitPoint": 1,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
+      "Other": "Bards are versatile performers and storytellers; they blend combat skill with lore and subtle magical talent."
+    },
+
+
+    {
+      "Name": "Devil, Lemure",
+      "Type": "Devil",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 30,
+      "ArmorClass": 7,
+      "Movement": 3,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "100",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 1 hp per melee round"
+        },
+        {
+          "Name": "Mind-affecting spells Immunity",
+          "Description": "Immune to charm, sleep, and all mind-affecting spells"
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Lawful Evil",
+      "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 3,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 28-29",
+      "Other": "Can only be permanently destroyed by blessed items such as holy water or holy swords."
     },
 
 
@@ -209,6 +557,7 @@
       "BaseXPValue": 33,
       "XPValuePerHitPoint": 0,
       "Source": "AD&D Monster Manual",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 30-31",
       "Other": "https://1eonline.info/1mm/gasspore.htm"
     },
 
@@ -243,117 +592,10 @@
       "BaseXPValue": 28,
       "XPValuePerHitPoint": 2,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 31-32",
       "Other": "Hyena-like humanoids; aggressive and rapacious; often accompanied by flinds."
     },
 
-    {
-      "Name": "Giant Badger",
-      "Type": "Animal",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 4,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "Attacks": [
-        {
-          "Name": "Claws",
-          "NumberOfAttacks": 2,
-          "Damage": "1d3"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 65,
-      "TreasureType": "Nil",
-      "Source": "AD&D",
-      "DM comment": "Giant Badgers are fierce burrowing animals; they attack with claws and bite, fighting to the death if threatened. Monster Manual p.8"
-    },
-    {
-      "Name": "Giant Centipede",
-      "Type": "Vermin",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 24,
-      "ArmorClass": 9,
-      "Movement": 15,
-      "HitDice": 1,
-      "HitDiceType": 2,
-      "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "0"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Poison",
-          "Description": "Victim must save vs. poison or suffer effects"
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Small",
-      "BaseXPValue": 30,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "Other": "Bite causes no damage; poison is the threat."
-    },
-
-    {
-      "Name": "Devil, Lemure",
-      "Type": "Devil",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 5,
-      "NumberOfAppearancesMax": 30,
-      "ArmorClass": 7,
-      "Movement": 3,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "100",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates 1 hp per melee round"
-        },
-        {
-          "Name": "Spell Immunity",
-          "Description": "Immune to charm, sleep, and all mind-affecting spells"
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Semi-",
-      "Alignment": "Lawful Evil",
-      "Size": "Medium",
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 3,
-      "Source": "Adnd",
-      "Other": "Can only be permanently destroyed by blessed items such as holy water or holy swords."
-    },
 
     {
       "Name": "Stirge",
@@ -390,49 +632,8 @@
       "BaseXPValue": 36,
       "XPValuePerHitPoint": 2,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 73-77",
       "Other": "Attacks as if it had 4 HD; only way to detach is to kill the stirge."
-    },
-
-    {
-      "Name": "Giant Tick",
-      "Type": "Animal",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 12,
-      "ArmorClass": 3,
-      "Movement": 3,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "0",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Blood Drain",
-          "Description": "After attaching, drains 1–6 HP per round until total drained equals its hit points."
-        },
-        {
-          "Name": "Disease",
-          "Description": "50% chance of contracting a fatal disease; victim dies in 2–8 days unless cured."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Small",
-      "BaseXPValue": 105,
-      "XPValuePerHitPoint": 2,
-      "Source": "Adnd",
-      "Other": "Must be killed, burned, or immersed in water to detach before satiation."
     },
 
     {
@@ -465,6 +666,7 @@
       "BaseXPValue": 50,
       "XPValuePerHitPoint": 3,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 78-87",
       "Other": "Can hop its full movement distance; may attack mid-air or at landing."
     },
 
@@ -494,20 +696,7 @@
           "Damage": "1d4+1"
         }
       ],
-      "SpecialAttacks": [
-        {
-          "Name": "Revulsion Odor",
-          "Description": "Humanoids must save vs. poison or lose 1 STR per round for 1–6 rounds; STR loss lasts 10 rounds after final effect."
-        },
-        {
-          "Name": "Missiles",
-          "Description": "Troglodytes using javelins gain +3 to hit and deal 2–8 damage."
-        },
-        {
-          "Name": "Surprise",
-          "Description": "Surprise opponents on 1–4 due to chameleon coloration unless emitting odor."
-        }
-      ],
+      "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Low",
@@ -516,84 +705,9 @@
       "BaseXPValue": 36,
       "XPValuePerHitPoint": 2,
       "Source": "Adnd",
-      "Other": "50% use weapons; armed half carry javelins (25%), stone axes (10%), stone morning stars (10%), swords (5%). Infravision 9\"."
+      "DungeonRandomMonsterTableReference": "Level 2, Roll 88-100",
+      "Other": "Surprise opponents on 1–4 due to chameleon coloration unless emitting odor.50% use weapons; armed half carry javelins (25%), stone axes (10%), stone morning stars (10%), swords (5%). Infravision 9\"."
     },
-
-    {
-      "Name": "Zombie",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 5,
-      "Type": "Undead",
-      "Frequency": "Uncommon",
-      "ArmorClass": 8,
-      "HitDice": 2,
-      "Size": "Medium",
-      "Movement": 10,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 13,
-        "RodStaffWand": 14,
-        "PetrificationPolymorph": 15,
-        "BreathWeapon": 16,
-        "Spell": 16
-      },
-      "Morale": {
-        "Value": 12
-      },
-      "Attacks": [
-        {
-          "Name": "Slam",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 35,
-      "XPValuePerHitPoint": 3,
-      "TreasureType": "None",
-      "Source": "Wizardry"
-    },
-    {
-      "Name": "Giant Spider",
-      "Type": "Arachnid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 4,
-      "%InLair": "70",
-      "TreasureType": "C",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Webs",
-          "Description": "Constructs sticky horizontal or vertical webs functioning like a web spell; STR 18 breaks free in 1 round, STR 17 in 2 rounds, etc. Webs are highly flammable."
-        },
-        {
-          "Name": "Poison",
-          "Description": "Victim must save vs. poison or die."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic Evil",
-      "Size": "Large",
-      "BaseXPValue": 315,
-      "XPValuePerHitPoint": 5,
-      "Source": "Adnd",
-      "Other": "Web‑building ambush predator; may drop from above; flees from superior foes and hides."
-    },
-
 
     {
       "Name": "Wolf",
@@ -630,6 +744,7 @@
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 3,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "NA",
       "Other": "Wolves hunt in packs; found in forests from temperate to sub‑arctic regions."
     },
 
@@ -754,6 +869,39 @@
       ],
       "SpecialAbilities": [],
       "BaseXPValue": 600,
+      "XPValuePerHitPoint": 3,
+      "TreasureType": "None",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Zombie",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "ArmorClass": 8,
+      "HitDice": 2,
+      "Size": "Medium",
+      "Movement": 10,
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 13,
+        "RodStaffWand": 14,
+        "PetrificationPolymorph": 15,
+        "BreathWeapon": 16,
+        "Spell": 16
+      },
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 35,
       "XPValuePerHitPoint": 3,
       "TreasureType": "None",
       "Source": "Wizardry"
