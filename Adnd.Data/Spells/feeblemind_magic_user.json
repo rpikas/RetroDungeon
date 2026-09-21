@@ -1,0 +1,13 @@
+{
+  "Id": "feeblemind_magic_user",
+  "Name": "Feeblemind",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "A mind-shattering curse that ruins magical thought.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "One target must save vs. spell or become permanently feebleminded."
+}

@@ -1283,3 +1283,5 @@ Insect Plague is not only a level 5 cleric spell, but also a level 5 druid spell
 ____
 implement level 5 magic user spell: cone of cold that gives damage= (1d4+1)*level of the caster to one group of monsters. 36,9
 ____
+Feeblemind is not only a level 6 druid spell but also a level 5 magic user spell. 37,0
+____

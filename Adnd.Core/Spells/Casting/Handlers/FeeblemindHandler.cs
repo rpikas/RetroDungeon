@@ -4,7 +4,9 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class FeeblemindHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "feeblemind", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+        => string.Equals(spellId, "feeblemind", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "feeblemind_magic_user", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
