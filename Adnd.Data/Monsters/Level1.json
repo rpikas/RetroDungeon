@@ -1223,6 +1223,45 @@
     },
 
     {
+      "Name": "Skeleton",
+      "Type": "Undead",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 30,
+      "ArmorClass": 7,
+      "Movement": 12,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Weapon Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Half Damage from Sharp Weapons",
+          "Description": "Slashing and Piercing weapons deal half damage."
+        }
+      ],
+      "MagicResistance": "Immune to charm, sleep, cold-based magic, and all willpower-affecting spells",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 14,
+      "XPValuePerHitPoint": 1,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 97-98",
+      "Other": "Holy water deals 2d4 damage; blunt weapons deal full damage; fire deals normal damage."
+    },
+
+    {
       "Name": "Zombie",
       "Type": "Undead",
       "Frequency": "Rare",
@@ -1252,6 +1291,7 @@
       "BaseXPValue": 20,
       "XPValuePerHitPoint": 2,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 1, Roll 99-100",
       "Other": "Always strikes last; holy water deals 2d8 damage."
     },
 
@@ -1296,45 +1336,8 @@
       "Other": " (Medium) Piercers drop from ceilings; no further attacks after landing."
     },
 
-   
 
-    {
-      "Name": "Skeleton",
-      "Type": "Undead",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 30,
-      "ArmorClass": 7,
-      "Movement": 12,
-      "HitDice": 1,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Weapon Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Half Damage from Sharp Weapons",
-          "Description": "Slashing and Piercing weapons deal half damage."
-        }
-      ],
-      "MagicResistance": "Immune to charm, sleep, cold-based magic, and all willpower-affecting spells",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Medium",
-      "BaseXPValue": 14,
-      "XPValuePerHitPoint": 1,
-      "Source": "Adnd",
-      "Other": "Holy water deals 2d4 damage; blunt weapons deal full damage; fire deals normal damage."
-    },
+
 
     {
       "Name": "Buccaneer",
@@ -1366,6 +1369,7 @@
       "XPValuePerHitPoint": 1,
       "Alignment": "Neutral",
       "Source": "AI",
+      "DungeonRandomMonsterTableReference": "Not Applicable",
       "Other": "https://1eonline.info/1mm/buccaneer.htm"
     },
 
@@ -1416,6 +1420,7 @@
       "BaseXPValue": 20,
       "XPValuePerHitPoint": 1,
       "TreasureType": "A",
+      "DungeonRandomMonsterTableReference": "Not Applicable",
       "Source": "AI"
     },
     {
@@ -1469,6 +1474,7 @@
       "BaseXPValue": 15,
       "XPValuePerHitPoint": 1,
       "TreasureType": "A",
+      "DungeonRandomMonsterTableReference": "Not Applicable",
       "Source": "AI"
     },
     {
@@ -1531,6 +1537,7 @@
       "BaseXPValue": 40,
       "XPValuePerHitPoint": 1,
       "TreasureType": "A",
+      "DungeonRandomMonsterTableReference": "Not Applicable",
       "Source": "AI"
     },
 
@@ -1627,6 +1634,7 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
+
     {
       "Name": "Lvl 1 Mage",
       "Type": "Humanoid",
@@ -1663,6 +1671,7 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
+
     {
       "Name": "Undead Kobold",
       "Type": "Undead",
