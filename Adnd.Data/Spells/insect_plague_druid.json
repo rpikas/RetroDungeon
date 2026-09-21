@@ -1,0 +1,13 @@
+{
+  "Id": "insect_plague_druid",
+  "Name": "Insect Plague",
+  "Class": "Druid",
+  "Level": 5,
+  "Description": "A roiling swarm of biting insects overwhelms one enemy with terror.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "Target must save vs. spell or panic for 2–6 rounds."
+}

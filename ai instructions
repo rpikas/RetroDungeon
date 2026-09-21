@@ -1277,4 +1277,6 @@ implement special attack assassination for encounters. Both party assassins and 
 Cure light wounds should be a level 2 druid spell and a level 1 cleric spell.
 
 in the Encounter dialog, in the table where the party members are shown, the column Class, make it a bit wider and show all classes that a multi class member got. 36,7
+____
 
+Insect Plague is not only a level 5 cleric spell, but also a level 5 druid spell. 36,7

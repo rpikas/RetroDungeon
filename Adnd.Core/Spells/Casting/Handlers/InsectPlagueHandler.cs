@@ -4,7 +4,9 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class InsectPlagueHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "insect_plague", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+        => string.Equals(spellId, "insect_plague", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "insect_plague_druid", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
