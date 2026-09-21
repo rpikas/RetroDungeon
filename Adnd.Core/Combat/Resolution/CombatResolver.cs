@@ -649,6 +649,9 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (TryResolveConfusedMonsterTurn(session, monster, events))
+                continue;
+
             if (monster.HasStatus(MonsterStatus.Panicked))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Panicked);
@@ -2193,6 +2196,96 @@ public sealed class CombatResolver
     {
         return GetMonsterAbilityNames(monster)
             .Any(name => abilityNames.Any(n => string.Equals(name, n, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private bool TryResolveConfusedMonsterTurn(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var roundsRemaining = monster.GetStatusRounds(MonsterStatus.Confused);
+        if (roundsRemaining <= 0)
+            return false;
+
+        // Save vs spell each round at -2.
+        var saveTarget = monster.Template.SavingThrows?.Spell ?? 20;
+        var saveRoll = _dice.Roll(20);
+        var effectiveRoll = Math.Max(1, saveRoll - 2);
+
+        if (saveTarget > 0 && effectiveRoll >= saveTarget)
+        {
+            monster.SetStatus(MonsterStatus.Confused, 0);
+            events.Add(new CombatEvent($"{monster.DisplayName} shakes off confusion (save {saveRoll}-2={effectiveRoll} vs {saveTarget})."));
+            return false;
+        }
+
+        var actionRoll = _dice.Roll(100);
+        if (actionRoll <= 10)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} wanders away in confusion and cannot act."));
+            TickConfusedDuration(monster, events);
+            return true;
+        }
+
+        if (actionRoll <= 60)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} stands confused and does nothing."));
+            TickConfusedDuration(monster, events);
+            return true;
+        }
+
+        if (actionRoll <= 80)
+        {
+            ResolveConfusedAttackNearestCreature(session, monster, events);
+            TickConfusedDuration(monster, events);
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} turns on the druid's side in confusion!"));
+        TickConfusedDuration(monster, events);
+        return false;
+    }
+
+    private void TickConfusedDuration(MonsterInstance monster, List<CombatEvent> events)
+    {
+        var remaining = monster.TickStatus(MonsterStatus.Confused);
+        if (remaining <= 0)
+            events.Add(new CombatEvent($"{monster.DisplayName} is no longer confused."));
+    }
+
+    private void ResolveConfusedAttackNearestCreature(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var targetMonster = session.AliveMonsters
+            .Where(m => !ReferenceEquals(m, monster))
+            .OrderBy(m => string.Equals(m.GroupId, monster.GroupId, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .ThenBy(m => m.CurrentHitPoints)
+            .FirstOrDefault();
+
+        if (targetMonster == null)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} lashes out wildly but finds no nearby creature."));
+            return;
+        }
+
+        var attack = monster.Template.Attacks.FirstOrDefault()
+                     ?? new MonsterAttack { Name = "Claw", NumberOfAttacks = 1, Damage = "1d4" };
+
+        var thac0 = GetMonsterThac0(monster);
+        var needed = thac0 - targetMonster.ArmorClass;
+        var roll = _dice.Roll(20);
+
+        if (roll < needed)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} attacks nearest creature {targetMonster.DisplayName} in confusion but misses."));
+            return;
+        }
+
+        var damage = RollDamage(string.IsNullOrWhiteSpace(attack.Damage) ? "1d4" : attack.Damage);
+        var before = targetMonster.CurrentHitPoints;
+        targetMonster.CurrentHitPoints = Math.Max(0, targetMonster.CurrentHitPoints - damage);
+        var actual = before - targetMonster.CurrentHitPoints;
+        WakeMonsterIfAsleepAfterDamage(targetMonster, actual, events);
+
+        events.Add(new CombatEvent($"{monster.DisplayName} attacks nearest creature {targetMonster.DisplayName} in confusion for {actual} damage. HP {before}->{targetMonster.CurrentHitPoints}."));
+        if (!targetMonster.IsAlive)
+            events.Add(new CombatEvent($"{targetMonster.DisplayName} is slain by the confused attack!"));
     }
 
     private bool TryResolveMonsterAssassination(CombatSession session, MonsterInstance monster, List<CombatEvent> events)

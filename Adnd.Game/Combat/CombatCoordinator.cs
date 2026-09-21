@@ -138,6 +138,7 @@ public sealed class CombatCoordinator
             new PowerWordKillHandler(),
             new ColorSprayHandler(),
             new FearHandler(),
+            new ConfusionDruidHandler(),
             new ParalyzationHandler(),
             new PhantasmalForceHandler(),
             new PhantasmalKillerHandler(),
