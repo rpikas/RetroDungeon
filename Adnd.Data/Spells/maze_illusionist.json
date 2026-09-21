@@ -1,0 +1,13 @@
+{
+  "Id": "maze_illusionist",
+  "Name": "Maze",
+  "Class": "Illusionist",
+  "Level": 5,
+  "Description": "Banishes one creature into an extradimensional maze for a duration based on intelligence.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "No saving throw. One target is trapped in a maze for a duration based on intelligence. Minotaurs are unaffected."
+}

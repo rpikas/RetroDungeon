@@ -583,6 +583,26 @@ public sealed class CombatResolver
                 }
             }
 
+            if (monster.HasStatus(MonsterStatus.PermanentIllusion))
+            {
+                var rolledDamage = 0;
+                for (int i = 0; i < 16; i++)
+                    rolledDamage += _dice.Roll(6);
+
+                var beforeHp = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
+                var actualDamage = beforeHp - monster.CurrentHitPoints;
+                WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
+
+                events.Add(new CombatEvent($"{monster.DisplayName} is tormented by permanent illusion for {actualDamage} damage (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
+
+                if (!monster.IsAlive)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} dies from terror and shock."));
+                    continue;
+                }
+            }
+
             if (monster.HasStatus(MonsterStatus.Asleep))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Asleep);
@@ -645,6 +665,17 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{monster.DisplayName} is stunned ({remaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{monster.DisplayName} is no longer stunned."));
+
+                continue;
+            }
+
+            if (monster.HasStatus(MonsterStatus.Mazed))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Mazed);
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is trapped in the maze ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} finds the exit and returns from the maze."));
 
                 continue;
             }

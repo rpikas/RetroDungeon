@@ -1,0 +1,13 @@
+{
+  "Id": "permanent_illusion",
+  "Name": "Permanent Illusion",
+  "Class": "Illusionist",
+  "Level": 6,
+  "Description": "A lasting phantasm that persists through the battle.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Works like Spectral Force (independent disbelief saves), but creatures that fail remain affected for the entire battle and continue taking illusion damage each round."
+}

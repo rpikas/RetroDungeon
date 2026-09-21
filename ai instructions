@@ -1305,7 +1305,16 @@ Supra‑Genius 19–20  20
 Godlike Intelligence 21+ 25 37,3
 ___
 
-Implement level 7 druid spell Confusion, past in pictre from PHB page 63.
+Implement level 7 druid spell Confusion, paste in pictre from PHB page 63.
 ____
 implement level 5 illustionist spell Chaos, that works in the same way as level 7 druid spell confusion. 37,7
 ___
+implement level 8 magic user spell maze, paste in picture from PHB page 90.
+the illustionist level 5 spell Maze should work in the same way
+
+implement spectral force level 3 illusionist spell, that works like Phantasmal Force, 
+the difference is that if one mob makes the save, he does not shout anything and the illusion is not broken for others.
+
+implement permanent illusion, illustionist level 6 spell that should work like spectral force but it lasts the whole battle 38,1
+
+__

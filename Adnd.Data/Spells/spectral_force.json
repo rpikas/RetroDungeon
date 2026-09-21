@@ -1,0 +1,13 @@
+{
+  "Id": "spectral_force",
+  "Name": "Spectral Force",
+  "Class": "Illusionist",
+  "Level": 3,
+  "Description": "Creates a potent visual illusion that can harm those who believe it.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Works like Phantasmal Force, but one creature succeeding on its save does not reveal the illusion to others. Each target resolves disbelief independently."
+}

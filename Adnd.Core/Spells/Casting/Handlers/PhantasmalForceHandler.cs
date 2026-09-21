@@ -9,7 +9,9 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
     {
         return string.Equals(spellId, "phantasmal_force", StringComparison.OrdinalIgnoreCase)
                || string.Equals(spellId, "phantasmal_force_magic_user", StringComparison.OrdinalIgnoreCase)
-               || string.Equals(spellId, "improved_phantasmal_force", StringComparison.OrdinalIgnoreCase);
+               || string.Equals(spellId, "improved_phantasmal_force", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(spellId, "spectral_force", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(spellId, "permanent_illusion", StringComparison.OrdinalIgnoreCase);
     }
 
     public SpellCastResult Resolve(SpellCastRequest request)
@@ -30,6 +32,9 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
         var isImproved = string.Equals(request.SpellId, "improved_phantasmal_force", StringComparison.OrdinalIgnoreCase)
                          || spell.TargetingScope == SpellTargetingScope.AllGroups;
 
+        var isSpectralForce = string.Equals(request.SpellId, "spectral_force", StringComparison.OrdinalIgnoreCase);
+        var isPermanentIllusion = string.Equals(request.SpellId, "permanent_illusion", StringComparison.OrdinalIgnoreCase);
+
         var groupIds = isImproved
             ? session.GetDistinctGroupIds().Where(g => session.GetAliveCountByGroup(g) > 0).ToList()
             : ResolveSingleTargetGroup(request, session);
@@ -44,7 +49,7 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
         );
 
         foreach (var groupId in groupIds)
-            ResolvePhantasmalForceAgainstGroup(groupId, spell, session, rng, result);
+            ResolvePhantasmalForceAgainstGroup(groupId, spell, session, rng, result, breakOnFirstDisbelief: !isSpectralForce && !isPermanentIllusion, applyPermanentStatus: isPermanentIllusion);
 
         return result;
     }
@@ -66,15 +71,52 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
         return new List<string> { targetGroupId };
     }
 
-    private static void ResolvePhantasmalForceAgainstGroup(string groupId, Spell spell, CombatSession session, Random rng, SpellCastResult result)
+    private static void ResolvePhantasmalForceAgainstGroup(string groupId, Spell spell, CombatSession session, Random rng, SpellCastResult result, bool breakOnFirstDisbelief, bool applyPermanentStatus)
     {
         var targets = session.GetAliveMonstersByGroup(groupId).ToList();
         if (targets.Count == 0)
             return;
 
-        MonsterInstance? disbeliefMonster = null;
-        int disbeliefRoll = 0;
-        int disbeliefTarget = 0;
+        if (breakOnFirstDisbelief)
+        {
+            MonsterInstance? disbeliefMonster = null;
+            int disbeliefRoll = 0;
+            int disbeliefTarget = 0;
+
+            foreach (var monster in targets)
+            {
+                var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 0);
+                var saveRoll = rng.Next(1, 21);
+                var saved = saveTarget > 0 && saveRoll >= saveTarget;
+
+                RuleApplicationInfo.Publish(
+                    "PHB",
+                    "Phantasmal Force",
+                    $"{monster.DisplayName} save vs spell against illusion",
+                    $"Roll d20, need {saveTarget}+ to disbelieve.",
+                    "1",
+                    "20",
+                    saveRoll.ToString(),
+                    saved
+                        ? "Save made. Monster disbelieves and warns the group; illusion collapses."
+                        : "Save failed. Monster believes the dragon breath is real.");
+
+                if (!saved)
+                    continue;
+
+                disbeliefMonster = monster;
+                disbeliefRoll = saveRoll;
+                disbeliefTarget = saveTarget;
+                break;
+            }
+
+            if (disbeliefMonster != null)
+            {
+                result.Events.Add($"{disbeliefMonster.DisplayName} (Group {groupId}) makes save ({disbeliefRoll} vs {disbeliefTarget}) and shouts it is fake!");
+                result.Events.Add($"The illusion is exposed for group {groupId}. No monsters in that group take damage.");
+                return;
+            }
+        }
 
         foreach (var monster in targets)
         {
@@ -84,34 +126,27 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
 
             RuleApplicationInfo.Publish(
                 "PHB",
-                "Phantasmal Force",
+                breakOnFirstDisbelief ? "Phantasmal Force" : "Spectral Force",
                 $"{monster.DisplayName} save vs spell against illusion",
-                $"Roll d20, need {saveTarget}+ to disbelieve.",
+                breakOnFirstDisbelief
+                    ? $"Roll d20, need {saveTarget}+ to disbelieve."
+                    : $"Roll d20, need {saveTarget}+ to disbelieve; success does not expose illusion to allies.",
                 "1",
                 "20",
                 saveRoll.ToString(),
                 saved
-                    ? "Save made. Monster disbelieves and warns the group; illusion collapses."
+                    ? (breakOnFirstDisbelief
+                        ? "Save made. Monster disbelieves and warns the group; illusion collapses."
+                        : "Save made. Monster disbelieves, but does not reveal the illusion to others.")
                     : "Save failed. Monster believes the dragon breath is real.");
 
-            if (!saved)
+            if (saved)
+            {
+                if (!breakOnFirstDisbelief)
+                    result.Events.Add($"{monster.DisplayName} (Group {groupId}) disbelieves the illusion (save {saveRoll} vs {saveTarget}) and is unaffected.");
                 continue;
+            }
 
-            disbeliefMonster = monster;
-            disbeliefRoll = saveRoll;
-            disbeliefTarget = saveTarget;
-            break;
-        }
-
-        if (disbeliefMonster != null)
-        {
-            result.Events.Add($"{disbeliefMonster.DisplayName} (Group {groupId}) makes save ({disbeliefRoll} vs {disbeliefTarget}) and shouts it is fake!");
-            result.Events.Add($"The illusion is exposed for group {groupId}. No monsters in that group take damage.");
-            return;
-        }
-
-        foreach (var monster in targets)
-        {
             if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
                 continue;
 
@@ -123,7 +158,12 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
             monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
             var actual = Math.Max(0, before - monster.CurrentHitPoints);
 
+            if (applyPermanentStatus && monster.IsAlive)
+                monster.SetStatus(MonsterStatus.PermanentIllusion, int.MaxValue);
+
             result.Events.Add($"{monster.DisplayName} (Group {groupId}) believes the dragon breath, takes {actual} illusionary fire damage (rolled {rolledDamage}). HP {before}->{monster.CurrentHitPoints}.");
+            if (applyPermanentStatus && monster.IsAlive)
+                result.Events.Add($"{monster.DisplayName} remains trapped by the permanent illusion for the rest of the battle.");
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} dies from terror and shock.");
 

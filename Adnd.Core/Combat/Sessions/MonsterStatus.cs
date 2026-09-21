@@ -20,10 +20,12 @@ public enum MonsterStatus
     Slowed,
     Feared,
     Feebleminded,
+    PermanentIllusion,
     Blinded,
     Silenced,
     Petrified,
     Stunned,
-    Unconscious
+    Unconscious,
+    Mazed
 
 }
