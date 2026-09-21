@@ -124,6 +124,7 @@ public sealed class CombatCoordinator
             new LightningBoltHandler(),
             new IceStormHandler(),
             new CloudkillHandler(),
+            new ConeOfColdHandler(),
             new DisintegrateHandler(),
             new DeathFogHandler(),
             new DelayedBlastFireballHandler(),

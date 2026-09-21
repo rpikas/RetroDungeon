@@ -1280,3 +1280,6 @@ in the Encounter dialog, in the table where the party members are shown, the col
 ____
 
 Insect Plague is not only a level 5 cleric spell, but also a level 5 druid spell. 36,7
+____
+implement level 5 magic user spell: cone of cold that gives damage= (1d4+1)*level of the caster to one group of monsters. 36,9
+____

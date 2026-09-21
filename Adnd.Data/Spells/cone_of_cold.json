@@ -1,0 +1,13 @@
+{
+  "Id": "cone_of_cold",
+  "Name": "Cone of Cold",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "A freezing cone blasts one enemy group.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals (1d4+1) × caster level cold damage to each monster in the target group (save for half)."
+}
