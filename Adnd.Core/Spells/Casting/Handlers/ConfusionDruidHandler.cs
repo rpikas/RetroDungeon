@@ -6,7 +6,9 @@ public sealed class ConfusionDruidHandler : ISpellEffectHandler
 {
     public bool CanHandle(string spellId)
         => string.Equals(spellId, "confusion_druid", StringComparison.OrdinalIgnoreCase)
-           || string.Equals(spellId, "confusion", StringComparison.OrdinalIgnoreCase);
+           || string.Equals(spellId, "confusion", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "chaos_illusionist", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "chaos", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -15,11 +17,11 @@ public sealed class ConfusionDruidHandler : ISpellEffectHandler
             return SpellCastResult.Failure("Missing spell definition.");
 
         if (request.Context != SpellUseContext.Combat)
-            return SpellCastResult.Failure("Confusion can only be cast in combat.");
+            return SpellCastResult.Failure("This spell can only be cast in combat.");
 
         var session = request.CombatSession;
         if (session == null)
-            return SpellCastResult.Failure("Confusion requires combat session context.");
+            return SpellCastResult.Failure("This spell requires combat session context.");
 
         var rng = request.Rng ?? Random.Shared;
         var casterLevel = Math.Max(1, request.Caster.Level);
@@ -55,7 +57,7 @@ public sealed class ConfusionDruidHandler : ISpellEffectHandler
 
         var affectedCount = Math.Min(intelligentCandidates.Count, Math.Max(0, desiredCount));
         if (affectedCount <= 0)
-            return SpellCastResult.Failure("Confusion affects no creatures this cast.");
+            return SpellCastResult.Failure("This spell affects no creatures this cast.");
 
         var affected = intelligentCandidates
             .OrderBy(_ => rng.Next())
@@ -74,7 +76,7 @@ public sealed class ConfusionDruidHandler : ISpellEffectHandler
             result.Events.Add($"{monster.DisplayName} is confused for up to {durationRounds} round(s).");
         }
 
-        result.Events.Add($"Confusion affects {affected.Count} creature(s).");
+        result.Events.Add($"{spell.Name} affects {affected.Count} creature(s).");
         return result;
     }
 }
