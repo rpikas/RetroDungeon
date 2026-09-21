@@ -1285,3 +1285,24 @@ implement level 5 magic user spell: cone of cold that gives damage= (1d4+1)*leve
 ____
 Feeblemind is not only a level 6 druid spell but also a level 5 magic user spell. 37,0
 ____
+Implement level 4 Illusionist spell: Phantasmal killer. The target is one single monster in one group of monsters. The target must roll 3d6 and if
+the total is less than or equal to the intelligence of the target, then the target will die from fear immediately, else the target will be uneffected. 
+The target will not roll a save vs. spell. if the intelligence of the target is unknown, then it is assumed to be 10.
+targets with Non- intelligence are not affected by this spell. 
+
+This table can be used to determine the intelligence, create method GetIntelligenceForMonster(string monsterName) that returns the intelligence 
+for a monster, that could be used in the Phantasmal killer and other spells that needs to know the intelligence of a monster.
+Category	INT Range	Average (rounded up)
+Non-	0–1	1
+Animal	2–4	3
+Semi-	2–7	5
+Average	8–10	9
+Very	11–12	12
+High	13–14	14
+Exceptional	15–16	16
+Genius	17–18	18
+Supra‑Genius 19–20  20
+Godlike Intelligence 21+ 25 37,3
+___
+
+

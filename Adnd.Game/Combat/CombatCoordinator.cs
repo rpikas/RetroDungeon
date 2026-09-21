@@ -140,6 +140,7 @@ public sealed class CombatCoordinator
             new FearHandler(),
             new ParalyzationHandler(),
             new PhantasmalForceHandler(),
+            new PhantasmalKillerHandler(),
         });
 
         _spellCastingService = new SpellCastingService(resolver, spellRepo.LoadAll());

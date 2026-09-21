@@ -155,9 +155,9 @@ public sealed class EncounterForm : Form
         _partyList = new ListView
         {
             Left = 16,
-            Top = 700,//This was 362, but I increased it to 700 to move it down below the monster panel.
+            Top = 656,//More room so 6 party members fit without scrolling.
             Width = 940,
-            Height = 180,
+            Height = 224,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             View = View.Details,
@@ -390,7 +390,7 @@ public sealed class EncounterForm : Form
             Left = 16,
             Top = 222,//Used to be 172, but I moved it down to make room for the new monster status counts
             Width = 940,
-            Height = 480,//This was 180, but I increased it to 480 to accommodate the monster image. This is multiple group
+            Height = 430,//Slightly reduced so the party table can be taller without overlap.
             BackColor = Color.Black,
             BorderStyle = BorderStyle.FixedSingle
         };
@@ -399,9 +399,9 @@ public sealed class EncounterForm : Form
         _partyList = new ListView
         {
             Left = 16,
-            Top = 700,//This was 362, but I increased it to 700 to move it down below the monster panel.
+            Top = 660,//Move up and enlarge so 6 party members fit without scrolling.
             Width = 940,
-            Height = 180,
+            Height = 220,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             View = View.Details,

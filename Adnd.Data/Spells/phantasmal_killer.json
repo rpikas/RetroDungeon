@@ -1,0 +1,13 @@
+{
+  "Id": "phantasmal_killer",
+  "Name": "Phantasmal Killer",
+  "Class": "Illusionist",
+  "Level": 4,
+  "Description": "A terrifying illusion assaults one monster's mind.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "Target rolls 3d6; if result is > target intelligence, target dies from fear. No save vs spell. Non-intelligence targets are unaffected."
+}
