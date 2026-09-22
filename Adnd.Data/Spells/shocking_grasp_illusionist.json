@@ -1,0 +1,13 @@
+{
+  "Id": "shocking_grasp_illusionist",
+  "Name": "Shocking Grasp",
+  "Class": "Illusionist",
+  "Level": 7,
+  "Description": "A touch delivers a crackling electrical surge.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Deals 1d8 + caster level lightning damage to one target."
+}

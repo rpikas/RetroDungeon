@@ -1,0 +1,13 @@
+{
+  "Id": "magic_missile_illusionist",
+  "Name": "Magic Missile",
+  "Class": "Illusionist",
+  "Level": 7,
+  "Description": "A dart of magical force strikes unerringly.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Each missile hits automatically for 1d4+1 damage; number of missiles scales with caster level."
+}

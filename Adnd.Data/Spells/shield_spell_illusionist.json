@@ -1,0 +1,13 @@
+{
+  "Id": "shield_spell_illusionist",
+  "Name": "Shield",
+  "Class": "Illusionist",
+  "Level": 7,
+  "Description": "A shimmering disk of force improves defense.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Buff",
+  "EffectDescription": "Sets the caster's armor class to 2 if worse."
+}

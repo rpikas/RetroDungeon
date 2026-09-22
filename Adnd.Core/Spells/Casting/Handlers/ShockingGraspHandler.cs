@@ -4,7 +4,9 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class ShockingGraspHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "shocking_grasp", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+        => string.Equals(spellId, "shocking_grasp", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "shocking_grasp_illusionist", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {

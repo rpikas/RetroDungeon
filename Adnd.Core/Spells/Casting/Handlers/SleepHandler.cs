@@ -5,7 +5,9 @@ namespace Adnd.Core.Spells.Casting.Handlers;
 
 public sealed class SleepHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "sleep", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+        => string.Equals(spellId, "sleep", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "sleep_illusionist", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {

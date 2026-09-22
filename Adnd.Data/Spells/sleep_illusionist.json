@@ -1,0 +1,13 @@
+{
+  "Id": "sleep_illusionist",
+  "Name": "Sleep",
+  "Class": "Illusionist",
+  "Level": 7,
+  "Description": "Puts creatures into a magical slumber.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "Targets in one group save vs spell or fall asleep for a short duration."
+}

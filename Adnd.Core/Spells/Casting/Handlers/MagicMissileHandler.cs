@@ -3,7 +3,9 @@ using Adnd.Core.Diagnostics;
 
 public sealed class MagicMissileHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) => string.Equals(spellId, "magic_missile", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId)
+        => string.Equals(spellId, "magic_missile", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "magic_missile_illusionist", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
