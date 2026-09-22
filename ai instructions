@@ -1911,6 +1911,15 @@ Die	Item
 10	1 Set: Plate Mail +4, Shield +3
 11	1 Sword: Wounding
 12	1 Arrow of Slaying (select character type)
+_____
 
-Can you expand the floors in the dungeon to include level 11,12,13, 14,15 and 16 also make the elevator go that far down.
+Can you expand the floors in the dungeon to include level 11,12,13, 14,15 and 16 also make the elevator go that far down. 44,8
+
+when rolling for WornEquipment,  Write the dices rolled and the results to the ADnD Rule and Dice info dialog.44,8
+
+WornEquipment: Lvl 1 Assassin #4 Sword roll 4/100 <= 5%: yes. Item: Short Sword +5.
+
+Can you please gnerate encoumters for all classes for levels 11-16 in the dungeon, including the new floors and elevator access. 
+Each encounter should be tailored to the class and level of the party, ensuring a balanced challenge.
+
 

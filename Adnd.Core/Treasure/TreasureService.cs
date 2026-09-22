@@ -1142,6 +1142,17 @@ public sealed class TreasureService
         {
             var item = RollWornEquipmentItem(table, out var dieSize, out var dieRoll);
             result.LogLines.Add($"    Magic item #{itemIndex}: WornEquipment Table {table} d{dieSize} {dieRoll} => {item}.");
+
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "DMG WornEquipment",
+                $"Roll worn equipment item #{itemIndex}",
+                $"Roll 1d{dieSize} on WornEquipment Table {table} for encounter treasure.",
+                "1",
+                dieSize.ToString(CultureInfo.InvariantCulture),
+                dieRoll.ToString(CultureInfo.InvariantCulture),
+                $"Result: {item}.");
+
             result.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult
             {
                 Table = $"WornEquipment-{table}: {item}",

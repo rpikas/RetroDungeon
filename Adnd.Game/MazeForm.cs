@@ -40,6 +40,8 @@ public sealed class MazeForm : Form
     private const int PositionCount = (StraightAhead * 2) + 1;
     private const int TopLeft = 0;
     private const int BottomRight = 1;
+    private const int MinDungeonLevel = 1;
+    private const int MaxDungeonLevel = 16;
   //  private const int EncounterChanceDenominator = 4;
 
     private static readonly string[] LevelOneMonsters =
@@ -748,7 +750,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             if (_position.X == 1 && _position.Y == 2)
             {
-                ShowElevatorDialog();
+                ShowDungeonElevatorDialog();
                 Invalidate();
             }
 
@@ -1236,6 +1238,31 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return null;
 
         return value;
+    }
+
+    private void ShowDungeonElevatorDialog()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Choose dungeon level:");
+        sb.AppendLine();
+        for (var n = MinDungeonLevel; n <= MaxDungeonLevel; n++)
+            sb.AppendLine($"{n}. Level {n}");
+
+        sb.AppendLine();
+        sb.Append($"Current level: {_currentDungeonLevel}");
+
+        var selected = PromptForNumber("Elevator", sb.ToString(), MinDungeonLevel, MaxDungeonLevel);
+        if (!selected.HasValue)
+            return;
+
+        _currentDungeonLevel = selected.Value;
+        BuildMazeForLevel(_currentDungeonLevel);
+
+        // Elevator landing.
+        _position = new Point(1, 2);
+
+        Invalidate();
+        PublishToViewer();
     }
 
     /// <param name="tableOptions">
@@ -2296,7 +2323,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             if (_position.X == 1 && _position.Y == 2)
             {
-                ShowElevatorDialog();
+                ShowDungeonElevatorDialog();
             }
 
             if (_currentDungeonLevel == 1 && _position.X == 0 && _position.Y == 0)
@@ -3043,7 +3070,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 "1",
                 "100",
                 roll.ToString(), creature);
-            var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel);
+            var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel, dungeonLevel);
             int? countOverride = null;
             int? countMin = null;
             int? countMax = null;
@@ -3114,7 +3141,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return null;
     }
 
-    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int monsterLevel)
+    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int monsterLevel, int dungeonLevel)
     {
         if (string.IsNullOrWhiteSpace(dmgCreature))
             return null;
@@ -3146,7 +3173,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 <= 25 => "Bandit",
                 <= 30 => "Berserker",
                 <= 45 => "Brigand",
-                _ => GetRandomLevel1HumanCharacterEncounterName()
+                _ => GetRandomHumanCharacterEncounterNameForLevel(dungeonLevel)
             };
 
             RuleApplicationInfo.Publish(
@@ -3163,7 +3190,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         if (IsCharacterEncounterEntry(dmgCreature))
-            return GetRandomLevel1HumanCharacterEncounterName();
+            return GetRandomHumanCharacterEncounterNameForLevel(dungeonLevel);
 
         if (IsDemonPrinceEncounter(dmgCreature))
         {
@@ -3222,19 +3249,20 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return trimmed.StartsWith("Character", StringComparison.OrdinalIgnoreCase);
     }
 
-    private string GetRandomLevel1HumanCharacterEncounterName()
+    private string GetRandomHumanCharacterEncounterNameForLevel(int monsterLevel)
     {
+        var level = Math.Max(1, monsterLevel);
         var candidates = _monsterRepository.GetAll()
             .Where(m => m.Source == Sources.Adnd)
-            .Where(m => m.DungeonLevel == 1)
+            .Where(m => m.DungeonLevel == level)
             .Where(m => m.Type == MonsterType.Humanoid)
-            .Where(m => m.Name.StartsWith("Lvl 1 ", StringComparison.OrdinalIgnoreCase))
+            .Where(m => m.Name.StartsWith($"Lvl {level} ", StringComparison.OrdinalIgnoreCase))
             .Select(m => m.Name)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         if (candidates.Count == 0)
-            return "Adventurer";
+            return $"Lvl {level} Fighter";
 
         return candidates[_random.Next(candidates.Count)];
     }
