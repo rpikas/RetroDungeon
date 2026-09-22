@@ -362,7 +362,10 @@ public sealed class CombatResolver
                         "Level 1 Magic-User spells",
                         "Level 3 Mage spells",
                         "Level 3 Magic-User spells",
+                        "Level 3 Illusionist spells",
                         "Level 2 Illusionist spells",
+                        "Level 3 Priest spells",
+                        "Level 3 Cleric spells",
                         "Level 1 Priest spells",
                         "Level 1 Cleric spells",
                         "Level 1 Druid spells",
@@ -380,9 +383,12 @@ public sealed class CombatResolver
                     "Level 1 Magic-User spells",
                     "Level 3 Mage spells",
                     "Level 3 Magic-User spells",
+                    "Level 3 Illusionist spells",
                     "Level 2 Mage spells",
                     "Level 2 Magic-User spells",
                     "Level 2 Illusionist spells",
+                    "Level 3 Priest spells",
+                    "Level 3 Cleric spells",
                     "Level 1 Priest spells",
                     "Level 1 Cleric spells",
                     "Level 1 Druid spells",
@@ -398,6 +404,18 @@ public sealed class CombatResolver
                 && HasAnySpecialAbility(monster, "Level 3 Mage spells", "Level 3 Magic-User spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel3MagicUserSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 3 Illusionist spells")
+                && ResolveLevel3IllusionistSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 3 Priest spells", "Level 3 Cleric spells")
+                && ResolveLevel3ClericSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
@@ -1517,6 +1535,77 @@ public sealed class CombatResolver
             events.Add(new CombatEvent($"{monster.DisplayName} casts Mirror Image on itself. {imageCount} mirror image(s) appear for {rounds} round(s)."));
             return true;
         }
+
+    private bool ResolveLevel3IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        // Requested behavior: 50% Improved Phantasmal Force, 50% Mirror Image.
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Improved Phantasmal Force!"));
+            ResolveIllusionistPhantasmalForce(monster, session, events);
+            return true;
+        }
+
+        var imageCount = _dice.Roll(4);
+        var rounds = Math.Max(1, Math.Max(1, monster.Template.HitDice) * 2);
+        session.SetMonsterMirrorImage(monster, imageCount, rounds);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Mirror Image on itself. {imageCount} mirror image(s) appear for {rounds} round(s)."));
+        return true;
+    }
+
+    private bool ResolveLevel3ClericSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            var damagedAllies = session.AliveMonsters
+                .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
+                .ToList();
+
+            if (damagedAllies.Count == 0)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} tries to cast Cure Serious Wounds but no ally needs healing."));
+                return true;
+            }
+
+            var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
+            var healRoll = _dice.Roll(8) + _dice.Roll(8) + 1;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+            var actual = target.CurrentHitPoints - before;
+
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Serious Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
+            return true;
+        }
+
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var rolledDamage = _dice.Roll(4) + _dice.Roll(4); // same glyph damage model used elsewhere
+        var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        var saveRoll = _dice.Roll(20);
+        var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+        var beforeHp = partyTarget.CurrentHitPoints;
+        partyTarget.CurrentHitPoints = Math.Max(0, partyTarget.CurrentHitPoints - applied);
+        var actualDamage = beforeHp - partyTarget.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(partyTarget, actualDamage, events);
+
+        events.Add(new CombatEvent(saveRoll >= saveTarget
+            ? $"{monster.DisplayName} casts Glyph of Warding! {partyTarget.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half damage: {actualDamage}. HP {beforeHp}->{partyTarget.CurrentHitPoints}."
+            : $"{monster.DisplayName} casts Glyph of Warding! {partyTarget.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actualDamage} damage. HP {beforeHp}->{partyTarget.CurrentHitPoints}."));
+
+        if (partyTarget.CurrentHitPoints <= 0)
+        {
+            partyTarget.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{partyTarget.Name} is slain by glyph of warding!"));
+        }
+
+        return true;
+    }
 
         var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var roundsAcid = _dice.Roll(3);

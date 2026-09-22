@@ -1357,3 +1357,7 @@ ____
 
 when encounter a thief, the encounter thief can backstab the party members if they are surprised. 
 The encounter thief gets +4 to hit and deals extra damage according to the same multiplier table as the party thief.
+____
+Implement "SpecialAbilities":  Level 3 illusionist spells, 50% chanse to cast Improved Phantasmal Force and 50% chanse to cast Mirror Image.
+Implement "SpecialAbilities":  Level 3 cleric spells, 50% chanse to cast Cure Serious Wounds and 50% chanse to cast Glyph of Warding 39,3
+____
