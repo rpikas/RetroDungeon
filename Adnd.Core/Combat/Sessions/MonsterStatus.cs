@@ -8,6 +8,7 @@ public enum MonsterStatus
     Snared,
     TurnedUndead,
     Poisoned,
+    Charmed,
     Paralyzed,
     Confused,
     Cursed,

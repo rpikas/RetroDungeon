@@ -1616,6 +1616,7 @@ public sealed class EncounterForm : Form
         var paralyzedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Paralyzed)) ?? _paralyzedMonsterCount;
         var unconsciousCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Unconscious)) ?? _unconsciousMonsterCount;
         var mazedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Mazed)) ?? 0;
+        var charmedCount = aliveMonsters?.Count(m => m.HasStatus(MonsterStatus.Charmed)) ?? 0;
 
         var asleepText = !_multipleGroups && asleepCount > 0
             ? $"  ({asleepCount} ASLEEP)"
@@ -1653,6 +1654,9 @@ public sealed class EncounterForm : Form
         var mazedText = !_multipleGroups && mazedCount > 0
             ? $"  ({mazedCount} MAZED)"
             : string.Empty;
+        var charmedText = !_multipleGroups && charmedCount > 0
+            ? $"  ({charmedCount} CHARMED)"
+            : string.Empty;
         var surpriseText = _session != null
             && _session.RoundNumber == 1
             && !string.IsNullOrWhiteSpace(_session.SurpriseSummary)
@@ -1663,7 +1667,7 @@ public sealed class EncounterForm : Form
             ? _monsterName.ToUpperInvariant() + "S"
             : _monsterName.ToUpperInvariant();
 
-        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}{mazedText}{surpriseText}";
+        _headerLabel.Text = $"1)  {_monsterCount}  {headerMonsterName}{asleepText}{entangledText}{panickedText}{fearedText}{turnedText}{blindText}{confusedText}{stunnedText}{slowedText}{paralyzedText}{unconsciousText}{mazedText}{charmedText}{surpriseText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count)
         {

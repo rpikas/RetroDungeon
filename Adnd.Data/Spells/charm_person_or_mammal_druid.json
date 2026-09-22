@@ -1,0 +1,13 @@
+{
+  "Id": "charm_person_or_mammal_druid",
+  "Name": "Charm Person or Mammal",
+  "Class": "Druid",
+  "Level": 2,
+  "Description": "Charms one humanoid or animal target.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "One humanoid or animal target saves vs spell or becomes charmed. Charmed targets regard the druid as a trusted friend and aid the druid's side in combat."
+}

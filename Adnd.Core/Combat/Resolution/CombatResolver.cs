@@ -669,6 +669,12 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (monster.HasStatus(MonsterStatus.Charmed))
+            {
+                ResolveCharmedMonsterTurn(session, monster, events);
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.Mazed))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Mazed);
@@ -2295,28 +2301,70 @@ public sealed class CombatResolver
             return;
         }
 
-        var attack = monster.Template.Attacks.FirstOrDefault()
+        ResolveMonsterAttackAgainstMonster(
+            attacker: monster,
+            target: targetMonster,
+            events: events,
+            missText: $"{monster.DisplayName} attacks nearest creature {targetMonster.DisplayName} in confusion but misses.",
+            hitText: $"{monster.DisplayName} attacks nearest creature {targetMonster.DisplayName} in confusion",
+            slainText: $"{targetMonster.DisplayName} is slain by the confused attack!");
+    }
+
+    private void ResolveCharmedMonsterTurn(CombatSession session, MonsterInstance charmedMonster, List<CombatEvent> events)
+    {
+        var hostileMonsters = session.AliveMonsters
+            .Where(m => !ReferenceEquals(m, charmedMonster))
+            .Where(m => !m.HasStatus(MonsterStatus.Charmed))
+            .OrderBy(m => string.Equals(m.GroupId, charmedMonster.GroupId, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .ThenBy(m => m.CurrentHitPoints)
+            .ToList();
+
+        if (hostileMonsters.Count == 0)
+        {
+            events.Add(new CombatEvent($"{charmedMonster.DisplayName} is charmed and stands by the druid."));
+            return;
+        }
+
+        var target = hostileMonsters[0];
+        ResolveMonsterAttackAgainstMonster(
+            attacker: charmedMonster,
+            target: target,
+            events: events,
+            missText: $"{charmedMonster.DisplayName} fights for the druid and misses {target.DisplayName}.",
+            hitText: $"{charmedMonster.DisplayName} fights for the druid and hits {target.DisplayName}",
+            slainText: $"{target.DisplayName} is slain by the charmed ally!");
+    }
+
+    private void ResolveMonsterAttackAgainstMonster(
+        MonsterInstance attacker,
+        MonsterInstance target,
+        List<CombatEvent> events,
+        string missText,
+        string hitText,
+        string slainText)
+    {
+        var attack = attacker.Template.Attacks.FirstOrDefault()
                      ?? new MonsterAttack { Name = "Claw", NumberOfAttacks = 1, Damage = "1d4" };
 
-        var thac0 = GetMonsterThac0(monster);
-        var needed = thac0 - targetMonster.ArmorClass;
+        var thac0 = GetMonsterThac0(attacker);
+        var needed = thac0 - target.ArmorClass;
         var roll = _dice.Roll(20);
 
         if (roll < needed)
         {
-            events.Add(new CombatEvent($"{monster.DisplayName} attacks nearest creature {targetMonster.DisplayName} in confusion but misses."));
+            events.Add(new CombatEvent(missText));
             return;
         }
 
         var damage = RollDamage(string.IsNullOrWhiteSpace(attack.Damage) ? "1d4" : attack.Damage);
-        var before = targetMonster.CurrentHitPoints;
-        targetMonster.CurrentHitPoints = Math.Max(0, targetMonster.CurrentHitPoints - damage);
-        var actual = before - targetMonster.CurrentHitPoints;
-        WakeMonsterIfAsleepAfterDamage(targetMonster, actual, events);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        var actual = before - target.CurrentHitPoints;
+        WakeMonsterIfAsleepAfterDamage(target, actual, events);
 
-        events.Add(new CombatEvent($"{monster.DisplayName} attacks nearest creature {targetMonster.DisplayName} in confusion for {actual} damage. HP {before}->{targetMonster.CurrentHitPoints}."));
-        if (!targetMonster.IsAlive)
-            events.Add(new CombatEvent($"{targetMonster.DisplayName} is slain by the confused attack!"));
+        events.Add(new CombatEvent($"{hitText} for {actual} damage. HP {before}->{target.CurrentHitPoints}."));
+        if (!target.IsAlive)
+            events.Add(new CombatEvent(slainText));
     }
 
     private bool TryResolveMonsterAssassination(CombatSession session, MonsterInstance monster, List<CombatEvent> events)

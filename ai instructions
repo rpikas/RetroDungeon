@@ -1320,3 +1320,24 @@ implement permanent illusion, illustionist level 6 spell that should work like s
 ____
 These 1st level magic user spells are also level 7 illusionist spells Magic Missile, Shield, Shocking Grasp, Sleep
 ____
+implement level 2 Druid spell Charm person of mammal. If the target is not a humanoid bor animal, the spell will not work. 
+The target will roll a save vs. spell, if it fails, it will be charmed for a period according to this table
+
+Intelligence Score	Period Between Checks
+3 or less	3 months
+4 to 6	2 months
+7 to 9	1 month
+10 to 12	3 weeks
+13 to 14	2 weeks
+15 to 16	1 week
+17	3 days
+18	2 days
+19 or more	1 day
+
+Day break is when you leave the dungeon.
+When it is charmed, it will not attack you and will help you in combat. 
+
+implement 1st level magic-user spell charm person. It will work like level 2 Druid spell Charm person of mammal but it only woks on humanoids
+
+All level 1 magic-user spells are also level 7 illusionist spells. so Charm person is also a level 7 illusionist spell. 
+____

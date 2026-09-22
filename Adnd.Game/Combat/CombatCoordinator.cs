@@ -101,6 +101,8 @@ public sealed class CombatCoordinator
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
             new FaerieFireHandler(),
+            new CharmPersonOrMammalHandler(),
+            new CharmPersonHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
             new ChromaticOrbHandler(),

@@ -1,0 +1,13 @@
+{
+  "Id": "charm_person_magic_user",
+  "Name": "Charm Person",
+  "Class": "MagicUser",
+  "Level": 1,
+  "Description": "Charms one humanoid target.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "One humanoid target saves vs spell or becomes charmed. Charmed targets regard the caster as a trusted friend and aid the caster's side in combat."
+}
