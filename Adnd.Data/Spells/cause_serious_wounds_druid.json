@@ -1,0 +1,13 @@
+{
+  "Id": "cause_serious_wounds_druid",
+  "Name": "Cause Serious Wounds",
+  "Class": "Druid",
+  "Level": 4,
+  "Description": "Reversed cure spell that inflicts serious wounds.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Damage",
+  "EffectDescription": "Inflicts 2d8+1 damage to one enemy target."
+}

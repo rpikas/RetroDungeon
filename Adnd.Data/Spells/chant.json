@@ -1,0 +1,13 @@
+{
+  "Id": "chant",
+  "Name": "Chant",
+  "Class": "Cleric",
+  "Level": 2,
+  "Description": "The cleric chants to favor allies and hinder enemies.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Buff",
+  "EffectDescription": "While chanting continues, friendly creatures gain +1 to attacks, damage, and saving throws; enemies suffer -1 to attacks, damage, and saving throws. The chant ends if the chanter is interrupted."
+}

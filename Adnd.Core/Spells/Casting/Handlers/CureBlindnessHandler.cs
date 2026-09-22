@@ -1,14 +1,13 @@
 using Adnd.Core.Characters;
+using Adnd.Core.Combat.Sessions;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
-public sealed class CureLightWoundsHandler : ISpellEffectHandler
+public sealed class CureBlindnessHandler : ISpellEffectHandler
 {
     public bool CanHandle(string spellId) =>
-        string.Equals(spellId, "cure_light_wounds", StringComparison.OrdinalIgnoreCase)
-        || string.Equals(spellId, "cure_light_wounds_druid", StringComparison.OrdinalIgnoreCase)
-        || string.Equals(spellId, "cause_light_wounds", StringComparison.OrdinalIgnoreCase)
-        || string.Equals(spellId, "cause_light_wounds_druid", StringComparison.OrdinalIgnoreCase);
+        string.Equals(spellId, "cure_blindness", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(spellId, "cause_blindness", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -16,11 +15,14 @@ public sealed class CureLightWoundsHandler : ISpellEffectHandler
         if (spell == null)
             return SpellCastResult.Failure("Missing spell definition.");
 
-        var isCause = spell.Id.StartsWith("cause_", StringComparison.OrdinalIgnoreCase);
+        var isCause = string.Equals(spell.Id, "cause_blindness", StringComparison.OrdinalIgnoreCase);
+        return isCause
+            ? ResolveCauseBlindness(request, spell)
+            : ResolveCureBlindness(request, spell);
+    }
 
-        if (isCause)
-            return ResolveCauseLightWounds(request, spell);
-
+    private static SpellCastResult ResolveCureBlindness(SpellCastRequest request, Spell spell)
+    {
         var targetRef = request.Targets.FirstOrDefault(t => t.Type == SpellCastTargetType.Ally);
         var target = targetRef == null
             ? request.Caster
@@ -34,30 +36,26 @@ public sealed class CureLightWoundsHandler : ISpellEffectHandler
             || target.HasStatus(CharacterStatus.Lost)
             || target.CurrentHitPoints <= 0)
         {
-            return SpellCastResult.Failure($"{spell.Name} cannot heal {target.Name} in current condition.");
+            return SpellCastResult.Failure($"{spell.Name} cannot affect {target.Name} in current condition.");
         }
 
-        var rng = request.Rng ?? Random.Shared;
-        var before = target.CurrentHitPoints;
-        var heal = rng.Next(1, 9);
-        target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + heal);
-        var actual = Math.Max(0, target.CurrentHitPoints - before);
+        var wasBlind = target.HasStatus(CharacterStatus.Blind);
+        target.RemoveStatus(CharacterStatus.Blind);
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add(actual > 0
-            ? $"{target.Name} is healed for {actual} HP."
-            : $"{target.Name} is already at full health.");
-        result.HpChanges[target.Name] = actual;
+        result.Events.Add(wasBlind
+            ? $"{target.Name}'s sight is restored."
+            : $"{target.Name} is not blind.");
         return result;
     }
 
-    private static SpellCastResult ResolveCauseLightWounds(SpellCastRequest request, Spell spell)
+    private static SpellCastResult ResolveCauseBlindness(SpellCastRequest request, Spell spell)
     {
         var session = request.CombatSession;
         var rng = request.Rng ?? Random.Shared;
 
-        Combat.Sessions.MonsterInstance? target = null;
+        MonsterInstance? target = null;
         var firstTarget = request.Targets.FirstOrDefault(t => t.Type == SpellCastTargetType.Enemy);
 
         if (firstTarget?.MonsterIndex is int idx)
@@ -74,16 +72,26 @@ public sealed class CureLightWoundsHandler : ISpellEffectHandler
         if (target == null)
             return SpellCastResult.Failure("No valid enemy target selected.");
 
-        var rolled = rng.Next(1, 9);
-        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
+        var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
+        var saveRoll = rng.Next(1, 21);
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, rolled, outcome));
-        if (!target.IsAlive)
-            result.Events.Add($"{target.DisplayName} is destroyed.");
 
-        result.HpChanges[target.DisplayName] = -outcome.ActualDamage;
+        if (saveRoll >= saveTarget)
+        {
+            result.Events.Add($"{target.DisplayName} resists cause blindness (save {saveRoll} vs {saveTarget}).");
+            return result;
+        }
+
+        if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
+        {
+            result.Events.Add($"{target.DisplayName} negates cause blindness with magic resistance.");
+            return result;
+        }
+
+        target.SetStatus(MonsterStatus.Blinded, int.MaxValue);
+        result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and is blinded.");
         return result;
     }
 }

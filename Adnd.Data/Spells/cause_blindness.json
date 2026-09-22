@@ -1,0 +1,13 @@
+{
+  "Id": "cause_blindness",
+  "Name": "Cause Blindness",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "Reversed form of Cure Blindness; blinds the touched victim if it fails its save.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "On a failed saving throw vs spell, the victim is blinded; successful save negates."
+}

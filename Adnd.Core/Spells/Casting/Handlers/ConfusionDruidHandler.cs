@@ -6,6 +6,7 @@ public sealed class ConfusionDruidHandler : ISpellEffectHandler
 {
     public bool CanHandle(string spellId)
         => string.Equals(spellId, "confusion_druid", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(spellId, "confusion_illusionist", StringComparison.OrdinalIgnoreCase)
            || string.Equals(spellId, "confusion", StringComparison.OrdinalIgnoreCase)
            || string.Equals(spellId, "chaos_illusionist", StringComparison.OrdinalIgnoreCase)
            || string.Equals(spellId, "chaos", StringComparison.OrdinalIgnoreCase);

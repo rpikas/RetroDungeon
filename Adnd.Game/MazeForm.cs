@@ -3146,7 +3146,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 <= 25 => "Bandit",
                 <= 30 => "Berserker",
                 <= 45 => "Brigand",
-                _ => "Adventurer"
+                _ => GetRandomLevel1HumanCharacterEncounterName()
             };
 
             RuleApplicationInfo.Publish(
@@ -3163,7 +3163,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         if (IsCharacterEncounterEntry(dmgCreature))
-            return "Adventurer";
+            return GetRandomLevel1HumanCharacterEncounterName();
 
         if (IsDemonPrinceEncounter(dmgCreature))
         {
@@ -3220,6 +3220,23 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         var trimmed = dmgCreature.Trim();
         return trimmed.StartsWith("Character", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private string GetRandomLevel1HumanCharacterEncounterName()
+    {
+        var candidates = _monsterRepository.GetAll()
+            .Where(m => m.Source == Sources.Adnd)
+            .Where(m => m.DungeonLevel == 1)
+            .Where(m => m.Type == MonsterType.Humanoid)
+            .Where(m => m.Name.StartsWith("Lvl 1 ", StringComparison.OrdinalIgnoreCase))
+            .Select(m => m.Name)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (candidates.Count == 0)
+            return "Adventurer";
+
+        return candidates[_random.Next(candidates.Count)];
     }
 
     private static bool IsDemonPrinceEncounter(string dmgCreature)

@@ -1,0 +1,13 @@
+{
+  "Id": "cure_blindness",
+  "Name": "Cure Blindness",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "Permanently cures most forms of blindness by touch.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Removes blindness from one creature touched."
+}

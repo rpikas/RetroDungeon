@@ -1,0 +1,13 @@
+{
+  "Id": "cause_critical_wounds",
+  "Name": "Cause Critical Wounds",
+  "Class": "Cleric",
+  "Level": 5,
+  "Description": "Reversed cure spell that inflicts critical wounds.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Damage",
+  "EffectDescription": "Inflicts 3d8+3 damage to one enemy target."
+}

@@ -336,6 +336,12 @@ public class Character
         EarSeekerDeathOnNextDungeonEntry = true;
     }
 
+    public void ApplyInfestationDisease()
+    {
+        ApplyDisease();
+        EarSeekerDeathOnNextDungeonEntry = true;
+    }
+
     private string GetStatusDisplay()
     {
         var statuses = new List<string>();

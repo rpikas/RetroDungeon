@@ -82,6 +82,49 @@ internal static class SpellDamageSaveHelper
             || string.Equals(d.Description?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
     }
 
+    internal static bool HasMindAffectingImmunity(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d.Name?.Trim() ?? string.Empty;
+            var description = d.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}".ToLowerInvariant();
+
+            return string.Equals(name, "Mind-affecting spells Immunity", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Mind-affecting spells Immunity", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(name, "Immune to charm, sleep, and all mind-affecting spells", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Immune to charm, sleep, and all mind-affecting spells", StringComparison.OrdinalIgnoreCase)
+                   || (merged.Contains("mind-affecting", StringComparison.Ordinal)
+                       && merged.Contains("immun", StringComparison.Ordinal));
+        });
+    }
+
+    internal static bool IsMindAffectingSpell(string? spellIdOrName)
+    {
+        if (string.IsNullOrWhiteSpace(spellIdOrName))
+            return false;
+
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("charm", StringComparison.Ordinal)
+               || key.Contains("sleep", StringComparison.Ordinal)
+               || key.Contains("hold", StringComparison.Ordinal)
+               || key.Contains("fear", StringComparison.Ordinal)
+               || key.Contains("confusion", StringComparison.Ordinal)
+               || key.Contains("chaos", StringComparison.Ordinal)
+               || key.Contains("feeblemind", StringComparison.Ordinal)
+               || key.Contains("phantasmal", StringComparison.Ordinal)
+               || key.Contains("color_spray", StringComparison.Ordinal)
+               || key.Contains("color spray", StringComparison.Ordinal)
+               || key.Contains("paralyzation", StringComparison.Ordinal)
+               || key.Contains("power_word_stun", StringComparison.Ordinal)
+               || key.Contains("power word stun", StringComparison.Ordinal);
+    }
+
+    internal static bool IsNegatedByMindAffectingImmunity(MonsterInstance monster, string? spellIdOrName)
+    {
+        return HasMindAffectingImmunity(monster) && IsMindAffectingSpell(spellIdOrName);
+    }
+
     internal static string FormatSaveAndDamageLine(string targetDisplayName, int rolledDamage, Outcome outcome, string? rolledDamageText = null)
     {
         if (outcome.MagicResisted)

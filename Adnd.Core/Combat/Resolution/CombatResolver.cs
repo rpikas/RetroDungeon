@@ -40,6 +40,23 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (member.HasStatus(CharacterStatus.Confused))
+            {
+                var confusedRounds = session.GetPartyConfusedRounds(member.Name);
+                events.Add(new CombatEvent(confusedRounds > 0
+                    ? $"{member.Name} is confused and cannot act ({confusedRounds} round(s) remaining)."
+                    : $"{member.Name} is confused and cannot act."));
+
+                var remainingConfused = session.TickPartyConfused(member.Name);
+                if (remainingConfused <= 0)
+                {
+                    member.RemoveStatus(CharacterStatus.Confused);
+                    events.Add(new CombatEvent($"{member.Name} regains clarity."));
+                }
+
+                continue;
+            }
+
             var caster = session.Party.FirstOrDefault(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
             if (caster == null || _spellCastingService == null)
             {
@@ -94,6 +111,53 @@ public sealed class CombatResolver
 
         var parrying = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         bool partyAttemptedRun = false;
+
+        var chantActiveAtRoundStart = session.IsChantActive;
+        var prayerActiveAtRoundStart = session.IsPrayerActive;
+
+        if (chantActiveAtRoundStart)
+        {
+            var chantCaster = session.Party.FirstOrDefault(p => string.Equals(p.Name, session.ActiveChantCasterName, StringComparison.OrdinalIgnoreCase));
+            if (chantCaster == null || !IsAlive(chantCaster))
+            {
+                session.BreakChant();
+                chantActiveAtRoundStart = false;
+                events.Add(new CombatEvent("Chant ends as the chanter can no longer continue."));
+            }
+        }
+
+            var drainRemaining = session.GetPartyDrainBloodRemaining(member.Name);
+            if (drainRemaining > 0)
+            {
+                var drainRoll = _dice.Roll(4);
+                var drainAmount = session.ConsumePartyDrainBlood(member.Name, drainRoll);
+                if (drainAmount > 0)
+                {
+                    var beforeHp = member.CurrentHitPoints;
+                    member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - drainAmount);
+                    var actualDrain = beforeHp - member.CurrentHitPoints;
+                    WakeCharacterIfAsleepAfterDamage(member, actualDrain, events);
+
+                    var remainingAfter = session.GetPartyDrainBloodRemaining(member.Name);
+                    events.Add(new CombatEvent($"{member.Name} suffers Drain Blood for {actualDrain} (rolled {drainRoll}). Remaining drain: {remainingAfter}. HP {beforeHp}->{member.CurrentHitPoints}."));
+
+                    if (member.CurrentHitPoints <= 0)
+                    {
+                        member.AddStatus(CharacterStatus.Dead);
+                        events.Add(new CombatEvent($"{member.Name} dies from blood loss!"));
+                        continue;
+                    }
+                }
+            }
+
+        if (prayerActiveAtRoundStart)
+        {
+            var remainingPrayerRounds = session.ActivePrayerRounds;
+            var prayerCaster = string.IsNullOrWhiteSpace(session.ActivePrayerCasterName)
+                ? "A cleric"
+                : session.ActivePrayerCasterName;
+            events.Add(new CombatEvent($"{prayerCaster}'s Prayer remains in effect ({remainingPrayerRounds} round(s) remaining)."));
+        }
 
         foreach (var member in session.Party)
         {
@@ -262,6 +326,11 @@ public sealed class CombatResolver
             switch (action.Type)
             {
                 case CombatActionType.Fight:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     ResolvePartyAttack(session, member, action, events);
                     break;
                 case CombatActionType.Parry:
@@ -269,22 +338,58 @@ public sealed class CombatResolver
                     events.Add(new CombatEvent($"{member.Name} parries."));
                     break;
                 case CombatActionType.UseItem:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     ResolvePartyUseItem(session, member, action, events);
                     break;
                 case CombatActionType.DispellUndead:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     ResolveDispellUndead(session, member, action, events);
                     break;
                 case CombatActionType.LayOnHands:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     ResolveLayOnHands(session, member, action, events);
                     break;
                 case CombatActionType.MonkBodyHeal:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     ResolveMonkBodyHeal(session, member, events);
                     break;
                 case CombatActionType.Spell:
                 case CombatActionType.CastSpell:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     ResolvePartySpell(session, member, action, events);
                     break;
                 case CombatActionType.Run:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
                     partyAttemptedRun = true;
                     events.Add(new CombatEvent($"{member.Name} tries to run!"));
                     break;
@@ -329,6 +434,8 @@ public sealed class CombatResolver
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
                 continue;
 
+            ApplyMonsterRegeneration(monster, events);
+
             if (session.RoundNumber == 1 && session.MonstersSurprisedRound1)
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} is surprised and cannot act in round 1."));
@@ -360,15 +467,24 @@ public sealed class CombatResolver
                 if (HasAnySpecialAbility(monster,
                         "Level 1 Mage spells",
                         "Level 1 Magic-User spells",
+                        "Level 5 Mage spells",
+                        "Level 5 Magic-User spells",
+                        "Level 5 Illusionist spells",
+                        "Level 4 Mage spells",
+                        "Level 4 Magic-User spells",
+                        "Level 4 Illusionist spells",
                         "Level 3 Mage spells",
                         "Level 3 Magic-User spells",
                         "Level 3 Illusionist spells",
                         "Level 2 Illusionist spells",
                         "Level 3 Priest spells",
                         "Level 3 Cleric spells",
+                        "Level 5 Priest spells",
+                        "Level 5 Cleric spells",
                         "Level 1 Priest spells",
                         "Level 1 Cleric spells",
                         "Level 1 Druid spells",
+                        "Level 5 Druid spells",
                         "Level 1 Illusionist spells"))
                 {
                     events.Add(new CombatEvent(remainingSilence > 0
@@ -381,6 +497,12 @@ public sealed class CombatResolver
                 && HasAnySpecialAbility(monster,
                     "Level 1 Mage spells",
                     "Level 1 Magic-User spells",
+                    "Level 5 Mage spells",
+                    "Level 5 Magic-User spells",
+                    "Level 5 Illusionist spells",
+                    "Level 4 Mage spells",
+                    "Level 4 Magic-User spells",
+                    "Level 4 Illusionist spells",
                     "Level 3 Mage spells",
                     "Level 3 Magic-User spells",
                     "Level 3 Illusionist spells",
@@ -389,15 +511,55 @@ public sealed class CombatResolver
                     "Level 2 Illusionist spells",
                     "Level 3 Priest spells",
                     "Level 3 Cleric spells",
+                    "Level 5 Priest spells",
+                    "Level 5 Cleric spells",
                     "Level 1 Priest spells",
                     "Level 1 Cleric spells",
                     "Level 1 Druid spells",
                     "Level 2 Druid spells",
                     "Level 3 Druid spells",
+                    "Level 4 Druid spells",
+                    "Level 5 Druid spells",
                     "Level 1 Illusionist spells"))
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
             }
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 5 Illusionist spells")
+                && ResolveLevel5IllusionistSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 5 Mage spells", "Level 5 Magic-User spells")
+                && ResolveLevel5MagicUserSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 5 Druid spells")
+                && ResolveLevel5DruidSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 5 Priest spells", "Level 5 Cleric spells")
+                && ResolveLevel5ClericSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 4 Illusionist spells")
+                && ResolveLevel4IllusionistSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasAnySpecialAbility(monster, "Level 4 Mage spells", "Level 4 Magic-User spells")
+                && ResolveLevel4MagicUserSpell(monster, session, events))
+                continue;
 
             if (!isSilenced
                 && !isFeebleminded
@@ -446,6 +608,12 @@ public sealed class CombatResolver
                 && HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
                 && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1PriestSpell(monster, session, events))
+                continue;
+
+            if (!isSilenced
+                && !isFeebleminded
+                && HasSpecialAbility(monster, "Level 4 Druid spells")
+                && ResolveLevel4DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
@@ -803,9 +971,10 @@ public sealed class CombatResolver
                         return FinalizeRound(session, events);
                     }
 
-                    var blessedAcAdjustment = session.IsBlessed(target.Name) ? -1 : 0;
                     var targetAc = target.ArmorClass + (parrying.Contains(target.Name) ? 2 : 0);
                     var thac0 = GetMonsterThac0(monster);
+                    if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
+                        thac0 += 1;
                     if (monsterBackstabInfo.Enabled)
                         thac0 -= 4;
                     if (monster.HasStatus(MonsterStatus.Blinded)
@@ -834,6 +1003,9 @@ public sealed class CombatResolver
                         }
 
                         int damage = RollDamage(attack.Damage);
+                        var enemyDamagePenaltyApplied = chantActiveAtRoundStart || prayerActiveAtRoundStart;
+                        if (enemyDamagePenaltyApplied)
+                            damage = Math.Max(1, damage - 1);
                         if (monsterBackstabInfo.Enabled)
                         {
                             var baseDamage = damage;
@@ -841,8 +1013,16 @@ public sealed class CombatResolver
                             events.Add(new CombatEvent($"{monster.DisplayName} backstabs! +4 to hit, damage x{monsterBackstabInfo.Multiplier} ({baseDamage}->{damage})."));
                         }
                         target.CurrentHitPoints -= damage;
-                        events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name} for {damage}."));
+                        var enemyDamageModText = enemyDamagePenaltyApplied ? " (chant/prayer -1 damage)" : string.Empty;
+                        events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name} for {damage}.{enemyDamageModText}"));
                         WakeCharacterIfAsleepAfterDamage(target, damage, events);
+
+                        if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, target.Name, StringComparison.OrdinalIgnoreCase) && damage > 0)
+                        {
+                            session.BreakChant();
+                            chantActiveAtRoundStart = false;
+                            events.Add(new CombatEvent($"{target.Name}'s chant is interrupted and ends."));
+                        }
 
                         if (target.CurrentHitPoints <= 0)
                         {
@@ -853,6 +1033,8 @@ public sealed class CombatResolver
                         else
                         {
                             TryApplyEarSeekerDisease(monster, target, events);
+                            TryApplyInfestation(monster, target, events);
+                            TryApplyDrainBlood(monster, target, session, events);
                             TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
 
@@ -868,6 +1050,8 @@ public sealed class CombatResolver
                                 if (poisonRoll <= 70)
                                 {
                                     var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
+                                    if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
+                                        saveTarget = Math.Max(1, saveTarget - 1);
                                     var saveRoll = _dice.Roll(20);
                                     if (saveRoll >= saveTarget)
                                     {
@@ -889,7 +1073,7 @@ public sealed class CombatResolver
 
                             if (HasAnySpecialAbility(monster, "Paralyze", "Paralyzation", "Paralysis"))
                             {
-                                TryApplyMonsterParalyzation(monster, target, events);
+                                TryApplyMonsterParalyzation(monster, target, session, events);
                             }
                         }
                     }
@@ -912,6 +1096,13 @@ public sealed class CombatResolver
         {
             session.Outcome = CombatOutcome.Victory;
             events.Add(new CombatEvent("All monsters are defeated!"));
+        }
+
+        if (prayerActiveAtRoundStart)
+        {
+            var afterTickPrayerRounds = session.TickPrayer();
+            if (afterTickPrayerRounds <= 0)
+                events.Add(new CombatEvent("Prayer fades."));
         }
 
         return FinalizeRound(session, events);
@@ -1322,6 +1513,8 @@ public sealed class CombatResolver
 
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
+        var chantOrPrayerBonus = (session.IsChantActive || session.IsPrayerActive) ? 1 : 0;
+
         var hasImprovedInvisibility = session.GetImprovedInvisibilityRounds(member.Name) > 0;
         if (!hasImprovedInvisibility
             && member.HasStatus(CharacterStatus.Invisible)
@@ -1415,6 +1608,7 @@ public sealed class CombatResolver
         for (int i = 0; i < attacks; i++)
         {
             var thac0Modifier = session.IsBlessed(member.Name) ? 1 : 0;
+            thac0Modifier += chantOrPrayerBonus;
             if (isBackstab)
                 thac0Modifier += 4;
 
@@ -1467,6 +1661,9 @@ public sealed class CombatResolver
                 : 0;
 
             int damage = RollDamage(damageExpression) + strengthDamageBonus;
+            var partyDamageBonusApplied = chantOrPrayerBonus > 0;
+            if (partyDamageBonusApplied)
+                damage += 1;
 
             if (isBackstab)
             {
@@ -1484,15 +1681,20 @@ public sealed class CombatResolver
 
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
-            WakeMonsterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+            var actualDamageToTarget = before - target.CurrentHitPoints;
+            WakeMonsterIfAsleepAfterDamage(target, actualDamageToTarget, events);
 
             var weaponName = mainHand != null ? mainHand.Name : "bare hands";
             var damageFormula = strengthDamageBonus == 0
                 ? damageExpression
                 : $"{damageExpression}+{strengthDamageBonus}";
 
+            var partyDamageModText = partyDamageBonusApplied ? " +1 chant/prayer" : string.Empty;
             events.Add(new CombatEvent(
-                $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
+                $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}{partyDamageModText}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (actualDamageToTarget > 0 && TryResolveMonsterExplosionOnHit(target, session, events))
+                break;
 
             if (target.CurrentHitPoints <= 0)
             {
@@ -1535,6 +1737,13 @@ public sealed class CombatResolver
             events.Add(new CombatEvent($"{monster.DisplayName} casts Mirror Image on itself. {imageCount} mirror image(s) appear for {rounds} round(s)."));
             return true;
         }
+
+        var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var roundsAcid = _dice.Roll(3);
+        session.SetPartyAcidArrow(target.Name, roundsAcid);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+        return true;
+    }
 
     private bool ResolveLevel3IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
@@ -1586,6 +1795,8 @@ public sealed class CombatResolver
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = _dice.Roll(4) + _dice.Roll(4); // same glyph damage model used elsewhere
         var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        if (session.IsChantActive || session.IsPrayerActive)
+            saveTarget = Math.Max(1, saveTarget - 1);
         var saveRoll = _dice.Roll(20);
         var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
 
@@ -1607,10 +1818,61 @@ public sealed class CombatResolver
         return true;
     }
 
-        var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
-        var roundsAcid = _dice.Roll(3);
-        session.SetPartyAcidArrow(target.Name, roundsAcid);
-        events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
+    private bool ResolveLevel5ClericSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            var damagedAllies = session.AliveMonsters
+                .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
+                .ToList();
+
+            if (damagedAllies.Count == 0)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} tries to cast Cure Critical Wounds but no ally needs healing."));
+                return true;
+            }
+
+            var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
+            var healRoll = _dice.Roll(8) + _dice.Roll(8) + _dice.Roll(8) + 3;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+            var actual = target.CurrentHitPoints - before;
+
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Critical Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
+            return true;
+        }
+
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var rolledDamage = 0;
+        for (int i = 0; i < 6; i++)
+            rolledDamage += _dice.Roll(8);
+
+        var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        if (session.IsChantActive || session.IsPrayerActive)
+            saveTarget = Math.Max(1, saveTarget - 1);
+        var saveRoll = _dice.Roll(20);
+        var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+        var beforeHp = partyTarget.CurrentHitPoints;
+        partyTarget.CurrentHitPoints = Math.Max(0, partyTarget.CurrentHitPoints - applied);
+        var actualDamage = beforeHp - partyTarget.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(partyTarget, actualDamage, events);
+
+        events.Add(new CombatEvent(saveRoll >= saveTarget
+            ? $"{monster.DisplayName} casts Flame Strike! {partyTarget.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half damage: {actualDamage}. HP {beforeHp}->{partyTarget.CurrentHitPoints}."
+            : $"{monster.DisplayName} casts Flame Strike! {partyTarget.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actualDamage} damage. HP {beforeHp}->{partyTarget.CurrentHitPoints}."));
+
+        if (partyTarget.CurrentHitPoints <= 0)
+        {
+            partyTarget.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{partyTarget.Name} is slain by flame strike!"));
+        }
+
         return true;
     }
 
@@ -1675,6 +1937,8 @@ public sealed class CombatResolver
             var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
             var rolledDamage = _dice.RollMany(6, 8);
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
             var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
 
@@ -1703,6 +1967,247 @@ public sealed class CombatResolver
         session.SetPartyAsleep(insectTarget.Name, 0);
         events.Add(new CombatEvent($"{insectTarget.Name} is swarmed by summoned insects and cannot act for {rounds} round(s)."));
         return true;
+    }
+
+    private bool ResolveLevel4DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            var damagedAllies = session.AliveMonsters
+                .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
+                .ToList();
+
+            if (damagedAllies.Count == 0)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} tries to cast Cure Serious Wounds but no ally needs healing."));
+                return true;
+            }
+
+            var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
+            var healRoll = _dice.Roll(8) + _dice.Roll(8) + 1;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+            var actual = target.CurrentHitPoints - before;
+
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Serious Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
+            return true;
+        }
+
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var rolledDamage = _dice.Roll(8) + _dice.Roll(8) + 1;
+        var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        if (session.IsChantActive || session.IsPrayerActive)
+            saveTarget = Math.Max(1, saveTarget - 1);
+        var saveRoll = _dice.Roll(20);
+        var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+        var beforeHp = partyTarget.CurrentHitPoints;
+        partyTarget.CurrentHitPoints = Math.Max(0, partyTarget.CurrentHitPoints - applied);
+        var actualDamage = beforeHp - partyTarget.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(partyTarget, actualDamage, events);
+
+        events.Add(new CombatEvent(saveRoll >= saveTarget
+            ? $"{monster.DisplayName} casts Cause Serious Wounds! {partyTarget.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half damage: {actualDamage}. HP {beforeHp}->{partyTarget.CurrentHitPoints}."
+            : $"{monster.DisplayName} casts Cause Serious Wounds! {partyTarget.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actualDamage} damage. HP {beforeHp}->{partyTarget.CurrentHitPoints}."));
+
+        if (partyTarget.CurrentHitPoints <= 0)
+        {
+            partyTarget.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{partyTarget.Name} is slain by cause serious wounds!"));
+        }
+
+        return true;
+    }
+
+    private bool ResolveLevel5DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            // Wall of Fire: apply ongoing wall status to one party target.
+            var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+            var rounds = Math.Max(1, monster.Template.HitDice);
+            session.SetPartyAcidArrow(partyTarget.Name, rounds);
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Wall of Fire! {partyTarget.Name} is trapped in flames for {rounds} round(s)."));
+            return true;
+        }
+
+        // Insect Plague: panic one party member for 2-6 rounds.
+        var insectTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var panicRounds = _dice.Roll(5) + 1;
+        insectTarget.AddStatus(CharacterStatus.Feeblemind);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Insect Plague! {insectTarget.Name} panics and loses control for {panicRounds} round(s)."));
+        return true;
+    }
+
+    private bool ResolveLevel5MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Cone of Cold!"));
+            var damagePerTarget = (_dice.Roll(4) + 1) * Math.Max(1, monster.Template.HitDice);
+
+            foreach (var target in aliveParty)
+            {
+                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (session.IsChantActive || session.IsPrayerActive)
+                    saveTarget = Math.Max(1, saveTarget - 1);
+
+                var saveRoll = _dice.Roll(20);
+                var applied = saveRoll >= saveTarget ? Math.Max(1, damagePerTarget / 2) : damagePerTarget;
+
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
+                var actual = before - target.CurrentHitPoints;
+                WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+                events.Add(new CombatEvent(saveRoll >= saveTarget
+                    ? $"{target.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half cone of cold damage: {actual}. HP {before}->{target.CurrentHitPoints}."
+                    : $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actual} cone of cold damage. HP {before}->{target.CurrentHitPoints}."));
+
+                if (target.CurrentHitPoints <= 0)
+                {
+                    target.AddStatus(CharacterStatus.Dead);
+                    events.Add(new CombatEvent($"{target.Name} is frozen to death!"));
+                }
+            }
+
+            return true;
+        }
+
+        var feeblemindTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var feeblemindSaveTarget = _savingThrowService.GetSaveTarget(feeblemindTarget, SaveThrowType.Spell);
+        if (session.IsChantActive || session.IsPrayerActive)
+            feeblemindSaveTarget = Math.Max(1, feeblemindSaveTarget - 1);
+        var feeblemindSaveRoll = _dice.Roll(20);
+
+        if (feeblemindSaveRoll >= feeblemindSaveTarget)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Feeblemind, but {feeblemindTarget.Name} resists (save {feeblemindSaveRoll} vs {feeblemindSaveTarget})."));
+            return true;
+        }
+
+        feeblemindTarget.AddStatus(CharacterStatus.Feeblemind);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Feeblemind! {feeblemindTarget.Name} fails save ({feeblemindSaveRoll} vs {feeblemindSaveTarget}) and is feebleminded."));
+        return true;
+    }
+
+    private bool ResolveLevel5IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Chaos!"));
+
+            var casterLevel = Math.Max(1, monster.Template.HitDice);
+            var highestPartyLevel = aliveParty.Max(p => Math.Max(1, p.Level));
+            var baseCount = _dice.Roll(4) + _dice.Roll(4); // 2-8
+            var bonusCount = Math.Max(0, casterLevel - highestPartyLevel);
+            var desiredCount = baseCount + bonusCount;
+
+            var candidates = aliveParty
+                .Where(p => !p.HasStatus(CharacterStatus.Dead)
+                            && !p.HasStatus(CharacterStatus.Ashes)
+                            && !p.HasStatus(CharacterStatus.Lost)
+                            && p.CurrentHitPoints > 0)
+                .ToList();
+
+            if (candidates.Count == 0)
+                return true;
+
+            var affectedCount = Math.Min(candidates.Count, Math.Max(0, desiredCount));
+            if (affectedCount <= 0)
+            {
+                events.Add(new CombatEvent("Chaos affects no party members this cast."));
+                return true;
+            }
+
+            var affected = candidates
+                .OrderBy(_ => _dice.Roll(100))
+                .Take(affectedCount)
+                .ToList();
+
+            var rounds = casterLevel; // 1 round / caster level
+            events.Add(new CombatEvent($"Chaos attempts to affect {desiredCount} target(s); {affected.Count} affected for up to {rounds} round(s)."));
+
+            foreach (var target in affected)
+            {
+                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (session.IsChantActive || session.IsPrayerActive)
+                    saveTarget = Math.Max(1, saveTarget - 1);
+
+                var saveRoll = _dice.Roll(20);
+                if (saveRoll >= saveTarget)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Chaos (save {saveRoll} vs {saveTarget})."));
+                    continue;
+                }
+
+                target.AddStatus(CharacterStatus.Confused);
+                session.SetPartyConfused(target.Name, rounds);
+                events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is confused for {rounds} round(s)."));
+            }
+
+            return true;
+        }
+
+        var mazeTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var intelligence = Math.Max(1, mazeTarget.Abilities.Intelligence);
+        var roundsInMaze = RollMazeDurationRoundsByIntelligenceForParty(intelligence);
+        var displayRounds = intelligence <= 5 ? Math.Max(1, roundsInMaze / 10) : roundsInMaze;
+        var unitText = intelligence <= 5 ? "turn(s)" : "round(s)";
+
+        mazeTarget.AddStatus(CharacterStatus.Paralyzed);
+        session.SetPartyAsleep(mazeTarget.Name, roundsInMaze);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Maze! {mazeTarget.Name} (INT {intelligence}) is trapped for {displayRounds} {unitText}."));
+        return true;
+    }
+
+    private int RollMazeDurationRoundsByIntelligenceForParty(int intelligence)
+    {
+        if (intelligence < 3)
+        {
+            var turns = _dice.Roll(7) + 1; // 2-8 turns
+            return turns * 10;
+        }
+
+        if (intelligence <= 5)
+        {
+            var turns = _dice.Roll(4); // 1-4 turns
+            return turns * 10;
+        }
+
+        if (intelligence <= 8)
+            return _dice.Roll(16) + 4; // 5-20 rounds
+
+        if (intelligence <= 11)
+            return _dice.Roll(13) + 3; // 4-16 rounds
+
+        if (intelligence <= 14)
+            return _dice.Roll(10) + 2; // 3-12 rounds
+
+        if (intelligence <= 17)
+            return _dice.Roll(7) + 1; // 2-8 rounds
+
+        return _dice.Roll(4); // 1-4 rounds
     }
 
     private bool ResolveLevel3MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
@@ -1734,6 +2239,8 @@ public sealed class CombatResolver
                 }
 
                 var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (session.IsChantActive || session.IsPrayerActive)
+                    saveTarget = Math.Max(1, saveTarget - 1);
                 var saveRoll = _dice.Roll(20);
                 if (saveRoll >= saveTarget)
                 {
@@ -1765,6 +2272,8 @@ public sealed class CombatResolver
         {
             var rolledDamage = _dice.RollMany(6, fireballDamageDice);
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
             var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
 
@@ -1891,6 +2400,8 @@ public sealed class CombatResolver
         foreach (var target in aliveParty)
         {
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
 
             if (saveRoll >= saveTarget)
@@ -1947,6 +2458,8 @@ public sealed class CombatResolver
             foreach (var target in aliveParty)
             {
                 var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (session.IsChantActive || session.IsPrayerActive)
+                    saveTarget = Math.Max(1, saveTarget - 1);
                 var saveRoll = _dice.Roll(20);
                 if (saveRoll >= saveTarget)
                 {
@@ -2355,6 +2868,22 @@ public sealed class CombatResolver
             .Any(name => abilityNames.Any(n => string.Equals(name, n, StringComparison.OrdinalIgnoreCase)));
     }
 
+    private static void ApplyMonsterRegeneration(MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Regeneration"))
+            return;
+
+        if (!monster.IsAlive || monster.CurrentHitPoints >= monster.MaxHitPoints)
+            return;
+
+        var before = monster.CurrentHitPoints;
+        monster.CurrentHitPoints = Math.Min(monster.MaxHitPoints, monster.CurrentHitPoints + 1);
+        var healed = monster.CurrentHitPoints - before;
+
+        if (healed > 0)
+            events.Add(new CombatEvent($"{monster.DisplayName} regenerates {healed} HP. HP {before}->{monster.CurrentHitPoints}."));
+    }
+
     private bool TryResolveConfusedMonsterTurn(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
         var roundsRemaining = monster.GetStatusRounds(MonsterStatus.Confused);
@@ -2517,9 +3046,11 @@ public sealed class CombatResolver
         return true;
     }
 
-    private void TryApplyMonsterParalyzation(MonsterInstance monster, Character target, List<CombatEvent> events)
+    private void TryApplyMonsterParalyzation(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
     {
         var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
+        if (session.IsChantActive || session.IsPrayerActive)
+            saveTarget = Math.Max(1, saveTarget - 1);
         var saveRoll = _dice.Roll(20);
         var failedSave = saveRoll < saveTarget;
 
@@ -2629,6 +3160,43 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! They will die upon next dungeon entry unless cured."));
     }
 
+    private static void TryApplyInfestation(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Infestation"))
+            return;
+
+        if (target.IsMonkImmuneToDiseaseSlowHaste())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to infestation disease from {monster.DisplayName}."));
+            return;
+        }
+
+        if (target.EarSeekerDeathOnNextDungeonEntry)
+            return;
+
+        target.ApplyInfestationDisease();
+        events.Add(new CombatEvent($"{target.Name} suffers infestation by {monster.DisplayName}: rhizomes penetrate flesh. Cure Disease is required within 24 hours or death will occur."));
+    }
+
+    private static void TryApplyDrainBlood(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Drain Blood"))
+            return;
+
+        if (!IsAlive(target) || target.CurrentHitPoints <= 0)
+            return;
+
+        var remaining = session.GetPartyDrainBloodRemaining(target.Name);
+        if (remaining <= 0)
+        {
+            session.SetPartyDrainBlood(target.Name, 12);
+            events.Add(new CombatEvent($"{target.Name} is afflicted by Drain Blood from {monster.DisplayName}! 12 HP will be drained over subsequent rounds (1-4 per round)."));
+            return;
+        }
+
+        events.Add(new CombatEvent($"{target.Name} is hit again by {monster.DisplayName}, but Drain Blood is already active ({remaining} HP remaining to drain)."));
+    }
+
     private static bool IsShrieker(MonsterInstance monster)
     {
         return string.Equals(monster.Template.Name, "Shrieker", StringComparison.OrdinalIgnoreCase)
@@ -2638,6 +3206,49 @@ public sealed class CombatResolver
     private static bool IsPiercer(MonsterInstance monster)
     {
         return monster.Template.Name.StartsWith("Piercer", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool TryResolveMonsterExplosionOnHit(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Explosion"))
+            return false;
+
+        if (!monster.IsAlive)
+            return false;
+
+        var rolledDamage = 0;
+        for (int i = 0; i < 6; i++)
+            rolledDamage += _dice.Roll(6);
+
+        monster.CurrentHitPoints = 0;
+        events.Add(new CombatEvent($"{monster.DisplayName} explodes violently!"));
+
+        foreach (var member in session.AliveParty.ToList())
+        {
+            var saveTarget = _savingThrowService.GetSaveTarget(member, SaveThrowType.Spell);
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
+
+            var saveRoll = _dice.Roll(20);
+            var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+            var before = member.CurrentHitPoints;
+            member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - applied);
+            var actual = before - member.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(member, actual, events);
+
+            events.Add(new CombatEvent(saveRoll >= saveTarget
+                ? $"{member.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half explosion damage: {actual}. HP {before}->{member.CurrentHitPoints}."
+                : $"{member.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actual} explosion damage. HP {before}->{member.CurrentHitPoints}."));
+
+            if (member.CurrentHitPoints <= 0)
+            {
+                member.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{member.Name} is slain by the explosion!"));
+            }
+        }
+
+        return true;
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

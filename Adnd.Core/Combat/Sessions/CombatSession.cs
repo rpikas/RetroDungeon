@@ -34,7 +34,9 @@ public sealed class CombatSession
     public Dictionary<string, int> MonsterBarkskinRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterBarkskinBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AcidArrowPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> DrainBloodRemaining { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -44,6 +46,55 @@ public sealed class CombatSession
     public bool PartySurprisedRound1 { get; set; }
     public bool MonstersSurprisedRound1 { get; set; }
     public string? SurpriseSummary { get; set; }
+    public string? ActiveChantCasterName { get; private set; }
+    public string? ActivePrayerCasterName { get; private set; }
+    public int ActivePrayerRounds { get; private set; }
+
+    public bool IsChantActive => !string.IsNullOrWhiteSpace(ActiveChantCasterName);
+    public bool IsPrayerActive => ActivePrayerRounds > 0;
+
+    public void StartChant(string casterName)
+    {
+        ActiveChantCasterName = string.IsNullOrWhiteSpace(casterName) ? null : casterName;
+    }
+
+    public void BreakChant()
+    {
+        ActiveChantCasterName = null;
+    }
+
+    public void StartPrayer(string casterName, int rounds)
+    {
+        if (rounds <= 0)
+        {
+            EndPrayer();
+            return;
+        }
+
+        ActivePrayerCasterName = string.IsNullOrWhiteSpace(casterName) ? null : casterName;
+        ActivePrayerRounds = Math.Max(1, rounds);
+    }
+
+    public int TickPrayer()
+    {
+        if (ActivePrayerRounds <= 0)
+            return 0;
+
+        ActivePrayerRounds -= 1;
+        if (ActivePrayerRounds <= 0)
+        {
+            EndPrayer();
+            return 0;
+        }
+
+        return ActivePrayerRounds;
+    }
+
+    public void EndPrayer()
+    {
+        ActivePrayerRounds = 0;
+        ActivePrayerCasterName = null;
+    }
 
     public bool HasMonsterUsedLayOnHands(MonsterInstance monster)
     {
@@ -514,9 +565,73 @@ public sealed class CombatSession
         return rounds;
     }
 
+    public void SetPartyDrainBlood(string characterName, int totalToDrain)
+    {
+        if (totalToDrain <= 0)
+        {
+            DrainBloodRemaining.Remove(characterName);
+            return;
+        }
+
+        DrainBloodRemaining[characterName] = totalToDrain;
+    }
+
+    public int GetPartyDrainBloodRemaining(string characterName)
+    {
+        return DrainBloodRemaining.TryGetValue(characterName, out var remaining) ? Math.Max(0, remaining) : 0;
+    }
+
+    public int ConsumePartyDrainBlood(string characterName, int attemptedDrain)
+    {
+        if (!DrainBloodRemaining.TryGetValue(characterName, out var remaining) || remaining <= 0)
+            return 0;
+
+        var actual = Math.Max(0, Math.Min(remaining, attemptedDrain));
+        remaining -= actual;
+
+        if (remaining <= 0)
+            DrainBloodRemaining.Remove(characterName);
+        else
+            DrainBloodRemaining[characterName] = remaining;
+
+        return actual;
+    }
+
     public int GetPartyAsleepRounds(string characterName)
     {
         return AsleepPartyRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public void SetPartyConfused(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+        {
+            ConfusedPartyRounds.Remove(characterName);
+            return;
+        }
+
+        ConfusedPartyRounds[characterName] = rounds;
+    }
+
+    public int GetPartyConfusedRounds(string characterName)
+    {
+        return ConfusedPartyRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickPartyConfused(string characterName)
+    {
+        if (!ConfusedPartyRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            ConfusedPartyRounds.Remove(characterName);
+            return 0;
+        }
+
+        ConfusedPartyRounds[characterName] = rounds;
+        return rounds;
     }
 
     public int TickPartyAsleep(string characterName)

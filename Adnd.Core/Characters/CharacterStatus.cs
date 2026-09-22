@@ -21,6 +21,7 @@ public enum CharacterStatus
     Diseased = 1 << 10 ,       // Character is diseased
     Feeblemind = 1 << 11,        // Character is feebleminded
     Slowed = 1 << 12,  // Character is slowed
-    DeadlyPoisoned = 1 << 13  // Character is deadly poisoned
+    DeadlyPoisoned = 1 << 13,  // Character is deadly poisoned
+    Confused = 1 << 14  // Character is confused
 
 }

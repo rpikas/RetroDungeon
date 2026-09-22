@@ -49,6 +49,12 @@ public sealed class CharmPersonHandler : ISpellEffectHandler
             return result;
         }
 
+        if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, spell.Id))
+        {
+            result.Events.Add($"{target.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+            return result;
+        }
+
         MonsterIntelligenceResolver.RegisterMonsterIntelligence(target.Template.Name, target.Template.Intelligence);
         var intelligence = MonsterIntelligenceResolver.GetIntelligenceForMonster(target.Template.Name);
 

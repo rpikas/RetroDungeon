@@ -1,0 +1,13 @@
+{
+  "Id": "confusion_illusionist",
+  "Name": "Confusion",
+  "Class": "Illusionist",
+  "Level": 4,
+  "Description": "Causes confusion among creatures in one enemy group.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "Works like Confusion: affects 2-8 creatures, plus caster level minus highest HD in target group (minimum +0). Non-intelligence creatures are unaffected. Each round affected creatures save vs spell at -2 or act per confusion table."
+}

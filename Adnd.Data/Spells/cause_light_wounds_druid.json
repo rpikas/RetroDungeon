@@ -1,0 +1,13 @@
+{
+  "Id": "cause_light_wounds_druid",
+  "Name": "Cause Light Wounds",
+  "Class": "Druid",
+  "Level": 2,
+  "Description": "Reversed cure spell that inflicts minor wounds.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Damage",
+  "EffectDescription": "Inflicts 1d8 damage to one enemy target."
+}

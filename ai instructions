@@ -1361,3 +1361,287 @@ ____
 Implement "SpecialAbilities":  Level 3 illusionist spells, 50% chanse to cast Improved Phantasmal Force and 50% chanse to cast Mirror Image.
 Implement "SpecialAbilities":  Level 3 cleric spells, 50% chanse to cast Cure Serious Wounds and 50% chanse to cast Glyph of Warding 39,3
 ____
+can you implement this cleric spell? Chant (Conjuration/Summoning) PH, pg45
+Level: 2 Components: V, S Range: 0 Duration: Time of chanting Area of Effect: 3" radius
+Explanation/Description: By means of the chant, the cleric brings into being a special favor upon himself or herself and his or her party, 
+and causes harm to his or her enemies. Once the chant spell is completed, a11 attacks, damage and saving throws made by those in the area 
+of effect who are friendly to the cleric are at + 1, while those of the cleric's enemies are at -1. This bonus/penalty continues as long 
+as the cleric continues to chant the mystic syllables and is stationary. An interruption, however, such as an attack which succeeds and 
+causes damage, grappling the chanter, or a magical silence, will break the spell.
+
+when shreikers summoned Humas on level 1 it was mapped to Adventures, but it should instead random among Bandit, Berserker, Brigand and 
+Charaters if Humasn summoned by shreikers just like when enouter Humans
+
+spells cure light wounds, cure serious wounds and cure critical wounds should be reverable, so  a cleric or druid can cause damage to
+one encounter with the spell, they are then called cause light wounds, cause serious wounds and cause critical wounds. please implement this.
+
+implement level 6 cleric spell Harm that will make remove all hp from target except 1-4 hp
+
+implement cleric spell Prayer (Conjuration/Summoning)
+Level: 3 Range: 0 Duration: I round/level Area of Effect: 6“ radius
+Components: V, S, M Casting Time: 6 segments Saving Throw: None
+Explanation/Description: This spell exactly duplicates the effects of a chant with regard to bonuses of + 1 for friendly attacks and 
+saving throws and -1 on like enemy dice. However, once the prayer is uttered, the cleric can do other things, unlike a chant which he 
+or she must continue to make the spell effective. The cleric needs a silver holy symbol, prayer beads, or a similar device as the 
+material component of this spell. 40,7
+
+Can you implement this cleric spell?
+
+Implement cleric spell cure blindness and cause blindness Cure Blindness (Abjuration) Reversible
+Level: 3 Components: V: S Range: Touch Duration: Permanent Saving Throw: None Area of Effect: Creature touched
+Explanation/Description: By touching the creature afflicted, the cleric employing the spell can permanently cure most forms of blindness. Its reverse, cause blindness, requires a successful touch upon the victim, and if the victim then makes the saving throw, the effect is negated
+
+
+Implement "SpecialAbilities":  Level 4 cleric spells, 50% chanse each to cast, Cure Serious Wounds (cure_serious_wounds),Cause Serious Wounds (cause_serious_wounds)
+Implement "SpecialAbilities":  Level 4 druid spells, 50% chanse each to cast, Cure Serious Wounds (cure_serious_wounds),Cause Serious Wounds (cause_serious_wounds) 
+Implement "SpecialAbilities":  Level 4 Magic-user spells, 50% chanse each to cast Ice Storm (ice_storm), Wall of Fire (wall_of_fire)
+Implement "SpecialAbilities":  Level 4 illusionist spells, 50% chanse each to cast Confusion, Improved Invisibility
+
+Confusion should not only be a druid level 7 spell, but also a level 4 illusionist spell.
+
+Implement "SpecialAbilities":  Level 5 cleric spells, 50% chanse each to cast, Cure Critical Wounds, Flame Strike 42,0
+Implement "SpecialAbilities":  Level 5 druid spells, 50% chanse each to cast, Wall of Fire,  Insect Plague
+Implement "SpecialAbilities":  Level 5 Magic-user spells, 50% chanse each to cast Cone of cold,  Feeblemind
+Implement "SpecialAbilities":  Level 5 illusionist spells, 50% chanse each to cast Chaos, Maze
+
+Implement "SpecialDefenses": "Regeneration": "Regenerates 1 hp per melee round",
+Implement "SpecialDefenses": "Mind-affecting spells Immunity", "Immune to charm, sleep, and all mind-affecting spells"
+Implement "SpecialAttacks": "Infestation", "Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die"
+Implement "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) to all in the party" 43,1
+Implement "SpecialAttacks":  "Drain Blood","After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
+
+
+When finding MAGIC ITEMS, roll this table to determine what type of magic item is found. Write the result to the ADnD Rule and Dice info dialog.
+all tables are not defined yes, so only the ones that are defined will be rolled for. If a table is not defined, then it will be skipped and not rolled for.
+Die* Results
+01-20 Potions (A.)
+21-35 Scrolls (8.)
+36-40 Rings (C)
+41-45 Rods, Staves & Wands [0.)
+46-48 Miscellaneous Magic (E.l.J
+49-51 Miscellaneous Magic (E.2.)
+52-54 Miscellaneos Magic (£.3.)
+55-57 Miscellaneous Magic (E 4.)
+SS-60 Miscellaneous Magic {E.5.)
+61 -75 Armor & Sh telds (F.)
+76-86 Swords (G)
+87-00 Miscellaneous Weapons (H,)
+
+This is the potions table for the magic items found in the dungeon. Write the result to the ADnD Rule and Dice info dialog.
+All potions are note implemented yet, so this is just a placeholder for future implementation. 
+Dice	Result	Experience Point Value	G.P. Sale Value
+01-03	Animal Control*	250	400
+04-06	Clairaudience	250	400
+07-09	Clairvoyance	300	500
+10-12	Climbing	300	500
+13-15	Delusion**	---	150
+16-18	Diminution	300	500
+19-20	Dragon Control*	500-1,000	5,000-9,000
+21-23	ESP	500	850
+24-26	Extra-Healing	400	800
+27-29	Fire Resistance	250	400
+30-32	Flying	500	750
+33-34	Gaseous Form	300	400
+35-36	Giant Control*	400-900	1,000-6,000
+37-39	Giant Strength* (F)	500-750	900-1,400
+40-41	Growth	250	300
+42-47	Healing	200	400
+48-49	Heroism (F)	300	500
+50-51	Human Control*	500	900
+52-54	Invisibility	250	500
+55-57	Invulnerability (F)	350	500
+58-60	Levitation	250	400
+61-63	Longevity	500	1,000
+64-66	Oil of Etherealness	600	1,500
+67-69	Oil of Slipperiness	400	750
+70-72	Philter of Love	200	300
+73-75	Philter of Persuasiveness	400	850
+76-78	Plant Control	250	300
+79-81	Polymorph (self)	200	350
+82-84	Poison**	---	---
+85-87	Speed	200	450
+88-90	Super-Heroism (F)	450	750
+91-93	Sweet Water	200	250
+94-96	Treasure Finding	600	2,000
+97	Undead Control*	700	2,500
+98-00	Water Breathing	400	900
+
+This is the rings table for the magic items found in the dungeon. Write the result to the ADnD Rule and Dice info dialog.
+All rings are note implemented yet, so this is just a placeholder for future implementation. 
+Dice	Result	Experience Point Value	G.P. Sale Value
+Dico	Result	Experience Point Value	G.P. Sale Value
+01-06	Contrarness	---	1,000
+07-12	Delusion	---	2,000
+13-14	Djinn Summoning‡	3,000	20,000
+15	Elemental Command	5,000	25,000
+16-21	Feather Falling	1,000	5,000
+22-27	Fire Resistance	1,000	5,000
+28-30	Free Action	1,000	5,000
+31-33	Human Influence‡	2,000	10,000
+34-40	Invisibility	1,500	7,500
+41-43	Mammal Control‡	1,000	5,000
+44	Multiple Wishes‡	5,000	25,000
+45-60	Protection	2,000-4,000	10,000-20,000
+61	Regeneration	5,000	40,000
+62-63	Shooting Stars	3,000	15,000
+64-65	Spell Storing	2,500	22,500
+66-69	Spell Turning	2,000	17,500
+70-75	Swimming	1,000	5,000
+76-77	Telekinesis‡	2,000	10,000
+78-79	Three Wishes‡	3,000	15,000
+80-85	Warmth	1,000	5,000
+86-90	Water Walking	1,000	5,000
+91-98	Weakness	---	1,000
+99	Wizardry‡ (M)	4,000	50,000
+00	X-Ray Vision	4,000	35,000
+
+Here is the table for scrolls to be added
+Scroll		
+Dice	Result	Spell Level Range
+01-10	1 spell	1-4
+11-16	1 spell	1-6
+17-19	1 spell	2-9 (d8 + 1) or 2-7* (d6 + 1)
+20-24	2 spells	1-4
+25-27	2 spells	1-8 or 1-6*
+28-32	3 spells	1-4
+33-35	3 spells	2-9 or 2-7*
+36-39	4 spells	1-6
+40-42	4 spells	1-8 or 1-6*
+43-46	5 spells	1-6
+47-49	5 spells	1-8 or 1-6*
+50-52	6 spells	1-6
+53-54	6 spells	3-8 (d6 + 2) or 3-6* (d4 + 2)
+55-57	7 spells	1-8
+58-59	7 spells	2-9
+60	7 spells	4-9 (d6 + 3) or 4-7* (d4 + 3)
+61-62	Protection — Demons	(2,500 x.p.)
+63-64	Protection — Devils	(2,500 x.p.)
+65-70	Protection — Elementals	(1,500 x.p.)
+71-76	Protection — Lycanthropes	(1,000 x.p.)
+77-82	Protection — Magic	(1,500 x.p.)
+83-87	Protection — Petrification	(2,000 x.p.)
+88-92	Protection — Possession	(2,000 x.p.)
+93-97	Protection — Undead	(1,500 x.p.)
+98-00	Curse**	
+
+Rods, Staves and Wands
+Dice	Result	G.P. Sale Value*	Experience Point Value*
+26-01-03	Rod of Absorption (C,M)	40000	7500
+4	Rod of Beguiling (C,M,T)	30000	5000
+26-05-14	Rod of Cancellation (any)	15000	10000
+15-16	Rod of Lordly Might (F)	20000	6000
+17	Rod of Resurrection (C)	35000	10000
+18	Rod of Rulership (any)	35000	8000
+19	Rod of Smiting (C,F)	15000	4000
+20	Staff of Command (C,M)	25000	5000
+21-22	Staff of Curing (C)	25000	6000
+23	Staff of the Magi (M)	75000	15000
+24	Staff of Power (M)	60000	12000
+25-27	Staff of the Serpent (C)	35000	7000
+28-31	Staff of Striking (C,M)	15000	6000
+32-33	Staff of Withering (C)	35000	8000
+34	Wand of Conjuration (M)	35000	7000
+35-38	Wand of Enemy Detection (any)	10000	2000
+39-41	Wand of Fear (C,M)	15000	3000
+42-44	Wand of Fire (M)	25000	4500
+45-47	Wand of Frost (M)	50000	6000
+48-52	Wand of Illumination (any)	10000	2000
+53-56	Wand of Illusion (M)	20000	3000
+57-59	Wand of Lightning (M)	30000	4000
+60-68	Wand of Magic Detection (any)	25000	2500
+69-73	Wand of Metal & Mineral Detection (any)	7500	1500
+74-78	Wand of Magic Missiles (any)	35000	4000
+79-86	Wand of Negation (any)	15000	3500
+87-89	Wand of Paralysis (M)	25000	3500
+90-92	Wand of Polymorphing (M)	25000	3500
+93-94	Wand of Secret Door & Trap Location (any)	40000	5000
+95-00	Wand of Wonder (any)	10000	6000
+
+E1
+Dice	Result	G.P. Sale Value	Experience Point Value
+26-01-02	Alchemy Jug	12000	3000
+26-03-04	Amulet of Inescapable Location	1000	---
+5	Amulet of Life Protection	20000	5000
+26-06-07	Amulet of the Planes	30000	6000
+26-08-11	Amulet of Proof Against Detection and Location	15000	4000
+26-12-13	Apparatus of Kwalish	35000	8000
+14-16	Arrow of Direction	17500	2500
+17	Artifact or Relic (see Special table hereafter)	---	---
+18-20	Bag of Beans	5000	1000
+21	Bag of Devouring	1500	---
+22-26	Bag of Holding	25000	5000
+27	Bag of Transmuting	500	---
+28-29	Bag of Tricks	15000	2500
+30-31	Beaker of Plentyful Potions	12500	1500
+32	Boat, Folding	25000	10000
+33	Book of Exalted Deeds (C)	40000	8000
+34	Book of Infinite Spells	50000	9000
+35	Book of Vile Darkness (C)	40000	8000
+36	Boats of Dancing	5000	---
+37-42	Boots of Elvenkind	5000	1000
+43-47	Boots of Levitation	15000	2000
+48-51	Boots of Speed	20000	2500
+52-55	Boots of Striding and Springing	20000	2500
+56-58	Bowl Commanding Water Elementals (M)	25000	4000
+59	Bowl of Watery Death (M)	1000	---
+60-79	Bracers of Defense	3000*	500*
+80-81	Bracers of Defenselessness	2000	---
+82-84	Brazier Commanding Fire Elementals (M)	25000	4000
+85	Brazier of Sleep Smoke (M)	1000	---
+86-92	Brooch of Shielding	10000	1000
+93	Broom of Animated Attack	3000	---
+94-98	Broom of Flying	10000	2000
+99-00	Bucknard's Everfull Purse	15000/25000/40000	1500/2500/4000
+
+E2
+Dice	Result	G.P. Sale Value	Experience Point Value
+01-06	Candle of Invocation (C)	5000	1000
+07-08	Carpet of Flying	25000	7500
+09-10	Censer Controlling Air Elementals (M)	25000	4000
+11	Censer of Summoning Hostile Air Elementals (M)	1000	---
+12-13	Chime of Opening	20000	3500
+14	Chime of Hunger	---	---
+15-18	Cloak of Displacement	17500	3000
+19-27	Cloak of Elvenkind	6000	1000
+28-30	Cloak of Mana Ray	12500	2000
+31-32	Cloak of Poisonousness	2500	---
+33-55	Cloak of Protection	10000*	1000*
+56-60	Crystal Ball (M)	5000**	1000**
+61	Crystal Hypnosis Ball (M)	3000	---
+to be continued 
+
+E3
+Dice	Result	G.P. Sale Value	Experience Point Value
+.01-15	Figurine of Wondrous Power	1000*	100*
+16	Flask of Curses	1000	---
+17-18	Gauntlets of Dexterity	10000	1000
+19-20	Gauntlets of Fumbling	1000	---
+21-22	Gauntlets of Ogre Power (C, F, T)	15000	1000
+23-25	Gauntlets of Swimming and Climbing (C, F, T)	10000	1000
+26	Gem of Brightness	17500	2000
+27	Gem of Seeing	25000	2000
+28	Girdle of Femininity/Masculinity (C, F, T)	1000	---
+29	Girdle of Giant Strength (C, F, T)	2500	200
+30	Helm of Brilliance	60000	2500
+31-35	Helm of Comprehending Languages & Reading Magic	12500	1000
+36-37	Helm of Opposite Alignment	1000	---
+38-39	Helm of Telepathy	35000	3000
+40	Helm of Teleportation	30000	2500
+41-45	Helm of Underwater Action	10000	1000
+46	Horn of Blasting	55000	5000
+47-48	Horn of Bubbles	---	---
+49	Horn of Collapsing	25000	1500
+50-53	Horn of the Tritons (C, F)	17500	2000
+54-60	Horn of Valhalla	15000**	1000**
+61-63	Horseshoes of Speed	10000	2000
+64-65	Horseshoes of a Zephyr	7500	1500
+66-70	Incense of Meditation (C)	7500	500
+71	Incense of Obsession (C)	500	---
+72	Ioun Stones	5000***	300***
+73-78	Instrument of the Bards	5000****	1000****
+79-80	Iron Flask	---	---
+81-85	Javelin of Lightning (F)	3000	250
+86-90	Javelin of Piercing (F)	3000	250
+91	Jewel of Attacks	1000	---
+92	Jewel of Flawlessness	1000/facet	---
+93-00	Keoghtom's Ointment	10000	500

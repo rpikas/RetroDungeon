@@ -1,0 +1,13 @@
+{
+  "Id": "cause_critical_wounds_druid",
+  "Name": "Cause Critical Wounds",
+  "Class": "Druid",
+  "Level": 6,
+  "Description": "Reversed cure spell that inflicts critical wounds.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Damage",
+  "EffectDescription": "Inflicts 3d6+3 damage to one enemy target."
+}

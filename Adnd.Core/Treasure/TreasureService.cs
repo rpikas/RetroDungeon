@@ -177,6 +177,9 @@ public sealed class TreasureService
         if (magicFound > 0)
             lines.Add($"{monsterDisplayName}: individual {source} magic treasure found.");
 
+        foreach (var magicLine in tokenLines.Where(IsMagicRollDetailLine))
+            lines.Add(magicLine);
+
         if (lines.Count == 0)
             lines.Add($"{monsterDisplayName}: individual {source} treasure found.");
 
@@ -235,6 +238,18 @@ public sealed class TreasureService
         }
 
         return result;
+    }
+
+    private static bool IsMagicRollDetailLine(string line)
+    {
+        if (string.IsNullOrWhiteSpace(line))
+            return false;
+
+        return line.Contains("Magic item #", StringComparison.OrdinalIgnoreCase)
+               || line.Contains("Potions table (A)", StringComparison.OrdinalIgnoreCase)
+               || line.Contains("Rings table (C)", StringComparison.OrdinalIgnoreCase)
+               || line.Contains("not defined yet, skipped", StringComparison.OrdinalIgnoreCase)
+               || line.Contains("table key", StringComparison.OrdinalIgnoreCase);
     }
 
     private void RollTreasureToken(
@@ -360,6 +375,8 @@ public sealed class TreasureService
             if (count <= 0)
                 continue;
 
+            RollMagicItems(magicRule.Table, count, result.LogLines);
+
             result.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult
             {
                 Table = magicRule.Table,
@@ -369,6 +386,480 @@ public sealed class TreasureService
 
             result.LogLines.Add($"  + Magic placeholder: {magicRule.Table} x{count}");
         }
+    }
+
+    private void RollMagicItems(string requestedTable, int count, List<string> logs)
+    {
+        for (var i = 1; i <= count; i++)
+        {
+            var normalized = (requestedTable ?? string.Empty).Trim();
+            if (normalized.Equals("Any", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Any 3 plus 1 scroll", StringComparison.OrdinalIgnoreCase)
+                || normalized.Length == 0)
+            {
+                RollFromAnyMagicItemTypeTable(i, logs);
+                continue;
+            }
+
+            if (normalized.Equals("Potion", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Potions", StringComparison.OrdinalIgnoreCase))
+            {
+                var potionRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Potions (A) from table key '{requestedTable}'.");
+                logs.Add($"      Potions table (A) d100 {potionRoll:00} => {ResolvePotionResult(potionRoll)} (placeholder).");
+                continue;
+            }
+
+            if (normalized.Equals("Scroll", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Scrolls", StringComparison.OrdinalIgnoreCase))
+            {
+                var scrollRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Scrolls (B) from table key '{requestedTable}'.");
+                logs.Add($"      Scrolls table (B) d100 {scrollRoll:00} => {ResolveScrollResult(scrollRoll)} (placeholder).");
+                continue;
+            }
+
+            if (normalized.Equals("Rod", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Rods", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Staff", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Staves", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Wand", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Wands", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Rods/Staves/Wands", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Rods, Staves & Wands", StringComparison.OrdinalIgnoreCase))
+            {
+                var dRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Rods, Staves & Wands (D) from table key '{requestedTable}'.");
+                logs.Add($"      Rods, Staves & Wands table (D) d100 {dRoll:00} => {ResolveRodStaffWandResult(dRoll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("E1", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("E.1", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Magic (E.1)", StringComparison.OrdinalIgnoreCase))
+            {
+                var e1Roll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.1) from table key '{requestedTable}'.");
+                logs.Add($"      Miscellaneous Magic table (E.1) d100 {e1Roll:00} => {ResolveMiscMagicE1Result(e1Roll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("E2", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("E.2", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Magic (E.2)", StringComparison.OrdinalIgnoreCase))
+            {
+                var e2Roll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.2) from table key '{requestedTable}'.");
+                logs.Add($"      Miscellaneous Magic table (E.2) d100 {e2Roll:00} => {ResolveMiscMagicE2Result(e2Roll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("E3", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("E.3", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Magic (E.3)", StringComparison.OrdinalIgnoreCase))
+            {
+                var e3Roll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.3) from table key '{requestedTable}'.");
+                logs.Add($"      Miscellaneous Magic table (E.3) d100 {e3Roll:00} => {ResolveMiscMagicE3Result(e3Roll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("E4", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("E.4", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Magic (E.4)", StringComparison.OrdinalIgnoreCase))
+            {
+                var e4Roll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.4) from table key '{requestedTable}'.");
+                logs.Add($"      Miscellaneous Magic table (E.4) d100 {e4Roll:00} => {ResolveMiscMagicE4Result(e4Roll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("Ring", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Rings", StringComparison.OrdinalIgnoreCase))
+            {
+                var ringRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Rings (C) from table key '{requestedTable}'.");
+                logs.Add($"      Rings table (C) d100 {ringRoll:00} => {ResolveRingResult(ringRoll)} (placeholder).");
+                continue;
+            }
+
+            logs.Add($"    Magic item #{i}: table key '{requestedTable}' not mapped to a defined subtable yet, skipped.");
+        }
+    }
+
+    private void RollFromAnyMagicItemTypeTable(int itemNumber, List<string> logs)
+    {
+        var typeRoll = _random.Next(1, 101);
+
+        if (typeRoll <= 20)
+        {
+            var potionRoll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Potions (A).");
+            logs.Add($"      Potions table (A) d100 {potionRoll:00} => {ResolvePotionResult(potionRoll)} (placeholder).");
+            return;
+        }
+
+        if (typeRoll <= 35)
+        {
+            var scrollRoll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Scrolls (B).");
+            logs.Add($"      Scrolls table (B) d100 {scrollRoll:00} => {ResolveScrollResult(scrollRoll)} (placeholder).");
+            return;
+        }
+
+        if (typeRoll <= 40)
+        {
+            var ringRoll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Rings (C).");
+            logs.Add($"      Rings table (C) d100 {ringRoll:00} => {ResolveRingResult(ringRoll)} (placeholder).");
+            return;
+        }
+
+        if (typeRoll <= 45)
+        {
+            var dRoll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Rods, Staves & Wands (D).");
+            logs.Add($"      Rods, Staves & Wands table (D) d100 {dRoll:00} => {ResolveRodStaffWandResult(dRoll)}.");
+            return;
+        }
+
+        if (typeRoll <= 48)
+        {
+            var e1Roll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.1).");
+            logs.Add($"      Miscellaneous Magic table (E.1) d100 {e1Roll:00} => {ResolveMiscMagicE1Result(e1Roll)}.");
+            return;
+        }
+
+        if (typeRoll <= 51)
+        {
+            var e2Roll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.2).");
+            logs.Add($"      Miscellaneous Magic table (E.2) d100 {e2Roll:00} => {ResolveMiscMagicE2Result(e2Roll)}.");
+            return;
+        }
+
+        if (typeRoll <= 54)
+        {
+            var e3Roll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.3).");
+            logs.Add($"      Miscellaneous Magic table (E.3) d100 {e3Roll:00} => {ResolveMiscMagicE3Result(e3Roll)}.");
+            return;
+        }
+
+        if (typeRoll <= 57)
+        {
+            var e4Roll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.4).");
+            logs.Add($"      Miscellaneous Magic table (E.4) d100 {e4Roll:00} => {ResolveMiscMagicE4Result(e4Roll)}.");
+            return;
+        }
+
+        if (typeRoll <= 60)
+        {
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.5), table not defined yet, skipped.");
+            return;
+        }
+
+        if (typeRoll <= 75)
+        {
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Armor & Shields (F), table not defined yet, skipped.");
+            return;
+        }
+
+        if (typeRoll <= 86)
+        {
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Swords (G), table not defined yet, skipped.");
+            return;
+        }
+
+        logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Weapons (H), table not defined yet, skipped.");
+    }
+
+    private static string ResolvePotionResult(int roll)
+    {
+        return roll switch
+        {
+            <= 3 => "Animal Control",
+            <= 6 => "Clairaudience",
+            <= 9 => "Clairvoyance",
+            <= 12 => "Climbing",
+            <= 15 => "Delusion",
+            <= 18 => "Diminution",
+            <= 20 => "Dragon Control",
+            <= 23 => "ESP",
+            <= 26 => "Extra-Healing",
+            <= 29 => "Fire Resistance",
+            <= 32 => "Flying",
+            <= 34 => "Gaseous Form",
+            <= 36 => "Giant Control",
+            <= 39 => "Giant Strength",
+            <= 41 => "Growth",
+            <= 47 => "Healing",
+            <= 49 => "Heroism",
+            <= 51 => "Human Control",
+            <= 54 => "Invisibility",
+            <= 57 => "Invulnerability",
+            <= 60 => "Levitation",
+            <= 63 => "Longevity",
+            <= 66 => "Oil of Etherealness",
+            <= 69 => "Oil of Slipperiness",
+            <= 72 => "Philter of Love",
+            <= 75 => "Philter of Persuasiveness",
+            <= 78 => "Plant Control",
+            <= 81 => "Polymorph (self)",
+            <= 84 => "Poison",
+            <= 87 => "Speed",
+            <= 90 => "Super-Heroism",
+            <= 93 => "Sweet Water",
+            <= 96 => "Treasure Finding",
+            <= 97 => "Undead Control",
+            _ => "Water Breathing"
+        };
+    }
+
+    private static string ResolveScrollResult(int roll)
+    {
+        return roll switch
+        {
+            <= 10 => "1 spell (levels 1-4)",
+            <= 16 => "1 spell (levels 1-6)",
+            <= 19 => "1 spell (levels 2-9, d8+1; or 2-7*, d6+1)",
+            <= 24 => "2 spells (levels 1-4)",
+            <= 27 => "2 spells (levels 1-8; or 1-6*)",
+            <= 32 => "3 spells (levels 1-4)",
+            <= 35 => "3 spells (levels 2-9; or 2-7*)",
+            <= 39 => "4 spells (levels 1-6)",
+            <= 42 => "4 spells (levels 1-8; or 1-6*)",
+            <= 46 => "5 spells (levels 1-6)",
+            <= 49 => "5 spells (levels 1-8; or 1-6*)",
+            <= 52 => "6 spells (levels 1-6)",
+            <= 54 => "6 spells (levels 3-8, d6+2; or 3-6*, d4+2)",
+            <= 57 => "7 spells (levels 1-8)",
+            <= 59 => "7 spells (levels 2-9)",
+            <= 60 => "7 spells (levels 4-9, d6+3; or 4-7*, d4+3)",
+            <= 62 => "Protection — Demons",
+            <= 64 => "Protection — Devils",
+            <= 70 => "Protection — Elementals",
+            <= 76 => "Protection — Lycanthropes",
+            <= 82 => "Protection — Magic",
+            <= 87 => "Protection — Petrification",
+            <= 92 => "Protection — Possession",
+            <= 97 => "Protection — Undead",
+            _ => "Curse"
+        };
+    }
+
+    private static string ResolveRingResult(int roll)
+    {
+        return roll switch
+        {
+            <= 6 => "Contrariness",
+            <= 12 => "Delusion",
+            <= 14 => "Djinn Summoning",
+            <= 15 => "Elemental Command",
+            <= 21 => "Feather Falling",
+            <= 27 => "Fire Resistance",
+            <= 30 => "Free Action",
+            <= 33 => "Human Influence",
+            <= 40 => "Invisibility",
+            <= 43 => "Mammal Control",
+            <= 44 => "Multiple Wishes",
+            <= 60 => "Protection",
+            <= 61 => "Regeneration",
+            <= 63 => "Shooting Stars",
+            <= 65 => "Spell Storing",
+            <= 69 => "Spell Turning",
+            <= 75 => "Swimming",
+            <= 77 => "Telekinesis",
+            <= 79 => "Three Wishes",
+            <= 85 => "Warmth",
+            <= 90 => "Water Walking",
+            <= 98 => "Weakness",
+            <= 99 => "Wizardry",
+            _ => "X-Ray Vision"
+        };
+    }
+
+    private static string ResolveRodStaffWandResult(int roll)
+    {
+        return roll switch
+        {
+            <= 3 => "Rod of Absorption (gp 40000, xp 7500)",
+            <= 4 => "Rod of Beguiling (gp 30000, xp 5000)",
+            <= 14 => "Rod of Cancellation (gp 15000, xp 10000)",
+            <= 16 => "Rod of Lordly Might (gp 20000, xp 6000)",
+            <= 17 => "Rod of Resurrection (gp 35000, xp 10000)",
+            <= 18 => "Rod of Rulership (gp 35000, xp 8000)",
+            <= 19 => "Rod of Smiting (gp 15000, xp 4000)",
+            <= 20 => "Staff of Command (gp 25000, xp 5000)",
+            <= 22 => "Staff of Curing (gp 25000, xp 6000)",
+            <= 23 => "Staff of the Magi (gp 75000, xp 15000)",
+            <= 24 => "Staff of Power (gp 60000, xp 12000)",
+            <= 27 => "Staff of the Serpent (gp 35000, xp 7000)",
+            <= 31 => "Staff of Striking (gp 15000, xp 6000)",
+            <= 33 => "Staff of Withering (gp 35000, xp 8000)",
+            <= 34 => "Wand of Conjuration (gp 35000, xp 7000)",
+            <= 38 => "Wand of Enemy Detection (gp 10000, xp 2000)",
+            <= 41 => "Wand of Fear (gp 15000, xp 3000)",
+            <= 44 => "Wand of Fire (gp 25000, xp 4500)",
+            <= 47 => "Wand of Frost (gp 50000, xp 6000)",
+            <= 52 => "Wand of Illumination (gp 10000, xp 2000)",
+            <= 56 => "Wand of Illusion (gp 20000, xp 3000)",
+            <= 59 => "Wand of Lightning (gp 30000, xp 4000)",
+            <= 68 => "Wand of Magic Detection (gp 25000, xp 2500)",
+            <= 73 => "Wand of Metal & Mineral Detection (gp 7500, xp 1500)",
+            <= 78 => "Wand of Magic Missiles (gp 35000, xp 4000)",
+            <= 86 => "Wand of Negation (gp 15000, xp 3500)",
+            <= 89 => "Wand of Paralysis (gp 25000, xp 3500)",
+            <= 92 => "Wand of Polymorphing (gp 25000, xp 3500)",
+            <= 94 => "Wand of Secret Door & Trap Location (gp 40000, xp 5000)",
+            _ => "Wand of Wonder (gp 10000, xp 6000)"
+        };
+    }
+
+    private static string ResolveMiscMagicE1Result(int roll)
+    {
+        return roll switch
+        {
+            <= 2 => "Alchemy Jug (gp 12000, xp 3000)",
+            <= 4 => "Amulet of Inescapable Location (gp 1000, xp ---)",
+            <= 5 => "Amulet of Life Protection (gp 20000, xp 5000)",
+            <= 7 => "Amulet of the Planes (gp 30000, xp 6000)",
+            <= 11 => "Amulet of Proof Against Detection and Location (gp 15000, xp 4000)",
+            <= 13 => "Apparatus of Kwalish (gp 35000, xp 8000)",
+            <= 16 => "Arrow of Direction (gp 17500, xp 2500)",
+            <= 17 => "Artifact or Relic (special table)",
+            <= 20 => "Bag of Beans (gp 5000, xp 1000)",
+            <= 21 => "Bag of Devouring (gp 1500, xp ---)",
+            <= 26 => "Bag of Holding (gp 25000, xp 5000)",
+            <= 27 => "Bag of Transmuting (gp 500, xp ---)",
+            <= 29 => "Bag of Tricks (gp 15000, xp 2500)",
+            <= 31 => "Beaker of Plentyful Potions (gp 12500, xp 1500)",
+            <= 32 => "Boat, Folding (gp 25000, xp 10000)",
+            <= 33 => "Book of Exalted Deeds (gp 40000, xp 8000)",
+            <= 34 => "Book of Infinite Spells (gp 50000, xp 9000)",
+            <= 35 => "Book of Vile Darkness (gp 40000, xp 8000)",
+            <= 36 => "Boats of Dancing (gp 5000, xp ---)",
+            <= 42 => "Boots of Elvenkind (gp 5000, xp 1000)",
+            <= 47 => "Boots of Levitation (gp 15000, xp 2000)",
+            <= 51 => "Boots of Speed (gp 20000, xp 2500)",
+            <= 55 => "Boots of Striding and Springing (gp 20000, xp 2500)",
+            <= 58 => "Bowl Commanding Water Elementals (gp 25000, xp 4000)",
+            <= 59 => "Bowl of Watery Death (gp 1000, xp ---)",
+            <= 79 => "Bracers of Defense (gp 3000*, xp 500*)",
+            <= 81 => "Bracers of Defenselessness (gp 2000, xp ---)",
+            <= 84 => "Brazier Commanding Fire Elementals (gp 25000, xp 4000)",
+            <= 85 => "Brazier of Sleep Smoke (gp 1000, xp ---)",
+            <= 92 => "Brooch of Shielding (gp 10000, xp 1000)",
+            <= 93 => "Broom of Animated Attack (gp 3000, xp ---)",
+            <= 98 => "Broom of Flying (gp 10000, xp 2000)",
+            _ => "Bucknard's Everfull Purse (gp 15000/25000/40000, xp 1500/2500/4000)"
+        };
+    }
+
+    private static string ResolveMiscMagicE2Result(int roll)
+    {
+        return roll switch
+        {
+            <= 6 => "Candle of Invocation (gp 5000, xp 1000)",
+            <= 8 => "Carpet of Flying (gp 25000, xp 7500)",
+            <= 10 => "Censer Controlling Air Elementals (gp 25000, xp 4000)",
+            <= 11 => "Censer of Summoning Hostile Air Elementals (gp 1000, xp ---)",
+            <= 13 => "Chime of Opening (gp 20000, xp 3500)",
+            <= 14 => "Chime of Hunger (gp ---, xp ---)",
+            <= 18 => "Cloak of Displacement (gp 17500, xp 3000)",
+            <= 27 => "Cloak of Elvenkind (gp 6000, xp 1000)",
+            <= 30 => "Cloak of Mana Ray (gp 12500, xp 2000)",
+            <= 32 => "Cloak of Poisonousness (gp 2500, xp ---)",
+            <= 55 => "Cloak of Protection (gp 10000*, xp 1000*)",
+            <= 60 => "Crystal Ball (gp 5000**, xp 1000**)",
+            <= 61 => "Crystal Hypnosis Ball (gp 3000, xp ---)",
+            _ => "E.2 continuation not provided yet (62-00)"
+        };
+    }
+
+    private static string ResolveMiscMagicE3Result(int roll)
+    {
+        return roll switch
+        {
+            <= 15 => "Figurine of Wondrous Power (gp 1000*, xp 100*)",
+            <= 16 => "Flask of Curses (gp 1000, xp ---)",
+            <= 18 => "Gauntlets of Dexterity (gp 10000, xp 1000)",
+            <= 20 => "Gauntlets of Fumbling (gp 1000, xp ---)",
+            <= 22 => "Gauntlets of Ogre Power (gp 15000, xp 1000)",
+            <= 25 => "Gauntlets of Swimming and Climbing (gp 10000, xp 1000)",
+            <= 26 => "Gem of Brightness (gp 17500, xp 2000)",
+            <= 27 => "Gem of Seeing (gp 25000, xp 2000)",
+            <= 28 => "Girdle of Femininity/Masculinity (gp 1000, xp ---)",
+            <= 29 => "Girdle of Giant Strength (gp 2500, xp 200)",
+            <= 30 => "Helm of Brilliance (gp 60000, xp 2500)",
+            <= 35 => "Helm of Comprehending Languages & Reading Magic (gp 12500, xp 1000)",
+            <= 37 => "Helm of Opposite Alignment (gp 1000, xp ---)",
+            <= 39 => "Helm of Telepathy (gp 35000, xp 3000)",
+            <= 40 => "Helm of Teleportation (gp 30000, xp 2500)",
+            <= 45 => "Helm of Underwater Action (gp 10000, xp 1000)",
+            <= 46 => "Horn of Blasting (gp 55000, xp 5000)",
+            <= 48 => "Horn of Bubbles (gp ---, xp ---)",
+            <= 49 => "Horn of Collapsing (gp 25000, xp 1500)",
+            <= 53 => "Horn of the Tritons (gp 17500, xp 2000)",
+            <= 60 => "Horn of Valhalla (gp 15000**, xp 1000**)",
+            <= 63 => "Horseshoes of Speed (gp 10000, xp 2000)",
+            <= 65 => "Horseshoes of a Zephyr (gp 7500, xp 1500)",
+            <= 70 => "Incense of Meditation (gp 7500, xp 500)",
+            <= 71 => "Incense of Obsession (gp 500, xp ---)",
+            <= 72 => "Ioun Stones (gp 5000***, xp 300***)",
+            <= 78 => "Instrument of the Bards (gp 5000****, xp 1000****)",
+            <= 80 => "Iron Flask (gp ---, xp ---)",
+            <= 85 => "Javelin of Lightning (gp 3000, xp 250)",
+            <= 90 => "Javelin of Piercing (gp 3000, xp 250)",
+            <= 91 => "Jewel of Attacks (gp 1000, xp ---)",
+            <= 92 => "Jewel of Flawlessness (gp 1000/facet, xp ---)",
+            _ => "Keoghtom's Ointment (gp 10000, xp 500)"
+        };
+    }
+
+    private static string ResolveMiscMagicE4Result(int roll)
+    {
+        return roll switch
+        {
+            <= 1 => "Libram of Gainful Conjuration (gp 40000, xp 8000)",
+            <= 2 => "Libram of Ineffable Damnation (gp 40000, xp 8000)",
+            <= 3 => "Libram of Silver Magic (gp 40000, xp 8000)",
+            <= 4 => "Lyre of Building (gp 30000, xp 5000)",
+            <= 5 => "Manual of Bodily Health (gp 50000, xp 5000)",
+            <= 6 => "Manual of Gainful Exercise (gp 50000, xp 5000)",
+            <= 7 => "Manual of Golems (gp 30000, xp 3000)",
+            <= 8 => "Manual of Puissant Skill at Arms (gp 40000, xp 8000)",
+            <= 9 => "Manual of Quickness of Action (gp 50000, xp 5000)",
+            <= 10 => "Manual of Stealthy Pilfering (gp 40000, xp 8000)",
+            <= 11 => "Mattock of the Titans (gp 7000, xp 3500)",
+            <= 12 => "Maul of the Titans (gp 12000, xp 4000)",
+            <= 15 => "Medallion of ESP (gp 10000/30000, xp 1000/3000)",
+            <= 17 => "Medallion of Thought Projection (gp 1000, xp ---)",
+            <= 18 => "Mirror of Life Trapping (gp 25000, xp 2500)",
+            <= 19 => "Mirror of Mental Prowess (gp 50000, xp 5000)",
+            <= 20 => "Mirror of Opposition (gp 2000, xp ---)",
+            <= 23 => "Necklace of Adaptation (gp 10000, xp 1000)",
+            <= 27 => "Necklace of Missiles (gp 200*, xp 50*)",
+            <= 33 => "Necklace of Prayer Beads (gp 3000**, xp 500**)",
+            <= 35 => "Necklace of Strangulation (gp 1000, xp ---)",
+            <= 38 => "Net of Entrapment (gp 7500, xp 1000)",
+            <= 42 => "Net of Snaring (gp 6000, xp 1000)",
+            <= 44 => "Nolzur's Marvelous Pigments (gp 3000***, xp 500***)",
+            <= 46 => "Pearl of Power (gp 2000****, xp 200****)",
+            <= 48 => "Pearl of Wisdom (gp 5000, xp 500)",
+            <= 50 => "Periapt of Foul Rotting (gp 1000, xp ---)",
+            <= 53 => "Periapt of Health (gp 10000, xp 1000)",
+            <= 60 => "Periapt of Proof Against Poison (gp 12500, xp 1500)",
+            <= 64 => "Periapt of Wound Closure (gp 10000, xp 1000)",
+            <= 70 => "Phylactery of Faithfulness (gp 7500, xp 1000)",
+            <= 74 => "Phylactery of Long Years (gp 25000, xp 3000)",
+            <= 76 => "Phylactery of Monstrous Attention (gp 2000, xp ---)",
+            <= 84 => "Pipes of the Sewers (gp 8500, xp 1750)",
+            <= 85 => "Portable Hole (gp 50000, xp 5000)",
+            _ => "Quaals Feather Token (gp 2000/7000, xp 500/1000)"
+        };
     }
 
     private void RollCoins(string label, TreasureRollRule rule, string source, TreasureResult result, Action<int> add, double amountScaleFactor, bool suppressFailedRollLogs)

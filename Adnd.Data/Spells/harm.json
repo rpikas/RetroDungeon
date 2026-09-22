@@ -1,0 +1,13 @@
+{
+  "Id": "harm",
+  "Name": "Harm",
+  "Class": "Cleric",
+  "Level": 6,
+  "Description": "Withering touch that leaves the target barely alive.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "Reduces one target to 1-4 HP."
+}

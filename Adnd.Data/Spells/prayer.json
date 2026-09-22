@@ -1,0 +1,13 @@
+{
+  "Id": "prayer",
+  "Name": "Prayer",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "A powerful supplication that aids allies and hinders enemies.",
+  "RangeType": "Self",
+  "Targeting": "Multiple",
+  "TargetingScope": "AllGroups",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "Functions like chant (+1 allies, -1 enemies to attacks and saving throws), but persists for 1 round per caster level without requiring continued chanting."
+}
