@@ -768,6 +768,8 @@ public sealed class CombatResolver
             if (TryResolveMonsterAssassination(session, monster, events))
                 continue;
 
+            var monsterBackstabInfo = TryGetMonsterThiefBackstabInfo(session, monster);
+
             var attacks = monster.Template.Attacks.Count > 0 ? monster.Template.Attacks : new List<Adnd.Core.Monsters.MonsterAttack> { new() { NumberOfAttacks = 1, Damage = "1d4", Name = "Claw" } };
 
             foreach (var attack in attacks)
@@ -786,6 +788,8 @@ public sealed class CombatResolver
                     var blessedAcAdjustment = session.IsBlessed(target.Name) ? -1 : 0;
                     var targetAc = target.ArmorClass + (parrying.Contains(target.Name) ? 2 : 0);
                     var thac0 = GetMonsterThac0(monster);
+                    if (monsterBackstabInfo.Enabled)
+                        thac0 -= 4;
                     if (monster.HasStatus(MonsterStatus.Blinded)
                         && !target.HasStatus(CharacterStatus.Invisible))
                     {
@@ -812,6 +816,12 @@ public sealed class CombatResolver
                         }
 
                         int damage = RollDamage(attack.Damage);
+                        if (monsterBackstabInfo.Enabled)
+                        {
+                            var baseDamage = damage;
+                            damage *= monsterBackstabInfo.Multiplier;
+                            events.Add(new CombatEvent($"{monster.DisplayName} backstabs! +4 to hit, damage x{monsterBackstabInfo.Multiplier} ({baseDamage}->{damage})."));
+                        }
                         target.CurrentHitPoints -= damage;
                         events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name} for {damage}."));
                         WakeCharacterIfAsleepAfterDamage(target, damage, events);
@@ -1305,20 +1315,14 @@ public sealed class CombatResolver
             events.Add(new CombatEvent($"{member.Name} attacks and becomes visible."));
         }
 
-        // Determine target: the named monster first, then a spread, then the group, then whoever is first.
-        Combat.Sessions.MonsterInstance? target = null;
+        MonsterInstance? target = null;
 
-        // A monster the player picked out. Falls through when it is already dead -- initiative means an
-        // earlier attacker may have finished it, and the swing should land somewhere rather than be lost.
         if (!string.IsNullOrEmpty(action.TargetMonsterId))
         {
             var named = session.FindMonster(action.TargetMonsterId);
             if (named != null && named.IsAlive) target = named;
         }
 
-       
-        // Spread: take the next monster along, within the chosen group if one was named. The cursor is on the
-        // session, so consecutive attackers asking to spread walk along the line instead of stacking up.
         if (target is null && action.SpreadTargets)
         {
             var spreadable = (string.IsNullOrEmpty(action.TargetGroupId)
@@ -1336,25 +1340,14 @@ public sealed class CombatResolver
 
         if (target is null && !string.IsNullOrEmpty(action.TargetGroupId))
         {
-            // Attack a monster from the specified group
             var groupMonsters = session.GetAliveMonstersByGroup(action.TargetGroupId).ToList();
             if (groupMonsters.Count > 0)
-            {
                 target = groupMonsters.First();
-            }
         }
 
-        if (target is null)
-        {
-            // Default to first alive monster (backward compatibility)
-            target = session.AliveMonsters.FirstOrDefault();
-        }
-
+        target ??= session.AliveMonsters.FirstOrDefault();
         if (target is null)
             return;
-     
-
-
 
         int attacks = GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
         if (session.IsHasted(member.Name))
@@ -1363,115 +1356,133 @@ public sealed class CombatResolver
             attacks = Math.Max(1, attacks / 2);
 
         var isBackstab = IsThiefBackstabAttack(member, session);
-        var backstabMultiplier = isBackstab ? GetThiefBackstabMultiplier(member) : 1;
-        // ---------------------------------------------------------
-        // ASSASSINATION (AD&D 1e) – korrekt placerad i ResolvePartyAttack
-        // ---------------------------------------------------------
+        var backstabMultiplier = isBackstab ? GetThiefBackstabMultiplierByLevel(member.GetClassLevel(CharacterClass.Thief)) : 1;
+
         if (member.Class == CharacterClass.Assassin
             && session.RoundNumber == 1
             && session.MonstersSurprisedRound1
-            && target != null
             && target.IsAlive)
         {
             var assassination = new AssassinationService("Data/Assassination");
-
             int monsterLevel = target.Template.HitDice;
-
-            // CombatResolver använder nu sin egen RNG
             bool success = assassination.TryAssassinate(monsterLevel, _rng);
 
             if (success)
             {
                 RuleApplicationInfo.Publish(
-                            "HomeBrewAI",
-                            "NA",
-                            "assassination",
-                            "assassination success",
-                            "1",
-                            "6",
-                            "0",
-                            "Monster dies?");
+                    "HomeBrewAI",
+                    "NA",
+                    "assassination",
+                    "assassination success",
+                    "1",
+                    "6",
+                    "0",
+                    "Monster dies?");
                 target.CurrentHitPoints = 0;
                 events.Add(new CombatEvent($"{member.Name} assassinates {target.DisplayName} instantly!"));
-                return; // hoppa över hela attack-loopen
+                return;
             }
-            else
-            {
-                RuleApplicationInfo.Publish(
-                            "HomeBrewAI",
-                            "NA",
-                            "assassination",
-                            "assassination fail",
-                            "1",
-                            "6",
-                            "0",
-                            "Monster survives?");
-            }
+
+            RuleApplicationInfo.Publish(
+                "HomeBrewAI",
+                "NA",
+                "assassination",
+                "assassination fail",
+                "1",
+                "6",
+                "0",
+                "Monster survives?");
         }
+
         for (int i = 0; i < attacks; i++)
         {
             var thac0Modifier = session.IsBlessed(member.Name) ? 1 : 0;
-
             if (isBackstab)
                 thac0Modifier += 4;
 
-            if (member.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.MainHand, out var mainHand)
-                && mainHand != null)
+            Item? mainHand = null;
+            if (member.Equipment.TryGetValue(EquipmentSlot.MainHand, out var equipped) && equipped != null)
             {
+                mainHand = equipped;
                 thac0Modifier += Math.Max(0, mainHand.ToHitBonus);
             }
 
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
             int roll = _dice.Roll(20);
 
-            if (roll >= needed)
+            if (roll < needed)
             {
-                var mirrorImages = session.GetMonsterMirrorImageCount(target);
-                if (mirrorImages > 0)
-                {
-                    var imageHitRoll = _dice.Roll(mirrorImages + 1);
-                    if (imageHitRoll > 1)
-                    {
-                        var remainingImages = session.RemoveOneMonsterMirrorImage(target);
-                        events.Add(new CombatEvent($"{member.Name} hits a mirror image of {target.DisplayName}!"));
-                        events.Add(new CombatEvent($"{target.DisplayName} has {remainingImages} mirror image(s) remaining."));
-                        if (remainingImages <= 0)
-                            events.Add(new CombatEvent($"{target.DisplayName} has no mirror images left."));
-                        continue;
-                    }
-                }
+                events.Add(new CombatEvent($"{member.Name} misses {target.DisplayName}."));
+                continue;
+            }
 
-                if (RequiresPlusOneWeaponToHit(target) && !IsMagicalWeapon(mainHand))
+            var mirrorImages = session.GetMonsterMirrorImageCount(target);
+            if (mirrorImages > 0)
+            {
+                var imageHitRoll = _dice.Roll(mirrorImages + 1);
+                if (imageHitRoll > 1)
                 {
-                    var blockedWeaponName = mainHand != null ? mainHand.Name : "bare hands";
-                    events.Add(new CombatEvent(
-                        $"{member.Name} hits {target.DisplayName} with {blockedWeaponName}, but the attack cannot harm it (+1 or better weapon required)."));
-
-                    RuleApplicationInfo.Publish(
-                        $"AD&D special defense: {target.DisplayName} requires '+1 or better weapons to hit'. " +
-                        $"{member.Name}'s attack with {blockedWeaponName} is non-magical (no '+' in name and no special abilities), so it deals no damage.");
+                    var remainingImages = session.RemoveOneMonsterMirrorImage(target);
+                    events.Add(new CombatEvent($"{member.Name} hits a mirror image of {target.DisplayName}!"));
+                    events.Add(new CombatEvent($"{target.DisplayName} has {remainingImages} mirror image(s) remaining."));
+                    if (remainingImages <= 0)
+                        events.Add(new CombatEvent($"{target.DisplayName} has no mirror images left."));
                     continue;
                 }
+            }
 
-                var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
-                var strengthDamageBonus = mainHand != null && mainHand.Type == ItemType.Weapon
-                    ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)
-                    : 0;
-                int damage = RollDamage(damageExpression) + strengthDamageBonus;
+            if (RequiresPlusOneWeaponToHit(target) && !IsMagicalWeapon(mainHand))
+            {
+                var blockedWeaponName = mainHand != null ? mainHand.Name : "bare hands";
+                events.Add(new CombatEvent(
+                    $"{member.Name} hits {target.DisplayName} with {blockedWeaponName}, but the attack cannot harm it (+1 or better weapon required)."));
 
-                if (isBackstab)
-                {
-                    var beforeBackstab = damage;
-                    damage *= backstabMultiplier;
-                    events.Add(new CombatEvent($"{member.Name} backstabs! +4 to hit, damage x{backstabMultiplier} ({beforeBackstab}->{damage})."));
-                }
+                RuleApplicationInfo.Publish(
+                    $"AD&D special defense: {target.DisplayName} requires '+1 or better weapons to hit'. " +
+                    $"{member.Name}'s attack with {blockedWeaponName} is non-magical (no '+' in name and no special abilities), so it deals no damage.");
+                continue;
+            }
 
-                if (IsHalfDamageFromSharpWeapons(target, mainHand))
-                {
-                    var originalDamage = damage;
-                    damage = Math.Max(1, damage / 2);
-                    events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
-                }
+            var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
+            var strengthDamageBonus = mainHand != null && mainHand.Type == ItemType.Weapon
+                ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)
+                : 0;
+
+            int damage = RollDamage(damageExpression) + strengthDamageBonus;
+
+            if (isBackstab)
+            {
+                var beforeBackstab = damage;
+                damage *= backstabMultiplier;
+                events.Add(new CombatEvent($"{member.Name} backstabs! +4 to hit, damage x{backstabMultiplier} ({beforeBackstab}->{damage})."));
+            }
+
+            if (IsHalfDamageFromSharpWeapons(target, mainHand))
+            {
+                var originalDamage = damage;
+                damage = Math.Max(1, damage / 2);
+                events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
+            }
+
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            WakeMonsterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+
+            var weaponName = mainHand != null ? mainHand.Name : "bare hands";
+            var damageFormula = strengthDamageBonus == 0
+                ? damageExpression
+                : $"{damageExpression}+{strengthDamageBonus}";
+
+            events.Add(new CombatEvent(
+                $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                events.Add(new CombatEvent($"{target.DisplayName} is destroyed."));
+                break;
+            }
+        }
+    }
 
     private static bool IsThiefBackstabAttack(Character member, CombatSession session)
     {
@@ -1483,43 +1494,12 @@ public sealed class CombatResolver
                && session.MonstersSurprisedRound1;
     }
 
-    private static int GetThiefBackstabMultiplier(Character member)
+    private static int GetThiefBackstabMultiplierByLevel(int thiefLevel)
     {
-        var thiefLevel = member.GetClassLevel(CharacterClass.Thief);
-
-        if (thiefLevel <= 0)
-            return 2;
-
         if (thiefLevel <= 4) return 2;
         if (thiefLevel <= 8) return 3;
         if (thiefLevel <= 12) return 4;
-        return 5; // 13+
-    }
-
-                var before = target.CurrentHitPoints;
-                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
-                WakeMonsterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
-
-                var weaponName = mainHand != null ? mainHand.Name : "bare hands";
-                var damageFormula = strengthDamageBonus == 0
-                    ? damageExpression
-                    : $"{damageExpression}+{strengthDamageBonus}";
-
-                events.Add(new CombatEvent(
-                    $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
-
-                if (target.CurrentHitPoints <= 0)
-                {
-                    events.Add(new CombatEvent($"{target.DisplayName} is destroyed."));
-                    break;
-                }
-            }
-            else
-            {
-                events.Add(new CombatEvent($"{member.Name} misses {target.DisplayName}."));
-            }
-        }
-
+        return 5;
     }
 
     private bool ResolveLevel2MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
@@ -1755,6 +1735,21 @@ public sealed class CombatResolver
 
         var index = _dice.Roll(frontline.Count) - 1;
         return frontline[index];
+    }
+
+    private (bool Enabled, int Multiplier) TryGetMonsterThiefBackstabInfo(CombatSession session, MonsterInstance monster)
+    {
+        if (session.RoundNumber != 1 || !session.PartySurprisedRound1)
+            return (false, 1);
+
+        var isThiefByName = monster.Template.Name?.IndexOf("thief", StringComparison.OrdinalIgnoreCase) >= 0;
+        var isThiefByAbility = HasAnySpecialAbility(monster, "Thief", "Backstab", "Thief Backstab");
+        if (!isThiefByName && !isThiefByAbility)
+            return (false, 1);
+
+        var thiefLevel = Math.Max(1, monster.Template.HitDice);
+        var multiplier = GetThiefBackstabMultiplierByLevel(thiefLevel);
+        return (true, multiplier);
     }
 
     private int RollDamage(string damageExpression)
