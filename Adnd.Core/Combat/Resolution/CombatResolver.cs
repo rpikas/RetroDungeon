@@ -40,23 +40,6 @@ public sealed class CombatResolver
                 continue;
             }
 
-            if (member.HasStatus(CharacterStatus.Confused))
-            {
-                var confusedRounds = session.GetPartyConfusedRounds(member.Name);
-                events.Add(new CombatEvent(confusedRounds > 0
-                    ? $"{member.Name} is confused and cannot act ({confusedRounds} round(s) remaining)."
-                    : $"{member.Name} is confused and cannot act."));
-
-                var remainingConfused = session.TickPartyConfused(member.Name);
-                if (remainingConfused <= 0)
-                {
-                    member.RemoveStatus(CharacterStatus.Confused);
-                    events.Add(new CombatEvent($"{member.Name} regains clarity."));
-                }
-
-                continue;
-            }
-
             var caster = session.Party.FirstOrDefault(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
             if (caster == null || _spellCastingService == null)
             {
@@ -126,6 +109,26 @@ public sealed class CombatResolver
             }
         }
 
+        if (prayerActiveAtRoundStart)
+        {
+            var remainingPrayerRounds = session.ActivePrayerRounds;
+            var prayerCaster = string.IsNullOrWhiteSpace(session.ActivePrayerCasterName)
+                ? "A cleric"
+                : session.ActivePrayerCasterName;
+            events.Add(new CombatEvent($"{prayerCaster}'s Prayer remains in effect ({remainingPrayerRounds} round(s) remaining)."));
+        }
+
+        foreach (var member in session.Party)
+        {
+            if (!IsAlive(member))
+                continue;
+
+            if (session.RoundNumber == 1 && session.PartySurprisedRound1)
+            {
+                events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
+                continue;
+            }
+
             var drainRemaining = session.GetPartyDrainBloodRemaining(member.Name);
             if (drainRemaining > 0)
             {
@@ -150,23 +153,20 @@ public sealed class CombatResolver
                 }
             }
 
-        if (prayerActiveAtRoundStart)
-        {
-            var remainingPrayerRounds = session.ActivePrayerRounds;
-            var prayerCaster = string.IsNullOrWhiteSpace(session.ActivePrayerCasterName)
-                ? "A cleric"
-                : session.ActivePrayerCasterName;
-            events.Add(new CombatEvent($"{prayerCaster}'s Prayer remains in effect ({remainingPrayerRounds} round(s) remaining)."));
-        }
-
-        foreach (var member in session.Party)
-        {
-            if (!IsAlive(member))
-                continue;
-
-            if (session.RoundNumber == 1 && session.PartySurprisedRound1)
+            if (member.HasStatus(CharacterStatus.Confused))
             {
-                events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
+                var confusedRounds = session.GetPartyConfusedRounds(member.Name);
+                events.Add(new CombatEvent(confusedRounds > 0
+                    ? $"{member.Name} is confused and cannot act ({confusedRounds} round(s) remaining)."
+                    : $"{member.Name} is confused and cannot act."));
+
+                var remainingConfused = session.TickPartyConfused(member.Name);
+                if (remainingConfused <= 0)
+                {
+                    member.RemoveStatus(CharacterStatus.Confused);
+                    events.Add(new CombatEvent($"{member.Name} regains clarity."));
+                }
+
                 continue;
             }
 
@@ -2106,6 +2106,53 @@ public sealed class CombatResolver
         return true;
     }
 
+    private bool ResolveLevel4MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Ice Storm!"));
+
+            foreach (var target in aliveParty)
+            {
+                var rolledDamage = _dice.RollMany(4, 6);
+                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (session.IsChantActive || session.IsPrayerActive)
+                    saveTarget = Math.Max(1, saveTarget - 1);
+
+                var saveRoll = _dice.Roll(20);
+                var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
+                var actual = before - target.CurrentHitPoints;
+                WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+                events.Add(new CombatEvent(saveRoll >= saveTarget
+                    ? $"{target.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half ice storm damage: {actual}. HP {before}->{target.CurrentHitPoints}."
+                    : $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actual} ice storm damage. HP {before}->{target.CurrentHitPoints}."));
+
+                if (target.CurrentHitPoints <= 0)
+                {
+                    target.AddStatus(CharacterStatus.Dead);
+                    events.Add(new CombatEvent($"{target.Name} is slain by ice storm!"));
+                }
+            }
+
+            return true;
+        }
+
+        var wallTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var rounds = Math.Max(1, monster.Template.HitDice);
+        session.SetPartyAcidArrow(wallTarget.Name, rounds);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Wall of Fire! {wallTarget.Name} is trapped in flames for {rounds} round(s)."));
+        return true;
+    }
+
     private bool ResolveLevel5IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
         var aliveParty = session.AliveParty.ToList();
@@ -2178,6 +2225,54 @@ public sealed class CombatResolver
         mazeTarget.AddStatus(CharacterStatus.Paralyzed);
         session.SetPartyAsleep(mazeTarget.Name, roundsInMaze);
         events.Add(new CombatEvent($"{monster.DisplayName} casts Maze! {mazeTarget.Name} (INT {intelligence}) is trapped for {displayRounds} {unitText}."));
+        return true;
+    }
+
+    private bool ResolveLevel4IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var spellRoll = _dice.Roll(100);
+        if (spellRoll <= 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Confusion!"));
+
+            var casterLevel = Math.Max(1, monster.Template.HitDice);
+            var affectedCount = Math.Min(aliveParty.Count, Math.Max(1, casterLevel));
+            var rounds = casterLevel;
+
+            var targets = aliveParty
+                .OrderBy(_ => _dice.Roll(100))
+                .Take(affectedCount)
+                .ToList();
+
+            foreach (var target in targets)
+            {
+                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (session.IsChantActive || session.IsPrayerActive)
+                    saveTarget = Math.Max(1, saveTarget - 1);
+
+                var saveRoll = _dice.Roll(20);
+                if (saveRoll >= saveTarget)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Confusion (save {saveRoll} vs {saveTarget})."));
+                    continue;
+                }
+
+                target.AddStatus(CharacterStatus.Confused);
+                session.SetPartyConfused(target.Name, rounds);
+                events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and is confused for {rounds} round(s)."));
+            }
+
+            return true;
+        }
+
+        var imageCount = _dice.Roll(4) + 1;
+        var invisRounds = Math.Max(1, monster.Template.HitDice);
+        session.SetMonsterMirrorImage(monster, imageCount, invisRounds);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Improved Invisibility on itself ({imageCount} mirror image proxy for {invisRounds} round(s))."));
         return true;
     }
 

@@ -86,6 +86,7 @@ public sealed class TreasureService
             RollTreasureToken(
                 token,
                 monster.DisplayName,
+                monster.Template.DungeonLevel,
                 result,
                 monster.Template.TreasureChanceOverride,
                 "lair",
@@ -114,6 +115,7 @@ public sealed class TreasureService
             RollTreasureToken(
                 token,
                 monster.DisplayName,
+                monster.Template.DungeonLevel,
                 result,
                 null,
                 "individual",
@@ -255,6 +257,7 @@ public sealed class TreasureService
     private void RollTreasureToken(
         string token,
         string monsterDisplayName,
+        int encounterLevel,
         TreasureResult result,
         double? overrideChance,
         string scope,
@@ -275,7 +278,13 @@ public sealed class TreasureService
 
         if (string.Equals(tableCode, "WORNEQUIPMENT", StringComparison.OrdinalIgnoreCase))
         {
-            result.LogLines.Add($"{monsterDisplayName}: {scope} treasure {token} deferred to worn equipment magic rules.");
+            RollWornEquipmentTreasure(
+                monsterDisplayName,
+                encounterLevel,
+                result,
+                scope,
+                gemJewelryMagicChanceScaleFactor,
+                suppressFailedRollLogs);
             return;
         }
 
@@ -474,6 +483,49 @@ public sealed class TreasureService
                 continue;
             }
 
+            if (normalized.Equals("E5", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("E.5", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Magic (E.5)", StringComparison.OrdinalIgnoreCase))
+            {
+                var e5Roll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.5) from table key '{requestedTable}'.");
+                logs.Add($"      Miscellaneous Magic table (E.5) d100 {e5Roll:00} => {ResolveMiscMagicE5Result(e5Roll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("Armor", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Armour", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Shield", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Shields", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Armor & Shields", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Armour & Shields", StringComparison.OrdinalIgnoreCase))
+            {
+                var fRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Armor & Shields (F) from table key '{requestedTable}'.");
+                logs.Add($"      Armor & Shields table (F) d100 {fRoll:00} => {ResolveArmorShieldResult(fRoll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("Sword", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Swords", StringComparison.OrdinalIgnoreCase))
+            {
+                var gRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Swords (G) from table key '{requestedTable}'.");
+                logs.Add($"      Swords table (G) d100 {gRoll:00} => {ResolveSwordResult(gRoll)}.");
+                continue;
+            }
+
+            if (normalized.Equals("Weapon", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Weapons", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Weapon", StringComparison.OrdinalIgnoreCase)
+                || normalized.Equals("Miscellaneous Weapons", StringComparison.OrdinalIgnoreCase))
+            {
+                var hRoll = _random.Next(1, 101);
+                logs.Add($"    Magic item #{i}: forced Miscellaneous Weapons (H) from table key '{requestedTable}'.");
+                logs.Add($"      Miscellaneous Weapons table (H) d100 {hRoll:00} => {ResolveMiscWeaponResult(hRoll)}.");
+                continue;
+            }
+
             if (normalized.Equals("Ring", StringComparison.OrdinalIgnoreCase)
                 || normalized.Equals("Rings", StringComparison.OrdinalIgnoreCase))
             {
@@ -557,23 +609,31 @@ public sealed class TreasureService
 
         if (typeRoll <= 60)
         {
-            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.5), table not defined yet, skipped.");
+            var e5Roll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.5).");
+            logs.Add($"      Miscellaneous Magic table (E.5) d100 {e5Roll:00} => {ResolveMiscMagicE5Result(e5Roll)}.");
             return;
         }
 
         if (typeRoll <= 75)
         {
-            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Armor & Shields (F), table not defined yet, skipped.");
+            var fRoll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Armor & Shields (F).");
+            logs.Add($"      Armor & Shields table (F) d100 {fRoll:00} => {ResolveArmorShieldResult(fRoll)}.");
             return;
         }
 
         if (typeRoll <= 86)
         {
-            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Swords (G), table not defined yet, skipped.");
+            var gRoll = _random.Next(1, 101);
+            logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Swords (G).");
+            logs.Add($"      Swords table (G) d100 {gRoll:00} => {ResolveSwordResult(gRoll)}.");
             return;
         }
 
-        logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Weapons (H), table not defined yet, skipped.");
+        var hTypeRoll = _random.Next(1, 101);
+        logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Weapons (H).");
+        logs.Add($"      Miscellaneous Weapons table (H) d100 {hTypeRoll:00} => {ResolveMiscWeaponResult(hTypeRoll)}.");
     }
 
     private static string ResolvePotionResult(int roll)
@@ -775,7 +835,23 @@ public sealed class TreasureService
             <= 55 => "Cloak of Protection (gp 10000*, xp 1000*)",
             <= 60 => "Crystal Ball (gp 5000**, xp 1000**)",
             <= 61 => "Crystal Hypnosis Ball (gp 3000, xp ---)",
-            _ => "E.2 continuation not provided yet (62-00)"
+            <= 63 => "Cube of Force (xp 3, gp 20)",
+            <= 65 => "Cube of Frost Resistance (xp 2, gp 14)",
+            <= 67 => "Cubic Gate (xp 5, gp 17,5)",
+            <= 69 => "Daern's Instant Fortress (xp 7, gp 27,5)",
+            <= 72 => "Decanter of Endless Water (xp 1, gp 10)",
+            <= 76 => "Deck of Many Things (xp —, gp 10)",
+            <= 77 => "Drums of Deafening (xp —, gp —)",
+            <= 79 => "Drums of Panic (xp 6,5, gp 35)",
+            <= 85 => "Dust of Appearance (xp 1, gp —)",
+            <= 91 => "Dust of Disappearance (xp 2, gp 8)",
+            <= 92 => "Dust of Sneezing and Choking (xp —, gp —)",
+            <= 93 => "Efreeti Bottle (xp 9, gp 45)",
+            <= 94 => "Eversmoking Bottle (xp 500, gp 2,5)",
+            <= 95 => "Eyes of Charming (xp 4, gp 24)",
+            <= 97 => "Eyes of the Eagle (xp 3,5, gp 18)",
+            <= 99 => "Eyes of Minute Seeing (xp 2, gp 12,5)",
+            _ => "Eyes of Petrification (xp —, gp —)"
         };
     }
 
@@ -861,6 +937,352 @@ public sealed class TreasureService
             _ => "Quaals Feather Token (gp 2000/7000, xp 500/1000)"
         };
     }
+
+    private static string ResolveMiscMagicE5Result(int roll)
+    {
+        return roll switch
+        {
+            <= 1 => "Robe of the Archmagi (xp 6, gp 65)",
+            <= 8 => "Robe of Blending (xp 3,5, gp 35)",
+            <= 9 => "Robe of Eyes (xp 4,5, gp 45)",
+            <= 10 => "Robe of Powerlessness (xp —, gp 1)",
+            <= 11 => "Robe of Scintillating Colors (xp 2,75, gp 27,5)",
+            <= 19 => "Robe of Useful Items (xp 1,5, gp 15)",
+            <= 25 => "Rope of Climbing (xp 1, gp 10)",
+            <= 27 => "Rope of Constriction (xp 1,5, gp 12)",
+            <= 31 => "Rope of Entanglement (xp 1,25, gp 12,5)",
+            <= 32 => "Rug of Smothering (xp —, gp 1)",
+            <= 33 => "Rug of Welcome (xp 6,5, gp 45)",
+            <= 34 => "Saw of Mighty Cutting (xp 1,75, gp 12,5)",
+            <= 35 => "Scarab of Death (xp —, gp 1)",
+            <= 38 => "Scarab of Enraging Enemies (xp 1, gp 10)",
+            <= 44 => "Scarab of Insanity (xp 1,5, gp 11)",
+            <= 45 => "Scarab of Protection (xp 2,5, gp 25)",
+            <= 46 => "E.5 entry missing in provided table (46)",
+            <= 47 => "Spade of Colossal Excavation (xp 3,75, gp 6,5)",
+            <= 48 => "Sphere of Annihilation (xp —, gp 30)",
+            <= 50 => "Stone of Controlling Earth Elementals (xp 1,5, gp 12,5)",
+            <= 52 => "Stone of Good Luck (Luckstone) (xp 3, gp 25)",
+            <= 54 => "Stone of Weight (Loadstone) (xp —, gp 1)",
+            <= 57 => "Talisman of Pure Good (xp 3,5, gp 27,5)",
+            <= 58 => "Talisman of the Sphere (xp 3,5, gp 30)",
+            <= 60 => "Talisman of Ultimate Evil (xp 3,5, gp 27,5)",
+            <= 66 => "Talisman of Zagy (xp —, gp 1)",
+            <= 67 => "Tome of Clear Thought (xp 8, gp 48)",
+            <= 68 => "Tome of Leadership and Influence (xp 7,5, gp 40)",
+            <= 69 => "Tome of Understanding (xp 7,5, gp 40)",
+            <= 76 => "Trident of Fish Command (xp 1,5, gp 15)",
+            <= 78 => "Trident of Submission (xp 1,5, gp 15)",
+            <= 83 => "Trident of Warning (xp 1, gp 10)",
+            <= 85 => "Trident of Yearning (xp —, gp 1)",
+            <= 87 => "Vacuous Grimoire (xp —, gp 12)",
+            <= 90 => "Well of Many Worlds (xp 6, gp 12)",
+            _ => "Wings of Flying (xp 750, gp 7,5)"
+        };
+    }
+
+    private static string ResolveArmorShieldResult(int roll)
+    {
+        return roll switch
+        {
+            <= 5 => "Chain Mail +1 (xp 600, gp 3,500)",
+            <= 9 => "Chain Mail +2 (xp 1,200, gp 7,500)",
+            <= 11 => "Chain Mail +3 (xp 2,000, gp 12,500)",
+            <= 19 => "Leather Armor +1 (xp 150, gp 750)",
+            <= 26 => "Plate Mail +1 (xp 800, gp 5,000)",
+            <= 32 => "Plate Mail +2 (xp 1,750, gp 10,000)",
+            <= 35 => "Plate Mail +3 (xp 3,500, gp 20,000)",
+            <= 37 => "Plate Mail +4 (xp 7,500, gp 25,000)",
+            <= 38 => "Plate Mail +5 (xp 15,000, gp 30,000)",
+            <= 39 => "Plate Mail of Etherealness (xp 5,000, gp 30,000)",
+            <= 44 => "Plate Mail of Vulnerability (xp —, gp —)",
+            <= 50 => "Ring Mail +1 (xp 400, gp 2,000)",
+            <= 53 => "Scale Mail +1 (xp 600, gp 3,500)",
+            <= 60 => "Scale Mail +2 (xp 1,100, gp 7,500)",
+            <= 65 => "Splint Mail +1 (xp 600, gp 3,500)",
+            <= 68 => "Splint Mail +2 (xp 1,250, gp 7,500)",
+            <= 69 => "Splint Mail +3 (xp 2,500, gp 14,500)",
+            <= 75 => "Studded Leather +1 (xp 400, gp 2,000)",
+            <= 84 => "Shield +1 (xp 300, gp 1,000)",
+            <= 89 => "Shield +2 (xp 500, gp 3,500)",
+            <= 93 => "Shield +3 (xp 800, gp 7,500)",
+            <= 95 => "Shield +4 (xp 1,200, gp 12,000)",
+            <= 96 => "Shield +5 (xp 1,750, gp 15,000)",
+            <= 97 => "Shield, large, +1, +4 vs. missiles (xp 400, gp 4,000)",
+            _ => "Shield -1, missile attractor (xp —, gp 750)"
+        };
+    }
+
+    private static string ResolveSwordResult(int roll)
+    {
+        return roll switch
+        {
+            <= 25 => "Sword +1 (xp 400, gp 2,000)",
+            <= 30 => "Sword +1, +2 vs. magic-using & enchanted creatures (xp 600, gp 3,000)",
+            <= 35 => "Sword +1, +3 vs. lycanthropes & shape changers (xp 700, gp 3,500)",
+            <= 40 => "Sword +1, +3 vs. regenerating creatures (xp 800, gp 4,000)",
+            <= 45 => "Sword +1, +4 vs. reptiles (xp 800, gp 4,000)",
+            <= 49 => "Sword +1, Flame Tongue (+2 vs. regenerating, +3 vs. cold-using/inflammable/avian, +4 vs. undead) (xp 900, gp 4,500)",
+            <= 50 => "Sword +1, Luck Blade (xp 1,000, gp 5,000)",
+            <= 58 => "Sword +2 (xp 800, gp 4,000)",
+            <= 62 => "Sword +2, Giant Slayer (xp 900, gp 4,500)",
+            <= 63 => "G table entry missing in provided data (63)",
+            <= 64 => "Sword +2, Dragon Slayer (xp 900, gp 4,500)",
+            <= 66 => "G table entry missing in provided data (65-66)",
+            <= 67 => "Sword +2, Nine Lives Stealer (xp 1,600, gp 8,000)",
+            <= 71 => "Sword +3 (xp 1,400, gp 7,000)",
+            <= 74 => "Sword +3, Frost Brand (+6 vs. fire-using/dwelling creatures) (xp 1,600, gp 8,000)",
+            <= 76 => "Sword +4 (xp 2,000, gp 10,000)",
+            <= 77 => "Sword +4, Defender (xp 3,000, gp 15,000)",
+            <= 78 => "Sword +5 (xp 3,000, gp 15,000)",
+            <= 79 => "Sword +5, Defender (xp 3,600, gp 18,000)",
+            <= 80 => "Sword +5, Holy Avenger (xp 4,000, gp 20,000)",
+            <= 81 => "Sword of Dancing (xp 4,400, gp 22,000)",
+            <= 82 => "Sword of Wounding (xp 4,400, gp 22,000)",
+            <= 83 => "Sword of Life Stealing (xp 5,000, gp 25,000)",
+            <= 84 => "Sword of Sharpness (xp 7,000, gp 35,000)",
+            <= 85 => "Sword, Vorpal Weapon (xp 10,000, gp 50,000)",
+            <= 90 => "G table entry missing in provided data (86-90)",
+            <= 95 => "Sword +1, Cursed (xp 400, gp —)",
+            _ => "Sword, Cursed Berserking (xp 900, gp —)"
+        };
+    }
+
+    private static string ResolveMiscWeaponResult(int roll)
+    {
+        return roll switch
+        {
+            <= 8 => "Arrow +1, 2-24 in number (xp 20, gp 120)",
+            <= 12 => "Arrow +2, 2-16 in number (xp 50, gp 300)",
+            <= 14 => "Arrow +3, 2-12 in number (xp 75, gp 450)",
+            <= 15 => "Arrow of Slaying (xp 250, gp 2,5)",
+            <= 20 => "Axe +1 (xp 300, gp 1,75)",
+            <= 22 => "Axe +2 (xp 600, gp 3,5)",
+            <= 23 => "Axe +2, Throwing (xp 750, gp 4,5)",
+            <= 24 => "Axe +3 (xp 1, gp 7)",
+            <= 27 => "Battle Axe +1 (xp 400, gp 2,5)",
+            <= 32 => "Bolt +2, 2-20 in number (xp 50, gp 300)",
+            <= 35 => "Bow +1 (xp 500, gp 3,5)",
+            <= 36 => "Crossbow of Accuracy, +3 (xp 2, gp 12)",
+            <= 37 => "Crossbow of Distance (xp 1,5, gp 7,5)",
+            <= 38 => "Crossbow of Speed (xp 1,5, gp 7,5)",
+            <= 46 => "Dagger +1, +2 vs. creatures smaller than man-sized (xp 100, gp 750)",
+            <= 50 => "Dagger +2, +3 vs. creatures larger than man-sized (xp 250, gp 2)",
+            <= 51 => "Dagger of Venom (xp —, gp 3)",
+            <= 56 => "Flail +1 (xp 450, gp 2,5)",
+            <= 60 => "Hammer +1 (xp 300, gp 2,5)",
+            <= 62 => "Hammer +2 (xp 600, gp 6)",
+            <= 63 => "Hammer +3, Dwarven Thrower (xp 1,5, gp 15)",
+            <= 64 => "Hammer of Thunderbolts (xp 2,5, gp 25)",
+            <= 67 => "Javelin +2 (xp 750, gp 5)",
+            <= 72 => "Mace +1 (xp 350, gp 2)",
+            <= 75 => "Mace +2 (xp 700, gp 4,5)",
+            <= 76 => "Mace of Disruption (xp 1,75, gp 17,5)",
+            <= 77 => "Mace +4 (xp 1,5, gp 15)",
+            <= 80 => "Military Pick +1 (xp 400, gp 2,5)",
+            <= 83 => "Morning Star +1 (xp 400, gp 3)",
+            <= 88 => "Scimitar +2 (xp 750, gp 6)",
+            <= 89 => "Sling of Seeking +2 (xp 1, gp 8)",
+            <= 94 => "Spear +1 (xp 500, gp 3)",
+            <= 96 => "Spear +2 (xp 1, gp 6,5)",
+            <= 97 => "Spear +3 (xp 1,75, gp 15)",
+            <= 99 => "Spear, Cursed Backbiter (xp —, gp —)",
+            _ => "Trident (Military Fork) +3 (xp 1,5, gp 12,5)"
+        };
+    }
+
+    private void RollWornEquipmentTreasure(
+        string monsterDisplayName,
+        int encounterLevel,
+        TreasureResult result,
+        string scope,
+        double chanceScaleFactor,
+        bool suppressFailedRollLogs)
+    {
+        var rule = GetWornEquipmentRule(encounterLevel);
+        var levelLabel = rule.Level;
+
+        if (!RollChance(rule.BaseChancePercent, $"WornEquipment level {levelLabel} base chance", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
+        {
+            if (!suppressFailedRollLogs)
+                result.LogLines.Add($"{monsterDisplayName}: {scope} worn equipment level {levelLabel} not found.");
+            return;
+        }
+
+        result.LogLines.Add($"{monsterDisplayName}: {scope} worn equipment triggered for encounter level {levelLabel}.");
+
+        var itemIndex = 1;
+        itemIndex = RollWornTableItems(monsterDisplayName, "I", rule.TableIRolls, itemIndex, result);
+        itemIndex = RollWornTableItems(monsterDisplayName, "II", rule.TableIIRolls, itemIndex, result);
+        itemIndex = RollWornTableItems(monsterDisplayName, "III", rule.TableIIIRolls, itemIndex, result);
+        itemIndex = RollWornTableItems(monsterDisplayName, "IV", rule.TableIVRolls, itemIndex, result);
+
+        if (rule.BonusTableIIRolls > 0
+            && RollChance(rule.BonusTableIIChancePercent, $"WornEquipment level {levelLabel} bonus Table II", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
+        {
+            itemIndex = RollWornTableItems(monsterDisplayName, "II", rule.BonusTableIIRolls, itemIndex, result);
+        }
+
+        if (rule.BonusTableIIIRolls > 0
+            && RollChance(rule.BonusTableIIIChancePercent, $"WornEquipment level {levelLabel} bonus Table III", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
+        {
+            itemIndex = RollWornTableItems(monsterDisplayName, "III", rule.BonusTableIIIRolls, itemIndex, result);
+        }
+
+        if (rule.BonusTableIVRolls > 0
+            && RollChance(rule.BonusTableIVChancePercent, $"WornEquipment level {levelLabel} bonus Table IV", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
+        {
+            _ = RollWornTableItems(monsterDisplayName, "IV", rule.BonusTableIVRolls, itemIndex, result);
+        }
+    }
+
+    private int RollWornTableItems(string monsterDisplayName, string table, int rolls, int itemIndex, TreasureResult result)
+    {
+        for (var i = 0; i < rolls; i++)
+        {
+            var item = RollWornEquipmentItem(table, out var dieSize, out var dieRoll);
+            result.LogLines.Add($"    Magic item #{itemIndex}: WornEquipment Table {table} d{dieSize} {dieRoll} => {item}.");
+            result.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult
+            {
+                Table = $"WornEquipment-{table}: {item}",
+                Count = 1,
+                SourceTable = "WornEquipment"
+            });
+            itemIndex++;
+        }
+
+        return itemIndex;
+    }
+
+    private string RollWornEquipmentItem(string table, out int dieSize, out int dieRoll)
+    {
+        var entries = table switch
+        {
+            "I" => WornTableI,
+            "II" => WornTableII,
+            "III" => WornTableIII,
+            "IV" => WornTableIV,
+            _ => WornTableI
+        };
+
+        dieSize = entries.Length;
+        dieRoll = _random.Next(1, dieSize + 1);
+        return entries[dieRoll - 1];
+    }
+
+    private static WornEquipmentRule GetWornEquipmentRule(int encounterLevel)
+    {
+        var level = Math.Clamp(encounterLevel, 1, 12);
+        return level switch
+        {
+            1 => new WornEquipmentRule(1, 10, 1, 0, 0, 0, 0, 0, 0, 0),
+            2 => new WornEquipmentRule(2, 20, 2, 0, 0, 0, 0, 0, 0, 0),
+            3 => new WornEquipmentRule(3, 30, 2, 0, 0, 0, 1, 10, 0, 0),
+            4 => new WornEquipmentRule(4, 40, 2, 0, 0, 0, 1, 20, 0, 0),
+            5 => new WornEquipmentRule(5, 50, 2, 0, 0, 0, 1, 30, 0, 0),
+            6 => new WornEquipmentRule(6, 60, 3, 2, 0, 0, 0, 0, 0, 0),
+            7 => new WornEquipmentRule(7, 70, 3, 2, 0, 0, 0, 0, 0, 0),
+            8 => new WornEquipmentRule(8, 80, 0, 3, 0, 0, 0, 0, 1, 20),
+            9 => new WornEquipmentRule(9, 90, 0, 3, 0, 0, 2, 70, 1, 30),
+            10 => new WornEquipmentRule(10, 80, 3, 0, 0, 0, 2, 80, 1, 40),
+            11 => new WornEquipmentRule(11, 90, 3, 0, 0, 0, 2, 90, 1, 50, 1, 10),
+            _ => new WornEquipmentRule(12, 100, 3, 2, 0, 0, 1, 60, 0, 0, 1, 20)
+        };
+    }
+
+    private sealed record WornEquipmentRule(
+        int Level,
+        int BaseChancePercent,
+        int TableIRolls,
+        int TableIIRolls,
+        int TableIIIRolls,
+        int TableIVRolls,
+        int BonusTableIIRolls,
+        int BonusTableIIChancePercent,
+        int BonusTableIIIRolls,
+        int BonusTableIIIChancePercent,
+        int BonusTableIVRolls = 0,
+        int BonusTableIVChancePercent = 0);
+
+    private static readonly string[] WornTableI =
+    {
+        "2 Potions: climbing, flying",
+        "2 Potions: extra-healing, polymorph (self)",
+        "2 Potions: fire resistance, speed",
+        "2 Potions: healing, giant strength",
+        "2 Potions: heroism, invulnerability",
+        "2 Potions: human control, levitation",
+        "2 Potions: super-heroism, animal control",
+        "1 Scroll: 1 Spell (level 1-6)",
+        "1 Scroll: 2 Spells (level 1-4)",
+        "1 Scroll: protection from magic",
+        "1 Ring: mammal control",
+        "1 Ring: protection +1",
+        "1 Armor: leather +1",
+        "1 Shield: +1",
+        "1 Sword: +1 (no special abilities)",
+        "10 Arrows: +1",
+        "4 Bolts: +2",
+        "1 Dagger: +1 (or +2) et al.",
+        "1 Javelin: +2",
+        "1 Mace: +1"
+    };
+
+    private static readonly string[] WornTableII =
+    {
+        "1 Scroll: 3 Spells (level 2-9 or 2-7)",
+        "2 Rings: fire resistance, invisibility",
+        "1 Ring: protection +3",
+        "1 Staff: striking",
+        "1 Wand: illusion",
+        "1 Wand: negation",
+        "Bracers of Defense, AC 4",
+        "Brooch of Shielding",
+        "1 Cloak of Elvenkind",
+        "1 Dust of Appearance",
+        "1 Figurine of Wondrous Power: Serpentine Owl",
+        "3 Javelins of Lightning",
+        "1 Set: Chain Mail +1, Shield +2",
+        "1 Armor: Splint Mail +4",
+        "1 Sword: +3 (no special abilities)",
+        "2 Weapons: Crossbow of Speed, +2 Hammer"
+    };
+
+    private static readonly string[] WornTableIII =
+    {
+        "1 Ring: spell storing",
+        "1 Rod: cancellation",
+        "1 Staff: serpent — python or adder",
+        "1 Bag of Tricks",
+        "1 Boots of Speed",
+        "1 Boots of Striding and Leaping",
+        "1 Cloak of Displacement",
+        "1 Gauntlets of Ogre Power",
+        "1 Pipe of the Sewers",
+        "1 Robe of Blending",
+        "2 Ropes: climbing, entanglement",
+        "1 Set: plate mail +3, shield +2",
+        "1 Shield: +5",
+        "1 Sword: +4, defender",
+        "1 Mace +3",
+        "1 Spear +3"
+    };
+
+    private static readonly string[] WornTableIV =
+    {
+        "1 Ring: djinni summoning",
+        "1 Ring: spell turning",
+        "1 Rod: smiting",
+        "1 Wand: fire",
+        "1 Cube of Force",
+        "1 Eyes of Charming",
+        "1 Horn of Valhalla",
+        "1 Robe of Scintillating Colors",
+        "1 Talisman of either Ultimate Evil or Pure Good",
+        "1 Set: Plate Mail +4, Shield +3",
+        "1 Sword: Wounding",
+        "1 Arrow of Slaying (select character type)"
+    };
 
     private void RollCoins(string label, TreasureRollRule rule, string source, TreasureResult result, Action<int> add, double amountScaleFactor, bool suppressFailedRollLogs)
     {
