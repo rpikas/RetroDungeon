@@ -1361,6 +1361,9 @@ public sealed class CombatResolver
             attacks *= 2;
         if (session.IsPartySlowed(member.Name))
             attacks = Math.Max(1, attacks / 2);
+
+        var isBackstab = IsThiefBackstabAttack(member, session);
+        var backstabMultiplier = isBackstab ? GetThiefBackstabMultiplier(member) : 1;
         // ---------------------------------------------------------
         // ASSASSINATION (AD&D 1e) – korrekt placerad i ResolvePartyAttack
         // ---------------------------------------------------------
@@ -1409,6 +1412,9 @@ public sealed class CombatResolver
         {
             var thac0Modifier = session.IsBlessed(member.Name) ? 1 : 0;
 
+            if (isBackstab)
+                thac0Modifier += 4;
+
             if (member.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.MainHand, out var mainHand)
                 && mainHand != null)
             {
@@ -1453,12 +1459,42 @@ public sealed class CombatResolver
                     : 0;
                 int damage = RollDamage(damageExpression) + strengthDamageBonus;
 
+                if (isBackstab)
+                {
+                    var beforeBackstab = damage;
+                    damage *= backstabMultiplier;
+                    events.Add(new CombatEvent($"{member.Name} backstabs! +4 to hit, damage x{backstabMultiplier} ({beforeBackstab}->{damage})."));
+                }
+
                 if (IsHalfDamageFromSharpWeapons(target, mainHand))
                 {
                     var originalDamage = damage;
                     damage = Math.Max(1, damage / 2);
                     events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
                 }
+
+    private static bool IsThiefBackstabAttack(Character member, CombatSession session)
+    {
+        var isThief = member.Classes.Contains(CharacterClass.Thief)
+                      || member.Class == CharacterClass.Thief;
+
+        return isThief
+               && session.RoundNumber == 1
+               && session.MonstersSurprisedRound1;
+    }
+
+    private static int GetThiefBackstabMultiplier(Character member)
+    {
+        var thiefLevel = member.GetClassLevel(CharacterClass.Thief);
+
+        if (thiefLevel <= 0)
+            return 2;
+
+        if (thiefLevel <= 4) return 2;
+        if (thiefLevel <= 8) return 3;
+        if (thiefLevel <= 12) return 4;
+        return 5; // 13+
+    }
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
