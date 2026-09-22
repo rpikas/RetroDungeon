@@ -1354,3 +1354,6 @@ Thief Level	Multiplikator 1–4	×2 damage 5–8	×3 damage 9–12	×4 damage 13
 _____
 Implement "SpecialAbilities":  Level 3 druid spells, 50% chanse to cast Call Lightning and 50% chanse to cast Summon Insects.
 ____
+
+when encounter a thief, the encounter thief can backstab the party members if they are surprised. 
+The encounter thief gets +4 to hit and deals extra damage according to the same multiplier table as the party thief.
