@@ -2792,23 +2792,28 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return true;
         }
 
-        if (count == 5)
+        // Prefer mixed classes for multi-character encounters, while still allowing duplicates.
+        var requireMixedClasses = count >= 2;
+        if (!requireMixedClasses)
         {
-            for (int reroll = 0; reroll < 100; reroll++)
-            {
-                if (!TryBuildOneSet())
-                    return result;
-
-                if (result.Distinct(StringComparer.OrdinalIgnoreCase).Count() < 5)
-                    break;
-            }
-
+            TryBuildOneSet();
             return result;
         }
 
-        TryBuildOneSet();
+        List<string>? fallback = null;
+        for (int reroll = 0; reroll < 100; reroll++)
+        {
+            if (!TryBuildOneSet())
+                return result;
 
-        return result;
+            fallback ??= new List<string>(result);
+
+            if (result.Distinct(StringComparer.OrdinalIgnoreCase).Count() >= 2)
+                return result;
+        }
+
+        // Fallback if the available class pool at this level is too narrow.
+        return fallback ?? result;
     }
 
     private string? MapCharacterClassRollToMonsterName(int roll, int dungeonLevel)

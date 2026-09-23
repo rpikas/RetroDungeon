@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Adnd.Core.Config;
 using Adnd.Core.Monsters;
 
@@ -121,6 +122,34 @@ public static class MonsterArt
             AddCandidates(sourceFolder2, noCommaSlug, useWizardrySuffix);
             AddCandidates(sourceFolder2, noCommaCamelCase, useWizardrySuffix);
             AddCandidates(sourceFolder2, noComma, useWizardrySuffix);
+        }
+
+        // Character portrait fallback: Lvl 11-16 class art falls back to Lvl10 class art.
+        // Example: "Lvl 15 Assassin" -> "Lvl10Assassin" in Assets/Monsters/Level10.
+        var match = Regex.Match(trimmedName, @"^Lvl\s*(\d+)\s+(.+)$", RegexOptions.IgnoreCase);
+        if (match.Success && int.TryParse(match.Groups[1].Value, out var parsedLevel) && parsedLevel > 10)
+        {
+            var className = match.Groups[2].Value.Trim();
+            if (!string.IsNullOrWhiteSpace(className))
+            {
+                var level10FallbackNames = new[]
+                {
+                    $"Lvl10{className}",
+                    $"Lvl 10 {className}",
+                    $"Lvl10{className.Replace(" ", string.Empty)}"
+                }.Distinct();
+
+                var baseFolder = Path.Combine(baseDir, "Assets", "Monsters", "Level10");
+                var sourceFolder1 = Path.Combine("Adnd.Game", "Assets", "Monsters", "Level10");
+                var sourceFolder2 = Path.Combine("Assets", "Monsters", "Level10");
+
+                foreach (var fallbackName in level10FallbackNames)
+                {
+                    AddCandidates(baseFolder, fallbackName, useWizardrySuffix);
+                    AddCandidates(sourceFolder1, fallbackName, useWizardrySuffix);
+                    AddCandidates(sourceFolder2, fallbackName, useWizardrySuffix);
+                }
+            }
         }
 
         // Fallback: search in root Monsters folder
