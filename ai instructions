@@ -1929,3 +1929,17 @@ ______
 for all charteras in all monster json update to  "NumberOfAppearancesMin":1,"NumberOfAppearancesMax":1
 can you remove the overload you just did and manually edit the json files insted to avoid confusion?
 ____
+I want these messages to be linked to the corresponding picture in Adnd.Game\Assets\Rules\Treasure 
+[06:49:23] Lvl 10 Magic-User #1: lair worn equipment triggered for encounter level 10. 
+[06:49:23]     Magic item #1: WornEquipment Table I d20 1 => 2 Potions: climbing, flying. 
+[06:49:23]     Magic item #2: WornEquipment Table I d20 11 => 1 Ring: mammal control. 
+[06:49:23]     Magic item #3: WornEquipment Table I d20 7 => 2 Potions: super-heroism, animal control. 
+[06:49:23]     Chance roll for WornEquipment level 10 bonus Table II: rolled 0.81131 on [0,1) vs 0.8 => fail
+[06:49:23]     Chance roll for WornEquipment level 10 bonus Table III: rolled 0.830623 on [0,1) vs 0.4 => fail
+
+It should be like this fists use this  PartyMagicItems.png then •	
+Table I → PartyTable1.png •
+Table II → PartyTable2.png •	
+Table III → PartyTable3.png •	
+Table IV → PartyTable4.png
+______

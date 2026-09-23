@@ -7,6 +7,21 @@ public static class RuleApplicationInfo
 {
     public static event Action<string>? InfoPublished;
 
+    public static void PublishLinked(string source, string page, string message)
+    {
+        if (!GameRulesProvider.Current.ShowDiceRollAndRuleApplicationInfo)
+            return;
+
+        if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        var sourcePageText = $"{source}, {page}";
+        if (TryResolveRuleImagePath(source, page, out var imagePath))
+            sourcePageText = $"[[RULEIMG|{sourcePageText}|{imagePath}|{DateTime.Now.Ticks}]]";
+
+        InfoPublished?.Invoke($"[{DateTime.Now:HH:mm:ss}] {sourcePageText}: {message}");
+    }
+
     public static void Publish(string message)
     {
         if (!GameRulesProvider.Current.ShowDiceRollAndRuleApplicationInfo)
@@ -39,9 +54,13 @@ public static class RuleApplicationInfo
     {
         imagePath = string.Empty;
 
-        var sourceToken = (source ?? string.Empty).Trim().Replace(" ", string.Empty);
-        var pageToken = (page ?? string.Empty).Trim().Replace(" ", string.Empty);
+        var sourceRaw = (source ?? string.Empty).Trim();
+        var pageRaw = (page ?? string.Empty).Trim();
+        var sourceToken = sourceRaw.Replace(" ", string.Empty);
+        var pageToken = pageRaw.Replace(" ", string.Empty);
         var fileName = $"{sourceToken}{pageToken}.png";
+        var pageFileName = string.IsNullOrWhiteSpace(pageToken) ? string.Empty : $"{pageToken}.png";
+        var rawPageFileName = string.IsNullOrWhiteSpace(pageRaw) ? string.Empty : $"{pageRaw}.png";
         if (string.IsNullOrWhiteSpace(sourceToken) || string.IsNullOrWhiteSpace(pageToken))
             return false;
 
@@ -57,7 +76,18 @@ public static class RuleApplicationInfo
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", fileName),
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", fileName),
             Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Rules", fileName),
-            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", fileName)
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", fileName),
+
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", "Treasure", pageFileName),
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", "Treasure", rawPageFileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", "Treasure", pageFileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", "Treasure", rawPageFileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", "Treasure", pageFileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", "Treasure", rawPageFileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Rules", "Treasure", pageFileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Rules", "Treasure", rawPageFileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", "Treasure", pageFileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", "Treasure", rawPageFileName)
         };
 
         foreach (var candidate in candidates)

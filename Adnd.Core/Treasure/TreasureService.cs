@@ -23,6 +23,7 @@ public sealed class TreasureService
     {
         var result = new TreasureResult();
         var monsterList = monsters?.ToList() ?? new List<MonsterInstance>();
+        var linkedRuleMessages = new List<(string page, string message)>();
 
         foreach (var group in monsterList.GroupBy(m => string.IsNullOrWhiteSpace(m.GroupId) ? "default" : m.GroupId))
         {
@@ -32,10 +33,10 @@ public sealed class TreasureService
 
             var representative = members[0];
             result.LogLines.Add($"Group {representative.GroupId}: non-individual treasure is rolled once for the whole group ({members.Count} monster(s)).");
-            RollLairTreasure(representative, members.Count, result);
+            RollLairTreasure(representative, members.Count, result, linkedRuleMessages);
 
             foreach (var monster in members)
-                RollIndividualTreasure(monster, result);
+                RollIndividualTreasure(monster, result, linkedRuleMessages);
         }
 
         if (result.LogLines.Count > 0)
@@ -45,12 +46,15 @@ public sealed class TreasureService
                 RuleApplicationInfo.Publish(line);
         }
 
+        foreach (var linked in linkedRuleMessages)
+            RuleApplicationInfo.PublishLinked("Treasure", linked.page, linked.message);
+
         PopulateTotalBucketFromLegacy(result);
 
         return result;
     }
 
-    private void RollLairTreasure(MonsterInstance monster, int groupCount, TreasureResult result)
+    private void RollLairTreasure(MonsterInstance monster, int groupCount, TreasureResult result, List<(string page, string message)> linkedRuleMessages)
     {
         var tokens = ParseTreasureTypes(monster.Template.TreasureType);
         var expectedAverage = GetExpectedAverageGroupSize(monster);
@@ -88,6 +92,7 @@ public sealed class TreasureService
                 monster.DisplayName,
                 monster.Template.DungeonLevel,
                 result,
+                linkedRuleMessages,
                 monster.Template.TreasureChanceOverride,
                 "lair",
                 amountScaleFactor: 1d,
@@ -101,7 +106,7 @@ public sealed class TreasureService
         }
     }
 
-    private void RollIndividualTreasure(MonsterInstance monster, TreasureResult result)
+    private void RollIndividualTreasure(MonsterInstance monster, TreasureResult result, List<(string page, string message)> linkedRuleMessages)
     {
         var tokens = ParseTreasureTypes(monster.Template.IndividualTreasure);
         if (tokens.Count == 0)
@@ -117,6 +122,7 @@ public sealed class TreasureService
                 monster.DisplayName,
                 monster.Template.DungeonLevel,
                 result,
+                linkedRuleMessages,
                 null,
                 "individual",
                 amountScaleFactor: 1d,
@@ -259,6 +265,7 @@ public sealed class TreasureService
         string monsterDisplayName,
         int encounterLevel,
         TreasureResult result,
+        List<(string page, string message)> linkedRuleMessages,
         double? overrideChance,
         string scope,
         double amountScaleFactor,
@@ -282,6 +289,7 @@ public sealed class TreasureService
                 monsterDisplayName,
                 encounterLevel,
                 result,
+                linkedRuleMessages,
                 scope,
                 gemJewelryMagicChanceScaleFactor,
                 suppressFailedRollLogs);
@@ -1095,6 +1103,7 @@ public sealed class TreasureService
         string monsterDisplayName,
         int encounterLevel,
         TreasureResult result,
+        List<(string page, string message)> linkedRuleMessages,
         string scope,
         double chanceScaleFactor,
         bool suppressFailedRollLogs)
@@ -1102,46 +1111,65 @@ public sealed class TreasureService
         var rule = GetWornEquipmentRule(encounterLevel);
         var levelLabel = rule.Level;
 
+        var baseChanceStart = result.LogLines.Count;
         if (!RollChance(rule.BaseChancePercent, $"WornEquipment level {levelLabel} base chance", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
         {
             if (!suppressFailedRollLogs)
                 result.LogLines.Add($"{monsterDisplayName}: {scope} worn equipment level {levelLabel} not found.");
+
+            foreach (var line in result.LogLines.Skip(baseChanceStart).Where(l => l.Contains($"WornEquipment level {levelLabel} base chance", StringComparison.OrdinalIgnoreCase)))
+                linkedRuleMessages.Add(("PartyMagicItems", line));
             return;
         }
 
+        foreach (var line in result.LogLines.Skip(baseChanceStart).Where(l => l.Contains($"WornEquipment level {levelLabel} base chance", StringComparison.OrdinalIgnoreCase)))
+            linkedRuleMessages.Add(("PartyMagicItems", line));
+
         result.LogLines.Add($"{monsterDisplayName}: {scope} worn equipment triggered for encounter level {levelLabel}.");
+        linkedRuleMessages.Add(("PartyMagicItems", $"{monsterDisplayName}: {scope} worn equipment triggered for encounter level {levelLabel}."));
 
         var itemIndex = 1;
-        itemIndex = RollWornTableItems(monsterDisplayName, "I", rule.TableIRolls, itemIndex, result);
-        itemIndex = RollWornTableItems(monsterDisplayName, "II", rule.TableIIRolls, itemIndex, result);
-        itemIndex = RollWornTableItems(monsterDisplayName, "III", rule.TableIIIRolls, itemIndex, result);
-        itemIndex = RollWornTableItems(monsterDisplayName, "IV", rule.TableIVRolls, itemIndex, result);
+        itemIndex = RollWornTableItems(monsterDisplayName, "I", rule.TableIRolls, itemIndex, result, linkedRuleMessages);
+        itemIndex = RollWornTableItems(monsterDisplayName, "II", rule.TableIIRolls, itemIndex, result, linkedRuleMessages);
+        itemIndex = RollWornTableItems(monsterDisplayName, "III", rule.TableIIIRolls, itemIndex, result, linkedRuleMessages);
+        itemIndex = RollWornTableItems(monsterDisplayName, "IV", rule.TableIVRolls, itemIndex, result, linkedRuleMessages);
 
+        var bonusIILogStart = result.LogLines.Count;
         if (rule.BonusTableIIRolls > 0
             && RollChance(rule.BonusTableIIChancePercent, $"WornEquipment level {levelLabel} bonus Table II", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
         {
-            itemIndex = RollWornTableItems(monsterDisplayName, "II", rule.BonusTableIIRolls, itemIndex, result);
+            itemIndex = RollWornTableItems(monsterDisplayName, "II", rule.BonusTableIIRolls, itemIndex, result, linkedRuleMessages);
         }
+        foreach (var line in result.LogLines.Skip(bonusIILogStart).Where(l => l.Contains($"WornEquipment level {levelLabel} bonus Table II", StringComparison.OrdinalIgnoreCase)))
+            linkedRuleMessages.Add(("PartyTable2", line));
 
+        var bonusIIILogStart = result.LogLines.Count;
         if (rule.BonusTableIIIRolls > 0
             && RollChance(rule.BonusTableIIIChancePercent, $"WornEquipment level {levelLabel} bonus Table III", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
         {
-            itemIndex = RollWornTableItems(monsterDisplayName, "III", rule.BonusTableIIIRolls, itemIndex, result);
+            itemIndex = RollWornTableItems(monsterDisplayName, "III", rule.BonusTableIIIRolls, itemIndex, result, linkedRuleMessages);
         }
+        foreach (var line in result.LogLines.Skip(bonusIIILogStart).Where(l => l.Contains($"WornEquipment level {levelLabel} bonus Table III", StringComparison.OrdinalIgnoreCase)))
+            linkedRuleMessages.Add(("PartyTable3", line));
 
+        var bonusIVLogStart = result.LogLines.Count;
         if (rule.BonusTableIVRolls > 0
             && RollChance(rule.BonusTableIVChancePercent, $"WornEquipment level {levelLabel} bonus Table IV", result.LogLines, chanceScaleFactor, suppressFailedRollLogs))
         {
-            _ = RollWornTableItems(monsterDisplayName, "IV", rule.BonusTableIVRolls, itemIndex, result);
+            _ = RollWornTableItems(monsterDisplayName, "IV", rule.BonusTableIVRolls, itemIndex, result, linkedRuleMessages);
         }
+        foreach (var line in result.LogLines.Skip(bonusIVLogStart).Where(l => l.Contains($"WornEquipment level {levelLabel} bonus Table IV", StringComparison.OrdinalIgnoreCase)))
+            linkedRuleMessages.Add(("PartyTable4", line));
     }
 
-    private int RollWornTableItems(string monsterDisplayName, string table, int rolls, int itemIndex, TreasureResult result)
+    private int RollWornTableItems(string monsterDisplayName, string table, int rolls, int itemIndex, TreasureResult result, List<(string page, string message)> linkedRuleMessages)
     {
         for (var i = 0; i < rolls; i++)
         {
             var item = RollWornEquipmentItem(table, out var dieSize, out var dieRoll);
-            result.LogLines.Add($"    Magic item #{itemIndex}: WornEquipment Table {table} d{dieSize} {dieRoll} => {item}.");
+            var line = $"    Magic item #{itemIndex}: WornEquipment Table {table} d{dieSize} {dieRoll} => {item}.";
+            result.LogLines.Add(line);
+            linkedRuleMessages.Add((GetWornEquipmentRulePageForTable(table), line));
 
             RuleApplicationInfo.Publish(
                 "AD&D",
@@ -1163,6 +1191,18 @@ public sealed class TreasureService
         }
 
         return itemIndex;
+    }
+
+    private static string GetWornEquipmentRulePageForTable(string table)
+    {
+        return table switch
+        {
+            "I" => "PartyTable1",
+            "II" => "PartyTable2",
+            "III" => "PartyTable3",
+            "IV" => "PartyTable4",
+            _ => "PartyMagicItems"
+        };
     }
 
     private string RollWornEquipmentItem(string table, out int dieSize, out int dieRoll)
