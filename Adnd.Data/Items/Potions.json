@@ -74,7 +74,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Haste" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Heroism",
@@ -89,7 +90,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Heroism" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Super-Heroism",
@@ -104,7 +106,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Super-Heroism" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Giant Strength",
@@ -119,7 +122,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Giant Strength" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Fire Resistance",
@@ -134,7 +138,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Fire Resistance" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
 
     {
@@ -150,7 +155,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Levitate" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Invulnerability",
@@ -165,7 +171,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Invulnerability" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Regeneration",
@@ -180,7 +187,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Regeneration" ],
       "Rarity": "Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Fire Breath",
@@ -195,7 +203,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Fire Breath" ],
       "Rarity": "Very Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Cold Resistance",
@@ -210,7 +219,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Cold Resistance" ],
       "Rarity": "Very Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Cure Disease",
@@ -225,7 +235,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Cure Disease" ],
       "Rarity": "Uncommon",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Animal Control",
@@ -240,7 +251,8 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Animal Control" ],
       "Rarity": "Very Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
     },
     {
       "Name": "Potion of Undead Control",
@@ -255,7 +267,88 @@
       "AllowedClasses": [ "All" ],
       "SpecialAbilities": [ "Casts Undead Control" ],
       "Rarity": "Very Rare",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Status": "Implemented"
+    },
+    {
+      "Name": "Potion of Climbing",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 300,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Climbing" ],
+      "Rarity": "Rare",
+      "Source": "Adnd",
+      "Status": "Implemented"
+    },
+    {
+      "Name": "Potion of Flying",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 500,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Flying" ],
+      "Rarity": "Very Rare",
+      "Source": "Adnd",
+      "Status": "Implemented"
+    },
+    {
+      "Name": "Potion of Polymorph (Self)",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 800,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Polymorph Self" ],
+      "Rarity": "Very Rare",
+      "Source": "Adnd",
+      "Status": "Implemented"
+    },
+    {
+      "Name": "Potion of Healing",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 100,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": true,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Cure Light Wounds" ],
+      "Rarity": "Uncommon",
+      "Source": "Adnd",
+      "Status": "Implemented"
+    },
+    {
+      "Name": "Potion of Human Control",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 450,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "SpecialAbilities": [ "Casts Human Control" ],
+      "Rarity": "Very Rare",
+      "Source": "Adnd",
+      "Status": "Implemented"
     }
   ]
 }

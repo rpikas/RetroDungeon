@@ -365,6 +365,38 @@
         "AllowedClasses": [ "All" ]
       },
       {
+        "Name": "Ring of Protection +3",
+        "Type": "MagicItem",
+        "Slot": "Ring1",
+        "Cost": 9000,
+        "Weight": 0,
+        "ArmorClassBonus": 3,
+        "IsShopBuyable": false,
+        "Damage": "",
+        "AllowedClasses": [ "All" ],
+        "Rarity": "Very Rare",
+        "Description": "A powerful magical ring that grants superior protection.",
+        "SpecialAbilities": [],
+        "Source": "Adnd",
+        "StockQuantity": 0
+      },
+      {
+        "Name": "Ring of Spell Turning",
+        "Type": "MagicItem",
+        "Slot": "Ring1",
+        "Cost": 45000,
+        "Weight": 0,
+        "ArmorClassBonus": 0,
+        "IsShopBuyable": false,
+        "Damage": "",
+        "AllowedClasses": [ "All" ],
+        "Rarity": "Legendary",
+        "Description": "A ring that can reflect hostile spells back upon the caster.",
+        "SpecialAbilities": [ "Spell Turning" ],
+        "Source": "Adnd",
+        "StockQuantity": 0
+      },
+      {
         "Name": "Ring of Shielding",
         "Type": "MagicItem",
         "Slot": "Ring1",

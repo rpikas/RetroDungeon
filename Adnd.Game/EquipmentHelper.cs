@@ -46,7 +46,7 @@ public static class EquipmentHelper
         // Determine target slot based on item type and properties
         if (item.Type == ItemType.Weapon)
         {
-            if (!string.IsNullOrWhiteSpace(item.FireRate) || item.RequiresAmmo || !string.IsNullOrWhiteSpace(item.AmmoType))
+            if (IsRangedWeaponForEquip(item))
             {
                 targetSlot = EquipmentSlot.Range;
             }
@@ -105,6 +105,31 @@ public static class EquipmentHelper
 
             Console.WriteLine($"\n{c.Name} cannot equip {item.Name}.");
             Console.ReadKey(true);
+        }
+
+        return false;
+    }
+
+    private static bool IsRangedWeaponForEquip(Item item)
+    {
+        if (item.Type != ItemType.Weapon)
+            return false;
+
+        if (item.Slot == EquipmentSlot.Range)
+            return true;
+
+        if (item.RequiresAmmo || !string.IsNullOrWhiteSpace(item.AmmoType))
+            return true;
+
+        var name = item.Name ?? string.Empty;
+        if (name.Contains("Crossbow", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Bow", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Sling", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Javelin", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Dart", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Throwing", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
         }
 
         return false;

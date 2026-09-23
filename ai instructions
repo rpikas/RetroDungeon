@@ -2098,3 +2098,37 @@ update class restrictions for these newly added weapons to strict AD&D 1e values
 
 Bugfix: in this table 2-5 does not mean 2d5, it means 1d4+1 49,9
 ____
+
+Add all the itmes from the WornEquipment tables I, II, III and IV into the .json files as full entries with costs/weights/damage S,M/L and 
+class restrictions to strict AD&D 1e values in one pass.
+
+Dont you think the items in the WornEquipment tables needs to be in Adnd.Data\Itmes\ in the differet json files for the different types of items? 51,3
+Ok, I want the players to be abel to use the items they find, so can you please add them to Adnd.Data\Itmes\ if needed and preferably one json file 
+per Potions (A), Scrolls (B), Rings (C), Rods/Staves/Wands (D), E1, E2, E3, E4, E5, F, G, H
+do •	Option C (clean refactor): create full table files and remove/migrate duplicates from old files.
+do •	Scope 1 (recommended): migrate only items referenced by the current treasure roll tables/resolvers (A, B, C, D, E1–E5, F, G, H).
+start with 1.	A–D (Potions/Scrolls/Rings/Rods-Staves-Wands)
+Keep the tables you added, but when I think about it, maybe it is better to start with the itmes defined in WornEquipment 
+tables I, II, III and IV and make sure they are usable by the players, can you do that? 53,6
+
+after this Magic table Any: rolled 68 on 1d100 => Armor. I expect the armor table to be rolled to find out what armor is 
+found and write the roll for that also in Adnd Rule and Dice info
+only Range items should be equiped in range, like bow, crossbow, sling, javelin, now many items that does not fit as 
+range are marked as range: I get this list in Equip Item dialog Ring of Healing [Range] 54,0
+For example Illustionists can now equip crossbows, that should not be allowed look at this for example
+Weapon Type	Classes Allowed
+Bow (short, long, composite)	Fighter, Ranger, Paladin
+Crossbow (light, heavy)	Fighter, Ranger, Paladin, Thief
+Sling	Cleric, Fighter, Ranger, Paladin
+Javelin	Fighter, Ranger, Paladin
+____
+1. add scrolls for all spells missing.
+
+2. when for example Scroll of 1 Spell (Level 1-6) is found
+first determine what class the spell is roll 1d100
+0-10 Illustionist
+11-70 Magic user
+71-92 Cleric
+93-100 Druid
+Then 1d6 to determine the level.
+Then you have to ranomize one of the avaliabele spells on that level for that class to see what kind of scroll you have found.

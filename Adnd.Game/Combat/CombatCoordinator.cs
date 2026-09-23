@@ -808,6 +808,13 @@ public sealed class CombatCoordinator
                 sb.AppendLine($"    {unassigned}");
         }
 
+        if (magicAward.UnresolvedWornEquipmentEntries.Count > 0)
+        {
+            sb.AppendLine("- Unresolved WornEquipment entries:");
+            foreach (var unresolved in magicAward.UnresolvedWornEquipmentEntries)
+                sb.AppendLine($"    {unresolved}");
+        }
+
         if (wornEquipmentAward.AssignedItems.Count > 0)
         {
             sb.AppendLine("- Worn equipment magic items:");
@@ -919,12 +926,44 @@ public sealed class CombatCoordinator
 
         foreach (var placeholder in placeholders)
         {
+            if (TryResolveSpecificItemsFromPlaceholder(placeholder, allItems, out var specificItems, out var specificResolutionIssue))
+            {
+                if (specificItems.Count == 0)
+                {
+                    var unresolved = specificResolutionIssue ?? $"{placeholder.Table} (no matching item defined)";
+                    result.UnassignedItems.Add(unresolved);
+                    result.UnresolvedWornEquipmentEntries.Add(unresolved);
+                    continue;
+                }
+
+                foreach (var specificItem in specificItems)
+                {
+                    var cloned = CloneItem(specificItem);
+                    if (!TryAssignItemToSurvivors(survivors, cloned, result, ref nextReceiverIndex))
+                        result.UnassignedItems.Add(cloned.Name + " (no one can carry)");
+                }
+
+                continue;
+            }
+
             var rolls = Math.Max(0, placeholder.Count);
             for (int i = 0; i < rolls; i++)
             {
                 var resolvedTable = ResolveAnyMagicTable(placeholder.Table, out var anyRollInfo);
                 if (!string.IsNullOrWhiteSpace(anyRollInfo))
                     RuleApplicationInfo.Publish(anyRollInfo!);
+
+                if (!string.IsNullOrWhiteSpace(anyRollInfo)
+                    && TryRollFromResolvedAnySubtable(resolvedTable, allItems, out var subtableItem, out var subtableRollInfo))
+                {
+                    RuleApplicationInfo.Publish(subtableRollInfo!);
+
+                    var rolledItem = CloneItem(subtableItem!);
+                    if (!TryAssignItemToSurvivors(survivors, rolledItem, result, ref nextReceiverIndex))
+                        result.UnassignedItems.Add(rolledItem.Name + " (no one can carry)");
+
+                    continue;
+                }
 
                 var pool = GetItemPoolForMagicTable(allItems, resolvedTable, miscMagicNames);
                 if (pool.Count == 0)
@@ -962,6 +1001,159 @@ public sealed class CombatCoordinator
         }
 
         return result;
+    }
+
+    private bool TryResolveSpecificItemsFromPlaceholder(
+        TreasureMagicPlaceholderResult placeholder,
+        List<Item> allItems,
+        out List<Item> resolvedItems,
+        out string? issue)
+    {
+        resolvedItems = new List<Item>();
+        issue = null;
+
+        if (!IsWornEquipmentPlaceholder(placeholder))
+            return false;
+
+        var descriptor = ExtractWornEquipmentDescriptor(placeholder.Table);
+        if (string.IsNullOrWhiteSpace(descriptor))
+        {
+            issue = $"{placeholder.Table} (invalid worn-equipment descriptor)";
+            return true;
+        }
+
+        var parts = descriptor
+            .Split(" + ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 0)
+        {
+            issue = $"{descriptor} (invalid worn-equipment bundle)";
+            return true;
+        }
+
+        foreach (var part in parts)
+        {
+            var matched = ResolveSpecificWornEquipmentItem(part, allItems);
+            if (matched == null)
+            {
+                issue = $"{part} (from {descriptor}) (no matching item defined)";
+                return true;
+            }
+
+            resolvedItems.Add(matched);
+        }
+
+        return true;
+    }
+
+    private bool TryRollFromResolvedAnySubtable(string resolvedTable, List<Item> allItems, out Item? item, out string? rollInfo)
+    {
+        item = null;
+        rollInfo = null;
+
+        if (string.IsNullOrWhiteSpace(resolvedTable))
+            return false;
+
+        var key = resolvedTable.Trim().ToLowerInvariant();
+        if (key is not "armor" and not "armour" and not "armor & shields" and not "armour & shields")
+            return false;
+
+        var roll = _random.Next(1, 101);
+        var tableResultName = ResolveArmorAnySubtableName(roll);
+        rollInfo = $"Armor & Shields table (F) d100 {roll:00} => {tableResultName}.";
+
+        item = ResolveSpecificWornEquipmentItem(tableResultName, allItems);
+        if (item != null)
+            return true;
+
+        // If exact canonical mapping is missing, allow caller to use the existing generic pool fallback.
+        return false;
+    }
+
+    private static string ResolveArmorAnySubtableName(int roll)
+    {
+        return roll switch
+        {
+            <= 5 => "Chain Mail +1",
+            <= 9 => "Chain Mail +2",
+            <= 11 => "Chain Mail +3",
+            <= 19 => "Leather Armor +1",
+            <= 26 => "Plate Mail +1",
+            <= 32 => "Plate Mail +2",
+            <= 35 => "Plate Mail +3",
+            <= 37 => "Plate Mail +4",
+            <= 38 => "Plate Mail +5",
+            <= 39 => "Plate Mail of Etherealness",
+            <= 44 => "Plate Mail of Vulnerability",
+            <= 50 => "Ring Mail +1",
+            <= 53 => "Scale Mail +1",
+            <= 60 => "Scale Mail +2",
+            <= 65 => "Splint Mail +1",
+            <= 68 => "Splint Mail +2",
+            <= 69 => "Splint Mail +3",
+            <= 75 => "Studded Leather +1",
+            <= 84 => "Shield +1",
+            <= 89 => "Shield +2",
+            <= 93 => "Shield +3",
+            <= 95 => "Shield +4",
+            <= 96 => "Shield +5",
+            <= 97 => "Shield, large, +1, +4 vs. missiles",
+            _ => "Shield -1, missile attractor"
+        };
+    }
+
+    private Item? ResolveSpecificWornEquipmentItem(string descriptorPart, List<Item> allItems)
+    {
+        if (string.IsNullOrWhiteSpace(descriptorPart))
+            return null;
+
+        var exact = allItems.FirstOrDefault(i => string.Equals(i.Name, descriptorPart, StringComparison.OrdinalIgnoreCase));
+        if (exact != null)
+            return exact;
+
+        if (descriptorPart.Contains(" or ", StringComparison.OrdinalIgnoreCase))
+        {
+            var options = descriptorPart
+                .Split(" or ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+            var candidates = options
+                .Select(option => allItems.FirstOrDefault(i => string.Equals(i.Name, option, StringComparison.OrdinalIgnoreCase))
+                                  ?? allItems.FirstOrDefault(i => string.Equals(NormalizeMatchKey(i.Name), NormalizeMatchKey(option), StringComparison.OrdinalIgnoreCase)))
+                .Where(i => i != null)
+                .Cast<Item>()
+                .ToList();
+
+            if (candidates.Count > 0)
+                return candidates[_random.Next(candidates.Count)];
+
+            return null;
+        }
+
+        var normalized = NormalizeMatchKey(descriptorPart);
+        return allItems.FirstOrDefault(i => string.Equals(NormalizeMatchKey(i.Name), normalized, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsWornEquipmentPlaceholder(TreasureMagicPlaceholderResult placeholder)
+    {
+        if (placeholder == null)
+            return false;
+
+        if (string.Equals(placeholder.SourceTable, "WornEquipment", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return placeholder.Table.StartsWith("WornEquipment-", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string ExtractWornEquipmentDescriptor(string table)
+    {
+        if (string.IsNullOrWhiteSpace(table))
+            return string.Empty;
+
+        var colon = table.IndexOf(':');
+        if (colon < 0 || colon >= table.Length - 1)
+            return table.Trim();
+
+        return table[(colon + 1)..].Trim();
     }
 
     private MagicAwardResult AwardWornEquipmentMagicItems(CombatSession session, List<Character> survivors, int? dungeonLevel)
@@ -1505,6 +1697,7 @@ public sealed class CombatCoordinator
     {
         public List<AssignedMagicItem> AssignedItems { get; } = new();
         public List<string> UnassignedItems { get; } = new();
+        public List<string> UnresolvedWornEquipmentEntries { get; } = new();
     }
 
     private sealed class AssignedMagicItem

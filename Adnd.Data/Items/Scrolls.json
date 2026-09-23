@@ -771,6 +771,62 @@
       "SpecialAbilities": [ "Casts neutralize poison" ],
       "Rarity": "Rare",
       "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of 1 Spell (Level 1-6)",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 1200,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "MagicUser", "Illusionist", "Cleric", "Druid" ],
+      "SpecialAbilities": [ "Casts Random Spell" ],
+      "Rarity": "Rare",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of 2 Spells (Level 1-4)",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 1800,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "MagicUser", "Illusionist", "Cleric", "Druid" ],
+      "SpecialAbilities": [ "Casts Random Spell", "Casts Random Spell" ],
+      "Rarity": "Very Rare",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of 3 Spells (Level 2-9 or 2-7)",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 3000,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "MagicUser", "Illusionist", "Cleric", "Druid" ],
+      "SpecialAbilities": [ "Casts Random Spell", "Casts Random Spell", "Casts Random Spell" ],
+      "Rarity": "Very Rare",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Protection from Magic",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 2000,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": false,
+      "AllowedClasses": [ "MagicUser", "Illusionist", "Cleric", "Druid", "Fighter", "Paladin", "Ranger", "Thief", "Assassin", "Bard", "Monk" ],
+      "SpecialAbilities": [ "Casts Protection from Magic" ],
+      "Rarity": "Very Rare",
+      "Source": "Adnd"
     }
 
   ]
