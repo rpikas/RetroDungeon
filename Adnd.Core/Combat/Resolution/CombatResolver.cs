@@ -1515,6 +1515,40 @@ public sealed class CombatResolver
     {
         var chantOrPrayerBonus = (session.IsChantActive || session.IsPrayerActive) ? 1 : 0;
 
+        var rangedWeapon = member.Equipment.TryGetValue(EquipmentSlot.Range, out var rw) ? rw : null;
+        var ammo = member.Equipment.TryGetValue(EquipmentSlot.Ammo, out var am) ? am : null;
+        var useRanged = rangedWeapon != null
+                        && (!string.IsNullOrWhiteSpace(rangedWeapon.Range)
+                            || !string.IsNullOrWhiteSpace(rangedWeapon.FireRate)
+                            || rangedWeapon.RequiresAmmo
+                            || !string.IsNullOrWhiteSpace(rangedWeapon.AmmoType));
+
+        if (useRanged && rangedWeapon != null)
+        {
+            if (string.Equals((rangedWeapon.FireRate ?? string.Empty).Trim(), "1/2", StringComparison.OrdinalIgnoreCase)
+                && session.RoundNumber % 2 != 0)
+            {
+                events.Add(new CombatEvent($"{member.Name} reloads {rangedWeapon.Name} and cannot fire this round."));
+                return;
+            }
+
+            if (rangedWeapon.RequiresAmmo)
+            {
+                if (ammo == null || ammo.Quantity <= 0)
+                {
+                    events.Add(new CombatEvent($"{member.Name} has no ammo for {rangedWeapon.Name}."));
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(rangedWeapon.AmmoType)
+                    && !string.Equals(rangedWeapon.AmmoType, ammo.AmmoType, StringComparison.OrdinalIgnoreCase))
+                {
+                    events.Add(new CombatEvent($"{member.Name} has incompatible ammo for {rangedWeapon.Name}."));
+                    return;
+                }
+            }
+        }
+
         var hasImprovedInvisibility = session.GetImprovedInvisibilityRounds(member.Name) > 0;
         if (!hasImprovedInvisibility
             && member.HasStatus(CharacterStatus.Invisible)
@@ -1560,7 +1594,9 @@ public sealed class CombatResolver
         if (target is null)
             return;
 
-        int attacks = GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
+        int attacks = useRanged && rangedWeapon != null
+            ? GetRangedAttacksPerRound(rangedWeapon.FireRate, session.RoundNumber)
+            : GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
         if (session.IsHasted(member.Name))
             attacks *= 2;
         if (session.IsPartySlowed(member.Name))
@@ -1617,6 +1653,12 @@ public sealed class CombatResolver
             {
                 mainHand = equipped;
                 thac0Modifier += Math.Max(0, mainHand.ToHitBonus);
+            }
+
+            if (useRanged && rangedWeapon != null)
+            {
+                mainHand = rangedWeapon;
+                thac0Modifier += Math.Max(0, rangedWeapon.ToHitBonus);
             }
 
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
@@ -1684,6 +1726,12 @@ public sealed class CombatResolver
             var actualDamageToTarget = before - target.CurrentHitPoints;
             WakeMonsterIfAsleepAfterDamage(target, actualDamageToTarget, events);
 
+            if (useRanged && rangedWeapon != null && rangedWeapon.RequiresAmmo && ammo != null && ammo.Quantity > 0)
+            {
+                ammo.Quantity = Math.Max(0, ammo.Quantity - 1);
+                events.Add(new CombatEvent($"{member.Name} uses 1 {ammo.Name}. {ammo.Quantity} remaining."));
+            }
+
             var weaponName = mainHand != null ? mainHand.Name : "bare hands";
             var damageFormula = strengthDamageBonus == 0
                 ? damageExpression
@@ -1702,6 +1750,21 @@ public sealed class CombatResolver
                 break;
             }
         }
+    }
+
+    private static int GetRangedAttacksPerRound(string? fireRate, int roundNumber)
+    {
+        var rate = (fireRate ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(rate))
+            return 1;
+
+        if (string.Equals(rate, "1/2", StringComparison.OrdinalIgnoreCase))
+            return roundNumber % 2 == 0 ? 1 : 0;
+
+        if (int.TryParse(rate, out var parsed) && parsed > 0)
+            return parsed;
+
+        return 1;
     }
 
     private static bool IsThiefBackstabAttack(Character member, CombatSession session)

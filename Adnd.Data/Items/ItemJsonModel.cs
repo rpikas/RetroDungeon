@@ -7,6 +7,7 @@ public class ItemJsonModel
     public string Type { get; set; } = "";
     public string Slot { get; set; } = "";
     public int Cost { get; set; }
+    public int CostSilverPieces { get; set; } = 0;
     public int Weight { get; set; } = 0;
     public int ToHitBonus { get; set; } = 0;
     public bool IsShopBuyable { get; set; } = true;
@@ -19,6 +20,10 @@ public class ItemJsonModel
     public string WeaponLength { get; set; } = "";
     public bool IsTwoHanded { get; set; } = false;
     public string Range { get; set; } = "";
+    public string FireRate { get; set; } = "1";
+    public bool RequiresAmmo { get; set; } = false;
+    public string AmmoType { get; set; } = "";
+    public int Quantity { get; set; } = 0;
     public int MagicBonus { get; set; } = 0;
     public List<string> SpecialAbilities { get; set; } = new();
     public bool IsCursed { get; set; } = false;

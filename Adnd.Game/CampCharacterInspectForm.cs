@@ -630,11 +630,27 @@ public sealed class CampCharacterInspectForm : Form
         EquipmentSlot? targetSlot = null;
         if (item.Type == ItemType.Weapon)
         {
-            var slotChoice = PromptChoice("Equip Weapon To", new List<string> { "Main Hand", "Off Hand" });
-            if (!slotChoice.HasValue)
-                return;
+            var isRangedWeapon = !string.IsNullOrWhiteSpace(item.FireRate)
+                                 || item.RequiresAmmo
+                                 || !string.IsNullOrWhiteSpace(item.AmmoType)
+                                 || !string.IsNullOrWhiteSpace(item.Range);
 
-            targetSlot = slotChoice.Value == 0 ? EquipmentSlot.MainHand : EquipmentSlot.OffHand;
+            if (isRangedWeapon)
+            {
+                targetSlot = EquipmentSlot.Range;
+            }
+            else
+            {
+                var slotChoice = PromptChoice("Equip Weapon To", new List<string> { "Main Hand", "Off Hand" });
+                if (!slotChoice.HasValue)
+                    return;
+
+                targetSlot = slotChoice.Value == 0 ? EquipmentSlot.MainHand : EquipmentSlot.OffHand;
+            }
+        }
+        else if (item.Type == ItemType.Misc && item.Quantity > 0 && !string.IsNullOrWhiteSpace(item.AmmoType))
+        {
+            targetSlot = EquipmentSlot.Ammo;
         }
         else if (item.Type == ItemType.Shield)
         {
@@ -669,7 +685,20 @@ public sealed class CampCharacterInspectForm : Form
     private static string GetDisplaySlot(Item item)
     {
         if (item.Type == ItemType.Weapon)
+        {
+            var isRangedWeapon = !string.IsNullOrWhiteSpace(item.FireRate)
+                                 || item.RequiresAmmo
+                                 || !string.IsNullOrWhiteSpace(item.AmmoType)
+                                 || !string.IsNullOrWhiteSpace(item.Range);
+
+            if (isRangedWeapon)
+                return "Range";
+
             return "MainHand/OffHand";
+        }
+
+        if (item.Type == ItemType.Misc && item.Quantity > 0 && !string.IsNullOrWhiteSpace(item.AmmoType))
+            return "Ammo";
 
         if (item.Type == ItemType.Shield)
             return "OffHand";

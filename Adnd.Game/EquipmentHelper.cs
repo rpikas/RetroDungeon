@@ -46,20 +46,31 @@ public static class EquipmentHelper
         // Determine target slot based on item type and properties
         if (item.Type == ItemType.Weapon)
         {
-            // Weapons: prompt user to choose MainHand or OffHand
-            Console.WriteLine("\nEquip to:");
-            Console.WriteLine("1. Main Hand");
-            Console.WriteLine("2. Off Hand");
-            Console.Write("Choose slot: ");
-            var slotChoice = InputHelper.ReadNumber(1, 2);
-            if (slotChoice.HasValue)
+            if (!string.IsNullOrWhiteSpace(item.FireRate) || item.RequiresAmmo || !string.IsNullOrWhiteSpace(item.AmmoType))
             {
-                targetSlot = slotChoice.Value == 1 ? EquipmentSlot.MainHand : EquipmentSlot.OffHand;
+                targetSlot = EquipmentSlot.Range;
             }
             else
             {
-                return false;
+                // Weapons: prompt user to choose MainHand or OffHand
+                Console.WriteLine("\nEquip to:");
+                Console.WriteLine("1. Main Hand");
+                Console.WriteLine("2. Off Hand");
+                Console.Write("Choose slot: ");
+                var slotChoice = InputHelper.ReadNumber(1, 2);
+                if (slotChoice.HasValue)
+                {
+                    targetSlot = slotChoice.Value == 1 ? EquipmentSlot.MainHand : EquipmentSlot.OffHand;
+                }
+                else
+                {
+                    return false;
+                }
             }
+        }
+        else if (item.Type == ItemType.Misc && item.Quantity > 0 && !string.IsNullOrWhiteSpace(item.AmmoType))
+        {
+            targetSlot = EquipmentSlot.Ammo;
         }
         else if (item.Type == ItemType.Shield)
         {

@@ -899,7 +899,7 @@
             ],
             "BaseXPValue": 5000,
             "XPValuePerHitPoint": 10,
-            "TreasureType": "R",
+            "TreasureType": "F",
             "Information": "Former Magic-User (12th Level)",
             "Source": "Adnd"
         },

@@ -2502,6 +2502,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         var firstGroupRoll = RollDungeonMonsterForLevelWithCount(_currentDungeonLevel);
         var monsterName = firstGroupRoll?.MonsterName;
+
+        if (_currentDungeonLevel == 10)
+        {
+            for (var reroll = 0; reroll < 10 && string.Equals(monsterName, "No Encounter", StringComparison.OrdinalIgnoreCase); reroll++)
+            {
+                firstGroupRoll = RollDungeonMonsterForLevelWithCount(_currentDungeonLevel);
+                monsterName = firstGroupRoll?.MonsterName;
+            }
+        }
+
         if (string.IsNullOrWhiteSpace(monsterName))
             monsterName = LevelOneMonsters[_random.Next(LevelOneMonsters.Length)];
 

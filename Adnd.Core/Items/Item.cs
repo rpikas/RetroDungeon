@@ -9,6 +9,7 @@ public class Item
     public ItemType Type { get; set; }
     public EquipmentSlot? Slot { get; set; } // null = cannot equip (potions etc.)
     public int Cost { get; set; } = 0;
+    public int CostSilverPieces { get; set; } = 0; // optional explicit SP cost; when 0, Cost is treated as GP
     public int Weight { get; set; } = 0;
     public int ToHitBonus { get; set; } = 0;
     public bool IsShopBuyable { get; set; } = true;
@@ -23,6 +24,10 @@ public class Item
     public string WeaponLength { get; set; } = ""; // e.g. "short", "medium", "long". TBD: should be enum
     public bool IsTwoHanded { get; set; } = false;
     public string Range { get; set; } = ""; // e.g. for thrown or ranged weapons. Format: "10/20/30" for short/medium/long
+    public string FireRate { get; set; } = "1"; // e.g. 1,2,3,1/2
+    public bool RequiresAmmo { get; set; } = false;
+    public string AmmoType { get; set; } = ""; // e.g. Arrow, BoltLight, BoltHeavy, SlingBullet, SlingStone
+    public int Quantity { get; set; } = 0; // for ammo items kept in Ammo slot
     /*
 Intervall	Avstånd	            Modifiering
 Short Range	upp till 10 fot	+0  (ingen penalty)

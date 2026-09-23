@@ -641,11 +641,10 @@ public sealed class EncounterForm : Form
         var rank = GetActionableRank(_currentIndex);
         var options = new List<ViewerPromptOption>();
 
-        // The back three may not swing; the keyboard refuses it with a dialog, so it is simply not
-        // offered here rather than being offered and then denied.
-        if (rank is >= 1 and <= 3)
+        // Front rank can always fight. Back rank can fight only with equipped ranged setup.
+        if (rank is >= 1 and <= 3 || (rank is >= 4 and <= 6 && CanUseRanged(character)))
         {
-            options.Add(new ViewerPromptOption("fight", "Fight"));
+            options.Add(new ViewerPromptOption("fight", rank is >= 4 and <= 6 ? "Shoot" : "Fight"));
 
             // Every living monster, as something to POINT AT rather than a button to read. An option with a
             // Target makes the viewer light that figure up and take the click there, so choosing who to hit
@@ -680,8 +679,7 @@ public sealed class EncounterForm : Form
 
         options.Add(new ViewerPromptOption("parry", "Parry"));
 
-        // The same button for the back three, so Auto answers for EVERY character rather than three of six.
-        // For them it parries, which is all they can do without spending something.
+        // The same button for the back three; if no ranged setup, they auto-parry.
         if (rank is < 1 or > 3)
             options.Add(new ViewerPromptOption("confirm", "Auto: parry"));
 
@@ -730,7 +728,7 @@ public sealed class EncounterForm : Form
                 // plain, because sharing the blows around is what "get on with it" should mean with several
                 // monsters standing; with one left there is nothing to spread and it simply hits that one.
                 var rank = GetActionableRank(_currentIndex);
-                if (rank is >= 1 and <= 3)
+                if (rank is >= 1 and <= 3 || (rank is >= 4 and <= 6 && CanUseRanged(_party[_currentIndex])))
                 {
                     ChooseFight(spread: true);
                 }
@@ -743,10 +741,10 @@ public sealed class EncounterForm : Form
             case Keys.F:
             {
                 var rank = GetActionableRank(_currentIndex);
-                if (rank is >= 1 and <= 3)
+                if (rank is >= 1 and <= 3 || (rank is >= 4 and <= 6 && CanUseRanged(_party[_currentIndex])))
                     ChooseAction(CombatActionType.Fight);
                 else
-                    SayOnBoth("Action not allowed", "Only the first three living characters may choose Fight.");
+                    SayOnBoth("Action not allowed", "Rows 4-6 need equipped ranged weapon and ammo to fight.");
                 break;
             }
             case Keys.P:
@@ -803,7 +801,11 @@ public sealed class EncounterForm : Form
         if (!IsActionable(character)) return;
 
         var rank = GetActionableRank(_currentIndex);
-        if (rank is < 1 or > 3) return;   // the back three may not swing; the prompt never offered it
+        if (rank is < 1 or > 3)
+        {
+            if (!CanUseRanged(character))
+                return;
+        }
 
         var action = CombatAction.OfType(CombatActionType.Fight);
         action.SpreadTargets = spread;
@@ -823,6 +825,33 @@ public sealed class EncounterForm : Form
 
         _actions[character.Name] = action;
         AdvanceActor();
+    }
+
+    private static bool CanUseRanged(Character character)
+    {
+        if (!character.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.Range, out var ranged)
+            || ranged == null)
+            return false;
+
+        var looksRanged = !string.IsNullOrWhiteSpace(ranged.Range)
+                          || !string.IsNullOrWhiteSpace(ranged.FireRate)
+                          || ranged.RequiresAmmo
+                          || !string.IsNullOrWhiteSpace(ranged.AmmoType);
+        if (!looksRanged)
+            return false;
+
+        if (!ranged.RequiresAmmo)
+            return true;
+
+        if (!character.Equipment.TryGetValue(Adnd.Core.Items.EquipmentSlot.Ammo, out var ammo)
+            || ammo == null)
+            return false;
+
+        if (!string.IsNullOrWhiteSpace(ranged.AmmoType)
+            && !string.Equals(ranged.AmmoType, ammo.AmmoType, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        return ammo.Quantity > 0;
     }
 
     private void ChooseDispellUndeadAction()

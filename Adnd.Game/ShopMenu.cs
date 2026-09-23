@@ -147,7 +147,7 @@ public class ShopMenu
                     var notEquipableTag = shopper != null && !IsEquipableBy(shopper, it) ? " - (Not Equipable)" : string.Empty;
                     var stockText = GetStockDisplay(it);
                     var label = GetShopLabel(i - startIndex);
-                    Console.WriteLine($"{label}. {it.Name}{notEquipableTag} - Cost: {it.Cost} gp - Stock: {stockText}");
+                    Console.WriteLine($"{label}. {it.Name}{notEquipableTag} - Cost: {Shop.FormatCost(it)} - Stock: {stockText}");
             }
 
             Console.WriteLine("\nB)uy Items");

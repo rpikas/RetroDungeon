@@ -1943,3 +1943,158 @@ Table II → PartyTable2.png •
 Table III → PartyTable3.png •	
 Table IV → PartyTable4.png
 ______
+If NO ENCOUNTER in level 10, reroll
+
+If WornEquipment treasure found on level 13 or higher level, then
+100% 3 items from Table1
+100% 2 items from Table2
+100% 1 items from Table3
+60% 1 items from Table4
+
+I want to introduce ranged weapons.
+I want two new slots for the charaters: Range and Ammo
+I want attribute Fire Rate to be defined for the ranged weapons from Adnd added.
+I want attribute quantity  to be defined for the ammo weapons from Adnd added.
+Create a new json file with all these ranged weapons that goes into the range slot.
+Weapon	Fire Rate
+Axe, hand	1
+Bow, composite, long	2
+Bow, composite, short	2
+Bow, long	2
+Bow, short	2
+Club	1
+Crossbow, heavy	½
+Crossbow, light	1
+Dagger	2
+Dart	3
+Hammer	1
+Javelin	1
+Sling	1
+Spear	1
+Some ranged weapons require Ammunition, some do not, define what Ammunition that belongs to which ranged weapon.
+For those that require ammo, the ammo should be defined in the ammo slot. 
+The ammo should have a quantity attribute defined. 
+For example, a bow requires arrows as ammo, and the quantity of arrows should be defined in the ammo slot.
+Also add the ammunition to json file.
+Party members in position 4,5 and 6 can not use attack but should get the option 
+Make it possible to pay with gold even if it cost sp, 10sp=1gp
+
+Use this table to define the ranged weapons and their attributes
+Weapon	Weight in gp	Damage S,M	Damage L
+Arrow	2	1-6	1-6
+Axe, Battle	75	1-8	1-8
+Axe, Hand or throwing	50	1-6	1-4
+Bardiche	125	2-8	3-12
+Bec de corbin	100	1-8	1-6
+Bill-Guisarme	150	2-8	1-10
+Bo Stick	15	1-6	1-3
+Club	30	1-6	1-3
+Dagger	10	1-4	1-3
+Dart	5	1-3	1-2
+Fauchard	60	1-6	1-8
+Fauchard-Fork	80	1-8	1-10
+Flail, footsman's	150	2-7	2-8
+Flail, horseman's	35	2-5	2-5
+Fork, Military	75	1-8	2-8
+Glaive	75	1-6	1-10
+Glaive - Guisarme	100	2-8	2-12
+Guisarme	80	2-8	1-8
+Guisarme-Voulge	150	2-8	2-8
+Holberd	175	1-10	2-12
+Hammer, Lucern	150	2-8	1-6
+Hammer	50	2-5	1-4
+Javelin	20	1-6	1-6
+Jo Stick	40	1-6	1-4
+Lance* (light horse)	50	1-6	1-8
+Lance* (medium horse)	100	2-7	2-12
+Lance* (heavy horse)	150	3-9	3-18
+Mace, footman's	100	2-7	1-6
+Mace, horseman's	50	1-6	1-4
+Morning Star	125	2-8	2-7
+Partisan	80	1-6	2-7
+Pick, Military, footman's	60	2-7	2-8
+Pick, Military, horseman's	40	2-5	1-4
+Pike, Awl	80	1-6	1-12
+Quarrel (or Bolt), light	1	1-4	1-4
+Quarrel (or Bolt), heavy	2	2-5	2-7
+Ranseur	50	2-8	2-8
+Scimitar	40	1-8	1-8
+Sling bullet	2	2-5	2-7
+Sling stone	1	1-4	1-4
+Spear**	40-60	1-6	1-8
+Spetum	50	2-7	2-12
+Staff, Quarter	50	1-6	1-6
+Sword, Bastard	100	2-8	2-16
+Sword, Broad	75	2-8	2-7
+Sword, Long	60	1-8	1-12
+Sword, Short	35	1-6	1-8
+Sword, Two-handed	250	1-10	3-18
+Trident	50	2-7	3-12
+Voulge	125	2-8	2-8
+
+Here are the costs
+Arrow, normal, single	2 s.p.
+Arrow, normal, dozen	1 g.p.
+Arrow, silver, single	1 g.p.
+Axe, battle	5 g.p.
+Axe, hand or throwing	1 g.p.
+Bardiche	7 g.p.
+Bec de corbin	6 g.p.
+Bill-Guisarme	6 g.p.
+Bow, composite short	75 g.p.
+Bow, composite, long	100 g.p.
+Bow, long	60 g.p.
+Bow, short	15 g.p.
+Crossbow, heavy	20 g.p.
+Crossbow, light	12 g.p.
+Dagger and scabbard	2 g.p.
+Dart	5 s.p.
+Fauchard	3 g.p.
+Fauchard - Fork	8 g.p.
+Flail, footman's	3 g.p.
+Flail, horseman's	8 g.p.
+Fork, Military	4 g.p.
+Glaive	6 g.p.
+Glaive-Guisarme	10 g.p.
+Guisarme	5 g.p.
+Guisarme - Voulge	7 g.p.
+Halberd	9 g.p.
+Hammer, Lucern	7 g.p.
+Hammer	1 g.p.
+Javelin	10 s.p.
+Lance	6 g.p.
+Mace, footman's	8 g.p.
+Mace, horseman's	4 g.p.
+Morning Star	5 g.p.
+Partisan	10 g.p.
+Pick, Military, footman's	8 g.p.
+Pick, Military, horseman's	5 g.p.
+Pike, awl	3 g.p.
+Quarrel (or Bolt), light, single	1 s.p.
+Quarrel (or Bolt), heavy, score	2 g.p.
+Ranseur	4 g.p.
+Scimitar	15 g.p.
+Sling & Bullets, dozen	15 s.p.
+Sling Bullets, score	10 s.p.
+Spear	1 g.p.
+Spetum	3 g.p.
+Sword, bastard, & scabbard	25 g.p.
+Sword, broad, & scabbard	10 g.p.
+Sword, long & scabbard	15 g.p.
+Sword, short & scabbard	8 g.p.
+Sword, two-handed	30 g.p.
+Trident	4 g.p.
+Voulge	2 g.p.
+47,9
+Bugfix: When equipping for example Heavy Crossbow from chatater inspect in dungeon it should go into Range slot, not Main hand or Off hand 
+Update all prices, weights damage to M and damage to L also for weapons not ranged.48,5
+
+In the shop the prices should be shown in gp, sp and cp if needed. If it only costs gp, no need to write sp or cp. 1gp=10sp=100cp. 
+
+Automatically exhange all cp, sp, ep and pp into gp when entering town 2ep=1gp , 1pp=10gp, 1sp=0.1gp, 1cp=0.01gp. 49,0
+
+Add all missing weapons from your table into Weapons.json as full entries (with costs/weights/damage S,M/L).
+update class restrictions for these newly added weapons to strict AD&D 1e values in one pass. 49,5
+
+Bugfix: in this table 2-5 does not mean 2d5, it means 1d4+1 49,9
+____

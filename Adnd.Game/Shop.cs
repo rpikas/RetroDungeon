@@ -18,6 +18,32 @@ namespace Adnd.Game;
 
 public static class Shop
 {
+    public static int CostInSilverPieces(Item item)
+    {
+        if (item == null)
+            return 0;
+
+        return item.CostSilverPieces > 0
+            ? Math.Max(0, item.CostSilverPieces)
+            : Math.Max(0, item.Cost * 10);
+    }
+
+    public static string FormatCostFromSilverPieces(int totalSp)
+    {
+        totalSp = Math.Max(0, totalSp);
+
+        var gp = totalSp / 10;
+        var sp = totalSp % 10;
+
+        if (sp == 0)
+            return $"{gp} gp";
+
+        return $"{gp} gp {sp} sp";
+    }
+
+    public static string FormatCost(Item item)
+        => FormatCostFromSilverPieces(CostInSilverPieces(item));
+
     /// <summary>
     /// What is on the shelves: buyable, and not sold out. The cap (formerly 52) is now raised to allow up to
     /// 9999 different items so both surfaces see the same shop rather than the table quietly stocking more
@@ -65,6 +91,7 @@ public static class Shop
         Type = it.Type,
         Slot = it.Slot,
         Cost = it.Cost,
+        CostSilverPieces = it.CostSilverPieces,
         Weight = it.Weight,
         ToHitBonus = it.ToHitBonus,
         Status = it.Status,
@@ -73,6 +100,11 @@ public static class Shop
         ArmorClassBonus = it.ArmorClassBonus,
         Damage = it.Damage,
         DamageVsLarge = it.DamageVsLarge,
+        Range = it.Range,
+        FireRate = it.FireRate,
+        RequiresAmmo = it.RequiresAmmo,
+        AmmoType = it.AmmoType,
+        Quantity = it.Quantity,
         AllowedClasses = new List<CharacterClass>(it.AllowedClasses),
         SpecialAbilities = new List<string>(it.SpecialAbilities)
     };
@@ -90,8 +122,10 @@ public static class Shop
         if (!InStock(shelfItem))
             return $"{shelfItem.Name} is out of stock.";
 
-        if (buyer.GoldPieces < shelfItem.Cost)
-            return $"{buyer.Name} cannot afford {shelfItem.Name} ({shelfItem.Cost} gp).";
+        var priceSp = CostInSilverPieces(shelfItem);
+        var availableSp = ToSilverPieces(buyer);
+        if (availableSp < priceSp)
+            return $"{buyer.Name} cannot afford {shelfItem.Name} ({FormatCostFromSilverPieces(priceSp)}).";
 
         var purchased = CopyOf(shelfItem);
 
@@ -101,12 +135,38 @@ public static class Shop
         if (!items.TryAdjustStock(shelfItem.Name, -1))
             return $"Boltac cannot find another {shelfItem.Name}.";
 
-        buyer.GoldPieces -= shelfItem.Cost;
+        SubtractSilverPieces(buyer, priceSp);
         buyer.TryReceiveItem(purchased);
         characters.Save(buyer);
         parties.Save(party);
 
-        return $"{buyer.Name} buys {shelfItem.Name} for {shelfItem.Cost} gp, and has {buyer.GoldPieces} left.";
+        return $"{buyer.Name} buys {shelfItem.Name} for {FormatCostFromSilverPieces(priceSp)}.";
+    }
+
+    private static int ToSilverPieces(Character c)
+    {
+        checked
+        {
+            return c.CopperPieces / 10
+                   + c.SilverPieces
+                   + (c.ElectrumPieces * 5)
+                   + (c.GoldPieces * 10)
+                   + (c.PlatinumPieces * 50);
+        }
+    }
+
+    private static void SubtractSilverPieces(Character c, int costSp)
+    {
+        var remaining = Math.Max(0, ToSilverPieces(c) - Math.Max(0, costSp));
+
+        c.PlatinumPieces = remaining / 50;
+        remaining %= 50;
+        c.GoldPieces = remaining / 10;
+        remaining %= 10;
+        c.ElectrumPieces = remaining / 5;
+        remaining %= 5;
+        c.SilverPieces = remaining;
+        c.CopperPieces = 0;
     }
 
     /// <summary>

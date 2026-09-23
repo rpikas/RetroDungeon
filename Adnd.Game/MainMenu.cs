@@ -60,6 +60,7 @@ public class MainMenu
         while (true)
         {
             RestoreDailySpellPointsInTown();
+            ExchangePartyCoinsToGoldInTown();
 
             // Back at the hub: put the party on the town board, where they last stood. Publishing on every
             // pass through the loop keeps the table right after any location returns, with no per-menu hooks.
@@ -148,6 +149,46 @@ public class MainMenu
                 case ConsoleKey.Enter:
                     return;
             }
+        }
+
+    }
+
+    private void ExchangePartyCoinsToGoldInTown()
+    {
+        var party = _partyRepo.Load();
+        if (party.Members.Count == 0)
+            return;
+
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var memberName in party.Members)
+        {
+            if (!roster.TryGetValue(memberName, out var character))
+                continue;
+
+            if (character.CopperPieces == 0
+                && character.SilverPieces == 0
+                && character.ElectrumPieces == 0
+                && character.PlatinumPieces == 0)
+            {
+                continue;
+            }
+
+            // 1 gp = 10 sp = 100 cp, 1 ep = 5 sp = 0.5 gp, 1 pp = 10 gp
+            var totalCopperValue =
+                (character.GoldPieces * 100)
+                + (character.PlatinumPieces * 1000)
+                + (character.ElectrumPieces * 50)
+                + (character.SilverPieces * 10)
+                + character.CopperPieces;
+
+            character.GoldPieces = Math.Max(0, totalCopperValue / 100);
+            character.CopperPieces = 0;
+            character.SilverPieces = 0;
+            character.ElectrumPieces = 0;
+            character.PlatinumPieces = 0;
+
+            _charRepo.Save(character);
         }
     }
 

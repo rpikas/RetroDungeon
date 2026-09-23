@@ -92,12 +92,12 @@ public sealed class ShopSession
 
         foreach (var it in Shop.Stock(_items))
         {
-            var note = it.Cost > shopper.GoldPieces ? "too dear"
+            var note = Shop.CostInSilverPieces(it) > (shopper.CopperPieces / 10 + shopper.SilverPieces + shopper.ElectrumPieces * 5 + shopper.GoldPieces * 10 + shopper.PlatinumPieces * 50) ? "too dear"
                      : !shopper.CanCarry(Shop.CopyOf(it)) ? "too heavy"
                      : !Shop.IsEquipableBy(shopper, it) ? "cannot use"
                      : "";
 
-            wares.Add(new { Id = it.Name, it.Name, Price = it.Cost + " gp", Note = note, Side = ViewerIds.ShopSide });
+            wares.Add(new { Id = it.Name, it.Name, Price = Shop.FormatCost(it), Note = note, Side = ViewerIds.ShopSide });
         }
 
         for (var i = 0; i < shopper.Inventory.Count; i++)
@@ -138,10 +138,11 @@ public sealed class ShopSession
 
         foreach (var it in Shop.Stock(_items))
         {
-            if (it.Cost > shopper.GoldPieces) continue;
+            var availableSp = shopper.CopperPieces / 10 + shopper.SilverPieces + shopper.ElectrumPieces * 5 + shopper.GoldPieces * 10 + shopper.PlatinumPieces * 50;
+            if (Shop.CostInSilverPieces(it) > availableSp) continue;
             if (!shopper.CanCarry(Shop.CopyOf(it))) continue;
 
-            options.Add(new ViewerPromptOption("take:" + it.Name, $"Buy {it.Name} ({it.Cost} gp)",
+            options.Add(new ViewerPromptOption("take:" + it.Name, $"Buy {it.Name} ({Shop.FormatCost(it)})",
                                               Target: ViewerIds.Ware(ViewerIds.ShopSide, it.Name)));
         }
 

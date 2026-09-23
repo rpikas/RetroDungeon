@@ -6,8 +6,19 @@ namespace Adnd.Core.Characters;
 
 public static class EquipmentManager
 {
+    private static void EnsureEquipmentSlots(Character c)
+    {
+        foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
+        {
+            if (!c.Equipment.ContainsKey(slot))
+                c.Equipment[slot] = null;
+        }
+    }
+
     public static bool Equip(Character c, Item item)
     {
+        EnsureEquipmentSlots(c);
+
         if (item.Slot == null)
             return false;
 
@@ -42,6 +53,8 @@ public static class EquipmentManager
 
     public static bool Unequip(Character c, EquipmentSlot slot)
     {
+        EnsureEquipmentSlots(c);
+
         if (c.Equipment[slot] == null)
             return false;
 
@@ -59,6 +72,8 @@ public static class EquipmentManager
 
     private static void RecalculateDamage(Character c)
     {
+        EnsureEquipmentSlots(c);
+
         var mainHandWeapon = c.Equipment[EquipmentSlot.MainHand];
         var offHandWeapon = c.Equipment[EquipmentSlot.OffHand];
 

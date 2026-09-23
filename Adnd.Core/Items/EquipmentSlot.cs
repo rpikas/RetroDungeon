@@ -9,6 +9,8 @@ public enum EquipmentSlot
     Hands,
     MainHand,
     OffHand,
+    Range,
+    Ammo,
     Ring1,
     Ring2,
     Neck,

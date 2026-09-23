@@ -1223,7 +1223,7 @@ public sealed class TreasureService
 
     private static WornEquipmentRule GetWornEquipmentRule(int encounterLevel)
     {
-        var level = Math.Clamp(encounterLevel, 1, 12);
+        var level = Math.Clamp(encounterLevel, 1, 13);
         return level switch
         {
             1 => new WornEquipmentRule(1, 10, 1, 0, 0, 0, 0, 0, 0, 0),
@@ -1237,7 +1237,8 @@ public sealed class TreasureService
             9 => new WornEquipmentRule(9, 90, 0, 3, 0, 0, 2, 70, 1, 30),
             10 => new WornEquipmentRule(10, 80, 3, 0, 0, 0, 2, 80, 1, 40),
             11 => new WornEquipmentRule(11, 90, 3, 0, 0, 0, 2, 90, 1, 50, 1, 10),
-            _ => new WornEquipmentRule(12, 100, 3, 2, 0, 0, 1, 60, 0, 0, 1, 20)
+            12 => new WornEquipmentRule(12, 100, 3, 2, 0, 0, 1, 60, 0, 0, 1, 20),
+            _ => new WornEquipmentRule(13, 100, 3, 2, 1, 0, 0, 0, 0, 0, 1, 60)
         };
     }
 
