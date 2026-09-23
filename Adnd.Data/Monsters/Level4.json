@@ -1,5 +1,5 @@
 {
-    "Level": 4,
+  "Level": 4,
   "Monsters": [
     {
       "Name": "Su-Monster",
@@ -81,50 +81,48 @@
       "Source": "Adnd",
       "Other": "Common serpent; sometimes harvested for stew, fried meat, or valuable eggs."
     },
-
-      {
-        "Name": "Snake, Giant Constrictor",
-        "Type": "Animal",
-        "Frequency": "Uncommon",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 2,
-        "ArmorClass": 6,
-        "Movement": 9,
-        "HitDice": 3,
-        "HitDiceType": 8,
-        "ExtraHitPoints": 2,
-        "%InLair": "Nil",
-        "TreasureType": "Nil",
-        "IndividualTreasure": "Snake Stew ($5), Fried Snake ($3), Snake Eggs ($50)",
-        "Attacks": [
-          {
-            "Name": "Bite",
-            "NumberOfAttacks": 1,
-            "Damage": "1"
-          },
-          {
-            "Name": "Coil",
-            "NumberOfAttacks": 1,
-            "Damage": "1d3"
-          }
-        ],
-        "SpecialAttacks": [
-          {
-            "Name": "Constriction",
-            "Description": "Snake coils around prey, dealing damage and restraining."
-          }
-        ],
-        "SpecialDefenses": [],
-        "MagicResistance": "Standard",
-        "Intelligence": "Animal",
-        "Alignment": "Neutral",
-        "Size": "Medium",
-        "BaseXPValue": 85,
-        "XPValuePerHitPoint": 4,
-        "Source": "Adnd",
-        "Other": "Subterranean serpent; valued for meat and eggs."
-      },
-
+    {
+      "Name": "Snake, Giant Constrictor",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 6,
+      "Movement": 9,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "Snake Stew ($5), Fried Snake ($3), Snake Eggs ($50)",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1"
+        },
+        {
+          "Name": "Coil",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Constriction",
+          "Description": "Snake coils around prey, dealing damage and restraining."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 85,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Subterranean serpent; valued for meat and eggs."
+    },
     {
       "Name": "Shadow",
       "Type": "Undead",
@@ -175,7 +173,6 @@
       "Source": "Adnd",
       "Other": "Shadow creatures drain strength and are difficult to detect."
     },
-
     {
       "Name": "Rust Monster",
       "Type": "Aberration",
@@ -218,7 +215,6 @@
       "Source": "Adnd",
       "Other": "Rust monsters inhabit subterranean places and feed on ferrous metals."
     },
-
     {
       "Name": "Owlbear",
       "Type": "Animal",
@@ -298,46 +294,43 @@
       "Source": "Adnd",
       "Other": "Hydras vary in head count; attack numbers scale with remaining heads (15–19)."
     },
-
-      {
-        "Name": "Hydra 7 Heads",
-        "Type": "Animal",
-        "Frequency": "Uncommon",
-        "NumberOfAppearancesMin": 1,
-        "NumberOfAppearancesMax": 1,
-        "ArmorClass": 5,
-        "Movement": 9,
-        "HitDice": 7,
-        "HitDiceType": 8,
-        "ExtraHitPoints": 0,
-        "%InLair": "20",
-        "TreasureType": "B",
-        "IndividualTreasure": "None",
-        "Attacks": [
-          {
-            "Name": "Head Attacks",
-            "NumberOfAttacks": 13,
-            "Damage": "1d8"
-          }
-        ],
-        "SpecialAttacks": [],
-        "SpecialDefenses": [
-          {
-            "Name": "Multi-Headed",
-            "Description": "All heads must be killed to slay the hydra."
-          }
-        ],
-        "MagicResistance": "Standard",
-        "Intelligence": "Semi-",
-        "Alignment": "Neutral",
-        "Size": "Large",
-        "BaseXPValue": 400,
-        "XPValuePerHitPoint": 8,
-        "Source": "Adnd",
-        "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
-      },
-
-
+    {
+      "Name": "Hydra 7 Heads",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Head Attacks",
+          "NumberOfAttacks": 13,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Multi-Headed",
+          "Description": "All heads must be killed to slay the hydra."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 400,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
+    },
     {
       "Name": "Black Dragon",
       "Type": "Dragon",
@@ -585,17 +578,7 @@
           "NumberOfAttacks": 1,
           "Damage": "2d6"
         }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Dragon breath",
-          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
-        }
-      ],
-      "BaseXPValue": 1900,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "D",
-      "Source": "Adnd"
+      ]
     },
     {
       "Name": "Red Dragon",
@@ -739,7 +722,6 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
-
     {
       "Name": "Blink Dog",
       "Type": "Animal",
@@ -782,8 +764,6 @@
       "Source": "Adnd",
       "Other": "Blink dogs use instinctive teleportation to reposition in combat and avoid danger."
     },
-
-
     {
       "Name": "Yellow Mold",
       "Type": "Fungus",
@@ -826,7 +806,6 @@
       "Source": "Adnd",
       "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed."
     },
-
     {
       "Name": "Carnivorous Ape",
       "Type": "Animal",
@@ -879,7 +858,6 @@
       "Source": "Adnd",
       "Other": "Very aggressive relative of the gorilla; cunning and hungers for human flesh."
     },
-
     {
       "Name": "Poisonous Toad",
       "Type": "Animal",
@@ -917,8 +895,6 @@
       "Source": "Adnd",
       "Other": "Indistinguishable from non-poisonous giant toads."
     },
-
-
     {
       "Name": "Werewolf",
       "Type": "Lycanthrope",
@@ -961,8 +937,6 @@
       "Source": "Adnd",
       "Other": "Werewolves are swift predators; their alignment varies in folklore but is Chaotic Evil in AD&D."
     },
-
-
     {
       "Name": "Lvl 4 Magic-User",
       "Type": "Humanoid",
@@ -1002,8 +976,8 @@
       "Name": "Lvl 4 Cleric",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 4,
       "HitDice": 4,
       "HitDiceType": 8,
@@ -1074,7 +1048,7 @@
       "Type": "Humanoid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 6,
       "HitDice": 4,
       "HitDiceType": 6,
@@ -1258,7 +1232,7 @@
       "Type": "Humanoid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
       "HitDice": 4,
       "HitDiceType": 8,
@@ -1411,8 +1385,6 @@
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/grayooze.htm"
     },
-
-
     {
       "Name": "Pyrohydra 5 Heads",
       "Type": "Monstrous Beast",
@@ -1455,7 +1427,6 @@
       "TreasureType": "C",
       "Source": "Adnd"
     },
-
     {
       "Name": "Hell Hound",
       "Type": "Canine",
@@ -1502,8 +1473,6 @@
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/hellhound.htm"
     },
-
-
     {
       "Name": "Ghast",
       "Type": "Undead",
@@ -1559,7 +1528,6 @@
       "Source": "Adnd",
       "Other": "Often found with packs of ghouls; can be turned by clerics."
     },
-
     {
       "Name": "Scorpion, Giant",
       "Type": "Vermin",
@@ -1602,7 +1570,6 @@
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/scorpion.giant.htm"
     },
-
     {
       "Name": "Harpy",
       "Type": "Humanoid",
@@ -1686,7 +1653,6 @@
       "Source": "Adnd",
       "Other": "Ice toads inhabit frozen caverns and lairs; their bodies radiate intense cold."
     },
-
     {
       "Name": "Toad, Poisonous",
       "Type": "Animal",
@@ -1720,11 +1686,9 @@
       "Size": "Medium",
       "BaseXPValue": 155,
       "XPValuePerHitPoint": 2,
-      "Alignment": "Neutral",
       "Source": "Adnd",
       "Other": "Indistinguishable from non-poisonous giant toads."
     },
-
     {
       "Name": "Toad, Giant",
       "Type": "Animal",
@@ -1757,7 +1721,6 @@
       "Source": "Adnd",
       "Other": "Giant frogs can leap great distances and often inhabit swamps or marshes."
     },
-
     {
       "Name": "Giant Toad",
       "Type": "Animal",
@@ -1784,7 +1747,6 @@
           "NumberOfAttacks": 1,
           "Damage": "1d11"
         }
-
       ],
       "SpecialAbilities": [
         {
@@ -1828,8 +1790,8 @@
     {
       "Name": "Lvl 3 Ninja",
       "Type": "Humanoid",
-      "NumberOfAppearancesMin": 4,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 3,
       "HitDice": 3,
       "HitDiceType": 8,
@@ -1998,7 +1960,6 @@
       "TreasureType": "D",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Lvl 7 Mage",
       "Type": "Humanoid",

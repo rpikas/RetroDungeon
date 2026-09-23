@@ -98,7 +98,7 @@
       "Name": "Lvl 7 Cleric",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 7,
@@ -1648,28 +1648,7 @@
           "NumberOfAttacks": 1,
           "Damage": "4d4"
         }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Surprises on a roll of 1–5 due to near‑perfect invisibility."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Invisibility",
-          "Description": "Permanently invisible; only detectable by special means."
-        }
-      ],
-      "MagicResistance": "30%",
-      "Intelligence": "High",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 2850,
-      "XPValuePerHitPoint": 16,
-      "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 50",
-      "Other": "Summoned from the Elemental Plane of Air; obeys conjurer until task is completed; strength 19 represents grasping strength only."
+      ]
     },
     {
       "Name": "Lamia",

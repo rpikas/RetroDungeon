@@ -2508,9 +2508,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (string.Equals(monsterName, "No Encounter", StringComparison.OrdinalIgnoreCase))
             return;
 
-        if (string.Equals(monsterName, "Adventurer", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(monsterName, "Adventurer", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(monsterName, "Character", StringComparison.OrdinalIgnoreCase))
         {
-            ResolveCharacterEncounter(_currentDungeonLevel);
+            ResolveCharacterEncounter(_currentDungeonLevel, firstGroupRoll?.CountOverride);
             PublishToViewer();
             return;
         }
@@ -2723,7 +2724,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private string? RollDungeonMonsterForLevelExcludingCharacter(int level)
         => RollDungeonMonsterForLevelWithCountExcludingCharacter(level)?.MonsterName;
 
-    private void ResolveCharacterEncounter(int dungeonLevel)
+    private void ResolveCharacterEncounter(int dungeonLevel, int? forcedCount = null)
     {
         var party = LoadEncounterParty();
         if (party.Count == 0)
@@ -2732,7 +2733,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return;
         }
 
-        var count = _random.Next(1, 5) + 1; // 1d4+1
+        var count = forcedCount.HasValue && forcedCount.Value > 0
+            ? forcedCount.Value
+            : _random.Next(1, 5) + 1; // 1d4+1
         var classMonsters = RollCharacterEncounterClasses(count, dungeonLevel);
         if (classMonsters.Count == 0)
         {
@@ -2745,7 +2748,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             "Adnd",
             "House Rule",
             "Character encounter composition",
-            "Roll 1d4+1 for count, then roll class table once per encountered character. All encountered classes use current dungeon level.",
+            forcedCount.HasValue
+                ? "Use table count for Character encounter, then roll class table once per encountered character. All encountered classes use current dungeon level."
+                : "Roll 1d4+1 for count, then roll class table once per encountered character. All encountered classes use current dungeon level.",
             "1",
             "5",
             count.ToString(),
@@ -3178,7 +3183,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 <= 25 => "Bandit",
                 <= 30 => "Berserker",
                 <= 45 => "Brigand",
-                _ => GetRandomHumanCharacterEncounterNameForLevel(dungeonLevel)
+                _ => "Character"
             };
 
             RuleApplicationInfo.Publish(
@@ -3195,7 +3200,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         if (IsCharacterEncounterEntry(dmgCreature))
-            return GetRandomHumanCharacterEncounterNameForLevel(dungeonLevel);
+            return "Character";
 
         if (IsDemonPrinceEncounter(dmgCreature))
         {

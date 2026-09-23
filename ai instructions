@@ -1926,3 +1926,6 @@ when entering characters, i expected to different classes encountered only one. 
 
 if the picutres are missing for charaters level 11-16 then use the level 10 version of th picture
 ______
+for all charteras in all monster json update to  "NumberOfAppearancesMin":1,"NumberOfAppearancesMax":1
+can you remove the overload you just did and manually edit the json files insted to avoid confusion?
+____
