@@ -949,6 +949,33 @@ public sealed class CombatCoordinator
             var rolls = Math.Max(0, placeholder.Count);
             for (int i = 0; i < rolls; i++)
             {
+                if (TryResolveMiscMagicPlusPotionPlaceholder(
+                    placeholder.Table,
+                    allItems,
+                    miscMagicNames,
+                    out var comboItems,
+                    out var comboRuleInfos,
+                    out var comboIssue))
+                {
+                    foreach (var info in comboRuleInfos)
+                        RuleApplicationInfo.Publish(info);
+
+                    if (comboItems.Count == 0)
+                    {
+                        result.UnassignedItems.Add(comboIssue ?? $"{placeholder.Table} (no matching item defined)");
+                        continue;
+                    }
+
+                    foreach (var comboItem in comboItems)
+                    {
+                        var rolledComboItem = CloneItem(comboItem);
+                        if (!TryAssignItemToSurvivors(survivors, rolledComboItem, result, ref nextReceiverIndex))
+                            result.UnassignedItems.Add(rolledComboItem.Name + " (no one can carry)");
+                    }
+
+                    continue;
+                }
+
                 var resolvedTable = ResolveAnyMagicTable(placeholder.Table, out var anyRollInfo);
                 if (!string.IsNullOrWhiteSpace(anyRollInfo))
                     RuleApplicationInfo.Publish(anyRollInfo!);
@@ -1033,6 +1060,18 @@ public sealed class CombatCoordinator
 
         foreach (var part in parts)
         {
+            if (TryResolveRandomSpellScrollsFromDescriptorPart(part, allItems, out var rolledScrolls, out var scrollIssue))
+            {
+                if (rolledScrolls.Count == 0)
+                {
+                    issue = scrollIssue ?? $"{part} (scroll generation failed)";
+                    return true;
+                }
+
+                resolvedItems.AddRange(rolledScrolls);
+                continue;
+            }
+
             var matched = ResolveSpecificWornEquipmentItem(part, allItems);
             if (matched == null)
             {
@@ -1044,6 +1083,260 @@ public sealed class CombatCoordinator
         }
 
         return true;
+    }
+
+    private bool TryResolveMiscMagicPlusPotionPlaceholder(
+        string placeholderTable,
+        List<Item> allItems,
+        HashSet<string> miscMagicNames,
+        out List<Item> resolvedItems,
+        out List<string> ruleInfos,
+        out string? issue)
+    {
+        resolvedItems = new List<Item>();
+        ruleInfos = new List<string>();
+        issue = null;
+
+        if (!IsMiscMagicPlusPotionPlaceholder(placeholderTable))
+            return false;
+
+        var anyResolved = ResolveAnyMagicTable("Any", out var anyRollInfo);
+        if (!string.IsNullOrWhiteSpace(anyRollInfo))
+            ruleInfos.Add(anyRollInfo!);
+
+        if (TryRollFromResolvedAnySubtable(anyResolved, allItems, out var subtableItem, out var subtableRollInfo))
+        {
+            if (!string.IsNullOrWhiteSpace(subtableRollInfo))
+                ruleInfos.Add(subtableRollInfo!);
+
+            if (subtableItem != null)
+                resolvedItems.Add(subtableItem);
+        }
+        else
+        {
+            var anyPool = GetItemPoolForMagicTable(allItems, anyResolved, miscMagicNames);
+            if (anyPool.Count == 0)
+            {
+                issue = $"{placeholderTable} => Any resolved to {anyResolved} (no matching item defined)";
+                return true;
+            }
+
+            var anyItem = anyPool[_random.Next(anyPool.Count)];
+            ruleInfos.Add($"Any-table item roll => {anyItem.Name} ({anyResolved}).");
+            resolvedItems.Add(anyItem);
+        }
+
+        var potionPool = GetItemPoolForMagicTable(allItems, "Potion", miscMagicNames);
+        if (potionPool.Count == 0)
+        {
+            issue = $"{placeholderTable} => bonus potion (A) has no matching item defined";
+            return true;
+        }
+
+        var potion = potionPool[_random.Next(potionPool.Count)];
+        ruleInfos.Add($"Bonus potion (A) roll => {potion.Name}.");
+        resolvedItems.Add(potion);
+
+        return true;
+    }
+
+    private static bool IsMiscMagicPlusPotionPlaceholder(string? table)
+    {
+        if (string.IsNullOrWhiteSpace(table))
+            return false;
+
+        var normalized = NormalizeMatchKey(table);
+        return normalized is "miscellaneousmagicplus1potion"
+            or "miscmagicplus1potion";
+    }
+
+    private bool TryResolveRandomSpellScrollsFromDescriptorPart(string descriptorPart, List<Item> allItems, out List<Item> items, out string? issue)
+    {
+        items = new List<Item>();
+        issue = null;
+
+        if (!TryParseRandomSpellScrollTemplate(descriptorPart, out var spellCount, out var primaryMinLevel, out var primaryMaxLevel, out var hasSecondaryRange, out var secondaryMinLevel, out var secondaryMaxLevel))
+            return false;
+
+        var allSpells = _spellRepository.LoadAll();
+
+        for (var i = 1; i <= spellCount; i++)
+        {
+            var classRoll = _random.Next(1, 101);
+            var spellClass = ResolveScrollSpellClassByRoll(classRoll);
+            RuleApplicationInfo.Publish($"Scroll spell #{i} class roll: 1d100={classRoll} => {spellClass}.");
+
+            var (minLevel, maxLevel) = ResolveScrollLevelRangeForClass(
+                spellClass,
+                primaryMinLevel,
+                primaryMaxLevel,
+                hasSecondaryRange,
+                secondaryMinLevel,
+                secondaryMaxLevel);
+
+            var levelRoll = _random.Next(minLevel, maxLevel + 1);
+            var dieSize = maxLevel - minLevel + 1;
+            var dieExpr = minLevel <= 1 ? $"1d{dieSize}" : $"1d{dieSize}+{minLevel - 1}";
+            RuleApplicationInfo.Publish($"Scroll spell #{i} level roll: {dieExpr} => {levelRoll}.");
+
+            var classSpellsInRange = allSpells
+                .Where(s => s.SpellClass == spellClass)
+                .Where(s => s.Level >= minLevel && s.Level <= maxLevel)
+                .GroupBy(s => s.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.First())
+                .ToList();
+
+            if (classSpellsInRange.Count == 0)
+            {
+                issue = $"Scroll template '{descriptorPart}' => no {spellClass} spells in level range {minLevel}-{maxLevel}";
+                return true;
+            }
+
+            var spellPoolAtRolledLevel = classSpellsInRange
+                .Where(s => s.Level == levelRoll)
+                .ToList();
+
+            Spell selectedSpell;
+            if (spellPoolAtRolledLevel.Count > 0)
+            {
+                selectedSpell = spellPoolAtRolledLevel[_random.Next(spellPoolAtRolledLevel.Count)];
+            }
+            else
+            {
+                selectedSpell = classSpellsInRange[_random.Next(classSpellsInRange.Count)];
+                RuleApplicationInfo.Publish($"Scroll spell #{i}: no {spellClass} spell at level {levelRoll}; fallback => {selectedSpell.Name} (L{selectedSpell.Level}).");
+            }
+
+            RuleApplicationInfo.Publish($"Scroll spell #{i} roll: {selectedSpell.Name} ({spellClass} L{selectedSpell.Level}).");
+
+            items.Add(ResolveOrCreateConcreteSpellScrollItem(selectedSpell, allItems));
+        }
+
+        return true;
+    }
+
+    private Item ResolveOrCreateConcreteSpellScrollItem(Spell spell, List<Item> allItems)
+    {
+        var scrollName = $"Scroll of {spell.Name}";
+        var resolved = allItems.FirstOrDefault(i => i.Type == ItemType.Scroll && string.Equals(i.Name, scrollName, StringComparison.OrdinalIgnoreCase));
+        if (resolved != null)
+            return resolved;
+
+        return new Item
+        {
+            Name = scrollName,
+            Type = ItemType.Scroll,
+            Cost = 200 * Math.Max(1, spell.Level),
+            Weight = 1,
+            IsShopBuyable = false,
+            AllowedClasses = new List<CharacterClass> { MapSpellClassToCharacterClass(spell.SpellClass) },
+            SpecialAbilities = new List<string> { $"Casts {spell.Name.ToLowerInvariant()}" },
+            Rarity = MapSpellLevelToRarity(spell.Level),
+            Source = "Treasure generated",
+            Version = "1e",
+            Status = ItemStatus.Implemented
+        };
+    }
+
+    private static bool TryParseRandomSpellScrollTemplate(
+        string descriptorPart,
+        out int spellCount,
+        out int primaryMinLevel,
+        out int primaryMaxLevel,
+        out bool hasSecondaryRange,
+        out int secondaryMinLevel,
+        out int secondaryMaxLevel)
+    {
+        spellCount = 0;
+        primaryMinLevel = 1;
+        primaryMaxLevel = 1;
+        hasSecondaryRange = false;
+        secondaryMinLevel = 1;
+        secondaryMaxLevel = 1;
+
+        if (string.IsNullOrWhiteSpace(descriptorPart))
+            return false;
+
+        var pattern = @"^\s*Scroll\s+of\s+(?<count>\d+)\s+Spells?\s*\(\s*Levels?\s*(?<a>\d+)\s*-\s*(?<b>\d+)(?:\s*or\s*(?<c>\d+)\s*-\s*(?<d>\d+))?\s*\)\s*$";
+        var match = System.Text.RegularExpressions.Regex.Match(descriptorPart, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (!match.Success)
+            return false;
+
+        if (!int.TryParse(match.Groups["count"].Value, out spellCount) || spellCount <= 0)
+            return false;
+        if (!int.TryParse(match.Groups["a"].Value, out primaryMinLevel))
+            return false;
+        if (!int.TryParse(match.Groups["b"].Value, out primaryMaxLevel))
+            return false;
+
+        if (primaryMaxLevel < primaryMinLevel)
+            (primaryMinLevel, primaryMaxLevel) = (primaryMaxLevel, primaryMinLevel);
+
+        hasSecondaryRange = match.Groups["c"].Success && match.Groups["d"].Success;
+        if (hasSecondaryRange)
+        {
+            if (!int.TryParse(match.Groups["c"].Value, out secondaryMinLevel))
+                return false;
+            if (!int.TryParse(match.Groups["d"].Value, out secondaryMaxLevel))
+                return false;
+
+            if (secondaryMaxLevel < secondaryMinLevel)
+                (secondaryMinLevel, secondaryMaxLevel) = (secondaryMaxLevel, secondaryMinLevel);
+        }
+
+        return true;
+    }
+
+    private static (int minLevel, int maxLevel) ResolveScrollLevelRangeForClass(
+        SpellClass spellClass,
+        int primaryMinLevel,
+        int primaryMaxLevel,
+        bool hasSecondaryRange,
+        int secondaryMinLevel,
+        int secondaryMaxLevel)
+    {
+        if (!hasSecondaryRange)
+            return (primaryMinLevel, primaryMaxLevel);
+
+        return spellClass == SpellClass.MagicUser
+            ? (primaryMinLevel, primaryMaxLevel)
+            : (secondaryMinLevel, secondaryMaxLevel);
+    }
+
+    private static SpellClass ResolveScrollSpellClassByRoll(int roll)
+    {
+        return roll switch
+        {
+            <= 10 => SpellClass.Illusionist,
+            <= 70 => SpellClass.MagicUser,
+            <= 92 => SpellClass.Cleric,
+            _ => SpellClass.Druid
+        };
+    }
+
+    private static CharacterClass MapSpellClassToCharacterClass(SpellClass spellClass)
+    {
+        return spellClass switch
+        {
+            SpellClass.MagicUser => CharacterClass.MagicUser,
+            SpellClass.Illusionist => CharacterClass.Illusionist,
+            SpellClass.Cleric => CharacterClass.Cleric,
+            SpellClass.Druid => CharacterClass.Druid,
+            _ => CharacterClass.MagicUser
+        };
+    }
+
+    private static RarityType MapSpellLevelToRarity(int level)
+    {
+        return level switch
+        {
+            <= 2 => RarityType.Common,
+            <= 4 => RarityType.Uncommon,
+            <= 6 => RarityType.Rare,
+            <= 7 => RarityType.VeryRare,
+            <= 8 => RarityType.Legendary,
+            _ => RarityType.Unique
+        };
     }
 
     private bool TryRollFromResolvedAnySubtable(string resolvedTable, List<Item> allItems, out Item? item, out string? rollInfo)

@@ -2124,7 +2124,7 @@ Javelin	Fighter, Ranger, Paladin
 ____
 1. add scrolls for all spells missing.
 
-2. when for example Scroll of 1 Spell (Level 1-6) is found
+2. Ref DMG pg. 121. When for example Scroll of 1 Spell (Level 1-6) is found
 first determine what class the spell is roll 1d100
 0-10 Illustionist
 11-70 Magic user
@@ -2132,3 +2132,20 @@ first determine what class the spell is roll 1d100
 93-100 Druid
 Then 1d6 to determine the level.
 Then you have to ranomize one of the avaliabele spells on that level for that class to see what kind of scroll you have found.
+
+If finding this Scroll of 3 Spells (Level 2-9 or 2-7) 
+want you to first roll 1d100 to figure out what classes the 3 scrolls are according to the table
+0-10 Illustionist
+11-70 Magic user
+71-92 Cleric
+93-100 Druid
+If Magic user then level is 2-9 else level is 2-7
+I want that to be translated into concrete spells that the player can use
+
+So i dont get this behaviour:
+- Unclaimed magic items:
+    Scroll of 3 Spells (Level 2-9 or 2-7) (from Scroll of 3 Spells (Level 2-9 or 2-7)) (no matching item defined)
+55,1
+When for example this found "Miscellaneous magic plus 1 potion" I want 1 random item using 1d100 and this table just like any Die* Results 01-20 Potions (A.) 21-35 Scrolls (8.) 36-40 Rings (C) 41-45 Rods, Staves & Wands [0.) 46-48 Miscellaneous Magic (E.l.J 49-51 Miscellaneous Magic (E.2.) 52-54 Miscellaneos Magic (£.3.) 55-57 Miscellaneous Magic (E 4.) SS-60 Miscellaneous Magic {E.5.) 61 -75 Armor & Sh telds (F.) 76-86 Swords (G) 87-00 Miscellaneous Weapons (H,) to determine what is found and on top of that I also want the party to find one extra item from Potions (A.) list.
+So I do not want this behaviour:
+•	Unclaimed magic items: Miscellaneous magic plus 1 potion (no matching item defined)

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.Json;
 using Adnd.Core.Characters;
 using Adnd.Core.Items;
+using Adnd.Core.Spells;
+using Adnd.Data.Spells;
 
 namespace Adnd.Data.Items;
 
@@ -20,6 +22,8 @@ public class ItemRepository
     public IEnumerable<Item> LoadAll()
     {
         var list = new List<Item>();
+
+        EnsureScrollsJsonContainsAllSpellScrolls();
 
         foreach (var file in Directory.GetFiles(_folder, "*.json"))
         {
@@ -210,5 +214,237 @@ public class ItemRepository
             return parsed;
 
         return RarityType.Common;
+    }
+
+    private void EnsureScrollsJsonContainsAllSpellScrolls()
+    {
+        var scrollsPath = Path.Combine(_folder, "Scrolls.json");
+        if (!File.Exists(scrollsPath))
+            return;
+
+        var scrollsJson = File.ReadAllText(scrollsPath);
+        var grouped = JsonSerializer.Deserialize<ItemCategoryJsonModel>(scrollsJson);
+        if (grouped == null)
+            return;
+
+        grouped.Category = string.IsNullOrWhiteSpace(grouped.Category) ? "Scroll" : grouped.Category;
+        grouped.Items ??= new List<ItemJsonModel>();
+
+        var beforeCleanupCount = grouped.Items.Count;
+        grouped.Items = grouped.Items
+            .Where(i => !(string.Equals(i.Type, "Scroll", StringComparison.OrdinalIgnoreCase)
+                          && IsGenericScrollTemplateName(i.Name)))
+            .ToList();
+        var removedGenericTemplates = beforeCleanupCount - grouped.Items.Count;
+
+        var existing = grouped.Items
+            .Where(i => string.Equals(i.Type, "Scroll", StringComparison.OrdinalIgnoreCase))
+            .Select(i => i.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var spells = new SpellRepository("Data/Spells").LoadAll()
+            .Where(s => !string.IsNullOrWhiteSpace(s.Name))
+            .GroupBy(s => s.Name.Trim(), StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .ToList();
+
+        var spellsByNormalizedName = spells
+            .GroupBy(s => NormalizeSpellKey(s.Name), StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+        var addedAny = false;
+        foreach (var spell in spells)
+        {
+            var scrollName = $"Scroll of {spell.Name}";
+            if (existing.Contains(scrollName))
+                continue;
+
+            grouped.Items.Add(CreateGeneratedScrollModel(spell));
+            existing.Add(scrollName);
+            addedAny = true;
+        }
+
+        foreach (var requiredSpellName in GetRequiredSpellScrollNames())
+        {
+            var requiredScrollName = $"Scroll of {requiredSpellName}";
+            if (existing.Contains(requiredScrollName))
+                continue;
+
+            if (!spellsByNormalizedName.TryGetValue(NormalizeSpellKey(requiredSpellName), out var spell))
+                continue;
+
+            var concreteScrollName = $"Scroll of {spell.Name}";
+            if (existing.Contains(concreteScrollName))
+                continue;
+
+            grouped.Items.Add(CreateGeneratedScrollModel(spell));
+            existing.Add(concreteScrollName);
+            addedAny = true;
+        }
+
+        if (!addedAny && removedGenericTemplates == 0)
+            return;
+
+        grouped.Items = grouped.Items
+            .OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var updated = JsonSerializer.Serialize(grouped, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(scrollsPath, updated);
+    }
+
+    private static bool IsGenericScrollTemplateName(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var n = name.Trim();
+        if (!n.StartsWith("Scroll of ", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        // Examples: "Scroll of 1 Spell (Level 1-6)", "Scroll of 2 Spells (Levels 1-4)", etc.
+        return n.Contains("Spell (", StringComparison.OrdinalIgnoreCase)
+               || n.Contains("Spells (", StringComparison.OrdinalIgnoreCase)
+               || n.Contains("Levels ", StringComparison.OrdinalIgnoreCase)
+               || n.Contains("Level ", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string NormalizeSpellKey(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+        return new string(value
+            .Where(char.IsLetterOrDigit)
+            .Select(char.ToLowerInvariant)
+            .ToArray());
+    }
+
+    private static IEnumerable<string> GetRequiredSpellScrollNames()
+    {
+        return new[]
+        {
+            "Bless", "Cure Light Wounds", "Chant", "Find Traps", "Hold Person", "Silence 15' Radius",
+            "Spiritual Hammer", "Cure Disease", "Glyph of Warding", "Remove Paralysis", "Prayer",
+            "Cure Serious Wounds", "Neutralize Poison", "Cure Critical Wounds", "Flame Strike", "Insect Plague",
+            "Raise Dead", "Blade Barrier", "Heal", "Harm", "Earthquake", "Resurrection", "Unholy Word",
+            "Cause Light Wounds", "Cause Serious Wounds", "Cause Critical Wounds",
+            "Entangle", "Faerie Fire", "Barkskin", "Charm Person or Mammal", "Call Lightning", "Snare",
+            "Summon Insects", "Pyrotechnics", "Wall of Fire", "Feeblemind", "Wall of Thorns",
+            "Finger of Death", "Fire Storm",
+            "Chromatic Orb", "Color Spray", "Phantasmal Force", "Blur", "Improved Phantasmal Force",
+            "Invisibility", "Mirror Image", "Fear", "Paralyzation", "Spectral Force", "Confusion",
+            "Improved Invisibility", "Phantasmal Killer", "Chaos", "Maze", "Permanent Illusion",
+            "Magic Missile", "Shield", "Shocking Grasp", "Sleep", "Charm Person", "Melf's Acid Arrow",
+            "Strength", "Fireball", "Haste", "Lightning Bolt", "Slow", "Ice Storm", "Cloudkill",
+            "Hold Monster", "Cone of Cold", "Death Fog", "Disintegrate", "Delayed Blast Fireball",
+            "Mass Invisibility", "Incendiary Cloud", "Power Word Stun", "Meteor Swarm", "Power Word Kill"
+        };
+    }
+
+    private static ItemJsonModel CreateGeneratedScrollModel(Spell spell)
+    {
+        var level = Math.Max(1, spell.Level);
+        return new ItemJsonModel
+        {
+            Name = $"Scroll of {spell.Name}",
+            Status = "Implemented",
+            Type = "Scroll",
+            Slot = string.Empty,
+            Cost = 200 * level,
+            CostSilverPieces = 0,
+            Weight = 1,
+            ToHitBonus = 0,
+            IsShopBuyable = false,
+            StockQuantity = 0,
+            ArmorClassBonus = 0,
+            Damage = string.Empty,
+            DamageVsLarge = string.Empty,
+            DamageType = string.Empty,
+            SpeedFactor = 0,
+            WeaponLength = string.Empty,
+            IsTwoHanded = false,
+            Range = string.Empty,
+            FireRate = "1",
+            RequiresAmmo = false,
+            AmmoType = string.Empty,
+            Quantity = 0,
+            MagicBonus = 0,
+            SpecialAbilities = new List<string> { $"Casts {spell.Name.ToLowerInvariant()}" },
+            IsCursed = false,
+            AllowedClasses = new List<string> { spell.SpellClass.ToString() },
+            Rarity = MapSpellLevelToRarity(level).ToString(),
+            Description = $"Generated scroll for spell {spell.Name}.",
+            Source = "Generated from spell list",
+            Version = "1e"
+        };
+    }
+
+    private static void AppendGeneratedScrollsForMissingSpells(List<Item> items)
+    {
+        var existingScrolls = items
+            .Where(i => i.Type == ItemType.Scroll)
+            .Select(i => i.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var spells = new SpellRepository("Data/Spells").LoadAll();
+        var groupedByName = spells
+            .Where(s => !string.IsNullOrWhiteSpace(s.Name))
+            .GroupBy(s => s.Name.Trim(), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var group in groupedByName)
+        {
+            var scrollName = $"Scroll of {group.Key}";
+            if (existingScrolls.Contains(scrollName))
+                continue;
+
+            var allowed = group
+                .Select(s => MapSpellClassToCharacterClass(s.SpellClass))
+                .Distinct()
+                .ToList();
+
+            var minLevel = group.Min(s => Math.Max(1, s.Level));
+
+            items.Add(new Item
+            {
+                Name = scrollName,
+                Type = ItemType.Scroll,
+                Cost = 200 * minLevel,
+                Weight = 1,
+                StockQuantity = 0,
+                IsShopBuyable = false,
+                AllowedClasses = allowed,
+                SpecialAbilities = new List<string> { $"Casts {group.Key.ToLowerInvariant()}" },
+                Rarity = MapSpellLevelToRarity(minLevel),
+                Source = "Generated from spell list",
+                Version = "1e",
+                Status = ItemStatus.Implemented
+            });
+        }
+    }
+
+    private static CharacterClass MapSpellClassToCharacterClass(SpellClass spellClass)
+    {
+        return spellClass switch
+        {
+            SpellClass.MagicUser => CharacterClass.MagicUser,
+            SpellClass.Illusionist => CharacterClass.Illusionist,
+            SpellClass.Cleric => CharacterClass.Cleric,
+            SpellClass.Druid => CharacterClass.Druid,
+            _ => CharacterClass.MagicUser
+        };
+    }
+
+    private static RarityType MapSpellLevelToRarity(int level)
+    {
+        return level switch
+        {
+            <= 2 => RarityType.Common,
+            <= 4 => RarityType.Uncommon,
+            <= 6 => RarityType.Rare,
+            <= 7 => RarityType.VeryRare,
+            <= 8 => RarityType.Legendary,
+            _ => RarityType.Unique
+        };
     }
 }
