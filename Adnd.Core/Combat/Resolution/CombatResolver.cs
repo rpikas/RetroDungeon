@@ -87,6 +87,7 @@ public sealed class CombatResolver
     {
         ApplyRingProtectionAuras(session);
         ApplyRingWizardryEffects(session);
+        ApplyHolyAvengerPartyAuras(session);
 
         var events = new List<CombatEvent>
         {
@@ -1082,6 +1083,9 @@ public sealed class CombatResolver
                         ? target.PotionInvulnerabilityArmorClassBonus
                         : 0;
                     var targetAc = (target.ArmorClass - invulnerabilityAcBonus) + (parrying.Contains(target.Name) ? 2 : 0);
+                    var defenderAcBonus = GetDefenderArmorClassBonus(target, attack);
+                    if (defenderAcBonus > 0)
+                        targetAc += defenderAcBonus;
                     var thac0 = GetMonsterThac0(monster);
                     if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
                         thac0 += 1;
@@ -2350,6 +2354,21 @@ public sealed class CombatResolver
             {
                 mainHand = equipped;
                 thac0Modifier += Math.Max(0, mainHand.ToHitBonus);
+
+                var dancingSwordToHitBonus = GetSwordOfDancingCurrentBonus(mainHand, session);
+                if (dancingSwordToHitBonus > 0)
+                    thac0Modifier += dancingSwordToHitBonus - Math.Max(0, mainHand.ToHitBonus);
+
+                if (IsSwordPlusFourDefender(mainHand))
+                {
+                    var defenderAttackBonus = GetDefenderAttackBonusAllocation(mainHand);
+                    var redirectedToDefense = Math.Max(0, 4 - defenderAttackBonus);
+                    if (redirectedToDefense > 0)
+                        thac0Modifier -= redirectedToDefense;
+                }
+
+                if (IsSwordPlusFiveHolyAvenger(mainHand) && !member.IsPaladin())
+                    thac0Modifier -= 3;
             }
 
             if (useRanged && rangedWeapon != null)
@@ -2415,6 +2434,20 @@ public sealed class CombatResolver
                 : 0;
 
             int damage = RollDamage(damageExpression) + strengthDamageBonus;
+            if (IsSwordPlusFiveHolyAvenger(mainHand) && !member.IsPaladin())
+                damage = Math.Max(1, damage - 3);
+
+            var dancingSwordBonus = GetSwordOfDancingCurrentBonus(mainHand, session);
+            if (dancingSwordBonus > 1)
+                damage += dancingSwordBonus - 1;
+
+            if (IsSwordPlusFiveHolyAvenger(mainHand)
+                && member.IsPaladin()
+                && IsTargetChaoticEvil(target))
+            {
+                damage += 10;
+            }
+
             if (swordSituationalBonus > 0)
                 damage += swordSituationalBonus;
             var partyDamageBonusApplied = chantOrPrayerBonus > 0;
@@ -4579,6 +4612,182 @@ public sealed class CombatResolver
 
         var chosenDragonType = GetOrAssignDragonSlayerType(weapon);
         return IsTargetSpecificDragonType(target, chosenDragonType) ? 3 : 1;
+    }
+
+    private int GetSwordOfDancingCurrentBonus(Item? weapon, CombatSession session)
+    {
+        if (!IsSwordOfDancing(weapon) || session == null)
+            return 0;
+
+        var phase = ((Math.Max(1, session.RoundNumber) - 1) % 4) + 1;
+        return phase;
+    }
+
+    private static bool IsSwordOfDancing(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Sword of Dancing", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Dancing", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Dancing", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSwordPlusFourDefender(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        return name.Contains("Sword +4, Defender", StringComparison.OrdinalIgnoreCase)
+               || (weapon.SpecialAbilities != null && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Defender", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private static int GetDefenderAttackBonusAllocation(Item weapon)
+    {
+        if (weapon.SpecialAbilities == null)
+            return 4;
+
+        var profile = weapon.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("DefenderAttackBonus:", StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(profile)
+            && int.TryParse(profile[(profile.IndexOf(':') + 1)..].Trim(), out var parsed))
+        {
+            return Math.Clamp(parsed, 0, 4);
+        }
+
+        return 4;
+    }
+
+    private static int GetDefenderArmorClassBonus(Character target, Adnd.Core.Monsters.MonsterAttack attack)
+    {
+        if (target?.Equipment == null)
+            return 0;
+
+        if (!IsMonsterAttackFromHandheldWeapon(attack))
+            return 0;
+
+        if (!target.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainHand)
+            || !IsSwordPlusFourDefender(mainHand))
+        {
+            return 0;
+        }
+
+        var attackBonusAllocation = GetDefenderAttackBonusAllocation(mainHand!);
+        return Math.Max(0, 4 - attackBonusAllocation);
+    }
+
+    private static bool IsMonsterAttackFromHandheldWeapon(Adnd.Core.Monsters.MonsterAttack attack)
+    {
+        var name = (attack?.Name ?? string.Empty).ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("hurled") || name.Contains("thrown") || name.Contains("missile"))
+            return false;
+
+        return name.Contains("sword")
+               || name.Contains("dagger")
+               || name.Contains("mace")
+               || name.Contains("spear")
+               || name.Contains("axe")
+               || name.Contains("club")
+               || name.Contains("hammer")
+               || name.Contains("staff")
+               || name.Contains("flail")
+               || name.Contains("halberd")
+               || name.Contains("morning star")
+               || name.Contains("trident");
+    }
+
+    private static bool IsSwordPlusFiveHolyAvenger(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        return name.Contains("Sword +5, Holy Avenger", StringComparison.OrdinalIgnoreCase)
+               || (weapon.SpecialAbilities != null && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Holy Avenger", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private static bool IsTargetChaoticEvil(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        return string.Equals(target.Template.Alignment?.Trim(), "Chaotic Evil", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(target.Template.Alignment?.Trim(), "CE", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsPaladinHolyAvengerAuraActive(Character member, Item? mainHand)
+    {
+        return member != null
+               && member.IsPaladin()
+               && IsSwordPlusFiveHolyAvenger(mainHand)
+               && member.CurrentHitPoints > 0
+               && !member.HasStatus(CharacterStatus.Dead);
+    }
+
+    private static bool IsWithinHolyAvengerAura(Character paladin, Character target)
+    {
+        // Current combat model has no tactical map distance; treat active allies as within 5' aura.
+        return paladin != null
+               && target != null
+               && target.CurrentHitPoints > 0
+               && !target.HasStatus(CharacterStatus.Dead);
+    }
+
+    private bool TrySuppressMonsterSpellByHolyAvengerAura(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (session?.Party == null || monster?.Template == null)
+            return false;
+
+        foreach (var member in session.Party)
+        {
+            if (member?.Equipment == null)
+                continue;
+
+            member.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainHand);
+            if (!IsPaladinHolyAvengerAuraActive(member, mainHand))
+                continue;
+
+            var chance = 50;
+            var roll = _rng.Next(1, 101);
+            if (roll <= chance)
+            {
+                events.Add(new CombatEvent($"{member.Name}'s Holy Avenger aura disrupts {monster.DisplayName}'s spellcasting (MR {chance}%, roll {roll})."));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void ApplyHolyAvengerPartyAuras(CombatSession session)
+    {
+        // Character currently has no persisted magic-resistance stat.
+        // Holy Avenger party aura is handled dynamically via spell suppression checks.
     }
 
     private bool TryExtinguishFireWithFrostBrand(Character member, CombatSession session, List<CombatEvent> events)

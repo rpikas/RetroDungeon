@@ -1123,7 +1123,9 @@
                       "ArmorClassBonus":  0,
                       "MagicBonus":  4,
                       "SpecialAbilities":  [
-                                               "Defender"
+                                               "Defender",
+                                               "DefenderAttackBonus:4",
+                                               "Can allocate up to +4 between attack and AC each round vs hand-held weapons"
                                            ],
                       "IsCursed":  false,
                       "IsShopBuyable":  false,
@@ -1136,12 +1138,83 @@
                                              "Bard"
                                          ],
                       "Rarity":  "Legendary",
-                      "Description":  "A magical defender sword.",
+                      "Description":  "+4 Defender sword; wielder may allocate some/all of +4 to defense (AC) each round against hand-held weapon attacks.",
                       "Source":  "Adnd",
                       "Version":  "1e",
                       "StockQuantity":  0,
                       "Slot":  "",
                       "ToHitBonus":  4
+                  },
+                  {
+                      "Name":  "Sword +5, Holy Avenger",
+                      "Type":  "Weapon",
+                      "Cost":  20000,
+                      "Weight":  60,
+                      "Damage":  "1d8+5",
+                      "DamageVsLarge":  "1d12+5",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  5,
+                      "SpecialAbilities":  [
+                                               "Holy Avenger",
+                                               "Paladin only full power; otherwise acts as +2",
+                                               "Paladin aura: 50% magic resistance in 5' radius",
+                                               "Dispels/disrupts magic in 5' radius",
+                                               "+10 damage vs chaotic evil"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Paladin"
+                                         ],
+                      "Rarity":  "Legendary",
+                      "Description":  "+5 Holy Avenger: full power in paladin hands; otherwise functions as +2. Paladin aura disrupts hostile magic and deals +10 vs chaotic evil.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  5
+                  },
+                  {
+                      "Name":  "Sword of Dancing",
+                      "Type":  "Weapon",
+                      "Cost":  22000,
+                      "Weight":  60,
+                      "Damage":  "1d8+1",
+                      "DamageVsLarge":  "1d12+1",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+                                               "Dancing",
+                                               "Progressive melee bonus cycle +1/+2/+3/+4 by round, then repeats",
+                                               "Can be loosed to dance after melee cycles (manual mode pending)"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Legendary",
+                      "Description":  "Sword of Dancing with progressive +1 to +4 round-based combat bonuses.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
                   },
                   {
                       "Name":  "Sword of Wounding",
