@@ -2579,3 +2579,22 @@ ___
 add all items  from F. ARMOR AND SHIELD that are missing inC:\Users\rober\source\repos\RetroDungeon\Adnd.Data\Items\Armor.json to that file
 ___
 SeparateAdnd.Data\Items\Weapons.json into MISCELLANEOUS_WEAPONS.json and SWORDS.json
+___
+add all items from H. MISCELLANEOUS WEAPONS tha are missing from MISCELLANEOUS_WEAPONS,json to MISCELLANEOUS_WEAPONS,json
+___
+add all items from G. SWORDS that are missing from SWORDS.json to SWORDS.json
+___
+Crossbows and other weapons should all have a weight that is > 0
+___
+70% of swords are longs wards, 20% are broadswords, 5% are short swords, 4% are bastard swords, 1 h are two-handed swords. so when looting a sword roll 1d100 
+1-70 Long sword
+71-91 Broad sword
+91-96 Short sword
+97-99 Bastard sword
+100 Two-handed sword
+
+Implement Sword + 1, +2 vs. magic-using and enchanted creature*
+It gives its +1 bonus always, +2 when employed against magic-users, monsiers which can cost spells, conjured, created, gated, or summoned creatures. 
+Note that the +2 would not operate against a creature magically empowered by some item to cast spells —such as a ring of spell storing
+
+

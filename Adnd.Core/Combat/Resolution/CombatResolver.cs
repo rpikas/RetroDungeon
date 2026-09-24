@@ -2353,6 +2353,15 @@ public sealed class CombatResolver
                 thac0Modifier += Math.Max(0, rangedWeapon.ToHitBonus);
             }
 
+            var swordSituationalBonus = 0;
+            if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(mainHand)
+                && IsTargetEligibleForSwordPlusTwoBonus(target))
+            {
+                // Weapon is +1 normally, but +2 vs magic-using/enchanted/conjured-created-gated-summoned creatures.
+                swordSituationalBonus = 1;
+                thac0Modifier += swordSituationalBonus;
+            }
+
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
             int roll = _dice.Roll(20);
 
@@ -2395,6 +2404,8 @@ public sealed class CombatResolver
                 : 0;
 
             int damage = RollDamage(damageExpression) + strengthDamageBonus;
+            if (swordSituationalBonus > 0)
+                damage += swordSituationalBonus;
             var partyDamageBonusApplied = chantOrPrayerBonus > 0;
             if (partyDamageBonusApplied)
                 damage += 1;
@@ -4514,6 +4525,100 @@ public sealed class CombatResolver
 
         return target.Template.SpecialDefenses.Any(d =>
             string.Equals(d.Name?.Trim(), "Half Damage from Sharp Weapons", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.Replace('&', ' ').ToLowerInvariant();
+        if (normalized.Contains("sword +1, +2 vs. magic-using", StringComparison.Ordinal)
+            || normalized.Contains("sword +1 +2 vs magic-using", StringComparison.Ordinal)
+            || normalized.Contains("sword +1, +2 vs. magic using", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("+2 vs. magic-using and enchanted creatures", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsTargetEligibleForSwordPlusTwoBonus(MonsterInstance target)
+    {
+        return IsMagicUsingMonster(target)
+               || IsConjuredCreatedGatedOrSummoned(target)
+               || IsEnchantedCreature(target);
+    }
+
+    private static bool IsMagicUsingMonster(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var lowerName = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        if (lowerName.Contains("magic-user")
+            || lowerName.Contains("mage")
+            || lowerName.Contains("wizard")
+            || lowerName.Contains("illusionist")
+            || lowerName.Contains("sorcerer")
+            || lowerName.Contains("warlock"))
+        {
+            return true;
+        }
+
+        foreach (var ability in GetMonsterAbilityNames(target))
+        {
+            var lower = ability.ToLowerInvariant();
+            if (lower.Contains("casts ")
+                || lower.Contains("mage spells")
+                || lower.Contains("magic-user spells")
+                || lower.Contains("illusionist spells")
+                || lower.Contains("cleric spells")
+                || lower.Contains("priest spells")
+                || lower.Contains("druid spells"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsConjuredCreatedGatedOrSummoned(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("conjur")
+               || composite.Contains("summon")
+               || composite.Contains("gated")
+               || composite.Contains("gate")
+               || composite.Contains("created");
+    }
+
+    private static bool IsEnchantedCreature(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("enchant");
     }
 
     private static bool RequiresPlusOneWeaponToHit(MonsterInstance target)

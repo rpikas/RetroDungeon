@@ -1404,6 +1404,8 @@ public sealed class CombatCoordinator
         if (string.IsNullOrWhiteSpace(descriptorPart))
             return null;
 
+        var originalDescriptorPart = descriptorPart;
+
         static string NormalizeSwordNoSpecialLabel(string value)
         {
             return value
@@ -1425,6 +1427,11 @@ public sealed class CombatCoordinator
             && normalizedDescriptor.Contains("abilities"))
         {
             descriptorPart = "Long Sword +1";
+        }
+
+        if (descriptorPart.StartsWith("Sword", StringComparison.OrdinalIgnoreCase))
+        {
+            descriptorPart = ResolveSwordLootForm(descriptorPart);
         }
 
         var exact = allItems.FirstOrDefault(i => string.Equals(i.Name, descriptorPart, StringComparison.OrdinalIgnoreCase));
@@ -1450,7 +1457,30 @@ public sealed class CombatCoordinator
         }
 
         var normalized = NormalizeMatchKey(descriptorPart);
-        return allItems.FirstOrDefault(i => string.Equals(NormalizeMatchKey(i.Name), normalized, StringComparison.OrdinalIgnoreCase));
+        var resolved = allItems.FirstOrDefault(i => string.Equals(NormalizeMatchKey(i.Name), normalized, StringComparison.OrdinalIgnoreCase));
+        if (resolved != null)
+            return resolved;
+
+        var normalizedOriginal = NormalizeMatchKey(originalDescriptorPart);
+        return allItems.FirstOrDefault(i => string.Equals(NormalizeMatchKey(i.Name), normalizedOriginal, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private string ResolveSwordLootForm(string descriptor)
+    {
+        var roll = _random.Next(1, 101);
+        var swordType = roll switch
+        {
+            <= 70 => "Long Sword",
+            <= 90 => "Broad Sword",
+            <= 95 => "Short Sword",
+            <= 99 => "Bastard Sword",
+            _ => "Sword, Two-handed"
+        };
+
+        if (string.Equals(swordType, "Sword, Two-handed", StringComparison.OrdinalIgnoreCase))
+            return descriptor.Replace("Sword", "Sword, Two-handed", StringComparison.OrdinalIgnoreCase);
+
+        return descriptor.Replace("Sword", swordType, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsWornEquipmentPlaceholder(TreasureMagicPlaceholderResult placeholder)
