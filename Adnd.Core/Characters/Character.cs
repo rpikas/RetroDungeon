@@ -80,6 +80,10 @@ public class Character
     public bool RingInvisibilityActive { get; set; }
     public bool RingInvisibilityAppliedArmorClassBonus { get; set; }
     public bool RingInvisibilityInaudibilityActive { get; set; }
+    public int RingProtectionArmorClassBonusApplied { get; set; }
+    public int RingProtectionSelfSaveBonus { get; set; }
+    public int RingProtectionAuraSaveBonus { get; set; }
+    public int RingProtectionReceivedAuraSaveBonus { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -263,6 +267,120 @@ public class Character
 
         RingInvisibilityInaudibilityActive = false;
         return true;
+    }
+
+    private static bool IsRingOfProtection(Item? item)
+        => item != null && string.Equals(item.Name, "Ring of Protection", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsMagicalArmor(Item? item)
+        => item != null
+           && item.Type == ItemType.Armor
+           && (item.Name?.Contains('+') ?? false);
+
+    private static string RollRingProtectionProfileKey(Random roller)
+    {
+        var roll = roller.Next(1, 101);
+        if (roll <= 70) return "P1";
+        if (roll <= 82) return "P2";
+        if (roll == 83) return "P2A";
+        if (roll <= 90) return "P3";
+        if (roll == 91) return "P3A";
+        if (roll <= 97) return "P4A2S";
+        return "P6A1S";
+    }
+
+    private static (int ArmorClassBonus, int SaveBonus, int AuraSaveBonus) ParseRingProtectionProfile(string profileKey)
+    {
+        return profileKey switch
+        {
+            "P1" => (1, 1, 0),
+            "P2" => (2, 2, 0),
+            "P2A" => (2, 2, 2),
+            "P3" => (3, 3, 0),
+            "P3A" => (3, 3, 3),
+            "P4A2S" => (4, 2, 0),
+            "P6A1S" => (6, 1, 0),
+            _ => (1, 1, 0)
+        };
+    }
+
+    private static string EnsureRingProtectionProfile(Item ring, Random? rng = null)
+    {
+        ring.SpecialAbilities ??= new List<string>();
+
+        var existing = ring.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("RingProtectionProfile:", StringComparison.OrdinalIgnoreCase));
+
+        if (!string.IsNullOrWhiteSpace(existing))
+        {
+            var idx = existing.IndexOf(':');
+            if (idx >= 0 && idx < existing.Length - 1)
+                return existing[(idx + 1)..].Trim().ToUpperInvariant();
+        }
+
+        var roller = rng ?? Random.Shared;
+        var rolled = RollRingProtectionProfileKey(roller);
+        ring.SpecialAbilities.Add($"RingProtectionProfile:{rolled}");
+        return rolled;
+    }
+
+    public void RefreshRingProtectionEffects(Random? rng = null)
+    {
+        var equippedRings = new List<(Item Ring, int ArmorClassBonus, int SaveBonus, int AuraSaveBonus)>();
+
+        if (Equipment.TryGetValue(EquipmentSlot.Ring1, out var ring1) && IsRingOfProtection(ring1))
+        {
+            var profileKey = EnsureRingProtectionProfile(ring1!, rng);
+            var profile = ParseRingProtectionProfile(profileKey);
+            equippedRings.Add((ring1!, profile.ArmorClassBonus, profile.SaveBonus, profile.AuraSaveBonus));
+        }
+
+        if (Equipment.TryGetValue(EquipmentSlot.Ring2, out var ring2) && IsRingOfProtection(ring2))
+        {
+            var profileKey = EnsureRingProtectionProfile(ring2!, rng);
+            var profile = ParseRingProtectionProfile(profileKey);
+            equippedRings.Add((ring2!, profile.ArmorClassBonus, profile.SaveBonus, profile.AuraSaveBonus));
+        }
+
+        var wearingMagicalArmor = Equipment.TryGetValue(EquipmentSlot.Body, out var bodyArmor)
+                                 && IsMagicalArmor(bodyArmor);
+
+        var bestArmorClassBonus = 0;
+        var bestSaveBonus = 0;
+        var bestAuraSaveBonus = 0;
+
+        if (equippedRings.Count > 0)
+        {
+            var bestRing = wearingMagicalArmor
+                ? equippedRings
+                    .OrderByDescending(r => r.SaveBonus)
+                    .ThenByDescending(r => r.ArmorClassBonus)
+                    .ThenByDescending(r => r.AuraSaveBonus)
+                    .First()
+                : equippedRings
+                    .OrderByDescending(r => r.ArmorClassBonus)
+                    .ThenByDescending(r => r.SaveBonus)
+                    .ThenByDescending(r => r.AuraSaveBonus)
+                    .First();
+
+            bestArmorClassBonus = bestRing.ArmorClassBonus;
+            bestSaveBonus = bestRing.SaveBonus;
+            bestAuraSaveBonus = bestRing.AuraSaveBonus;
+        }
+
+        var desiredArmorClassBonusApplied = wearingMagicalArmor ? 0 : bestArmorClassBonus;
+        var delta = desiredArmorClassBonusApplied - RingProtectionArmorClassBonusApplied;
+        if (delta != 0)
+            ArmorClass -= delta;
+
+        RingProtectionArmorClassBonusApplied = desiredArmorClassBonusApplied;
+        RingProtectionSelfSaveBonus = bestSaveBonus;
+        RingProtectionAuraSaveBonus = bestAuraSaveBonus;
+    }
+
+    public void SetRingProtectionReceivedAuraSaveBonus(int auraSaveBonus)
+    {
+        RingProtectionReceivedAuraSaveBonus = Math.Max(0, auraSaveBonus);
     }
 
     public void SetProtectionFromFireSelf(int rounds, int absorptionPool)

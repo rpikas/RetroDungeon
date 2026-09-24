@@ -476,6 +476,8 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
+        c.RefreshRingProtectionEffects();
+
         _layOnHandsButton.Visible = c.IsPaladin();
         _layOnHandsButton.Text = c.LayOnHandsUsedToday ? "L)ay Hands (used)" : "L)ay on Hands";
         _monkBodyHealButton.Visible = c.IsMonk() && c.GetMonkLevel() >= 7;
@@ -781,6 +783,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (ok)
         {
+            c.RefreshRingProtectionEffects();
             _characterRepository.Save(c);
             RefreshView();
         }
@@ -861,6 +864,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (EquipmentManager.Unequip(c, equipped[idx.Value]))
         {
+            c.RefreshRingProtectionEffects();
             _characterRepository.Save(c);
             RefreshView();
         }

@@ -84,6 +84,8 @@ public sealed class CombatResolver
 
     public List<CombatEvent> ResolveRound(CombatSession session, IReadOnlyDictionary<string, CombatAction> partyActions)
     {
+        ApplyRingProtectionAuras(session);
+
         var events = new List<CombatEvent>
         {
             new($"-- Round {session.RoundNumber} --")
@@ -3913,10 +3915,40 @@ public sealed class CombatResolver
 
     private static int ApplyUniversalPotionInvulnerabilitySaveBonus(Character target, int saveTarget)
     {
-        if (!target.HasActivePotionInvulnerability || target.PotionInvulnerabilitySaveBonus <= 0)
-            return saveTarget;
+        var adjusted = saveTarget;
 
-        return Math.Max(1, saveTarget - target.PotionInvulnerabilitySaveBonus);
+        if (target.HasActivePotionInvulnerability && target.PotionInvulnerabilitySaveBonus > 0)
+            adjusted = Math.Max(1, adjusted - target.PotionInvulnerabilitySaveBonus);
+
+        var ringProtectionSaveBonus = Math.Max(target.RingProtectionSelfSaveBonus, target.RingProtectionReceivedAuraSaveBonus);
+        if (ringProtectionSaveBonus > 0)
+            adjusted = Math.Max(1, adjusted - ringProtectionSaveBonus);
+
+        return adjusted;
+    }
+
+    private static void ApplyRingProtectionAuras(CombatSession session)
+    {
+        if (session?.Party == null)
+            return;
+
+        foreach (var member in session.Party)
+        {
+            member.RefreshRingProtectionEffects();
+            member.SetRingProtectionReceivedAuraSaveBonus(0);
+        }
+
+        var strongestAura = session.Party
+            .Where(m => m.CurrentHitPoints > 0 && !m.HasStatus(CharacterStatus.Dead))
+            .Select(m => Math.Max(0, m.RingProtectionAuraSaveBonus))
+            .DefaultIfEmpty(0)
+            .Max();
+
+        if (strongestAura <= 0)
+            return;
+
+        foreach (var member in session.Party)
+            member.SetRingProtectionReceivedAuraSaveBonus(strongestAura);
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

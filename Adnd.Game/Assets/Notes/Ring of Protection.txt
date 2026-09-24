@@ -1,0 +1,39 @@
+Ring of Protection
+What’s implemented
+1) Ring profile roll and persistence
+•	On first effective use/equip of a Ring of Protection, profile is rolled once using your table.
+•	Stored on the ring item as SpecialAbilities: ["RingProtectionProfile:<key>"] so it stays stable.
+2) Exact profile mapping
+Implemented profiles:
+•	+1 AC, +1 saves
+•	+2 AC, +2 saves
+•	+2 AC, +2 saves, +2 aura saves
+•	+3 AC, +3 saves
+•	+3 AC, +3 saves, +3 aura saves
+•	+4 AC, +2 saves
+•	+6 AC, +1 saves
+3) Strongest-ring-only rule
+•	If multiple rings of protection are worn, only one strongest profile is active.
+•	No stacking across multiple rings.
+4) Magical armor exception
+•	If magical body armor is worn (armor name contains '+'), ring AC bonus is suppressed.
+•	Save bonuses from ring still apply.
+5) Save bonuses applied globally
+•	Integrated into shared save pipeline (ApplyUniversalPotionInvulnerabilitySaveBonus) so ring save bonuses apply across save types already routed through it.
+•	Includes aura-received save bonus.
+6) Aura support (5' equivalent in current combat model)
+•	At start of each combat round:
+•	refresh ring protection effects for each party member,
+•	clear prior received aura,
+•	apply strongest active ring aura save bonus to party members.
+•	Wearer still gets self bonus; aura bonus applies to others (and same numeric cap behavior through max).
+7) Equip/unequip synchronization
+•	EquipmentManager now refreshes ring protection effects after equip/unequip.
+•	Also adjusted AC application so Ring of Protection does not double-apply via static ArmorClassBonus.
+8) Camp UI synchronization
+•	Character inspect RefreshView() now refreshes ring protection derived effects.
+•	Equip/unequip actions also refresh before save/display.
+ 
+Important note
+I did not run a full compile/test cycle in this pass, so there may still be unrelated pre-existing issues in CombatResolver from earlier edits.
+But the Ring of Protection wiring itself is now integrated across character state, equip flow, combat save flow, and aura propagation.

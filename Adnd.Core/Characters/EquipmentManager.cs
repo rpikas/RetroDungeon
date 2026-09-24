@@ -6,6 +6,22 @@ namespace Adnd.Core.Characters;
 
 public static class EquipmentManager
 {
+    private static bool IsRingOfProtection(Item? it)
+        => it != null && string.Equals(it.Name, "Ring of Protection", StringComparison.OrdinalIgnoreCase);
+
+    private static int GetEffectiveArmorClassBonusForEquip(Item? item)
+    {
+        if (item == null)
+            return 0;
+
+        // Ring of Protection AC is resolved dynamically from profile rules on Character,
+        // not from static item ArmorClassBonus.
+        if (IsRingOfProtection(item))
+            return 0;
+
+        return item.ArmorClassBonus;
+    }
+
     private static void EnsureEquipmentSlots(Character c)
     {
         foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
@@ -44,14 +60,16 @@ public static class EquipmentManager
             }
 
             // subtract the armor class bonus of the currently equipped item
-            c.ArmorClass += c.Equipment[slot].ArmorClassBonus;
+            c.ArmorClass += GetEffectiveArmorClassBonusForEquip(c.Equipment[slot]);
             c.Inventory.Add(c.Equipment[slot]);
         }
 
         // equip the new item and apply its armor class bonus
         c.Equipment[slot] = item;
-        c.ArmorClass -= item.ArmorClassBonus;
+        c.ArmorClass -= GetEffectiveArmorClassBonusForEquip(item);
         c.Inventory.Remove(item);
+
+        c.RefreshRingProtectionEffects();
 
         RecalculateDamage(c);
         c.RefreshMoveFromArmorAndClass();
@@ -74,9 +92,11 @@ public static class EquipmentManager
         }
 
         // remove item's armor class bonus when unequipping
-        c.ArmorClass += c.Equipment[slot].ArmorClassBonus;
+        c.ArmorClass += GetEffectiveArmorClassBonusForEquip(c.Equipment[slot]);
         c.Inventory.Add(c.Equipment[slot]);
         c.Equipment[slot] = null;
+
+        c.RefreshRingProtectionEffects();
 
         RecalculateDamage(c);
         c.RefreshMoveFromArmorAndClass();
