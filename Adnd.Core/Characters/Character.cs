@@ -56,6 +56,10 @@ public class Character
     public int ColdResistanceRoundsRemaining { get; set; }
     public int ColdResistanceSaveBonus { get; set; }
     public bool ColdResistanceActive { get; set; }
+    public int PotionFireResistanceRoundsRemaining { get; set; }
+    public int PotionFireResistanceSaveBonusVsFire { get; set; }
+    public int PotionFireResistanceDamageReductionPerDie { get; set; }
+    public bool PotionFireResistanceNormalFireImmunity { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -116,6 +120,9 @@ public class Character
 
     [JsonIgnore]
     public bool HasActiveResistCold => ColdResistanceActive && ColdResistanceRoundsRemaining > 0;
+
+    [JsonIgnore]
+    public bool HasActivePotionFireResistance => PotionFireResistanceRoundsRemaining > 0;
 
     public void SetProtectionFromFireSelf(int rounds, int absorptionPool)
     {
@@ -183,6 +190,22 @@ public class Character
         ColdResistanceRoundsRemaining = 0;
         ColdResistanceSaveBonus = 0;
         ColdResistanceActive = false;
+    }
+
+    public void SetPotionFireResistanceFullDose()
+    {
+        PotionFireResistanceRoundsRemaining = 10; // 1 turn
+        PotionFireResistanceSaveBonusVsFire = 4;
+        PotionFireResistanceDamageReductionPerDie = 2;
+        PotionFireResistanceNormalFireImmunity = true;
+    }
+
+    public void ClearPotionFireResistance()
+    {
+        PotionFireResistanceRoundsRemaining = 0;
+        PotionFireResistanceSaveBonusVsFire = 0;
+        PotionFireResistanceDamageReductionPerDie = 0;
+        PotionFireResistanceNormalFireImmunity = false;
     }
 
     public override string ToString()

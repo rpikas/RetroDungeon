@@ -1003,9 +1003,10 @@ public sealed class CampCharacterInspectForm : Form
                 item,
                 index,
                 spell = _spellCastingService.FindSpellFromItem(item),
-                grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration")
+                grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
+                grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance")
             })
-            .Where(x => x.spell != null || x.grantsRegeneration)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -1017,13 +1018,16 @@ public sealed class CampCharacterInspectForm : Form
         var itemIdx = PromptChoice("Use Item", usableItems.Select(x =>
             x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
-                : $"{x.item.Name} (grants regeneration)").ToList());
+                : x.grantsRegeneration
+                    ? $"{x.item.Name} (grants regeneration)"
+                    : $"{x.item.Name} (grants fire resistance)").ToList());
         if (!itemIdx.HasValue)
             return;
 
         var selected = usableItems[itemIdx.Value];
         var spell = selected.spell;
         var grantsRegenerationUntilDungeonExit = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
+        var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
         var targets = new List<SpellCastTarget>();
 
         if (spell != null && spell.RangeType == SpellRangeType.Self)
@@ -1062,7 +1066,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit)
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1085,6 +1089,12 @@ public sealed class CampCharacterInspectForm : Form
                 SpecialAbilities = new List<string> { "Regeneration (Potion)" }
             });
             result.Events.Add($"{user.Name} begins regenerating until leaving the dungeon.");
+        }
+
+        if (grantsFireResistancePotion)
+        {
+            user.SetPotionFireResistanceFullDose();
+            result.Events.Add($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds.");
         }
 
         foreach (var member in partyMembers)

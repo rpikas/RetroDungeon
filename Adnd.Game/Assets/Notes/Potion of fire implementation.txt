@@ -1,0 +1,48 @@
+Potion of fire implementation
+What is now implemented
+1) Full-dose potion effect state on character
+Added to Character:
+•	PotionFireResistanceRoundsRemaining
+•	PotionFireResistanceSaveBonusVsFire
+•	PotionFireResistanceDamageReductionPerDie
+•	PotionFireResistanceNormalFireImmunity
+•	HasActivePotionFireResistance
+•	SetPotionFireResistanceFullDose() → sets:
+•	duration = 10 rounds (1 turn)
+•	save bonus = +4
+•	damage reduction = -2 per die
+•	normal fire immunity = true
+•	ClearPotionFireResistance()
+ 
+2) Potion use applies effect (exploration + combat)
+Exploration (CampCharacterInspectForm.UseItemAction)
+•	Recognizes items with Casts Fire Resistance.
+•	Treats them as usable even without spell mapping.
+•	Consumes potion.
+•	Applies full-dose effect to user.
+•	Adds message with exact granted benefits.
+Combat (CombatResolver.ResolvePartyUseItem)
+•	Same behavior in combat item usage.
+•	Works both in “no spell id fallback” and normal use flow.
+•	Consumes potion and applies full-dose effect.
+ 
+3) Duration ticking + expiry
+In CombatResolver round processing:
+•	PotionFireResistanceRoundsRemaining decrements each round.
+•	On expiration, clears effect and logs expiry message.
+ 
+4) Fire mitigation and save bonus integrated into incoming fire paths
+Applied potion bonuses in these fire damage paths:
+•	Monster Fireball
+•	+4 save bonus vs fire
+•	-2 per die reduction (using known dice count)
+•	Monster Flame Strike
+•	+4 save bonus vs fire
+•	-2 per die reduction (6d8 path → uses 6 dice count)
+•	Monster fiery explosion on hit
+•	+4 save bonus vs fire
+•	-2 per die reduction (6 dice count)
+•	Dragon/generic breath fire branch
+•	+4 save bonus vs fire
+•	mitigation helper applied (dice count unknown path uses 0, so per-die subtraction is skipped there by design)
+It is merged with existing fire spell protections by taking the larger fire save bonus where both exist.

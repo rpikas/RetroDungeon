@@ -263,6 +263,16 @@ public sealed class CombatResolver
                 }
             }
 
+            if (member.PotionFireResistanceRoundsRemaining > 0)
+            {
+                member.PotionFireResistanceRoundsRemaining = Math.Max(0, member.PotionFireResistanceRoundsRemaining - 1);
+                if (member.PotionFireResistanceRoundsRemaining <= 0)
+                {
+                    member.ClearPotionFireResistance();
+                    events.Add(new CombatEvent($"{member.Name}'s Potion of Fire Resistance effect expires."));
+                }
+            }
+
             if (member.ColdResistanceRoundsRemaining > 0)
             {
                 member.ColdResistanceRoundsRemaining = Math.Max(0, member.ColdResistanceRoundsRemaining - 1);
@@ -1193,6 +1203,7 @@ public sealed class CombatResolver
         var item = user.Inventory[action.ItemInventoryIndex.Value];
         var spellId = action.SpellId;
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
+        var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
@@ -1202,7 +1213,7 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
-            if (grantsRegenerationUntilDungeonExit)
+            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion)
             {
                 if (item.Type is ItemType.Potion or ItemType.Scroll)
                     user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
@@ -1218,6 +1229,12 @@ public sealed class CombatResolver
                     });
 
                     events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
+                }
+
+                if (grantsFireResistancePotion)
+                {
+                    user.SetPotionFireResistanceFullDose();
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
                 }
 
                 events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
@@ -1262,6 +1279,12 @@ public sealed class CombatResolver
             });
 
             events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
+        }
+
+        if (grantsFireResistancePotion)
+        {
+            user.SetPotionFireResistanceFullDose();
+            events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
         }
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
@@ -1888,10 +1911,14 @@ public sealed class CombatResolver
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = _dice.Roll(4) + _dice.Roll(4); // same glyph damage model used elsewhere
         var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        var fireSaveBonus = Math.Max(partyTarget.FireProtectionSaveBonusVsFire, partyTarget.PotionFireResistanceSaveBonusVsFire);
+        if (fireSaveBonus > 0)
+            saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
         if (session.IsChantActive || session.IsPrayerActive)
             saveTarget = Math.Max(1, saveTarget - 1);
         var saveRoll = _dice.Roll(20);
-        var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+        var preSaveDamage = ApplyFireProtectionDamageReduction(partyTarget, rolledDamage, 6, isMagicalFire: true, isNormalFire: false);
+        var applied = saveRoll >= saveTarget ? Math.Max(1, preSaveDamage / 2) : preSaveDamage;
 
         var beforeHp = partyTarget.CurrentHitPoints;
         partyTarget.CurrentHitPoints = Math.Max(0, partyTarget.CurrentHitPoints - applied);
@@ -2479,12 +2506,13 @@ public sealed class CombatResolver
         {
             var rolledDamage = _dice.RollMany(6, fireballDamageDice);
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
-            if (target.FireProtectionSaveBonusVsFire > 0)
-                saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
+            var fireSaveBonus = Math.Max(target.FireProtectionSaveBonusVsFire, target.PotionFireResistanceSaveBonusVsFire);
+            if (fireSaveBonus > 0)
+                saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
             if (session.IsChantActive || session.IsPrayerActive)
                 saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
-            var preSaveDamage = ApplyFireProtectionDamageReduction(target, rolledDamage, isMagicalFire: true, isNormalFire: false);
+            var preSaveDamage = ApplyFireProtectionDamageReduction(target, rolledDamage, fireballDamageDice, isMagicalFire: true, isNormalFire: false);
             if (preSaveDamage <= 0)
             {
                 events.Add(new CombatEvent($"{target.Name} is protected from fireball damage."));
@@ -2834,10 +2862,11 @@ public sealed class CombatResolver
         foreach (var target in aliveParty)
         {
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
-            if (target.FireProtectionSaveBonusVsFire > 0)
-                saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
+            var fireSaveBonus = Math.Max(target.FireProtectionSaveBonusVsFire, target.PotionFireResistanceSaveBonusVsFire);
+            if (fireSaveBonus > 0)
+                saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
             var saveRoll = _dice.Roll(20);
-            var preSaveDamage = ApplyFireProtectionDamageReduction(target, rolledDamage, isMagicalFire: true, isNormalFire: false);
+            var preSaveDamage = ApplyFireProtectionDamageReduction(target, rolledDamage, 0, isMagicalFire: true, isNormalFire: false);
             if (preSaveDamage <= 0)
             {
                 events.Add(new CombatEvent($"{target.Name} is protected from {monster.DisplayName}'s breath."));
@@ -2881,19 +2910,28 @@ public sealed class CombatResolver
         foreach (var target in aliveParty)
         {
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
-            var isBlueDragonLightningBreath = string.Equals(monster.Template.Name?.Trim(), "Blue Dragon", StringComparison.OrdinalIgnoreCase);
-            var isWhiteDragonColdBreath = string.Equals(monster.Template.Name?.Trim(), "White Dragon", StringComparison.OrdinalIgnoreCase);
-            var isSilverDragonColdBreath = string.Equals(monster.Template.Name?.Trim(), "Silver Dragon", StringComparison.OrdinalIgnoreCase);
+            var dragonName = monster.Template.Name?.Trim() ?? string.Empty;
+            var isBlueDragonLightningBreath = string.Equals(dragonName, "Blue Dragon", StringComparison.OrdinalIgnoreCase);
+            var isWhiteDragonColdBreath = string.Equals(dragonName, "White Dragon", StringComparison.OrdinalIgnoreCase);
+            var isSilverDragonColdBreath = string.Equals(dragonName, "Silver Dragon", StringComparison.OrdinalIgnoreCase);
+            var isRedDragonFireBreath = string.Equals(dragonName, "Red Dragon", StringComparison.OrdinalIgnoreCase);
+            var isGoldDragonFireBreath = string.Equals(dragonName, "Gold Dragon", StringComparison.OrdinalIgnoreCase);
+            var isBrassDragonFireBreath = string.Equals(dragonName, "Brass Dragon", StringComparison.OrdinalIgnoreCase);
             var isColdDragonBreath = isWhiteDragonColdBreath || isSilverDragonColdBreath;
+            var isFireDragonBreath = isRedDragonFireBreath || isGoldDragonFireBreath || isBrassDragonFireBreath;
             if (isBlueDragonLightningBreath && target.LightningProtectionSaveBonusVsLightning > 0)
                 saveTarget = Math.Max(1, saveTarget - target.LightningProtectionSaveBonusVsLightning);
             if (isColdDragonBreath && target.HasActiveResistCold && target.ColdResistanceSaveBonus > 0)
                 saveTarget = Math.Max(1, saveTarget - target.ColdResistanceSaveBonus);
-            if (!isBlueDragonLightningBreath && !isColdDragonBreath && target.FireProtectionSaveBonusVsFire > 0)
-                saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
+            if (isFireDragonBreath)
+            {
+                var fireSaveBonus = Math.Max(target.FireProtectionSaveBonusVsFire, target.PotionFireResistanceSaveBonusVsFire);
+                if (fireSaveBonus > 0)
+                    saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
+            }
             var saveRoll = _dice.Roll(20);
             var preSaveDamage = breathDamage;
-            if (!isBlueDragonLightningBreath && !isColdDragonBreath)
+            if (isFireDragonBreath)
                 preSaveDamage = ApplyFireProtectionDamageReduction(target, preSaveDamage, isMagicalFire: true, isNormalFire: false);
             if (isBlueDragonLightningBreath)
                 preSaveDamage = ApplyLightningProtectionDamageReduction(target, preSaveDamage, isMagicalLightning: true, isNormalLightning: false);
@@ -3474,13 +3512,14 @@ public sealed class CombatResolver
         foreach (var member in session.AliveParty.ToList())
         {
             var saveTarget = _savingThrowService.GetSaveTarget(member, SaveThrowType.Spell);
-            if (member.FireProtectionSaveBonusVsFire > 0)
-                saveTarget = Math.Max(1, saveTarget - member.FireProtectionSaveBonusVsFire);
+            var fireSaveBonus = Math.Max(member.FireProtectionSaveBonusVsFire, member.PotionFireResistanceSaveBonusVsFire);
+            if (fireSaveBonus > 0)
+                saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
             if (session.IsChantActive || session.IsPrayerActive)
                 saveTarget = Math.Max(1, saveTarget - 1);
 
             var saveRoll = _dice.Roll(20);
-            var preSaveDamage = ApplyFireProtectionDamageReduction(member, rolledDamage, isMagicalFire: true, isNormalFire: false);
+            var preSaveDamage = ApplyFireProtectionDamageReduction(member, rolledDamage, 6, isMagicalFire: true, isNormalFire: false);
             if (preSaveDamage <= 0)
             {
                 events.Add(new CombatEvent($"{member.Name} is protected from the fiery explosion."));
@@ -3508,22 +3547,32 @@ public sealed class CombatResolver
         return true;
     }
 
-    private static int ApplyFireProtectionDamageReduction(Character target, int incomingDamage, bool isMagicalFire, bool isNormalFire)
+    private static int ApplyFireProtectionDamageReduction(Character target, int incomingDamage, int damageDiceCount, bool isMagicalFire, bool isNormalFire)
     {
         var damage = Math.Max(0, incomingDamage);
         if (damage <= 0)
             return 0;
 
-        if (!target.HasActiveProtectionFromFire)
+        var hasSpellProtection = target.HasActiveProtectionFromFire;
+        var hasPotionProtection = target.HasActivePotionFireResistance;
+        if (!hasSpellProtection && !hasPotionProtection)
             return damage;
 
-        if (isNormalFire && target.FireProtectionNormalFireImmunity)
+        var normalFireImmunity = (hasSpellProtection && target.FireProtectionNormalFireImmunity)
+            || (hasPotionProtection && target.PotionFireResistanceNormalFireImmunity);
+        if (isNormalFire && normalFireImmunity)
             return 0;
 
-        if (isMagicalFire && target.FireProtectionHalfDamageFromMagicalFire)
+        if (isMagicalFire && hasSpellProtection && target.FireProtectionHalfDamageFromMagicalFire)
             damage = (int)Math.Ceiling(damage * 0.5);
 
-        if (isMagicalFire && target.FireProtectionAbsorptionRemaining > 0)
+        if (isMagicalFire && hasPotionProtection && target.PotionFireResistanceDamageReductionPerDie > 0 && damageDiceCount > 0)
+        {
+            var reduction = target.PotionFireResistanceDamageReductionPerDie * damageDiceCount;
+            damage = Math.Max(0, damage - reduction);
+        }
+
+        if (isMagicalFire && hasSpellProtection && target.FireProtectionAbsorptionRemaining > 0)
         {
             var absorbed = Math.Min(target.FireProtectionAbsorptionRemaining, damage);
             target.FireProtectionAbsorptionRemaining -= absorbed;
