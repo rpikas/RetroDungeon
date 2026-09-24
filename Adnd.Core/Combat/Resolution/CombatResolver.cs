@@ -2353,14 +2353,9 @@ public sealed class CombatResolver
                 thac0Modifier += Math.Max(0, rangedWeapon.ToHitBonus);
             }
 
-            var swordSituationalBonus = 0;
-            if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(mainHand)
-                && IsTargetEligibleForSwordPlusTwoBonus(target))
-            {
-                // Weapon is +1 normally, but +2 vs magic-using/enchanted/conjured-created-gated-summoned creatures.
-                swordSituationalBonus = 1;
+            var swordSituationalBonus = GetSituationalSwordBonusAgainstTarget(mainHand, target);
+            if (swordSituationalBonus > 0)
                 thac0Modifier += swordSituationalBonus;
-            }
 
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
             int roll = _dice.Roll(20);
@@ -4550,6 +4545,48 @@ public sealed class CombatResolver
                    && a.Contains("+2 vs. magic-using and enchanted creatures", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordPlusOnePlusThreeVsLycanthropesAndShapeChangers(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.Replace('&', ' ').ToLowerInvariant();
+        if (normalized.Contains("sword +1, +3 vs. lycanthropes", StringComparison.Ordinal)
+            || normalized.Contains("sword +1 +3 vs lycanthropes", StringComparison.Ordinal)
+            || normalized.Contains("sword +1, +3 vs. lycanthropes shape changers", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("+3 vs. lycanthropes and shape changers", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static int GetSituationalSwordBonusAgainstTarget(Item? weapon, MonsterInstance target)
+    {
+        if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(weapon)
+            && IsTargetEligibleForSwordPlusTwoBonus(target))
+        {
+            // Weapon is +1 normally, but +2 vs magic-using/enchanted/conjured-created-gated-summoned creatures.
+            return 1;
+        }
+
+        if (IsSwordPlusOnePlusThreeVsLycanthropesAndShapeChangers(weapon)
+            && IsTargetLycanthropeOrShapeChanger(target))
+        {
+            // Weapon is +1 normally, but +3 vs lycanthropes and shape changers.
+            return 2;
+        }
+
+        return 0;
+    }
+
     private static bool IsTargetEligibleForSwordPlusTwoBonus(MonsterInstance target)
     {
         return IsMagicUsingMonster(target)
@@ -4619,6 +4656,33 @@ public sealed class CombatResolver
             .ToLowerInvariant();
 
         return composite.Contains("enchant");
+    }
+
+    private static bool IsTargetLycanthropeOrShapeChanger(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var lowerName = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        if (lowerName.Contains("lycanthrope")
+            || lowerName.Contains("were")
+            || lowerName.Contains("doppelganger")
+            || lowerName.Contains("wolfwer")
+            || lowerName.Contains("shape changer")
+            || lowerName.Contains("shapechanger"))
+        {
+            return true;
+        }
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("lycanthrope")
+               || composite.Contains("shape changer")
+               || composite.Contains("shapechanger")
+               || composite.Contains("polymorph");
     }
 
     private static bool RequiresPlusOneWeaponToHit(MonsterInstance target)

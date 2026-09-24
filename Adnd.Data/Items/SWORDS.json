@@ -675,6 +675,41 @@
                       "ToHitBonus":  1
                   },
                   {
+                      "Name":  "Sword +1, +3 vs. lycanthropes & shape changers",
+                      "Type":  "Weapon",
+                      "Cost":  3500,
+                      "Weight":  60,
+                      "Damage":  "1d8+1",
+                      "DamageVsLarge":  "1d12+1",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+                                               "+3 vs. lycanthropes and shape changers"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "+1 sword that acts as +3 versus lycanthropes and shape changers.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
                       "Name":  "Sword +1",
                       "Type":  "Weapon",
                       "Cost":  2000,
