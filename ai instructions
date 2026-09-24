@@ -2236,8 +2236,16 @@ Restriction:  This potion may only be used by men‑at‑arms and fighters.
 ____
 
 Implement Potion of Speed: 
-A potion of speed increases the movement and combat capabilities of the imbiber by 100% Thus, a movement rote of 9" becomes 18", and a character normally able to attack but once per round would gain double attacks in a round. Noie that this does not reduce spell casting time, how¬ ever (cf, haste spell). Use of o speed potion oges the individual by t year. The other effecis lost for 5-20 rounds, the aging is permanent.
+A potion of speed increases the movement and combat capabilities of the imbiber by 100% Thus, a movement rote of 9" becomes 18", 
+and a character normally able to attack but once per round would gain double attacks in a round. Noie that this does not reduce spell casting time, 
+how¬ ever (cf, haste spell). Use of o speed potion oges the individual by t year. The other effecis lost for 5-20 rounds, the aging is permanent.
+____
 
+Keep track of the individual characters' age in years and days.
+Every time the party exits the dungeon, each character should be 1 day older.
+implement  4.	Optional display updates
+•	UI display can show age as X years, Y days where relevant (character inspect/sheet), without changing mechanics.
+____
 
 
 

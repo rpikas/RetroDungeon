@@ -86,6 +86,7 @@ public class Character
     public Gender Gender { get; set; }
     public Alignment Alignment { get; set; }
     public int Age { get; set; }
+    public int AgeDays { get; set; }
     public List<Item> Inventory { get; set; } = new();
     public Dictionary<EquipmentSlot, Item?> Equipment { get; set; } = new();
     public int? ExceptionalStrengthPercentile { get; set; }
@@ -365,6 +366,20 @@ public class Character
     }
 
     public bool IsMonkImmuneToDiseaseSlowHaste() => IsMonk() && GetMonkLevel() >= 5;
+
+    public void AdvanceAgeByDays(int days)
+    {
+        if (days <= 0)
+            return;
+
+        AgeDays = Math.Max(0, AgeDays) + days;
+        var extraYears = AgeDays / 365;
+        if (extraYears > 0)
+        {
+            Age = Math.Max(0, Age + extraYears);
+            AgeDays %= 365;
+        }
+    }
 
     public bool IsMonkImmuneToPoison() => IsMonk() && GetMonkLevel() >= 11;
 

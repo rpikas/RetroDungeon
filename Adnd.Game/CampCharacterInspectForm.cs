@@ -535,7 +535,7 @@ public sealed class CampCharacterInspectForm : Form
             : c.Level.ToString();
 
         var sb = new System.Text.StringBuilder();
-        var age = Math.Max(14, c.Level + 13);
+        var ageText = $"{Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d";
         static string RowWithRightColumn(string left, string middle, string rightLabel, string rightValue)
             => $"{left,-20}{middle,-26}{rightLabel,-5}{rightValue,4}";
 
@@ -554,7 +554,7 @@ public sealed class CampCharacterInspectForm : Form
             $"INTELLIGENCE {c.Abilities.Intelligence,2}",
             $"XP        {c.Experience,6}",
             "AGE",
-            age.ToString()));
+            ageText));
         sb.AppendLine($"WISDOM       {c.Abilities.Wisdom,2}");
         sb.AppendLine(RowWithRightColumn(
             $"DEXTERITY    {c.Abilities.Dexterity,2}",

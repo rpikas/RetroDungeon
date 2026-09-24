@@ -82,6 +82,7 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.Level.ToString(), new Rectangle(640, 80, 46, 40));  
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
+            DrawInBox(g, $"{Math.Max(0, _character.Age)}y {Math.Max(0, _character.AgeDays)}d", new Rectangle(44, 188, 120, 36), false, StringAlignment.Center, _handFontSmall10);
 
             // Ability circles: write only the value inside each circle, not labels.
             if (_character.ExceptionalStrengthPercentile == null)

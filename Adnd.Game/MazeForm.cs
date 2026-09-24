@@ -2332,6 +2332,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
                 if (result == DialogResult.Yes)
                 {
+                    ApplyPartyAgingForDungeonExitDay();
                     ApplyDiseaseProgressForDungeonExitDay();
                     Close();
                     return;
@@ -2483,6 +2484,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (messages.Count > 0)
             SayOnBoth("Disease", string.Join(Environment.NewLine, messages));
+    }
+
+    private void ApplyPartyAgingForDungeonExitDay()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            c.AdvanceAgeByDays(1);
+            _characterRepository.Save(c);
+        }
     }
 
     private static bool HasEquippedRegeneration(Character c)
