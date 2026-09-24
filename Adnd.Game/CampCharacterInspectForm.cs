@@ -1726,6 +1726,12 @@ public sealed class CampCharacterInspectForm : Form
                 $"Version: {item.Version}"
             };
 
+            if (string.Equals(item.Name, "Ring of Wizardry", StringComparison.OrdinalIgnoreCase))
+            {
+                var wizardryProfile = DescribeRingWizardryProfile(specialAbilities);
+                details.Add($"Ring wizardry profile: {wizardryProfile}");
+            }
+
             if (item.AllowedClasses.Count > 0)
                 details.Add("Allowed classes: " + string.Join(", ", item.AllowedClasses));
 
@@ -1738,6 +1744,33 @@ public sealed class CampCharacterInspectForm : Form
         form.CancelButton = cancel;
 
         form.ShowDialog(this);
+    }
+
+    private static string DescribeRingWizardryProfile(List<string> specialAbilities)
+    {
+        var profileEntry = specialAbilities
+            .FirstOrDefault(a => a.StartsWith("RingWizardryProfile:", StringComparison.OrdinalIgnoreCase));
+
+        if (string.IsNullOrWhiteSpace(profileEntry))
+            return "Unrevealed (wear/equip to determine).";
+
+        var idx = profileEntry.IndexOf(':');
+        var key = idx >= 0 && idx < profileEntry.Length - 1
+            ? profileEntry[(idx + 1)..].Trim().ToUpperInvariant()
+            : string.Empty;
+
+        return key switch
+        {
+            "W1" => "Doubles 1st-level spells/day.",
+            "W2" => "Doubles 2nd-level spells/day.",
+            "W3" => "Doubles 3rd-level spells/day.",
+            "W12" => "Doubles 1st- and 2nd-level spells/day.",
+            "W4" => "Doubles 4th-level spells/day.",
+            "W5" => "Doubles 5th-level spells/day.",
+            "W123" => "Doubles 1st- through 3rd-level spells/day.",
+            "W45" => "Doubles 4th- and 5th-level spells/day.",
+            _ => $"Unknown profile ({key})."
+        };
     }
 
     private void TradeAction()
