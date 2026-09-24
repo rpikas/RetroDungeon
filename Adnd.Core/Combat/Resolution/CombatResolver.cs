@@ -9,6 +9,7 @@ using Adnd.Core.Items;
 using Adnd.Core.Monsters;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
+using Adnd.Core.Spells.Casting.Handlers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -1276,6 +1277,7 @@ public sealed class CombatResolver
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
+        var grantsAnimalControlPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Animal Control");
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
         var grantsSuperHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism");
         var grantsInvulnerabilityPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability");
@@ -1288,6 +1290,7 @@ public sealed class CombatResolver
             => grantsRegenerationUntilDungeonExit
                || grantsFireResistancePotion
                || grantsGiantStrengthPotion
+               || grantsAnimalControlPotion
                || grantsHeroismPotion
                || grantsSuperHeroismPotion
                || grantsInvulnerabilityPotion
@@ -1406,6 +1409,81 @@ public sealed class CombatResolver
                     var bonusHp = rolled + profile.Bonus;
                     user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                     events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
+                }
+            }
+
+            if (grantsAnimalControlPotion)
+            {
+                var categoryRoll = _dice.Roll(20);
+                var category = ResolveAnimalControlCategory(categoryRoll);
+                var eligibleAnimals = session.AliveMonsters
+                    .Where(m => m.InstanceMonsterType == MonsterType.Animal)
+                    .Where(m => IsAnimalControlCategoryMatch(m, category))
+                    .ToList();
+
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Animal Control (d20 {categoryRoll}: {category})."));
+
+                if (eligibleAnimals.Count == 0)
+                {
+                    events.Add(new CombatEvent("No controllable animals of the potion's type are present."));
+                }
+                else
+                {
+                    var targetSize = PickBestAnimalControlSize(eligibleAnimals);
+                    var sizeTargets = eligibleAnimals
+                        .Where(m => m.Template.Size == targetSize)
+                        .OrderBy(_ => _rng.Next())
+                        .ToList();
+
+                    var capacity = RollAnimalControlCapacity(targetSize);
+                    var attempted = 0;
+                    var controlled = 0;
+
+                    foreach (var target in sizeTargets)
+                    {
+                        if (attempted >= capacity)
+                            break;
+
+                        attempted += 1;
+
+                        if (target.HasStatus(MonsterStatus.Charmed))
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} is already charmed."));
+                            continue;
+                        }
+
+                        if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, "Animal Control"))
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} is immune to mind-affecting control."));
+                            continue;
+                        }
+
+                        MonsterIntelligenceResolver.RegisterMonsterIntelligence(target.Template.Name, target.Template.Intelligence);
+                        var intelligence = MonsterIntelligenceResolver.GetIntelligenceForMonster(target.Template.Name);
+
+                        if (intelligence >= 5)
+                        {
+                            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
+                            var saveRoll = _dice.Roll(20);
+                            if (saveRoll >= saveTarget)
+                            {
+                                events.Add(new CombatEvent($"{target.DisplayName} resists animal control (save {saveRoll} vs {saveTarget})."));
+                                continue;
+                            }
+                        }
+
+                        if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, _rng, "Animal Control"))
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} negates animal control with magic resistance."));
+                            continue;
+                        }
+
+                        target.SetStatus(MonsterStatus.Charmed, int.MaxValue);
+                        controlled += 1;
+                        events.Add(new CombatEvent($"{target.DisplayName} is brought under animal control and fights for {user.Name}."));
+                    }
+
+                    events.Add(new CombatEvent($"Animal control affects {SizeLabel(targetSize)} animals: attempted {attempted} of capacity {capacity}, controlled {controlled}."));
                 }
             }
 
@@ -1535,6 +1613,77 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+    }
+
+    private int RollAnimalControlCapacity(MonsterSize size)
+    {
+        return size switch
+        {
+            MonsterSize.Small => _dice.Roll(16) + 4,
+            MonsterSize.Medium => _dice.Roll(10) + 2,
+            _ => _dice.Roll(4)
+        };
+    }
+
+    private static MonsterSize PickBestAnimalControlSize(IReadOnlyCollection<MonsterInstance> animals)
+    {
+        return animals
+            .GroupBy(a => a.Template.Size)
+            .OrderByDescending(g => g.Count())
+            .ThenBy(g => g.Key == MonsterSize.Small ? 0 : g.Key == MonsterSize.Medium ? 1 : 2)
+            .Select(g => g.Key)
+            .FirstOrDefault();
+    }
+
+    private static string SizeLabel(MonsterSize size)
+    {
+        return size switch
+        {
+            MonsterSize.Small => "small",
+            MonsterSize.Medium => "man-sized",
+            _ => "large"
+        };
+    }
+
+    private static string ResolveAnimalControlCategory(int d20)
+    {
+        return d20 switch
+        {
+            <= 4 => "mammal/marsupial",
+            <= 8 => "avian",
+            <= 12 => "reptile/amphibian",
+            <= 15 => "fish",
+            <= 17 => "mammal/marsupial/avian",
+            <= 19 => "reptile/amphibian/fish",
+            _ => "all animal types"
+        };
+    }
+
+    private static bool IsAnimalControlCategoryMatch(MonsterInstance monster, string category)
+    {
+        if (string.Equals(category, "all animal types", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var kind = ResolveAnimalKind(monster);
+        return category.Split('/').Any(part => string.Equals(part.Trim(), kind, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string ResolveAnimalKind(MonsterInstance monster)
+    {
+        var name = monster.Template.Name?.ToLowerInvariant() ?? string.Empty;
+        var typeName = monster.Template.TypeName?.ToLowerInvariant() ?? string.Empty;
+        var merged = $"{name} {typeName}";
+
+        if (merged.Contains("bird") || merged.Contains("avian") || merged.Contains("eagle") || merged.Contains("hawk") || merged.Contains("owl") || merged.Contains("vulture") || merged.Contains("raven"))
+            return "avian";
+
+        if (merged.Contains("snake") || merged.Contains("lizard") || merged.Contains("reptile") || merged.Contains("amphib") || merged.Contains("frog") || merged.Contains("toad") || merged.Contains("turtle") || merged.Contains("crocod"))
+            return "reptile";
+
+        if (merged.Contains("fish") || merged.Contains("shark") || merged.Contains("eel") || merged.Contains("piranha") || merged.Contains("trout") || merged.Contains("salmon"))
+            return "fish";
+
+        return "mammal";
     }
 
     private static void ResolveLayOnHands(CombatSession session, Character paladin, CombatAction action, List<CombatEvent> events)

@@ -1,0 +1,17 @@
+Potion of Animal Control
+This potion enables the imbiber to empathize with and control the emotions 
+of animals of 1 type, i.e. cats, dogs, horses, etc The number of animals so controlled depends upon 
+size: 5-20 animals of the size of giant rats, 3-12 animals of about man-size, or 1-4 animals of about 
+Vi ton or more in weight. The sort of animal which cori be controlled depends upon the particular 
+potion as indicated by die roll (d2G):
+1-4 mammal/marsupial
+5-8 avian
+9-12 reptile/amphibian
+13-15 fish
+16-17 mo mm a!/marsupial/avian
+18-19 reptile/amphibian/fish
+20 oil of the above
+Animais with intelligence of 5 (low intelligence) or better ore entitled to a saving throw versus magic.
+Control is limited to emotions or drives unless same form of communication is possible. 
+Note thai many monsiers cannot be controlled by the use of Ihis potion, nor can humans, demi-humans, 
+or humanoids. (Cf. Ring of MammaJ Control)
