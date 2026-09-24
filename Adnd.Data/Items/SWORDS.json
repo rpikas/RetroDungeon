@@ -889,6 +889,78 @@
                       "ToHitBonus":  1
                   },
                   {
+                      "Name":  "Sword +2",
+                      "Type":  "Weapon",
+                      "Cost":  4000,
+                      "Weight":  60,
+                      "Damage":  "1d8+2",
+                      "DamageVsLarge":  "1d12+2",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "A plain enchanted sword +2.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
+                      "Name":  "Sword +2, Giant Slayer",
+                      "Type":  "Weapon",
+                      "Cost":  4500,
+                      "Weight":  60,
+                      "Damage":  "1d8+2",
+                      "DamageVsLarge":  "1d12+2",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+                                               "Giant Slayer",
+                                               "+3 vs. giant, ettin, ogre mage, titan",
+                                               "Double damage vs. hill, stone, frost, fire, cloud, and storm giants"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "+2 Giant Slayer sword: +3 vs giant-kind (giants, ettins, ogre magi, titans); double damage vs true giants.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
                       "Name":  "Sword +3 (No Special Abilities)",
                       "Type":  "Weapon",
                       "Cost":  7000,

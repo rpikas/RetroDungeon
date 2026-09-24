@@ -2405,6 +2405,9 @@ public sealed class CombatResolver
             if (partyDamageBonusApplied)
                 damage += 1;
 
+            if (IsSwordPlusTwoGiantSlayer(mainHand) && IsTargetTrueGiantForGiantSlayer(target))
+                damage *= 2;
+
             if (isBackstab)
             {
                 var beforeBackstab = damage;
@@ -4665,6 +4668,28 @@ public sealed class CombatResolver
                    && a.Contains("Flame Tongue", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordPlusTwoGiantSlayer(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.ToLowerInvariant();
+        if (normalized.Contains("sword +2, giant slayer", StringComparison.Ordinal)
+            || normalized.Contains("sword +2 giant slayer", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Giant Slayer", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static int GetSituationalSwordBonusAgainstTarget(Item? weapon, MonsterInstance target)
     {
         if (IsSwordPlusOneFlameTongue(weapon))
@@ -4685,6 +4710,13 @@ public sealed class CombatResolver
                 return 1;
 
             return 0;
+        }
+
+        if (IsSwordPlusTwoGiantSlayer(weapon)
+            && IsTargetGiantKinForGiantSlayer(target))
+        {
+            // Weapon is +2 normally, but +3 vs giant-kind targets.
+            return 1;
         }
 
         if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(weapon)
@@ -4852,6 +4884,40 @@ public sealed class CombatResolver
                || composite.Contains("crocod")
                || composite.Contains("alligator")
                || composite.Contains("turtle");
+    }
+
+    private static bool IsTargetGiantKinForGiantSlayer(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        if (target.InstanceMonsterType == MonsterType.Giant)
+            return true;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("ettin")
+               || composite.Contains("ogre mage")
+               || composite.Contains("ogre-mage")
+               || composite.Contains("titan");
+    }
+
+    private static bool IsTargetTrueGiantForGiantSlayer(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var name = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+
+        return name.Contains("hill giant")
+               || name.Contains("stone giant")
+               || name.Contains("frost giant")
+               || name.Contains("fire giant")
+               || name.Contains("cloud giant")
+               || name.Contains("storm giant");
     }
 
     private static bool IsTargetColdUsingCreature(MonsterInstance target)
