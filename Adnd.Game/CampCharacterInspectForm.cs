@@ -1007,9 +1007,10 @@ public sealed class CampCharacterInspectForm : Form
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
                 grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
                 grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism"),
+                grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -1029,6 +1030,8 @@ public sealed class CampCharacterInspectForm : Form
                             ? $"{x.item.Name} (grants giant strength)"
                             : x.grantsHeroismPotion
                                 ? $"{x.item.Name} (grants heroism)"
+                                : x.grantsSpeedPotion
+                                    ? $"{x.item.Name} (grants speed)"
                                 : $"{x.item.Name} (heals 2d4+2)").ToList());
         if (!itemIdx.HasValue)
             return;
@@ -1039,6 +1042,7 @@ public sealed class CampCharacterInspectForm : Form
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
         var grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Giant Strength");
         var grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Heroism");
+        var grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Haste") || string.Equals(selected.item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
         var targets = new List<SpellCastTarget>();
 
@@ -1090,7 +1094,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !isPotionOfHealing)
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !grantsSpeedPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1182,6 +1186,12 @@ public sealed class CampCharacterInspectForm : Form
                 user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                 result.Events.Add($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit.");
             }
+        }
+
+        if (grantsSpeedPotion)
+        {
+            user.Age = Math.Max(0, user.Age + 1);
+            result.Events.Add($"{user.Name} drinks Potion of Speed: movement and combat capability are doubled for 5-20 combat rounds; ages 1 year permanently.");
         }
 
         foreach (var member in partyMembers)

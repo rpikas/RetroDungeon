@@ -1206,6 +1206,7 @@ public sealed class CombatResolver
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
+        var grantsSpeedPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
 
         if (string.IsNullOrWhiteSpace(spellId))
@@ -1216,7 +1217,7 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
-            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion || grantsHeroismPotion || isPotionOfHealing)
+            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion || grantsHeroismPotion || grantsSpeedPotion || isPotionOfHealing)
             {
                 if (grantsGiantStrengthPotion && !user.IsFighterClassed())
                 {
@@ -1314,6 +1315,23 @@ public sealed class CombatResolver
                         user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                         events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
                     }
+                }
+
+                if (grantsSpeedPotion)
+                {
+                    var rounds = _dice.Roll(16) + 4; // 5-20 rounds
+                    if (!session.IsHasted(user.Name))
+                    {
+                        session.SetHaste(user.Name, rounds, user.Move);
+                        user.Move *= 2;
+                    }
+                    else
+                    {
+                        session.SetHaste(user.Name, rounds, session.GetHasteOriginalMove(user.Name));
+                    }
+
+                    user.Age = Math.Max(0, user.Age + 1);
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Speed: move/attacks doubled for {rounds} rounds; ages 1 year permanently."));
                 }
 
                 events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
@@ -1428,6 +1446,23 @@ public sealed class CombatResolver
                 user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                 events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
             }
+        }
+
+        if (grantsSpeedPotion)
+        {
+            var rounds = _dice.Roll(16) + 4; // 5-20 rounds
+            if (!session.IsHasted(user.Name))
+            {
+                session.SetHaste(user.Name, rounds, user.Move);
+                user.Move *= 2;
+            }
+            else
+            {
+                session.SetHaste(user.Name, rounds, session.GetHasteOriginalMove(user.Name));
+            }
+
+            user.Age = Math.Max(0, user.Age + 1);
+            events.Add(new CombatEvent($"{user.Name} drinks Potion of Speed: move/attacks doubled for {rounds} rounds; ages 1 year permanently."));
         }
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
