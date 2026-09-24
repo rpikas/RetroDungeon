@@ -1128,12 +1128,13 @@ public sealed class CampCharacterInspectForm : Form
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
                 grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
                 grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism"),
+                grantsSuperHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism"),
                 grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability"),
                 grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase),
                 grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
             .ToList();
 
         var hasEquippedRingInvisibility = user.TryGetEquippedRingOfInvisibility(out var equippedRingOfInvisibility)
@@ -1179,6 +1180,8 @@ public sealed class CampCharacterInspectForm : Form
                             ? $"{x.item.Name} (grants giant strength)"
                             : x.grantsHeroismPotion
                                 ? $"{x.item.Name} (grants heroism)"
+                                : x.grantsSuperHeroismPotion
+                                    ? $"{x.item.Name} (grants super-heroism)"
                                 : x.grantsInvulnerabilityPotion
                                     ? $"{x.item.Name} (grants invulnerability)"
                                 : x.grantsLevitationPotion
@@ -1227,6 +1230,7 @@ public sealed class CampCharacterInspectForm : Form
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
         var grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Giant Strength");
         var grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Heroism");
+        var grantsSuperHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Super-Heroism");
         var grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Invulnerability");
         var grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Levitate") || string.Equals(selected.item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Haste") || string.Equals(selected.item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
@@ -1319,13 +1323,19 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
+        if (grantsSuperHeroismPotion && !user.IsFighterClassed())
+        {
+            SayOnBoth("Use Item", "Potion of Super-Heroism can only be used by fighters.");
+            return;
+        }
+
         if (grantsInvulnerabilityPotion && !user.IsFighterClassed())
         {
             SayOnBoth("Use Item", "Potion of Invulnerability can only be used by fighters.");
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !grantsInvulnerabilityPotion && !grantsLevitationPotion && !grantsSpeedPotion && !isPotionOfHealing)
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !grantsSuperHeroismPotion && !grantsInvulnerabilityPotion && !grantsLevitationPotion && !grantsSpeedPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1416,6 +1426,35 @@ public sealed class CampCharacterInspectForm : Form
                 var bonusHp = rolled + profile.Bonus;
                 user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                 result.Events.Add($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit.");
+            }
+        }
+
+        if (grantsSuperHeroismPotion)
+        {
+            var level = Math.Max(0, user.Level);
+            var profile = level switch
+            {
+                <= 0 => (LevelBonus: 6, Dice: 5, Bonus: 0),
+                <= 3 => (LevelBonus: 5, Dice: 4, Bonus: 1),
+                <= 6 => (LevelBonus: 4, Dice: 3, Bonus: 2),
+                <= 9 => (LevelBonus: 3, Dice: 2, Bonus: 3),
+                <= 12 => (LevelBonus: 2, Dice: 1, Bonus: 4),
+                _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
+            };
+
+            if (profile.LevelBonus <= 0)
+            {
+                result.Events.Add($"{user.Name} drinks Potion of Super-Heroism, but gains no extra life energy at level {level}.");
+            }
+            else
+            {
+                var rolled = 0;
+                for (var i = 0; i < profile.Dice; i++)
+                    rolled += Random.Shared.Next(1, 11);
+
+                var bonusHp = rolled + profile.Bonus;
+                user.SetPotionHeroism(profile.LevelBonus, bonusHp);
+                result.Events.Add($"{user.Name} drinks Potion of Super-Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit.");
             }
         }
 

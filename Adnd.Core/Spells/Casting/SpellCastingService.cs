@@ -33,6 +33,9 @@ public sealed class SpellCastingService
 
     public SpellCastResult CastFromItem(SpellCastRequest request)
     {
+        if (IsBlockedFromCasting(request.Caster))
+            return SpellCastResult.Failure($"{request.Caster.Name} is feebleminded and cannot cast spells.");
+
         if (!_spellsById.TryGetValue(request.SpellId, out var spell))
             return SpellCastResult.Failure($"Unknown spell: {request.SpellId}");
 
@@ -204,6 +207,9 @@ public sealed class SpellCastingService
 
     public SpellCastResult Cast(SpellCastRequest request)
     {
+        if (IsBlockedFromCasting(request.Caster))
+            return SpellCastResult.Failure($"{request.Caster.Name} is feebleminded and cannot cast spells.");
+
         if (!_spellsById.TryGetValue(request.SpellId, out var spell))
             return SpellCastResult.Failure($"Unknown spell: {request.SpellId}");
 
@@ -249,6 +255,9 @@ public sealed class SpellCastingService
 
     private static bool CanCast(Character caster, Spell spell)
     {
+        if (IsBlockedFromCasting(caster))
+            return false;
+
         if (caster.IsFallenPaladin() && spell.SpellClass == SpellClass.Cleric)
             return false;
 
@@ -272,6 +281,11 @@ public sealed class SpellCastingService
             return true;
 
         return state.KnownSpellIds.Contains(spell.Id, StringComparer.OrdinalIgnoreCase);
+    }
+
+    private static bool IsBlockedFromCasting(Character caster)
+    {
+        return caster.HasStatus(CharacterStatus.Feeblemind);
     }
 
     private static bool IsContextAllowed(Spell spell, SpellUseContext context)

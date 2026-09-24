@@ -2430,3 +2430,19 @@ below:
 11-16 Humans
 17-19 Humanoids (gnolls, orcs, goblins, etc.)
 20 Elves, Half-Elves, and Humans
+
+____
+
+Characters should not be able to cast spells when feebleminded, now they are not able to cast spells 
+____
+Potion of Super-Heroism: 
+This potion gives the individual o temporary increase in life energy levels (cf heroism potion) if he or she has fewer than 13 levels of experience:
+Potion of Super‑Heroism Table
+Level of Consumer	Number of Energy Levels Bestowed	10‑Sided Dice for Accumulated Damage Bestowed
+0	6	5
+1st–3rd	5	4 + 1
+4th–6th	4	3 + 2
+7th–9th	3	2 + 3
+10th–12th	2	1 + 4
+
+

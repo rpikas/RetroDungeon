@@ -1277,6 +1277,7 @@ public sealed class CombatResolver
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
+        var grantsSuperHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism");
         var grantsInvulnerabilityPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability");
         var grantsLevitationPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Haste")
@@ -1288,6 +1289,7 @@ public sealed class CombatResolver
                || grantsFireResistancePotion
                || grantsGiantStrengthPotion
                || grantsHeroismPotion
+               || grantsSuperHeroismPotion
                || grantsInvulnerabilityPotion
                || grantsLevitationPotion
                || grantsSpeedPotion
@@ -1304,6 +1306,12 @@ public sealed class CombatResolver
             if (grantsHeroismPotion && !user.IsFighterClassed())
             {
                 events.Add(new CombatEvent("Potion of Heroism can only be used by fighters."));
+                return true;
+            }
+
+            if (grantsSuperHeroismPotion && !user.IsFighterClassed())
+            {
+                events.Add(new CombatEvent("Potion of Super-Heroism can only be used by fighters."));
                 return true;
             }
 
@@ -1398,6 +1406,35 @@ public sealed class CombatResolver
                     var bonusHp = rolled + profile.Bonus;
                     user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                     events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
+                }
+            }
+
+            if (grantsSuperHeroismPotion)
+            {
+                var level = Math.Max(0, user.Level);
+                var profile = level switch
+                {
+                    <= 0 => (LevelBonus: 6, Dice: 5, Bonus: 0),
+                    <= 3 => (LevelBonus: 5, Dice: 4, Bonus: 1),
+                    <= 6 => (LevelBonus: 4, Dice: 3, Bonus: 2),
+                    <= 9 => (LevelBonus: 3, Dice: 2, Bonus: 3),
+                    <= 12 => (LevelBonus: 2, Dice: 1, Bonus: 4),
+                    _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
+                };
+
+                if (profile.LevelBonus <= 0)
+                {
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Super-Heroism, but gains no extra life energy at level {level}."));
+                }
+                else
+                {
+                    var rolled = 0;
+                    for (var i = 0; i < profile.Dice; i++)
+                        rolled += _dice.Roll(10);
+
+                    var bonusHp = rolled + profile.Bonus;
+                    user.SetPotionHeroism(profile.LevelBonus, bonusHp);
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Super-Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
                 }
             }
 
