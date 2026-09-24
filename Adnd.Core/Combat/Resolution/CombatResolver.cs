@@ -3121,7 +3121,7 @@ public sealed class CombatResolver
             var saveRoll = _dice.Roll(20);
             var preSaveDamage = breathDamage;
             if (isFireDragonBreath)
-                preSaveDamage = ApplyFireProtectionDamageReduction(target, preSaveDamage, isMagicalFire: true, isNormalFire: false);
+                preSaveDamage = ApplyFireProtectionDamageReduction(target, preSaveDamage, 0, isMagicalFire: true, isNormalFire: false);
             if (isBlueDragonLightningBreath)
                 preSaveDamage = ApplyLightningProtectionDamageReduction(target, preSaveDamage, isMagicalLightning: true, isNormalLightning: false);
             if (isColdDragonBreath)
