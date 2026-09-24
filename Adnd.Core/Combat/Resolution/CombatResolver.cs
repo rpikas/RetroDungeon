@@ -4590,6 +4590,28 @@ public sealed class CombatResolver
                    && a.Contains("+3 vs. regenerating creatures", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordPlusOnePlusFourVsReptiles(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.ToLowerInvariant();
+        if (normalized.Contains("sword +1, +4 vs. reptiles", StringComparison.Ordinal)
+            || normalized.Contains("sword +1 +4 vs reptiles", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("+4 vs. reptiles", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static int GetSituationalSwordBonusAgainstTarget(Item? weapon, MonsterInstance target)
     {
         if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(weapon)
@@ -4611,6 +4633,13 @@ public sealed class CombatResolver
         {
             // Weapon is +1 normally, but +3 vs regenerating creatures.
             return 2;
+        }
+
+        if (IsSwordPlusOnePlusFourVsReptiles(weapon)
+            && IsTargetReptile(target))
+        {
+            // Weapon is +1 normally, but +4 vs reptiles.
+            return 3;
         }
 
         return 0;
@@ -4728,6 +4757,28 @@ public sealed class CombatResolver
             .ToLowerInvariant();
 
         return composite.Contains("regenerat");
+    }
+
+    private static bool IsTargetReptile(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("reptile")
+               || composite.Contains("lizard")
+               || composite.Contains("snake")
+               || composite.Contains("serpent")
+               || composite.Contains("dragon")
+               || composite.Contains("drake")
+               || composite.Contains("wyvern")
+               || composite.Contains("crocod")
+               || composite.Contains("alligator")
+               || composite.Contains("turtle");
     }
 
     private static bool RequiresPlusOneWeaponToHit(MonsterInstance target)
