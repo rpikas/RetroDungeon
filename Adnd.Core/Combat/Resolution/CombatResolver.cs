@@ -2359,6 +2359,7 @@ public sealed class CombatResolver
 
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
             int roll = _dice.Roll(20);
+            var wasNaturalTwenty = roll == 20;
 
             if (roll < needed)
             {
@@ -2379,6 +2380,16 @@ public sealed class CombatResolver
                         events.Add(new CombatEvent($"{target.DisplayName} has no mirror images left."));
                     continue;
                 }
+            }
+
+            if (wasNaturalTwenty
+                && IsSwordPlusTwoNineLivesStealer(mainHand)
+                && TryResolveNineLivesStealerEffect(mainHand, target, events))
+            {
+                if (target.CurrentHitPoints <= 0)
+                    break;
+
+                continue;
             }
 
             if (RequiresPlusOneWeaponToHit(target) && !IsMagicalWeapon(mainHand))
@@ -4767,6 +4778,83 @@ public sealed class CombatResolver
                && weapon.SpecialAbilities.Any(a =>
                    !string.IsNullOrWhiteSpace(a)
                    && a.Contains("Dragon Slayer", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSwordPlusTwoNineLivesStealer(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.ToLowerInvariant();
+        if (normalized.Contains("sword +2, nine lives stealer", StringComparison.Ordinal)
+            || normalized.Contains("sword +2 nine lives stealer", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Nine Lives Stealer", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool TryResolveNineLivesStealerEffect(Item? weapon, MonsterInstance target, List<CombatEvent> events)
+    {
+        if (weapon == null || target?.Template == null)
+            return false;
+
+        var charges = GetOrAssignNineLivesStealerCharges(weapon);
+        if (charges <= 0)
+            return false;
+
+        var saveTarget = target.Template.SavingThrows?.Spell ?? 20;
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.DisplayName} resists Nine Lives Stealer (save vs spell {saveRoll} vs {saveTarget})."));
+            return false;
+        }
+
+        SetNineLivesStealerCharges(weapon, charges - 1);
+        target.CurrentHitPoints = 0;
+        events.Add(new CombatEvent($"Nine Lives Stealer draws the life force from {target.DisplayName}! Charges remaining: {Math.Max(0, charges - 1)}."));
+        return true;
+    }
+
+    private static int GetOrAssignNineLivesStealerCharges(Item weapon)
+    {
+        weapon.SpecialAbilities ??= new List<string>();
+
+        var existing = weapon.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("NineLivesCharges:", StringComparison.OrdinalIgnoreCase));
+
+        if (!string.IsNullOrWhiteSpace(existing)
+            && int.TryParse(existing[(existing.IndexOf(':') + 1)..].Trim(), out var parsed))
+        {
+            return Math.Max(0, parsed);
+        }
+
+        weapon.SpecialAbilities.Add("NineLivesCharges:9");
+        return 9;
+    }
+
+    private static void SetNineLivesStealerCharges(Item weapon, int charges)
+    {
+        weapon.SpecialAbilities ??= new List<string>();
+
+        var idx = weapon.SpecialAbilities.FindIndex(a =>
+            !string.IsNullOrWhiteSpace(a)
+            && a.StartsWith("NineLivesCharges:", StringComparison.OrdinalIgnoreCase));
+
+        var value = $"NineLivesCharges:{Math.Max(0, charges)}";
+        if (idx >= 0)
+            weapon.SpecialAbilities[idx] = value;
+        else
+            weapon.SpecialAbilities.Add(value);
     }
 
     private static int GetSituationalSwordBonusAgainstTarget(Item? weapon, MonsterInstance target)
