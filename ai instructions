@@ -2196,6 +2196,30 @@ and if a saving throw Is applicable, it is made at + 4. Note: If but one-half of
 to normal fires and half the benefits noted above ( 1 , + 2), The potion lasts 1 turn, or 5 rounds for half doses.
 
 Red dragon, Gold dragon and Brass dragon breath are considered fire and are affected by this potion and also by spell Protection From fire
+_____
+Implement potion Giant Strength 
+When a giant strength potion is consumed, the drinker gains immense strength and damage bonuses with any hand‑held or thrown weapon. They can also hurl rocks according to the table above.
+The type of giant strength is determined randomly by die roll.
+Compare these abilities to the girdle of giant strength — the potion can only be used by fighters and does not grant the same powers as a girdle.
+
+Potion Table
+Die Score	Strength Equivalent	Weight Allow.	Damage Bonus	Rock Hurling Range	Rock Hurling Damage	Bend Bars/Lift Gates
+1–6	Hill Giant	+4,500	+7	8″	1–6	50%
+7–10	Stone Giant	+5,000	+8	9″	1–8	60%
+11–14	Frost Giant	+6,000	+9	10″	1–8	70%
+15–17	Fire Giant	+7,500	+10	12″	1–10	80%
+18–19	Cloud Giant	+9,000	+11	14″	1–12	90%
+20	Storm Giant	+12,000	+12	16″	1–12	100%
+
+_____
+
+Implement Potion of Healing; An entire potion must be consumed in a single drinking (round) in order for this liquor to restore 4-10 (2d4 + 2) hit points of damage. (Cf, extro-heoimg.J
+
+
+
+
+
+
 
 
 

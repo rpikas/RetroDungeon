@@ -1004,9 +1004,10 @@ public sealed class CampCharacterInspectForm : Form
                 index,
                 spell = _spellCastingService.FindSpellFromItem(item),
                 grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
-                grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance")
+                grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
+                grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength")
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -1020,7 +1021,9 @@ public sealed class CampCharacterInspectForm : Form
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
                 : x.grantsRegeneration
                     ? $"{x.item.Name} (grants regeneration)"
-                    : $"{x.item.Name} (grants fire resistance)").ToList());
+                    : x.grantsFireResistancePotion
+                        ? $"{x.item.Name} (grants fire resistance)"
+                        : $"{x.item.Name} (grants giant strength)").ToList());
         if (!itemIdx.HasValue)
             return;
 
@@ -1028,6 +1031,7 @@ public sealed class CampCharacterInspectForm : Form
         var spell = selected.spell;
         var grantsRegenerationUntilDungeonExit = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
+        var grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Giant Strength");
         var targets = new List<SpellCastTarget>();
 
         if (spell != null && spell.RangeType == SpellRangeType.Self)
@@ -1066,7 +1070,13 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion)
+        if (grantsGiantStrengthPotion && !user.IsFighterClassed())
+        {
+            SayOnBoth("Use Item", "Potion of Giant Strength can only be used by fighters.");
+            return;
+        }
+
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1095,6 +1105,30 @@ public sealed class CampCharacterInspectForm : Form
         {
             user.SetPotionFireResistanceFullDose();
             result.Events.Add($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds.");
+        }
+
+        if (grantsGiantStrengthPotion)
+        {
+            var roll = Random.Shared.Next(1, 21);
+            var profile = roll switch
+            {
+                <= 6 => (Type: "Hill Giant", Carry: 4500, Damage: 7, RockRange: 8, RockDamage: "1-6", BendBars: 50),
+                <= 10 => (Type: "Stone Giant", Carry: 5000, Damage: 8, RockRange: 9, RockDamage: "1-8", BendBars: 60),
+                <= 14 => (Type: "Frost Giant", Carry: 6000, Damage: 9, RockRange: 10, RockDamage: "1-8", BendBars: 70),
+                <= 17 => (Type: "Fire Giant", Carry: 7500, Damage: 10, RockRange: 12, RockDamage: "1-10", BendBars: 80),
+                <= 19 => (Type: "Cloud Giant", Carry: 9000, Damage: 11, RockRange: 14, RockDamage: "1-12", BendBars: 90),
+                _ => (Type: "Storm Giant", Carry: 12000, Damage: 12, RockRange: 16, RockDamage: "1-12", BendBars: 100)
+            };
+
+            user.SetPotionGiantStrength(
+                giantType: profile.Type,
+                carryWeightBonus: profile.Carry,
+                damageBonus: profile.Damage,
+                rockRangeInches: profile.RockRange,
+                rockDamage: profile.RockDamage,
+                bendBarsLiftGatesPercent: profile.BendBars);
+
+            result.Events.Add($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%.");
         }
 
         foreach (var member in partyMembers)

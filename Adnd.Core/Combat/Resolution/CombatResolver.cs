@@ -1204,6 +1204,7 @@ public sealed class CombatResolver
         var spellId = action.SpellId;
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
+        var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
@@ -1213,10 +1214,22 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
-            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion)
+            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion)
             {
+                if (grantsGiantStrengthPotion && !user.IsFighterClassed())
+                {
+                    events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
+                    return;
+                }
+
                 if (item.Type is ItemType.Potion or ItemType.Scroll)
                     user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
+
+        if (grantsGiantStrengthPotion && !user.IsFighterClassed())
+        {
+            events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
+            return;
+        }
 
                 if (!user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
                 {
@@ -1235,6 +1248,30 @@ public sealed class CombatResolver
                 {
                     user.SetPotionFireResistanceFullDose();
                     events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
+                }
+
+                if (grantsGiantStrengthPotion)
+                {
+                    var roll = _dice.Roll(20);
+                    var profile = roll switch
+                    {
+                        <= 6 => (Type: "Hill Giant", Carry: 4500, Damage: 7, RockRange: 8, RockDamage: "1-6", BendBars: 50),
+                        <= 10 => (Type: "Stone Giant", Carry: 5000, Damage: 8, RockRange: 9, RockDamage: "1-8", BendBars: 60),
+                        <= 14 => (Type: "Frost Giant", Carry: 6000, Damage: 9, RockRange: 10, RockDamage: "1-8", BendBars: 70),
+                        <= 17 => (Type: "Fire Giant", Carry: 7500, Damage: 10, RockRange: 12, RockDamage: "1-10", BendBars: 80),
+                        <= 19 => (Type: "Cloud Giant", Carry: 9000, Damage: 11, RockRange: 14, RockDamage: "1-12", BendBars: 90),
+                        _ => (Type: "Storm Giant", Carry: 12000, Damage: 12, RockRange: 16, RockDamage: "1-12", BendBars: 100)
+                    };
+
+                    user.SetPotionGiantStrength(
+                        giantType: profile.Type,
+                        carryWeightBonus: profile.Carry,
+                        damageBonus: profile.Damage,
+                        rockRangeInches: profile.RockRange,
+                        rockDamage: profile.RockDamage,
+                        bendBarsLiftGatesPercent: profile.BendBars);
+
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
                 }
 
                 events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
@@ -1285,6 +1322,30 @@ public sealed class CombatResolver
         {
             user.SetPotionFireResistanceFullDose();
             events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
+        }
+
+        if (grantsGiantStrengthPotion)
+        {
+            var roll = _dice.Roll(20);
+            var profile = roll switch
+            {
+                <= 6 => (Type: "Hill Giant", Carry: 4500, Damage: 7, RockRange: 8, RockDamage: "1-6", BendBars: 50),
+                <= 10 => (Type: "Stone Giant", Carry: 5000, Damage: 8, RockRange: 9, RockDamage: "1-8", BendBars: 60),
+                <= 14 => (Type: "Frost Giant", Carry: 6000, Damage: 9, RockRange: 10, RockDamage: "1-8", BendBars: 70),
+                <= 17 => (Type: "Fire Giant", Carry: 7500, Damage: 10, RockRange: 12, RockDamage: "1-10", BendBars: 80),
+                <= 19 => (Type: "Cloud Giant", Carry: 9000, Damage: 11, RockRange: 14, RockDamage: "1-12", BendBars: 90),
+                _ => (Type: "Storm Giant", Carry: 12000, Damage: 12, RockRange: 16, RockDamage: "1-12", BendBars: 100)
+            };
+
+            user.SetPotionGiantStrength(
+                giantType: profile.Type,
+                carryWeightBonus: profile.Carry,
+                damageBonus: profile.Damage,
+                rockRangeInches: profile.RockRange,
+                rockDamage: profile.RockDamage,
+                bendBarsLiftGatesPercent: profile.BendBars);
+
+            events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
         }
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));

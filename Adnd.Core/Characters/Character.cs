@@ -60,6 +60,13 @@ public class Character
     public int PotionFireResistanceSaveBonusVsFire { get; set; }
     public int PotionFireResistanceDamageReductionPerDie { get; set; }
     public bool PotionFireResistanceNormalFireImmunity { get; set; }
+    public bool PotionGiantStrengthActiveUntilDungeonExit { get; set; }
+    public int PotionGiantStrengthDamageBonus { get; set; }
+    public int PotionGiantStrengthCarryWeightBonus { get; set; }
+    public string PotionGiantStrengthType { get; set; } = string.Empty;
+    public int PotionGiantStrengthRockRangeInches { get; set; }
+    public string PotionGiantStrengthRockDamage { get; set; } = string.Empty;
+    public int PotionGiantStrengthBendBarsLiftGatesPercent { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -206,6 +213,42 @@ public class Character
         PotionFireResistanceSaveBonusVsFire = 0;
         PotionFireResistanceDamageReductionPerDie = 0;
         PotionFireResistanceNormalFireImmunity = false;
+    }
+
+    public bool IsFighterClassed()
+    {
+        return Classes.Contains(CharacterClass.Fighter)
+               || Classes.Contains(CharacterClass.Paladin)
+               || Classes.Contains(CharacterClass.Ranger)
+               || Class is CharacterClass.Fighter or CharacterClass.Paladin or CharacterClass.Ranger;
+    }
+
+    public void SetPotionGiantStrength(
+        string giantType,
+        int carryWeightBonus,
+        int damageBonus,
+        int rockRangeInches,
+        string rockDamage,
+        int bendBarsLiftGatesPercent)
+    {
+        PotionGiantStrengthActiveUntilDungeonExit = true;
+        PotionGiantStrengthType = giantType ?? string.Empty;
+        PotionGiantStrengthCarryWeightBonus = Math.Max(0, carryWeightBonus);
+        PotionGiantStrengthDamageBonus = Math.Max(0, damageBonus);
+        PotionGiantStrengthRockRangeInches = Math.Max(0, rockRangeInches);
+        PotionGiantStrengthRockDamage = rockDamage ?? string.Empty;
+        PotionGiantStrengthBendBarsLiftGatesPercent = Math.Max(0, bendBarsLiftGatesPercent);
+    }
+
+    public void ClearPotionGiantStrength()
+    {
+        PotionGiantStrengthActiveUntilDungeonExit = false;
+        PotionGiantStrengthType = string.Empty;
+        PotionGiantStrengthCarryWeightBonus = 0;
+        PotionGiantStrengthDamageBonus = 0;
+        PotionGiantStrengthRockRangeInches = 0;
+        PotionGiantStrengthRockDamage = string.Empty;
+        PotionGiantStrengthBendBarsLiftGatesPercent = 0;
     }
 
     public override string ToString()
@@ -531,6 +574,9 @@ public class Character
 
     private int GetStrengthDamageBonus()
     {
+        if (PotionGiantStrengthActiveUntilDungeonExit && PotionGiantStrengthDamageBonus > 0)
+            return PotionGiantStrengthDamageBonus;
+
         var str = Abilities.Strength;
         if (str <= 5) return -2;
         if (str <= 7) return -1;
@@ -637,6 +683,14 @@ public class Character
     }
 
     private int GetMaxCarryWeight()
+    {
+        if (PotionGiantStrengthActiveUntilDungeonExit && PotionGiantStrengthCarryWeightBonus > 0)
+            return Math.Max(0, baseCarryWeightWithoutPotion() + PotionGiantStrengthCarryWeightBonus);
+
+        return baseCarryWeightWithoutPotion();
+    }
+
+    private int baseCarryWeightWithoutPotion()
     {
         var str = Abilities.Strength;
         return str switch
