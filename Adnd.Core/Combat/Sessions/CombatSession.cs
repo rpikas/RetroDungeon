@@ -34,6 +34,8 @@ public sealed class CombatSession
     public Dictionary<string, int> MonsterBarkskinRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterBarkskinBonuses { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AcidArrowPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> VeryHotFireExposurePartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> VeryHotFireExposurePartyDamagePerRound { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> DrainBloodRemaining { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -547,6 +549,46 @@ public sealed class CombatSession
         }
 
         AcidArrowPartyRounds[characterName] = rounds;
+    }
+
+    public void SetPartyVeryHotFireExposure(string characterName, int rounds, int damagePerRound = 10)
+    {
+        if (rounds <= 0)
+        {
+            VeryHotFireExposurePartyRounds.Remove(characterName);
+            VeryHotFireExposurePartyDamagePerRound.Remove(characterName);
+            return;
+        }
+
+        VeryHotFireExposurePartyRounds[characterName] = rounds;
+        VeryHotFireExposurePartyDamagePerRound[characterName] = Math.Max(1, damagePerRound);
+    }
+
+    public int GetPartyVeryHotFireExposureRounds(string characterName)
+    {
+        return VeryHotFireExposurePartyRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int GetPartyVeryHotFireExposureDamagePerRound(string characterName)
+    {
+        return VeryHotFireExposurePartyDamagePerRound.TryGetValue(characterName, out var damage) ? Math.Max(1, damage) : 10;
+    }
+
+    public int TickPartyVeryHotFireExposure(string characterName)
+    {
+        if (!VeryHotFireExposurePartyRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            VeryHotFireExposurePartyRounds.Remove(characterName);
+            VeryHotFireExposurePartyDamagePerRound.Remove(characterName);
+            return 0;
+        }
+
+        VeryHotFireExposurePartyRounds[characterName] = rounds;
+        return rounds;
     }
 
     public int TickPartyAcidArrow(string characterName)
