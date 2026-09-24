@@ -273,6 +273,16 @@ public sealed class CombatResolver
                 }
             }
 
+            if (member.PotionInvulnerabilityRoundsRemaining > 0)
+            {
+                member.PotionInvulnerabilityRoundsRemaining = Math.Max(0, member.PotionInvulnerabilityRoundsRemaining - 1);
+                if (member.PotionInvulnerabilityRoundsRemaining <= 0)
+                {
+                    member.ClearPotionInvulnerability();
+                    events.Add(new CombatEvent($"{member.Name}'s Potion of Invulnerability effect expires."));
+                }
+            }
+
             if (member.ColdResistanceRoundsRemaining > 0)
             {
                 member.ColdResistanceRoundsRemaining = Math.Max(0, member.ColdResistanceRoundsRemaining - 1);
@@ -1011,7 +1021,10 @@ public sealed class CombatResolver
                         return FinalizeRound(session, events);
                     }
 
-                    var targetAc = target.ArmorClass + (parrying.Contains(target.Name) ? 2 : 0);
+                    var invulnerabilityAcBonus = target.HasActivePotionInvulnerability
+                        ? target.PotionInvulnerabilityArmorClassBonus
+                        : 0;
+                    var targetAc = (target.ArmorClass - invulnerabilityAcBonus) + (parrying.Contains(target.Name) ? 2 : 0);
                     var thac0 = GetMonsterThac0(monster);
                     if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
                         thac0 += 1;
@@ -1040,6 +1053,14 @@ public sealed class CombatResolver
                                     events.Add(new CombatEvent($"{target.Name} has no mirror images left."));
                                 continue;
                             }
+                        }
+
+                        if (target.HasActivePotionInvulnerability
+                            && !IsMonsterAttackConsideredMagical(monster, attack)
+                            && (monster.Template.HitDice < 4 || !MonsterHasMagicalProperties(monster)))
+                        {
+                            events.Add(new CombatEvent($"{monster.DisplayName}'s attack cannot harm {target.Name} due to Potion of Invulnerability."));
+                            continue;
                         }
 
                         int damage = RollDamage(attack.Damage);
@@ -1089,7 +1110,9 @@ public sealed class CombatResolver
                                 var poisonRoll = _dice.Roll(100);
                                 if (poisonRoll <= 70)
                                 {
-                                    var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath);
+                                    var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                                        target,
+                                        _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
                                     if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
                                         saveTarget = Math.Max(1, saveTarget - 1);
                                     var saveRoll = _dice.Roll(20);
@@ -1202,12 +1225,165 @@ public sealed class CombatResolver
 
         var item = user.Inventory[action.ItemInventoryIndex.Value];
         var spellId = action.SpellId;
+
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
-        var grantsSpeedPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
+        var grantsInvulnerabilityPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability");
+        var grantsLevitationPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
+        var grantsSpeedPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Haste")
+                                || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
+
+        bool IsDirectEffectConsumable()
+            => grantsRegenerationUntilDungeonExit
+               || grantsFireResistancePotion
+               || grantsGiantStrengthPotion
+               || grantsHeroismPotion
+               || grantsInvulnerabilityPotion
+               || grantsLevitationPotion
+               || grantsSpeedPotion
+               || isPotionOfHealing;
+
+        bool FailsFighterRestriction()
+        {
+            if (grantsGiantStrengthPotion && !user.IsFighterClassed())
+            {
+                events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
+                return true;
+            }
+
+            if (grantsHeroismPotion && !user.IsFighterClassed())
+            {
+                events.Add(new CombatEvent("Potion of Heroism can only be used by fighters."));
+                return true;
+            }
+
+            if (grantsInvulnerabilityPotion && !user.IsFighterClassed())
+            {
+                events.Add(new CombatEvent("Potion of Invulnerability can only be used by fighters."));
+                return true;
+            }
+
+            return false;
+        }
+
+        void ApplyDirectConsumableEffects()
+        {
+            if (grantsRegenerationUntilDungeonExit
+                && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
+            {
+                user.Inventory.Add(new Item
+                {
+                    Name = "Regeneration (Potion Effect)",
+                    Type = ItemType.MagicItem,
+                    IsShopBuyable = false,
+                    SpecialAbilities = new List<string> { "Regeneration (Potion)" }
+                });
+
+                events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
+            }
+
+            if (grantsFireResistancePotion)
+            {
+                user.SetPotionFireResistanceFullDose();
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
+            }
+
+            if (grantsGiantStrengthPotion)
+            {
+                var roll = _dice.Roll(20);
+                var profile = roll switch
+                {
+                    <= 6 => (Type: "Hill Giant", Carry: 4500, Damage: 7, RockRange: 8, RockDamage: "1-6", BendBars: 50),
+                    <= 10 => (Type: "Stone Giant", Carry: 5000, Damage: 8, RockRange: 9, RockDamage: "1-8", BendBars: 60),
+                    <= 14 => (Type: "Frost Giant", Carry: 6000, Damage: 9, RockRange: 10, RockDamage: "1-8", BendBars: 70),
+                    <= 17 => (Type: "Fire Giant", Carry: 7500, Damage: 10, RockRange: 12, RockDamage: "1-10", BendBars: 80),
+                    <= 19 => (Type: "Cloud Giant", Carry: 9000, Damage: 11, RockRange: 14, RockDamage: "1-12", BendBars: 90),
+                    _ => (Type: "Storm Giant", Carry: 12000, Damage: 12, RockRange: 16, RockDamage: "1-12", BendBars: 100)
+                };
+
+                user.SetPotionGiantStrength(
+                    giantType: profile.Type,
+                    carryWeightBonus: profile.Carry,
+                    damageBonus: profile.Damage,
+                    rockRangeInches: profile.RockRange,
+                    rockDamage: profile.RockDamage,
+                    bendBarsLiftGatesPercent: profile.BendBars);
+
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
+            }
+
+            if (isPotionOfHealing)
+            {
+                var heal = _dice.Roll(4) + _dice.Roll(4) + 2;
+                var before = user.CurrentHitPoints;
+                user.CurrentHitPoints = Math.Min(user.MaxHitPoints, user.CurrentHitPoints + heal);
+                var actual = Math.Max(0, user.CurrentHitPoints - before);
+                events.Add(actual > 0
+                    ? new CombatEvent($"{user.Name} drinks Potion of Healing and recovers {actual} HP (rolled {heal} on 2d4+2).")
+                    : new CombatEvent($"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health."));
+            }
+
+            if (grantsHeroismPotion)
+            {
+                var level = Math.Max(0, user.Level);
+                var profile = level switch
+                {
+                    <= 0 => (LevelBonus: 4, Dice: 4, Bonus: 0),
+                    <= 3 => (LevelBonus: 3, Dice: 3, Bonus: 1),
+                    <= 6 => (LevelBonus: 2, Dice: 2, Bonus: 2),
+                    <= 9 => (LevelBonus: 1, Dice: 1, Bonus: 3),
+                    _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
+                };
+
+                if (profile.LevelBonus <= 0)
+                {
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism, but gains no extra life energy at level {level}."));
+                }
+                else
+                {
+                    var rolled = 0;
+                    for (var i = 0; i < profile.Dice; i++)
+                        rolled += _dice.Roll(10);
+
+                    var bonusHp = rolled + profile.Bonus;
+                    user.SetPotionHeroism(profile.LevelBonus, bonusHp);
+                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
+                }
+            }
+
+            if (grantsInvulnerabilityPotion)
+            {
+                var rounds = _dice.Roll(16) + 4; // 5-20 rounds
+                user.SetPotionInvulnerability(rounds);
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Invulnerability: +2 AC and +2 saves, and immunity to non-magical attacks from creatures with no magical properties or with fewer than 4 Hit Dice, for {rounds} rounds."));
+            }
+
+            if (grantsLevitationPotion)
+            {
+                user.SetPotionLevitation();
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Levitation and can levitate like the Levitate spell. Carry capacity becomes 6,000 gp equivalent until leaving the dungeon."));
+            }
+
+            if (grantsSpeedPotion)
+            {
+                var rounds = _dice.Roll(16) + 4; // 5-20 rounds
+                if (!session.IsHasted(user.Name))
+                {
+                    session.SetHaste(user.Name, rounds, user.Move);
+                    user.Move *= 2;
+                }
+                else
+                {
+                    session.SetHaste(user.Name, rounds, session.GetHasteOriginalMove(user.Name));
+                }
+
+                user.Age = Math.Max(0, user.Age + 1);
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Speed: move/attacks doubled for {rounds} rounds; ages 1 year permanently."));
+            }
+        }
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
@@ -1217,128 +1393,20 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
-            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion || grantsHeroismPotion || grantsSpeedPotion || isPotionOfHealing)
+            if (!IsDirectEffectConsumable())
             {
-                if (grantsGiantStrengthPotion && !user.IsFighterClassed())
-                {
-                    events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
-                    return;
-                }
-
-                if (grantsHeroismPotion && !user.IsFighterClassed())
-                {
-                    events.Add(new CombatEvent("Potion of Heroism can only be used by fighters."));
-                    return;
-                }
-
-                if (item.Type is ItemType.Potion or ItemType.Scroll)
-                    user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
-
-                if (grantsRegenerationUntilDungeonExit
-                    && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
-                {
-                    user.Inventory.Add(new Item
-                    {
-                        Name = "Regeneration (Potion Effect)",
-                        Type = ItemType.MagicItem,
-                        IsShopBuyable = false,
-                        SpecialAbilities = new List<string> { "Regeneration (Potion)" }
-                    });
-
-                    events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
-                }
-
-                if (grantsFireResistancePotion)
-                {
-                    user.SetPotionFireResistanceFullDose();
-                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
-                }
-
-                if (grantsGiantStrengthPotion)
-                {
-                    var roll = _dice.Roll(20);
-                    var profile = roll switch
-                    {
-                        <= 6 => (Type: "Hill Giant", Carry: 4500, Damage: 7, RockRange: 8, RockDamage: "1-6", BendBars: 50),
-                        <= 10 => (Type: "Stone Giant", Carry: 5000, Damage: 8, RockRange: 9, RockDamage: "1-8", BendBars: 60),
-                        <= 14 => (Type: "Frost Giant", Carry: 6000, Damage: 9, RockRange: 10, RockDamage: "1-8", BendBars: 70),
-                        <= 17 => (Type: "Fire Giant", Carry: 7500, Damage: 10, RockRange: 12, RockDamage: "1-10", BendBars: 80),
-                        <= 19 => (Type: "Cloud Giant", Carry: 9000, Damage: 11, RockRange: 14, RockDamage: "1-12", BendBars: 90),
-                        _ => (Type: "Storm Giant", Carry: 12000, Damage: 12, RockRange: 16, RockDamage: "1-12", BendBars: 100)
-                    };
-
-                    user.SetPotionGiantStrength(
-                        giantType: profile.Type,
-                        carryWeightBonus: profile.Carry,
-                        damageBonus: profile.Damage,
-                        rockRangeInches: profile.RockRange,
-                        rockDamage: profile.RockDamage,
-                        bendBarsLiftGatesPercent: profile.BendBars);
-
-                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
-                }
-
-                if (isPotionOfHealing)
-                {
-                    var heal = _dice.Roll(4) + _dice.Roll(4) + 2;
-                    var before = user.CurrentHitPoints;
-                    user.CurrentHitPoints = Math.Min(user.MaxHitPoints, user.CurrentHitPoints + heal);
-                    var actual = Math.Max(0, user.CurrentHitPoints - before);
-                    events.Add(actual > 0
-                        ? new CombatEvent($"{user.Name} drinks Potion of Healing and recovers {actual} HP (rolled {heal} on 2d4+2).")
-                        : new CombatEvent($"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health."));
-                }
-
-                if (grantsHeroismPotion)
-                {
-                    var level = Math.Max(0, user.Level);
-                    var profile = level switch
-                    {
-                        <= 0 => (LevelBonus: 4, Dice: 4, Bonus: 0),
-                        <= 3 => (LevelBonus: 3, Dice: 3, Bonus: 1),
-                        <= 6 => (LevelBonus: 2, Dice: 2, Bonus: 2),
-                        <= 9 => (LevelBonus: 1, Dice: 1, Bonus: 3),
-                        _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
-                    };
-
-                    if (profile.LevelBonus <= 0)
-                    {
-                        events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism, but gains no extra life energy at level {level}."));
-                    }
-                    else
-                    {
-                        var rolled = 0;
-                        for (var i = 0; i < profile.Dice; i++)
-                            rolled += _dice.Roll(10);
-
-                        var bonusHp = rolled + profile.Bonus;
-                        user.SetPotionHeroism(profile.LevelBonus, bonusHp);
-                        events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
-                    }
-                }
-
-                if (grantsSpeedPotion)
-                {
-                    var rounds = _dice.Roll(16) + 4; // 5-20 rounds
-                    if (!session.IsHasted(user.Name))
-                    {
-                        session.SetHaste(user.Name, rounds, user.Move);
-                        user.Move *= 2;
-                    }
-                    else
-                    {
-                        session.SetHaste(user.Name, rounds, session.GetHasteOriginalMove(user.Name));
-                    }
-
-                    user.Age = Math.Max(0, user.Age + 1);
-                    events.Add(new CombatEvent($"{user.Name} drinks Potion of Speed: move/attacks doubled for {rounds} rounds; ages 1 year permanently."));
-                }
-
-                events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
+                events.Add(new CombatEvent($"{item.Name} has no usable spell effect."));
                 return;
             }
 
-            events.Add(new CombatEvent($"{item.Name} has no usable spell effect."));
+            if (FailsFighterRestriction())
+                return;
+
+            if (item.Type is ItemType.Potion or ItemType.Scroll)
+                user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
+
+            ApplyDirectConsumableEffects();
+            events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
             return;
         }
 
@@ -1372,109 +1440,13 @@ public sealed class CombatResolver
             return;
         }
 
-        if (grantsGiantStrengthPotion && !user.IsFighterClassed())
-        {
-            events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
+        if (FailsFighterRestriction())
             return;
-        }
-
-        if (grantsHeroismPotion && !user.IsFighterClassed())
-        {
-            events.Add(new CombatEvent("Potion of Heroism can only be used by fighters."));
-            return;
-        }
 
         if (item.Type == ItemType.Potion)
             user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
 
-        if (grantsRegenerationUntilDungeonExit
-            && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
-        {
-            user.Inventory.Add(new Item
-            {
-                Name = "Regeneration (Potion Effect)",
-                Type = ItemType.MagicItem,
-                IsShopBuyable = false,
-                SpecialAbilities = new List<string> { "Regeneration (Potion)" }
-            });
-
-            events.Add(new CombatEvent($"{user.Name} begins regenerating until leaving the dungeon."));
-        }
-
-        if (grantsFireResistancePotion)
-        {
-            user.SetPotionFireResistanceFullDose();
-            events.Add(new CombatEvent($"{user.Name} drinks Potion of Fire Resistance (full dose): normal fire immunity, +4 saves vs fire, -2 per fire die for 10 rounds."));
-        }
-
-        if (grantsGiantStrengthPotion)
-        {
-            var roll = _dice.Roll(20);
-            var profile = roll switch
-            {
-                <= 6 => (Type: "Hill Giant", Carry: 4500, Damage: 7, RockRange: 8, RockDamage: "1-6", BendBars: 50),
-                <= 10 => (Type: "Stone Giant", Carry: 5000, Damage: 8, RockRange: 9, RockDamage: "1-8", BendBars: 60),
-                <= 14 => (Type: "Frost Giant", Carry: 6000, Damage: 9, RockRange: 10, RockDamage: "1-8", BendBars: 70),
-                <= 17 => (Type: "Fire Giant", Carry: 7500, Damage: 10, RockRange: 12, RockDamage: "1-10", BendBars: 80),
-                <= 19 => (Type: "Cloud Giant", Carry: 9000, Damage: 11, RockRange: 14, RockDamage: "1-12", BendBars: 90),
-                _ => (Type: "Storm Giant", Carry: 12000, Damage: 12, RockRange: 16, RockDamage: "1-12", BendBars: 100)
-            };
-
-            user.SetPotionGiantStrength(
-                giantType: profile.Type,
-                carryWeightBonus: profile.Carry,
-                damageBonus: profile.Damage,
-                rockRangeInches: profile.RockRange,
-                rockDamage: profile.RockDamage,
-                bendBarsLiftGatesPercent: profile.BendBars);
-
-            events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
-        }
-
-        if (grantsHeroismPotion)
-        {
-            var level = Math.Max(0, user.Level);
-            var profile = level switch
-            {
-                <= 0 => (LevelBonus: 4, Dice: 4, Bonus: 0),
-                <= 3 => (LevelBonus: 3, Dice: 3, Bonus: 1),
-                <= 6 => (LevelBonus: 2, Dice: 2, Bonus: 2),
-                <= 9 => (LevelBonus: 1, Dice: 1, Bonus: 3),
-                _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
-            };
-
-            if (profile.LevelBonus <= 0)
-            {
-                events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism, but gains no extra life energy at level {level}."));
-            }
-            else
-            {
-                var rolled = 0;
-                for (var i = 0; i < profile.Dice; i++)
-                    rolled += _dice.Roll(10);
-
-                var bonusHp = rolled + profile.Bonus;
-                user.SetPotionHeroism(profile.LevelBonus, bonusHp);
-                events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
-            }
-        }
-
-        if (grantsSpeedPotion)
-        {
-            var rounds = _dice.Roll(16) + 4; // 5-20 rounds
-            if (!session.IsHasted(user.Name))
-            {
-                session.SetHaste(user.Name, rounds, user.Move);
-                user.Move *= 2;
-            }
-            else
-            {
-                session.SetHaste(user.Name, rounds, session.GetHasteOriginalMove(user.Name));
-            }
-
-            user.Age = Math.Max(0, user.Age + 1);
-            events.Add(new CombatEvent($"{user.Name} drinks Potion of Speed: move/attacks doubled for {rounds} rounds; ages 1 year permanently."));
-        }
+        ApplyDirectConsumableEffects();
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
@@ -2099,7 +2071,9 @@ public sealed class CombatResolver
 
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = _dice.Roll(4) + _dice.Roll(4); // same glyph damage model used elsewhere
-        var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            partyTarget,
+            _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell));
         var fireSaveBonus = Math.Max(partyTarget.FireProtectionSaveBonusVsFire, partyTarget.PotionFireResistanceSaveBonusVsFire);
         if (fireSaveBonus > 0)
             saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
@@ -2161,7 +2135,9 @@ public sealed class CombatResolver
         for (int i = 0; i < 6; i++)
             rolledDamage += _dice.Roll(8);
 
-        var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            partyTarget,
+            _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell));
         if (session.IsChantActive || session.IsPrayerActive)
             saveTarget = Math.Max(1, saveTarget - 1);
         var saveRoll = _dice.Roll(20);
@@ -2245,7 +2221,9 @@ public sealed class CombatResolver
             events.Add(new CombatEvent($"{monster.DisplayName} casts Call Lightning!"));
             var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
             var rolledDamage = _dice.RollMany(6, 8);
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
             if (target.LightningProtectionSaveBonusVsLightning > 0)
                 saveTarget = Math.Max(1, saveTarget - target.LightningProtectionSaveBonusVsLightning);
             if (session.IsChantActive || session.IsPrayerActive)
@@ -2318,7 +2296,9 @@ public sealed class CombatResolver
 
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = _dice.Roll(8) + _dice.Roll(8) + 1;
-        var saveTarget = _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell);
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            partyTarget,
+            _savingThrowService.GetSaveTarget(partyTarget, SaveThrowType.Spell));
         if (session.IsChantActive || session.IsPrayerActive)
             saveTarget = Math.Max(1, saveTarget - 1);
         var saveRoll = _dice.Roll(20);
@@ -2381,7 +2361,9 @@ public sealed class CombatResolver
 
             foreach (var target in aliveParty)
             {
-                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                    target,
+                    _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
                 if (target.HasActiveResistCold && target.ColdResistanceSaveBonus > 0)
                     saveTarget = Math.Max(1, saveTarget - target.ColdResistanceSaveBonus);
                 if (session.IsChantActive || session.IsPrayerActive)
@@ -2415,7 +2397,9 @@ public sealed class CombatResolver
         }
 
         var feeblemindTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
-        var feeblemindSaveTarget = _savingThrowService.GetSaveTarget(feeblemindTarget, SaveThrowType.Spell);
+        var feeblemindSaveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            feeblemindTarget,
+            _savingThrowService.GetSaveTarget(feeblemindTarget, SaveThrowType.Spell));
         if (session.IsChantActive || session.IsPrayerActive)
             feeblemindSaveTarget = Math.Max(1, feeblemindSaveTarget - 1);
         var feeblemindSaveRoll = _dice.Roll(20);
@@ -2445,7 +2429,9 @@ public sealed class CombatResolver
             foreach (var target in aliveParty)
             {
                 var rolledDamage = _dice.RollMany(4, 6);
-                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                    target,
+                    _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
                 if (target.HasActiveResistCold && target.ColdResistanceSaveBonus > 0)
                     saveTarget = Math.Max(1, saveTarget - target.ColdResistanceSaveBonus);
                 if (session.IsChantActive || session.IsPrayerActive)
@@ -2525,7 +2511,9 @@ public sealed class CombatResolver
 
             foreach (var target in affected)
             {
-                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                    target,
+                    _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
                 if (session.IsChantActive || session.IsPrayerActive)
                     saveTarget = Math.Max(1, saveTarget - 1);
 
@@ -2578,7 +2566,9 @@ public sealed class CombatResolver
 
             foreach (var target in targets)
             {
-                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                    target,
+                    _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
                 if (session.IsChantActive || session.IsPrayerActive)
                     saveTarget = Math.Max(1, saveTarget - 1);
 
@@ -2661,7 +2651,9 @@ public sealed class CombatResolver
                     continue;
                 }
 
-                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                    target,
+                    _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
                 if (session.IsChantActive || session.IsPrayerActive)
                     saveTarget = Math.Max(1, saveTarget - 1);
                 var saveRoll = _dice.Roll(20);
@@ -2694,7 +2686,9 @@ public sealed class CombatResolver
         foreach (var target in aliveParty)
         {
             var rolledDamage = _dice.RollMany(6, fireballDamageDice);
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
             var fireSaveBonus = Math.Max(target.FireProtectionSaveBonusVsFire, target.PotionFireResistanceSaveBonusVsFire);
             if (fireSaveBonus > 0)
                 saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
@@ -2832,7 +2826,9 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{monster.DisplayName} casts Sleep!"));
         foreach (var target in aliveParty)
         {
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
             if (session.IsChantActive || session.IsPrayerActive)
                 saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
@@ -2890,7 +2886,9 @@ public sealed class CombatResolver
             events.Add(new CombatEvent($"{monster.DisplayName} casts Entangle!"));
             foreach (var target in aliveParty)
             {
-                var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                    target,
+                    _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
                 if (session.IsChantActive || session.IsPrayerActive)
                     saveTarget = Math.Max(1, saveTarget - 1);
                 var saveRoll = _dice.Roll(20);
@@ -2956,7 +2954,9 @@ public sealed class CombatResolver
         foreach (var target in targets)
         {
             var hdDifference = Math.Max(1, target.Level) - casterLevel;
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
             var saveRoll = _dice.Roll(20);
 
             if (hdDifference <= 0)
@@ -3009,7 +3009,9 @@ public sealed class CombatResolver
 
         foreach (var target in aliveParty)
         {
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
             var saveRoll = _dice.Roll(20);
             if (saveRoll >= saveTarget)
             {
@@ -3050,7 +3052,9 @@ public sealed class CombatResolver
 
         foreach (var target in aliveParty)
         {
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon));
             var fireSaveBonus = Math.Max(target.FireProtectionSaveBonusVsFire, target.PotionFireResistanceSaveBonusVsFire);
             if (fireSaveBonus > 0)
                 saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
@@ -3098,7 +3102,9 @@ public sealed class CombatResolver
 
         foreach (var target in aliveParty)
         {
-            var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon));
             var dragonName = monster.Template.Name?.Trim() ?? string.Empty;
             var isBlueDragonLightningBreath = string.Equals(dragonName, "Blue Dragon", StringComparison.OrdinalIgnoreCase);
             var isWhiteDragonColdBreath = string.Equals(dragonName, "White Dragon", StringComparison.OrdinalIgnoreCase);
@@ -3700,7 +3706,9 @@ public sealed class CombatResolver
 
         foreach (var member in session.AliveParty.ToList())
         {
-            var saveTarget = _savingThrowService.GetSaveTarget(member, SaveThrowType.Spell);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                member,
+                _savingThrowService.GetSaveTarget(member, SaveThrowType.Spell));
             var fireSaveBonus = Math.Max(member.FireProtectionSaveBonusVsFire, member.PotionFireResistanceSaveBonusVsFire);
             if (fireSaveBonus > 0)
                 saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
@@ -3813,6 +3821,14 @@ public sealed class CombatResolver
         }
 
         return Math.Max(0, damage);
+    }
+
+    private static int ApplyUniversalPotionInvulnerabilitySaveBonus(Character target, int saveTarget)
+    {
+        if (!target.HasActivePotionInvulnerability || target.PotionInvulnerabilitySaveBonus <= 0)
+            return saveTarget;
+
+        return Math.Max(1, saveTarget - target.PotionInvulnerabilitySaveBonus);
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)
@@ -3959,5 +3975,70 @@ public sealed class CombatResolver
             && mainHand.SpecialAbilities.Any(a => !string.IsNullOrWhiteSpace(a));
 
         return hasPlusInName || hasSpecialAbilities;
+    }
+
+    private static bool IsMonsterAttackConsideredMagical(MonsterInstance monster, Adnd.Core.Monsters.MonsterAttack attack)
+    {
+        static bool HasMagicalKeyword(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            return value.IndexOf("magic", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("enchant", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("spell", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("elemental", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("demon", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("devil", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("dragon", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        if (HasMagicalKeyword(attack.Name))
+            return true;
+
+        if (monster.Template.SpecialAttacks.Any(a => HasMagicalKeyword(a.Name)))
+            return true;
+
+        if (monster.Template.SpecialAbilities.Any(a => HasMagicalKeyword(a.Name)))
+            return true;
+
+        return false;
+    }
+
+    private static bool MonsterHasMagicalProperties(MonsterInstance monster)
+    {
+        static bool HasMagicalKeyword(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            return value.IndexOf("magic", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("enchant", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("spell", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("summon", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("conjur", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("elemental", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("demon", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("devil", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("dragon", StringComparison.OrdinalIgnoreCase) >= 0
+                   || value.IndexOf("undead", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        if (monster.InstanceMonsterType == Adnd.Core.Monsters.MonsterType.Undead)
+            return true;
+
+        if (HasMagicalKeyword(monster.Template.Name))
+            return true;
+
+        if (monster.Template.SpecialAbilities.Any(a => HasMagicalKeyword(a.Name)))
+            return true;
+
+        if (monster.Template.SpecialAttacks.Any(a => HasMagicalKeyword(a.Name)))
+            return true;
+
+        if (monster.Template.SpecialDefenses.Any(a => HasMagicalKeyword(a.Name)))
+            return true;
+
+        return false;
     }
 }

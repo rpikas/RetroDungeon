@@ -48,6 +48,9 @@ public class Character
     public int FireProtectionSaveBonusVsFire { get; set; }
     public bool FireProtectionHalfDamageFromMagicalFire { get; set; }
     public bool FireProtectionNormalFireImmunity { get; set; }
+    public int ProtectionFromEvilRoundsRemaining { get; set; }
+    public int ProtectionFromEvilSaveBonusVsEvil { get; set; }
+    public int ProtectionFromEvilArmorClassBonusVsEvil { get; set; }
     public int LightningProtectionRoundsRemaining { get; set; }
     public int LightningProtectionAbsorptionRemaining { get; set; }
     public int LightningProtectionSaveBonusVsLightning { get; set; }
@@ -70,6 +73,10 @@ public class Character
     public bool PotionHeroismActiveUntilDungeonExit { get; set; }
     public int PotionHeroismLevelBonus { get; set; }
     public int PotionHeroismBonusHitPoints { get; set; }
+    public bool PotionLevitationActiveUntilDungeonExit { get; set; }
+    public int PotionInvulnerabilityRoundsRemaining { get; set; }
+    public int PotionInvulnerabilityArmorClassBonus { get; set; }
+    public int PotionInvulnerabilitySaveBonus { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -144,6 +151,12 @@ public class Character
     [JsonIgnore]
     public bool HasActivePotionFireResistance => PotionFireResistanceRoundsRemaining > 0;
 
+    [JsonIgnore]
+    public bool HasActivePotionInvulnerability => PotionInvulnerabilityRoundsRemaining > 0;
+
+    [JsonIgnore]
+    public bool HasActivePotionLevitation => PotionLevitationActiveUntilDungeonExit;
+
     public void SetProtectionFromFireSelf(int rounds, int absorptionPool)
     {
         FireProtectionRoundsRemaining = Math.Max(0, rounds);
@@ -151,6 +164,22 @@ public class Character
         FireProtectionSaveBonusVsFire = 0;
         FireProtectionHalfDamageFromMagicalFire = false;
         FireProtectionNormalFireImmunity = true;
+    }
+
+    public void SetProtectionFromEvil(int rounds)
+    {
+        ClearProtectionFromEvil();
+
+        ProtectionFromEvilRoundsRemaining = Math.Max(1, rounds);
+        ProtectionFromEvilSaveBonusVsEvil = 2;
+        ProtectionFromEvilArmorClassBonusVsEvil = 2;
+    }
+
+    public void ClearProtectionFromEvil()
+    {
+        ProtectionFromEvilRoundsRemaining = 0;
+        ProtectionFromEvilSaveBonusVsEvil = 0;
+        ProtectionFromEvilArmorClassBonusVsEvil = 0;
     }
 
     public void SetProtectionFromFireOther(int rounds)
@@ -226,6 +255,30 @@ public class Character
         PotionFireResistanceSaveBonusVsFire = 0;
         PotionFireResistanceDamageReductionPerDie = 0;
         PotionFireResistanceNormalFireImmunity = false;
+    }
+
+    public void SetPotionInvulnerability(int rounds)
+    {
+        PotionInvulnerabilityRoundsRemaining = Math.Max(1, rounds);
+        PotionInvulnerabilityArmorClassBonus = 2;
+        PotionInvulnerabilitySaveBonus = 2;
+    }
+
+    public void SetPotionLevitation()
+    {
+        PotionLevitationActiveUntilDungeonExit = true;
+    }
+
+    public void ClearPotionLevitation()
+    {
+        PotionLevitationActiveUntilDungeonExit = false;
+    }
+
+    public void ClearPotionInvulnerability()
+    {
+        PotionInvulnerabilityRoundsRemaining = 0;
+        PotionInvulnerabilityArmorClassBonus = 0;
+        PotionInvulnerabilitySaveBonus = 0;
     }
 
     public bool IsFighterClassed()
@@ -736,6 +789,9 @@ public class Character
 
     private int GetMaxCarryWeight()
     {
+        if (PotionLevitationActiveUntilDungeonExit)
+            return 6000;
+
         if (PotionGiantStrengthActiveUntilDungeonExit && PotionGiantStrengthCarryWeightBonus > 0)
             return Math.Max(0, baseCarryWeightWithoutPotion() + PotionGiantStrengthCarryWeightBonus);
 

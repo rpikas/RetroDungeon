@@ -1,0 +1,12 @@
+{
+  "Id": "protection_from_evil_magic_user",
+  "Name": "Protection From Evil",
+  "Class": "MagicUser",
+  "Level": 1,
+  "Description": "Protects target against evil creatures and influences.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "+2 AC and +2 saves versus evil attacks and effects."
+}

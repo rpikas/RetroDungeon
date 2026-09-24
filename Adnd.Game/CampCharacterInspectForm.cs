@@ -49,6 +49,7 @@ public sealed class CampCharacterInspectForm : Form
         var resolver = new SpellResolver(new ISpellEffectHandler[]
         {
             new CureLightWoundsHandler(),
+            new ProtectionFromEvilHandler(),
             new BarkskinHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
@@ -373,11 +374,40 @@ public sealed class CampCharacterInspectForm : Form
                || c.Classes.Any(cls => cls is CharacterClass.Cleric or CharacterClass.Druid);
     }
 
-    private static bool CanDetermineScrollContents(Character c)
+    private static bool IsThiefReader(Character c)
     {
-        // Core-rules approximation: Read Magic / Comprehend Languages availability.
-        // Arcane/divine reader classes can decode magical script.
-        return IsArcaneReader(c) || IsDivineReader(c);
+        return c.Classes.Any(cls => cls == CharacterClass.Thief)
+               || c.Class == CharacterClass.Thief;
+    }
+
+    private static bool TryThiefReadMagic(Character c, out double chancePercent, out int roll)
+    {
+        var thiefLevel = Math.Max(1, c.GetClassLevel(CharacterClass.Thief));
+        chancePercent = Math.Clamp(AbilitiesTables.ThiefReadLanguages(thiefLevel, c.Race, c.Abilities.Dexterity), 0d, 100d);
+        roll = Random.Shared.Next(1, 101);
+        return roll <= chancePercent;
+    }
+
+    private static bool CanDetermineScrollContents(Character c, out string? attemptMessage)
+    {
+        attemptMessage = null;
+
+        // Core-rules approximation: standard spell readers can decode automatically.
+        if (IsArcaneReader(c) || IsDivineReader(c))
+            return true;
+
+        // Thief special handling: roll against thief read-magic/read-languages skill when trying.
+        if (IsThiefReader(c))
+        {
+            var success = TryThiefReadMagic(c, out var chancePercent, out var roll);
+            attemptMessage = success
+                ? $"{c.Name} tries thief Read Magic {chancePercent:0.#}% and succeeds (roll {roll})."
+                : $"{c.Name} tries thief Read Magic {chancePercent:0.#}% and fails (roll {roll}).";
+            return success;
+        }
+
+        attemptMessage = "The scroll's magical cipher is unreadable. Read Magic or Comprehend Languages is required to determine contents.";
+        return false;
     }
 
     private static int RollScrollUnreadFadeChancePercent()
@@ -1088,10 +1118,12 @@ public sealed class CampCharacterInspectForm : Form
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
                 grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
                 grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism"),
+                grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability"),
+                grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase),
                 grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -1113,6 +1145,10 @@ public sealed class CampCharacterInspectForm : Form
                             ? $"{x.item.Name} (grants giant strength)"
                             : x.grantsHeroismPotion
                                 ? $"{x.item.Name} (grants heroism)"
+                                : x.grantsInvulnerabilityPotion
+                                    ? $"{x.item.Name} (grants invulnerability)"
+                                : x.grantsLevitationPotion
+                                    ? $"{x.item.Name} (grants levitation)"
                                 : x.grantsSpeedPotion
                                     ? $"{x.item.Name} (grants speed)"
                                 : $"{x.item.Name} (heals 2d4+2)").ToList());
@@ -1125,6 +1161,8 @@ public sealed class CampCharacterInspectForm : Form
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
         var grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Giant Strength");
         var grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Heroism");
+        var grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Invulnerability");
+        var grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Levitate") || string.Equals(selected.item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Haste") || string.Equals(selected.item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
         var targets = new List<SpellCastTarget>();
@@ -1148,13 +1186,19 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         string? scrollRevealEvent = null;
+        string? decipherAttemptEvent = null;
         if (selected.item.Type == ItemType.Scroll && !selected.item.ScrollContentsKnown)
         {
-            if (!CanDetermineScrollContents(user))
+            if (!CanDetermineScrollContents(user, out var decipherAttemptMessage))
             {
-                SayOnBoth("Use Item", "The scroll's magical cipher is unreadable. Read Magic or Comprehend Languages is required to determine contents.");
+                SayOnBoth("Use Item", string.IsNullOrWhiteSpace(decipherAttemptMessage)
+                    ? "The scroll's magical cipher is unreadable."
+                    : decipherAttemptMessage);
                 return;
             }
+
+            if (!string.IsNullOrWhiteSpace(decipherAttemptMessage))
+                decipherAttemptEvent = decipherAttemptMessage;
 
             selected.item.ScrollContentsKnown = true;
             selected.item.ScrollUnreadFadeChecked = true;
@@ -1175,6 +1219,9 @@ public sealed class CampCharacterInspectForm : Form
                 SourceItemName = selected.item.Name
             })
             : new Adnd.Core.Spells.Casting.SpellCastResult { Success = true };
+
+        if (!string.IsNullOrWhiteSpace(decipherAttemptEvent))
+            result.Events.Insert(0, decipherAttemptEvent);
 
         if (!string.IsNullOrWhiteSpace(scrollRevealEvent))
             result.Events.Insert(0, scrollRevealEvent);
@@ -1206,7 +1253,13 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !grantsSpeedPotion && !isPotionOfHealing)
+        if (grantsInvulnerabilityPotion && !user.IsFighterClassed())
+        {
+            SayOnBoth("Use Item", "Potion of Invulnerability can only be used by fighters.");
+            return;
+        }
+
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !grantsInvulnerabilityPotion && !grantsLevitationPotion && !grantsSpeedPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1298,6 +1351,19 @@ public sealed class CampCharacterInspectForm : Form
                 user.SetPotionHeroism(profile.LevelBonus, bonusHp);
                 result.Events.Add($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit.");
             }
+        }
+
+        if (grantsInvulnerabilityPotion)
+        {
+            var rounds = Random.Shared.Next(5, 21);
+            user.SetPotionInvulnerability(rounds);
+            result.Events.Add($"{user.Name} drinks Potion of Invulnerability: +2 AC and +2 saves, and immunity to non-magical attacks from creatures with no magical properties or with fewer than 4 Hit Dice, for {rounds} rounds.");
+        }
+
+        if (grantsLevitationPotion)
+        {
+            user.SetPotionLevitation();
+            result.Events.Add($"{user.Name} drinks Potion of Levitation and can levitate like the Levitate spell. Carry capacity becomes 6,000 gp equivalent until leaving the dungeon.");
         }
 
         if (grantsSpeedPotion)
@@ -1553,9 +1619,11 @@ public sealed class CampCharacterInspectForm : Form
             var selected = entries[list.SelectedIndex].Item;
             if (selected.Type == ItemType.Scroll
                 && !selected.ScrollContentsKnown
-                && !CanDetermineScrollContents(c))
+                && !CanDetermineScrollContents(c, out var decipherAttemptMessage))
             {
-                ViewerMessage.Show(form, "Item Info", "Magical cipher conceals this scroll's contents. Read Magic or Comprehend Languages is required.");
+                ViewerMessage.Show(form, "Item Info", string.IsNullOrWhiteSpace(decipherAttemptMessage)
+                    ? "Magical cipher conceals this scroll's contents."
+                    : decipherAttemptMessage);
                 return;
             }
 
