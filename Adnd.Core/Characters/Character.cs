@@ -67,6 +67,9 @@ public class Character
     public int PotionGiantStrengthRockRangeInches { get; set; }
     public string PotionGiantStrengthRockDamage { get; set; } = string.Empty;
     public int PotionGiantStrengthBendBarsLiftGatesPercent { get; set; }
+    public bool PotionHeroismActiveUntilDungeonExit { get; set; }
+    public int PotionHeroismLevelBonus { get; set; }
+    public int PotionHeroismBonusHitPoints { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -90,7 +93,16 @@ public class Character
 
     // Combat stats (AD&D)
     [JsonIgnore]
-    public int Thac0 => Thac0Calculator.GetThac0(Classes.Count > 0 ? Classes[0] : default, GetClassLevel(Classes.Count > 0 ? Classes[0] : default));
+    public int Thac0
+    {
+        get
+        {
+            var primary = Classes.Count > 0 ? Classes[0] : default;
+            var baseLevel = GetClassLevel(primary);
+            var effectiveLevel = baseLevel + (PotionHeroismActiveUntilDungeonExit ? PotionHeroismLevelBonus : 0);
+            return Thac0Calculator.GetThac0(primary, Math.Max(1, effectiveLevel));
+        }
+    }
     [JsonIgnore]
     public string Thac0Display
     {
@@ -249,6 +261,31 @@ public class Character
         PotionGiantStrengthRockRangeInches = 0;
         PotionGiantStrengthRockDamage = string.Empty;
         PotionGiantStrengthBendBarsLiftGatesPercent = 0;
+    }
+
+    public void SetPotionHeroism(int levelBonus, int bonusHitPoints)
+    {
+        ClearPotionHeroism();
+
+        PotionHeroismActiveUntilDungeonExit = true;
+        PotionHeroismLevelBonus = Math.Max(0, levelBonus);
+        PotionHeroismBonusHitPoints = Math.Max(0, bonusHitPoints);
+
+        MaxHitPoints = Math.Max(1, MaxHitPoints + PotionHeroismBonusHitPoints);
+        CurrentHitPoints = Math.Max(0, CurrentHitPoints + PotionHeroismBonusHitPoints);
+    }
+
+    public void ClearPotionHeroism()
+    {
+        if (PotionHeroismBonusHitPoints > 0)
+        {
+            MaxHitPoints = Math.Max(1, MaxHitPoints - PotionHeroismBonusHitPoints);
+            CurrentHitPoints = Math.Min(CurrentHitPoints, MaxHitPoints);
+        }
+
+        PotionHeroismActiveUntilDungeonExit = false;
+        PotionHeroismLevelBonus = 0;
+        PotionHeroismBonusHitPoints = 0;
     }
 
     public override string ToString()

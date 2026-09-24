@@ -1006,9 +1006,10 @@ public sealed class CampCharacterInspectForm : Form
                 grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
                 grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
+                grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism"),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.isPotionOfHealing)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -1026,7 +1027,9 @@ public sealed class CampCharacterInspectForm : Form
                         ? $"{x.item.Name} (grants fire resistance)"
                         : x.grantsGiantStrengthPotion
                             ? $"{x.item.Name} (grants giant strength)"
-                            : $"{x.item.Name} (heals 2d4+2)").ToList());
+                            : x.grantsHeroismPotion
+                                ? $"{x.item.Name} (grants heroism)"
+                                : $"{x.item.Name} (heals 2d4+2)").ToList());
         if (!itemIdx.HasValue)
             return;
 
@@ -1035,6 +1038,7 @@ public sealed class CampCharacterInspectForm : Form
         var grantsRegenerationUntilDungeonExit = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
         var grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Giant Strength");
+        var grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Heroism");
         var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
         var targets = new List<SpellCastTarget>();
 
@@ -1080,7 +1084,13 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !isPotionOfHealing)
+        if (grantsHeroismPotion && !user.IsFighterClassed())
+        {
+            SayOnBoth("Use Item", "Potion of Heroism can only be used by fighters.");
+            return;
+        }
+
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsHeroismPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1144,6 +1154,34 @@ public sealed class CampCharacterInspectForm : Form
             result.Events.Add(actual > 0
                 ? $"{user.Name} drinks Potion of Healing and recovers {actual} HP (rolled {heal} on 2d4+2)."
                 : $"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health.");
+        }
+
+        if (grantsHeroismPotion)
+        {
+            var level = Math.Max(0, user.Level);
+            var profile = level switch
+            {
+                <= 0 => (LevelBonus: 4, Dice: 4, Bonus: 0),
+                <= 3 => (LevelBonus: 3, Dice: 3, Bonus: 1),
+                <= 6 => (LevelBonus: 2, Dice: 2, Bonus: 2),
+                <= 9 => (LevelBonus: 1, Dice: 1, Bonus: 3),
+                _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
+            };
+
+            if (profile.LevelBonus <= 0)
+            {
+                result.Events.Add($"{user.Name} drinks Potion of Heroism, but gains no extra life energy at level {level}.");
+            }
+            else
+            {
+                var rolled = 0;
+                for (var i = 0; i < profile.Dice; i++)
+                    rolled += Random.Shared.Next(1, 11);
+
+                var bonusHp = rolled + profile.Bonus;
+                user.SetPotionHeroism(profile.LevelBonus, bonusHp);
+                result.Events.Add($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit.");
+            }
         }
 
         foreach (var member in partyMembers)

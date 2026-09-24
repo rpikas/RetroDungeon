@@ -2198,7 +2198,8 @@ to normal fires and half the benefits noted above ( 1 , + 2), The potion lasts 1
 Red dragon, Gold dragon and Brass dragon breath are considered fire and are affected by this potion and also by spell Protection From fire
 _____
 Implement potion Giant Strength 
-When a giant strength potion is consumed, the drinker gains immense strength and damage bonuses with any hand‑held or thrown weapon. They can also hurl rocks according to the table above.
+When a giant strength potion is consumed, the drinker gains immense strength and damage bonuses with any hand‑held or thrown weapon. 
+They can also hurl rocks according to the table above.
 The type of giant strength is determined randomly by die roll.
 Compare these abilities to the girdle of giant strength — the potion can only be used by fighters and does not grant the same powers as a girdle.
 
@@ -2219,7 +2220,8 @@ _____
 
 Potion of Heroism
 Description:  
-This potion gives the imbiber a temporary increase in life energy levels if he or she has fewer than 10 levels of experience. The effect depends on the drinker’s level:
+This potion gives the imbiber a temporary increase in life energy levels if he or she has fewer than 10 levels of experience. 
+The effect depends on the drinker’s level:
 
 Level of Consumer	Number of Energy Levels Bestowed	10‑Sided Dice for Accumulated Damage Bestowed
 0	4	4
@@ -2227,12 +2229,15 @@ Level of Consumer	Number of Energy Levels Bestowed	10‑Sided Dice for Accumulat
 4th–6th	2	2 + 2
 7th–9th	1	1 + 3
 
+Effect:  When the potion is quaffed, the individual fights as if he or she were at the experience level bestowed by the magic of the elixir. 
+Damage sustained is taken first from magically gained hit dice and bonus points.
 
-Effect:  
-When the potion is quaffed, the individual fights as if he or she were at the experience level bestowed by the magic of the elixir. Damage sustained is taken first from magically gained hit dice and bonus points.
+Restriction:  This potion may only be used by men‑at‑arms and fighters.
+____
 
-Restriction:  
-This potion may only be used by men‑at‑arms and fighters.
+Implement Potion of Speed: 
+A potion of speed increases the movement and combat capabilities of the imbiber by 100% Thus, a movement rote of 9" becomes 18", and a character normally able to attack but once per round would gain double attacks in a round. Noie that this does not reduce spell casting time, how¬ ever (cf, haste spell). Use of o speed potion oges the individual by t year. The other effecis lost for 5-20 rounds, the aging is permanent.
+
 
 
 

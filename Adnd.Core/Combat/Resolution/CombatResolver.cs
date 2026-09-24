@@ -1205,6 +1205,7 @@ public sealed class CombatResolver
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
+        var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
         var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
 
         if (string.IsNullOrWhiteSpace(spellId))
@@ -1215,7 +1216,7 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
-            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion || isPotionOfHealing)
+            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion || grantsHeroismPotion || isPotionOfHealing)
             {
                 if (grantsGiantStrengthPotion && !user.IsFighterClassed())
                 {
@@ -1223,16 +1224,17 @@ public sealed class CombatResolver
                     return;
                 }
 
+                if (grantsHeroismPotion && !user.IsFighterClassed())
+                {
+                    events.Add(new CombatEvent("Potion of Heroism can only be used by fighters."));
+                    return;
+                }
+
                 if (item.Type is ItemType.Potion or ItemType.Scroll)
                     user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
 
-        if (grantsGiantStrengthPotion && !user.IsFighterClassed())
-        {
-            events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
-            return;
-        }
-
-                if (!user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
+                if (grantsRegenerationUntilDungeonExit
+                    && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))
                 {
                     user.Inventory.Add(new Item
                     {
@@ -1286,6 +1288,34 @@ public sealed class CombatResolver
                         : new CombatEvent($"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health."));
                 }
 
+                if (grantsHeroismPotion)
+                {
+                    var level = Math.Max(0, user.Level);
+                    var profile = level switch
+                    {
+                        <= 0 => (LevelBonus: 4, Dice: 4, Bonus: 0),
+                        <= 3 => (LevelBonus: 3, Dice: 3, Bonus: 1),
+                        <= 6 => (LevelBonus: 2, Dice: 2, Bonus: 2),
+                        <= 9 => (LevelBonus: 1, Dice: 1, Bonus: 3),
+                        _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
+                    };
+
+                    if (profile.LevelBonus <= 0)
+                    {
+                        events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism, but gains no extra life energy at level {level}."));
+                    }
+                    else
+                    {
+                        var rolled = 0;
+                        for (var i = 0; i < profile.Dice; i++)
+                            rolled += _dice.Roll(10);
+
+                        var bonusHp = rolled + profile.Bonus;
+                        user.SetPotionHeroism(profile.LevelBonus, bonusHp);
+                        events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
+                    }
+                }
+
                 events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
                 return;
             }
@@ -1310,6 +1340,18 @@ public sealed class CombatResolver
         if (!result.Success)
         {
             events.Add(new CombatEvent($"{user.Name} fails to use {item.Name}: {result.Error}"));
+            return;
+        }
+
+        if (grantsGiantStrengthPotion && !user.IsFighterClassed())
+        {
+            events.Add(new CombatEvent("Potion of Giant Strength can only be used by fighters."));
+            return;
+        }
+
+        if (grantsHeroismPotion && !user.IsFighterClassed())
+        {
+            events.Add(new CombatEvent("Potion of Heroism can only be used by fighters."));
             return;
         }
 
@@ -1358,6 +1400,34 @@ public sealed class CombatResolver
                 bendBarsLiftGatesPercent: profile.BendBars);
 
             events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
+        }
+
+        if (grantsHeroismPotion)
+        {
+            var level = Math.Max(0, user.Level);
+            var profile = level switch
+            {
+                <= 0 => (LevelBonus: 4, Dice: 4, Bonus: 0),
+                <= 3 => (LevelBonus: 3, Dice: 3, Bonus: 1),
+                <= 6 => (LevelBonus: 2, Dice: 2, Bonus: 2),
+                <= 9 => (LevelBonus: 1, Dice: 1, Bonus: 3),
+                _ => (LevelBonus: 0, Dice: 0, Bonus: 0)
+            };
+
+            if (profile.LevelBonus <= 0)
+            {
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism, but gains no extra life energy at level {level}."));
+            }
+            else
+            {
+                var rolled = 0;
+                for (var i = 0; i < profile.Dice; i++)
+                    rolled += _dice.Roll(10);
+
+                var bonusHp = rolled + profile.Bonus;
+                user.SetPotionHeroism(profile.LevelBonus, bonusHp);
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Heroism: +{profile.LevelBonus} effective level(s), +{bonusHp} temporary HP ({profile.Dice}d10+{profile.Bonus}) until dungeon exit."));
+            }
         }
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
