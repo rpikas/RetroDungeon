@@ -41,6 +41,13 @@ public sealed class SpellCastingService
         if (!IsContextAllowed(spell, request.Context))
             return SpellCastResult.Failure($"{spell.Name} cannot be cast in this context.");
 
+        if (request.IsScrollSpell)
+        {
+            var scrollValidation = TryApplyScrollSpellRules(request, spell);
+            if (!scrollValidation.Success)
+                return scrollValidation;
+        }
+
         NormalizeTargetsForCombat(request, spell);
 
         var targetValidation = ValidateTargets(spell, request);
@@ -48,6 +55,120 @@ public sealed class SpellCastingService
             return targetValidation;
 
         return _resolver.Resolve(request);
+    }
+
+    private static SpellCastResult TryApplyScrollSpellRules(SpellCastRequest request, Spell spell)
+    {
+        if (!CanUseSpellClassFromScroll(request.Caster, spell.SpellClass))
+            return SpellCastResult.Failure($"{request.Caster.Name} cannot use {spell.SpellClass} scroll spells.");
+
+        var requiredLevel = GetRequiredClassLevelForSpell(spell.SpellClass, spell.Level);
+        var scrollCasterLevel = Math.Max(6, requiredLevel + 1);
+        request.EffectiveCasterLevel = scrollCasterLevel;
+
+        var casterLevelForSpellClass = GetCasterLevelForSpellClass(request.Caster, spell.SpellClass);
+        var levelDifference = Math.Max(0, requiredLevel - casterLevelForSpellClass);
+        if (levelDifference <= 0)
+            return new SpellCastResult { Success = true };
+
+        var failureChancePercent = Math.Min(95, levelDifference * 5);
+        var rng = request.Rng ?? Random.Shared;
+        var roll = rng.Next(1, 101);
+
+        if (roll > failureChancePercent)
+            return new SpellCastResult { Success = true };
+
+        var (totalFailurePercent, harmfulPercent) = GetScrollFailureBand(levelDifference);
+        var bandRoll = rng.Next(1, 101);
+
+        if (bandRoll <= totalFailurePercent)
+        {
+            return new SpellCastResult
+            {
+                Success = false,
+                Error = $"Scroll use failed ({failureChancePercent}% chance, rolled {roll}). Total failure ({totalFailurePercent}% band, rolled {bandRoll}).",
+                Events = new List<string>
+                {
+                    $"{request.Caster.Name} misreads the scroll. The magic fizzles and is lost.",
+                    $"Level difference {levelDifference}; failure chance {failureChancePercent}% (rolled {roll}).",
+                    $"Failure table result: total failure {totalFailurePercent}% / harmful {harmfulPercent}% (rolled {bandRoll})."
+                }
+            };
+        }
+
+        var backlash = 1 + Math.Max(1, spell.Level);
+        var beforeHp = request.Caster.CurrentHitPoints;
+        request.Caster.CurrentHitPoints = Math.Max(0, request.Caster.CurrentHitPoints - backlash);
+        var actual = beforeHp - request.Caster.CurrentHitPoints;
+        if (request.Caster.CurrentHitPoints <= 0)
+            request.Caster.AddStatus(CharacterStatus.Dead);
+
+        return new SpellCastResult
+        {
+            Success = false,
+            Error = $"Scroll use failed ({failureChancePercent}% chance, rolled {roll}) with reverse/harmful effect.",
+            Events = new List<string>
+            {
+                $"{request.Caster.Name} triggers a harmful scroll backlash.",
+                $"Level difference {levelDifference}; failure chance {failureChancePercent}% (rolled {roll}).",
+                $"Failure table result: total failure {totalFailurePercent}% / harmful {harmfulPercent}% (rolled {bandRoll}).",
+                $"Backlash deals {actual} damage to {request.Caster.Name}. HP {beforeHp}->{request.Caster.CurrentHitPoints}."
+            }
+        };
+    }
+
+    private static bool CanUseSpellClassFromScroll(Character caster, SpellClass spellClass)
+    {
+        return caster.Spellcasting.Any(s => s.SpellClass == spellClass);
+    }
+
+    private static int GetCasterLevelForSpellClass(Character caster, SpellClass spellClass)
+    {
+        var classes = caster.Classes != null && caster.Classes.Count > 0
+            ? caster.Classes
+            : new List<CharacterClass> { caster.Class };
+
+        var best = 0;
+        foreach (var cls in classes)
+        {
+            var classLevel = Math.Max(1, caster.GetClassLevel(cls));
+            var tracks = SpellProgression.GetSpellcastingTracks(cls, classLevel);
+            if (tracks.Any(t => t.SpellClass == spellClass))
+                best = Math.Max(best, classLevel);
+        }
+
+        if (best > 0)
+            return best;
+
+        // Fallback for legacy/single-class edge cases.
+        return Math.Max(1, caster.Level);
+    }
+
+    private static int GetRequiredClassLevelForSpell(SpellClass spellClass, int spellLevel)
+    {
+        var idx = Math.Max(0, spellLevel - 1);
+
+        for (var classLevel = 1; classLevel <= 40; classLevel++)
+        {
+            var slots = SpellProgression.GetSlotsPerDay(spellClass, classLevel);
+            if (idx < slots.Count && slots[idx] > 0)
+                return classLevel;
+        }
+
+        return 40;
+    }
+
+    private static (int totalFailurePercent, int harmfulPercent) GetScrollFailureBand(int levelDifference)
+    {
+        return levelDifference switch
+        {
+            <= 3 => (95, 5),
+            <= 6 => (85, 15),
+            <= 9 => (75, 25),
+            <= 12 => (65, 35),
+            <= 15 => (50, 50),
+            _ => (30, 70)
+        };
     }
 
     public Spell? FindSpellFromItem(Item item)

@@ -38,6 +38,9 @@ Long Range	upp till 30 fot	    –5 to hit*/
     public List<string> SpecialAbilities { get; set; } = new(); // e.g. ["Flaming", "Frost", "Returning"]>
     public bool IsCursed { get; set; } = false;
     public List<CharacterClass> AllowedClasses { get; set; } = new();
+    public bool ScrollContentsKnown { get; set; } = false;
+    public int ScrollUnreadFadeChancePercent { get; set; } = 0;
+    public bool ScrollUnreadFadeChecked { get; set; } = false;
 
     public RarityType Rarity { get; set; } = RarityType.Uncommon;
     public string Description { get; set; } = "";

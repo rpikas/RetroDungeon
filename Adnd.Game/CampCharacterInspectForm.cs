@@ -177,6 +177,7 @@ public sealed class CampCharacterInspectForm : Form
         Controls.Add(_oldStyleFooterLabel);
 
         ApplyUiStyleMode();
+        CheckUnreadScrollFadeForCurrentCharacter();
         RefreshView();
 
         KeyPreview = true;
@@ -347,6 +348,86 @@ public sealed class CampCharacterInspectForm : Form
     }
 
     private Character? GetCharacter() => _characterRepository.GetAll().FirstOrDefault(c => string.Equals(c.Name, _characterName, StringComparison.OrdinalIgnoreCase));
+
+    private void CheckUnreadScrollFadeForCurrentCharacter()
+    {
+        var c = GetCharacter();
+        if (c == null)
+            return;
+
+        var messages = new List<string>();
+        ApplyUnreadScrollFadeForCharacter(c, messages);
+        if (messages.Count > 0)
+            SayOnBoth("Scrolls", string.Join(Environment.NewLine, messages));
+    }
+
+    private static bool IsArcaneReader(Character c)
+    {
+        return c.Spellcasting.Any(s => s.SpellClass is SpellClass.MagicUser or SpellClass.Illusionist)
+               || c.Classes.Any(cls => cls is CharacterClass.MagicUser or CharacterClass.Illusionist);
+    }
+
+    private static bool IsDivineReader(Character c)
+    {
+        return c.Spellcasting.Any(s => s.SpellClass is SpellClass.Cleric or SpellClass.Druid)
+               || c.Classes.Any(cls => cls is CharacterClass.Cleric or CharacterClass.Druid);
+    }
+
+    private static bool CanDetermineScrollContents(Character c)
+    {
+        // Core-rules approximation: Read Magic / Comprehend Languages availability.
+        // Arcane/divine reader classes can decode magical script.
+        return IsArcaneReader(c) || IsDivineReader(c);
+    }
+
+    private static int RollScrollUnreadFadeChancePercent()
+    {
+        // Core rule: 5% to 30%, or d6 choice. We use 5% steps from a d6.
+        var d6 = Random.Shared.Next(1, 7);
+        return d6 * 5;
+    }
+
+    private void ApplyUnreadScrollFadeForCharacter(Character c, List<string> messages)
+    {
+        if (c.Inventory.Count == 0)
+            return;
+
+        var removed = new List<string>();
+        var changed = false;
+        for (var i = c.Inventory.Count - 1; i >= 0; i--)
+        {
+            var item = c.Inventory[i];
+            if (item.Type != ItemType.Scroll)
+                continue;
+
+            if (item.ScrollContentsKnown)
+                continue;
+
+            if (!item.ScrollUnreadFadeChecked)
+            {
+                item.ScrollUnreadFadeChancePercent = RollScrollUnreadFadeChancePercent();
+                item.ScrollUnreadFadeChecked = true;
+                changed = true;
+            }
+
+            var chance = Math.Clamp(item.ScrollUnreadFadeChancePercent, 0, 100);
+            var roll = Random.Shared.Next(1, 101);
+            if (roll <= chance)
+            {
+                removed.Add($"{item.Name} fades unread (roll {roll} <= {chance}%).");
+                c.Inventory.RemoveAt(i);
+                changed = true;
+            }
+        }
+
+        if (changed)
+            _characterRepository.Save(c);
+
+        if (removed.Count > 0)
+        {
+            messages.AddRange(removed);
+        }
+    }
 
     private List<Character> GetPartyCharacters()
     {
@@ -1020,7 +1101,9 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         var itemIdx = PromptChoice("Use Item", usableItems.Select(x =>
-            x.spell != null
+            x.item.Type == ItemType.Scroll && !x.item.ScrollContentsKnown
+                ? $"{x.item.Name} (unread magical scroll)"
+                : x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
                 : x.grantsRegeneration
                     ? $"{x.item.Name} (grants regeneration)"
@@ -1064,6 +1147,21 @@ public sealed class CampCharacterInspectForm : Form
             targets.Add(SpellCastTarget.Ally(partyMembers[targetIdx.Value]));
         }
 
+        string? scrollRevealEvent = null;
+        if (selected.item.Type == ItemType.Scroll && !selected.item.ScrollContentsKnown)
+        {
+            if (!CanDetermineScrollContents(user))
+            {
+                SayOnBoth("Use Item", "The scroll's magical cipher is unreadable. Read Magic or Comprehend Languages is required to determine contents.");
+                return;
+            }
+
+            selected.item.ScrollContentsKnown = true;
+            selected.item.ScrollUnreadFadeChecked = true;
+            selected.item.ScrollUnreadFadeChancePercent = 0;
+            scrollRevealEvent = $"{user.Name} deciphers {selected.item.Name}. Read Magic is no longer required for later invocation.";
+        }
+
         var result = spell != null
             ? _spellCastingService.CastFromItem(new SpellCastRequest
             {
@@ -1072,13 +1170,27 @@ public sealed class CampCharacterInspectForm : Form
                 Context = SpellUseContext.Exploration,
                 Targets = targets,
                 PartyTargets = partyMembers,
-                MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
+                MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>(),
+                IsScrollSpell = selected.item.Type == ItemType.Scroll,
+                SourceItemName = selected.item.Name
             })
             : new Adnd.Core.Spells.Casting.SpellCastResult { Success = true };
 
+        if (!string.IsNullOrWhiteSpace(scrollRevealEvent))
+            result.Events.Insert(0, scrollRevealEvent);
+
+        if (selected.item.Type == ItemType.Scroll)
+            user.Inventory.RemoveAt(selected.index);
+
         if (spell != null && !result.Success)
         {
-            SayOnBoth("Use Item", string.IsNullOrWhiteSpace(result.Error) ? "Could not use item." : result.Error);
+            var failureText = result.Events != null && result.Events.Count > 0
+                ? string.Join(Environment.NewLine, result.Events)
+                : (string.IsNullOrWhiteSpace(result.Error) ? "Could not use item." : result.Error);
+            SayOnBoth("Use Item", failureText);
+            foreach (var member in partyMembers)
+                _characterRepository.Save(member);
+            _characterRepository.Save(user);
             return;
         }
 
@@ -1100,7 +1212,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (selected.item.Type is ItemType.Potion or ItemType.Scroll)
+        if (selected.item.Type == ItemType.Potion)
         {
             user.Inventory.RemoveAt(selected.index);
             result.Events.Add($"{selected.item.Name} is consumed.");
@@ -1439,6 +1551,22 @@ public sealed class CampCharacterInspectForm : Form
                 return;
 
             var selected = entries[list.SelectedIndex].Item;
+            if (selected.Type == ItemType.Scroll
+                && !selected.ScrollContentsKnown
+                && !CanDetermineScrollContents(c))
+            {
+                ViewerMessage.Show(form, "Item Info", "Magical cipher conceals this scroll's contents. Read Magic or Comprehend Languages is required.");
+                return;
+            }
+
+            if (selected.Type == ItemType.Scroll && !selected.ScrollContentsKnown)
+            {
+                selected.ScrollContentsKnown = true;
+                selected.ScrollUnreadFadeChecked = true;
+                selected.ScrollUnreadFadeChancePercent = 0;
+                _characterRepository.Save(c);
+            }
+
             var fromJson = allItems.FirstOrDefault(i => string.Equals(i.Name, selected.Name, StringComparison.OrdinalIgnoreCase));
             var item = fromJson ?? selected;
             var specialAbilities = fromJson?.SpecialAbilities ?? item.SpecialAbilities;

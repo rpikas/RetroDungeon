@@ -20,7 +20,8 @@ public sealed class LightningBoltHandler : ISpellEffectHandler
             return SpellCastResult.Failure("Lightning Bolt requires combat session context.");
 
         var rng = request.Rng ?? Random.Shared;
-        var diceCount = Math.Max(1, request.Caster.Level); // 1d6 per caster level
+        var effectiveCasterLevel = request.EffectiveCasterLevel.GetValueOrDefault(request.Caster.Level);
+        var diceCount = Math.Max(1, effectiveCasterLevel); // 1d6 per caster level (scrolls may override)
 
         string targetGroupId = "default";
         var firstTarget = request.Targets.FirstOrDefault();

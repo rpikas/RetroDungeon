@@ -1352,11 +1352,22 @@ public sealed class CombatResolver
             MonsterTargets = session.Monsters,
             Targets = targets,
             RoundNumber = session.RoundNumber,
-            CombatSession = session
+            CombatSession = session,
+            IsScrollSpell = item.Type == ItemType.Scroll,
+            SourceItemName = item.Name
         });
+
+        if (item.Type == ItemType.Scroll)
+            user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
 
         if (!result.Success)
         {
+            if (result.Events != null && result.Events.Count > 0)
+            {
+                foreach (var entry in result.Events)
+                    events.Add(new CombatEvent(entry));
+            }
+
             events.Add(new CombatEvent($"{user.Name} fails to use {item.Name}: {result.Error}"));
             return;
         }
@@ -1373,7 +1384,7 @@ public sealed class CombatResolver
             return;
         }
 
-        if (item.Type is ItemType.Potion or ItemType.Scroll)
+        if (item.Type == ItemType.Potion)
             user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
 
         if (grantsRegenerationUntilDungeonExit

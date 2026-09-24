@@ -21,4 +21,7 @@ public sealed class SpellCastRequest
     public Spell? Spell { get; set; }
     public int RoundNumber { get; set; }
     public CombatSession? CombatSession { get; set; }
+    public bool IsScrollSpell { get; set; }
+    public string? SourceItemName { get; set; }
+    public int? EffectiveCasterLevel { get; set; }
 }

@@ -18,8 +18,9 @@ public sealed class FireballHandler : ISpellEffectHandler
         if (session == null)
             return SpellCastResult.Failure("Fireball requires combat session context.");
 
-        // Determine damage: 1d6 per caster level, max 10d6
-        var diceCount = Math.Min(10, caster.Level);
+        // Determine damage: 1d6 per caster level (scrolls may override effective caster level), max 10d6
+        var effectiveCasterLevel = request.EffectiveCasterLevel.GetValueOrDefault(caster.Level);
+        var diceCount = Math.Min(10, Math.Max(1, effectiveCasterLevel));
         var rng = request.Rng ?? Random.Shared;
 
         // Determine target group from request targets or default
