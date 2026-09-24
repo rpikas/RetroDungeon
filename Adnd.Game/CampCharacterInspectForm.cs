@@ -1005,9 +1005,10 @@ public sealed class CampCharacterInspectForm : Form
                 spell = _spellCastingService.FindSpellFromItem(item),
                 grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
-                grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength")
+                grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
+                isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.isPotionOfHealing)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -1023,7 +1024,9 @@ public sealed class CampCharacterInspectForm : Form
                     ? $"{x.item.Name} (grants regeneration)"
                     : x.grantsFireResistancePotion
                         ? $"{x.item.Name} (grants fire resistance)"
-                        : $"{x.item.Name} (grants giant strength)").ToList());
+                        : x.grantsGiantStrengthPotion
+                            ? $"{x.item.Name} (grants giant strength)"
+                            : $"{x.item.Name} (heals 2d4+2)").ToList());
         if (!itemIdx.HasValue)
             return;
 
@@ -1032,6 +1035,7 @@ public sealed class CampCharacterInspectForm : Form
         var grantsRegenerationUntilDungeonExit = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
         var grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Giant Strength");
+        var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
         var targets = new List<SpellCastTarget>();
 
         if (spell != null && spell.RangeType == SpellRangeType.Self)
@@ -1076,7 +1080,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion)
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1129,6 +1133,17 @@ public sealed class CampCharacterInspectForm : Form
                 bendBarsLiftGatesPercent: profile.BendBars);
 
             result.Events.Add($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%.");
+        }
+
+        if (isPotionOfHealing)
+        {
+            var heal = Random.Shared.Next(1, 5) + Random.Shared.Next(1, 5) + 2;
+            var before = user.CurrentHitPoints;
+            user.CurrentHitPoints = Math.Min(user.MaxHitPoints, user.CurrentHitPoints + heal);
+            var actual = Math.Max(0, user.CurrentHitPoints - before);
+            result.Events.Add(actual > 0
+                ? $"{user.Name} drinks Potion of Healing and recovers {actual} HP (rolled {heal} on 2d4+2)."
+                : $"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health.");
         }
 
         foreach (var member in partyMembers)

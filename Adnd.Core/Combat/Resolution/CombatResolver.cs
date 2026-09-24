@@ -1205,6 +1205,7 @@ public sealed class CombatResolver
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
+        var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
@@ -1214,7 +1215,7 @@ public sealed class CombatResolver
 
         if (string.IsNullOrWhiteSpace(spellId))
         {
-            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion)
+            if (grantsRegenerationUntilDungeonExit || grantsFireResistancePotion || grantsGiantStrengthPotion || isPotionOfHealing)
             {
                 if (grantsGiantStrengthPotion && !user.IsFighterClassed())
                 {
@@ -1272,6 +1273,17 @@ public sealed class CombatResolver
                         bendBarsLiftGatesPercent: profile.BendBars);
 
                     events.Add(new CombatEvent($"{user.Name} drinks Potion of Giant Strength (roll {roll}): {profile.Type} strength until dungeon exit (+{profile.Carry} carry, +{profile.Damage} damage). Rock hurling stored: range {profile.RockRange}\" damage {profile.RockDamage}, bend bars/lift gates {profile.BendBars}%."));
+                }
+
+                if (isPotionOfHealing)
+                {
+                    var heal = _dice.Roll(4) + _dice.Roll(4) + 2;
+                    var before = user.CurrentHitPoints;
+                    user.CurrentHitPoints = Math.Min(user.MaxHitPoints, user.CurrentHitPoints + heal);
+                    var actual = Math.Max(0, user.CurrentHitPoints - before);
+                    events.Add(actual > 0
+                        ? new CombatEvent($"{user.Name} drinks Potion of Healing and recovers {actual} HP (rolled {heal} on 2d4+2).")
+                        : new CombatEvent($"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health."));
                 }
 
                 events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));

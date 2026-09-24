@@ -66,9 +66,6 @@ public sealed class SpellCastingService
         if (item == null || string.IsNullOrWhiteSpace(item.Name))
             return string.Empty;
 
-        if (string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase))
-            return "Cure Light Wounds";
-
         if (string.Equals(item.Name, "Potion of Extra Healing", StringComparison.OrdinalIgnoreCase))
             return "Cure Serious Wounds";
 

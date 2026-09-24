@@ -2,7 +2,7 @@
   "Category": "Potion",
   "Items": [
     {
-      "Name": "Potion of Cure Light Wounds",
+      "Name": "Potion of Healing",
       "Type": "Potion",
       "Slot": "",
       "Cost": 50,
@@ -12,9 +12,9 @@
       "IsShopBuyable": true,
       "Damage": "",
       "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Cure Light Wounds" ],
+      "SpecialAbilities": [ "Potion Healing 2d4+2" ],
       "Rarity": "Uncommon",
-      "Source": "Wizardry"
+      "Source": "Adnd"
     },
     {
       "Name": "Potion of Extra Healing",

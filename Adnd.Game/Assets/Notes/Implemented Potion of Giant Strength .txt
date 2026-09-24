@@ -1,0 +1,31 @@
+Implemented Potion of Giant Strength 
+with your requested behavior.
+What is now working
+•	Fighter-only usage enforced
+•	Allowed: Fighter / Paladin / Ranger (fighter-classed check).
+•	Non-fighter attempt is blocked with message.
+•	Random giant profile roll (1d20)
+•	Exact table ranges implemented:
+•	1–6 Hill
+•	7–10 Stone
+•	11–14 Frost
+•	15–17 Fire
+•	18–19 Cloud
+•	20 Storm
+•	Persistent duration
+•	Effect lasts until dungeon exit (as requested).
+•	Bonuses applied
+•	Damage bonus applied through character damage calculation.
+•	Carry weight allowance bonus applied through max carry weight calculation.
+•	Rock hurling stored only
+•	Stored as metadata on character:
+•	giant type
+•	rock range
+•	rock damage
+•	bend bars / lift gates %
+•	No new combat action added (per your choice).
+•	Usable in both contexts
+•	Exploration item use (CampCharacterInspectForm.UseItemAction)
+•	Combat item use (CombatResolver.ResolvePartyUseItem)
+Technical note
+Potion data already existed (Potion of Giant Strength in Potions.json), so this implementation wires behavior without requiring new item definitions.
