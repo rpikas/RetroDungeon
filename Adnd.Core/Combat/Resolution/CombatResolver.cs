@@ -326,6 +326,16 @@ public sealed class CombatResolver
                 }
             }
 
+            if (member.ProtectionFromMagicScrollRoundsRemaining > 0)
+            {
+                member.ProtectionFromMagicScrollRoundsRemaining = Math.Max(0, member.ProtectionFromMagicScrollRoundsRemaining - 1);
+                if (member.ProtectionFromMagicScrollRoundsRemaining <= 0)
+                {
+                    member.ClearProtectionFromMagicScroll();
+                    events.Add(new CombatEvent($"{member.Name}'s anti-magic protection expires."));
+                }
+            }
+
             if (member.ColdResistanceRoundsRemaining > 0)
             {
                 member.ColdResistanceRoundsRemaining = Math.Max(0, member.ColdResistanceRoundsRemaining - 1);
@@ -1274,6 +1284,12 @@ public sealed class CombatResolver
         var item = user.Inventory[action.ItemInventoryIndex.Value];
         var spellId = action.SpellId;
 
+        if (user.HasActiveProtectionFromMagicScroll)
+        {
+            events.Add(new CombatEvent($"{user.Name} is inside anti-magic protection and cannot activate magical items."));
+            return;
+        }
+
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration");
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
@@ -1281,6 +1297,8 @@ public sealed class CombatResolver
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
         var grantsSuperHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism");
         var grantsInvulnerabilityPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability");
+        var grantsProtectionFromMagicScroll = ItemSpecialAbilityParser.HasCastsAbility(item, "Protection from Magic")
+                                             || string.Equals(item.Name, "Scroll of Protection from Magic", StringComparison.OrdinalIgnoreCase);
         var grantsLevitationPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Haste")
                                 || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
@@ -1294,6 +1312,7 @@ public sealed class CombatResolver
                || grantsHeroismPotion
                || grantsSuperHeroismPotion
                || grantsInvulnerabilityPotion
+               || grantsProtectionFromMagicScroll
                || grantsLevitationPotion
                || grantsSpeedPotion
                || isPotionOfHealing;
@@ -1487,6 +1506,17 @@ public sealed class CombatResolver
                 }
             }
 
+            if (grantsProtectionFromMagicScroll)
+            {
+                var rounds = 0;
+                for (var i = 0; i < 5; i++)
+                    rounds += _dice.Roll(6);
+
+                user.SetProtectionFromMagicScroll(rounds);
+                events.Add(new CombatEvent($"{user.Name} reads Scroll of Protection from Magic: anti-magic globe (5' radius) surrounds the reader for {rounds} round(s)."));
+                ResolveProtectionFromMagicItemContact(user, item, events);
+            }
+
             if (grantsSuperHeroismPotion)
             {
                 var level = Math.Max(0, user.Level);
@@ -1613,6 +1643,69 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+    }
+
+    private void ResolveProtectionFromMagicItemContact(Character user, Item sourceItem, List<CombatEvent> events)
+    {
+        var candidates = user.Inventory
+            .Where(i => !ReferenceEquals(i, sourceItem))
+            .Concat(user.Equipment.Values.Where(i => i != null).Select(i => i!))
+            .Where(IsMagicalItemForProtectionFromMagic)
+            .Distinct()
+            .OrderByDescending(GetProtectionFromMagicItemPower)
+            .ToList();
+
+        foreach (var magicItem in candidates)
+        {
+            var saveRoll = _dice.Roll(20);
+            if (saveRoll >= 11)
+            {
+                events.Add(new CombatEvent($"{magicItem.Name} resists anti-magic contact (save {saveRoll} vs 11)."));
+                continue;
+            }
+
+            DrainItemMagic(magicItem);
+            user.ClearProtectionFromMagicScroll();
+            events.Add(new CombatEvent($"{magicItem.Name} fails anti-magic contact save ({saveRoll} vs 11), is drained of magic, and the anti-magic globe collapses."));
+            return;
+        }
+    }
+
+    private static bool IsMagicalItemForProtectionFromMagic(Item item)
+    {
+        if (item == null)
+            return false;
+
+        return item.Type is ItemType.Potion or ItemType.Scroll or ItemType.MagicItem
+               || item.MagicBonus != 0
+               || item.ToHitBonus != 0
+               || item.ArmorClassBonus != 0
+               || (item.SpecialAbilities != null && item.SpecialAbilities.Count > 0)
+               || item.IsCursed;
+    }
+
+    private static int GetProtectionFromMagicItemPower(Item item)
+    {
+        if (item == null)
+            return 0;
+
+        var specialCount = item.SpecialAbilities?.Count ?? 0;
+        return Math.Abs(item.MagicBonus) * 100
+               + Math.Abs(item.ToHitBonus) * 80
+               + Math.Abs(item.ArmorClassBonus) * 80
+               + specialCount * 25
+               + Math.Max(0, item.Cost / 100);
+    }
+
+    private static void DrainItemMagic(Item item)
+    {
+        item.MagicBonus = 0;
+        item.ToHitBonus = 0;
+        item.ArmorClassBonus = 0;
+        item.IsCursed = false;
+
+        if (item.SpecialAbilities != null)
+            item.SpecialAbilities.Clear();
     }
 
     private int RollAnimalControlCapacity(MonsterSize size)

@@ -1131,11 +1131,12 @@ public sealed class CampCharacterInspectForm : Form
                 grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism"),
                 grantsSuperHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism"),
                 grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability"),
+                grantsProtectionFromMagicScroll = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Protection from Magic") || string.Equals(item.Name, "Scroll of Protection from Magic", StringComparison.OrdinalIgnoreCase),
                 grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase),
                 grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
             .ToList();
 
         var hasEquippedRingInvisibility = user.TryGetEquippedRingOfInvisibility(out var equippedRingOfInvisibility)
@@ -1187,6 +1188,8 @@ public sealed class CampCharacterInspectForm : Form
                                     ? $"{x.item.Name} (grants super-heroism)"
                                 : x.grantsInvulnerabilityPotion
                                     ? $"{x.item.Name} (grants invulnerability)"
+                                : x.grantsProtectionFromMagicScroll
+                                    ? $"{x.item.Name} (protection from magic)"
                                 : x.grantsLevitationPotion
                                     ? $"{x.item.Name} (grants levitation)"
                                 : x.grantsSpeedPotion
@@ -1236,6 +1239,7 @@ public sealed class CampCharacterInspectForm : Form
         var grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Heroism");
         var grantsSuperHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Super-Heroism");
         var grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Invulnerability");
+        var grantsProtectionFromMagicScroll = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Protection from Magic") || string.Equals(selected.item.Name, "Scroll of Protection from Magic", StringComparison.OrdinalIgnoreCase);
         var grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Levitate") || string.Equals(selected.item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Haste") || string.Equals(selected.item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
@@ -1339,7 +1343,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsAnimalControlPotion && !grantsHeroismPotion && !grantsSuperHeroismPotion && !grantsInvulnerabilityPotion && !grantsLevitationPotion && !grantsSpeedPotion && !isPotionOfHealing)
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsAnimalControlPotion && !grantsHeroismPotion && !grantsSuperHeroismPotion && !grantsInvulnerabilityPotion && !grantsProtectionFromMagicScroll && !grantsLevitationPotion && !grantsSpeedPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1348,6 +1352,12 @@ public sealed class CampCharacterInspectForm : Form
         if (grantsAnimalControlPotion)
         {
             SayOnBoth("Use Item", "Potion of Animal Control can only be used in combat encounters.");
+            return;
+        }
+
+        if (grantsProtectionFromMagicScroll)
+        {
+            SayOnBoth("Use Item", "Scroll of Protection from Magic can only be used in combat encounters.");
             return;
         }
 

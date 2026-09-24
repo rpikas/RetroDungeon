@@ -77,6 +77,7 @@ public class Character
     public int PotionInvulnerabilityRoundsRemaining { get; set; }
     public int PotionInvulnerabilityArmorClassBonus { get; set; }
     public int PotionInvulnerabilitySaveBonus { get; set; }
+    public int ProtectionFromMagicScrollRoundsRemaining { get; set; }
     public bool RingInvisibilityActive { get; set; }
     public bool RingInvisibilityAppliedArmorClassBonus { get; set; }
     public bool RingInvisibilityInaudibilityActive { get; set; }
@@ -161,6 +162,7 @@ public class Character
 
     [JsonIgnore]
     public bool HasActivePotionInvulnerability => PotionInvulnerabilityRoundsRemaining > 0;
+    public bool HasActiveProtectionFromMagicScroll => ProtectionFromMagicScrollRoundsRemaining > 0;
 
     [JsonIgnore]
     public bool HasActivePotionLevitation => PotionLevitationActiveUntilDungeonExit;
@@ -627,6 +629,16 @@ public class Character
         PotionInvulnerabilityRoundsRemaining = 0;
         PotionInvulnerabilityArmorClassBonus = 0;
         PotionInvulnerabilitySaveBonus = 0;
+    }
+
+    public void SetProtectionFromMagicScroll(int rounds)
+    {
+        ProtectionFromMagicScrollRoundsRemaining = Math.Max(1, rounds);
+    }
+
+    public void ClearProtectionFromMagicScroll()
+    {
+        ProtectionFromMagicScrollRoundsRemaining = 0;
     }
 
     public bool IsFighterClassed()

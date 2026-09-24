@@ -36,6 +36,9 @@ public sealed class SpellCastingService
         if (IsBlockedFromCasting(request.Caster))
             return SpellCastResult.Failure($"{request.Caster.Name} is feebleminded and cannot cast spells.");
 
+        if (request.Caster.HasActiveProtectionFromMagicScroll)
+            return SpellCastResult.Failure($"{request.Caster.Name} is within anti-magic protection and cannot cast spells.");
+
         if (!_spellsById.TryGetValue(request.SpellId, out var spell))
             return SpellCastResult.Failure($"Unknown spell: {request.SpellId}");
 
@@ -210,6 +213,9 @@ public sealed class SpellCastingService
         if (IsBlockedFromCasting(request.Caster))
             return SpellCastResult.Failure($"{request.Caster.Name} is feebleminded and cannot cast spells.");
 
+        if (request.Caster.HasActiveProtectionFromMagicScroll)
+            return SpellCastResult.Failure($"{request.Caster.Name} is within anti-magic protection and cannot cast spells.");
+
         if (!_spellsById.TryGetValue(request.SpellId, out var spell))
             return SpellCastResult.Failure($"Unknown spell: {request.SpellId}");
 
@@ -314,13 +320,18 @@ public sealed class SpellCastingService
                 case SpellRangeType.Self:
                     if (t.Type != SpellCastTargetType.Ally || !string.Equals(t.CharacterName, request.Caster.Name, StringComparison.OrdinalIgnoreCase))
                         return SpellCastResult.Failure("This spell can only target the caster.");
+                    if (request.Caster.HasActiveProtectionFromMagicScroll)
+                        return SpellCastResult.Failure($"{request.Caster.Name} is protected by anti-magic and cannot be affected by spells.");
                     break;
 
                 case SpellRangeType.Ally:
                     if (t.Type != SpellCastTargetType.Ally)
                         return SpellCastResult.Failure("This spell must target allies.");
-                    if (!request.PartyTargets.Any(p => string.Equals(p.Name, t.CharacterName, StringComparison.OrdinalIgnoreCase)))
+                    var allyTarget = request.PartyTargets.FirstOrDefault(p => string.Equals(p.Name, t.CharacterName, StringComparison.OrdinalIgnoreCase));
+                    if (allyTarget == null)
                         return SpellCastResult.Failure("Invalid ally target.");
+                    if (allyTarget.HasActiveProtectionFromMagicScroll)
+                        return SpellCastResult.Failure($"{allyTarget.Name} is protected by anti-magic and cannot be affected by spells.");
                     break;
 
                 case SpellRangeType.Enemy:

@@ -1,0 +1,99 @@
+Scroll of Protection from Magic
+Reading time: 8 segments. This scroll invokes a very powerful and invisible globe of anti-magic in a 5' radius from the reader. It prevents any form of magic from passing into or our of its con¬ fines, but normal things ore not restricted by it, As with other protections, the globe of anti-magic moves with its invoker. 
+Any magical item which touches the globe must be soved for with a 50% likelihood of the object being drained of all magic from the power of the globe, he. save equals 11 or better with d2Q The protection fasts for 5-30 (5d6) rounds.
+If multiple magic items encounter the globe simultaneously, the leading item (o magic sword held in advance of its holder, for instance) is the first affected, then the others are checked in order of decreasing power until the first item fails its save, at which time the globe Is cancelled and the item is drained of its magic.
+Protection from Magic (Scroll) — Explained Clearly
+This scroll creates a 5‑foot radius invisible anti‑magic globe around the reader. Think of it as a mobile anti‑magic shell that follows the character.
+Maybe you agree with this interpreation?
+Here’s what it actually does:
+
+🔒 1. Blocks ALL magic — both directions
+Inside the globe:
+No magic can enter
+No magic can leave
+No magical effects function
+
+This includes:
+Spells
+Spell‑like abilities
+Magic items’ effects
+Magical projectiles
+Magical barriers
+Magic weapon bonuses
+Normal physical things still work:
+Swords
+Arrows
+Movement
+Talking
+Nonmagical equipment
+
+🚶 2. The globe moves with the reader
+Just like Protection from Evil, the anti‑magic field is centered on the scroll user and travels with them.
+
+⚠️ 3. Magic items touching the globe must save
+This is the dangerous part.
+Any magical item that touches the globe must make a saving throw:
+50% chance of being drained
+Save is 11 or better on d20
+Failure = item permanently loses all magic
+Success = item is unaffected
+This applies to:
+Magic weapons
+Magic armor
+Rings
+Wands
+Staves
+Rods
+Potions
+Scrolls
+ANYTHING magical
+
+🗡️ 4. Multiple items touching at once
+If several magic items hit the globe at the same time (example: a fighter with sword + shield + armor):
+The leading item is checked first
+Example: a sword held forward
+Then items are checked in order of decreasing power
+As soon as one item fails, the globe ends and that item is drained
+
+This means:
+The globe does not drain multiple items
+It drains one item, then collapses
+The first failed save ends the protection
+
+⏳ 5. Duration
+5–30 rounds (5d6)
+That’s ½ minute to 3 minutes of real time.
+
+🧙 What this means in play
+✔ You become immune to magic
+No spell can touch you. No wand can affect you. No magic missile, no charm, no fireball, no magic weapon bonus.
+✔ You can walk through magical barriers
+Wall of Fire
+Wall of Ice
+Blade Barrier
+Web (if magical)
+Hold Person
+Silence
+
+Protection from Evil  
+All suppressed.
+
+✔ You can shut down enemy spellcasters
+They cannot affect you with magic at all.
+
+❌ Your own magic items become risky
+If your +3 sword touches the globe → it must save.
+If your +2 armor touches the globe → it must save.
+If your ring touches the globe → it must save.
+
+Most characters must drop all magic gear before using this scroll.
+
+🧭 Summary Table
+Effect	Result
+Radius	5 ft
+Blocks magic	Both directions
+Magic item touching	50% drain, save 11+
+Multiple items	First failed save ends globe
+Duration	5–30 rounds
+Movement	Globe follows user
+Normal items	Unaffected
