@@ -160,6 +160,11 @@ public sealed class CombatResolver
             var veryHotFireExposureRounds = session.GetPartyVeryHotFireExposureRounds(member.Name);
             if (veryHotFireExposureRounds > 0)
             {
+                if (TryExtinguishFireWithFrostBrand(member, session, events))
+                {
+                    veryHotFireExposureRounds = session.GetPartyVeryHotFireExposureRounds(member.Name);
+                }
+
                 var veryHotFireDamage = session.GetPartyVeryHotFireExposureDamagePerRound(member.Name);
                 var appliedFireDamage = ApplyFireProtectionDamageReduction(
                     member,
@@ -4267,7 +4272,12 @@ public sealed class CombatResolver
 
         target.Equipment.TryGetValue(EquipmentSlot.Ring1, out var ring1);
         target.Equipment.TryGetValue(EquipmentSlot.Ring2, out var ring2);
-        return IsRingOfFireResistance(ring1) || IsRingOfFireResistance(ring2);
+        var hasRing = IsRingOfFireResistance(ring1) || IsRingOfFireResistance(ring2);
+        if (hasRing)
+            return true;
+
+        target.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainHand);
+        return IsSwordPlusThreeFrostBrand(mainHand);
     }
 
     private static int GetFireResistanceSaveBonus(Character target)
@@ -4571,6 +4581,26 @@ public sealed class CombatResolver
         return IsTargetSpecificDragonType(target, chosenDragonType) ? 3 : 1;
     }
 
+    private bool TryExtinguishFireWithFrostBrand(Character member, CombatSession session, List<CombatEvent> events)
+    {
+        if (member?.Equipment == null)
+            return false;
+
+        if (!member.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainHand)
+            || !IsSwordPlusThreeFrostBrand(mainHand))
+        {
+            return false;
+        }
+
+        var roll = _dice.Roll(100);
+        if (roll > 50)
+            return false;
+
+        session.SetPartyVeryHotFireExposure(member.Name, 0, 0);
+        events.Add(new CombatEvent($"{member.Name} thrusts Frost Brand into the flames and extinguishes nearby fire (50% chance)."));
+        return true;
+    }
+
     private string GetOrAssignDragonSlayerType(Item weapon)
     {
         weapon.SpecialAbilities ??= new List<string>();
@@ -4802,6 +4832,24 @@ public sealed class CombatResolver
                    && a.Contains("Nine Lives Stealer", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordPlusThreeFrostBrand(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Frost Brand", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Frost Brand", StringComparison.OrdinalIgnoreCase));
+    }
+
     private bool TryResolveNineLivesStealerEffect(Item? weapon, MonsterInstance target, List<CombatEvent> events)
     {
         if (weapon == null || target?.Template == null)
@@ -4891,6 +4939,13 @@ public sealed class CombatResolver
         {
             // Weapon is +2 normally, but +4 vs true dragons.
             return 2;
+        }
+
+        if (IsSwordPlusThreeFrostBrand(weapon)
+            && IsTargetFireUsingOrDwellingCreature(target))
+        {
+            // Weapon is +3 normally, but +6 vs fire-using/dwelling creatures.
+            return 3;
         }
 
         if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(weapon)
@@ -5092,6 +5147,25 @@ public sealed class CombatResolver
             return false;
 
         return name.Contains("dragon");
+    }
+
+    private static bool IsTargetFireUsingOrDwellingCreature(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("fire")
+               || composite.Contains("flame")
+               || composite.Contains("burn")
+               || composite.Contains("heat")
+               || composite.Contains("lava")
+               || composite.Contains("magma")
+               || composite.Contains("pyro");
     }
 
     private static bool IsTargetTrueGiantForGiantSlayer(MonsterInstance target)

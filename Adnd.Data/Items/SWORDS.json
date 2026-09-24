@@ -1036,6 +1036,44 @@
                       "ToHitBonus":  2
                   },
                   {
+                      "Name":  "Sword +3, Frost Brand",
+                      "Type":  "Weapon",
+                      "Cost":  8000,
+                      "Weight":  60,
+                      "Damage":  "1d8+3",
+                      "DamageVsLarge":  "1d12+3",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  3,
+                      "SpecialAbilities":  [
+                                               "Frost Brand",
+                                               "+6 vs. fire-using/dwelling creatures",
+                                               "Wielder protected as Ring of Fire Resistance",
+                                               "50% chance to extinguish nearby fire (includes wall of fire; excludes fireball/meteor swarm/flame strike)"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "+3 Frost Brand sword: +6 vs fire-using/dwelling creatures; grants fire resistance effects; can extinguish nearby fire on 50% chance.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  3
+                  },
+                  {
                       "Name":  "Sword +3 (No Special Abilities)",
                       "Type":  "Weapon",
                       "Cost":  7000,
