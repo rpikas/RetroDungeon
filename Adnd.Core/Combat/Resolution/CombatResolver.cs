@@ -2408,6 +2408,10 @@ public sealed class CombatResolver
             if (IsSwordPlusTwoGiantSlayer(mainHand) && IsTargetTrueGiantForGiantSlayer(target))
                 damage *= 2;
 
+            var dragonSlayerDamageMultiplier = GetDragonSlayerDamageMultiplier(mainHand, target);
+            if (dragonSlayerDamageMultiplier > 1)
+                damage *= dragonSlayerDamageMultiplier;
+
             if (isBackstab)
             {
                 var beforeBackstab = damage;
@@ -4541,6 +4545,59 @@ public sealed class CombatResolver
         return string.IsNullOrWhiteSpace(member.Damage) ? "1d2" : member.Damage;
     }
 
+    private int GetDragonSlayerDamageMultiplier(Item? weapon, MonsterInstance target)
+    {
+        if (!IsSwordPlusTwoDragonSlayer(weapon))
+            return 1;
+
+        if (!IsTargetEligibleForDragonSlayerBonus(target))
+            return 1;
+
+        if (weapon == null)
+            return 1;
+
+        var chosenDragonType = GetOrAssignDragonSlayerType(weapon);
+        return IsTargetSpecificDragonType(target, chosenDragonType) ? 3 : 1;
+    }
+
+    private string GetOrAssignDragonSlayerType(Item weapon)
+    {
+        weapon.SpecialAbilities ??= new List<string>();
+
+        var existing = weapon.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("DragonSlayerType:", StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(existing))
+            return existing[(existing.IndexOf(':') + 1)..].Trim();
+
+        var rolledType = _dice.Roll(10) switch
+        {
+            1 => "Black",
+            2 => "Blue",
+            3 => "Brass",
+            4 => "Bronze",
+            5 => "Copper",
+            6 => "Gold",
+            7 => "Green",
+            8 => "Red",
+            9 => "Silver",
+            _ => "White"
+        };
+
+        weapon.SpecialAbilities.Add($"DragonSlayerType:{rolledType}");
+        return rolledType;
+    }
+
+    private static bool IsTargetSpecificDragonType(MonsterInstance target, string dragonType)
+    {
+        if (target?.Template == null || string.IsNullOrWhiteSpace(dragonType))
+            return false;
+
+        var name = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        var type = dragonType.ToLowerInvariant();
+
+        return name.Contains("dragon") && name.Contains(type);
+    }
+
     private static bool IsHalfDamageFromSharpWeapons(MonsterInstance target, Item? mainHand)
     {
         if (mainHand == null || mainHand.Type != ItemType.Weapon)
@@ -4690,6 +4747,28 @@ public sealed class CombatResolver
                    && a.Contains("Giant Slayer", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordPlusTwoDragonSlayer(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.ToLowerInvariant();
+        if (normalized.Contains("sword +2, dragon slayer", StringComparison.Ordinal)
+            || normalized.Contains("sword +2 dragon slayer", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Dragon Slayer", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static int GetSituationalSwordBonusAgainstTarget(Item? weapon, MonsterInstance target)
     {
         if (IsSwordPlusOneFlameTongue(weapon))
@@ -4717,6 +4796,13 @@ public sealed class CombatResolver
         {
             // Weapon is +2 normally, but +3 vs giant-kind targets.
             return 1;
+        }
+
+        if (IsSwordPlusTwoDragonSlayer(weapon)
+            && IsTargetEligibleForDragonSlayerBonus(target))
+        {
+            // Weapon is +2 normally, but +4 vs true dragons.
+            return 2;
         }
 
         if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(weapon)
@@ -4903,6 +4989,21 @@ public sealed class CombatResolver
                || composite.Contains("ogre mage")
                || composite.Contains("ogre-mage")
                || composite.Contains("titan");
+    }
+
+    private static bool IsTargetEligibleForDragonSlayerBonus(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        if (target.InstanceMonsterType != MonsterType.Dragon)
+            return false;
+
+        var name = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        if (name.Contains("bahamut") || name.Contains("tiamat"))
+            return false;
+
+        return name.Contains("dragon");
     }
 
     private static bool IsTargetTrueGiantForGiantSlayer(MonsterInstance target)

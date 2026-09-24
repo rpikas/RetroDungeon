@@ -961,6 +961,43 @@
                       "ToHitBonus":  2
                   },
                   {
+                      "Name":  "Sword +2, Dragon Slayer",
+                      "Type":  "Weapon",
+                      "Cost":  4500,
+                      "Weight":  60,
+                      "Damage":  "1d8+2",
+                      "DamageVsLarge":  "1d12+2",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+                                               "Dragon Slayer",
+                                               "+4 vs. true dragons (excluding Bahamut and Tiamat)",
+                                               "Triple damage vs. one randomly determined dragon type"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "+2 Dragon Slayer sword: +4 vs true dragons; triple damage vs one random dragon type (black/blue/brass/bronze/copper/gold/green/red/silver/white).",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
                       "Name":  "Sword +3 (No Special Abilities)",
                       "Type":  "Weapon",
                       "Cost":  7000,
