@@ -53,6 +53,9 @@ public class Character
     public int LightningProtectionSaveBonusVsLightning { get; set; }
     public bool LightningProtectionHalfDamageFromMagicalLightning { get; set; }
     public bool LightningProtectionNormalLightningImmunity { get; set; }
+    public int ColdResistanceRoundsRemaining { get; set; }
+    public int ColdResistanceSaveBonus { get; set; }
+    public bool ColdResistanceActive { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -111,6 +114,9 @@ public class Character
     [JsonIgnore]
     public bool HasActiveProtectionFromLightning => LightningProtectionRoundsRemaining > 0 || LightningProtectionAbsorptionRemaining > 0;
 
+    [JsonIgnore]
+    public bool HasActiveResistCold => ColdResistanceActive && ColdResistanceRoundsRemaining > 0;
+
     public void SetProtectionFromFireSelf(int rounds, int absorptionPool)
     {
         FireProtectionRoundsRemaining = Math.Max(0, rounds);
@@ -163,6 +169,20 @@ public class Character
         LightningProtectionSaveBonusVsLightning = 0;
         LightningProtectionHalfDamageFromMagicalLightning = false;
         LightningProtectionNormalLightningImmunity = false;
+    }
+
+    public void SetResistCold(int rounds)
+    {
+        ColdResistanceRoundsRemaining = Math.Max(0, rounds);
+        ColdResistanceSaveBonus = 3;
+        ColdResistanceActive = ColdResistanceRoundsRemaining > 0;
+    }
+
+    public void ClearResistCold()
+    {
+        ColdResistanceRoundsRemaining = 0;
+        ColdResistanceSaveBonus = 0;
+        ColdResistanceActive = false;
     }
 
     public override string ToString()

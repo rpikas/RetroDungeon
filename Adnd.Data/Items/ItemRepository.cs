@@ -325,7 +325,7 @@ public class ItemRepository
         return new[]
         {
             "Bless", "Cure Light Wounds", "Chant", "Find Traps", "Hold Person", "Silence 15' Radius",
-            "Spiritual Hammer", "Cure Disease", "Glyph of Warding", "Remove Paralysis", "Prayer",
+            "Resist Cold", "Spiritual Hammer", "Cure Disease", "Glyph of Warding", "Remove Paralysis", "Prayer",
             "Cure Serious Wounds", "Neutralize Poison", "Cure Critical Wounds", "Flame Strike", "Insect Plague",
             "Raise Dead", "Blade Barrier", "Heal", "Harm", "Earthquake", "Resurrection", "Unholy Word",
             "Cause Light Wounds", "Cause Serious Wounds", "Cause Critical Wounds",

@@ -80,6 +80,7 @@ public sealed class CombatCoordinator
         var resolver = new SpellResolver(new ISpellEffectHandler[]
         {
             new CureLightWoundsHandler(),
+            new ResistColdHandler(),
             new BarkskinHandler(),
             new ProtectionFromFireHandler(),
             new ProtectionFromLightningHandler(),

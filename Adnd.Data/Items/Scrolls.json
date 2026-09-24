@@ -63,6 +63,18 @@
       "Source": "Adnd"
     },
     {
+      "Name": "Scroll of Resist Cold",
+      "Type": "Scroll",
+      "Cost": 300,
+      "Weight": 1,
+      "StockQuantity": 1,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Cleric" ],
+      "SpecialAbilities": [ "Casts resist cold" ],
+      "Rarity": "Common",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Scroll of Fire Storm",
       "Type": "Scroll",
       "Cost": 900,

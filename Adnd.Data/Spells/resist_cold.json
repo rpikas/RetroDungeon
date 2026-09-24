@@ -1,0 +1,12 @@
+{
+  "Id": "resist_cold",
+  "Name": "Resist Cold",
+  "Class": "Cleric",
+  "Level": 1,
+  "Description": "Inures the target against cold.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Target gains +3 saves vs cold. Cold damage is reduced to half on failed save, or quarter on successful save. Duration: 1 turn per caster level."
+}

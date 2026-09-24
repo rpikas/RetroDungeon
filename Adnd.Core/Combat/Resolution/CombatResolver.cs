@@ -263,6 +263,16 @@ public sealed class CombatResolver
                 }
             }
 
+            if (member.ColdResistanceRoundsRemaining > 0)
+            {
+                member.ColdResistanceRoundsRemaining = Math.Max(0, member.ColdResistanceRoundsRemaining - 1);
+                if (member.ColdResistanceRoundsRemaining <= 0)
+                {
+                    member.ClearResistCold();
+                    events.Add(new CombatEvent($"{member.Name}'s Resist Cold expires."));
+                }
+            }
+
             var partySlowRounds = session.GetPartySlowRounds(member.Name);
             if (partySlowRounds > 0)
             {
@@ -2156,11 +2166,18 @@ public sealed class CombatResolver
             foreach (var target in aliveParty)
             {
                 var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (target.HasActiveResistCold && target.ColdResistanceSaveBonus > 0)
+                    saveTarget = Math.Max(1, saveTarget - target.ColdResistanceSaveBonus);
                 if (session.IsChantActive || session.IsPrayerActive)
                     saveTarget = Math.Max(1, saveTarget - 1);
 
                 var saveRoll = _dice.Roll(20);
-                var applied = saveRoll >= saveTarget ? Math.Max(1, damagePerTarget / 2) : damagePerTarget;
+                var damageAfterResistance = target.HasActiveResistCold
+                    ? Math.Max(1, damagePerTarget / 2)
+                    : damagePerTarget;
+                var applied = saveRoll >= saveTarget
+                    ? Math.Max(1, damageAfterResistance / 2)
+                    : damageAfterResistance;
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
@@ -2213,11 +2230,14 @@ public sealed class CombatResolver
             {
                 var rolledDamage = _dice.RollMany(4, 6);
                 var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+                if (target.HasActiveResistCold && target.ColdResistanceSaveBonus > 0)
+                    saveTarget = Math.Max(1, saveTarget - target.ColdResistanceSaveBonus);
                 if (session.IsChantActive || session.IsPrayerActive)
                     saveTarget = Math.Max(1, saveTarget - 1);
 
                 var saveRoll = _dice.Roll(20);
-                var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+                var damageAfterResistance = ApplyColdResistanceDamageReduction(target, rolledDamage, isMagicalCold: true, isNormalCold: false);
+                var applied = saveRoll >= saveTarget ? Math.Max(1, damageAfterResistance / 2) : damageAfterResistance;
 
                 var before = target.CurrentHitPoints;
                 target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
@@ -2862,14 +2882,23 @@ public sealed class CombatResolver
         {
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
             var isBlueDragonLightningBreath = string.Equals(monster.Template.Name?.Trim(), "Blue Dragon", StringComparison.OrdinalIgnoreCase);
+            var isWhiteDragonColdBreath = string.Equals(monster.Template.Name?.Trim(), "White Dragon", StringComparison.OrdinalIgnoreCase);
+            var isSilverDragonColdBreath = string.Equals(monster.Template.Name?.Trim(), "Silver Dragon", StringComparison.OrdinalIgnoreCase);
+            var isColdDragonBreath = isWhiteDragonColdBreath || isSilverDragonColdBreath;
             if (isBlueDragonLightningBreath && target.LightningProtectionSaveBonusVsLightning > 0)
                 saveTarget = Math.Max(1, saveTarget - target.LightningProtectionSaveBonusVsLightning);
-            if (target.FireProtectionSaveBonusVsFire > 0)
+            if (isColdDragonBreath && target.HasActiveResistCold && target.ColdResistanceSaveBonus > 0)
+                saveTarget = Math.Max(1, saveTarget - target.ColdResistanceSaveBonus);
+            if (!isBlueDragonLightningBreath && !isColdDragonBreath && target.FireProtectionSaveBonusVsFire > 0)
                 saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
             var saveRoll = _dice.Roll(20);
-            var preSaveDamage = ApplyFireProtectionDamageReduction(target, breathDamage, isMagicalFire: true, isNormalFire: false);
+            var preSaveDamage = breathDamage;
+            if (!isBlueDragonLightningBreath && !isColdDragonBreath)
+                preSaveDamage = ApplyFireProtectionDamageReduction(target, preSaveDamage, isMagicalFire: true, isNormalFire: false);
             if (isBlueDragonLightningBreath)
                 preSaveDamage = ApplyLightningProtectionDamageReduction(target, preSaveDamage, isMagicalLightning: true, isNormalLightning: false);
+            if (isColdDragonBreath)
+                preSaveDamage = ApplyColdResistanceDamageReduction(target, preSaveDamage, isMagicalCold: true, isNormalCold: false);
             if (preSaveDamage <= 0)
             {
                 events.Add(new CombatEvent($"{target.Name} is protected from {monster.DisplayName}'s dragon breath."));
@@ -3500,6 +3529,25 @@ public sealed class CombatResolver
             target.FireProtectionAbsorptionRemaining -= absorbed;
             damage -= absorbed;
         }
+
+        return Math.Max(0, damage);
+    }
+
+    private static int ApplyColdResistanceDamageReduction(Character target, int incomingDamage, bool isMagicalCold, bool isNormalCold)
+    {
+        var damage = Math.Max(0, incomingDamage);
+        if (damage <= 0)
+            return 0;
+
+        if (!target.HasActiveResistCold)
+            return damage;
+
+        // Resist Cold inures normal cold and halves magical cold before saving throw.
+        if (isNormalCold)
+            return 0;
+
+        if (isMagicalCold)
+            damage = Math.Max(1, damage / 2);
 
         return Math.Max(0, damage);
     }
