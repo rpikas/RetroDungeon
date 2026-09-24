@@ -468,7 +468,7 @@
       "Slot": "Range",
       "Cost": 7500,
       "CostSilverPieces": 75000,
-      "Weight": 0,
+      "Weight": 30,
       "Damage": "1d4",
       "DamageVsLarge": "1d4",
       "DamageType": "Piercing",

@@ -2599,4 +2599,12 @@ Note that the +2 would not operate against a creature magically empowered by som
 69,6
 ____
 Sword +1, +3 vs. lycanthropes & shape changers
+___
+Bow Type	Weight Short Bow	2 lbs Composite Short Bow	2 lbs Long Bow	3 lbs Composite Long Bow	3 lbs
+___
+Update weights for Crossbows
+70,8
+___
+
+all rings should have weight 1
 
