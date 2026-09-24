@@ -2420,6 +2420,14 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (wasNaturalTwenty
+                && IsSwordOfLifeStealing(mainHand))
+            {
+                TryResolveSwordOfLifeStealingEffect(member, target, events);
+                if (target.CurrentHitPoints <= 0)
+                    break;
+            }
+
             if (RequiresPlusOneWeaponToHit(target) && !IsMagicalWeapon(mainHand))
             {
                 var blockedWeaponName = mainHand != null ? mainHand.Name : "bare hands";
@@ -5102,6 +5110,56 @@ public sealed class CombatResolver
                && weapon.SpecialAbilities.Any(a =>
                    !string.IsNullOrWhiteSpace(a)
                    && a.Contains("Wounding", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSwordOfLifeStealing(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Sword of Life Stealing", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Life Stealing", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Life Stealing", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void TryResolveSwordOfLifeStealingEffect(Character wielder, MonsterInstance target, List<CombatEvent> events)
+    {
+        if (wielder == null || target?.Template == null || !target.IsAlive)
+            return;
+
+        var hitDieType = Math.Max(2, target.Template.HitDiceType <= 0 ? 8 : target.Template.HitDiceType);
+        var drained = _dice.Roll(hitDieType);
+
+        var beforeTargetHp = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - drained);
+        var actualDrained = beforeTargetHp - target.CurrentHitPoints;
+        if (actualDrained <= 0)
+            return;
+
+        // Approximation of one level/hit-die drain: reduce monster offense slightly.
+        target.AdjustThac0(1);
+
+        var beforeWielderHp = wielder.CurrentHitPoints;
+        var missing = Math.Max(0, wielder.MaxHitPoints - wielder.CurrentHitPoints);
+        var gained = Math.Min(missing, actualDrained);
+        if (gained > 0)
+            wielder.CurrentHitPoints = Math.Min(wielder.MaxHitPoints, wielder.CurrentHitPoints + gained);
+
+        events.Add(new CombatEvent(
+            gained > 0
+                ? $"Sword of Life Stealing drains {actualDrained} life from {target.DisplayName} (natural 20). {wielder.Name} gains {gained} HP. HP {beforeWielderHp}->{wielder.CurrentHitPoints}."
+                : $"Sword of Life Stealing drains {actualDrained} life from {target.DisplayName} (natural 20), but {wielder.Name} is already at full HP."));
     }
 
     private static bool IsSwordPlusThreeFrostBrand(Item? weapon)
