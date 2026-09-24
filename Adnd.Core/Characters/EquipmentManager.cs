@@ -31,9 +31,18 @@ public static class EquipmentManager
 
         var slot = item.Slot.Value;
 
+        static bool IsRingOfInvisibility(Item? it)
+            => it != null && string.Equals(it.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase);
+
         // Remove old item if slot is occupied
         if (c.Equipment[slot] != null)
         {
+            if ((slot == EquipmentSlot.Ring1 || slot == EquipmentSlot.Ring2)
+                && IsRingOfInvisibility(c.Equipment[slot]))
+            {
+                c.DeactivateRingInvisibility();
+            }
+
             // subtract the armor class bonus of the currently equipped item
             c.ArmorClass += c.Equipment[slot].ArmorClassBonus;
             c.Inventory.Add(c.Equipment[slot]);
@@ -57,6 +66,12 @@ public static class EquipmentManager
 
         if (c.Equipment[slot] == null)
             return false;
+
+        if ((slot == EquipmentSlot.Ring1 || slot == EquipmentSlot.Ring2)
+            && string.Equals(c.Equipment[slot]?.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase))
+        {
+            c.DeactivateRingInvisibility();
+        }
 
         // remove item's armor class bonus when unequipping
         c.ArmorClass += c.Equipment[slot].ArmorClassBonus;

@@ -1032,6 +1032,9 @@ public sealed class CampCharacterInspectForm : Form
             return;
 
         var caster = partyMembers.FirstOrDefault(x => string.Equals(x.Name, c.Name, StringComparison.OrdinalIgnoreCase)) ?? c;
+        if (caster.BreakRingInaudibilityForSpeaking())
+            _characterRepository.Save(caster);
+
         var targets = new List<SpellCastTarget>();
 
         if (spell.RangeType == SpellRangeType.Self)
@@ -1126,9 +1129,33 @@ public sealed class CampCharacterInspectForm : Form
             .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
             .ToList();
 
-        if (usableItems.Count == 0)
+        var hasEquippedRingInvisibility = user.TryGetEquippedRingOfInvisibility(out var equippedRingOfInvisibility)
+            && equippedRingOfInvisibility != null;
+
+        if (usableItems.Count == 0 && !hasEquippedRingInvisibility)
         {
             SayOnBoth("Use Item", "No usable magical items.");
+            return;
+        }
+
+        if (usableItems.Count == 0 && hasEquippedRingInvisibility)
+        {
+            if (user.HasActiveRingInvisibility)
+            {
+                user.DeactivateRingInvisibility();
+                _characterRepository.Save(user);
+                RefreshView();
+                SayOnBoth("Use Item", $"{user.Name} deactivates Ring of Invisibility and becomes visible.");
+            }
+            else
+            {
+                user.ActivateRingInvisibility();
+                _characterRepository.Save(user);
+                RefreshView();
+                SayOnBoth("Use Item", user.HasActiveRingInvisibilityInaudibility
+                    ? $"{user.Name} activates Ring of Invisibility and becomes invisible and inaudible."
+                    : $"{user.Name} activates Ring of Invisibility and becomes invisible.");
+            }
             return;
         }
 
@@ -1154,6 +1181,38 @@ public sealed class CampCharacterInspectForm : Form
                                 : $"{x.item.Name} (heals 2d4+2)").ToList());
         if (!itemIdx.HasValue)
             return;
+
+        if (hasEquippedRingInvisibility)
+        {
+            var toggleChoices = new List<string>
+            {
+                user.HasActiveRingInvisibility
+                    ? "Toggle Ring of Invisibility (currently ON)"
+                    : "Toggle Ring of Invisibility (currently OFF)"
+            };
+
+            var ringChoice = PromptChoice("Ring Power", toggleChoices);
+            if (ringChoice.HasValue)
+            {
+                if (user.HasActiveRingInvisibility)
+                {
+                    user.DeactivateRingInvisibility();
+                    _characterRepository.Save(user);
+                    RefreshView();
+                    SayOnBoth("Ring of Invisibility", $"{user.Name} deactivates ring invisibility and becomes visible.");
+                }
+                else
+                {
+                    user.ActivateRingInvisibility();
+                    _characterRepository.Save(user);
+                    RefreshView();
+                    SayOnBoth("Ring of Invisibility", user.HasActiveRingInvisibilityInaudibility
+                        ? $"{user.Name} activates ring invisibility and is now invisible and inaudible."
+                        : $"{user.Name} activates ring invisibility and is now invisible.");
+                }
+                return;
+            }
+        }
 
         var selected = usableItems[itemIdx.Value];
         var spell = selected.spell;

@@ -1,0 +1,29 @@
+Ring of Invisibility
+What is now implemented
+•	Added character-level ring invisibility state:
+•	RingInvisibilityActive
+•	RingInvisibilityAppliedArmorClassBonus
+•	RingInvisibilityInaudibilityActive
+•	Added ring helper methods on Character:
+•	detect equipped Ring of Invisibility in Ring1/Ring2
+•	roll and persist the 10% inaudibility trait on that ring (SpecialAbilities)
+•	activate/deactivate ring invisibility
+•	break invisibility on hostile action
+•	break inaudibility when speaking
+•	Added equip/unequip safety in EquipmentManager:
+•	if Ring of Invisibility is replaced or unequipped, ring invisibility is cleared properly.
+•	Added camp activation flow (UseItemAction):
+•	if Ring of Invisibility is equipped, player can toggle it at will.
+•	when turned on: applies invisibility and AC effect.
+•	if that ring is one of the 10% variant, it reports inaudibility too.
+•	Added combat interaction:
+•	ring invisibility breaks on attack (ResolvePartyAttack).
+•	inaudibility breaks on speaking actions in combat:
+•	spell casting
+•	combat item invocation
+•	Added exploration speaking interaction:
+•	inaudibility breaks when casting spells in camp (CastSpellAction).
+Notes
+•	I kept the “speak breaks silence” behavior for spell speaking paths.
+•	I did not force “Use Item in camp” to break inaudibility globally, so ring toggle itself can be used cleanly without auto-breaking first.
+•	This follows your requested ring semantics while fitting current game architecture.

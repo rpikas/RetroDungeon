@@ -77,6 +77,9 @@ public class Character
     public int PotionInvulnerabilityRoundsRemaining { get; set; }
     public int PotionInvulnerabilityArmorClassBonus { get; set; }
     public int PotionInvulnerabilitySaveBonus { get; set; }
+    public bool RingInvisibilityActive { get; set; }
+    public bool RingInvisibilityAppliedArmorClassBonus { get; set; }
+    public bool RingInvisibilityInaudibilityActive { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -156,6 +159,111 @@ public class Character
 
     [JsonIgnore]
     public bool HasActivePotionLevitation => PotionLevitationActiveUntilDungeonExit;
+
+    [JsonIgnore]
+    public bool HasActiveRingInvisibility => RingInvisibilityActive;
+
+    [JsonIgnore]
+    public bool HasActiveRingInvisibilityInaudibility => RingInvisibilityActive && RingInvisibilityInaudibilityActive;
+
+    public bool TryGetEquippedRingOfInvisibility(out Item? ring)
+    {
+        ring = null;
+
+        if (Equipment.TryGetValue(EquipmentSlot.Ring1, out var ring1)
+            && ring1 != null
+            && string.Equals(ring1.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase))
+        {
+            ring = ring1;
+            return true;
+        }
+
+        if (Equipment.TryGetValue(EquipmentSlot.Ring2, out var ring2)
+            && ring2 != null
+            && string.Equals(ring2.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase))
+        {
+            ring = ring2;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool EnsureRingOfInvisibilityTrait(Item ring, Random? rng = null)
+    {
+        if (ring == null || !string.Equals(ring.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        ring.SpecialAbilities ??= new List<string>();
+
+        if (!ring.SpecialAbilities.Any(a => string.Equals(a, "Invisibility trait rolled", StringComparison.OrdinalIgnoreCase)))
+        {
+            var roller = rng ?? Random.Shared;
+            var hasInaudibility = roller.Next(1, 11) == 1; // 10%
+            ring.SpecialAbilities.Add("Invisibility trait rolled");
+            if (hasInaudibility
+                && !ring.SpecialAbilities.Any(a => string.Equals(a, "Inaudibility", StringComparison.OrdinalIgnoreCase)))
+            {
+                ring.SpecialAbilities.Add("Inaudibility");
+            }
+        }
+
+        return ring.SpecialAbilities.Any(a => string.Equals(a, "Inaudibility", StringComparison.OrdinalIgnoreCase));
+    }
+
+    public bool ActivateRingInvisibility()
+    {
+        if (!TryGetEquippedRingOfInvisibility(out var ring) || ring == null)
+            return false;
+
+        RingInvisibilityActive = true;
+        RingInvisibilityInaudibilityActive = EnsureRingOfInvisibilityTrait(ring);
+
+        if (!HasStatus(CharacterStatus.Invisible))
+        {
+            AddStatus(CharacterStatus.Invisible);
+            ArmorClass -= 4;
+            RingInvisibilityAppliedArmorClassBonus = true;
+        }
+        else
+        {
+            RingInvisibilityAppliedArmorClassBonus = false;
+        }
+
+        return true;
+    }
+
+    public void DeactivateRingInvisibility()
+    {
+        RingInvisibilityActive = false;
+        RingInvisibilityInaudibilityActive = false;
+
+        if (RingInvisibilityAppliedArmorClassBonus)
+        {
+            RemoveStatus(CharacterStatus.Invisible);
+            ArmorClass += 4;
+        }
+
+        RingInvisibilityAppliedArmorClassBonus = false;
+    }
+
+    public bool BreakRingInvisibilityOnHostileAction()
+    {
+        if (!RingInvisibilityActive)
+            return false;
+
+        DeactivateRingInvisibility();
+        return true;
+    }
+
+    public bool BreakRingInaudibilityForSpeaking()
+    {
+        if (!RingInvisibilityInaudibilityActive)
+            return false;
+
+        RingInvisibilityInaudibilityActive = false;
+        return true;
+    }
 
     public void SetProtectionFromFireSelf(int rounds, int absorptionPool)
     {

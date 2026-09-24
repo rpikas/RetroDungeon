@@ -1211,6 +1211,9 @@ public sealed class CombatResolver
 
     private void ResolvePartySpell(CombatSession session, Character caster, CombatAction action, List<CombatEvent> events)
     {
+        if (caster.BreakRingInaudibilityForSpeaking())
+            events.Add(new CombatEvent($"{caster.Name} speaks and loses ring inaudibility."));
+
         if (_spellCastingService == null)
         {
             events.Add(new CombatEvent($"{caster.Name} cannot cast spells right now."));
@@ -1249,6 +1252,9 @@ public sealed class CombatResolver
 
     private void ResolvePartyUseItem(CombatSession session, Character user, CombatAction action, List<CombatEvent> events)
     {
+        if (user.BreakRingInaudibilityForSpeaking())
+            events.Add(new CombatEvent($"{user.Name} speaks and loses ring inaudibility."));
+
         if (_spellCastingService == null)
         {
             events.Add(new CombatEvent($"{user.Name} cannot use magical items right now."));
@@ -1766,6 +1772,9 @@ public sealed class CombatResolver
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
         var chantOrPrayerBonus = (session.IsChantActive || session.IsPrayerActive) ? 1 : 0;
+
+        if (member.BreakRingInvisibilityOnHostileAction())
+            events.Add(new CombatEvent($"{member.Name}'s ring invisibility breaks on attack."));
 
         var rangedWeapon = member.Equipment.TryGetValue(EquipmentSlot.Range, out var rw) ? rw : null;
         var ammo = member.Equipment.TryGetValue(EquipmentSlot.Ammo, out var am) ? am : null;
