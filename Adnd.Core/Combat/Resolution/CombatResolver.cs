@@ -2428,15 +2428,27 @@ public sealed class CombatResolver
                     break;
             }
 
-            if (RequiresPlusOneWeaponToHit(target) && !IsMagicalWeapon(mainHand))
+            if (TryResolveSwordOfSharpnessSeverEffect(mainHand, target, roll, events))
+            {
+                if (target.CurrentHitPoints <= 0)
+                    break;
+            }
+
+            if (TryResolveSwordVorpalSeverEffect(mainHand, target, roll, events))
+            {
+                if (target.CurrentHitPoints <= 0)
+                    break;
+            }
+
+            if (!CanWeaponHarmTargetByMagicRequirement(mainHand, target))
             {
                 var blockedWeaponName = mainHand != null ? mainHand.Name : "bare hands";
                 events.Add(new CombatEvent(
-                    $"{member.Name} hits {target.DisplayName} with {blockedWeaponName}, but the attack cannot harm it (+1 or better weapon required)."));
+                    $"{member.Name} hits {target.DisplayName} with {blockedWeaponName}, but the attack cannot harm it (insufficient magical weapon bonus)."));
 
                 RuleApplicationInfo.Publish(
-                    $"AD&D special defense: {target.DisplayName} requires '+1 or better weapons to hit'. " +
-                    $"{member.Name}'s attack with {blockedWeaponName} is non-magical (no '+' in name and no special abilities), so it deals no damage.");
+                    $"AD&D special defense: {target.DisplayName} requires a magical weapon bonus to hit. " +
+                    $"{member.Name}'s attack with {blockedWeaponName} does not meet the required bonus, so it deals no damage.");
                 continue;
             }
 
@@ -5131,6 +5143,242 @@ public sealed class CombatResolver
                && weapon.SpecialAbilities.Any(a =>
                    !string.IsNullOrWhiteSpace(a)
                    && a.Contains("Life Stealing", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSwordOfSharpness(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Sword of Sharpness", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Sharpness", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSwordVorpalWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Vorpal", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Vorpal", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool TryResolveSwordOfSharpnessSeverEffect(Item? weapon, MonsterInstance target, int naturalRoll, List<CombatEvent> events)
+    {
+        if (!IsSwordOfSharpness(weapon) || target?.Template == null)
+            return false;
+
+        // AD&D note: modified sever score considers only sword bonus (+1 for Sword of Sharpness).
+        var severScore = naturalRoll + 1;
+        var needed = GetSwordOfSharpnessSeverScoreNeeded(target);
+        if (severScore < needed)
+            return false;
+
+        var locationRoll = Random.Shared.Next(1, 7);
+        var location = locationRoll switch
+        {
+            1 => "arm",
+            2 => "leg",
+            3 => "tail",
+            4 => "tentacle",
+            5 => "neck",
+            _ => "other extremity"
+        };
+
+        if (string.Equals(location, "neck", StringComparison.OrdinalIgnoreCase))
+        {
+            target.CurrentHitPoints = 0;
+            events.Add(new CombatEvent($"Sword of Sharpness severs {target.DisplayName}'s neck! {target.DisplayName} is slain instantly."));
+            return true;
+        }
+
+        var before = target.CurrentHitPoints;
+        var extra = Math.Max(4, Math.Max(1, target.MaxHitPoints / 4));
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - extra);
+        var applied = before - target.CurrentHitPoints;
+        events.Add(new CombatEvent($"Sword of Sharpness severs {target.DisplayName}'s {location} (score {severScore} vs {needed}), causing {applied} additional damage."));
+        return true;
+    }
+
+    private static bool TryResolveSwordVorpalSeverEffect(Item? weapon, MonsterInstance target, int naturalRoll, List<CombatEvent> events)
+    {
+        if (!IsSwordVorpalWeapon(weapon) || target?.Template == null)
+            return false;
+
+        // AD&D note: modified sever score considers only sword bonus (+3 for Vorpal).
+        var severScore = naturalRoll + 3;
+        var needed = GetSwordVorpalSeverScoreNeeded(target);
+        if (severScore < needed)
+            return false;
+
+        if (!CanTargetBeDecapitated(target))
+        {
+            events.Add(new CombatEvent($"Vorpal strike lands on {target.DisplayName} (score {severScore} vs {needed}), but decapitation is impossible due to form."));
+            return true;
+        }
+
+        if (SurvivesDecapitation(target))
+        {
+            var before = target.CurrentHitPoints;
+            var extra = Math.Max(6, Math.Max(1, target.MaxHitPoints / 3));
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - extra);
+            var applied = before - target.CurrentHitPoints;
+            events.Add(new CombatEvent($"Vorpal strike severs {target.DisplayName}'s head, but it survives; extra damage {applied}."));
+            return true;
+        }
+
+        target.CurrentHitPoints = 0;
+        events.Add(new CombatEvent($"Vorpal strike severs {target.DisplayName}'s head! {target.DisplayName} is slain instantly."));
+        return true;
+    }
+
+    private static int GetSwordOfSharpnessSeverScoreNeeded(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return 99;
+
+        if (IsSolidMetalOrStoneTarget(target))
+            return 21;
+
+        return target.Template.Size == MonsterSize.Large ? 20 : 19;
+    }
+
+    private static int GetSwordVorpalSeverScoreNeeded(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return 99;
+
+        if (IsSolidMetalOrStoneTarget(target))
+            return 22;
+
+        return target.Template.Size == MonsterSize.Large ? 21 : 20;
+    }
+
+    private static bool IsSolidMetalOrStoneTarget(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("stone")
+               || composite.Contains("rock")
+               || composite.Contains("metal")
+               || composite.Contains("iron")
+               || composite.Contains("steel")
+               || composite.Contains("golem");
+    }
+
+    private static bool CanTargetBeDecapitated(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        if (composite.Contains("ooze")
+            || composite.Contains("slime")
+            || composite.Contains("jelly")
+            || composite.Contains("amorph")
+            || composite.Contains("formless")
+            || composite.Contains("gaseous")
+            || composite.Contains("swarm")
+            || composite.Contains("elemental"))
+        {
+            return false;
+        }
+
+        if (!composite.Contains("head")
+            && !composite.Contains("neck")
+            && (target.InstanceMonsterType == MonsterType.Ooze || target.InstanceMonsterType == MonsterType.Elemental))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool SurvivesDecapitation(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("doppelganger")
+               || composite.Contains("elemental")
+               || composite.Contains("golem");
+    }
+
+    private static bool CanWeaponHarmTargetByMagicRequirement(Item? weapon, MonsterInstance target)
+    {
+        var requiredBonus = GetRequiredWeaponBonusToHit(target);
+        if (requiredBonus <= 0)
+            return true;
+
+        var effectiveWeaponBonus = GetEffectiveWeaponBonusForHitRequirement(weapon);
+        return effectiveWeaponBonus >= requiredBonus;
+    }
+
+    private static int GetEffectiveWeaponBonusForHitRequirement(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return 0;
+
+        var baseBonus = Math.Max(0, Math.Max(weapon.MagicBonus, weapon.ToHitBonus));
+        if (IsSwordOfSharpness(weapon))
+            return Math.Max(baseBonus, 3);
+        if (IsSwordVorpalWeapon(weapon))
+            return Math.Max(baseBonus, 3);
+
+        return baseBonus;
+    }
+
+    private static int GetRequiredWeaponBonusToHit(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return 0;
+
+        var required = 0;
+        foreach (var defense in target.Template.SpecialDefenses)
+        {
+            var text = defense?.Name?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(text))
+                continue;
+
+            var match = Regex.Match(text, @"\+(\d+)\s*or\s*better\s*weapons\s*to\s*hit", RegexOptions.IgnoreCase);
+            if (match.Success && int.TryParse(match.Groups[1].Value, out var parsed))
+                required = Math.Max(required, Math.Max(0, parsed));
+        }
+
+        return required;
     }
 
     private void TryResolveSwordOfLifeStealingEffect(Character wielder, MonsterInstance target, List<CombatEvent> events)
