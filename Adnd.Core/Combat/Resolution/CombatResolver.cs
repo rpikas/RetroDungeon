@@ -1275,6 +1275,14 @@ public sealed class CombatResolver
             return;
         }
 
+        if (string.Equals(action.SpellId, "__ring_mammal_control__", StringComparison.OrdinalIgnoreCase))
+        {
+            if (!TryResolveRingOfMammalControlUse(session, user, events))
+                events.Add(new CombatEvent($"{user.Name} cannot invoke Ring of Mammal Control right now."));
+
+            return;
+        }
+
         if (!action.ItemInventoryIndex.HasValue || action.ItemInventoryIndex.Value < 0 || action.ItemInventoryIndex.Value >= user.Inventory.Count)
         {
             events.Add(new CombatEvent($"{user.Name} has no valid item selected."));
@@ -1294,6 +1302,7 @@ public sealed class CombatResolver
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
         var grantsAnimalControlPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Animal Control");
+        var grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase);
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
         var grantsSuperHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism");
         var grantsInvulnerabilityPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability");
@@ -1309,6 +1318,7 @@ public sealed class CombatResolver
                || grantsFireResistancePotion
                || grantsGiantStrengthPotion
                || grantsAnimalControlPotion
+               || grantsMammalControlRing
                || grantsHeroismPotion
                || grantsSuperHeroismPotion
                || grantsInvulnerabilityPotion
@@ -1506,6 +1516,12 @@ public sealed class CombatResolver
                 }
             }
 
+            if (grantsMammalControlRing)
+            {
+                if (!TryResolveRingOfMammalControlUse(session, user, events))
+                    events.Add(new CombatEvent($"{user.Name} cannot invoke Ring of Mammal Control right now."));
+            }
+
             if (grantsProtectionFromMagicScroll)
             {
                 var rounds = 0;
@@ -1643,6 +1659,139 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+    }
+
+    private bool TryResolveRingOfMammalControlUse(CombatSession session, Character user, List<CombatEvent> events)
+    {
+        if (!HasEquippedRingOfMammalControl(user) && !user.Inventory.Any(i => string.Equals(i.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase)))
+            return false;
+
+        events.Add(new CombatEvent($"{user.Name} concentrates for 3 segments and invokes Ring of Mammal Control."));
+
+        var candidates = session.AliveMonsters
+            .Where(IsEligibleMammalForRingControl)
+            .OrderBy(m => Math.Max(1, m.Template.HitDice))
+            .ThenBy(m => m.DisplayName)
+            .ToList();
+
+        if (candidates.Count == 0)
+        {
+            events.Add(new CombatEvent("No eligible mammal is affected."));
+            return true;
+        }
+
+        const int maxHitDiceControlled = 30;
+        var controlledCount = 0;
+        var controlledHitDice = 0;
+
+        foreach (var mammal in candidates)
+        {
+            var hd = Math.Max(1, mammal.Template.HitDice);
+            if (controlledHitDice + hd > maxHitDiceControlled)
+                continue;
+
+            mammal.SetStatus(MonsterStatus.Charmed, int.MaxValue);
+            controlledCount += 1;
+            controlledHitDice += hd;
+            events.Add(new CombatEvent($"{mammal.DisplayName} is controlled by {user.Name}'s ring."));
+        }
+
+        events.Add(new CombatEvent($"Ring of Mammal Control affects {controlledCount} mammal(s), total {controlledHitDice} HD (max 30 HD)."));
+        return true;
+    }
+
+    private static bool HasEquippedRingOfMammalControl(Character user)
+    {
+        return (user.Equipment.TryGetValue(EquipmentSlot.Ring1, out var ring1)
+                && ring1 != null
+                && string.Equals(ring1.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase))
+               ||
+               (user.Equipment.TryGetValue(EquipmentSlot.Ring2, out var ring2)
+                && ring2 != null
+                && string.Equals(ring2.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsEligibleMammalForRingControl(MonsterInstance monster)
+    {
+        if (monster == null || !monster.IsAlive)
+            return false;
+
+        if (monster.InstanceMonsterType != MonsterType.Animal)
+            return false;
+
+        if (!IsLikelyMammal(monster))
+            return false;
+
+        if (!HasRingMammalControlEligibleIntelligence(monster.Template.Intelligence))
+            return false;
+
+        var name = (monster.Template.Name ?? string.Empty).ToLowerInvariant();
+        if (name.Contains("lammasu") || name.Contains("shedu") || name.Contains("manes") || name.Contains("core"))
+            return false;
+
+        return true;
+    }
+
+    private static bool IsLikelyMammal(MonsterInstance monster)
+    {
+        var text = $"{monster.Template.Name} {monster.Template.TypeName}".ToLowerInvariant();
+
+        if (text.Contains("bat") || text.Contains("bird") || text.Contains("avian")
+            || text.Contains("snake") || text.Contains("lizard") || text.Contains("rept")
+            || text.Contains("amphib") || text.Contains("frog") || text.Contains("toad")
+            || text.Contains("fish") || text.Contains("shark") || text.Contains("eel")
+            || text.Contains("insect") || text.Contains("spider") || text.Contains("scorpion"))
+            return false;
+
+        return text.Contains("rat")
+               || text.Contains("weasel")
+               || text.Contains("badger")
+               || text.Contains("wolf")
+               || text.Contains("dog")
+               || text.Contains("fox")
+               || text.Contains("cat")
+               || text.Contains("lion")
+               || text.Contains("tiger")
+               || text.Contains("bear")
+               || text.Contains("boar")
+               || text.Contains("pig")
+               || text.Contains("horse")
+               || text.Contains("pony")
+               || text.Contains("camel")
+               || text.Contains("cow")
+               || text.Contains("bull")
+               || text.Contains("ox")
+               || text.Contains("deer")
+               || text.Contains("stag")
+               || text.Contains("goat")
+               || text.Contains("sheep")
+               || text.Contains("ram")
+               || text.Contains("dolphin")
+               || text.Contains("whale")
+               || text.Contains("ape")
+               || text.Contains("baboon")
+               || text.Contains("monkey")
+               || text.Contains("mammal");
+    }
+
+    private static bool HasRingMammalControlEligibleIntelligence(string? intelligenceText)
+    {
+        if (string.IsNullOrWhiteSpace(intelligenceText))
+            return false;
+
+        var lower = intelligenceText.Trim().ToLowerInvariant();
+        if (lower.StartsWith("non") || lower.StartsWith("animal") || lower.StartsWith("semi"))
+            return true;
+
+        var matches = Regex.Matches(lower, @"\d+")
+            .Select(m => int.TryParse(m.Value, out var n) ? n : -1)
+            .Where(n => n >= 0)
+            .ToList();
+
+        if (matches.Count == 0)
+            return false;
+
+        return matches.Min() <= 4;
     }
 
     private void ResolveProtectionFromMagicItemContact(Character user, Item sourceItem, List<CombatEvent> events)

@@ -1404,6 +1404,29 @@ public sealed class CombatCoordinator
         if (string.IsNullOrWhiteSpace(descriptorPart))
             return null;
 
+        static string NormalizeSwordNoSpecialLabel(string value)
+        {
+            return value
+                .Replace(":", " ", StringComparison.Ordinal)
+                .Replace("-", " ", StringComparison.Ordinal)
+                .Replace("+", " +", StringComparison.Ordinal)
+                .Replace("(", " ", StringComparison.Ordinal)
+                .Replace(")", " ", StringComparison.Ordinal)
+                .Replace("  ", " ", StringComparison.Ordinal)
+                .Trim()
+                .ToLowerInvariant();
+        }
+
+        var normalizedDescriptor = NormalizeSwordNoSpecialLabel(descriptorPart);
+        if (normalizedDescriptor.Contains("sword")
+            && normalizedDescriptor.Contains("+1")
+            && normalizedDescriptor.Contains("no")
+            && normalizedDescriptor.Contains("special")
+            && normalizedDescriptor.Contains("abilities"))
+        {
+            descriptorPart = "Long Sword +1";
+        }
+
         var exact = allItems.FirstOrDefault(i => string.Equals(i.Name, descriptorPart, StringComparison.OrdinalIgnoreCase));
         if (exact != null)
             return exact;

@@ -2563,3 +2563,19 @@ Multiple items	First failed save ends globe
 Duration	5–30 rounds
 Movement	Globe follows user
 Normal items	Unaffected
+___
+
+Implement Ring of Mammal Control:
+This ring enables its wearer to exercise complete control over mammals with 
+intelligence of 4 or less (animal or semi-intelligent mammals). Up to 30 hit dice of mammals can be 
+controlled, Control extends to such limits as to enable the wearer to have the creatures controlled 
+actually kill themselves, but complete concentration is required. (Note: the ring does not affect 
+bard-mammal combinations, humans, semi-humans, and monsters such as lammasu, shedu, manes, cores, etc.) 
+If you are in doubt about any monster, it is NOT a mammal
+Obviously, rats, weasels, herd animals, dolphins, and even unicorns are mammals, but intelligence will 
+preclude control of the better ones. Control time is 3 segments.
+___
+
+add all items  from F. ARMOR AND SHIELD that are missing inC:\Users\rober\source\repos\RetroDungeon\Adnd.Data\Items\Armor.json to that file
+___
+SeparateAdnd.Data\Items\Weapons.json into MISCELLANEOUS_WEAPONS.json and SWORDS.json

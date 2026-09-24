@@ -6,6 +6,7 @@ using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
+using Adnd.Core.Items;
 using Adnd.Core.Monsters;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
@@ -911,26 +912,68 @@ public sealed class EncounterForm : Form
                 item,
                 index,
                 spell = ResolveItemSpell(item, allSpells),
-                grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration")
+                grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
+                grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsMammalControlRing)
             .ToList();
 
-        if (usable.Count == 0)
+        var hasEquippedMammalControlRing =
+            (user.Equipment.TryGetValue(EquipmentSlot.Ring1, out var ring1)
+             && ring1 != null
+             && string.Equals(ring1.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase))
+            ||
+            (user.Equipment.TryGetValue(EquipmentSlot.Ring2, out var ring2)
+             && ring2 != null
+             && string.Equals(ring2.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase));
+
+        if (usable.Count == 0 && !hasEquippedMammalControlRing)
         {
             SayOnBoth("Use Item", $"{user.Name} has no usable magical item.");
             return;
         }
 
-        var lines = string.Join(Environment.NewLine, usable.Select((x, i) =>
-            x.spell != null
-                ? $"{i + 1}. {x.item.Name} (casts {x.spell!.Name})"
-                : $"{i + 1}. {x.item.Name} (grants regeneration)"));
-        var selected = PromptForNumber("Use Item", $"{user.Name} - choose item:{Environment.NewLine}{Environment.NewLine}{lines}", 1, usable.Count);
+        var options = usable.Select(x => new
+        {
+            label = x.spell != null
+                ? $"{x.item.Name} (casts {x.spell!.Name})"
+                : x.grantsMammalControlRing
+                    ? $"{x.item.Name} (controls mammals)"
+                    : $"{x.item.Name} (grants regeneration)",
+            payload = x,
+            equippedRing = false
+        }).ToList();
+
+        if (hasEquippedMammalControlRing)
+        {
+            options.Add(new
+            {
+                label = "Ring of Mammal Control (equipped; controls mammals)",
+                payload = usable.FirstOrDefault(),
+                equippedRing = true
+            });
+        }
+
+        var lines = string.Join(Environment.NewLine, options.Select((x, i) => $"{i + 1}. {x.label}"));
+        var selected = PromptForNumber("Use Item", $"{user.Name} - choose item:{Environment.NewLine}{Environment.NewLine}{lines}", 1, options.Count);
         if (!selected.HasValue)
             return;
 
-        var chosen = usable[selected.Value - 1];
+        var picked = options[selected.Value - 1];
+        if (picked.equippedRing)
+        {
+            _actions[user.Name] = new CombatAction
+            {
+                Type = CombatActionType.UseItem,
+                SpellId = "__ring_mammal_control__",
+                Target = null
+            };
+
+            AdvanceActor();
+            return;
+        }
+
+        var chosen = picked.payload!;
         var spell = chosen.spell;
 
         SpellCastTarget? target;
@@ -1000,7 +1043,7 @@ public sealed class EncounterForm : Form
         {
             Type = CombatActionType.UseItem,
             ItemInventoryIndex = chosen.index,
-            SpellId = spell?.Id,
+            SpellId = chosen.grantsMammalControlRing ? "__ring_mammal_control__" : spell?.Id,
             Target = target
         };
 
