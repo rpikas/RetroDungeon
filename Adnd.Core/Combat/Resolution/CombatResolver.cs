@@ -543,7 +543,11 @@ public sealed class CombatResolver
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
                 continue;
 
-            ApplyMonsterRegeneration(monster, events);
+            ApplySwordOfWoundingOngoingDamage(session, monster, events);
+            if (!monster.IsAlive)
+                continue;
+
+            ApplyMonsterRegeneration(session, monster, events);
 
             if (session.RoundNumber == 1 && session.MonstersSurprisedRound1)
             {
@@ -2478,6 +2482,14 @@ public sealed class CombatResolver
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
             var actualDamageToTarget = before - target.CurrentHitPoints;
+
+            if (actualDamageToTarget > 0 && IsSwordOfWounding(mainHand))
+            {
+                session.AddMonsterWoundingWound(target, rounds: 10);
+                session.AddMonsterWoundingUnhealableDamage(target, actualDamageToTarget);
+                events.Add(new CombatEvent($"Sword of Wounding opens a lingering wound on {target.DisplayName} (10 rounds)."));
+            }
+
             WakeMonsterIfAsleepAfterDamage(target, actualDamageToTarget, events);
 
             if (useRanged && rangedWeapon != null && rangedWeapon.RequiresAmmo && ammo != null && ammo.Quantity > 0)
@@ -2599,6 +2611,7 @@ public sealed class CombatResolver
             var healRoll = _dice.Roll(8) + _dice.Roll(8) + 1;
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+            ApplySwordOfWoundingHealingRestriction(session, target);
             var actual = target.CurrentHitPoints - before;
 
             events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Serious Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
@@ -2660,6 +2673,7 @@ public sealed class CombatResolver
             var healRoll = _dice.Roll(8) + _dice.Roll(8) + _dice.Roll(8) + 3;
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+            ApplySwordOfWoundingHealingRestriction(session, target);
             var actual = target.CurrentHitPoints - before;
 
             events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Critical Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
@@ -2754,6 +2768,7 @@ public sealed class CombatResolver
         var healRoll = _dice.Roll(8);
         var before = cureTarget.CurrentHitPoints;
         cureTarget.CurrentHitPoints = Math.Min(cureTarget.MaxHitPoints, cureTarget.CurrentHitPoints + healRoll);
+        ApplySwordOfWoundingHealingRestriction(session, cureTarget);
         var actual = cureTarget.CurrentHitPoints - before;
         events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Light Wounds on {cureTarget.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{cureTarget.CurrentHitPoints}."));
         return true;
@@ -2834,6 +2849,7 @@ public sealed class CombatResolver
             var healRoll = _dice.Roll(8) + _dice.Roll(8) + 1;
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+            ApplySwordOfWoundingHealingRestriction(session, target);
             var actual = target.CurrentHitPoints - before;
 
             events.Add(new CombatEvent($"{monster.DisplayName} casts Cure Serious Wounds on {target.DisplayName}, healing {actual} HP (rolled {healRoll}). HP {before}->{target.CurrentHitPoints}."));
@@ -3412,6 +3428,7 @@ public sealed class CombatResolver
         var healRoll = _dice.Roll(8);
         var before = target.CurrentHitPoints;
         target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healRoll);
+        ApplySwordOfWoundingHealingRestriction(session, target);
         var actual = target.CurrentHitPoints - before;
 
         session.Level1PriestSpellCastsUsed += 1;
@@ -3899,9 +3916,12 @@ public sealed class CombatResolver
             .Any(name => abilityNames.Any(n => string.Equals(name, n, StringComparison.OrdinalIgnoreCase)));
     }
 
-    private static void ApplyMonsterRegeneration(MonsterInstance monster, List<CombatEvent> events)
+    private static void ApplyMonsterRegeneration(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
         if (!HasSpecialAbility(monster, "Regeneration"))
+            return;
+
+        if (session != null && session.GetMonsterWoundingActiveCount(monster) > 0)
             return;
 
         if (!monster.IsAlive || monster.CurrentHitPoints >= monster.MaxHitPoints)
@@ -3913,6 +3933,31 @@ public sealed class CombatResolver
 
         if (healed > 0)
             events.Add(new CombatEvent($"{monster.DisplayName} regenerates {healed} HP. HP {before}->{monster.CurrentHitPoints}."));
+    }
+
+    private static void ApplySwordOfWoundingOngoingDamage(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (session == null || monster?.Template == null || !monster.IsAlive)
+            return;
+
+        var activeWounds = session.GetMonsterWoundingActiveCount(monster);
+        if (activeWounds <= 0)
+            return;
+
+        var before = monster.CurrentHitPoints;
+        monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - activeWounds);
+        var actual = before - monster.CurrentHitPoints;
+
+        session.AddMonsterWoundingUnhealableDamage(monster, actual);
+        var remainingWounds = session.TickMonsterWounding(monster);
+
+        events.Add(new CombatEvent($"{monster.DisplayName} bleeds from Sword of Wounding for {actual} damage ({activeWounds} wound stack(s)). HP {before}->{monster.CurrentHitPoints}."));
+
+        if (remainingWounds <= 0)
+            events.Add(new CombatEvent($"Sword of Wounding bleed effect ends on {monster.DisplayName}."));
+
+        if (monster.CurrentHitPoints <= 0)
+            events.Add(new CombatEvent($"{monster.DisplayName} succumbs to Sword of Wounding blood loss."));
     }
 
     private bool TryResolveConfusedMonsterTurn(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
@@ -5041,6 +5086,24 @@ public sealed class CombatResolver
                    && a.Contains("Nine Lives Stealer", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordOfWounding(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Sword of Wounding", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Wounding", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static bool IsSwordPlusThreeFrostBrand(Item? weapon)
     {
         if (weapon == null || weapon.Type != ItemType.Weapon)
@@ -5375,6 +5438,20 @@ public sealed class CombatResolver
                || composite.Contains("lava")
                || composite.Contains("magma")
                || composite.Contains("pyro");
+    }
+
+    private static void ApplySwordOfWoundingHealingRestriction(CombatSession session, MonsterInstance target)
+    {
+        if (session == null || target == null)
+            return;
+
+        var blockedHealing = session.GetMonsterWoundingUnhealableDamage(target);
+        if (blockedHealing <= 0)
+            return;
+
+        var cappedHp = Math.Max(0, target.MaxHitPoints - blockedHealing);
+        if (target.CurrentHitPoints > cappedHp)
+            target.CurrentHitPoints = cappedHp;
     }
 
     private static bool IsTargetTrueGiantForGiantSlayer(MonsterInstance target)

@@ -42,6 +42,8 @@ public sealed class CombatSession
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, List<int>> MonsterWoundingRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterWoundingUnhealableDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
     public bool SurpriseResolved { get; set; }
@@ -123,6 +125,81 @@ public sealed class CombatSession
         }
 
         PiercerClimbRounds[key] = rounds;
+    }
+
+    public void AddMonsterWoundingWound(MonsterInstance monster, int rounds = 10)
+    {
+        if (monster == null || rounds <= 0)
+            return;
+
+        var key = MonsterKey(monster);
+        if (!MonsterWoundingRounds.TryGetValue(key, out var woundRounds))
+        {
+            woundRounds = new List<int>();
+            MonsterWoundingRounds[key] = woundRounds;
+        }
+
+        woundRounds.Add(Math.Max(1, rounds));
+    }
+
+    public int GetMonsterWoundingActiveCount(MonsterInstance monster)
+    {
+        if (monster == null)
+            return 0;
+
+        var key = MonsterKey(monster);
+        if (!MonsterWoundingRounds.TryGetValue(key, out var woundRounds) || woundRounds.Count == 0)
+            return 0;
+
+        woundRounds.RemoveAll(r => r <= 0);
+        if (woundRounds.Count == 0)
+        {
+            MonsterWoundingRounds.Remove(key);
+            return 0;
+        }
+
+        return woundRounds.Count;
+    }
+
+    public int TickMonsterWounding(MonsterInstance monster)
+    {
+        if (monster == null)
+            return 0;
+
+        var key = MonsterKey(monster);
+        if (!MonsterWoundingRounds.TryGetValue(key, out var woundRounds) || woundRounds.Count == 0)
+            return 0;
+
+        for (int i = 0; i < woundRounds.Count; i++)
+            woundRounds[i] = Math.Max(0, woundRounds[i] - 1);
+
+        woundRounds.RemoveAll(r => r <= 0);
+        if (woundRounds.Count == 0)
+        {
+            MonsterWoundingRounds.Remove(key);
+            return 0;
+        }
+
+        return woundRounds.Count;
+    }
+
+    public void AddMonsterWoundingUnhealableDamage(MonsterInstance monster, int damage)
+    {
+        if (monster == null || damage <= 0)
+            return;
+
+        var key = MonsterKey(monster);
+        var current = MonsterWoundingUnhealableDamage.TryGetValue(key, out var existing) ? Math.Max(0, existing) : 0;
+        MonsterWoundingUnhealableDamage[key] = Math.Max(0, current + damage);
+    }
+
+    public int GetMonsterWoundingUnhealableDamage(MonsterInstance monster)
+    {
+        if (monster == null)
+            return 0;
+
+        var key = MonsterKey(monster);
+        return MonsterWoundingUnhealableDamage.TryGetValue(key, out var damage) ? Math.Max(0, damage) : 0;
     }
 
     public int TickPiercerClimbRounds(MonsterInstance monster)

@@ -1231,7 +1231,11 @@
                       "ArmorClassBonus":  0,
                       "MagicBonus":  2,
                       "SpecialAbilities":  [
-                                               "Wounding"
+                                               "Wounding",
+                                               "+1 bonus",
+                                               "Wounds inflict ongoing 1 HP/round per hit for up to 10 rounds",
+                                               "Blocks regeneration while wounds persist",
+                                               "Damage from wounds cannot be healed by magical means"
                                            ],
                       "IsCursed":  false,
                       "IsShopBuyable":  false,
@@ -1244,7 +1248,7 @@
                                              "Bard"
                                          ],
                       "Rarity":  "Legendary",
-                      "Description":  "A sword that causes persistent bleeding wounds.",
+                      "Description":  "+1 Sword of Wounding: each hit causes ongoing blood loss (1 HP/round for up to 10 rounds per wound), suppresses regeneration, and magical healing cannot restore wound damage.",
                       "Source":  "Adnd",
                       "Version":  "1e",
                       "StockQuantity":  0,
