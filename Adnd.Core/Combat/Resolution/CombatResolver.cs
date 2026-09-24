@@ -85,6 +85,7 @@ public sealed class CombatResolver
     public List<CombatEvent> ResolveRound(CombatSession session, IReadOnlyDictionary<string, CombatAction> partyActions)
     {
         ApplyRingProtectionAuras(session);
+        ApplyRingWizardryEffects(session);
 
         var events = new List<CombatEvent>
         {
@@ -3949,6 +3950,15 @@ public sealed class CombatResolver
 
         foreach (var member in session.Party)
             member.SetRingProtectionReceivedAuraSaveBonus(strongestAura);
+    }
+
+    private static void ApplyRingWizardryEffects(CombatSession session)
+    {
+        if (session?.Party == null)
+            return;
+
+        foreach (var member in session.Party)
+            member.RefreshRingWizardryEffects();
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

@@ -80,6 +80,7 @@ public class Character
     public bool RingInvisibilityActive { get; set; }
     public bool RingInvisibilityAppliedArmorClassBonus { get; set; }
     public bool RingInvisibilityInaudibilityActive { get; set; }
+    public string RingWizardryProfileKey { get; set; } = string.Empty;
     public int RingProtectionArmorClassBonusApplied { get; set; }
     public int RingProtectionSelfSaveBonus { get; set; }
     public int RingProtectionAuraSaveBonus { get; set; }
@@ -267,6 +268,127 @@ public class Character
 
         RingInvisibilityInaudibilityActive = false;
         return true;
+    }
+
+    private static bool IsRingOfWizardry(Item? item)
+        => item != null && string.Equals(item.Name, "Ring of Wizardry", StringComparison.OrdinalIgnoreCase);
+
+    private bool HasMagicUserClass()
+        => Classes.Contains(CharacterClass.MagicUser) || Class == CharacterClass.MagicUser;
+
+    private static string RollRingWizardryProfileKey(Random roller)
+    {
+        var roll = roller.Next(1, 101);
+        if (roll <= 50) return "W1";
+        if (roll <= 75) return "W2";
+        if (roll <= 82) return "W3";
+        if (roll <= 88) return "W12";
+        if (roll <= 92) return "W4";
+        if (roll <= 95) return "W5";
+        if (roll <= 99) return "W123";
+        return "W45";
+    }
+
+    private static int[] ParseRingWizardryDoubledLevels(string profileKey)
+    {
+        return profileKey.ToUpperInvariant() switch
+        {
+            "W1" => new[] { 1 },
+            "W2" => new[] { 2 },
+            "W3" => new[] { 3 },
+            "W12" => new[] { 1, 2 },
+            "W4" => new[] { 4 },
+            "W5" => new[] { 5 },
+            "W123" => new[] { 1, 2, 3 },
+            "W45" => new[] { 4, 5 },
+            _ => new[] { 1 }
+        };
+    }
+
+    private static string EnsureRingWizardryProfile(Item ring, Random? rng = null)
+    {
+        ring.SpecialAbilities ??= new List<string>();
+
+        var existing = ring.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("RingWizardryProfile:", StringComparison.OrdinalIgnoreCase));
+
+        if (!string.IsNullOrWhiteSpace(existing))
+        {
+            var idx = existing.IndexOf(':');
+            if (idx >= 0 && idx < existing.Length - 1)
+                return existing[(idx + 1)..].Trim().ToUpperInvariant();
+        }
+
+        var roller = rng ?? Random.Shared;
+        var rolled = RollRingWizardryProfileKey(roller);
+        ring.SpecialAbilities.Add($"RingWizardryProfile:{rolled}");
+        return rolled;
+    }
+
+    private static List<int> ApplyRingWizardryDoubling(List<int> baseSlots, string profileKey)
+    {
+        var doubledLevels = ParseRingWizardryDoubledLevels(profileKey);
+        var result = new List<int>(baseSlots);
+        foreach (var spellLevel in doubledLevels)
+        {
+            var idx = spellLevel - 1;
+            if (idx < 0 || idx >= result.Count)
+                continue;
+
+            result[idx] = Math.Max(0, result[idx] * 2);
+        }
+
+        return result;
+    }
+
+    public void RefreshRingWizardryEffects(Random? rng = null)
+    {
+        var muState = Spellcasting.FirstOrDefault(s => s.SpellClass == SpellClass.MagicUser);
+        if (muState == null)
+            return;
+
+        if (!HasMagicUserClass())
+            return;
+
+        var magicUserLevel = Math.Max(1, GetClassLevel(CharacterClass.MagicUser));
+        var baseSlots = SpellProgression.GetSlotsPerDay(SpellClass.MagicUser, magicUserLevel);
+        var desiredSlots = new List<int>(baseSlots);
+        var profileKeyApplied = string.Empty;
+
+        var wizardryRings = new List<Item>();
+        if (Equipment.TryGetValue(EquipmentSlot.Ring1, out var ring1) && IsRingOfWizardry(ring1))
+            wizardryRings.Add(ring1!);
+        if (Equipment.TryGetValue(EquipmentSlot.Ring2, out var ring2) && IsRingOfWizardry(ring2))
+            wizardryRings.Add(ring2!);
+
+        if (wizardryRings.Count > 0)
+        {
+            var bestTotal = desiredSlots.Sum();
+            foreach (var ring in wizardryRings)
+            {
+                var profileKey = EnsureRingWizardryProfile(ring, rng);
+                var candidate = ApplyRingWizardryDoubling(baseSlots, profileKey);
+                var candidateTotal = candidate.Sum();
+                if (candidateTotal > bestTotal)
+                {
+                    bestTotal = candidateTotal;
+                    desiredSlots = candidate;
+                    profileKeyApplied = profileKey;
+                }
+            }
+        }
+
+        RingWizardryProfileKey = profileKeyApplied;
+        muState.SlotsPerDay = desiredSlots;
+
+        while (muState.SlotsUsed.Count < muState.SlotsPerDay.Count)
+            muState.SlotsUsed.Add(0);
+
+        for (int i = 0; i < muState.SlotsPerDay.Count; i++)
+        {
+            if (muState.SlotsUsed[i] > muState.SlotsPerDay[i])
+                muState.SlotsUsed[i] = muState.SlotsPerDay[i];
+        }
     }
 
     private static bool IsRingOfProtection(Item? item)

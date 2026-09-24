@@ -70,6 +70,7 @@ public static class EquipmentManager
         c.Inventory.Remove(item);
 
         c.RefreshRingProtectionEffects();
+        c.RefreshRingWizardryEffects();
 
         RecalculateDamage(c);
         c.RefreshMoveFromArmorAndClass();
@@ -97,6 +98,7 @@ public static class EquipmentManager
         c.Equipment[slot] = null;
 
         c.RefreshRingProtectionEffects();
+        c.RefreshRingWizardryEffects();
 
         RecalculateDamage(c);
         c.RefreshMoveFromArmorAndClass();

@@ -477,6 +477,7 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         c.RefreshRingProtectionEffects();
+        c.RefreshRingWizardryEffects();
 
         _layOnHandsButton.Visible = c.IsPaladin();
         _layOnHandsButton.Text = c.LayOnHandsUsedToday ? "L)ay Hands (used)" : "L)ay on Hands";
@@ -784,6 +785,7 @@ public sealed class CampCharacterInspectForm : Form
         if (ok)
         {
             c.RefreshRingProtectionEffects();
+            c.RefreshRingWizardryEffects();
             _characterRepository.Save(c);
             RefreshView();
         }
@@ -865,6 +867,7 @@ public sealed class CampCharacterInspectForm : Form
         if (EquipmentManager.Unequip(c, equipped[idx.Value]))
         {
             c.RefreshRingProtectionEffects();
+            c.RefreshRingWizardryEffects();
             _characterRepository.Save(c);
             RefreshView();
         }

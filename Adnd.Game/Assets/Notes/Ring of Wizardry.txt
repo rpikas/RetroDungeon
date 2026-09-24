@@ -1,0 +1,35 @@
+Ring of Wizardry
+What was added
+•	Added Ring of Wizardry runtime state and logic in Character:
+•	RingWizardryProfileKey
+•	Profile roll table implemented exactly from your ranges:
+•	01–50: doubles L1
+•	51–75: doubles L2
+•	76–82: doubles L3
+•	83–88: doubles L1+L2
+•	89–92: doubles L4
+•	93–95: doubles L5
+•	96–99: doubles L1–L3
+•	00: doubles L4+L5
+•	Profile persistence:
+•	Stored on the ring item in SpecialAbilities as RingWizardryProfile:<key> so each ring keeps its rolled property.
+•	Class restriction handling:
+•	Effect only applies if the character has MagicUser class.
+•	Non-MagicUser spellcasting tracks are not modified.
+•	Slot doubling behavior:
+•	Rebuilds baseline Magic-User slots from progression tables, then applies ring doubling.
+•	Keeps SlotsUsed clamped to new slot maximums.
+•	Multiple rings handling:
+•	If two Ring of Wizardry are equipped, the strongest resulting slot-total profile is chosen (non-stacking, strongest-effective interpretation).
+Wiring completed
+•	Recalculation on equip/unequip in EquipmentManager:
+•	RefreshRingWizardryEffects() is called after equipment changes.
+•	Recalculation in camp UI:
+•	RefreshView() now refreshes wizardry effects.
+•	Equip/unequip actions also refresh before save/display.
+•	Recalculation in combat:
+•	Combat round start now calls ApplyRingWizardryEffects(session).
+Notes
+•	This is implemented as a passive equipped effect.
+•	It updates SlotsPerDay dynamically from base progression, then ring modifier, so it should self-correct across level/equipment transitions.
+Would you like Copilot to continue with deeper analysis?
