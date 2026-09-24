@@ -4359,7 +4359,42 @@ public sealed class CombatResolver
         if (ringProtectionSaveBonus > 0)
             adjusted = Math.Max(1, adjusted - ringProtectionSaveBonus);
 
+        var luckBladeSaveBonus = GetLuckBladeSaveBonus(target);
+        if (luckBladeSaveBonus > 0)
+            adjusted = Math.Max(1, adjusted - luckBladeSaveBonus);
+
         return adjusted;
+    }
+
+    private static int GetLuckBladeSaveBonus(Character target)
+    {
+        if (target?.Equipment == null)
+            return 0;
+
+        static bool IsLuckBlade(Item? item)
+        {
+            if (item == null || item.Type != ItemType.Weapon)
+                return false;
+
+            if (!string.IsNullOrWhiteSpace(item.Name)
+                && item.Name.Contains("Luck Blade", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return item.SpecialAbilities != null
+                   && item.SpecialAbilities.Any(a =>
+                       !string.IsNullOrWhiteSpace(a)
+                       && a.Contains("Luck Blade", StringComparison.OrdinalIgnoreCase));
+        }
+
+        var hasEquippedLuckBlade = (target.Equipment.TryGetValue(EquipmentSlot.MainHand, out var main) && IsLuckBlade(main))
+                                   || (target.Equipment.TryGetValue(EquipmentSlot.OffHand, out var off) && IsLuckBlade(off));
+
+        if (hasEquippedLuckBlade)
+            return 1;
+
+        return target.Inventory != null && target.Inventory.Any(IsLuckBlade) ? 1 : 0;
     }
 
     private static void ApplyRingProtectionAuras(CombatSession session)
