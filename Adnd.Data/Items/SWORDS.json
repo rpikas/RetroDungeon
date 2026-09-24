@@ -780,6 +780,44 @@
                       "ToHitBonus":  1
                   },
                   {
+                      "Name":  "Sword +1, Flame Tongue",
+                      "Type":  "Weapon",
+                      "Cost":  4500,
+                      "Weight":  60,
+                      "Damage":  "1d8+1",
+                      "DamageVsLarge":  "1d12+1",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+                                               "Flame Tongue",
+                                               "+2 vs. regenerating creatures",
+                                               "+3 vs. cold-using/inflammable/avian creatures",
+                                               "+4 vs. undead"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Thief",
+                                             "Assassin",
+                                             "Bard"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "+1 Flame Tongue sword: +2 vs regenerating, +3 vs cold-using/inflammable/avian, +4 vs undead.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
                       "Name":  "Sword +1",
                       "Type":  "Weapon",
                       "Cost":  2000,

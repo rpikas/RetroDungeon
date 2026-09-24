@@ -4612,8 +4612,46 @@ public sealed class CombatResolver
                    && a.Contains("+4 vs. reptiles", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSwordPlusOneFlameTongue(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        if (name.Contains("Flame Tongue", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Flame Tongue", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static int GetSituationalSwordBonusAgainstTarget(Item? weapon, MonsterInstance target)
     {
+        if (IsSwordPlusOneFlameTongue(weapon))
+        {
+            // Weapon is +1 normally, but:
+            // +2 vs regenerating, +3 vs cold-using/inflammable/avian, +4 vs undead.
+            if (target?.InstanceMonsterType == MonsterType.Undead)
+                return 3;
+
+            if (IsTargetColdUsingCreature(target)
+                || IsTargetInflammableCreature(target)
+                || IsTargetAvianCreature(target))
+            {
+                return 2;
+            }
+
+            if (IsTargetRegeneratingCreature(target))
+                return 1;
+
+            return 0;
+        }
+
         if (IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(weapon)
             && IsTargetEligibleForSwordPlusTwoBonus(target))
         {
@@ -4779,6 +4817,62 @@ public sealed class CombatResolver
                || composite.Contains("crocod")
                || composite.Contains("alligator")
                || composite.Contains("turtle");
+    }
+
+    private static bool IsTargetColdUsingCreature(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("cold")
+               || composite.Contains("frost")
+               || composite.Contains("ice")
+               || composite.Contains("winter");
+    }
+
+    private static bool IsTargetInflammableCreature(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        if (target.InstanceMonsterType == MonsterType.Plant)
+            return true;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("inflammable")
+               || composite.Contains("flammable")
+               || composite.Contains("combustible")
+               || composite.Contains("burns easily");
+    }
+
+    private static bool IsTargetAvianCreature(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var composite = string.Join(" ",
+            new[] { target.Template.Name, target.Template.TypeName }
+                .Concat(GetMonsterAbilityNames(target)))
+            .ToLowerInvariant();
+
+        return composite.Contains("avian")
+               || composite.Contains("bird")
+               || composite.Contains("eagle")
+               || composite.Contains("hawk")
+               || composite.Contains("owl")
+               || composite.Contains("vulture")
+               || composite.Contains("raven")
+               || composite.Contains("falcon")
+               || composite.Contains("roc");
     }
 
     private static bool RequiresPlusOneWeaponToHit(MonsterInstance target)
