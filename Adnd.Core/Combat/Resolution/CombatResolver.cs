@@ -243,6 +243,26 @@ public sealed class CombatResolver
                 }
             }
 
+            if (member.FireProtectionRoundsRemaining > 0)
+            {
+                member.FireProtectionRoundsRemaining = Math.Max(0, member.FireProtectionRoundsRemaining - 1);
+                if (member.FireProtectionRoundsRemaining <= 0)
+                {
+                    member.ClearProtectionFromFire();
+                    events.Add(new CombatEvent($"{member.Name}'s Protection From Fire expires."));
+                }
+            }
+
+            if (member.LightningProtectionRoundsRemaining > 0)
+            {
+                member.LightningProtectionRoundsRemaining = Math.Max(0, member.LightningProtectionRoundsRemaining - 1);
+                if (member.LightningProtectionRoundsRemaining <= 0)
+                {
+                    member.ClearProtectionFromLightning();
+                    events.Add(new CombatEvent($"{member.Name}'s Protection From Lightning expires."));
+                }
+            }
+
             var partySlowRounds = session.GetPartySlowRounds(member.Name);
             if (partySlowRounds > 0)
             {
@@ -2000,10 +2020,19 @@ public sealed class CombatResolver
             var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
             var rolledDamage = _dice.RollMany(6, 8);
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            if (target.LightningProtectionSaveBonusVsLightning > 0)
+                saveTarget = Math.Max(1, saveTarget - target.LightningProtectionSaveBonusVsLightning);
             if (session.IsChantActive || session.IsPrayerActive)
                 saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
-            var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+            var preSaveDamage = ApplyLightningProtectionDamageReduction(target, rolledDamage, isMagicalLightning: true, isNormalLightning: false);
+            if (preSaveDamage <= 0)
+            {
+                events.Add(new CombatEvent($"{target.Name} is protected from call lightning damage."));
+                return true;
+            }
+
+            var applied = saveRoll >= saveTarget ? Math.Max(1, preSaveDamage / 2) : preSaveDamage;
 
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
@@ -2430,10 +2459,19 @@ public sealed class CombatResolver
         {
             var rolledDamage = _dice.RollMany(6, fireballDamageDice);
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell);
+            if (target.FireProtectionSaveBonusVsFire > 0)
+                saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
             if (session.IsChantActive || session.IsPrayerActive)
                 saveTarget = Math.Max(1, saveTarget - 1);
             var saveRoll = _dice.Roll(20);
-            var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+            var preSaveDamage = ApplyFireProtectionDamageReduction(target, rolledDamage, isMagicalFire: true, isNormalFire: false);
+            if (preSaveDamage <= 0)
+            {
+                events.Add(new CombatEvent($"{target.Name} is protected from fireball damage."));
+                continue;
+            }
+
+            var applied = saveRoll >= saveTarget ? Math.Max(1, preSaveDamage / 2) : preSaveDamage;
 
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
@@ -2776,8 +2814,17 @@ public sealed class CombatResolver
         foreach (var target in aliveParty)
         {
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
+            if (target.FireProtectionSaveBonusVsFire > 0)
+                saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
             var saveRoll = _dice.Roll(20);
-            var damage = saveRoll >= saveTarget ? rolledDamage / 2 : rolledDamage;
+            var preSaveDamage = ApplyFireProtectionDamageReduction(target, rolledDamage, isMagicalFire: true, isNormalFire: false);
+            if (preSaveDamage <= 0)
+            {
+                events.Add(new CombatEvent($"{target.Name} is protected from {monster.DisplayName}'s breath."));
+                continue;
+            }
+
+            var damage = saveRoll >= saveTarget ? preSaveDamage / 2 : preSaveDamage;
 
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
@@ -2814,8 +2861,22 @@ public sealed class CombatResolver
         foreach (var target in aliveParty)
         {
             var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon);
+            var isBlueDragonLightningBreath = string.Equals(monster.Template.Name?.Trim(), "Blue Dragon", StringComparison.OrdinalIgnoreCase);
+            if (isBlueDragonLightningBreath && target.LightningProtectionSaveBonusVsLightning > 0)
+                saveTarget = Math.Max(1, saveTarget - target.LightningProtectionSaveBonusVsLightning);
+            if (target.FireProtectionSaveBonusVsFire > 0)
+                saveTarget = Math.Max(1, saveTarget - target.FireProtectionSaveBonusVsFire);
             var saveRoll = _dice.Roll(20);
-            var applied = saveRoll >= saveTarget ? breathDamage / 2 : breathDamage;
+            var preSaveDamage = ApplyFireProtectionDamageReduction(target, breathDamage, isMagicalFire: true, isNormalFire: false);
+            if (isBlueDragonLightningBreath)
+                preSaveDamage = ApplyLightningProtectionDamageReduction(target, preSaveDamage, isMagicalLightning: true, isNormalLightning: false);
+            if (preSaveDamage <= 0)
+            {
+                events.Add(new CombatEvent($"{target.Name} is protected from {monster.DisplayName}'s dragon breath."));
+                continue;
+            }
+
+            var applied = saveRoll >= saveTarget ? preSaveDamage / 2 : preSaveDamage;
 
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
@@ -3384,11 +3445,20 @@ public sealed class CombatResolver
         foreach (var member in session.AliveParty.ToList())
         {
             var saveTarget = _savingThrowService.GetSaveTarget(member, SaveThrowType.Spell);
+            if (member.FireProtectionSaveBonusVsFire > 0)
+                saveTarget = Math.Max(1, saveTarget - member.FireProtectionSaveBonusVsFire);
             if (session.IsChantActive || session.IsPrayerActive)
                 saveTarget = Math.Max(1, saveTarget - 1);
 
             var saveRoll = _dice.Roll(20);
-            var applied = saveRoll >= saveTarget ? Math.Max(1, rolledDamage / 2) : rolledDamage;
+            var preSaveDamage = ApplyFireProtectionDamageReduction(member, rolledDamage, isMagicalFire: true, isNormalFire: false);
+            if (preSaveDamage <= 0)
+            {
+                events.Add(new CombatEvent($"{member.Name} is protected from the fiery explosion."));
+                continue;
+            }
+
+            var applied = saveRoll >= saveTarget ? Math.Max(1, preSaveDamage / 2) : preSaveDamage;
 
             var before = member.CurrentHitPoints;
             member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - applied);
@@ -3407,6 +3477,56 @@ public sealed class CombatResolver
         }
 
         return true;
+    }
+
+    private static int ApplyFireProtectionDamageReduction(Character target, int incomingDamage, bool isMagicalFire, bool isNormalFire)
+    {
+        var damage = Math.Max(0, incomingDamage);
+        if (damage <= 0)
+            return 0;
+
+        if (!target.HasActiveProtectionFromFire)
+            return damage;
+
+        if (isNormalFire && target.FireProtectionNormalFireImmunity)
+            return 0;
+
+        if (isMagicalFire && target.FireProtectionHalfDamageFromMagicalFire)
+            damage = (int)Math.Ceiling(damage * 0.5);
+
+        if (isMagicalFire && target.FireProtectionAbsorptionRemaining > 0)
+        {
+            var absorbed = Math.Min(target.FireProtectionAbsorptionRemaining, damage);
+            target.FireProtectionAbsorptionRemaining -= absorbed;
+            damage -= absorbed;
+        }
+
+        return Math.Max(0, damage);
+    }
+
+    private static int ApplyLightningProtectionDamageReduction(Character target, int incomingDamage, bool isMagicalLightning, bool isNormalLightning)
+    {
+        var damage = Math.Max(0, incomingDamage);
+        if (damage <= 0)
+            return 0;
+
+        if (!target.HasActiveProtectionFromLightning)
+            return damage;
+
+        if (isNormalLightning && target.LightningProtectionNormalLightningImmunity)
+            return 0;
+
+        if (isMagicalLightning && target.LightningProtectionHalfDamageFromMagicalLightning)
+            damage = (int)Math.Ceiling(damage * 0.5);
+
+        if (isMagicalLightning && target.LightningProtectionAbsorptionRemaining > 0)
+        {
+            var absorbed = Math.Min(target.LightningProtectionAbsorptionRemaining, damage);
+            target.LightningProtectionAbsorptionRemaining -= absorbed;
+            damage -= absorbed;
+        }
+
+        return Math.Max(0, damage);
     }
 
     private void ApplyPoisonDamageDuringCombat(CombatSession session, List<CombatEvent> events)

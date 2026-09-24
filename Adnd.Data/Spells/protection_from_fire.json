@@ -1,0 +1,12 @@
+{
+  "Id": "protection_from_fire",
+  "Name": "Protection From Fire",
+  "Class": "Druid",
+  "Level": 3,
+  "Description": "Protects target against normal and magical fire.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Self: immunity to normal fire and absorbs magical fire damage up to 12 HP per caster level. Other target: immunity to normal fire, +4 saves vs fire, and takes half magical fire damage."
+}

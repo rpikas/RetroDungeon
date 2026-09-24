@@ -1,0 +1,22 @@
+Protection From fire status
+Implemented so far (partial, not yet validated by build/run):
+•	Added spell data:
+•	Adnd.Data/Spells/protection_from_fire.json
+•	Added new handler:
+•	ProtectionFromFireHandler (protection_from_fire)
+•	Self-cast: normal-fire immunity + magical fire absorption pool (12 HP/level) for 10 rounds/level
+•	Cast on others: normal-fire immunity + +4 save bonus vs fire + half magical fire damage for 10 rounds/level
+•	Registered handler in spell resolver setup (CombatCoordinator).
+•	Extended Character with Protection From Fire state fields and helper methods:
+•	duration rounds, absorption pool, save bonus, magical-fire half-damage flag, normal-fire immunity flag
+•	Integrated mitigation in enemy fire damage paths inside CombatResolver:
+•	Monster fireball spell path
+•	Breath weapon damage paths
+•	Fiery explosion-on-hit path
+•	Applies save bonus vs fire and magical fire reduction/absorption
+•	Added round ticking/expiration for Protection From Fire in combat round processing.
+Current status / known gaps:
+•	No compile/build verification was performed after edits.
+•	Coverage is still partial for all possible fire sources (some indirect/environmental or special-case fire effects may still bypass this logic).
+•	Normal-fire immunity exists in the model, but current integrated paths are mostly magical fire; additional normal-fire hooks may still be needed depending on desired AD&D fidelity.
+•	Duration ticking was added in per-member round effect processing; behavior should be validated for exact timing expectations.

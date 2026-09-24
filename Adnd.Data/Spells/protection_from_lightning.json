@@ -1,0 +1,12 @@
+{
+  "Id": "protection_from_lightning",
+  "Name": "Protection From Lightning",
+  "Class": "Druid",
+  "Level": 4,
+  "Description": "Protects target against normal and magical lightning/electrical attacks.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Self: immunity to normal lightning and absorbs magical lightning damage up to 12 HP per caster level. Other target: immunity to normal lightning, +4 saves vs lightning, and takes half magical lightning damage."
+}

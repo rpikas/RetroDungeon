@@ -219,6 +219,30 @@
       "Source": "Adnd"
     },
     {
+      "Name": "Scroll of Protection From Fire",
+      "Type": "Scroll",
+      "Cost": 600,
+      "Weight": 1,
+      "StockQuantity": 1,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts protection from fire" ],
+      "Rarity": "Uncommon",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Scroll of Protection From Lightning",
+      "Type": "Scroll",
+      "Cost": 800,
+      "Weight": 1,
+      "StockQuantity": 1,
+      "IsShopBuyable": true,
+      "AllowedClasses": [ "Druid" ],
+      "SpecialAbilities": [ "Casts protection from lightning" ],
+      "Rarity": "Uncommon",
+      "Source": "Adnd"
+    },
+    {
       "Name": "Scroll of Blade Barrier",
       "Type": "Scroll",
       "Cost": 2500,

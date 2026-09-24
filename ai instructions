@@ -2149,3 +2149,42 @@ So i dont get this behaviour:
 When for example this found "Miscellaneous magic plus 1 potion" I want 1 random item using 1d100 and this table just like any Die* Results 01-20 Potions (A.) 21-35 Scrolls (8.) 36-40 Rings (C) 41-45 Rods, Staves & Wands [0.) 46-48 Miscellaneous Magic (E.l.J 49-51 Miscellaneous Magic (E.2.) 52-54 Miscellaneos Magic (£.3.) 55-57 Miscellaneous Magic (E 4.) SS-60 Miscellaneous Magic {E.5.) 61 -75 Armor & Sh telds (F.) 76-86 Swords (G) 87-00 Miscellaneous Weapons (H,) to determine what is found and on top of that I also want the party to find one extra item from Potions (A.) list.
 So I do not want this behaviour:
 •	Unclaimed magic items: Miscellaneous magic plus 1 potion (no matching item defined)
+55,2
+______
+Implement druid spell Protection From fire (Abjuration)
+Level: 3 Components: V, S, M Range: Touch Casting Time: 5 segments Duration: Special Saving Throw: 
+None Area of Effect: Creature touched
+Explanation/Description: The effect of a protection from fire spell differs according to the recipient 
+of the magic the druid or some other creature. If the spell is cast upon the druid, it confers complete 
+invulnerability to normal fires (torches, bonfires, oil fires, and the like) and to exposure to magical 
+fires such as demon fire, burning hands, fiery dragon breath, fire ball, fire seeds, fire storm, 
+flame strike, hell hound breath, meteor swarm, pyrohydra breath, etc. until an accumulation of 12
+hit points of potential damage per level of experience of the druid has been absorbed by the 
+protection from fire spell, at which time thespell is negated. Otherwise the spell lasts for 
+1 turn per level of experience of the druid. If the spell is cast upon another creature, 
+it gives invulnerability to normal fire, gives a bonus of +4 on saving throw die rolls made versus fire attacks, 
+and reduces damage sustained from magical fires by 50%.
+
+also add corresponding scroll for this spell to the game so that players can find and use them. 57,0
+
+Implement druid spell Protection From Lightning (Abjuration)
+Level: 4 Components: V, S, M Range: Touch Casting Time: 6 segments Duration: Special . Saving Throw: None Area of Effect: Creature touched
+Explanation/Description: This spell is exactly the same as the 3rd level protection from fire spell (q.v.) except that it applies to electrical/lightning attacks.
+i ment only treat dragon with lightning breath as lightning that means the only dragon this is spell is applicable for is blue dragon.
+also add corresponding scroll for this spell to the game so that players can find and use them. 57,5
+
+_______
+
+
+Implement cleric spell Resist Cold (Alteration)
+Level: 1 Range: Touch Duration: J turn/level Area of Effect: Creature touched
+Components: V, S, M Casting Time: J round Saving Throw: None
+Explanation/Description: When this spell is placed on a creature by a cleric, the creature’s body is inured to cold. 
+The recipient can stand zero degrees Fahrenheit without discomfort, even totally nude. Greater cold, 
+such as that produced by a sword of cold, ice storm, cold wand, or white dragon’s breath, must be saved against. 
+All saving throws against cold are made with a bonus of +3, and damage sustained is one-half 
+(if the saving throw is not made) or one-quarter (if the saving throw is made) of damage normal from that attack form. 
+The resistance lasts for 1 turn per level of experience of the caster. A pinch of sulphur is necessary to complete this spell.
+also add corresponding scroll for this spell to the game so that players can find and use them.
+
+

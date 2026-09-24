@@ -329,7 +329,7 @@ public class ItemRepository
             "Cure Serious Wounds", "Neutralize Poison", "Cure Critical Wounds", "Flame Strike", "Insect Plague",
             "Raise Dead", "Blade Barrier", "Heal", "Harm", "Earthquake", "Resurrection", "Unholy Word",
             "Cause Light Wounds", "Cause Serious Wounds", "Cause Critical Wounds",
-            "Entangle", "Faerie Fire", "Barkskin", "Charm Person or Mammal", "Call Lightning", "Snare",
+            "Entangle", "Faerie Fire", "Barkskin", "Protection From Fire", "Protection From Lightning", "Charm Person or Mammal", "Call Lightning", "Snare",
             "Summon Insects", "Pyrotechnics", "Wall of Fire", "Feeblemind", "Wall of Thorns",
             "Finger of Death", "Fire Storm",
             "Chromatic Orb", "Color Spray", "Phantasmal Force", "Blur", "Improved Phantasmal Force",

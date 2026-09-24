@@ -81,6 +81,8 @@ public sealed class CombatCoordinator
         {
             new CureLightWoundsHandler(),
             new BarkskinHandler(),
+            new ProtectionFromFireHandler(),
+            new ProtectionFromLightningHandler(),
             new CureSeriousWoundsHandler(),
             new CureCriticalWoundsHandler(),
             new RemoveParalysisHandler(),

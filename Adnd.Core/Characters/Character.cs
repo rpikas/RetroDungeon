@@ -43,6 +43,16 @@ public class Character
     public int TemporaryStrengthBonus { get; set; }
     public int TemporaryStrengthRoundsRemaining { get; set; }
     public int TemporaryArmorClassBonusUntilDungeonExit { get; set; }
+    public int FireProtectionRoundsRemaining { get; set; }
+    public int FireProtectionAbsorptionRemaining { get; set; }
+    public int FireProtectionSaveBonusVsFire { get; set; }
+    public bool FireProtectionHalfDamageFromMagicalFire { get; set; }
+    public bool FireProtectionNormalFireImmunity { get; set; }
+    public int LightningProtectionRoundsRemaining { get; set; }
+    public int LightningProtectionAbsorptionRemaining { get; set; }
+    public int LightningProtectionSaveBonusVsLightning { get; set; }
+    public bool LightningProtectionHalfDamageFromMagicalLightning { get; set; }
+    public bool LightningProtectionNormalLightningImmunity { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int Experience { get; set; }
@@ -94,6 +104,66 @@ public class Character
 
     // Status conditions (can be combined as flags)
     public CharacterStatus Status { get; set; } = CharacterStatus.None;
+
+    [JsonIgnore]
+    public bool HasActiveProtectionFromFire => FireProtectionRoundsRemaining > 0 || FireProtectionAbsorptionRemaining > 0;
+
+    [JsonIgnore]
+    public bool HasActiveProtectionFromLightning => LightningProtectionRoundsRemaining > 0 || LightningProtectionAbsorptionRemaining > 0;
+
+    public void SetProtectionFromFireSelf(int rounds, int absorptionPool)
+    {
+        FireProtectionRoundsRemaining = Math.Max(0, rounds);
+        FireProtectionAbsorptionRemaining = Math.Max(0, absorptionPool);
+        FireProtectionSaveBonusVsFire = 0;
+        FireProtectionHalfDamageFromMagicalFire = false;
+        FireProtectionNormalFireImmunity = true;
+    }
+
+    public void SetProtectionFromFireOther(int rounds)
+    {
+        FireProtectionRoundsRemaining = Math.Max(0, rounds);
+        FireProtectionAbsorptionRemaining = 0;
+        FireProtectionSaveBonusVsFire = 4;
+        FireProtectionHalfDamageFromMagicalFire = true;
+        FireProtectionNormalFireImmunity = true;
+    }
+
+    public void ClearProtectionFromFire()
+    {
+        FireProtectionRoundsRemaining = 0;
+        FireProtectionAbsorptionRemaining = 0;
+        FireProtectionSaveBonusVsFire = 0;
+        FireProtectionHalfDamageFromMagicalFire = false;
+        FireProtectionNormalFireImmunity = false;
+    }
+
+    public void SetProtectionFromLightningSelf(int rounds, int absorptionPool)
+    {
+        LightningProtectionRoundsRemaining = Math.Max(0, rounds);
+        LightningProtectionAbsorptionRemaining = Math.Max(0, absorptionPool);
+        LightningProtectionSaveBonusVsLightning = 0;
+        LightningProtectionHalfDamageFromMagicalLightning = false;
+        LightningProtectionNormalLightningImmunity = true;
+    }
+
+    public void SetProtectionFromLightningOther(int rounds)
+    {
+        LightningProtectionRoundsRemaining = Math.Max(0, rounds);
+        LightningProtectionAbsorptionRemaining = 0;
+        LightningProtectionSaveBonusVsLightning = 4;
+        LightningProtectionHalfDamageFromMagicalLightning = true;
+        LightningProtectionNormalLightningImmunity = true;
+    }
+
+    public void ClearProtectionFromLightning()
+    {
+        LightningProtectionRoundsRemaining = 0;
+        LightningProtectionAbsorptionRemaining = 0;
+        LightningProtectionSaveBonusVsLightning = 0;
+        LightningProtectionHalfDamageFromMagicalLightning = false;
+        LightningProtectionNormalLightningImmunity = false;
+    }
 
     public override string ToString()
     {
