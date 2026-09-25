@@ -77,6 +77,7 @@ public class Character
     public int PotionInvulnerabilityRoundsRemaining { get; set; }
     public int PotionInvulnerabilityArmorClassBonus { get; set; }
     public int PotionInvulnerabilitySaveBonus { get; set; }
+    public int BroochOfShieldingRemainingHitPoints { get; set; }
     public int ProtectionFromMagicScrollRoundsRemaining { get; set; }
     public bool RingInvisibilityActive { get; set; }
     public bool RingInvisibilityAppliedArmorClassBonus { get; set; }

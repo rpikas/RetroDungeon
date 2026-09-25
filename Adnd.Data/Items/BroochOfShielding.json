@@ -1,0 +1,22 @@
+{
+  "Category": "MagicItem",
+  "Items": [
+    {
+      "Status": "Implemented",
+      "Name": "Brooch of Shielding",
+      "Type": "MagicItem",
+      "Slot": "Neck",
+      "Cost": 10000,
+      "Weight": 1,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [ "All" ],
+      "Rarity": "Rare",
+      "Description": "Appears as a cloak clasp and absorbs up to 101 hit points of magic missile damage before melting.",
+      "SpecialAbilities": [ "Brooch of Shielding" ],
+      "Source": "Adnd",
+      "StockQuantity": 0
+    }
+  ]
+}

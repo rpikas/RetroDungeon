@@ -1861,6 +1861,69 @@ public sealed class CombatResolver
         return matches.Min() <= 4;
     }
 
+    private static bool IsBroochOfShielding(Item? item)
+    {
+        if (item == null)
+            return false;
+
+        var name = item.Name?.Trim() ?? string.Empty;
+        if (name.Contains("Brooch of Shielding", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return item.SpecialAbilities != null
+               && item.SpecialAbilities.Any(a => !string.IsNullOrWhiteSpace(a)
+                                                 && a.Contains("Brooch of Shielding", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static Item? FindBroochOfShielding(Character character)
+    {
+        if (character == null)
+            return null;
+
+        if (character.Equipment.TryGetValue(EquipmentSlot.Neck, out var neck)
+            && IsBroochOfShielding(neck))
+            return neck;
+
+        return character.Inventory.FirstOrDefault(IsBroochOfShielding);
+    }
+
+    private static int ApplyBroochOfShieldingAgainstMagicMissile(Character target, int incomingDamage, List<CombatEvent> events)
+    {
+        if (target == null || incomingDamage <= 0)
+            return incomingDamage;
+
+        var brooch = FindBroochOfShielding(target);
+        if (brooch == null)
+            return incomingDamage;
+
+        if (target.BroochOfShieldingRemainingHitPoints <= 0)
+            target.BroochOfShieldingRemainingHitPoints = 101;
+
+        var beforeCapacity = target.BroochOfShieldingRemainingHitPoints;
+        var absorbed = Math.Min(beforeCapacity, incomingDamage);
+        target.BroochOfShieldingRemainingHitPoints = Math.Max(0, beforeCapacity - absorbed);
+
+        if (absorbed > 0)
+        {
+            events.Add(new CombatEvent(
+                $"{target.Name}'s Brooch of Shielding absorbs {absorbed} magic missile damage ({beforeCapacity}->{target.BroochOfShieldingRemainingHitPoints} capacity)."));
+        }
+
+        if (target.BroochOfShieldingRemainingHitPoints <= 0)
+        {
+            if (target.Equipment.TryGetValue(EquipmentSlot.Neck, out var equippedNeck)
+                && ReferenceEquals(equippedNeck, brooch))
+            {
+                target.Equipment[EquipmentSlot.Neck] = null;
+            }
+
+            target.Inventory.RemoveAll(i => ReferenceEquals(i, brooch));
+            events.Add(new CombatEvent($"{target.Name}'s Brooch of Shielding melts and becomes useless."));
+        }
+
+        return Math.Max(0, incomingDamage - absorbed);
+    }
+
     private void ResolveProtectionFromMagicItemContact(Character user, Item sourceItem, List<CombatEvent> events)
     {
         var candidates = user.Inventory
@@ -2872,6 +2935,13 @@ public sealed class CombatResolver
         var rolledDamage = 0;
         for (int i = 0; i < 6; i++)
             rolledDamage += _dice.Roll(8);
+
+        rolledDamage = ApplyBroochOfShieldingAgainstMagicMissile(partyTarget, rolledDamage, events);
+        if (rolledDamage <= 0)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName}'s magic missiles are fully absorbed by {partyTarget.Name}'s Brooch of Shielding."));
+            return true;
+        }
 
         var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
             partyTarget,
