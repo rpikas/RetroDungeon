@@ -1212,6 +1212,58 @@ public class Character
         Move = IsWearingBodyArmor() ? Math.Min(baseMove, armorMove) : baseMove;
     }
 
+    /// <summary>
+    /// Recomputes Armor Class from current character state (class/level, dexterity, equipment and dynamic effects).
+    /// Intended for full refresh points such as dungeon entry.
+    /// </summary>
+    public void RecalculateArmorClassFromState()
+    {
+        EnsureClassProgressions();
+
+        var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
+        var isMonkPrimary = primaryClass == CharacterClass.Monk && IsMonk();
+        var effectiveLevel = isMonkPrimary ? GetClassLevel(CharacterClass.Monk) : GetClassLevel(primaryClass);
+
+        var baseAc = isMonkPrimary
+            ? GetMonkEffectiveArmorClass(effectiveLevel)
+            : 10;
+
+        var dexAcModifier = (isMonkPrimary && IsWearingBodyArmor())
+            ? 0
+            : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+
+        var equipmentAcBonus = GetStaticEquipmentArmorClassBonusExcludingRingOfProtection();
+
+        ArmorClass = baseAc + dexAcModifier - equipmentAcBonus;
+
+        // Ring of Protection AC is profile-driven and handled dynamically.
+        RingProtectionArmorClassBonusApplied = 0;
+        RefreshRingProtectionEffects();
+
+        // Preserve active invisibility AC bonus in a deterministic recalculation pass.
+        if (RingInvisibilityAppliedArmorClassBonus)
+            ArmorClass -= 4;
+    }
+
+    private int GetStaticEquipmentArmorClassBonusExcludingRingOfProtection()
+    {
+        int bonus = 0;
+
+        foreach (var kv in Equipment)
+        {
+            var item = kv.Value;
+            if (item == null)
+                continue;
+
+            if (string.Equals(item.Name, "Ring of Protection", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            bonus += item.ArmorClassBonus;
+        }
+
+        return bonus;
+    }
+
     public void RefreshMonkProgressionStats()
     {
         EnsureClassProgressions();

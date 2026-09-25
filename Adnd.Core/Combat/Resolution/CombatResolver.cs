@@ -3,6 +3,7 @@ using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
 using Adnd.Core.Dices;
 using Adnd.Core.Items;
@@ -852,11 +853,24 @@ public sealed class CombatResolver
 
             if (monster.HasStatus(MonsterStatus.WallOfFire))
             {
+                var resistedWallOfFire = SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, _rng, "Wall of Fire");
+                var remaining = monster.TickStatus(MonsterStatus.WallOfFire);
+
+                if (resistedWallOfFire)
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} negates wall of fire damage with magic resistance."));
+                    if (remaining > 0)
+                        events.Add(new CombatEvent($"{monster.DisplayName} remains within wall of fire ({remaining} round(s) remaining)."));
+                    else
+                        events.Add(new CombatEvent($"The wall of fire around {monster.DisplayName} is no longer affecting it."));
+
+                    continue;
+                }
+
                 var beforeHp = monster.CurrentHitPoints;
                 monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - 10);
                 var actualDamage = beforeHp - monster.CurrentHitPoints;
                 WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
-                var remaining = monster.TickStatus(MonsterStatus.WallOfFire);
 
                 events.Add(new CombatEvent($"Wall of fire burns {monster.DisplayName} for {actualDamage}. HP {beforeHp}->{monster.CurrentHitPoints}."));
                 if (remaining > 0)
@@ -1114,6 +1128,11 @@ public sealed class CombatResolver
                     }
                     int needed = thac0 - targetAc;
                     int roll = _dice.Roll(20);
+
+                    if (GameRulesProvider.Current.ShowToHitRoll)
+                    {
+                        events.Add(new CombatEvent($"TO-HIT: {monster.DisplayName} THAC0 {thac0}, {target.Name} AC {targetAc}, needs {needed} on 1d20, rolled {roll}."));
+                    }
 
                     if (roll >= needed)
                     {
@@ -2242,6 +2261,19 @@ public sealed class CombatResolver
 
         if (useRanged && rangedWeapon != null)
         {
+            if (IsJavelinOfLightning(rangedWeapon) && rangedWeapon.Quantity <= 0)
+            {
+                if (member.Equipment.TryGetValue(EquipmentSlot.Range, out var equippedRange)
+                    && ReferenceEquals(equippedRange, rangedWeapon))
+                {
+                    member.Equipment[EquipmentSlot.Range] = null;
+                }
+
+                member.Inventory.RemoveAll(item => IsJavelinOfLightning(item) && item.Quantity <= 0);
+                events.Add(new CombatEvent($"{member.Name}'s Javelin of Lightning is depleted."));
+                return;
+            }
+
             if (IsHammerOfThunderbolts(rangedWeapon) && session.RoundNumber % 2 != 0)
             {
                 events.Add(new CombatEvent($"{member.Name} steadies {rangedWeapon.Name} and cannot hurl it this round."));
@@ -2412,6 +2444,12 @@ public sealed class CombatResolver
             int roll = _dice.Roll(20);
             var wasNaturalTwenty = roll == 20;
 
+            if (GameRulesProvider.Current.ShowToHitRoll)
+            {
+                var effectiveThac0 = member.Thac0 - thac0Modifier;
+                events.Add(new CombatEvent($"TO-HIT: {member.Name} THAC0 {effectiveThac0}, {target.DisplayName} AC {target.ArmorClass}, needs {needed} on 1d20, rolled {roll}."));
+            }
+
             if (roll < needed)
             {
                 events.Add(new CombatEvent($"{member.Name} misses {target.DisplayName}."));
@@ -2567,6 +2605,8 @@ public sealed class CombatResolver
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
             var actualDamageToTarget = before - target.CurrentHitPoints;
 
+            TryRevealWillOWispLairTreasureOnLowHp(target, events);
+
             if (actualDamageToTarget > 0 && IsSwordOfWounding(mainHand))
             {
                 session.AddMonsterWoundingWound(target, rounds: 10);
@@ -2575,6 +2615,9 @@ public sealed class CombatResolver
             }
 
             WakeMonsterIfAsleepAfterDamage(target, actualDamageToTarget, events);
+
+            if (useRanged && mainHand != null)
+                ResolveJavelinOfLightningStrike(member, mainHand, target, session, events);
 
             if (useRanged && rangedWeapon != null && rangedWeapon.RequiresAmmo && ammo != null && ammo.Quantity > 0)
             {
@@ -2611,6 +2654,29 @@ public sealed class CombatResolver
                 break;
             }
         }
+    }
+
+    private static void TryRevealWillOWispLairTreasureOnLowHp(MonsterInstance target, List<CombatEvent> events)
+    {
+        if (target?.Template == null)
+            return;
+
+        if (!IsWillOWisp(target))
+            return;
+
+        if (!target.IsAlive)
+            return;
+
+        if (target.CurrentHitPoints > 5)
+            return;
+
+        if (target.HasRevealedLairTreasure)
+            return;
+
+        target.HasRevealedLairTreasure = true;
+        target.IsInLair = true;
+
+        events.Add(new CombatEvent($"{target.DisplayName} falters at {target.CurrentHitPoints} HP, reveals its lair, and gives over its treasure."));
     }
 
     private static int GetRangedAttacksPerRound(string? fireRate, int roundNumber)
@@ -3000,11 +3066,25 @@ public sealed class CombatResolver
             return true;
         }
 
-        // Insect Plague: panic one party member for 2-6 rounds.
+        // Insect Plague: panic one party member for 2-6 rounds (save negates).
         var insectTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var panicRounds = _dice.Roll(5) + 1;
-        insectTarget.AddStatus(CharacterStatus.Feeblemind);
-        events.Add(new CombatEvent($"{monster.DisplayName} casts Insect Plague! {insectTarget.Name} panics and loses control for {panicRounds} round(s)."));
+        var panicSaveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            insectTarget,
+            _savingThrowService.GetSaveTarget(insectTarget, SaveThrowType.Spell));
+        if (session.IsChantActive || session.IsPrayerActive)
+            panicSaveTarget = Math.Max(1, panicSaveTarget - 1);
+
+        var panicSaveRoll = _dice.Roll(20);
+        if (panicSaveRoll >= panicSaveTarget)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Insect Plague, but {insectTarget.Name} resists (save {panicSaveRoll} vs {panicSaveTarget})."));
+            return true;
+        }
+
+        insectTarget.AddStatus(CharacterStatus.Confused);
+        session.SetPartyConfused(insectTarget.Name, panicRounds);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Insect Plague! {insectTarget.Name} fails save ({panicSaveRoll} vs {panicSaveTarget}), panics, and cannot attack or cast for {panicRounds} round(s)."));
         return true;
     }
 
@@ -5312,6 +5392,84 @@ public sealed class CombatResolver
                    && a.Contains("Hammer of Thunderbolts", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsJavelinOfLightning(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (name.Contains("Javelin of Lightning", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Javelin of Lightning", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void ResolveJavelinOfLightningStrike(Character thrower, Item weapon, MonsterInstance impactTarget, CombatSession session, List<CombatEvent> events)
+    {
+        if (!IsJavelinOfLightning(weapon) || impactTarget?.Template == null)
+            return;
+
+        var baseName = Regex.Replace(weapon.Name ?? "Javelin of Lightning", @"\s*\(\d+\)\s*$", string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(baseName))
+            baseName = "Javelin of Lightning";
+
+        var primaryBefore = impactTarget.CurrentHitPoints;
+        impactTarget.CurrentHitPoints = Math.Max(0, impactTarget.CurrentHitPoints - 20);
+        var primaryLightningDamage = primaryBefore - impactTarget.CurrentHitPoints;
+        if (primaryLightningDamage > 0)
+        {
+            events.Add(new CombatEvent($"{thrower.Name}'s Javelin of Lightning discharges for 20 electrical damage on {impactTarget.DisplayName}. HP {primaryBefore}->{impactTarget.CurrentHitPoints}."));
+            WakeMonsterIfAsleepAfterDamage(impactTarget, primaryLightningDamage, events);
+        }
+
+        var backStrokeTargets = session.GetAliveMonstersByGroup(impactTarget.GroupId)
+            .Where(m => !ReferenceEquals(m, impactTarget))
+            .ToList();
+
+        foreach (var secondary in backStrokeTargets)
+        {
+            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(secondary, 20);
+            var saveRoll = _dice.Roll(20);
+            var boltDamage = saveRoll >= saveTarget ? 10 : 20;
+
+            var beforeSecondary = secondary.CurrentHitPoints;
+            secondary.CurrentHitPoints = Math.Max(0, secondary.CurrentHitPoints - boltDamage);
+            var actualSecondary = beforeSecondary - secondary.CurrentHitPoints;
+
+            if (actualSecondary <= 0)
+                continue;
+
+            events.Add(new CombatEvent(saveRoll >= saveTarget
+                ? $"Backstroke lightning grazes {secondary.DisplayName}: save {saveRoll} vs {saveTarget}, takes 10 electrical damage. HP {beforeSecondary}->{secondary.CurrentHitPoints}."
+                : $"Backstroke lightning rakes {secondary.DisplayName}: save {saveRoll} vs {saveTarget}, takes 20 electrical damage. HP {beforeSecondary}->{secondary.CurrentHitPoints}."));
+
+            WakeMonsterIfAsleepAfterDamage(secondary, actualSecondary, events);
+            if (secondary.CurrentHitPoints <= 0)
+                events.Add(new CombatEvent($"{secondary.DisplayName} is destroyed by the lightning backstroke."));
+        }
+
+        weapon.Quantity = Math.Max(0, weapon.Quantity - 1);
+        if (weapon.Quantity <= 0)
+        {
+            if (thrower.Equipment.TryGetValue(EquipmentSlot.Range, out var equippedRange)
+                && ReferenceEquals(equippedRange, weapon))
+            {
+                thrower.Equipment[EquipmentSlot.Range] = null;
+            }
+
+            thrower.Inventory.RemoveAll(item => ReferenceEquals(item, weapon) || (IsJavelinOfLightning(item) && item.Quantity <= 0));
+            events.Add(new CombatEvent($"{thrower.Name}'s Javelin of Lightning is consumed in the discharge."));
+        }
+        else
+        {
+            weapon.Name = $"{baseName} ({weapon.Quantity})";
+            events.Add(new CombatEvent($"{thrower.Name}'s Javelin of Lightning crackles out. {weapon.Quantity} remaining."));
+        }
+    }
+
     private static bool MeetsHammerOfThunderboltsBaselineStrength(Character wielder)
     {
         if (wielder == null)
@@ -6265,6 +6423,20 @@ public sealed class CombatResolver
     {
         return target.Template.SpecialDefenses.Any(d =>
             string.Equals(d.Name?.Trim(), "+1 or better weapons to hit", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsWillOWisp(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var normalized = (target.Template.Name ?? string.Empty)
+            .ToLowerInvariant()
+            .Replace("'", string.Empty)
+            .Replace("-", string.Empty)
+            .Replace(" ", string.Empty);
+
+        return normalized.Contains("willowisp", StringComparison.Ordinal);
     }
 
     private static bool IsMagicalWeapon(Item? mainHand)

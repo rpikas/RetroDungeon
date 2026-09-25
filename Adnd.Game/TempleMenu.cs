@@ -102,7 +102,7 @@ public class TempleMenu
         {
             if (Console.KeyAvailable) return (Console.ReadKey(true).Key, null);
 
-            var command = _viewer.TryTakeCommand();
+            var command = _viewer.TryTakeCommandAsync().GetAwaiter().GetResult();
             if (command != null) return (default, command);
 
             System.Threading.Thread.Sleep(60);
@@ -129,7 +129,7 @@ public class TempleMenu
             return;
         }
 
-        Console.WriteLine($"Healing costs: {Temple.HealCost} gp (HP), +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis).");
+        Console.WriteLine($"Healing costs: {Temple.HealCost} gp (HP), +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureFeeblemindCost} gp (feeblemind).");
 
         var healedCount = 0;
         var skipped = new List<string>();

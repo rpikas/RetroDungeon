@@ -3,7 +3,7 @@
   "Items": [
     {
       "Status": "Implemented",
-      "Name": "Achemy Jug",
+      "Name": "Alchemy Jug",
       "Type": "MagicItem",
       "Slot": "",
       "Cost": 12000,

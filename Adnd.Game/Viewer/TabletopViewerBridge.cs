@@ -716,29 +716,33 @@ public sealed class TabletopViewerBridge
     /// the game's own key handler owns the rules. The tavern has no rules and no form: it applies the
     /// command to the roster directly.
     ///
-    /// Blocking, briefly, and deliberately so: a console loop has nothing else to do while it waits, and
-    /// the HttpClient timeout caps it at well under a second.
+    /// Async so callers can poll the viewer without blocking their own thread.
     ///
     /// Do NOT call this while a pump is running. Collecting a command REMOVES it from the viewer's queue,
     /// so two readers means each swallows commands meant for the other. Nothing enforces that here
     /// because nothing can: it is a fact about the queue, not about this method.
     /// </summary>
-    public string? TryTakeCommand()
+    public async Task<string?> TryTakeCommandAsync()
     {
         if (!_enabled) return null;
 
         try
         {
-            using var response = Http.GetAsync(_commandEndpoint).GetAwaiter().GetResult();
+            using var response = await Http.GetAsync(_commandEndpoint).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode
                 || response.StatusCode == System.Net.HttpStatusCode.NoContent) return null;
 
-            var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             using var document = JsonDocument.Parse(body);
 
             return document.RootElement.TryGetProperty("option", out var option)
                  ? option.GetString()
                  : null;
+        }
+        catch (OperationCanceledException)
+        {
+            // Timed out waiting for the viewer; treat as "no command yet".
+            return null;
         }
         catch
         {

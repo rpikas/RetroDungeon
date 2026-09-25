@@ -1068,7 +1068,7 @@ public class PartyMenu
             // the player in a menu that is waiting for a click nobody can make.
             if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) return;
 
-            var command = bridge.TryTakeCommand();
+            var command = bridge.TryTakeCommandAsync().GetAwaiter().GetResult();
             if (command == null) { System.Threading.Thread.Sleep(60); continue; }
 
             if (command == "back") return;

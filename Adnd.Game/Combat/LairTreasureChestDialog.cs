@@ -1,6 +1,7 @@
 using Adnd.Game.Viewer;
 using Adnd.Core.Config;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Adnd.Game.Combat;
@@ -76,12 +77,7 @@ internal sealed class LairTreasureChestDialog : Form
             BackColor = Color.Black
         };
 
-        var path = ResolveChestImagePath();
-        if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
-        {
-            using var src = Image.FromFile(path);
-            picture.Image = new Bitmap(src);
-        }
+        picture.Image = ResolveChestImage();
 
         var options = new Label
         {
@@ -148,20 +144,53 @@ internal sealed class LairTreasureChestDialog : Form
             CloseWith(LairChestChoice.Inspect);
     }
 
-    private static string? ResolveChestImagePath()
+    private static Image? ResolveChestImage()
     {
-        var candidates = new[]
-        {
-            Path.Combine("Assets", "ScenPictures", "TreasureChest.png"),
-            Path.Combine("..", "..", "..", "Assets", "ScenPictures", "TreasureChest.png"),
-            Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", "TreasureChest.png")
-        };
+        var wizardryOnly = GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyWizardry;
 
-        foreach (var candidate in candidates)
+        var imageFileNames = wizardryOnly
+            ? new[]
+            {
+                "TreasureChest.png",
+                "TreasureChest.webp",
+                "FindingTreasure.webp",
+                "dividing-treasure.webp"
+            }
+            : new[]
+            {
+                "TreasureChest_Adnd.png",
+                "TreasureChest_adnd.png",
+                "TreasureChest_Adnd.webp",
+                "TreasureChest_adnd.webp",
+                "FindingTreasure.webp",
+                "dividing-treasure.webp"
+            };
+
+        foreach (var imageFileName in imageFileNames)
         {
-            var fullPath = Path.GetFullPath(candidate);
-            if (File.Exists(fullPath))
-                return fullPath;
+            var candidates = new[]
+            {
+                Path.Combine("Assets", "ScenPictures", imageFileName),
+                Path.Combine("..", "..", "..", "Assets", "ScenPictures", imageFileName),
+                Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", imageFileName)
+            };
+
+            foreach (var candidate in candidates)
+            {
+                var fullPath = Path.GetFullPath(candidate);
+                if (!File.Exists(fullPath))
+                    continue;
+
+                try
+                {
+                    using var src = Image.FromFile(fullPath);
+                    return new Bitmap(src);
+                }
+                catch (Exception ex) when (ex is ExternalException || ex is OutOfMemoryException || ex is ArgumentException)
+                {
+                    // Try next candidate if this file exists but cannot be decoded by System.Drawing.
+                }
+            }
         }
 
         return null;

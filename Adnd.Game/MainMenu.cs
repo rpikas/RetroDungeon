@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Adnd.Core.Characters;
 using Adnd.Core.Items;
 using Adnd.Game.Viewer;
@@ -55,7 +56,7 @@ public class MainMenu
     /// </summary>
     private string _standing = TownWalk[0];
 
-    public void Show()
+    public async Task ShowAsync()
     {
         while (true)
         {
@@ -78,7 +79,7 @@ public class MainMenu
             Console.WriteLine("S)ettings");
             Console.WriteLine("L<-eave");
 
-            var (key, command) = AwaitChoice();
+            var (key, command) = await AwaitChoiceAsync();
 
             // A click on the table and a key at the console arrive as the same intention, and land in the
             // same code. Anything else the viewer sends is dropped here exactly as the pump drops a word it
@@ -201,19 +202,19 @@ public class MainMenu
     /// started cannot strand anyone in this menu.
     ///
     /// Safe to take commands here because no pump is running at the hub -- see the warning on
-    /// <see cref="TabletopViewerBridge.TryTakeCommand"/>. The maze and a fight own the queue while they
+    /// <see cref="TabletopViewerBridge.TryTakeCommandAsync"/>. The maze and a fight own the queue while they
     /// are up, and this loop is not running then.
     /// </summary>
-    private (ConsoleKey Key, string? Command) AwaitChoice()
+    private async Task<(ConsoleKey Key, string? Command)> AwaitChoiceAsync()
     {
         while (true)
         {
             if (Console.KeyAvailable) return (Console.ReadKey(true).Key, null);
 
-            var command = _viewer.TryTakeCommand();
+            var command = await _viewer.TryTakeCommandAsync();
             if (command != null) return (default, command);
 
-            System.Threading.Thread.Sleep(60);
+            await Task.Delay(60);
         }
     }
 
@@ -304,6 +305,7 @@ public class MainMenu
         Enter("EdgeOfTown");
 
         ApplyEarSeekerDungeonEntryDeaths();
+        RecalculatePartyCombatStateOnDungeonEntry();
         _dungeonMenu.Show();
 
         // A new day starts only after the party leaves the maze.
@@ -336,6 +338,22 @@ public class MainMenu
             if (removedRegenMarkers > 0)
                 changed = true;
 
+            _charRepo.Save(member);
+        }
+    }
+
+    private void RecalculatePartyCombatStateOnDungeonEntry()
+    {
+        var party = _partyRepo.Load();
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var member))
+                continue;
+
+            member.RecalculateArmorClassFromState();
+            member.RefreshMoveFromArmorAndClass();
             _charRepo.Save(member);
         }
     }

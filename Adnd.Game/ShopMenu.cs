@@ -69,7 +69,7 @@ public class ShopMenu
         {
             if (Console.KeyAvailable) return (Console.ReadKey(true).Key, null);
 
-            var command = _viewer.TryTakeCommand();
+            var command = _viewer.TryTakeCommandAsync().GetAwaiter().GetResult();
             if (command != null) return (default, command);
 
             System.Threading.Thread.Sleep(60);

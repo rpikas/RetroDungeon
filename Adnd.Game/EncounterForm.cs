@@ -1546,31 +1546,49 @@ public sealed class EncounterForm : Form
         var isChooseSpellDialog = string.Equals(title, "Choose Spell", StringComparison.OrdinalIgnoreCase);
         form.FormBorderStyle = isChooseSpellDialog ? FormBorderStyle.Sizable : FormBorderStyle.FixedDialog;
         form.ClientSize = isChooseSpellDialog
-            ? new Size(760, 980)
+            ? new Size(620, 420)
             : new Size(520, 340);
         if (isChooseSpellDialog)
-            form.MinimumSize = new Size(640, 520);
+            form.MinimumSize = new Size(560, 340);
         form.MinimizeBox = false;
         form.MaximizeBox = false;
 
-        var label = new Label
+        Control promptControl;
+        if (isChooseSpellDialog)
         {
-            Left = 12,
-            Top = 12,
-            Width = isChooseSpellDialog ? 736 : 496,
-            Height = isChooseSpellDialog ? 890 : 250,
-            AutoSize = false,
-            Text = prompt,
-            Anchor = isChooseSpellDialog
-                ? AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
-                : AnchorStyles.Top | AnchorStyles.Left
-        };
+            promptControl = new TextBox
+            {
+                Left = 12,
+                Top = 12,
+                Width = 596,
+                Height = 338,
+                ReadOnly = true,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                BorderStyle = BorderStyle.FixedSingle,
+                Text = prompt,
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+            };
+        }
+        else
+        {
+            promptControl = new Label
+            {
+                Left = 12,
+                Top = 12,
+                Width = 496,
+                Height = 250,
+                AutoSize = false,
+                Text = prompt,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left
+            };
+        }
 
         var input = new TextBox
         {
             Left = 12,
-            Top = isChooseSpellDialog ? 910 : 270,
-            Width = isChooseSpellDialog ? 480 : 320,
+            Top = isChooseSpellDialog ? 360 : 270,
+            Width = isChooseSpellDialog ? 340 : 320,
             Anchor = isChooseSpellDialog
                 ? AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom
                 : AnchorStyles.Top | AnchorStyles.Left
@@ -1579,9 +1597,9 @@ public sealed class EncounterForm : Form
         var ok = new Button
         {
             Text = "OK",
-            Left = isChooseSpellDialog ? 576 : 352,
+            Left = isChooseSpellDialog ? 446 : 352,
             Width = 75,
-            Top = isChooseSpellDialog ? 908 : 268,
+            Top = isChooseSpellDialog ? 358 : 268,
             DialogResult = DialogResult.OK,
             Anchor = isChooseSpellDialog
                 ? AnchorStyles.Right | AnchorStyles.Bottom
@@ -1590,21 +1608,26 @@ public sealed class EncounterForm : Form
         var cancel = new Button
         {
             Text = "Cancel",
-            Left = isChooseSpellDialog ? 657 : 433,
+            Left = isChooseSpellDialog ? 527 : 433,
             Width = 75,
-            Top = isChooseSpellDialog ? 908 : 268,
+            Top = isChooseSpellDialog ? 358 : 268,
             DialogResult = DialogResult.Cancel,
             Anchor = isChooseSpellDialog
                 ? AnchorStyles.Right | AnchorStyles.Bottom
                 : AnchorStyles.Top | AnchorStyles.Left
         };
 
-        form.Controls.Add(label);
+        form.Controls.Add(promptControl);
         form.Controls.Add(input);
         form.Controls.Add(ok);
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+        form.Shown += (_, _) =>
+        {
+            input.Focus();
+            input.SelectAll();
+        };
 
         // The table's copy of this question, and its answer. One implementation of "publish the options, take an
         // answer from either end" lives in ViewerDialog and every dialog in the game now goes through it.

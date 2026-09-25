@@ -667,7 +667,7 @@
       ],
       "BaseXPValue": 1350,
       "XPValuePerHitPoint": 9,
-      "TreasureType": "Nil",
+      "TreasureType": "I",
       "Source": "Adnd"
     },
 

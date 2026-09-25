@@ -19,12 +19,6 @@
     "MinValueGp": 0,
     "MaxValueGp": 0
   },
-  "Art": {
-    "Amount": "0",
-    "Chance": 0,
-    "MinValueGp": 0,
-    "MaxValueGp": 0
-  },
   "Magic": {
     "Rolls": [
       { "Table": "Potion", "Amount": "0", "Chance": 0 }

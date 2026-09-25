@@ -704,16 +704,16 @@
       "MagicBonus": 3
     },
     {
-      "Name": "Javelin of Lightning (3)",
+      "Name": "Javelin of Lightning",
       "Type": "Weapon",
       "Slot": "Range",
       "Cost": 5000,
       "CostSilverPieces": 50000,
       "Weight": 20,
-      "Damage": "1d6+2",
-      "DamageVsLarge": "1d6+2",
+      "Damage": "1d6",
+      "DamageVsLarge": "1d6",
       "DamageType": "Piercing",
-      "Range": "20/40/60",
+      "Range": "9/18/27",
       "FireRate": "1",
       "RequiresAmmo": false,
       "AmmoType": "",
@@ -721,7 +721,8 @@
       "IsShopBuyable": false,
       "AllowedClasses": ["Fighter", "Paladin", "Ranger"],
       "Rarity": "Very Rare",
-      "Description": "Set of three magical javelins that can become lightning bolts."
+      "Description": "Set of three magical javelins. On a hit, each deals normal javelin damage plus a lightning discharge before being consumed.",
+      "MagicBonus": 2
     }
   ]
 }

@@ -71,4 +71,6 @@ public sealed class TreasureMagicPlaceholderResult
     public string Table { get; set; } = string.Empty;
     public int Count { get; set; }
     public string SourceTable { get; set; } = string.Empty;
+    public string ResolvedName { get; set; } = string.Empty;
+    public int ExperienceValue { get; set; }
 }

@@ -60,6 +60,9 @@ public sealed class MagicMissileHandler : ISpellEffectHandler
             var outcome = SpellDamageSaveHelper.ApplyToMonster(target, damage, rng, spell.Name);
 
             result.Events.Add($"Missile {i + 1}: {SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, damage, outcome)}");
+            if (TryRevealWillOWispLairTreasureOnLowHp(target))
+                result.Events.Add($"{target.DisplayName} falters at {target.CurrentHitPoints} HP, reveals its lair, and gives over its treasure.");
+
             if (!target.IsAlive)
                 result.Events.Add($"{target.DisplayName} is destroyed.");
 
@@ -70,5 +73,27 @@ public sealed class MagicMissileHandler : ISpellEffectHandler
         }
 
         return result;
+    }
+
+    private static bool TryRevealWillOWispLairTreasureOnLowHp(Combat.Sessions.MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var normalized = (target.Template.Name ?? string.Empty)
+            .ToLowerInvariant()
+            .Replace("'", string.Empty)
+            .Replace("-", string.Empty)
+            .Replace(" ", string.Empty);
+
+        if (!normalized.Contains("willowisp", StringComparison.Ordinal))
+            return false;
+
+        if (!target.IsAlive || target.CurrentHitPoints > 5 || target.HasRevealedLairTreasure)
+            return false;
+
+        target.HasRevealedLairTreasure = true;
+        target.IsInLair = true;
+        return true;
     }
 }

@@ -18,6 +18,7 @@ public static class Temple
     public const int HealCost = 10;
     public const int CurePoisonCost = 100;
     public const int CureParalysisCost = 200;
+    public const int CureFeeblemindCost = 400;
 
     public const int RaiseDeadCost = 100;
     public const int RaiseFromAshesCost = 500;
@@ -26,7 +27,8 @@ public static class Temple
         c.CurrentHitPoints < c.MaxHitPoints
         || c.HasStatus(CharacterStatus.Poisoned)
         || c.HasStatus(CharacterStatus.Paralyzed)
-        || c.HasStatus(CharacterStatus.Diseased);
+        || c.HasStatus(CharacterStatus.Diseased)
+        || c.HasStatus(CharacterStatus.Feeblemind);
 
     public static int CostToHeal(Character c)
     {
@@ -43,6 +45,9 @@ public static class Temple
 
         if (c.HasStatus(CharacterStatus.Diseased))
             cost += CurePoisonCost;
+
+        if (c.HasStatus(CharacterStatus.Feeblemind))
+            cost += CureFeeblemindCost;
 
         return cost;
     }
@@ -73,6 +78,7 @@ public static class Temple
         c.RemoveStatus(CharacterStatus.Poisoned);
         c.ClearParalysis();
         c.CureDiseaseAndRestoreConstitution();
+        c.RemoveStatus(CharacterStatus.Feeblemind);
         repo.Save(c);
         return true;
     }

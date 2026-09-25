@@ -1,0 +1,21 @@
+Potion of Speed 
+implemented as a direct consumable haste effect in combat:
+•	Item data:
+•	Adnd.Data/Items/Potions.json
+•	Name: "Potion of Speed"
+•	SpecialAbilities: ["Casts Haste"]
+•	Status: "Implemented"
+•	Runtime behavior:
+•	In CombatResolver, it is recognized either by:
+•	Casts Haste, or
+•	exact name "Potion of Speed".
+•	On use:
+•	rolls duration 5–20 rounds (1d16 + 4)
+•	applies haste state via session.SetHaste(...)
+•	doubles movement once (user.Move *= 2) if not already hasted
+•	doubles attacks during combat because attack count is multiplied when session.IsHasted(...) is true
+•	permanently ages character +1 year
+•	emits event text: move/attacks doubled and aging note
+•	Expiration:
+•	At round processing, haste rounds tick down.
+•	When it expires, Move is restored to original and haste state is cleared.

@@ -2,7 +2,7 @@
   "Id": "power_word_stun",
   "Name": "Power Word: Stun",
   "Class": "MagicUser",
-  "Level": 8,
+  "Level": 7,
   "Description": "A single word of power stuns one vulnerable monster with no saving throw.",
   "RangeType": "Enemy",
   "Targeting": "Single",

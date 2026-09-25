@@ -1,4 +1,4 @@
-Super-Heroism
+Potion of Super-Heroism
 This potion gives the individual o temporary increase in life energy levels (cf heroism potion) if he or she has fewer than 13 levels of experience:
 Potion of Super‑Heroism Table
 Level of Consumer	Number of Energy Levels Bestowed	10‑Sided Dice for Accumulated Damage Bestowed

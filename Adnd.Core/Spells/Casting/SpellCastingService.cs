@@ -337,7 +337,7 @@ public sealed class SpellCastingService
                 case SpellRangeType.Enemy:
                     if (t.Type != SpellCastTargetType.Enemy)
                         return SpellCastResult.Failure("This spell must target enemies.");
-                    if (!IsValidEnemyTarget(t, request))
+                    if (!IsValidEnemyTarget(t, request, spell))
                         return SpellCastResult.Failure("Invalid enemy target.");
                     break;
             }
@@ -358,13 +358,14 @@ public sealed class SpellCastingService
         {
             var alive = request.MonsterTargets
                 .Where(m => m.IsAlive)
+                .Where(m => IsSpellAllowedAgainstMonster(spell, m))
                 .ToList();
 
             if (alive.Count == 0)
                 return;
 
             var hasAnyValidEnemy = request.Targets.Any(t => t.Type == SpellCastTargetType.Enemy
-                                                             && IsValidEnemyTarget(t, request));
+                                                             && IsValidEnemyTarget(t, request, spell));
 
             var hasValidGroupTarget = request.Targets.Any(t => t.Type == SpellCastTargetType.Enemy
                                                                 && !string.IsNullOrWhiteSpace(t.TargetGroupId)
@@ -390,12 +391,12 @@ public sealed class SpellCastingService
             return;
 
         var hasValidEnemy = request.Targets.Any(t => t.Type == SpellCastTargetType.Enemy
-                                                     && IsValidEnemyTarget(t, request));
+                                                     && IsValidEnemyTarget(t, request, spell));
 
         if (hasValidEnemy)
             return;
 
-        var fallback = request.MonsterTargets.FirstOrDefault(m => m.IsAlive);
+        var fallback = request.MonsterTargets.FirstOrDefault(m => m.IsAlive && IsSpellAllowedAgainstMonster(spell, m));
         if (fallback == null)
             return;
 
@@ -403,14 +404,52 @@ public sealed class SpellCastingService
         request.Targets.Add(SpellCastTarget.Enemy(fallback.Index));
     }
 
-    private static bool IsValidEnemyTarget(SpellCastTarget target, SpellCastRequest request)
+    private static bool IsValidEnemyTarget(SpellCastTarget target, SpellCastRequest request, Spell? spell)
     {
         if (target.MonsterIndex is int idx)
-            return request.MonsterTargets.Any(m => m.Index == idx && m.IsAlive);
+        {
+            var byIndex = request.MonsterTargets.FirstOrDefault(m => m.Index == idx && m.IsAlive);
+            return byIndex != null && IsSpellAllowedAgainstMonster(spell, byIndex);
+        }
 
         if (!string.IsNullOrWhiteSpace(target.TargetGroupId))
-            return request.MonsterTargets.Any(m => m.IsAlive && string.Equals(m.GroupId, target.TargetGroupId, StringComparison.OrdinalIgnoreCase));
+            return request.MonsterTargets.Any(m => m.IsAlive
+                                                   && string.Equals(m.GroupId, target.TargetGroupId, StringComparison.OrdinalIgnoreCase)
+                                                   && IsSpellAllowedAgainstMonster(spell, m));
 
         return false;
+    }
+
+    private static bool IsSpellAllowedAgainstMonster(Spell? spell, Combat.Sessions.MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        if (!IsWillOWisp(monster))
+            return true;
+
+        var id = spell?.Id?.Trim() ?? string.Empty;
+
+        if (id.StartsWith("magic_missile", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (id.StartsWith("maze", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (id.StartsWith("protection_from_evil", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private static bool IsWillOWisp(Combat.Sessions.MonsterInstance monster)
+    {
+        var normalized = (monster.Template.Name ?? string.Empty)
+            .ToLowerInvariant()
+            .Replace("'", string.Empty)
+            .Replace("-", string.Empty)
+            .Replace(" ", string.Empty);
+
+        return normalized.Contains("willowisp", StringComparison.Ordinal);
     }
 }

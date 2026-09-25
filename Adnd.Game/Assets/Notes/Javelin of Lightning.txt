@@ -1,0 +1,48 @@
+Javelin of Lightning
+A javelin of lightning is considered equal to a + 2 magic weapon, although it has 
+neither "to hit" nor damage bonuses. It has a range of 9" and whenever it strikes, 
+the javelin then becomes ihe head of a W* wide, 3" long stroke of lightning. 
+Any creature hit by ihe javelin suffers 1-6 hit points of damage, plus 20 hit points 
+of electrical damage. Any other creatures in the path of the back stroke rake either 
+20 or 10 hit points of damage. (Draw a straight line between point of impact 3" back 
+in the direction of the character hurling it.) From 2-5 will be found The javelin 
+is consumed in the lightning discharge
+
+What changed
+1.	Combat logic for Javelin of Lightning
+•	File: Adnd.Core/Combat/Resolution/CombatResolver.cs
+•	Added Javelin of Lightning handling in ranged attack resolution:
+•	If equipped quantity is 0, attacker cannot throw it.
+•	On a successful hit:
+•	Normal javelin damage is applied (1d6 from weapon data).
+•	Then a lightning discharge is applied:
+•	Impact target: +20 electrical damage.
+•	Other monsters in the same group (line-path approximation): save for half, taking 20 or 10 electrical damage.
+•	The thrown javelin is consumed (Quantity - 1), and removed from Range slot at 0.
+•	Added helpers:
+•	IsJavelinOfLightning(Item?)
+•	ResolveJavelinOfLightningStrike(...)
+2.	Item data aligned with requested rules
+•	File: Adnd.Data/Items/RangedWeapons.json
+•	Updated Javelin of Lightning (3):
+•	Damage / DamageVsLarge: changed from 1d6+2 → 1d6
+•	Range: changed to 9/18/27 (9" short-range representation)
+•	MagicBonus: set to 2 (counts as +2 for magic-hit requirements)
+•	Description updated to reflect discharge + consumption behavior
+Notes
+•	This now matches your requirement that it is effectively a +2 magical weapon for hit immunity checks, but with no intrinsic to-hit/damage bonus.
+•	The “3" backstroke line” is approximated using same-group monsters since the combat model does not track battlefield coordinates.
+I got a message the I could not trhow more javelin of lightning, but they still appear in my inventory. I think als the (3) means how many I have left, that should be reduced once one is used. and when reahing 0 it should disappear from inventory
+
+What I changed
+I updated Javelin of Lightning handling so count and inventory stay consistent:
+•	Adnd.Core/Combat/Resolution/CombatResolver.cs
+•	When quantity is already 0, it now:
+•	clears the ranged slot if that depleted javelin is equipped,
+•	removes depleted Javelin-of-Lightning entries from inventory.
+•	On each lightning discharge:
+•	decrements Quantity,
+•	updates item name suffix to match remaining count:
+•	Javelin of Lightning (3) → (2) → (1),
+•	when it reaches 0, removes it from equipped range slot and inventory.
+So now (N) tracks remaining throws, and item disappears at 0.

@@ -97,3 +97,34 @@ Multiple items	First failed save ends globe
 Duration	5–30 rounds
 Movement	Globe follows user
 Normal items	Unaffected
+
+What was added for Scroll of Protection from Magic
+•	Added a dedicated character state:
+•	ProtectionFromMagicScrollRoundsRemaining
+•	HasActiveProtectionFromMagicScroll
+•	SetProtectionFromMagicScroll(rounds)
+•	ClearProtectionFromMagicScroll()
+•	Added round ticking/expiration in combat:
+•	decrements each round
+•	expiration event is shown
+Scroll behavior implemented
+•	Scroll of Protection from Magic is now handled as a direct item effect in combat.
+•	Duration uses 5d6 rounds (5–30).
+•	On activation, anti-magic globe event is logged.
+Anti-magic restrictions implemented
+•	While active, the protected character:
+•	cannot cast spells
+•	cannot cast from item-based spell effects
+•	cannot activate magical items in combat
+•	Spell targeting validation now blocks ally/self spell targets protected by anti-magic.
+Magic item contact/drain logic implemented
+•	Upon activation, magical items on/with the reader are checked.
+•	Items save on d20, 11+ succeeds.
+•	On first failure:
+•	item is drained (magic bonuses/abilities cleared)
+•	globe collapses immediately
+•	Items are checked in descending power heuristic order.
+Camp/exploration flow
+•	Scroll is now visible in usable item listings.
+•	In camp use, it is blocked with:
+•	"Scroll of Protection from Magic can only be used in combat encounters."

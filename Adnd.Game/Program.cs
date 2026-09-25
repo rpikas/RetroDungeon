@@ -24,12 +24,13 @@ internal class Program
 */
 using Adnd.Game;
 using Adnd.Game.Installers;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 internal class Program
 {
     [STAThread]
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
@@ -40,7 +41,7 @@ internal class Program
         TreasureInstaller.Install();
 
         var main = new Adnd.Game.MainMenu();
-        main.Show();
+        await main.ShowAsync();
     }
 }
 

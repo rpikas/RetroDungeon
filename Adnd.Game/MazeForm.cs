@@ -1684,7 +1684,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 ? c.GetClassesDisplayText("/")
                 : c.GetClassesDisplayText("/");
 
-            var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
+            var status = GetMazeStatusDisplay(c);
             var alignment = c.Alignment.ToAbbreviation();
 
             graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
@@ -1698,6 +1698,26 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             y += 18f;
         }
+    }
+
+    private string GetMazeStatusDisplay(Character c)
+    {
+        var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : string.Empty;
+
+        // Invisibility can be active from ring state even when status text would otherwise be empty.
+        var invisibleActive = c.HasStatus(CharacterStatus.Invisible)
+                              || c.RingInvisibilityActive
+                              || c.RingInvisibilityAppliedArmorClassBonus;
+
+        if (invisibleActive)
+        {
+            if (string.IsNullOrWhiteSpace(status) || status == "-")
+                status = "Invisible";
+            else if (!status.Contains("Invisible", StringComparison.OrdinalIgnoreCase))
+                status += ", Invisible";
+        }
+
+        return string.IsNullOrWhiteSpace(status) ? "-" : status;
     }
 
     private List<string> GetPartyLines()

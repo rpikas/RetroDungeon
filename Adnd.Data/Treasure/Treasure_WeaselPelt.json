@@ -8,13 +8,13 @@
     "PlatinumPieces": { "Amount": "1d4*1000", "Chance": 0 }
   },
   "Gems": {
-    "Amount": "4d10",
+    "Amount": "4d1",
     "Chance": 0,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },
   "Jewelry": {
-    "Amount": "3d10",
+    "Amount": "3d1",
     "Chance": 0,
     "MinValueGp": 100,
     "MaxValueGp": 1000

@@ -392,21 +392,30 @@ public sealed class TreasureService
             if (count <= 0)
                 continue;
 
-            RollMagicItems(magicRule.Table, count, result.LogLines);
+            var rolledPlaceholders = RollMagicItems(magicRule.Table, count, result.LogLines, source);
 
-            result.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult
+            if (rolledPlaceholders.Count > 0)
             {
-                Table = magicRule.Table,
-                Count = count,
-                SourceTable = source
-            });
+                result.MagicPlaceholders.AddRange(rolledPlaceholders);
+            }
+            else
+            {
+                result.MagicPlaceholders.Add(new TreasureMagicPlaceholderResult
+                {
+                    Table = magicRule.Table,
+                    Count = count,
+                    SourceTable = source
+                });
+            }
 
             result.LogLines.Add($"  + Magic placeholder: {magicRule.Table} x{count}");
         }
     }
 
-    private void RollMagicItems(string requestedTable, int count, List<string> logs)
+    private List<TreasureMagicPlaceholderResult> RollMagicItems(string requestedTable, int count, List<string> logs, string source)
     {
+        var placeholders = new List<TreasureMagicPlaceholderResult>();
+
         for (var i = 1; i <= count; i++)
         {
             var normalized = (requestedTable ?? string.Empty).Trim();
@@ -414,7 +423,9 @@ public sealed class TreasureService
                 || normalized.Equals("Any 3 plus 1 scroll", StringComparison.OrdinalIgnoreCase)
                 || normalized.Length == 0)
             {
-                RollFromAnyMagicItemTypeTable(i, logs);
+                var anyPlaceholder = RollFromAnyMagicItemTypeTable(i, logs, source);
+                if (anyPlaceholder != null)
+                    placeholders.Add(anyPlaceholder);
                 continue;
             }
 
@@ -422,8 +433,10 @@ public sealed class TreasureService
                 || normalized.Equals("Potions", StringComparison.OrdinalIgnoreCase))
             {
                 var potionRoll = _random.Next(1, 101);
+                var resolved = ResolvePotionResult(potionRoll);
                 logs.Add($"    Magic item #{i}: forced Potions (A) from table key '{requestedTable}'.");
-                logs.Add($"      Potions table (A) d100 {potionRoll:00} => {ResolvePotionResult(potionRoll)} (placeholder).");
+                logs.Add($"      Potions table (A) d100 {potionRoll:00} => {resolved} (placeholder).");
+                placeholders.Add(CreateMagicPlaceholder("Potion", source, resolved));
                 continue;
             }
 
@@ -431,8 +444,10 @@ public sealed class TreasureService
                 || normalized.Equals("Scrolls", StringComparison.OrdinalIgnoreCase))
             {
                 var scrollRoll = _random.Next(1, 101);
+                var resolvedScroll = ResolveScrollResult(scrollRoll);
                 logs.Add($"    Magic item #{i}: forced Scrolls (B) from table key '{requestedTable}'.");
-                logs.Add($"      Scrolls table (B) d100 {scrollRoll:00} => {ResolveScrollResult(scrollRoll)} (placeholder).");
+                logs.Add($"      Scrolls table (B) d100 {scrollRoll:00} => {resolvedScroll} (placeholder).");
+                placeholders.Add(CreateMagicPlaceholder(ResolveScrollPlaceholderTable(scrollRoll), source, resolvedScroll));
                 continue;
             }
 
@@ -446,8 +461,10 @@ public sealed class TreasureService
                 || normalized.Equals("Rods, Staves & Wands", StringComparison.OrdinalIgnoreCase))
             {
                 var dRoll = _random.Next(1, 101);
+                var resolved = ResolveRodStaffWandResult(dRoll);
                 logs.Add($"    Magic item #{i}: forced Rods, Staves & Wands (D) from table key '{requestedTable}'.");
-                logs.Add($"      Rods, Staves & Wands table (D) d100 {dRoll:00} => {ResolveRodStaffWandResult(dRoll)}.");
+                logs.Add($"      Rods, Staves & Wands table (D) d100 {dRoll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Rods, Staves & Wands", source, resolved));
                 continue;
             }
 
@@ -456,8 +473,10 @@ public sealed class TreasureService
                 || normalized.Equals("Miscellaneous Magic (E.1)", StringComparison.OrdinalIgnoreCase))
             {
                 var e1Roll = _random.Next(1, 101);
+                var resolved = ResolveMiscMagicE1Result(e1Roll);
                 logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.1) from table key '{requestedTable}'.");
-                logs.Add($"      Miscellaneous Magic table (E.1) d100 {e1Roll:00} => {ResolveMiscMagicE1Result(e1Roll)}.");
+                logs.Add($"      Miscellaneous Magic table (E.1) d100 {e1Roll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Misc Magic", source, resolved));
                 continue;
             }
 
@@ -466,8 +485,10 @@ public sealed class TreasureService
                 || normalized.Equals("Miscellaneous Magic (E.2)", StringComparison.OrdinalIgnoreCase))
             {
                 var e2Roll = _random.Next(1, 101);
+                var resolved = ResolveMiscMagicE2Result(e2Roll);
                 logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.2) from table key '{requestedTable}'.");
-                logs.Add($"      Miscellaneous Magic table (E.2) d100 {e2Roll:00} => {ResolveMiscMagicE2Result(e2Roll)}.");
+                logs.Add($"      Miscellaneous Magic table (E.2) d100 {e2Roll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Misc Magic", source, resolved));
                 continue;
             }
 
@@ -476,8 +497,10 @@ public sealed class TreasureService
                 || normalized.Equals("Miscellaneous Magic (E.3)", StringComparison.OrdinalIgnoreCase))
             {
                 var e3Roll = _random.Next(1, 101);
+                var resolved = ResolveMiscMagicE3Result(e3Roll);
                 logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.3) from table key '{requestedTable}'.");
-                logs.Add($"      Miscellaneous Magic table (E.3) d100 {e3Roll:00} => {ResolveMiscMagicE3Result(e3Roll)}.");
+                logs.Add($"      Miscellaneous Magic table (E.3) d100 {e3Roll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Misc Magic", source, resolved));
                 continue;
             }
 
@@ -486,8 +509,10 @@ public sealed class TreasureService
                 || normalized.Equals("Miscellaneous Magic (E.4)", StringComparison.OrdinalIgnoreCase))
             {
                 var e4Roll = _random.Next(1, 101);
+                var resolved = ResolveMiscMagicE4Result(e4Roll);
                 logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.4) from table key '{requestedTable}'.");
-                logs.Add($"      Miscellaneous Magic table (E.4) d100 {e4Roll:00} => {ResolveMiscMagicE4Result(e4Roll)}.");
+                logs.Add($"      Miscellaneous Magic table (E.4) d100 {e4Roll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Misc Magic", source, resolved));
                 continue;
             }
 
@@ -496,8 +521,10 @@ public sealed class TreasureService
                 || normalized.Equals("Miscellaneous Magic (E.5)", StringComparison.OrdinalIgnoreCase))
             {
                 var e5Roll = _random.Next(1, 101);
+                var resolved = ResolveMiscMagicE5Result(e5Roll);
                 logs.Add($"    Magic item #{i}: forced Miscellaneous Magic (E.5) from table key '{requestedTable}'.");
-                logs.Add($"      Miscellaneous Magic table (E.5) d100 {e5Roll:00} => {ResolveMiscMagicE5Result(e5Roll)}.");
+                logs.Add($"      Miscellaneous Magic table (E.5) d100 {e5Roll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Misc Magic", source, resolved));
                 continue;
             }
 
@@ -509,8 +536,10 @@ public sealed class TreasureService
                 || normalized.Equals("Armour & Shields", StringComparison.OrdinalIgnoreCase))
             {
                 var fRoll = _random.Next(1, 101);
+                var resolved = ResolveArmorShieldResult(fRoll);
                 logs.Add($"    Magic item #{i}: forced Armor & Shields (F) from table key '{requestedTable}'.");
-                logs.Add($"      Armor & Shields table (F) d100 {fRoll:00} => {ResolveArmorShieldResult(fRoll)}.");
+                logs.Add($"      Armor & Shields table (F) d100 {fRoll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Armor", source, resolved));
                 continue;
             }
 
@@ -518,8 +547,10 @@ public sealed class TreasureService
                 || normalized.Equals("Swords", StringComparison.OrdinalIgnoreCase))
             {
                 var gRoll = _random.Next(1, 101);
+                var resolved = ResolveSwordResult(gRoll);
                 logs.Add($"    Magic item #{i}: forced Swords (G) from table key '{requestedTable}'.");
-                logs.Add($"      Swords table (G) d100 {gRoll:00} => {ResolveSwordResult(gRoll)}.");
+                logs.Add($"      Swords table (G) d100 {gRoll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Sword", source, resolved));
                 continue;
             }
 
@@ -529,8 +560,10 @@ public sealed class TreasureService
                 || normalized.Equals("Miscellaneous Weapons", StringComparison.OrdinalIgnoreCase))
             {
                 var hRoll = _random.Next(1, 101);
+                var resolved = ResolveMiscWeaponResult(hRoll);
                 logs.Add($"    Magic item #{i}: forced Miscellaneous Weapons (H) from table key '{requestedTable}'.");
-                logs.Add($"      Miscellaneous Weapons table (H) d100 {hRoll:00} => {ResolveMiscWeaponResult(hRoll)}.");
+                logs.Add($"      Miscellaneous Weapons table (H) d100 {hRoll:00} => {resolved}.");
+                placeholders.Add(CreateMagicPlaceholder("Weapon", source, resolved));
                 continue;
             }
 
@@ -538,110 +571,177 @@ public sealed class TreasureService
                 || normalized.Equals("Rings", StringComparison.OrdinalIgnoreCase))
             {
                 var ringRoll = _random.Next(1, 101);
+                var resolved = ResolveRingResult(ringRoll);
                 logs.Add($"    Magic item #{i}: forced Rings (C) from table key '{requestedTable}'.");
-                logs.Add($"      Rings table (C) d100 {ringRoll:00} => {ResolveRingResult(ringRoll)} (placeholder).");
+                logs.Add($"      Rings table (C) d100 {ringRoll:00} => {resolved} (placeholder).");
+                placeholders.Add(CreateMagicPlaceholder("Ring", source, resolved));
                 continue;
             }
 
             logs.Add($"    Magic item #{i}: table key '{requestedTable}' not mapped to a defined subtable yet, skipped.");
         }
+
+        return placeholders;
     }
 
-    private void RollFromAnyMagicItemTypeTable(int itemNumber, List<string> logs)
+    private TreasureMagicPlaceholderResult? RollFromAnyMagicItemTypeTable(int itemNumber, List<string> logs, string source)
     {
         var typeRoll = _random.Next(1, 101);
 
         if (typeRoll <= 20)
         {
             var potionRoll = _random.Next(1, 101);
+            var resolved = ResolvePotionResult(potionRoll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Potions (A).");
-            logs.Add($"      Potions table (A) d100 {potionRoll:00} => {ResolvePotionResult(potionRoll)} (placeholder).");
-            return;
+            logs.Add($"      Potions table (A) d100 {potionRoll:00} => {resolved} (placeholder).");
+            return CreateMagicPlaceholder("Potion", source, resolved);
         }
 
         if (typeRoll <= 35)
         {
             var scrollRoll = _random.Next(1, 101);
+            var resolved = ResolveScrollResult(scrollRoll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Scrolls (B).");
-            logs.Add($"      Scrolls table (B) d100 {scrollRoll:00} => {ResolveScrollResult(scrollRoll)} (placeholder).");
-            return;
+            logs.Add($"      Scrolls table (B) d100 {scrollRoll:00} => {resolved} (placeholder).");
+            return CreateMagicPlaceholder(ResolveScrollPlaceholderTable(scrollRoll), source, resolved);
         }
 
         if (typeRoll <= 40)
         {
             var ringRoll = _random.Next(1, 101);
+            var resolved = ResolveRingResult(ringRoll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Rings (C).");
-            logs.Add($"      Rings table (C) d100 {ringRoll:00} => {ResolveRingResult(ringRoll)} (placeholder).");
-            return;
+            logs.Add($"      Rings table (C) d100 {ringRoll:00} => {resolved} (placeholder).");
+            return CreateMagicPlaceholder("Ring", source, resolved);
         }
 
         if (typeRoll <= 45)
         {
             var dRoll = _random.Next(1, 101);
+            var resolved = ResolveRodStaffWandResult(dRoll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Rods, Staves & Wands (D).");
-            logs.Add($"      Rods, Staves & Wands table (D) d100 {dRoll:00} => {ResolveRodStaffWandResult(dRoll)}.");
-            return;
+            logs.Add($"      Rods, Staves & Wands table (D) d100 {dRoll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Rods, Staves & Wands", source, resolved);
         }
 
         if (typeRoll <= 48)
         {
             var e1Roll = _random.Next(1, 101);
+            var resolved = ResolveMiscMagicE1Result(e1Roll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.1).");
-            logs.Add($"      Miscellaneous Magic table (E.1) d100 {e1Roll:00} => {ResolveMiscMagicE1Result(e1Roll)}.");
-            return;
+            logs.Add($"      Miscellaneous Magic table (E.1) d100 {e1Roll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Misc Magic", source, resolved);
         }
 
         if (typeRoll <= 51)
         {
             var e2Roll = _random.Next(1, 101);
+            var resolved = ResolveMiscMagicE2Result(e2Roll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.2).");
-            logs.Add($"      Miscellaneous Magic table (E.2) d100 {e2Roll:00} => {ResolveMiscMagicE2Result(e2Roll)}.");
-            return;
+            logs.Add($"      Miscellaneous Magic table (E.2) d100 {e2Roll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Misc Magic", source, resolved);
         }
 
         if (typeRoll <= 54)
         {
             var e3Roll = _random.Next(1, 101);
+            var resolved = ResolveMiscMagicE3Result(e3Roll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.3).");
-            logs.Add($"      Miscellaneous Magic table (E.3) d100 {e3Roll:00} => {ResolveMiscMagicE3Result(e3Roll)}.");
-            return;
+            logs.Add($"      Miscellaneous Magic table (E.3) d100 {e3Roll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Misc Magic", source, resolved);
         }
 
         if (typeRoll <= 57)
         {
             var e4Roll = _random.Next(1, 101);
+            var resolved = ResolveMiscMagicE4Result(e4Roll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.4).");
-            logs.Add($"      Miscellaneous Magic table (E.4) d100 {e4Roll:00} => {ResolveMiscMagicE4Result(e4Roll)}.");
-            return;
+            logs.Add($"      Miscellaneous Magic table (E.4) d100 {e4Roll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Misc Magic", source, resolved);
         }
 
         if (typeRoll <= 60)
         {
             var e5Roll = _random.Next(1, 101);
+            var resolved = ResolveMiscMagicE5Result(e5Roll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Magic (E.5).");
-            logs.Add($"      Miscellaneous Magic table (E.5) d100 {e5Roll:00} => {ResolveMiscMagicE5Result(e5Roll)}.");
-            return;
+            logs.Add($"      Miscellaneous Magic table (E.5) d100 {e5Roll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Misc Magic", source, resolved);
         }
 
         if (typeRoll <= 75)
         {
             var fRoll = _random.Next(1, 101);
+            var resolved = ResolveArmorShieldResult(fRoll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Armor & Shields (F).");
-            logs.Add($"      Armor & Shields table (F) d100 {fRoll:00} => {ResolveArmorShieldResult(fRoll)}.");
-            return;
+            logs.Add($"      Armor & Shields table (F) d100 {fRoll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Armor", source, resolved);
         }
 
         if (typeRoll <= 86)
         {
             var gRoll = _random.Next(1, 101);
+            var resolved = ResolveSwordResult(gRoll);
             logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Swords (G).");
-            logs.Add($"      Swords table (G) d100 {gRoll:00} => {ResolveSwordResult(gRoll)}.");
-            return;
+            logs.Add($"      Swords table (G) d100 {gRoll:00} => {resolved}.");
+            return CreateMagicPlaceholder("Sword", source, resolved);
         }
 
         var hTypeRoll = _random.Next(1, 101);
+        var hResolved = ResolveMiscWeaponResult(hTypeRoll);
         logs.Add($"    Magic item #{itemNumber}: d100 {typeRoll:00} => Miscellaneous Weapons (H).");
-        logs.Add($"      Miscellaneous Weapons table (H) d100 {hTypeRoll:00} => {ResolveMiscWeaponResult(hTypeRoll)}.");
+        logs.Add($"      Miscellaneous Weapons table (H) d100 {hTypeRoll:00} => {hResolved}.");
+        return CreateMagicPlaceholder("Weapon", source, hResolved);
+    }
+
+    private static TreasureMagicPlaceholderResult CreateMagicPlaceholder(string table, string source, string resolvedName)
+    {
+        return new TreasureMagicPlaceholderResult
+        {
+            Table = table,
+            Count = 1,
+            SourceTable = source,
+            ResolvedName = resolvedName,
+            ExperienceValue = ParseExperienceValueFromResolvedText(resolvedName)
+        };
+    }
+
+    private static int ParseExperienceValueFromResolvedText(string? resolvedName)
+    {
+        if (string.IsNullOrWhiteSpace(resolvedName))
+            return 0;
+
+        var match = Regex.Match(resolvedName, @"xp\s*([0-9][0-9,\.]*)", RegexOptions.IgnoreCase);
+        if (!match.Success)
+            return 0;
+
+        var raw = match.Groups[1].Value.Trim();
+        if (raw.StartsWith("—", StringComparison.Ordinal)
+            || raw.StartsWith("-", StringComparison.Ordinal)
+            || raw.StartsWith("--", StringComparison.Ordinal))
+            return 0;
+
+        raw = raw.Trim('*', ',', '.', ';');
+
+        // Heuristic handling for values like "7,5" that represent "7,500" in legacy tables.
+        if (raw.Contains(',', StringComparison.Ordinal))
+        {
+            var parts = raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (parts.Length == 2
+                && parts[0].All(char.IsDigit)
+                && parts[1].All(char.IsDigit)
+                && parts[1].Length is 1 or 2)
+            {
+                var padded = parts[1].PadRight(3, '0');
+                if (int.TryParse(parts[0] + padded, out var shorthandXp))
+                    return shorthandXp;
+            }
+
+            raw = raw.Replace(",", string.Empty, StringComparison.Ordinal);
+        }
+
+        var digits = new string(raw.Where(char.IsDigit).ToArray());
+        return int.TryParse(digits, out var xp) ? Math.Max(0, xp) : 0;
     }
 
     private static string ResolvePotionResult(int roll)
@@ -683,6 +783,38 @@ public sealed class TreasureService
             <= 96 => "Treasure Finding",
             <= 97 => "Undead Control",
             _ => "Water Breathing"
+        };
+    }
+
+    private static string ResolveScrollPlaceholderTable(int roll)
+    {
+        return roll switch
+        {
+            <= 10 => "Scroll of 1 Spell (Levels 1-4)",
+            <= 16 => "Scroll of 1 Spell (Levels 1-6)",
+            <= 19 => "Scroll of 1 Spell (Levels 2-9 or 2-7)",
+            <= 24 => "Scroll of 2 Spells (Levels 1-4)",
+            <= 27 => "Scroll of 2 Spells (Levels 1-8 or 1-6)",
+            <= 32 => "Scroll of 3 Spells (Levels 1-4)",
+            <= 35 => "Scroll of 3 Spells (Levels 2-9 or 2-7)",
+            <= 39 => "Scroll of 4 Spells (Levels 1-6)",
+            <= 42 => "Scroll of 4 Spells (Levels 1-8 or 1-6)",
+            <= 46 => "Scroll of 5 Spells (Levels 1-6)",
+            <= 49 => "Scroll of 5 Spells (Levels 1-8 or 1-6)",
+            <= 52 => "Scroll of 6 Spells (Levels 1-6)",
+            <= 54 => "Scroll of 6 Spells (Levels 3-8 or 3-6)",
+            <= 57 => "Scroll of 7 Spells (Levels 1-8)",
+            <= 59 => "Scroll of 7 Spells (Levels 2-9)",
+            <= 60 => "Scroll of 7 Spells (Levels 4-9 or 4-7)",
+            <= 62 => "Scroll of Protection from Demons",
+            <= 64 => "Scroll of Protection from Devils",
+            <= 70 => "Scroll of Protection from Elementals",
+            <= 76 => "Scroll of Protection from Lycanthropes",
+            <= 82 => "Scroll of Protection from Magic",
+            <= 87 => "Scroll of Protection from Petrification",
+            <= 92 => "Scroll of Protection from Possession",
+            <= 97 => "Scroll of Protection from Undead",
+            _ => "Cursed Scroll"
         };
     }
 
@@ -1088,7 +1220,7 @@ public sealed class TreasureService
             <= 83 => "Morning Star +1 (xp 400, gp 3)",
             <= 88 => "Scimitar +2 (xp 750, gp 6)",
             <= 89 => "Sling of Seeking +2 (xp 1, gp 8)",
-            <= 94 => " (xp 500, gp 3)",
+            <= 94 => "Spear +1 (xp 500, gp 3)",
             <= 96 => "Spear +2 (xp 1, gp 6,5)",
             <= 97 => "Spear +3 (xp 1,75, gp 15)",
             <= 99 => "Spear, Cursed Backbiter (xp —, gp —)",
@@ -1314,7 +1446,7 @@ public sealed class TreasureService
         "Cloak of Elvenkind",
         "Dust of Appearance",
         "Figurine of Wondrous Power: Serpentine Owl",
-        "Javelin of Lightning (3)",
+        "Javelin of Lightning",
         "Chain Mail +1 + Shield +2",
         "Splint Mail +4",
         "Sword +3 (No Special Abilities)",

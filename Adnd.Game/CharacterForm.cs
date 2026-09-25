@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,6 +12,8 @@ namespace Adnd.Game.Windows
     public class CharacterForm : Form
     {
         private readonly Character _character;
+        private readonly List<string> _knownSpellLines;
+        private const int MaxSpellsOnSheet = 17;
         private readonly Font _handFont = new Font("Bradley Hand ITC", 18, FontStyle.Regular);
         private readonly Font _handFontSmall14 = new Font("Bradley Hand ITC", 14, FontStyle.Regular);
         private readonly Font _handFontSmall12 = new Font("Bradley Hand ITC", 12, FontStyle.Regular);
@@ -25,6 +28,7 @@ namespace Adnd.Game.Windows
         public CharacterForm(Character character)
         {
             _character = character;
+            _knownSpellLines = BuildKnownSpellLines(character);
 
             //  _sheetBackground = Image.FromFile(
             //       @"C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\character_sheet.png");
@@ -44,6 +48,7 @@ namespace Adnd.Game.Windows
         public CharacterForm(Character character)
         {
             _character = character;
+            _knownSpellLines = BuildKnownSpellLines(character);
 
             _sheetBackground = Image.FromFile(
                 @"C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\character_sheet.png");
@@ -65,6 +70,12 @@ namespace Adnd.Game.Windows
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
+            };
+
+            Shown += (_, _) =>
+            {
+                if (_knownSpellLines.Count > MaxSpellsOnSheet)
+                    ShowAllSpellsDialog();
             };
         }
 
@@ -273,18 +284,7 @@ namespace Adnd.Game.Windows
             if ((_character.Class == CharacterClass.MagicUser) || (_character.Class == CharacterClass.Illusionist) || (_character.Class == CharacterClass.Ranger)
                 || (_character.Class == CharacterClass.Cleric) || (_character.Class == CharacterClass.Druid) || (_character.Class == CharacterClass.Paladin))
             {
-                var spellRepo = new SpellRepository();
-                var spellList = _character.Spellcasting
-
-                    .SelectMany(state =>
-                    {
-                        var classSpells = spellRepo.LoadByClass(state.SpellClass);
-                        return classSpells
-                            .Where(s => state.KnownSpellIds.Contains(s.Id))
-                            .Select(s => $"L{s.Level} {s.Name}");
-                    })
-                    .Distinct()
-                    .ToList();
+                var spellList = _knownSpellLines.Take(MaxSpellsOnSheet).ToList();
 
                 int yOffset = 0;
                 int additionalLineSpacingEvery4thRowCounter = 0; // Additional spacing for spells with longer names
@@ -298,8 +298,73 @@ namespace Adnd.Game.Windows
                         yOffset += 1; // Additional spacing for every 4th spell
                     }
                 }
+
+                if (_knownSpellLines.Count > MaxSpellsOnSheet)
+                {
+                    var hiddenCount = _knownSpellLines.Count - MaxSpellsOnSheet;
+                    DrawInAlignedBox(g, $"(+{hiddenCount} more; see spell list)", new Rectangle(100, 554 + yOffset + 2, 220, 66), false, StringAlignment.Near, _handFontSmall8);
+                }
             }
 
+        }
+
+        private static List<string> BuildKnownSpellLines(Character character)
+        {
+            if (character.Spellcasting == null || character.Spellcasting.Count == 0)
+                return new List<string>();
+
+            var spellRepo = new SpellRepository();
+            return character.Spellcasting
+                .SelectMany(state =>
+                {
+                    var classSpells = spellRepo.LoadByClass(state.SpellClass);
+                    return classSpells
+                        .Where(s => state.KnownSpellIds.Contains(s.Id))
+                        .Select(s => $"L{s.Level} {s.Name}");
+                })
+                .Distinct()
+                .ToList();
+        }
+
+        private void ShowAllSpellsDialog()
+        {
+            using var form = new Form
+            {
+                Text = $"{_character.Name} - All Spells",
+                StartPosition = FormStartPosition.CenterParent,
+                ClientSize = new Size(480, 520),
+                MinimizeBox = false,
+                MaximizeBox = false,
+                FormBorderStyle = FormBorderStyle.FixedDialog
+            };
+
+            var list = new ListBox
+            {
+                Left = 12,
+                Top = 12,
+                Width = 456,
+                Height = 460,
+                Font = new Font("Consolas", 10f)
+            };
+
+            foreach (var spell in _knownSpellLines)
+                list.Items.Add(spell);
+
+            var close = new Button
+            {
+                Text = "Close",
+                Left = 393,
+                Top = 482,
+                Width = 75,
+                DialogResult = DialogResult.OK
+            };
+
+            form.Controls.Add(list);
+            form.Controls.Add(close);
+            form.AcceptButton = close;
+            form.CancelButton = close;
+
+            form.ShowDialog(this);
         }
 
         private readonly Random _rnd = new Random();

@@ -23,13 +23,13 @@
     }
   },
   "Gems": {
-    "Amount": "10d80",
+    "Amount": "10d6",
     "Chance": 60,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },
   "Jewelry": {
-    "Amount": "5d40",
+    "Amount": "5d6",
     "Chance": 50,
     "MinValueGp": 100,
     "MaxValueGp": 1000
@@ -37,14 +37,9 @@
   "Magic": {
     "Rolls": [
       {
-        "Table": "Map",
-        "Amount": "1",
-        "Chance": 55
-      },
-      {
-        "Table": "Miscellaneous magic plus 1 potion",
-        "Amount": "2",
-        "Chance": 60
+        "Table": "Any",
+        "Amount": "3",
+        "Chance": 50
       }
     ]
   }

@@ -26,6 +26,7 @@ using Adnd.Game.Viewer;
 using System.Drawing;
 using System.Text;
 using System.Text.Json;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
@@ -664,7 +665,8 @@ public sealed class CombatCoordinator
         int xpEach = (int)Math.Round(totalMonsterXp * xpMultiplier / survivors.Count);
         int xpRemainder = totalMonsterXp % survivors.Count;
         int gemJewelryXpPool = Math.Max(0, effectiveTreasure.TotalGemValueGp + effectiveTreasure.TotalJewelryValueGp);
-        int goldXpPool = Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool;
+        int magicItemXpPool = Math.Max(0, effectiveTreasure.MagicPlaceholders.Sum(m => Math.Max(0, m.ExperienceValue) * Math.Max(1, m.Count)));
+        int goldXpPool = Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool + magicItemXpPool;
         int goldXpEach = goldXpPool / survivors.Count;
         int goldXpRemainder = goldXpPool % survivors.Count;
 
@@ -744,7 +746,7 @@ public sealed class CombatCoordinator
         }
         sb.AppendLine($"Total XP from all groups: {totalMonsterXp}");
         sb.AppendLine($"XP multiplier: x{xpMultiplier:0.##}");
-        sb.AppendLine($"Gold XP bonus: {goldXpPool} XP total (1 XP per GP found; includes {effectiveTreasure.GoldPieces} from GP coins and {gemJewelryXpPool} from gem/jewelry value), split {goldXpEach} each with {goldXpRemainder} remainder");
+        sb.AppendLine($"Treasure XP bonus: {goldXpPool} XP total (1 XP per GP value + magic-item XP; includes {effectiveTreasure.GoldPieces} from GP coins, {gemJewelryXpPool} from gem/jewelry value, {magicItemXpPool} from magic items), split {goldXpEach} each with {goldXpRemainder} remainder");
         sb.AppendLine($"Total awarded XP: {totalAwardedXp}");
         sb.AppendLine($"Survivors: {survivors.Count}");
         sb.AppendLine();
@@ -770,21 +772,21 @@ public sealed class CombatCoordinator
                         return $"{cls.ToDisplayString()}: has {classXp} XP, needs {need} XP";
                     });
 
-                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + GP XP {goldXpGain}; total {r.ExperienceAfter}; {string.Join(" | ", classProgress)})");
+                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; {string.Join(" | ", classProgress)})");
             }
             else
             {
                 var classForProgress = survivor?.Class ?? CharacterClass.Fighter;
                 var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
                 var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
-                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + GP XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
+                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
             }
         }
 
         sb.AppendLine();
         sb.AppendLine("Treasure found:");
         sb.AppendLine($"- Coins: {effectiveTreasure.CopperPieces} cp, {effectiveTreasure.SilverPieces} sp, {effectiveTreasure.ElectrumPieces} ep, {effectiveTreasure.GoldPieces} gp, {effectiveTreasure.PlatinumPieces} pp");
-        sb.AppendLine($"- XP from GP value: {goldXpPool} XP total (1 XP per GP; {effectiveTreasure.GoldPieces} from GP coins + {gemJewelryXpPool} from gem/jewelry value)");
+        sb.AppendLine($"- XP from treasure: {goldXpPool} XP total (1 XP per GP value + magic-item XP; {effectiveTreasure.GoldPieces} from GP coins + {gemJewelryXpPool} from gem/jewelry value + {magicItemXpPool} from magic items)");
 
         if (effectiveTreasure.Gems.Count > 0)
             sb.AppendLine($"- Gems: {effectiveTreasure.Gems.Count} (total {effectiveTreasure.TotalGemValueGp} gp)");
@@ -953,6 +955,15 @@ public sealed class CombatCoordinator
             var rolls = Math.Max(0, placeholder.Count);
             for (int i = 0; i < rolls; i++)
             {
+                if (TryResolveConcreteRolledItem(placeholder, allItems, out var concreteRolledItem))
+                {
+                    var rolledConcreteItem = CloneItem(concreteRolledItem!);
+                    if (!TryAssignItemToSurvivors(survivors, rolledConcreteItem, result, ref nextReceiverIndex))
+                        result.UnassignedItems.Add(rolledConcreteItem.Name + " (no one can carry)");
+
+                    continue;
+                }
+
                 if (TryResolveMiscMagicPlusPotionPlaceholder(
                     placeholder.Table,
                     allItems,
@@ -1032,6 +1043,105 @@ public sealed class CombatCoordinator
         }
 
         return result;
+    }
+
+    private bool TryResolveConcreteRolledItem(TreasureMagicPlaceholderResult placeholder, List<Item> allItems, out Item? item)
+    {
+        item = null;
+        if (placeholder == null || string.IsNullOrWhiteSpace(placeholder.ResolvedName))
+            return false;
+
+        if (string.IsNullOrWhiteSpace(placeholder.Table)
+            || placeholder.Table.Contains("scroll", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        var resolved = placeholder.ResolvedName;
+        var parenIndex = resolved.IndexOf('(');
+        if (parenIndex > 0)
+            resolved = resolved[..parenIndex].Trim();
+
+        var candidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            resolved,
+            resolved.Replace("—", "-", StringComparison.Ordinal)
+        };
+
+        // Keep legacy spacing aliases while item JSON coverage is expanded.
+        if (placeholder.Table.Contains("weapon", StringComparison.OrdinalIgnoreCase)
+            || placeholder.Table.Contains("sword", StringComparison.OrdinalIgnoreCase)
+            || placeholder.Table.Contains("armor", StringComparison.OrdinalIgnoreCase))
+        {
+            candidates.Add(resolved.Replace(" +", "+", StringComparison.Ordinal));
+            candidates.Add(resolved.Replace("+ ", "+", StringComparison.Ordinal));
+        }
+
+        if (!resolved.StartsWith("Potion", StringComparison.OrdinalIgnoreCase)
+            && placeholder.Table.Contains("potion", StringComparison.OrdinalIgnoreCase))
+        {
+            candidates.Add("Potion of " + resolved);
+            if (resolved.StartsWith("Oil of ", StringComparison.OrdinalIgnoreCase))
+                candidates.Add("Potion of " + resolved);
+            if (string.Equals(resolved, "Poison", StringComparison.OrdinalIgnoreCase))
+                candidates.Add("Potion of Poison");
+            if (string.Equals(resolved, "Sweet Water", StringComparison.OrdinalIgnoreCase))
+                candidates.Add("Potion of Sweet Water");
+            if (string.Equals(resolved, "Polymorph (self)", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(resolved, "Polymorph self", StringComparison.OrdinalIgnoreCase))
+                candidates.Add("Potion of Polymorph Self");
+        }
+
+        if (!resolved.StartsWith("Ring", StringComparison.OrdinalIgnoreCase)
+            && placeholder.Table.Contains("ring", StringComparison.OrdinalIgnoreCase))
+        {
+            candidates.Add("Ring of " + resolved);
+
+            if (resolved.Contains("Djinn", StringComparison.OrdinalIgnoreCase))
+                candidates.Add("Ring of " + resolved.Replace("Djinn", "Djinni", StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Retain variant-name compatibility until all concrete names are normalized in data.
+        if (placeholder.Table.Contains("weapon", StringComparison.OrdinalIgnoreCase))
+        {
+            if (resolved.StartsWith("Axe +", StringComparison.OrdinalIgnoreCase))
+                candidates.Add(resolved.Replace("Axe", "Battle Axe", StringComparison.OrdinalIgnoreCase));
+
+            if (resolved.StartsWith("Mace +", StringComparison.OrdinalIgnoreCase))
+                candidates.Add(resolved.Replace("Mace +", "Mace+", StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (placeholder.Table.Contains("sword", StringComparison.OrdinalIgnoreCase))
+        {
+            if (resolved.StartsWith("Sword", StringComparison.OrdinalIgnoreCase))
+                candidates.Add(ResolveSwordLootForm(resolved));
+
+            if (resolved.StartsWith("Sword, Vorpal Weapon", StringComparison.OrdinalIgnoreCase))
+                candidates.Add("Vorpal Sword");
+        }
+
+        if (placeholder.Table.Contains("armor", StringComparison.OrdinalIgnoreCase)
+            && resolved.StartsWith("Shield, large, +1, +4 vs. missiles", StringComparison.OrdinalIgnoreCase))
+        {
+            candidates.Add("Shield +1");
+        }
+
+        foreach (var candidate in candidates)
+        {
+            var exact = allItems.FirstOrDefault(i => string.Equals(i.Name, candidate, StringComparison.OrdinalIgnoreCase));
+            if (exact != null)
+            {
+                item = exact;
+                return true;
+            }
+        }
+
+        var normalizedCandidates = candidates
+            .Select(NormalizeMatchKey)
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        item = allItems.FirstOrDefault(i => normalizedCandidates.Contains(NormalizeMatchKey(i.Name), StringComparer.OrdinalIgnoreCase));
+        return item != null;
     }
 
     private bool TryResolveSpecificItemsFromPlaceholder(
@@ -2410,7 +2520,14 @@ public sealed class CombatCoordinator
         => new() { Category = value.Category, ValueGp = value.ValueGp, SourceTable = value.SourceTable };
 
     private static TreasureMagicPlaceholderResult CloneMagicPlaceholder(TreasureMagicPlaceholderResult value)
-        => new() { Table = value.Table, Count = value.Count, SourceTable = value.SourceTable };
+        => new()
+        {
+            Table = value.Table,
+            Count = value.Count,
+            SourceTable = value.SourceTable,
+            ResolvedName = value.ResolvedName,
+            ExperienceValue = value.ExperienceValue
+        };
 
     private void TriggerAlarmEncounter(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel)
     {
@@ -2716,6 +2833,7 @@ public sealed class CombatCoordinator
             IncludeLairTreasure = true,
             TrapType = trapType
         };
+        var chestOpened = false;
 
         using var dialog = new LairTreasureChestDialog(p => ViewerPromptChanged?.Invoke(session, p));
         dialog.ShowDialog(owner);
@@ -2742,17 +2860,22 @@ public sealed class CombatCoordinator
             if (opener == null)
                 return result;
 
+            chestOpened = true;
+
             var shouldTrigger = !result.TrapDisarmed && trapType != ChestTrapType.None;
-            if (!shouldTrigger)
-                return result;
+            if (shouldTrigger)
+            {
+                var triggerRoll = _dice.Roll(100);
+                var triggered = triggerRoll <= 50;
+                RuleApplicationInfo.Publish($"Chest trap trigger roll: 1d100={triggerRoll}; trigger on 1-50 => {(triggered ? "TRIGGERED" : "safe")}");
+                if (triggered)
+                    ApplyChestTrapEffect(owner, session, survivors, opener, dungeonLevel, trapType, result);
+            }
+        }
 
-            var triggerRoll = _dice.Roll(100);
-            var triggered = triggerRoll <= 50;
-            RuleApplicationInfo.Publish($"Chest trap trigger roll: 1d100={triggerRoll}; trigger on 1-50 => {(triggered ? "TRIGGERED" : "safe")}");
-            if (!triggered)
-                return result;
-
-            ApplyChestTrapEffect(owner, session, survivors, opener, dungeonLevel, trapType, result);
+        if (chestOpened)
+        {
+            ShowTreasureFoundDialog(owner, session);
         }
 
         return result;
@@ -3021,6 +3144,119 @@ public sealed class CombatCoordinator
 
         ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
         ViewerPromptChanged?.Invoke(session, null);
+    }
+
+    private void ShowTreasureFoundDialog(IWin32Window owner, CombatSession session)
+    {
+        var imagePath = ResolveFindingTreasureImagePath();
+        if (string.IsNullOrWhiteSpace(imagePath) || !File.Exists(imagePath))
+            return;
+
+        using var form = new Form
+        {
+            Text = "Treasure Found",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(760, 500),
+        };
+
+        var frame = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var title = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = frame.ClientSize.Width,
+            Height = 36,
+            Text = "TREASURE FOUND",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var picture = new PictureBox
+        {
+            Left = 20,
+            Top = 56,
+            Width = frame.ClientSize.Width - 40,
+            Height = frame.ClientSize.Height - 76,
+            SizeMode = PictureBoxSizeMode.Zoom,
+            BackColor = Color.Black
+        };
+
+        try
+        {
+            using var src = Image.FromFile(imagePath);
+            picture.Image = new Bitmap(src);
+        }
+        catch (Exception ex) when (ex is ExternalException || ex is OutOfMemoryException || ex is ArgumentException)
+        {
+            return;
+        }
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            {
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            }
+        };
+
+        frame.Controls.Add(title);
+        frame.Controls.Add(picture);
+        form.Controls.Add(frame);
+
+        var prompt = new ViewerPrompt(
+            "choice",
+            "Treasure found.",
+            null,
+            new[] { new ViewerPromptOption("continue", "Continue") });
+
+        var answers = new Dictionary<string, DialogResult>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["continue"] = DialogResult.OK
+        };
+
+        ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
+        ViewerPromptChanged?.Invoke(session, null);
+    }
+
+    private static string? ResolveFindingTreasureImagePath()
+    {
+        var candidates = new[]
+        {
+            Path.Combine("Assets", "ScenPictures", "FindingTreasure.png"),
+            Path.Combine("Assets", "ScenPictures", "FindingTreasure.webp"),
+            Path.Combine("..", "..", "..", "Assets", "ScenPictures", "FindingTreasure.png"),
+            Path.Combine("..", "..", "..", "Assets", "ScenPictures", "FindingTreasure.webp"),
+            Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", "FindingTreasure.png"),
+            Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", "FindingTreasure.webp")
+        };
+
+        foreach (var candidate in candidates)
+        {
+            var fullPath = Path.GetFullPath(candidate);
+            if (File.Exists(fullPath))
+                return fullPath;
+        }
+
+        return null;
     }
 
     private Character? PromptSelectPartyMember(IWin32Window owner, CombatSession session, List<Character> candidates, string title, string promptText, bool includeClassInList = false)

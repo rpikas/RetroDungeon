@@ -23,7 +23,7 @@
     }
   },
   "Gems": {
-    "Amount": "1d5+20",
+    "Amount": "5d4",
     "Chance": 30,
     "MinValueGp": 10,
     "MaxValueGp": 100

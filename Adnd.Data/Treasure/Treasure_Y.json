@@ -10,21 +10,21 @@
       "Chance": 0
     },
     "ElectrumPieces": {
-      "Amount": "1d4*1000",
-      "Chance": 25
-    },
-    "GoldPieces": {
-      "Amount": "nil",
+      "Amount": "1d1*1000",
       "Chance": 0
     },
-    "PlatinumPieces": {
-      "Amount": "2d12*100",
+    "GoldPieces": {
+      "Amount": "2d6*1000",
       "Chance": 70
+    },
+    "PlatinumPieces": {
+      "Amount": "2d1*100",
+      "Chance": 0
     }
   },
   "Gems": {
-    "Amount": "10d60",
-    "Chance": 55,
+    "Amount": "1d6",
+    "Chance": 0,
     "MinValueGp": 10,
     "MaxValueGp": 100
   },

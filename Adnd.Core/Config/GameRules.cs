@@ -58,6 +58,7 @@ public class GameRules
     public bool UIOldStyle { get; set; } = true;
     public int DelayInMsbetweenActions { get; set; } =0;
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
+    public bool ShowToHitRoll { get; set; } = false;
     public int MaxSizeEncounter { get; set; } = 2;
     public Color ForegroundColor { get; set; } = Color.White;
     [JsonIgnore]
