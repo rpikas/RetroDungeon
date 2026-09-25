@@ -2881,8 +2881,10 @@ when finding magical items the party should get xp, the amount is mentioned for 
 ResolveRodStaffWandResult. for example "Rod of Absorption (gp 40000, xp 7500)" that means the 
 party should get 7500 xp to share when that is found. Can you add them missing jsons and make 
 sure the party get the correct xp when finding magical items?
-
+___
 If Dust of Appearance is used, then the invisibility of all encounters will be removed
+•	clear MonsterStatus.Invisible (and any equivalent temporary invisibility containers)
+___
 
 Implement Broach of Shielding: The brooch of shielding appears to be a piece of silver or gold jewelry, 
 usually (90%) without gems inset, which is meant to fasten a cloak of cape ft has the properly, however, 

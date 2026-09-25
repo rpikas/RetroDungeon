@@ -1355,6 +1355,8 @@ public sealed class CombatResolver
         var grantsLevitationPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Haste")
                                 || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
+        var grantsDustOfAppearance = ItemSpecialAbilityParser.HasCastsAbility(item, "Dust of Appearance")
+                                     || string.Equals(item.Name, "Dust of Appearance", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
 
         bool IsDirectEffectConsumable()
@@ -1369,6 +1371,7 @@ public sealed class CombatResolver
                || grantsProtectionFromMagicScroll
                || grantsLevitationPotion
                || grantsSpeedPotion
+               || grantsDustOfAppearance
                || isPotionOfHealing;
 
         bool FailsFighterRestriction()
@@ -1634,6 +1637,26 @@ public sealed class CombatResolver
 
                 user.Age = Math.Max(0, user.Age + 1);
                 events.Add(new CombatEvent($"{user.Name} drinks Potion of Speed: move/attacks doubled for {rounds} rounds; ages 1 year permanently."));
+            }
+
+            if (grantsDustOfAppearance)
+            {
+                var revealedCount = 0;
+                foreach (var monster in session.Monsters)
+                {
+                    if (!monster.IsAlive)
+                        continue;
+
+                    if (!monster.HasStatus(MonsterStatus.Invisible))
+                        continue;
+
+                    monster.SetStatus(MonsterStatus.Invisible, 0);
+                    revealedCount += 1;
+                }
+
+                events.Add(revealedCount > 0
+                    ? new CombatEvent($"{user.Name} uses Dust of Appearance: {revealedCount} invisible monster(s) are revealed.")
+                    : new CombatEvent($"{user.Name} uses Dust of Appearance, but no invisible monsters are present."));
             }
         }
 

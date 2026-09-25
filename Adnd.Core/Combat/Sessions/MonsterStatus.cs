@@ -2,6 +2,7 @@ namespace Adnd.Core.Combat.Sessions;
 
 public enum MonsterStatus
 {
+    Invisible,
     Asleep,
     FaerieFire,
     Entangled,
