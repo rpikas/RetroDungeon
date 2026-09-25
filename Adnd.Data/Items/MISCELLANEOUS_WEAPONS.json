@@ -105,6 +105,38 @@
                       "ToHitBonus":  0
                   },
                   {
+                      "Name":  "Battle Axe +1",
+                      "Type":  "Weapon",
+                      "Cost":  2500,
+                      "Weight":  75,
+                      "Damage":  "1d8+1",
+                      "DamageVsLarge":  "1d8+1",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  7,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted battle axe +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
                       "Name":  "Mace+1",
                       "Type":  "Weapon",
                       "Cost":  400,
@@ -948,6 +980,102 @@
                       "StockQuantity":  0,
                       "Slot":  "",
                       "ToHitBonus":  0
+                  },
+                  {
+                      "Name":  "Axe +1",
+                      "Type":  "Weapon",
+                      "Cost":  1750,
+                      "Weight":  50,
+                      "Damage":  "1d6+1",
+                      "DamageVsLarge":  "1d4+1",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  4,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "10/20/30",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted hand axe +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
+                      "Name":  "Axe +2",
+                      "Type":  "Weapon",
+                      "Cost":  3500,
+                      "Weight":  50,
+                      "Damage":  "1d6+2",
+                      "DamageVsLarge":  "1d4+2",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  4,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "10/20/30",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "Enchanted hand axe +2.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
+                      "Name":  "Axe +3",
+                      "Type":  "Weapon",
+                      "Cost":  7000,
+                      "Weight":  50,
+                      "Damage":  "1d6+3",
+                      "DamageVsLarge":  "1d4+3",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  4,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "10/20/30",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  3,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "Enchanted hand axe +3.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  3
                   },
                   {
                       "Name":  "Bardiche",
