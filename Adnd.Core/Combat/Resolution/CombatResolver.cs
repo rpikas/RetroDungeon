@@ -2428,6 +2428,14 @@ public sealed class CombatResolver
                     break;
             }
 
+            if (wasNaturalTwenty
+                && IsDaggerOfVenom(mainHand))
+            {
+                TryResolveDaggerOfVenomEffect(mainHand, target, events);
+                if (target.CurrentHitPoints <= 0)
+                    break;
+            }
+
             if (TryResolveSwordOfSharpnessSeverEffect(mainHand, target, roll, events))
             {
                 if (target.CurrentHitPoints <= 0)
@@ -5477,6 +5485,82 @@ public sealed class CombatResolver
             && a.StartsWith("NineLivesCharges:", StringComparison.OrdinalIgnoreCase));
 
         var value = $"NineLivesCharges:{Math.Max(0, charges)}";
+        if (idx >= 0)
+            weapon.SpecialAbilities[idx] = value;
+        else
+            weapon.SpecialAbilities.Add(value);
+    }
+
+    private void TryResolveDaggerOfVenomEffect(Item? weapon, MonsterInstance target, List<CombatEvent> events)
+    {
+        if (weapon == null || target?.Template == null || !target.IsAlive)
+            return;
+
+        var doses = GetOrAssignDaggerOfVenomDoses(weapon);
+        if (doses <= 0)
+        {
+            events.Add(new CombatEvent($"{weapon.Name} has no venom dose remaining."));
+            return;
+        }
+
+        var remaining = Math.Max(0, doses - 1);
+        SetDaggerOfVenomDoses(weapon, remaining);
+
+        var saveTarget = SpellDamageSaveHelper.GetMonsterPoisonSaveTarget(target, fallbackTarget: 20);
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent(
+                $"{target.DisplayName} resists {weapon.Name} poison (save {saveRoll} vs {saveTarget}). Doses remaining: {remaining}."));
+            return;
+        }
+
+        target.CurrentHitPoints = 0;
+        events.Add(new CombatEvent(
+            $"{weapon.Name} injects fatal poison into {target.DisplayName} on a natural 20! (save {saveRoll} vs {saveTarget}, doses remaining: {remaining})."));
+    }
+
+    private static bool IsDaggerOfVenom(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (name.Contains("Dagger of Venom", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Dagger of Venom", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static int GetOrAssignDaggerOfVenomDoses(Item weapon)
+    {
+        weapon.SpecialAbilities ??= new List<string>();
+
+        var existing = weapon.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("VenomDoses:", StringComparison.OrdinalIgnoreCase));
+
+        if (!string.IsNullOrWhiteSpace(existing)
+            && int.TryParse(existing[(existing.IndexOf(':') + 1)..].Trim(), out var parsed))
+        {
+            return Math.Max(0, parsed);
+        }
+
+        weapon.SpecialAbilities.Add("VenomDoses:6");
+        return 6;
+    }
+
+    private static void SetDaggerOfVenomDoses(Item weapon, int doses)
+    {
+        weapon.SpecialAbilities ??= new List<string>();
+
+        var idx = weapon.SpecialAbilities.FindIndex(a =>
+            !string.IsNullOrWhiteSpace(a)
+            && a.StartsWith("VenomDoses:", StringComparison.OrdinalIgnoreCase));
+
+        var value = $"VenomDoses:{Math.Max(0, doses)}";
         if (idx >= 0)
             weapon.SpecialAbilities[idx] = value;
         else
