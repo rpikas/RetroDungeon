@@ -1069,7 +1069,7 @@ public sealed class TreasureService
             <= 32 => "Bolt +2, 2-20 in number (xp 50, gp 300)",
             <= 35 => "Bow +1 (xp 500, gp 3,5)",
             <= 36 => ResolveCrossbowOfAccuracyResult(),
-            <= 37 => "Crossbow of Distance (xp 1,5, gp 7,5)",
+            <= 37 => ResolveCrossbowOfDistanceResult(),
             <= 38 => "Crossbow of Speed (xp 1,5, gp 7,5)",
             <= 46 => "Dagger +1, +2 vs. creatures smaller than man-sized (xp 100, gp 750)",
             <= 50 => "Dagger +2, +3 vs. creatures larger than man-sized (xp 250, gp 2)",
@@ -1102,6 +1102,14 @@ public sealed class TreasureService
         return heavyCrossbowRoll <= 10
             ? "Crossbow of Accuracy, +3 (Heavy Crossbow; all ranges considered short; xp 2, gp 12)"
             : "Crossbow of Accuracy, +3 (all ranges considered short; xp 2, gp 12)";
+    }
+
+    private static string ResolveCrossbowOfDistanceResult()
+    {
+        var heavyCrossbowRoll = Random.Shared.Next(1, 101);
+        return heavyCrossbowRoll <= 10
+            ? "Crossbow of Distance (Heavy Crossbow; double range all categories; +1 to hit and damage; xp 1,5, gp 7,5)"
+            : "Crossbow of Distance (double range all categories; +1 to hit and damage; xp 1,5, gp 7,5)";
     }
 
     private void RollWornEquipmentTreasure(

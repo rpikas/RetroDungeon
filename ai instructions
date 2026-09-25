@@ -2724,4 +2724,7 @@ This allows players to manage their inventory by dropping unwanted items
 ___
 When selling things in the shop make an option to sell all items not equipped. 73,6
 
-Crossbow of accuracy, +3, gives a +3 bonus to its missiles and oil ranges are considered short. 10% of these weapons will be heavy crossbows
+updated manually inventory to 0 for scrolls and many new weapons
+Crossbow of accuracy, +3, gives a +3 bonus to its missiles and oil ranges are considered short. 10% of these weapons will be heavy crossbows- 74,4
+____
+Crossbow of Distance has double range in all categories. 10% of these weapons will be heavy crossbows. It is otherwise 41 "to hit" and far damage.
