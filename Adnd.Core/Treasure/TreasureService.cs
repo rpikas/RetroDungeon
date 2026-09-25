@@ -1088,7 +1088,7 @@ public sealed class TreasureService
             <= 83 => "Morning Star +1 (xp 400, gp 3)",
             <= 88 => "Scimitar +2 (xp 750, gp 6)",
             <= 89 => "Sling of Seeking +2 (xp 1, gp 8)",
-            <= 94 => "Spear +1 (xp 500, gp 3)",
+            <= 94 => " (xp 500, gp 3)",
             <= 96 => "Spear +2 (xp 1, gp 6,5)",
             <= 97 => "Spear +3 (xp 1,75, gp 15)",
             <= 99 => "Spear, Cursed Backbiter (xp —, gp —)",

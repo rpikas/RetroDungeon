@@ -377,6 +377,39 @@
                       "ToHitBonus":  0
                   },
                   {
+                      "Name":  "Flail +1",
+                      "Type":  "Weapon",
+                      "Cost":  2500,
+                      "Weight":  150,
+                      "Damage":  "2d7+1",
+                      "DamageVsLarge":  "2d8+1",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  7,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  true,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Cleric"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted flail +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
                       "Name":  "Staff +2",
                       "Type":  "Weapon",
                       "Cost":  4000,
@@ -484,6 +517,39 @@
                       "StockQuantity":  0,
                       "Slot":  "",
                       "ToHitBonus":  0
+                  },
+                  {
+                      "Name":  "Hammer +1",
+                      "Type":  "Weapon",
+                      "Cost":  2500,
+                      "Weight":  50,
+                      "Damage":  "1d4+2",
+                      "DamageVsLarge":  "1d4+1",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  4,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "10/20/30",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Cleric"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted war hammer +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
                   },
                   {
                       "Name":  "Mage Masher",
@@ -1997,6 +2063,39 @@
                       "ToHitBonus":  1
                   },
                   {
+                      "Name":  "Mace +2",
+                      "Type":  "Weapon",
+                      "Cost":  4500,
+                      "Weight":  50,
+                      "Damage":  "1d6+2",
+                      "DamageVsLarge":  "1d4+2",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  6,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Cleric"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted mace +2.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
                       "Name":  "Mace +3",
                       "Type":  "Weapon",
                       "Cost":  15000,
@@ -2028,6 +2127,103 @@
                       "StockQuantity":  0,
                       "Slot":  "",
                       "ToHitBonus":  3
+                  },
+                  {
+                      "Name":  "Mace +4",
+                      "Type":  "Weapon",
+                      "Cost":  15000,
+                      "Weight":  50,
+                      "Damage":  "1d6+4",
+                      "DamageVsLarge":  "1d4+4",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  6,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  4,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Cleric"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "Enchanted mace +4.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  4
+                  },
+                  {
+                      "Name":  "Military Pick +1",
+                      "Type":  "Weapon",
+                      "Cost":  2500,
+                      "Weight":  40,
+                      "Damage":  "1d4+2",
+                      "DamageVsLarge":  "1d4+1",
+                      "DamageType":  "Piercing",
+                      "SpeedFactor":  6,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted military pick +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
+                      "Name":  "Morning Star +1",
+                      "Type":  "Weapon",
+                      "Cost":  3000,
+                      "Weight":  125,
+                      "Damage":  "2d4+1",
+                      "DamageVsLarge":  "2d7+1",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  7,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted morning star +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
                   },
                   {
                       "Name":  "Mace of Disruption",
@@ -2097,6 +2293,39 @@
                       "ToHitBonus":  2
                   },
                   {
+                      "Name":  "Hammer +3",
+                      "Type":  "Weapon",
+                      "Cost":  15000,
+                      "Weight":  50,
+                      "Damage":  "1d4+4",
+                      "DamageVsLarge":  "1d4+3",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  4,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "10/20/30",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  3,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Cleric"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "Enchanted war hammer +3.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  3
+                  },
+                  {
                       "Name":  "Javelin +2",
                       "Type":  "Weapon",
                       "Cost":  5000,
@@ -2123,6 +2352,72 @@
                                          ],
                       "Rarity":  "Rare",
                       "Description":  "Enchanted javelin +2.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
+                      "Name":  "Spear +1",
+                      "Type":  "Weapon",
+                      "Cost":  3000,
+                      "Weight":  50,
+                      "Damage":  "1d6+1",
+                      "DamageVsLarge":  "1d8+1",
+                      "DamageType":  "Piercing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Long",
+                      "IsTwoHanded":  false,
+                      "Range":  "20/40/60",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Druid"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted spear +1.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
+                  },
+                  {
+                      "Name":  "Spear +2",
+                      "Type":  "Weapon",
+                      "Cost":  6500,
+                      "Weight":  50,
+                      "Damage":  "1d6+2",
+                      "DamageVsLarge":  "1d8+2",
+                      "DamageType":  "Piercing",
+                      "SpeedFactor":  5,
+                      "WeaponLength":  "Long",
+                      "IsTwoHanded":  false,
+                      "Range":  "20/40/60",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Druid"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted spear +2.",
                       "Source":  "Adnd",
                       "Version":  "1e",
                       "StockQuantity":  0,
