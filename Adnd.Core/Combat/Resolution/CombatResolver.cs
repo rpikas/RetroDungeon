@@ -2379,6 +2379,9 @@ public sealed class CombatResolver
             {
                 mainHand = rangedWeapon;
                 thac0Modifier += Math.Max(0, rangedWeapon.ToHitBonus);
+
+                if (CanUseDwarvenThrowerFullPower(member, rangedWeapon))
+                    thac0Modifier += 1;
             }
 
             var swordSituationalBonus = GetSituationalSwordBonusAgainstTarget(mainHand, target);
@@ -2492,6 +2495,13 @@ public sealed class CombatResolver
             var dragonSlayerDamageMultiplier = GetDragonSlayerDamageMultiplier(mainHand, target);
             if (dragonSlayerDamageMultiplier > 1)
                 damage *= dragonSlayerDamageMultiplier;
+
+            if (useRanged && CanUseDwarvenThrowerFullPower(member, mainHand))
+                damage += 1;
+
+            var dwarvenThrowerDamageMultiplier = GetDwarvenThrowerDamageMultiplier(member, mainHand, target, useRanged);
+            if (dwarvenThrowerDamageMultiplier > 1)
+                damage *= dwarvenThrowerDamageMultiplier;
 
             if (isBackstab)
             {
@@ -5090,6 +5100,49 @@ public sealed class CombatResolver
                && weapon.SpecialAbilities.Any(a =>
                    !string.IsNullOrWhiteSpace(a)
                    && a.Contains("Dragon Slayer", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsDwarvenThrower(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (name.Contains("Dwarven Thrower", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Dwarven Thrower", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool CanUseDwarvenThrowerFullPower(Character wielder, Item? weapon)
+    {
+        if (!IsDwarvenThrower(weapon) || wielder == null)
+            return false;
+
+        return wielder.Race == Race.Dwarf
+               && (wielder.Classes.Contains(CharacterClass.Fighter)
+                   || wielder.Class == CharacterClass.Fighter);
+    }
+
+    private static int GetDwarvenThrowerDamageMultiplier(Character wielder, Item? weapon, MonsterInstance target, bool useRanged)
+    {
+        if (!useRanged || !CanUseDwarvenThrowerFullPower(wielder, weapon) || target?.Template == null)
+            return 1;
+
+        var name = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        if (name.Contains("giant")
+            || name.Contains("ogre")
+            || name.Contains("ogre mage")
+            || name.Contains("troll")
+            || name.Contains("ettin"))
+        {
+            return 3;
+        }
+
+        return 2;
     }
 
     private static bool IsSwordPlusTwoNineLivesStealer(Item? weapon)
