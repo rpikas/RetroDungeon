@@ -222,6 +222,27 @@
       "Description": "Thrown hammer."
     },
     {
+      "Name": "Hammer of Thunderbolts",
+      "Type": "Weapon",
+      "Slot": "Range",
+      "Cost": 25000,
+      "CostSilverPieces": 250000,
+      "Weight": 80,
+      "Damage": "1d4+1",
+      "DamageVsLarge": "1d4+1",
+      "DamageType": "Blunt",
+      "Range": "10/20/30",
+      "FireRate": "1/2",
+      "RequiresAmmo": false,
+      "AmmoType": "",
+      "Quantity": 0,
+      "IsShopBuyable": false,
+      "AllowedClasses": ["Fighter", "Paladin", "Ranger", "Cleric"],
+      "Rarity": "Very Rare",
+      "Description": "Heavy magical hammer. Requires exceptional strength to wield well; reaches +3 with doubled damage dice, or +5 with giant-strength girdle and ogre-power gauntlets.",
+      "SpecialAbilities": ["Hammer of Thunderbolts", "TrueNameKnown"]
+    },
+    {
       "Name": "Javelin",
       "Type": "Weapon",
       "Slot": "Range",

@@ -36,6 +36,8 @@ public sealed class CombatSession
     public Dictionary<string, int> AcidArrowPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> VeryHotFireExposurePartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> VeryHotFireExposurePartyDamagePerRound { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, List<int>> ThunderboltsThrowRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> ThunderboltsRestRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> DrainBloodRemaining { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -60,6 +62,47 @@ public sealed class CombatSession
     public void StartChant(string casterName)
     {
         ActiveChantCasterName = string.IsNullOrWhiteSpace(casterName) ? null : casterName;
+    }
+
+    public int GetPartyThunderboltsRestRounds(string memberName)
+    {
+        return ThunderboltsRestRounds.TryGetValue(memberName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickPartyThunderboltsRest(string memberName)
+    {
+        if (!ThunderboltsRestRounds.TryGetValue(memberName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            ThunderboltsRestRounds.Remove(memberName);
+            return 0;
+        }
+
+        ThunderboltsRestRounds[memberName] = rounds;
+        return rounds;
+    }
+
+    public bool RegisterPartyThunderboltsThrow(string memberName, int roundNumber)
+    {
+        if (!ThunderboltsThrowRounds.TryGetValue(memberName, out var rounds))
+        {
+            rounds = new List<int>();
+            ThunderboltsThrowRounds[memberName] = rounds;
+        }
+
+        var minRound = Math.Max(1, roundNumber - 19);
+        rounds.RemoveAll(r => r < minRound);
+        rounds.Add(roundNumber);
+
+        if (rounds.Count < 5)
+            return false;
+
+        ThunderboltsRestRounds[memberName] = 10;
+        rounds.Clear();
+        return true;
     }
 
     public void BreakChant()

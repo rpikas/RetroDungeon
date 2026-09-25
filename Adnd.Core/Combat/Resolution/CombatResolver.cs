@@ -128,6 +128,14 @@ public sealed class CombatResolver
             if (!IsAlive(member))
                 continue;
 
+            var thunderboltsRest = session.GetPartyThunderboltsRestRounds(member.Name);
+            if (thunderboltsRest > 0)
+            {
+                events.Add(new CombatEvent($"{member.Name} is resting after repeated Hammer of Thunderbolts throws and cannot act ({thunderboltsRest} round(s) remaining)."));
+                session.TickPartyThunderboltsRest(member.Name);
+                continue;
+            }
+
             if (session.RoundNumber == 1 && session.PartySurprisedRound1)
             {
                 events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
@@ -2230,6 +2238,12 @@ public sealed class CombatResolver
 
         if (useRanged && rangedWeapon != null)
         {
+            if (IsHammerOfThunderbolts(rangedWeapon) && session.RoundNumber % 2 != 0)
+            {
+                events.Add(new CombatEvent($"{member.Name} steadies {rangedWeapon.Name} and cannot hurl it this round."));
+                return;
+            }
+
             if (string.Equals((rangedWeapon.FireRate ?? string.Empty).Trim(), "1/2", StringComparison.OrdinalIgnoreCase)
                 && session.RoundNumber % 2 != 0)
             {
@@ -2382,6 +2396,8 @@ public sealed class CombatResolver
 
                 if (CanUseDwarvenThrowerFullPower(member, rangedWeapon))
                     thac0Modifier += 1;
+
+                thac0Modifier += GetHammerOfThunderboltsToHitBonus(member, rangedWeapon);
             }
 
             var swordSituationalBonus = GetSituationalSwordBonusAgainstTarget(mainHand, target);
@@ -2499,9 +2515,25 @@ public sealed class CombatResolver
             if (useRanged && CanUseDwarvenThrowerFullPower(member, mainHand))
                 damage += 1;
 
+            var hammerOfThunderboltsPowerBonus = GetHammerOfThunderboltsDamageBonus(member, mainHand, useRanged);
+            if (hammerOfThunderboltsPowerBonus > 0)
+                damage += hammerOfThunderboltsPowerBonus;
+
             var dwarvenThrowerDamageMultiplier = GetDwarvenThrowerDamageMultiplier(member, mainHand, target, useRanged);
             if (dwarvenThrowerDamageMultiplier > 1)
                 damage *= dwarvenThrowerDamageMultiplier;
+
+            var thunderboltsDamageDiceMultiplier = GetHammerOfThunderboltsDamageDiceMultiplier(member, mainHand);
+            if (thunderboltsDamageDiceMultiplier > 1)
+                damage *= thunderboltsDamageDiceMultiplier;
+
+            if (CanWieldHammerOfThunderboltsAsPlusFive(member, mainHand)
+                && IsTargetGiantOrKinForHammerOfThunderbolts(target))
+            {
+                target.CurrentHitPoints = 0;
+                events.Add(new CombatEvent($"{member.Name}'s Hammer of Thunderbolts slays {target.DisplayName} outright!"));
+                continue;
+            }
 
             if (isBackstab)
             {
@@ -2534,6 +2566,17 @@ public sealed class CombatResolver
             {
                 ammo.Quantity = Math.Max(0, ammo.Quantity - 1);
                 events.Add(new CombatEvent($"{member.Name} uses 1 {ammo.Name}. {ammo.Quantity} remaining."));
+            }
+
+            if (useRanged && IsHammerOfThunderbolts(mainHand))
+            {
+                var restTriggered = session.RegisterPartyThunderboltsThrow(member.Name, session.RoundNumber);
+                if (restTriggered)
+                    events.Add(new CombatEvent($"{member.Name} has overtaxed the Hammer of Thunderbolts and must rest for 10 rounds."));
+
+                events.Add(new CombatEvent($"The hurled Hammer of Thunderbolts crashes like thunder! Nearby creatures are stunned for 1 round."));
+                foreach (var monster in session.AliveMonsters.Where(m => !ReferenceEquals(m, target)).ToList())
+                    monster.SetStatus(MonsterStatus.Stunned, 1);
             }
 
             var weaponName = mainHand != null ? mainHand.Name : "bare hands";
@@ -5115,6 +5158,119 @@ public sealed class CombatResolver
                && weapon.SpecialAbilities.Any(a =>
                    !string.IsNullOrWhiteSpace(a)
                    && a.Contains("Dwarven Thrower", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsHammerOfThunderbolts(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (name.Contains("Hammer of Thunderbolts", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Hammer of Thunderbolts", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool MeetsHammerOfThunderboltsBaselineStrength(Character wielder)
+    {
+        if (wielder == null)
+            return false;
+
+        if (wielder.Abilities.Strength > 18)
+            return true;
+
+        return wielder.Abilities.Strength == 18
+               && (wielder.ExceptionalStrengthPercentile ?? 0) >= 1;
+    }
+
+    private static bool IsGauntletsOfOgrePower(Item? item)
+    {
+        var name = item?.Name?.Trim() ?? string.Empty;
+        return name.Contains("Gauntlets of Ogre Power", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsGirdleOfGiantStrength(Item? item)
+    {
+        var name = item?.Name?.Trim() ?? string.Empty;
+        return name.Contains("Girdle of Giant Strength", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool HasHammerOfThunderboltsTrueName(Item? weapon)
+    {
+        if (weapon?.SpecialAbilities == null)
+            return false;
+
+        return weapon.SpecialAbilities.Any(a =>
+            !string.IsNullOrWhiteSpace(a)
+            && a.Contains("TrueNameKnown", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool CanWieldHammerOfThunderboltsAsPlusFive(Character wielder, Item? weapon)
+    {
+        if (!IsHammerOfThunderbolts(weapon) || wielder == null)
+            return false;
+
+        if (!HasHammerOfThunderboltsTrueName(weapon))
+            return false;
+
+        var hasGauntlets = wielder.Equipment.TryGetValue(EquipmentSlot.Hands, out var hands)
+                           && IsGauntletsOfOgrePower(hands);
+        var hasGirdle = wielder.Equipment.TryGetValue(EquipmentSlot.Belt, out var belt)
+                        && IsGirdleOfGiantStrength(belt);
+
+        return hasGauntlets && hasGirdle;
+    }
+
+    private static int GetHammerOfThunderboltsToHitBonus(Character wielder, Item? weapon)
+    {
+        if (!IsHammerOfThunderbolts(weapon) || wielder == null)
+            return 0;
+
+        if (CanWieldHammerOfThunderboltsAsPlusFive(wielder, weapon))
+            return 5;
+
+        return MeetsHammerOfThunderboltsBaselineStrength(wielder) ? 3 : 0;
+    }
+
+    private static int GetHammerOfThunderboltsDamageBonus(Character wielder, Item? weapon, bool useRanged)
+    {
+        if (!IsHammerOfThunderbolts(weapon) || wielder == null)
+            return 0;
+
+        if (!useRanged && !MeetsHammerOfThunderboltsBaselineStrength(wielder) && !CanWieldHammerOfThunderboltsAsPlusFive(wielder, weapon))
+            return 0;
+
+        if (CanWieldHammerOfThunderboltsAsPlusFive(wielder, weapon))
+            return 5;
+
+        return MeetsHammerOfThunderboltsBaselineStrength(wielder) ? 3 : 0;
+    }
+
+    private static int GetHammerOfThunderboltsDamageDiceMultiplier(Character wielder, Item? weapon)
+    {
+        if (!IsHammerOfThunderbolts(weapon) || wielder == null)
+            return 1;
+
+        return MeetsHammerOfThunderboltsBaselineStrength(wielder) || CanWieldHammerOfThunderboltsAsPlusFive(wielder, weapon)
+            ? 2
+            : 1;
+    }
+
+    private static bool IsTargetGiantOrKinForHammerOfThunderbolts(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        var name = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        return name.Contains("giant")
+               || name.Contains("ogre")
+               || name.Contains("ogre mage")
+               || name.Contains("troll")
+               || name.Contains("ettin");
     }
 
     private static bool CanUseDwarvenThrowerFullPower(Character wielder, Item? weapon)
