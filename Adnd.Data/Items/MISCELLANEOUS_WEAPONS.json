@@ -1725,6 +1725,39 @@
                       "ToHitBonus":  0
                   },
                   {
+                      "Name":  "Scimitar +2",
+                      "Type":  "Weapon",
+                      "Cost":  6000,
+                      "Weight":  40,
+                      "Damage":  "1d8+2",
+                      "DamageVsLarge":  "1d8+2",
+                      "DamageType":  "Slashing",
+                      "SpeedFactor":  4,
+                      "WeaponLength":  "Medium",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  2,
+                      "SpecialAbilities":  [
+
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Druid"
+                                         ],
+                      "Rarity":  "Rare",
+                      "Description":  "Enchanted scimitar +2.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  2
+                  },
+                  {
                       "Name":  "Spetum",
                       "Type":  "Weapon",
                       "Cost":  3,
@@ -1867,6 +1900,40 @@
                       "StockQuantity":  0,
                       "Slot":  "",
                       "ToHitBonus":  3
+                  },
+                  {
+                      "Name":  "Mace of Disruption",
+                      "Type":  "Weapon",
+                      "Cost":  17500,
+                      "Weight":  50,
+                      "Damage":  "1d6+1",
+                      "DamageVsLarge":  "1d4+1",
+                      "DamageType":  "Blunt",
+                      "SpeedFactor":  6,
+                      "WeaponLength":  "Short",
+                      "IsTwoHanded":  false,
+                      "Range":  "",
+                      "ArmorClassBonus":  0,
+                      "MagicBonus":  1,
+                      "SpecialAbilities":  [
+                                               "Mace of Disruption",
+                                               "Alignment: Neutral Good"
+                                           ],
+                      "IsCursed":  false,
+                      "IsShopBuyable":  false,
+                      "AllowedClasses":  [
+                                             "Fighter",
+                                             "Paladin",
+                                             "Ranger",
+                                             "Cleric"
+                                         ],
+                      "Rarity":  "Very Rare",
+                      "Description":  "Neutral good mace. Strikes undead and evil lower-planar creatures with disruptive holy force.",
+                      "Source":  "Adnd",
+                      "Version":  "1e",
+                      "StockQuantity":  0,
+                      "Slot":  "",
+                      "ToHitBonus":  1
                   },
                   {
                       "Name":  "Hammer +2",

@@ -128,6 +128,10 @@ public sealed class CombatResolver
             if (!IsAlive(member))
                 continue;
 
+            TryApplyMaceOfDisruptionEvilBacklash(session, member, events);
+            if (!IsAlive(member))
+                continue;
+
             var thunderboltsRest = session.GetPartyThunderboltsRestRounds(member.Name);
             if (thunderboltsRest > 0)
             {
@@ -2455,6 +2459,12 @@ public sealed class CombatResolver
                     break;
             }
 
+            if (TryResolveMaceOfDisruptionEffect(member, mainHand, target, useRanged, events))
+            {
+                if (target.CurrentHitPoints <= 0)
+                    break;
+            }
+
             if (TryResolveSwordOfSharpnessSeverEffect(mainHand, target, roll, events))
             {
                 if (target.CurrentHitPoints <= 0)
@@ -2511,6 +2521,10 @@ public sealed class CombatResolver
             var dragonSlayerDamageMultiplier = GetDragonSlayerDamageMultiplier(mainHand, target);
             if (dragonSlayerDamageMultiplier > 1)
                 damage *= dragonSlayerDamageMultiplier;
+
+            var maceOfDisruptionMultiplier = GetMaceOfDisruptionDamageMultiplier(mainHand, target);
+            if (maceOfDisruptionMultiplier > 1)
+                damage *= maceOfDisruptionMultiplier;
 
             if (useRanged && CanUseDwarvenThrowerFullPower(member, mainHand))
                 damage += 1;
@@ -5158,6 +5172,129 @@ public sealed class CombatResolver
                && weapon.SpecialAbilities.Any(a =>
                    !string.IsNullOrWhiteSpace(a)
                    && a.Contains("Dwarven Thrower", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void TryApplyMaceOfDisruptionEvilBacklash(CombatSession session, Character member, List<CombatEvent> events)
+    {
+        if (session.MaceOfDisruptionBacklashApplied.Contains(member.Name))
+            return;
+
+        if (!IsCharacterEvil(member.Alignment))
+            return;
+
+        var touching = member.Equipment.Values.Any(IsMaceOfDisruption)
+                       || member.Inventory.Any(IsMaceOfDisruption);
+        if (!touching)
+            return;
+
+        session.MaceOfDisruptionBacklashApplied.Add(member.Name);
+
+        const int damage = 100;
+        var before = member.CurrentHitPoints;
+        member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - damage);
+        var actual = before - member.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(member, actual, events);
+
+        events.Add(new CombatEvent($"{member.Name} is blasted by Mace of Disruption's holy backlash for {actual} damage."));
+        if (member.CurrentHitPoints <= 0)
+        {
+            member.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{member.Name} is slain by Mace of Disruption backlash."));
+        }
+    }
+
+    private bool TryResolveMaceOfDisruptionEffect(Character wielder, Item? weapon, MonsterInstance target, bool useRanged, List<CombatEvent> events)
+    {
+        if (wielder == null || target?.Template == null || weapon == null)
+            return false;
+
+        if (useRanged || !IsMaceOfDisruption(weapon) || !IsMaceOfDisruptionAffectedTarget(target))
+            return false;
+
+        var saveChance = GetMaceOfDisruptionSaveChancePercent(target);
+        var roll = _dice.Roll(100);
+        if (roll > saveChance)
+        {
+            target.CurrentHitPoints = 0;
+            events.Add(new CombatEvent($"Mace of Disruption disrupts {target.DisplayName} utterly ({roll} vs save {saveChance}%)."));
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{target.DisplayName} resists disruption ({roll} vs save {saveChance}%)."));
+        return false;
+    }
+
+    private static bool IsMaceOfDisruption(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        if (name.Contains("Mace of Disruption", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return weapon.SpecialAbilities != null
+               && weapon.SpecialAbilities.Any(a =>
+                   !string.IsNullOrWhiteSpace(a)
+                   && a.Contains("Mace of Disruption", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static int GetMaceOfDisruptionDamageMultiplier(Item? weapon, MonsterInstance target)
+    {
+        return IsMaceOfDisruption(weapon) && IsMaceOfDisruptionAffectedTarget(target)
+            ? 2
+            : 1;
+    }
+
+    private static bool IsMaceOfDisruptionAffectedTarget(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return false;
+
+        if (target.InstanceMonsterType == MonsterType.Undead)
+            return true;
+
+        if (target.InstanceMonsterType is MonsterType.Demon or MonsterType.Devil)
+            return true;
+
+        return IsTargetEvilAlignment(target.Template.Alignment);
+    }
+
+    private static int GetMaceOfDisruptionSaveChancePercent(MonsterInstance target)
+    {
+        if (target?.Template == null)
+            return 95;
+
+        var n = (target.Template.Name ?? string.Empty).ToLowerInvariant();
+        if (n.Contains("skeleton")
+            || n.Contains("zombie")
+            || n.Contains("ghoul")
+            || n.Contains("shadow")
+            || n.Contains("wight")
+            || n.Contains("wraith"))
+            return 0;
+        if (n.Contains("mummy")) return 20;
+        if (n.Contains("spectre") || n.Contains("specter")) return 35;
+        if (n.Contains("vampire")) return 50;
+        if (n.Contains("ghost")) return 65;
+        if (n.Contains("lich")) return 60;
+        return 95;
+    }
+
+    private static bool IsCharacterEvil(Alignment alignment)
+    {
+        return alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil;
+    }
+
+    private static bool IsTargetEvilAlignment(string? alignment)
+    {
+        if (string.IsNullOrWhiteSpace(alignment))
+            return false;
+
+        var text = alignment.Trim();
+        return text.Equals("Lawful Evil", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("Neutral Evil", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("Chaotic Evil", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsHammerOfThunderbolts(Item? weapon)

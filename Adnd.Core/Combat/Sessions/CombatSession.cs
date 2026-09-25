@@ -47,6 +47,7 @@ public sealed class CombatSession
     public Dictionary<string, List<int>> MonsterWoundingRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterWoundingUnhealableDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> MaceOfDisruptionBacklashApplied { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
     public bool SurpriseResolved { get; set; }
     public bool PartySurprisedRound1 { get; set; }
