@@ -480,8 +480,50 @@ public class ShopMenu
                 Console.WriteLine($"{i + 1}. {e.item.Name} (sell {price} gp)");
         }
 
-        Console.Write("\nChoose #: ");
-        if (int.TryParse(Console.ReadLine(), out int idx) && idx >= 1 && idx <= entries.Count)
+        Console.WriteLine("A) Sell all unequipped items");
+        Console.Write("\nChoose # or A: ");
+        var raw = (Console.ReadLine() ?? string.Empty).Trim();
+
+        if (string.Equals(raw, "A", StringComparison.OrdinalIgnoreCase))
+        {
+            var equippedSet = new HashSet<Item>(seller.Equipment.Values.Where(v => v != null)!);
+            var toSell = seller.Inventory
+                .Where(i => i != null && !equippedSet.Contains(i))
+                .ToList();
+
+            if (toSell.Count == 0)
+            {
+                Console.WriteLine("No unequipped items to sell.");
+                Console.ReadKey(true);
+                return;
+            }
+
+            var total = toSell.Sum(i => i.Cost / 2);
+            Console.WriteLine($"Sell all unequipped items ({toSell.Count} item(s)) for {total} gp? (Y/N)");
+            var confirmAll = Console.ReadKey(true).Key;
+            if (confirmAll != ConsoleKey.Y)
+            {
+                Console.WriteLine("Sale cancelled.");
+                Console.ReadKey(true);
+                return;
+            }
+
+            foreach (var item in toSell)
+            {
+                seller.Inventory.Remove(item);
+                seller.GoldPieces += item.Cost / 2;
+                _itemRepo.TryAdjustStock(item.Name, +1);
+            }
+
+            Console.WriteLine($"Sold {toSell.Count} unequipped item(s) for {total} gp.");
+            Console.WriteLine($"Gold after: {seller.GoldPieces} gp");
+            _charRepo.Save(seller);
+            _partyRepo.Save(party);
+            Console.ReadKey(true);
+            return;
+        }
+
+        if (int.TryParse(raw, out int idx) && idx >= 1 && idx <= entries.Count)
         {
             var entry = entries[idx - 1];
             var it = entry.item;

@@ -343,7 +343,7 @@
         "Slot": "Ring1",
         "Cost": 500,
         "Weight": 1,
-        "StockQuantity": 1,
+        "StockQuantity": 0,
         "ArmorClassBonus": 1,
         "AllowedClasses": [ "All" ],
         "Rarity": "Rare",

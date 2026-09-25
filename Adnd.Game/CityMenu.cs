@@ -395,11 +395,59 @@ public class CityMenu
                     }
                 }
             }
+
+            InspectCharacterInventory(c);
         }
         else Console.WriteLine("Invalid selection.");
 
         Console.WriteLine("Press any key...");
         Console.ReadKey(true);
+    }
+
+    private void InspectCharacterInventory(Character character)
+    {
+        while (true)
+        {
+            Console.WriteLine("\n=== INVENTORY ===");
+
+            if (character.Inventory == null || character.Inventory.Count == 0)
+            {
+                Console.WriteLine(" (empty)");
+                return;
+            }
+
+            for (int i = 0; i < character.Inventory.Count; i++)
+            {
+                var item = character.Inventory[i];
+                var quantityText = item.Quantity > 1 ? $" x{item.Quantity}" : string.Empty;
+                Console.WriteLine($"{i + 1,2}. {item.Name}{quantityText}");
+            }
+
+            Console.WriteLine("\nD)rop item");
+            Console.WriteLine("L<-eave inventory");
+            var key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.L || key == ConsoleKey.Enter || key == ConsoleKey.Escape)
+                return;
+
+            if (key != ConsoleKey.D)
+                continue;
+
+            Console.Write("Item #: ");
+            var itemSelection = InputHelper.ReadNumber(1, character.Inventory.Count, 3, echoTypedCharacters: true);
+            if (!itemSelection.HasValue)
+            {
+                Console.WriteLine("Invalid selection.");
+                continue;
+            }
+
+            var idx = itemSelection.Value - 1;
+            var dropped = character.Inventory[idx];
+            character.Inventory.RemoveAt(idx);
+            _repo.Save(character);
+
+            Console.WriteLine($"Dropped: {dropped.Name}");
+        }
     }
 
     private static string GetLevelDisplay(Character c)
