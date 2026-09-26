@@ -133,14 +133,73 @@ public class TempleMenu
 
         var healedCount = 0;
         var skipped = new List<string>();
+        var payments = new List<string>();
 
         foreach (var c in needHealing)
         {
-            if (Temple.Heal(c, _charRepo)) healedCount++;
-            else skipped.Add(c.Name);
+            var cost = Temple.CostToHeal(c);
+            if (cost <= 0)
+                continue;
+
+            // Normal case: character pays own healing.
+            if (c.GoldPieces >= cost)
+            {
+                if (Temple.Heal(c, c, _charRepo))
+                {
+                    healedCount++;
+                    payments.Add($"{c.Name} paid {cost} gp for own healing.");
+                }
+                else
+                {
+                    skipped.Add(c.Name);
+                }
+
+                continue;
+            }
+
+            // New behavior: ask who will pay when the target cannot afford healing.
+            Console.WriteLine();
+            Console.WriteLine($"{c.Name} cannot afford healing ({c.GoldPieces}/{cost} gp).");
+
+            var payers = partyCharacters
+                .Where(p => p.GoldPieces >= cost)
+                .ToList();
+
+            if (payers.Count == 0)
+            {
+                Console.WriteLine("No party member can cover this healing cost.");
+                skipped.Add(c.Name);
+                continue;
+            }
+
+            Console.WriteLine($"Who will pay {cost} gp for {c.Name}?");
+            for (int i = 0; i < payers.Count; i++)
+                Console.WriteLine($"{i + 1}. {payers[i].Name} ({payers[i].GoldPieces} gp)");
+
+            Console.Write("Choose #: ");
+            var payerSelection = InputHelper.ReadNumber(1, payers.Count);
+            if (!payerSelection.HasValue)
+            {
+                skipped.Add(c.Name);
+                continue;
+            }
+
+            var payer = payers[payerSelection.Value - 1];
+            if (Temple.Heal(c, payer, _charRepo))
+            {
+                healedCount++;
+                payments.Add($"{payer.Name} paid {cost} gp to heal {c.Name}.");
+            }
+            else
+            {
+                skipped.Add(c.Name);
+            }
         }
 
         Console.WriteLine($"Healed {healedCount} character(s).");
+
+        foreach (var payment in payments)
+            Console.WriteLine(payment);
 
         if (skipped.Count > 0)
             Console.WriteLine($"Could not afford healing: {string.Join(", ", skipped)}");

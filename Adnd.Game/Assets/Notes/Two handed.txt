@@ -1,0 +1,41 @@
+Two handed
+What I found
+•	Item already has IsTwoHanded (Adnd.Core/Items/Item.cs).
+•	JSON model already supports IsTwoHanded (Adnd.Data/Items/ItemJsonModel.cs).
+•	Repository mapping already loads it (ItemRepository.ToItem maps IsTwoHanded = model.IsTwoHanded).
+•	Equip logic does not yet enforce two-handed occupancy (EquipmentManager.Equip currently equips only one slot).
+•	Equip UI currently lets user pick Main Hand/Off Hand for melee weapons (EquipmentHelper.PromptAndEquipItem) and doesn’t special-case two-handed weapons.
+•	Sword data file exists (Adnd.Data/Items/SWORDS.json), and entries include IsTwoHanded; the specific “Two Handed Sword” entry should be set to true explicitly if not already.
+Required changes
+1.	Data
+•	In SWORDS.json, set "IsTwoHanded": true for Two Handed Sword (and magical variants if applicable).
+2.	Equip rule in EquipmentManager.Equip
+•	If item.IsTwoHanded and equipping to MainHand or OffHand:
+•	Force it to occupy both MainHand and OffHand.
+•	Move any existing item(s) in either hand back to inventory.
+•	Apply/remove AC modifiers consistently when displaced.
+•	If equipping a one-handed item/shield into either hand while a two-handed weapon is equipped in the other hand:
+•	Unequip that two-handed weapon first (move to inventory), then equip the new item.
+3.	UI in EquipmentHelper.PromptAndEquipItem
+•	If weapon is IsTwoHanded == true, skip hand-choice prompt and auto-target MainHand (manager handles both hands).
+That will give the behavior you asked for: equipping an IsTwoHanded: true item occupies both hands and blocks incompatible one-hand/off-hand combinations.
+
+mplemented exactly what you asked:
+1.	Two Handed Sword data
+•	Updated Adnd.Data/Items/SWORDS.json:
+•	Renamed to "Name": "Two Handed Sword"
+•	Kept "IsTwoHanded": true
+2.	Equip behavior for IsTwoHanded: true
+•	Updated Adnd.Core/Characters/EquipmentManager.cs so:
+•	Equipping a two-handed weapon into a hand slot now occupies both MainHand and OffHand.
+•	Existing items in either hand are unequipped and moved to inventory.
+•	Equipping a one-handed item into a hand slot while a two-handed weapon is equipped clears the two-handed setup first.
+•	Unequipping either hand clears both for two-handed weapons.
+•	AC/inventory adjustments are done once (no double counting).
+•	Damage display avoids showing duplicated off-hand damage when both slots reference the same two-handed weapon.
+3.	Equip UI flow
+•	Updated Adnd.Game/EquipmentHelper.cs:
+•	For two-handed melee weapons, it no longer asks Main/Off hand choice.
+•	It auto-targets MainHand, and EquipmentManager handles both hands.
+If you want, I can also add a short UI message like:
+“<item> is two-handed and occupies both hands.”

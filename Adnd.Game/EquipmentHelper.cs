@@ -50,6 +50,11 @@ public static class EquipmentHelper
             {
                 targetSlot = EquipmentSlot.Range;
             }
+            else if (item.IsTwoHanded)
+            {
+                // Two-handed melee weapons always anchor from main hand and consume both hands.
+                targetSlot = EquipmentSlot.MainHand;
+            }
             else
             {
                 // Weapons: prompt user to choose MainHand or OffHand

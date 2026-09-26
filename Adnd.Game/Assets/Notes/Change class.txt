@@ -1,0 +1,39 @@
+The Character With Two Classes
+
+Unlike multi-classed characters who are of non- or semi-human race, the character with two classes must be human. 
+To attain the second class, the character must switch his or her profession at some point. Thereafter no progression 
+in the original class is possible.
+
+In order to switch from one class to another, the character must have an ability score of 15 or more in the principal 
+attribute(s) ability of the original class and a 17 or 18 in the principal attribute(s) of the class changed to. 
+Note that nearly any combination of classes is thus possible, i.e. cleric 8 fighter, cleric & paladin, cleric & ranger, 
+etc. Alignment will preclude some combinations.
+
+When the character opts to cease his or her old profession and become a new class, the character retains the number of 
+hit dice (and the commensurate hit points) due to a character of the level of his or her class. However, all other 
+functions of the character are at 1st level of experience, for that is his or her ability in the newly espoused class.
+Furthermore, if, during the of any adventure, the character resorts to the use of any of the cap s of functions of his 
+or her former class, the character gains no experience for the adventure. Having switched classes, the character must 
+perform strictly within the parameters of his or her new profession. Reversion to the former class negates all 
+experience potential for the new class with respect to the course of recent activities, i.e. the adventure during 
+which original profession functions were resorted to.
+
+At such time as the character has attained a level of experience in his or her new class which exceeds the character's 
+former class level, the following benefits are gained:
+
+1. A hit die appropriate to the new class is gained for each increase in level of experience, up to the maximum normal
+ for the class in question (and thereafter hit points are likewise gained), and
+
+2. The character may mix functions freely and still gain experience, although restrictions regarding armor, shield, 
+and/or weapon apply with regard to operations particular to one or both classes.
+
+Example: A character with ability scores of 15 strength, 17 intelligence, 12 wisdom, 10 dexterity, 16 constitution, and 7 charisma 
+is begun as a fighter. After attaining 6th level, the player switches the character to magic-user. This allows the character to 
+retain six ten-sided hit dice, but in all other respects he or she must be a 1st level magic-user, wearing no armor, carrying 
+those weapons usable by his or her new class, and using spells to combat opponents. When 7th level of experience is gained, however, the
+haracter gets a four-sided hit die for additional hit points he or she can sustain at the new level. Furthermore, the character 
+can now carry (but not wear) armor and weapons not normally usable by magic-users, and resort to their use if the need arises 
+and not be penalized in respect to experience as a magic-user, for he or she has already surpassed in the new class the 
+disciplines of the former. Thus, no harm accrues to his or her experience as a magic-user. Note that this does not allow 
+spell use while armor clad, such as an elven fighter/magic user is able to-do.
+

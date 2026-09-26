@@ -67,19 +67,25 @@ public static class Temple
     /// Heals one character out of their own gold. Returns false when they cannot pay, so the caller can say so
     /// rather than silently doing nothing.
     /// </summary>
-    public static bool Heal(Character c, CharacterRepository repo)
+    public static bool Heal(Character c, CharacterRepository repo) => Heal(c, c, repo);
+
+    /// <summary>
+    /// Heals <paramref name="target"/>, charging <paramref name="payer"/>.
+    /// Returns false when the fee cannot be paid.
+    /// </summary>
+    public static bool Heal(Character target, Character payer, CharacterRepository repo)
     {
-        var cost = CostToHeal(c);
-        if (cost <= 0 || c.GoldPieces < cost)
+        var cost = CostToHeal(target);
+        if (cost <= 0 || payer.GoldPieces < cost)
             return false;
 
-        c.GoldPieces -= cost;
-        c.CurrentHitPoints = c.MaxHitPoints;
-        c.RemoveStatus(CharacterStatus.Poisoned);
-        c.ClearParalysis();
-        c.CureDiseaseAndRestoreConstitution();
-        c.RemoveStatus(CharacterStatus.Feeblemind);
-        repo.Save(c);
+        payer.GoldPieces -= cost;
+        target.CurrentHitPoints = target.MaxHitPoints;
+        target.RemoveStatus(CharacterStatus.Poisoned);
+        target.ClearParalysis();
+        target.CureDiseaseAndRestoreConstitution();
+        target.RemoveStatus(CharacterStatus.Feeblemind);
+        Save(target, payer, repo);
         return true;
     }
 
@@ -159,7 +165,7 @@ public static class Temple
         return events;
     }
 
-    /// <summary>Saves both, and only once when the payer is paying for their own resurrection.</summary>
+    /// <summary>Saves both, and only once when one character is both target and payer.</summary>
     private static void Save(Character target, Character payer, CharacterRepository repo)
     {
         repo.Save(target);

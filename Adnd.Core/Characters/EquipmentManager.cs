@@ -9,6 +9,9 @@ public static class EquipmentManager
     private static bool IsRingOfProtection(Item? it)
         => it != null && string.Equals(it.Name, "Ring of Protection", StringComparison.OrdinalIgnoreCase);
 
+    private static bool IsRingOfInvisibility(Item? it)
+        => it != null && string.Equals(it.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase);
+
     private static int GetEffectiveArmorClassBonusForEquip(Item? item)
     {
         if (item == null)
@@ -47,25 +50,36 @@ public static class EquipmentManager
 
         var slot = item.Slot.Value;
 
-        static bool IsRingOfInvisibility(Item? it)
-            => it != null && string.Equals(it.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase);
+        var movedItems = new System.Collections.Generic.HashSet<Item>();
+        var isHandSlot = slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand;
 
-        // Remove old item if slot is occupied
-        if (c.Equipment[slot] != null)
+        if (isHandSlot && item.IsTwoHanded)
         {
-            if ((slot == EquipmentSlot.Ring1 || slot == EquipmentSlot.Ring2)
-                && IsRingOfInvisibility(c.Equipment[slot]))
+            // Two-handed weapon occupies both hands.
+            UnequipSlotToInventory(c, EquipmentSlot.MainHand, movedItems);
+            UnequipSlotToInventory(c, EquipmentSlot.OffHand, movedItems);
+            c.Equipment[EquipmentSlot.MainHand] = item;
+            c.Equipment[EquipmentSlot.OffHand] = item;
+        }
+        else
+        {
+            if (isHandSlot)
             {
-                c.DeactivateRingInvisibility();
+                // If the opposite hand currently participates in a two-handed setup,
+                // clear both hands before equipping a one-handed item.
+                var otherHand = slot == EquipmentSlot.MainHand ? EquipmentSlot.OffHand : EquipmentSlot.MainHand;
+                var otherHandItem = c.Equipment[otherHand];
+                if (otherHandItem != null && otherHandItem.IsTwoHanded)
+                {
+                    UnequipSlotToInventory(c, EquipmentSlot.MainHand, movedItems);
+                    UnequipSlotToInventory(c, EquipmentSlot.OffHand, movedItems);
+                }
             }
 
-            // subtract the armor class bonus of the currently equipped item
-            c.ArmorClass += GetEffectiveArmorClassBonusForEquip(c.Equipment[slot]);
-            c.Inventory.Add(c.Equipment[slot]);
+            UnequipSlotToInventory(c, slot, movedItems);
+            c.Equipment[slot] = item;
         }
 
-        // equip the new item and apply its armor class bonus
-        c.Equipment[slot] = item;
         c.ArmorClass -= GetEffectiveArmorClassBonusForEquip(item);
         c.Inventory.Remove(item);
 
@@ -83,19 +97,21 @@ public static class EquipmentManager
     {
         EnsureEquipmentSlots(c);
 
-        if (c.Equipment[slot] == null)
+        var equipped = c.Equipment[slot];
+        if (equipped == null)
             return false;
 
-        if ((slot == EquipmentSlot.Ring1 || slot == EquipmentSlot.Ring2)
-            && string.Equals(c.Equipment[slot]?.Name, "Ring of Invisibility", StringComparison.OrdinalIgnoreCase))
+        var movedItems = new System.Collections.Generic.HashSet<Item>();
+        if ((slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand) && equipped.IsTwoHanded)
         {
-            c.DeactivateRingInvisibility();
+            // Clearing either hand for a two-handed weapon clears both.
+            UnequipSlotToInventory(c, EquipmentSlot.MainHand, movedItems);
+            UnequipSlotToInventory(c, EquipmentSlot.OffHand, movedItems);
         }
-
-        // remove item's armor class bonus when unequipping
-        c.ArmorClass += GetEffectiveArmorClassBonusForEquip(c.Equipment[slot]);
-        c.Inventory.Add(c.Equipment[slot]);
-        c.Equipment[slot] = null;
+        else
+        {
+            UnequipSlotToInventory(c, slot, movedItems);
+        }
 
         c.RefreshRingProtectionEffects();
         c.RefreshRingWizardryEffects();
@@ -114,13 +130,23 @@ public static class EquipmentManager
         var mainHandWeapon = c.Equipment[EquipmentSlot.MainHand];
         var offHandWeapon = c.Equipment[EquipmentSlot.OffHand];
 
+        // Legacy safety: if a two-handed weapon is only in off-hand, treat it as primary.
+        if (mainHandWeapon == null && offHandWeapon != null && offHandWeapon.IsTwoHanded)
+            mainHandWeapon = offHandWeapon;
+
         var mainDamage = mainHandWeapon != null
                          && mainHandWeapon.Type == ItemType.Weapon
                          && !string.IsNullOrWhiteSpace(mainHandWeapon.Damage)
             ? mainHandWeapon.Damage
             : "1d2";
 
-        var hasOffHandWeapon = offHandWeapon != null
+        var sameTwoHandedWeaponInBothHands = mainHandWeapon != null
+                                             && offHandWeapon != null
+                                             && ReferenceEquals(mainHandWeapon, offHandWeapon)
+                                             && mainHandWeapon.IsTwoHanded;
+
+        var hasOffHandWeapon = !sameTwoHandedWeaponInBothHands
+                               && offHandWeapon != null
                                && offHandWeapon.Type == ItemType.Weapon
                                && !string.IsNullOrWhiteSpace(offHandWeapon.Damage);
 
@@ -142,5 +168,30 @@ public static class EquipmentManager
         }
 
         return bonus;
+    }
+
+    private static void UnequipSlotToInventory(Character c, EquipmentSlot slot, System.Collections.Generic.HashSet<Item> movedItems)
+    {
+        var equipped = c.Equipment[slot];
+        if (equipped == null)
+        {
+            c.Equipment[slot] = null;
+            return;
+        }
+
+        if ((slot == EquipmentSlot.Ring1 || slot == EquipmentSlot.Ring2)
+            && IsRingOfInvisibility(equipped))
+        {
+            c.DeactivateRingInvisibility();
+        }
+
+        // For two-handed occupancy mirrored in both hand slots, ensure AC/inventory are adjusted once.
+        if (movedItems.Add(equipped))
+        {
+            c.ArmorClass += GetEffectiveArmorClassBonusForEquip(equipped);
+            c.Inventory.Add(equipped);
+        }
+
+        c.Equipment[slot] = null;
     }
 }

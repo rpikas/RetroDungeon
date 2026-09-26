@@ -2896,5 +2896,8 @@ be determined only by means of a detect magic spell and then experimentation
 Implement change class.-88,3
 ___
 when L is pressed in the shop go to === WELCOME TO THE CITY OF MYTHGAR ===
-______
-can you set IsTwoHanded: true for two handed sword and make sure that both hands are occupied when equipping items with IsTwoHanded: true?
+___
+can you set IsTwoHanded: true for two handed sword and make sure that both hands are occupied when equipping items with IsTwoHanded: true? 88,5
+___
+in the church when characters can not afford healing ask who will pay
+___
