@@ -188,9 +188,21 @@ public class ShopMenu
             else if (key == ConsoleKey.E) EquipItems();
             else if (key == ConsoleKey.P) PoolGoldToCurrentShopper();
             else if (key == ConsoleKey.C) SelectShopper();
-            else if (key == ConsoleKey.N) Show(startIndex+numberOfItems, numberOfItems, false);
-            else if ((key == ConsoleKey.G) && (startIndex > 0)) Show(startIndex - numberOfItems, numberOfItems, false);
-            else if (key == ConsoleKey.I) Show(0, numberOfItems, false);
+            else if (key == ConsoleKey.N)
+            {
+                startIndex = Math.Min(items.Count - 1, startIndex + numberOfItems);
+                continue;
+            }
+            else if ((key == ConsoleKey.G) && (startIndex > 0))
+            {
+                startIndex = Math.Max(0, startIndex - numberOfItems);
+                continue;
+            }
+            else if (key == ConsoleKey.I)
+            {
+                startIndex = 0;
+                continue;
+            }
         //    else if (key == ConsoleKey.F) FilterItemsa();
             else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
 

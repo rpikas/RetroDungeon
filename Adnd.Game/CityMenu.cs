@@ -94,17 +94,8 @@ public class CityMenu
 
         foreach (var c in all.Where(ch => ch.Race == Race.Human && !ch.IsDualClassed))
         {
-            c.EnsureClassProgressions();
-            var currentClass = c.Classes.Count > 0 ? c.Classes[0] : c.Class;
-
-            foreach (var targetClass in Enum.GetValues<CharacterClass>())
-            {
-                if (targetClass == currentClass)
-                    continue;
-
-                if (_dualClassService.CanStartDualClass(c, targetClass, out _))
-                    return (true, string.Empty);
-            }
+            if (GetEligibleDualClassTargets(c).Count > 0)
+                return (true, string.Empty);
         }
 
         return (false, "no valid target class for any eligible human");
@@ -120,8 +111,29 @@ public class CityMenu
             return;
         }
 
+        var eligibleCharacters = all
+            .Where(c => c.Race == Race.Human && !c.IsDualClassed)
+            .Where(c => GetEligibleDualClassTargets(c).Count > 0)
+            .ToList();
+
+        if (eligibleCharacters.Count == 0)
+        {
+            Console.WriteLine("No characters currently meet dual-class requirements.");
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.WriteLine("Characters that can dual-class:");
+        for (int i = 0; i < eligibleCharacters.Count; i++)
+        {
+            var c = eligibleCharacters[i];
+            var currentClass = c.Classes.Count > 0 ? c.Classes[0] : c.Class;
+            Console.WriteLine($"{i + 1}) {c.Name} - {c.Race.ToDisplayString()} {c.Alignment.ToDisplayString()} {currentClass.ToDisplayString()} L{c.GetClassLevel(currentClass)}");
+        }
+
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
+        var sel = InputHelper.ReadNumber(1, eligibleCharacters.Count, 2, echoTypedCharacters: true);
         if (!sel.HasValue)
         {
             Console.WriteLine("Invalid selection.");
@@ -130,13 +142,16 @@ public class CityMenu
             return;
         }
 
-        var character = all[sel.Value - 1];
-        var currentClass = character.Classes.Count > 0 ? character.Classes[0] : character.Class;
+        var character = eligibleCharacters[sel.Value - 1];
+        var targets = GetEligibleDualClassTargets(character);
 
-        var targets = Enum.GetValues<CharacterClass>()
-            .Where(c => c != currentClass)
-            .OrderBy(c => c.ToDisplayString())
-            .ToList();
+        if (targets.Count == 0)
+        {
+            Console.WriteLine("No valid target class meets dual-class requirements for this character.");
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
 
         Console.WriteLine("Choose target class:");
         for (int i = 0; i < targets.Count; i++)
@@ -156,6 +171,15 @@ public class CityMenu
         }
 
         var targetClass = targets[idx.Value];
+
+        // Revalidate immediately before confirmation/apply for deterministic UX.
+        if (!_dualClassService.CanStartDualClass(character, targetClass, out var revalidateReason))
+        {
+            Console.WriteLine(revalidateReason);
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
 
         Console.WriteLine();
         Console.WriteLine("Dual-class warning:");
@@ -180,6 +204,21 @@ public class CityMenu
 
         Console.WriteLine("Press any key...");
         Console.ReadKey(true);
+    }
+
+    private List<CharacterClass> GetEligibleDualClassTargets(Character character)
+    {
+        if (character == null)
+            return new List<CharacterClass>();
+
+        character.EnsureClassProgressions();
+        var currentClass = character.Classes.Count > 0 ? character.Classes[0] : character.Class;
+
+        return Enum.GetValues<CharacterClass>()
+            .Where(c => c != currentClass)
+            .Where(c => _dualClassService.CanStartDualClass(character, c, out _))
+            .OrderBy(c => c.ToDisplayString())
+            .ToList();
     }
 
     private void CreateCharacter()
