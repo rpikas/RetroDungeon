@@ -869,7 +869,7 @@ public class Character
                     ClassProgressions.Add(new ClassProgression
                     {
                         Class = cls,
-                        Level = Adnd.Core.Characters.Progression.ExperienceTable.GetLevelForClass(cls, share),
+                        Level = Adnd.Core.Characters.Progression.ExperienceTable.GetLevelForClass(this, cls, share),
                         Experience = share
                     });
                 }

@@ -38,18 +38,25 @@ public sealed class LevelUpService
         }
         else
         {
-            var perClass = gainedXp / character.Classes.Count;
-            var remainder = gainedXp % character.Classes.Count;
+            var eligible = character.ClassProgressions
+                .Where(e => e.Level < RaceClassLevelLimits.GetMaxLevel(character, e.Class))
+                .ToList();
 
-            for (int i = 0; i < character.ClassProgressions.Count; i++)
+            if (eligible.Count > 0)
             {
-                var gain = perClass + (i < remainder ? 1 : 0);
-                character.ClassProgressions[i].Experience += gain;
+                var perClass = gainedXp / eligible.Count;
+                var remainder = gainedXp % eligible.Count;
+
+                for (int i = 0; i < eligible.Count; i++)
+                {
+                    var gain = perClass + (i < remainder ? 1 : 0);
+                    eligible[i].Experience += gain;
+                }
             }
 
             foreach (var entry in character.ClassProgressions)
             {
-                var target = ExperienceTable.GetLevelForClass(entry.Class, entry.Experience);
+                var target = ExperienceTable.GetLevelForClass(character, entry.Class, entry.Experience);
                 entry.Level = Math.Max(entry.Level, target);
             }
 
@@ -91,7 +98,7 @@ public sealed class LevelUpService
 
     private static void LevelSingleClass(Character character, ClassProgression entry, ref LevelUpResult result)
     {
-        var targetLevel = ExperienceTable.GetLevelForClass(entry.Class, entry.Experience);
+        var targetLevel = ExperienceTable.GetLevelForClass(character, entry.Class, entry.Experience);
 
         while (entry.Level < targetLevel)
         {

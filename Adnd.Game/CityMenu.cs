@@ -268,20 +268,21 @@ public class CityMenu
                 Console.WriteLine($"{label}) {r.ToDisplayString()}");
             }
 
-            var rerollLabel = (char)('A' + availableRaces.Count);
-            Console.WriteLine($"{rerollLabel}) Reroll abilities");
+            Console.WriteLine("R)eroll abilities");
             Console.Write("Race: ");
-            var raceIdx = InputHelper.ReadLetterIndex(availableRaces.Count + 1);
+            var raceKey = Console.ReadKey(true);
+            var raceChar = char.ToUpperInvariant(raceKey.KeyChar);
 
-            if (raceIdx.HasValue && raceIdx.Value == availableRaces.Count)
+            if (raceChar == 'R')
             {
                 Console.WriteLine("Rerolling abilities...\n");
                 continue;
             }
 
-            race = Race.Human;
-            if (raceIdx.HasValue && raceIdx.Value < availableRaces.Count)
-                race = availableRaces[raceIdx.Value];
+            race = availableRaces.Count > 0 ? availableRaces[0] : Race.Human;
+            var raceIdx = raceChar - 'A';
+            if (raceIdx >= 0 && raceIdx < availableRaces.Count)
+                race = availableRaces[raceIdx];
 
             break;
         }

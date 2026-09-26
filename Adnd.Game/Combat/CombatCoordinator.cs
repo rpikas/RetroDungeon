@@ -782,6 +782,10 @@ public sealed class CombatCoordinator
                     {
                         var classLevel = survivor.GetClassLevel(cls);
                         var classXp = survivor.GetClassExperience(cls);
+                        var maxLevel = RaceClassLevelLimits.GetMaxLevel(survivor, cls);
+                        if (maxLevel != int.MaxValue && classLevel >= maxLevel)
+                            return $"{cls.ToDisplayString()}: has {classXp} XP, max level {maxLevel} reached";
+
                         var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, classLevel + 1);
                         var need = Math.Max(0, nextThreshold - classXp);
                         return $"{cls.ToDisplayString()}: has {classXp} XP, needs {need} XP";
@@ -792,9 +796,17 @@ public sealed class CombatCoordinator
             else
             {
                 var classForProgress = survivor?.Class ?? CharacterClass.Fighter;
-                var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
-                var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
-                sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
+                var maxLevel = survivor == null ? int.MaxValue : RaceClassLevelLimits.GetMaxLevel(survivor, classForProgress);
+                if (maxLevel != int.MaxValue && r.NewLevel >= maxLevel)
+                {
+                    sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; max level {maxLevel} reached)");
+                }
+                else
+                {
+                    var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
+                    var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
+                    sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
+                }
             }
 
             if (dualClassBlocked)

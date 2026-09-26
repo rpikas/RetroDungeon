@@ -2937,7 +2937,7 @@ In the inspect charater form: when charater that used to be level 17 monk become
 there is no need to inform about monk abilites beening supressed any more since they are not surpressed and should not be
 ___
 
-When createing a new charter, let the the user choose Gender with optinos Male of Female. Defult selected is Male. 
+PHB,pg 15: When createing a new charter, let the the user choose Gender with optinos Male of Female. Defult selected is Male. 
 Gender selection is fter ability roll and before selecting Race.
 When selecting race, there is a limit to what can be selcted since ther is a max and min for what  different abilites 
 can be depending on Gender and race. This table apply
@@ -2957,4 +2957,30 @@ Charisma	Min.	3/3	8/8	3/3	3/3	3/3	3/3
 Charisma	Max.	16/16	18/18	18/18	18/18	18/18	12/12
 
 instead of having the the choise Female and Male, let is be Random, and disply it at the same time as the abilities.
+___
+According to PHB,pg 14 there is a limit to what levels can be reached for different classes depending on the race of the character. This table apply
+
+Character Class	Dwarven	Elven	Gnome	Half-Elven	Halfling	Half-Orc	Human
+CLERIC	(8)	(7)	(7)	5	no	4	U
+Druid	no	no	no	U	no	no	U
+FIGHTER	9'	7'	6'	8'	6'	10	U
+Paladin	no	no	no	no	no	no	U
+Ranger	no	no	no	8'	no	no	U
+MAGIC-USER	no	11'	no	8'	no	no	U
+Illusionist	no	no	7'	no	no	no	U
+THIEF	U	U	U	U	U	8'	U
+Assassin	9	10	8	11	no	U	U
+MONK	no	no	no	no	no	no	U
+U means unlimited, i.e. no limit on level for that class and race combination.
+
+exceptions to the above table are as follows:
+Dwarven fighters with less than 17strength are limited to 7th level; those with 17strength are limited to 8th level.
+'Elven fighters with less than 17strength are limited to 5th level; those with 17strength are limited to 6th level.
+3Gnome fighters of less than 18 strength are limited to 5th level.
+4Half-elven fighters of less than 17strength are limited to 6th level; those of 17strength are limited to 7th level.
+'Halfling fighters of hairfeet sub-race, as well as all other types of sub-races with strength of under 17, are limited to 4th level. Tallfellows of 17strength and Stouts of I8 strength can work up to 5th level. Tallfellows that somehow obtain 18 strength can work up to 6th level.
+elven magic-users with intelligence of less than 17 are limited to 9th level; those with intelligence of 17are limited to 10th level.
+'Half-elven magic-users with intelligence of less than 17 are limited to 6th level; those with intelligence of 17 are limited to 7th level.
+'Gnome illusionists with intelligence or dexterity under 17 are limited to 5th level; those with both intelligence and dexterity of 17 are limited to 6th level.
+9Half-Orc thieves with dexterity of less than 17 are limited to 6th level; those with dexterity of 17 are limited to 7th level.:
 ___

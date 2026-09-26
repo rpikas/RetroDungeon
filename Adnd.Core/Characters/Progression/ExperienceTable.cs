@@ -67,25 +67,31 @@ public static class ExperienceTable
     public static int GetLevelForExperience(Character character, int experience)
     {
         if (character.IsDualClassed && character.DualClass.HasValue)
-            return GetLevelForClass(character.DualClass.Value, experience);
+            return GetLevelForClass(character, character.DualClass.Value, experience);
 
         if (character.Classes == null || character.Classes.Count == 0)
             return 1;
 
         if (character.Classes.Count == 1)
-            return GetLevelForClass(character.Classes[0], experience);
+            return GetLevelForClass(character, character.Classes[0], experience);
 
         // Multiclass: split XP equally, level is constrained by the slowest class.
         var share = experience / character.Classes.Count;
         int minLevel = int.MaxValue;
         foreach (var cls in character.Classes)
         {
-            var lvl = GetLevelForClass(cls, share);
+            var lvl = GetLevelForClass(character, cls, share);
             if (lvl < minLevel)
                 minLevel = lvl;
         }
 
         return Math.Max(1, minLevel);
+    }
+
+    public static int GetLevelForClass(Character character, CharacterClass cls, int experience)
+    {
+        var uncapped = GetLevelForClass(cls, experience);
+        return RaceClassLevelLimits.ApplyCap(character, cls, uncapped);
     }
 
     public static int GetLevelForClass(CharacterClass cls, int experience)

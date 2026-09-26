@@ -43,6 +43,7 @@ public class CharacterRepository
 
                 c.EnsureClassProgressions();
                 NormalizeDualClassDefaults(c);
+                var classLevelCapsChanged = NormalizeClassLevelCaps(c);
                 // Keep spell slots in sync with current class levels.
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
@@ -50,7 +51,7 @@ public class CharacterRepository
                 var abilityScoresChanged = NormalizeAbilityScoresByRaceGender(c);
                 HydrateWeaponDamageVsLarge(c, itemLookup);
 
-                if (abilityScoresChanged)
+                if (abilityScoresChanged || classLevelCapsChanged)
                     Save(c);
 
                 list.Add(c);
@@ -58,6 +59,36 @@ public class CharacterRepository
         }
 
         return list;
+    }
+
+    private static bool NormalizeClassLevelCaps(Character character)
+    {
+        character.EnsureClassProgressions();
+
+        var changed = false;
+
+        foreach (var progression in character.ClassProgressions)
+        {
+            var cappedLevel = RaceClassLevelLimits.ApplyCap(character, progression.Class, progression.Level);
+            var normalized = Math.Max(1, cappedLevel);
+            if (progression.Level != normalized)
+            {
+                progression.Level = normalized;
+                changed = true;
+            }
+        }
+
+        if (character.Classes != null && character.Classes.Count > 0)
+        {
+            var primary = Math.Max(1, character.GetClassLevel(character.Classes[0]));
+            if (character.Level != primary)
+            {
+                character.Level = primary;
+                changed = true;
+            }
+        }
+
+        return changed;
     }
 
     private static bool NormalizeAbilityScoresByRaceGender(Character character)
