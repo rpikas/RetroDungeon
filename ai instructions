@@ -2935,3 +2935,26 @@ normal methods usally used in RetroDungeon. 91,2
 
 In the inspect charater form: when charater that used to be level 17 monk becomes level 18 thief, 
 there is no need to inform about monk abilites beening supressed any more since they are not surpressed and should not be
+___
+
+When createing a new charter, let the the user choose Gender with optinos Male of Female. Defult selected is Male. 
+Gender selection is fter ability roll and before selecting Race.
+When selecting race, there is a limit to what can be selcted since ther is a max and min for what  different abilites 
+can be depending on Gender and race. This table apply
+	Ability Scores	Dwarven	Elven	Gnome	Half-Elven	Halfling	Half-Orc
+		M/F	M/F	M/F	M/F	M/F	M/F
+Strength	Min.	8/8	3/3	6/6	3/3	6/6	6/6
+strength	Max.	18/17	18/16	18/15	18/17	17/14	18/18
+Intelligence	Min.	3/3	8/8	7/7	4/4	6/6	3/3
+Intelligence	Max.	18/18	18/18	18/18	18/18	18/18	17/17
+Wisdom	Min.	3/3	3/3	3/3	3/3	3/3	3/3
+Wisdom	Max.	18/18	18/18	18/18	18/18	17/17	14/14
+Dexterity	Min.	3/3	7/7	3/3	6/6	8/8	3/3
+Dexterity	Max.	17/17	19/19	18/18	18/18	18/18	17/17
+Constitution	Min.	12/12	6/6	8/8	6/6	10/10	13/13
+Constitution	Max.	19/19	18/18	18/18	18/18	19/19	19/19
+Charisma	Min.	3/3	8/8	3/3	3/3	3/3	3/3
+Charisma	Max.	16/16	18/18	18/18	18/18	18/18	12/12
+
+instead of having the the choise Female and Male, let is be Random, and disply it at the same time as the abilities.
+___

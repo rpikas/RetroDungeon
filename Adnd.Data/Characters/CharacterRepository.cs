@@ -47,12 +47,41 @@ public class CharacterRepository
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
                 NormalizeAttackCadence(c);
+                var abilityScoresChanged = NormalizeAbilityScoresByRaceGender(c);
                 HydrateWeaponDamageVsLarge(c, itemLookup);
+
+                if (abilityScoresChanged)
+                    Save(c);
+
                 list.Add(c);
             }
         }
 
         return list;
+    }
+
+    private static bool NormalizeAbilityScoresByRaceGender(Character character)
+    {
+        if (character.Abilities == null)
+        {
+            character.Abilities = new AbilityScores();
+            return true;
+        }
+
+        var before = character.Abilities;
+        var clamped = RaceAbilityScoreLimits.ClampToLimits(before, character.Race, character.Gender);
+
+        var changed = before.Strength != clamped.Strength
+                      || before.Intelligence != clamped.Intelligence
+                      || before.Wisdom != clamped.Wisdom
+                      || before.Dexterity != clamped.Dexterity
+                      || before.Constitution != clamped.Constitution
+                      || before.Charisma != clamped.Charisma;
+
+        if (changed)
+            character.Abilities = clamped;
+
+        return changed;
     }
 
     private static void NormalizeAttackCadence(Character character)

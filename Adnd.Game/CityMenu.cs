@@ -236,41 +236,52 @@ public class CityMenu
             Console.WriteLine($"(Name truncated to: {name})");
         }
 
+        var gender = Gender.Male;
+
         // Roll abilities before race selection so player can choose race with knowledge
         // of the raw rolled stats. Allow rerolling here.
         var raceValues = Enum.GetValues<Race>();
-        int raceCount = raceValues.Length;
         AbilityScores abilities;
         Race race;
 
         while (true)
         {
+            gender = Random.Shared.Next(0, 2) == 0 ? Gender.Male : Gender.Female;
             abilities = _creator.RollAbilities();
             Console.WriteLine("\nRolled Abilities (raw):");
+            Console.WriteLine($"Gender: {gender}");
             Console.WriteLine(abilities);
 
+            var availableRaces = raceValues
+                .Where(r =>
+                {
+                    var adjusted = _creator.ApplyRaceModifiers(abilities, r);
+                    return RaceAbilityScoreLimits.IsWithinLimits(adjusted, r, gender);
+                })
+                .ToList();
+
             Console.WriteLine("Choose Race:");
-            for (int i = 0; i < raceCount; i++)
+            for (int i = 0; i < availableRaces.Count; i++)
             {
-                var r = (Race)raceValues.GetValue(i)!;
+                var r = availableRaces[i];
                 var label = (char)('A' + i);
                 Console.WriteLine($"{label}) {r.ToDisplayString()}");
             }
 
-            var rerollLabel = (char)('A' + raceCount);
+            var rerollLabel = (char)('A' + availableRaces.Count);
             Console.WriteLine($"{rerollLabel}) Reroll abilities");
             Console.Write("Race: ");
-            var raceIdx = InputHelper.ReadLetterIndex(raceCount + 1);
+            var raceIdx = InputHelper.ReadLetterIndex(availableRaces.Count + 1);
 
-            if (raceIdx.HasValue && raceIdx.Value == raceCount)
+            if (raceIdx.HasValue && raceIdx.Value == availableRaces.Count)
             {
                 Console.WriteLine("Rerolling abilities...\n");
                 continue;
             }
 
             race = Race.Human;
-            if (raceIdx.HasValue && raceIdx.Value < raceCount)
-                race = (Race)raceValues.GetValue(raceIdx.Value)!;
+            if (raceIdx.HasValue && raceIdx.Value < availableRaces.Count)
+                race = availableRaces[raceIdx.Value];
 
             break;
         }
@@ -279,7 +290,9 @@ public class CityMenu
         Console.WriteLine($"Selected race: {race.ToDisplayString()}");
         Console.WriteLine();
         abilities = _creator.ApplyRaceModifiers(abilities, race);
+        abilities = RaceAbilityScoreLimits.ClampToLimits(abilities, race, gender);
         Console.WriteLine("\nRolled Abilities (after racial modifiers):");
+        Console.WriteLine($"Gender: {gender}");
         Console.WriteLine(abilities);
 
         Console.WriteLine("Choose Class:");
@@ -418,6 +431,7 @@ public class CityMenu
             GoldPieces = startingGold,
             ArmorClass = armorClass,
             Alignment = alignment,
+            Gender = gender,
             ExceptionalStrengthPercentile = exceptionalStrengthPercentile,
             NumberOfAttacks = 1,  // Base 1 attack per round at level 1
             Damage = "1d2",  // Default unarmed or no-weapon damage; will be replaced when weapon equipped
