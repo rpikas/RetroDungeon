@@ -2899,5 +2899,14 @@ when L is pressed in the shop go to === WELCOME TO THE CITY OF MYTHGAR ===
 ___
 can you set IsTwoHanded: true for two handed sword and make sure that both hands are occupied when equipping items with IsTwoHanded: true? 88,5
 ___
-in the church when characters can not afford healing ask who will pay
+in the church when characters can not afford healing ask who will pay.88,8
 ___
+when a trap is triggered that cause a charater to get hp 0 or less then he dies. 89,0
+___
+
+Druid can not change class to cleric, since clerics can not be true neutral
+5) Sauron - Human True Neutral Druid L14
+Character #: 5Choose target class:
+A) Cleric
+B) Fighter
+Target class:

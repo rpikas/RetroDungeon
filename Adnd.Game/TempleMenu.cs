@@ -161,30 +161,23 @@ public class TempleMenu
             Console.WriteLine();
             Console.WriteLine($"{c.Name} cannot afford healing ({c.GoldPieces}/{cost} gp).");
 
-            var payers = partyCharacters
-                .Where(p => p.GoldPieces >= cost)
-                .ToList();
-
-            if (payers.Count == 0)
+            Console.WriteLine($"Who will pay {cost} gp for {c.Name}?");
+            for (int i = 0; i < partyCharacters.Count; i++)
             {
-                Console.WriteLine("No party member can cover this healing cost.");
-                skipped.Add(c.Name);
-                continue;
+                var payerCandidate = partyCharacters[i];
+                var canAfford = payerCandidate.GoldPieces >= cost ? "" : " (not enough)";
+                Console.WriteLine($"{i + 1}. {payerCandidate.Name} ({payerCandidate.GoldPieces} gp){canAfford}");
             }
 
-            Console.WriteLine($"Who will pay {cost} gp for {c.Name}?");
-            for (int i = 0; i < payers.Count; i++)
-                Console.WriteLine($"{i + 1}. {payers[i].Name} ({payers[i].GoldPieces} gp)");
-
             Console.Write("Choose #: ");
-            var payerSelection = InputHelper.ReadNumber(1, payers.Count);
+            var payerSelection = InputHelper.ReadNumber(1, partyCharacters.Count);
             if (!payerSelection.HasValue)
             {
                 skipped.Add(c.Name);
                 continue;
             }
 
-            var payer = payers[payerSelection.Value - 1];
+            var payer = partyCharacters[payerSelection.Value - 1];
             if (Temple.Heal(c, payer, _charRepo))
             {
                 healedCount++;
@@ -192,6 +185,7 @@ public class TempleMenu
             }
             else
             {
+                Console.WriteLine($"{payer.Name} does not have enough gold to cover {c.Name}'s healing.");
                 skipped.Add(c.Name);
             }
         }

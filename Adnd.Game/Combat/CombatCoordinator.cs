@@ -3037,9 +3037,18 @@ public sealed class CombatCoordinator
             case ChestTrapType.ExplodingBox:
                 var mult = Math.Max(1, dungeonLevel);
                 var dmg = _dice.Roll(6) * mult;
+                var explodedDeaths = new List<string>();
                 foreach (var c in survivors)
-                    c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - dmg);
-                ShowTrapTriggeredDialog(owner, session, "Exploding Box", $"Everyone takes {dmg} damage.");
+                {
+                    if (ApplyTrapDamageAndMarkDeath(c, dmg))
+                        explodedDeaths.Add(c.Name);
+                }
+
+                var explodingOutcome = $"Everyone takes {dmg} damage.";
+                if (explodedDeaths.Count > 0)
+                    explodingOutcome += Environment.NewLine + $"Died: {string.Join(", ", explodedDeaths)}.";
+
+                ShowTrapTriggeredDialog(owner, session, "Exploding Box", explodingOutcome);
                 break;
 
             case ChestTrapType.GasBomb:
@@ -3055,8 +3064,12 @@ public sealed class CombatCoordinator
 
             case ChestTrapType.CrossbowBolt:
                 var boltDamage = _dice.Roll(6);
-                opener.CurrentHitPoints = Math.Max(0, opener.CurrentHitPoints - boltDamage);
-                ShowTrapTriggeredDialog(owner, session, "Crossbow Bolt", $"{opener.Name} takes {boltDamage} damage.");
+                var boltKilled = ApplyTrapDamageAndMarkDeath(opener, boltDamage);
+                var boltOutcome = $"{opener.Name} takes {boltDamage} damage.";
+                if (boltKilled)
+                    boltOutcome += Environment.NewLine + $"{opener.Name} dies.";
+
+                ShowTrapTriggeredDialog(owner, session, "Crossbow Bolt", boltOutcome);
                 break;
 
             case ChestTrapType.Alarm:
@@ -3065,29 +3078,67 @@ public sealed class CombatCoordinator
                 break;
 
             case ChestTrapType.MageBlaster:
+                var mageDeaths = new List<string>();
                 foreach (var c in survivors.Where(IsMageOrIllusionist))
                 {
                     var d = _dice.Roll(6);
-                    c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - d);
-                    c.ApplyParalysis(999999);
+                    if (ApplyTrapDamageAndMarkDeath(c, d))
+                    {
+                        mageDeaths.Add(c.Name);
+                    }
+                    else
+                    {
+                        c.ApplyParalysis(999999);
+                    }
                 }
-                ShowTrapTriggeredDialog(owner, session, "Mage Blaster", "Magic-users and illusionists are blasted and paralyzed.");
+
+                var mageOutcome = "Magic-users and illusionists are blasted and paralyzed.";
+                if (mageDeaths.Count > 0)
+                    mageOutcome += Environment.NewLine + $"Died: {string.Join(", ", mageDeaths)}.";
+
+                ShowTrapTriggeredDialog(owner, session, "Mage Blaster", mageOutcome);
                 break;
 
             case ChestTrapType.PriestBlaster:
+                var priestDeaths = new List<string>();
                 foreach (var c in survivors.Where(IsClericOrDruid))
                 {
                     var d = _dice.Roll(6);
-                    c.CurrentHitPoints = Math.Max(0, c.CurrentHitPoints - d);
-                    c.ApplyParalysis(999999);
+                    if (ApplyTrapDamageAndMarkDeath(c, d))
+                    {
+                        priestDeaths.Add(c.Name);
+                    }
+                    else
+                    {
+                        c.ApplyParalysis(999999);
+                    }
                 }
-                ShowTrapTriggeredDialog(owner, session, "Priest Blaster", "Clerics and druids are blasted and paralyzed.");
+
+                var priestOutcome = "Clerics and druids are blasted and paralyzed.";
+                if (priestDeaths.Count > 0)
+                    priestOutcome += Environment.NewLine + $"Died: {string.Join(", ", priestDeaths)}.";
+
+                ShowTrapTriggeredDialog(owner, session, "Priest Blaster", priestOutcome);
                 break;
 
             default:
                 Say(owner, "Treasure Chest", "No trap triggers.", session);
                 break;
         }
+    }
+
+    private static bool ApplyTrapDamageAndMarkDeath(Character target, int damage)
+    {
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.CurrentHitPoints = 0;
+            target.AddStatus(CharacterStatus.Dead);
+            return true;
+        }
+
+        return false;
     }
 
     private void ShowTrapTriggeredDialog(IWin32Window owner, CombatSession session, string trapName, string outcome)
