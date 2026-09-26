@@ -42,6 +42,16 @@ public sealed class SpellProgressionService
             }
         }
 
+        var removedStates = character.Spellcasting
+            .Where(s => !allTracks.ContainsKey(s.SpellClass))
+            .ToList();
+
+        foreach (var removed in removedStates)
+        {
+            character.Spellcasting.Remove(removed);
+            changes.Add((removed.SpellClass, new List<int>(removed.SlotsPerDay), new List<int>()));
+        }
+
         foreach (var kv in allTracks)
         {
             var spellClass = kv.Key;

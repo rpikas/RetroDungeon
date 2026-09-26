@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Adnd.Core.Characters.Progression;
+using Adnd.Core.Items;
 using Adnd.Core.Spells;
 
 namespace Adnd.Core.Characters;
@@ -157,10 +158,53 @@ public sealed class DualClassService
         character.Level = 1;
         character.Experience = 0;
 
-        // Keep HP/HD as-is per AD&D dual-class rule.
+        // Drop old-class spellcasting state and rebuild from the new class only.
+        _ = new SpellProgressionService().RecalculateFromClassProgressions(character);
+
+        // Keep HP/HD as-is per AD&D dual-class rule, but recalculate derived combat state
+        // so old-class combat values (e.g., monk open-hand damage/attacks) do not leak.
+        character.RecalculateArmorClassFromState();
         character.RefreshMoveFromArmorAndClass();
-        character.RefreshMonkProgressionStats();
+        character.NumberOfAttacks = 1f;
+        character.Damage = GetCurrentWeaponDamageOrUnarmed(character);
+
         return true;
+    }
+
+    private static bool HasEquippedWeapon(Character c)
+    {
+        var mainHandWeapon = c.Equipment.TryGetValue(EquipmentSlot.MainHand, out var main)
+                             && main != null
+                             && main.Type == ItemType.Weapon;
+        var offHandWeapon = c.Equipment.TryGetValue(EquipmentSlot.OffHand, out var off)
+                            && off != null
+                            && off.Type == ItemType.Weapon;
+        return mainHandWeapon || offHandWeapon;
+    }
+
+    private static string GetCurrentWeaponDamageOrUnarmed(Character c)
+    {
+        var hasMain = c.Equipment.TryGetValue(EquipmentSlot.MainHand, out var main)
+                      && main != null
+                      && main.Type == ItemType.Weapon
+                      && !string.IsNullOrWhiteSpace(main.Damage);
+
+        var hasOff = c.Equipment.TryGetValue(EquipmentSlot.OffHand, out var off)
+                     && off != null
+                     && off.Type == ItemType.Weapon
+                     && !string.IsNullOrWhiteSpace(off.Damage)
+                     && !ReferenceEquals(main, off);
+
+        if (hasMain && hasOff)
+            return $"{main!.Damage}/{off!.Damage}";
+
+        if (hasMain)
+            return main!.Damage;
+
+        if (hasOff)
+            return off!.Damage;
+
+        return "1d2";
     }
 
     public void MarkOriginalClassFunctionUsed(Character character)
@@ -246,7 +290,14 @@ public sealed class DualClassService
 
         var currentLevel = character.GetClassLevel(activeClass.Value);
         if (currentLevel > Math.Max(0, character.DualClassOriginalLevel))
+        {
             character.DualClassState = DualClassState.SurpassedOriginal;
+
+            // Re-apply derived combat stats when original class features unlock.
+            character.RecalculateArmorClassFromState();
+            character.RefreshMoveFromArmorAndClass();
+            character.RefreshMonkProgressionStats();
+        }
     }
 
     public void ResetAdventureFlag(Character character)

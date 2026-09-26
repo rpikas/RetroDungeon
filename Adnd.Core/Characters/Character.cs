@@ -740,23 +740,39 @@ public class Character
     {
         EnsureClassProgressions();
         var entry = ClassProgressions.FirstOrDefault(x => x.Class == cls);
-        return entry?.Level ?? Level;
+        return entry?.Level ?? 0;
     }
 
     public int GetClassExperience(CharacterClass cls)
     {
         EnsureClassProgressions();
         var entry = ClassProgressions.FirstOrDefault(x => x.Class == cls);
-        return entry?.Experience ?? Experience;
+        return entry?.Experience ?? 0;
     }
 
-    public bool HasPaladinClass() => Classes.Contains(CharacterClass.Paladin);
+    public bool HasPaladinClass() => (Classes.Contains(CharacterClass.Paladin) || HasUnlockedOriginalClassFeature(CharacterClass.Paladin))
+                                     && !IsOriginalClassFeatureLocked(CharacterClass.Paladin);
 
     public bool IsFallenPaladin() => HasPaladinClass() && Alignment != Alignment.LawfulGood;
 
     public bool IsPaladin() => HasPaladinClass() && !IsFallenPaladin();
 
-    public bool HasMonkClass() => Classes.Contains(CharacterClass.Monk);
+    public bool HasMonkClass() => (Classes.Contains(CharacterClass.Monk) || HasUnlockedOriginalClassFeature(CharacterClass.Monk))
+                                  && !IsOriginalClassFeatureLocked(CharacterClass.Monk);
+
+    private bool HasUnlockedOriginalClassFeature(CharacterClass cls)
+    {
+        return IsDualClassed
+               && DualClassState == DualClassState.SurpassedOriginal
+               && DualClassOriginalClass == cls;
+    }
+
+    private bool IsOriginalClassFeatureLocked(CharacterClass cls)
+    {
+        return IsDualClassed
+               && DualClassState == DualClassState.TrainingNewClass
+               && DualClassOriginalClass == cls;
+    }
 
     public static bool IsLawfulAlignment(Alignment alignment)
         => alignment is Alignment.LawfulGood or Alignment.LawfulNeutral or Alignment.LawfulEvil;
@@ -806,11 +822,15 @@ public class Character
     public bool IsMonkImmuneToPoison() => IsMonk() && GetMonkLevel() >= 11;
 
     public int GetPaladinLevel() => IsPaladin()
-        ? GetClassLevel(CharacterClass.Paladin)
+        ? (Classes.Contains(CharacterClass.Paladin)
+            ? GetClassLevel(CharacterClass.Paladin)
+            : Math.Max(1, DualClassOriginalLevel))
         : 0;
 
     public int GetMonkLevel() => IsMonk()
-        ? GetClassLevel(CharacterClass.Monk)
+        ? (Classes.Contains(CharacterClass.Monk)
+            ? GetClassLevel(CharacterClass.Monk)
+            : Math.Max(1, DualClassOriginalLevel))
         : 0;
 
     public bool CanUseMonkBodyHeal() => IsMonk() && GetMonkLevel() >= 7 && !MonkBodyHealUsedToday;
@@ -1211,9 +1231,12 @@ public class Character
         EnsureClassProgressions();
 
         var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
-        var effectiveLevel = GetClassLevel(primaryClass);
+        var monkOriginalUnlocked = HasUnlockedOriginalClassFeature(CharacterClass.Monk) && IsMonk();
+        var effectiveLevel = monkOriginalUnlocked
+            ? Math.Max(1, DualClassOriginalLevel)
+            : GetClassLevel(primaryClass);
 
-        var baseMove = primaryClass == CharacterClass.Monk && IsMonk()
+        var baseMove = (primaryClass == CharacterClass.Monk || monkOriginalUnlocked) && IsMonk()
             ? GetMonkMove(effectiveLevel)
             : 12;
 
@@ -1230,8 +1253,13 @@ public class Character
         EnsureClassProgressions();
 
         var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
-        var isMonkPrimary = primaryClass == CharacterClass.Monk && IsMonk();
-        var effectiveLevel = isMonkPrimary ? GetClassLevel(CharacterClass.Monk) : GetClassLevel(primaryClass);
+        var monkOriginalUnlocked = HasUnlockedOriginalClassFeature(CharacterClass.Monk) && IsMonk();
+        var isMonkPrimary = (primaryClass == CharacterClass.Monk || monkOriginalUnlocked) && IsMonk();
+        var effectiveLevel = isMonkPrimary
+            ? (primaryClass == CharacterClass.Monk
+                ? GetClassLevel(CharacterClass.Monk)
+                : Math.Max(1, DualClassOriginalLevel))
+            : GetClassLevel(primaryClass);
 
         var baseAc = isMonkPrimary
             ? GetMonkEffectiveArmorClass(effectiveLevel)
@@ -1277,8 +1305,12 @@ public class Character
     {
         EnsureClassProgressions();
 
+        if (IsOriginalClassFeatureLocked(CharacterClass.Monk))
+            return;
+
         var primaryClass = Classes.Count > 0 ? Classes[0] : Class;
-        if (primaryClass != CharacterClass.Monk)
+        var monkOriginalUnlocked = HasUnlockedOriginalClassFeature(CharacterClass.Monk);
+        if (primaryClass != CharacterClass.Monk && !monkOriginalUnlocked)
             return;
 
         if (!IsMonk())
@@ -1295,7 +1327,9 @@ public class Character
             return;
         }
 
-        var effectiveLevel = GetClassLevel(CharacterClass.Monk);
+        var effectiveLevel = primaryClass == CharacterClass.Monk
+            ? GetClassLevel(CharacterClass.Monk)
+            : Math.Max(1, DualClassOriginalLevel);
 
         var monkDexterityAcModifier = IsWearingBodyArmor() ? 0 : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
         ArmorClass = GetMonkEffectiveArmorClass(effectiveLevel) + monkDexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);

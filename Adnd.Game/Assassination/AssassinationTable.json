@@ -1,84 +1,20 @@
 {
+  "TargetBands": [ "0-1", "2-3", "4-5", "6-7", "8-9", "10-11", "12-13", "14-15", "16-17", "18+" ],
   "AssassinationTable": [
-    {
-      "VictimLevel": 1,
-      "ChancePercent": 60
-    },
-    {
-      "VictimLevel": 2,
-      "ChancePercent": 55
-    },
-    {
-      "VictimLevel": 3,
-      "ChancePercent": 50
-    },
-    {
-      "VictimLevel": 4,
-      "ChancePercent": 45
-    },
-    {
-      "VictimLevel": 5,
-      "ChancePercent": 40
-    },
-    {
-      "VictimLevel": 6,
-      "ChancePercent": 35
-    },
-    {
-      "VictimLevel": 7,
-      "ChancePercent": 30
-    },
-    {
-      "VictimLevel": 8,
-      "ChancePercent": 25
-    },
-    {
-      "VictimLevel": 9,
-      "ChancePercent": 20
-    },
-    {
-      "VictimLevel": 10,
-      "ChancePercent": 15
-    },
-    {
-      "VictimLevel": 11,
-      "ChancePercent": 15
-    },
-    {
-      "VictimLevel": 12,
-      "ChancePercent": 10
-    },
-    {
-      "VictimLevel": 13,
-      "ChancePercent": 10
-    },
-    {
-      "VictimLevel": 14,
-      "ChancePercent": 10
-    },
-    {
-      "VictimLevel": 15,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 16,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 17,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 18,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 19,
-      "ChancePercent": 5
-    },
-    {
-      "VictimLevel": 20,
-      "ChancePercent": 5
-    }
+    { "AssassinLevel": 1, "TargetBandChances": [ 50, 45, 35, 25, 10, 1, 0, 0, 0, 0 ] },
+    { "AssassinLevel": 2, "TargetBandChances": [ 55, 50, 40, 30, 15, 2, 0, 0, 0, 0 ] },
+    { "AssassinLevel": 3, "TargetBandChances": [ 60, 55, 45, 35, 20, 5, 0, 0, 0, 0 ] },
+    { "AssassinLevel": 4, "TargetBandChances": [ 65, 60, 50, 40, 25, 10, 1, 0, 0, 0 ] },
+    { "AssassinLevel": 5, "TargetBandChances": [ 70, 65, 55, 45, 30, 15, 5, 0, 0, 0 ] },
+    { "AssassinLevel": 6, "TargetBandChances": [ 75, 70, 60, 50, 35, 20, 10, 1, 0, 0 ] },
+    { "AssassinLevel": 7, "TargetBandChances": [ 80, 75, 65, 55, 40, 25, 15, 5, 0, 0 ] },
+    { "AssassinLevel": 8, "TargetBandChances": [ 85, 80, 70, 60, 45, 30, 20, 10, 2, 0 ] },
+    { "AssassinLevel": 9, "TargetBandChances": [ 95, 90, 80, 70, 55, 40, 30, 20, 5, 0 ] },
+    { "AssassinLevel": 10, "TargetBandChances": [ 99, 95, 85, 75, 60, 45, 35, 25, 10, 1 ] },
+    { "AssassinLevel": 11, "TargetBandChances": [ 100, 99, 90, 80, 65, 50, 40, 30, 15, 5 ] },
+    { "AssassinLevel": 12, "TargetBandChances": [ 100, 100, 95, 85, 70, 55, 45, 35, 20, 10 ] },
+    { "AssassinLevel": 13, "TargetBandChances": [ 100, 100, 99, 95, 80, 65, 50, 40, 25, 15 ] },
+    { "AssassinLevel": 14, "TargetBandChances": [ 100, 100, 100, 99, 90, 75, 60, 50, 35, 25 ] },
+    { "AssassinLevel": 15, "TargetBandChances": [ 100, 100, 100, 100, 99, 85, 70, 60, 40, 30 ] }
   ]
 }

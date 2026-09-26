@@ -2851,34 +2851,47 @@ public sealed class CombatCoordinator
             IncludeLairTreasure = true,
             TrapType = trapType
         };
-        var chestOpened = false;
 
-        using var dialog = new LairTreasureChestDialog(p => ViewerPromptChanged?.Invoke(session, p));
-        dialog.ShowDialog(owner);
-
-        switch (dialog.Choice)
+        while (true)
         {
-            case LairChestChoice.LeaveAlone:
+            using var dialog = new LairTreasureChestDialog(p => ViewerPromptChanged?.Invoke(session, p));
+            dialog.ShowDialog(owner);
+
+            switch (dialog.Choice)
+            {
+                case LairChestChoice.LeaveAlone:
+                    result.IncludeLairTreasure = false;
+                    RuleApplicationInfo.Publish("Treasure chest left alone. In-lair treasure not collected.");
+                    return result;
+
+                case LairChestChoice.Back:
+                    return result;
+
+                case LairChestChoice.CastFindTraps:
+                    if (!HandleCastFindTraps(owner, session, survivors, result))
+                        continue;
+                    break;
+
+                case LairChestChoice.Inspect:
+                    if (!HandleInspectTrap(owner, session, survivors, result))
+                        continue;
+                    break;
+            }
+
+            if (dialog.Choice != LairChestChoice.Open && dialog.Choice != LairChestChoice.CastFindTraps && dialog.Choice != LairChestChoice.Inspect)
+                continue;
+
+            var openerPick = PromptSelectPartyMember(owner, session, survivors, "Open chest", "Choose who opens the chest:", allowLeaveOption: true);
+            if (openerPick.LeaveSelected)
+            {
                 result.IncludeLairTreasure = false;
                 RuleApplicationInfo.Publish("Treasure chest left alone. In-lair treasure not collected.");
                 return result;
+            }
 
-            case LairChestChoice.CastFindTraps:
-                HandleCastFindTraps(owner, session, survivors, result);
-                break;
-
-            case LairChestChoice.Inspect:
-                HandleInspectTrap(owner, session, survivors, result);
-                break;
-        }
-
-        if (dialog.Choice == LairChestChoice.Open || dialog.Choice == LairChestChoice.CastFindTraps || dialog.Choice == LairChestChoice.Inspect)
-        {
-            var opener = PromptSelectPartyMember(owner, session, survivors, "Open chest", "Choose who opens the chest:");
+            var opener = openerPick.Character;
             if (opener == null)
-                return result;
-
-            chestOpened = true;
+                continue;
 
             var shouldTrigger = !result.TrapDisarmed && trapType != ChestTrapType.None;
             if (shouldTrigger)
@@ -2889,21 +2902,17 @@ public sealed class CombatCoordinator
                 if (triggered)
                     ApplyChestTrapEffect(owner, session, survivors, opener, dungeonLevel, trapType, result);
             }
-        }
 
-        if (chestOpened)
-        {
             ShowTreasureFoundDialog(owner, session);
+            return result;
         }
-
-        return result;
     }
 
-    private void HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    private bool HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
     {
-        var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:", includeClassInList: true);
+        var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:", includeClassInList: true).Character;
         if (caster == null)
-            return;
+            return false;
 
         var findTrapsSpell = _spellRepository.LoadAll()
             .FirstOrDefault(s => string.Equals(s.Name, "Find Traps", StringComparison.OrdinalIgnoreCase));
@@ -2911,7 +2920,7 @@ public sealed class CombatCoordinator
         if (findTrapsSpell == null)
         {
             Say(owner, "Treasure Chest", "Find Traps spell is not available in spell data.", session);
-            return;
+            return true;
         }
 
         var cast = _spellCastingService.Cast(new SpellCastRequest
@@ -2927,7 +2936,7 @@ public sealed class CombatCoordinator
         if (!cast.Success)
         {
             Say(owner, "Treasure Chest", $"{caster.Name} fails to cast Find Traps.{Environment.NewLine}{string.Join(Environment.NewLine, cast.Events)}", session);
-            return;
+            return true;
         }
 
         Say(owner, "Treasure Chest", $"{caster.Name} casts Find Traps and detects: {FormatTrapName(result.TrapType)}.", session);
@@ -2935,28 +2944,29 @@ public sealed class CombatCoordinator
         RuleApplicationInfo.Publish($"Find Traps spell result: trap {(result.TrapFound ? "found" : "not found")} ({FormatTrapName(result.TrapType)}).");
 
         if (result.TrapType == ChestTrapType.None)
-            return;
+            return true;
 
         var attempt = AskYesNoOnBoth(owner, session, "Disarm Trap", "A trap is found. Attempt to disarm it?");
         if (attempt != DialogResult.Yes)
         {
             RuleApplicationInfo.Publish("Disarm Traps result: not attempted (trap remains armed).");
-            return;
+            return true;
         }
 
         TryDisarmByAnyThief(owner, session, survivors, result);
+        return true;
     }
 
-    private void HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    private bool HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
     {
-        var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true);
+        var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true).Character;
         if (inspector == null)
-            return;
+            return false;
 
         if (!IsThiefClass(inspector))
         {
             Say(owner, "Treasure Chest", $"{inspector.Name} is not a thief class and cannot inspect for traps effectively.", session);
-            return;
+            return true;
         }
 
         if (_dualClassService.IsThiefBackstabFromOriginalClass(inspector))
@@ -2972,7 +2982,7 @@ public sealed class CombatCoordinator
         {
             RuleApplicationInfo.Publish($"Find Traps result: trap not found by {inspector.Name}.");
             Say(owner, "Treasure Chest", $"{inspector.Name} does not find any trap.", session);
-            return;
+            return true;
         }
 
         result.TrapFound = true;
@@ -2982,7 +2992,7 @@ public sealed class CombatCoordinator
         if (attempt != DialogResult.Yes)
         {
             RuleApplicationInfo.Publish("Disarm Traps result: not attempted (trap remains armed).");
-            return;
+            return true;
         }
 
         var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
@@ -2994,6 +3004,8 @@ public sealed class CombatCoordinator
             Say(owner, "Treasure Chest", $"{inspector.Name} disarms the trap.", session);
         else
             Say(owner, "Treasure Chest", $"{inspector.Name} fails to disarm the trap.", session);
+
+        return true;
     }
 
     private void TryDisarmByAnyThief(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
@@ -3005,7 +3017,7 @@ public sealed class CombatCoordinator
             return;
         }
 
-        var disarmer = PromptSelectPartyMember(owner, session, thieves, "Disarm Trap", "Choose who attempts to disarm:");
+        var disarmer = PromptSelectPartyMember(owner, session, thieves, "Disarm Trap", "Choose who attempts to disarm:").Character;
         if (disarmer == null)
             return;
 
@@ -3334,7 +3346,14 @@ public sealed class CombatCoordinator
         return null;
     }
 
-    private Character? PromptSelectPartyMember(IWin32Window owner, CombatSession session, List<Character> candidates, string title, string promptText, bool includeClassInList = false)
+    private (Character? Character, bool LeaveSelected) PromptSelectPartyMember(
+        IWin32Window owner,
+        CombatSession session,
+        List<Character> candidates,
+        string title,
+        string promptText,
+        bool includeClassInList = false,
+        bool allowLeaveOption = false)
     {
         var selectable = candidates
             .Where(c => c.CurrentHitPoints > 0)
@@ -3343,7 +3362,7 @@ public sealed class CombatCoordinator
             .ToList();
 
         if (selectable.Count == 0)
-            return null;
+            return (null, false);
 
         using var form = new Form
         {
@@ -3394,7 +3413,7 @@ public sealed class CombatCoordinator
                     ? $" ({string.Join("/", c.Classes.Select(cls => cls.ToDisplayString()))})"
                     : string.Empty;
                 return $"{i + 1}) {c.Name}{classText}";
-            })),
+            })) + Environment.NewLine + Environment.NewLine + (allowLeaveOption ? "B)ack   L)eave" : "B)ack"),
             TextAlign = ContentAlignment.TopLeft,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -3402,11 +3421,20 @@ public sealed class CombatCoordinator
         };
 
         int selectedIndex = -1;
+        bool leaveSelected = false;
         form.KeyDown += (_, e) =>
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.B)
             {
                 form.DialogResult = DialogResult.Cancel;
+                form.Close();
+                return;
+            }
+
+            if (allowLeaveOption && e.KeyCode == Keys.L)
+            {
+                leaveSelected = true;
+                form.DialogResult = DialogResult.Abort;
                 form.Close();
                 return;
             }
@@ -3430,11 +3458,17 @@ public sealed class CombatCoordinator
         var options = selectable
             .Select((c, i) => new ViewerPromptOption($"pick:{i + 1}", c.Name))
             .ToList();
+        options.Add(new ViewerPromptOption("back", "Back"));
+        if (allowLeaveOption)
+            options.Add(new ViewerPromptOption("leave", "Leave"));
 
         var prompt = new ViewerPrompt("choice", promptText, null, options);
         var answers = selectable
             .Select((c, i) => new { Key = $"pick:{i + 1}", Value = DialogResult.OK })
             .ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+        answers["back"] = DialogResult.Cancel;
+        if (allowLeaveOption)
+            answers["leave"] = DialogResult.Abort;
 
         var viewerPick = ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
         ViewerPromptChanged?.Invoke(session, null);
@@ -3442,7 +3476,11 @@ public sealed class CombatCoordinator
         if (viewerPick == DialogResult.OK && selectedIndex < 0)
             selectedIndex = 0;
 
-        return selectedIndex >= 0 && selectedIndex < selectable.Count ? selectable[selectedIndex] : null;
+        if (viewerPick == DialogResult.Abort)
+            leaveSelected = true;
+
+        var selected = selectedIndex >= 0 && selectedIndex < selectable.Count ? selectable[selectedIndex] : null;
+        return (selected, leaveSelected);
     }
 
     private static bool IsThiefClass(Character c)

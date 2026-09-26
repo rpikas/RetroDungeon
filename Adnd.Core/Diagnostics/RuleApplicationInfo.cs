@@ -59,6 +59,8 @@ public static class RuleApplicationInfo
         var sourceToken = sourceRaw.Replace(" ", string.Empty);
         var pageToken = pageRaw.Replace(" ", string.Empty);
         var fileName = $"{sourceToken}{pageToken}.png";
+        var sourceCommaPageFileName = $"{sourceRaw},{pageRaw}.png";
+        var sourceCommaSpacePageFileName = $"{sourceRaw}, {pageRaw}.png";
         var pageFileName = string.IsNullOrWhiteSpace(pageToken) ? string.Empty : $"{pageToken}.png";
         var rawPageFileName = string.IsNullOrWhiteSpace(pageRaw) ? string.Empty : $"{pageRaw}.png";
         if (string.IsNullOrWhiteSpace(sourceToken) || string.IsNullOrWhiteSpace(pageToken))
@@ -73,10 +75,20 @@ public static class RuleApplicationInfo
             Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets",  "Monsters","MM1", fileName),
 
             Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", fileName),
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", sourceCommaPageFileName),
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", sourceCommaSpacePageFileName),
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", fileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", sourceCommaPageFileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "Rules", sourceCommaSpacePageFileName),
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", fileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", sourceCommaPageFileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Rules", sourceCommaSpacePageFileName),
             Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Rules", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Rules", sourceCommaPageFileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Rules", sourceCommaSpacePageFileName),
             Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", sourceCommaPageFileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets", "Rules", sourceCommaSpacePageFileName),
 
             Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", "Treasure", pageFileName),
             Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", "Treasure", rawPageFileName),

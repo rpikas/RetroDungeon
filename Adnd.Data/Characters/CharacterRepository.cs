@@ -34,17 +34,50 @@ public class CharacterRepository
             var c = JsonSerializer.Deserialize<Character>(json);
             if (c != null)
             {
+                if (c.HasStatus(CharacterStatus.Lost))
+                {
+                    // Lost characters are permanently removed from both roster and party.
+                    Delete(c.Name);
+                    continue;
+                }
+
                 c.EnsureClassProgressions();
                 NormalizeDualClassDefaults(c);
                 // Keep spell slots in sync with current class levels.
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
+                NormalizeAttackCadence(c);
                 HydrateWeaponDamageVsLarge(c, itemLookup);
                 list.Add(c);
             }
         }
 
         return list;
+    }
+
+    private static void NormalizeAttackCadence(Character character)
+    {
+        character.EnsureClassProgressions();
+
+        if (character.Classes == null || character.Classes.Count == 0)
+            return;
+
+        var primary = character.Classes[0];
+        var level = Math.Max(1, character.GetClassLevel(primary));
+
+        if (primary is CharacterClass.Fighter or CharacterClass.Paladin or CharacterClass.Ranger)
+        {
+            if (level < 7)
+                character.NumberOfAttacks = 1f;
+            else if (level < 13)
+                character.NumberOfAttacks = 1.5f;
+            else
+                character.NumberOfAttacks = 2f;
+
+            return;
+        }
+
+        character.NumberOfAttacks = 1f;
     }
 
     private static void NormalizeDualClassDefaults(Character character)
@@ -116,6 +149,13 @@ public class CharacterRepository
 
     public void Save(Character character)
     {
+        if (character.HasStatus(CharacterStatus.Lost))
+        {
+            // Lost status means removed from active game state.
+            Delete(character.Name);
+            return;
+        }
+
         string fileName = $"{SanitizeFileName(character.Name)}.json";
         string path = Path.Combine(_folder, fileName);
 

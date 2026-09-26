@@ -133,7 +133,25 @@ public sealed class SpellCastingService
 
     private static bool CanUseSpellClassFromScroll(Character caster, SpellClass spellClass)
     {
-        return caster.Spellcasting.Any(s => s.SpellClass == spellClass);
+        return CanCastSpellClass(caster, spellClass)
+               && caster.Spellcasting.Any(s => s.SpellClass == spellClass);
+    }
+
+    private static bool CanCastSpellClass(Character caster, SpellClass spellClass)
+    {
+        var classes = caster.Classes != null && caster.Classes.Count > 0
+            ? caster.Classes
+            : new List<CharacterClass> { caster.Class };
+
+        foreach (var cls in classes)
+        {
+            var classLevel = Math.Max(1, caster.GetClassLevel(cls));
+            var tracks = SpellProgression.GetSpellcastingTracks(cls, classLevel);
+            if (tracks.Any(t => t.SpellClass == spellClass))
+                return true;
+        }
+
+        return false;
     }
 
     private static int GetCasterLevelForSpellClass(Character caster, SpellClass spellClass)
@@ -232,6 +250,9 @@ public sealed class SpellCastingService
         if (!IsContextAllowed(spell, request.Context))
             return SpellCastResult.Failure($"{spell.Name} cannot be cast in this context.");
 
+        if (!CanCastSpellClass(request.Caster, spell.SpellClass))
+            return SpellCastResult.Failure($"{request.Caster.Name} cannot cast {spell.Name}.");
+
         NormalizeTargetsForCombat(request, spell);
 
         var state = request.Caster.Spellcasting.FirstOrDefault(s => s.SpellClass == spell.SpellClass);
@@ -273,6 +294,9 @@ public sealed class SpellCastingService
             return false;
 
         if (caster.IsFallenPaladin() && spell.SpellClass == SpellClass.Cleric)
+            return false;
+
+        if (!CanCastSpellClass(caster, spell.SpellClass))
             return false;
 
         var state = caster.Spellcasting.FirstOrDefault(s => s.SpellClass == spell.SpellClass);

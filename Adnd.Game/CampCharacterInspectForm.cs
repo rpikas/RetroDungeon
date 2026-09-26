@@ -716,6 +716,13 @@ public sealed class CampCharacterInspectForm : Form
         var current = c.DualClass.Value.ToDisplayString();
         var former = c.DualClassOriginalClass?.ToDisplayString() ?? "Unknown";
         var formerLevel = Math.Max(0, c.DualClassOriginalLevel);
+
+        if (c.DualClassState == DualClassState.TrainingNewClass)
+            return $"Dual-class: {current} (from {former} L{formerLevel}) - old-class abilities suppressed";
+
+        if (c.DualClassState == DualClassState.SurpassedOriginal)
+            return $"Dual-class: {current} (from {former} L{formerLevel})";
+
         return $"Dual-class: {current} (from {former} L{formerLevel}) - {c.DualClassState}";
     }
 

@@ -124,7 +124,11 @@ public sealed class LevelUpService
                 character.NumberOfAttacks = 1.5f; // 3/2 attacks
             else
                 character.NumberOfAttacks = 2f;
+
+            return;
         }
+
+        character.NumberOfAttacks = 1f;
     }
 
 }

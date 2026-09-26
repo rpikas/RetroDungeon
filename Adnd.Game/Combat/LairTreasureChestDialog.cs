@@ -11,7 +11,8 @@ internal enum LairChestChoice
     Open,
     CastFindTraps,
     LeaveAlone,
-    Inspect
+    Inspect,
+    Back
 }
 
 internal sealed class LairTreasureChestDialog : Form
@@ -22,12 +23,13 @@ internal sealed class LairTreasureChestDialog : Form
         ["cast"] = Keys.C,
         ["leave"] = Keys.L,
         ["inspect"] = Keys.I,
+        ["back"] = Keys.B,
     };
 
     private readonly Action<ViewerPrompt?>? _publish;
     private ViewerControlPump? _pump;
 
-    public LairChestChoice Choice { get; private set; } = LairChestChoice.LeaveAlone;
+    public LairChestChoice Choice { get; private set; } = LairChestChoice.Back;
 
     public LairTreasureChestDialog(Action<ViewerPrompt?>? publish)
     {
@@ -85,7 +87,7 @@ internal sealed class LairTreasureChestDialog : Form
             Top = 260,
             Width = frame.Width,
             Height = 140,
-            Text = "O)PEN   C)AST SPELL FIND TRAPS\nL)EAVE ALONE   I)NSPECT",
+            Text = "O)PEN   C)AST SPELL FIND TRAPS\nL)EAVE   I)NSPECT   B)ACK",
             TextAlign = ContentAlignment.TopCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -107,14 +109,15 @@ internal sealed class LairTreasureChestDialog : Form
 
         _publish?.Invoke(new ViewerPrompt(
             "choice",
-            "Treasure chest: O)pen, C)ast Find Traps, L)eave alone, I)nspect",
+            "Treasure chest: O)pen, C)ast Find Traps, L)eave, I)nspect, B)ack",
             null,
             new[]
             {
                 new ViewerPromptOption("open", "Open"),
                 new ViewerPromptOption("cast", "Cast Find Traps"),
-                new ViewerPromptOption("leave", "Leave alone"),
-                new ViewerPromptOption("inspect", "Inspect")
+                new ViewerPromptOption("leave", "Leave"),
+                new ViewerPromptOption("inspect", "Inspect"),
+                new ViewerPromptOption("back", "Back")
             }));
     }
 
@@ -138,10 +141,12 @@ internal sealed class LairTreasureChestDialog : Form
             CloseWith(LairChestChoice.Open);
         else if (key == Keys.C)
             CloseWith(LairChestChoice.CastFindTraps);
-        else if (key == Keys.L || key == Keys.Escape)
+        else if (key == Keys.L)
             CloseWith(LairChestChoice.LeaveAlone);
         else if (key == Keys.I)
             CloseWith(LairChestChoice.Inspect);
+        else if (key == Keys.B || key == Keys.Escape)
+            CloseWith(LairChestChoice.Back);
     }
 
     private static Image? ResolveChestImage()

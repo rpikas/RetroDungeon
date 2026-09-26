@@ -2350,7 +2350,10 @@ public sealed class CombatResolver
 
         var rangedWeapon = member.Equipment.TryGetValue(EquipmentSlot.Range, out var rw) ? rw : null;
         var ammo = member.Equipment.TryGetValue(EquipmentSlot.Ammo, out var am) ? am : null;
+        var partyPosition = session.Party.IndexOf(member) + 1; // 1-based
+        var isFrontRankPosition = partyPosition is >= 1 and <= 3;
         var useRanged = rangedWeapon != null
+                        && !isFrontRankPosition
                         && (!string.IsNullOrWhiteSpace(rangedWeapon.Range)
                             || !string.IsNullOrWhiteSpace(rangedWeapon.FireRate)
                             || rangedWeapon.RequiresAmmo
@@ -2469,34 +2472,26 @@ public sealed class CombatResolver
                 _dualClassService.MarkOriginalClassFunctionUsed(member);
 
             var assassination = new AssassinationService("Data/Assassination");
+            var assassinLevel = Math.Max(1, member.GetClassLevel(CharacterClass.Assassin));
             int monsterLevel = target.Template.HitDice;
-            bool success = assassination.TryAssassinate(monsterLevel, _rng);
+            var assassinationRoll = assassination.RollAssassination(assassinLevel, monsterLevel, _rng);
 
-            if (success)
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "75Assassin",
+                $"{member.Name} assassination attempt vs {target.DisplayName}",
+                "Use assassin level vs victim level/hit dice table; roll 1d100 and succeed if roll is less than or equal to chance.",
+                "1",
+                "100",
+                assassinationRoll.Roll.ToString(),
+                $"Assassin level {assassinLevel}, target HD {monsterLevel}, chance {assassinationRoll.ChancePercent}% => {(assassinationRoll.Success ? "success" : "failure")}.");
+
+            if (assassinationRoll.Success)
             {
-                RuleApplicationInfo.Publish(
-                    "HomeBrewAI",
-                    "NA",
-                    "assassination",
-                    "assassination success",
-                    "1",
-                    "6",
-                    "0",
-                    "Monster dies?");
                 target.CurrentHitPoints = 0;
                 events.Add(new CombatEvent($"{member.Name} assassinates {target.DisplayName} instantly!"));
                 return;
             }
-
-            RuleApplicationInfo.Publish(
-                "HomeBrewAI",
-                "NA",
-                "assassination",
-                "assassination fail",
-                "1",
-                "6",
-                "0",
-                "Monster survives?");
         }
 
         for (int i = 0; i < attacks; i++)
@@ -3686,14 +3681,18 @@ public sealed class CombatResolver
 
             if (saveRoll >= saveTarget)
             {
-                events.Add(new CombatEvent($"{target.Name} resists Sleep (save {saveRoll} vs {saveTarget})."));
+                var saveMessage = $"{target.Name} resists Sleep (save {saveRoll} vs {saveTarget}).";
+                events.Add(new CombatEvent(saveMessage));
+                RuleApplicationInfo.PublishLinked("DMG", "pg79 Savethrow", saveMessage);
                 continue;
             }
 
             var rounds = _dice.Roll(3) + 1; // 2-4 rounds
             target.AddStatus(CharacterStatus.Asleep);
             session.SetPartyAsleep(target.Name, rounds);
-            events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s)."));
+            var failedSaveMessage = $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s).";
+            events.Add(new CombatEvent(failedSaveMessage));
+            RuleApplicationInfo.PublishLinked("DMG", "pg79 Savethrow", failedSaveMessage);
         }
     }
 
@@ -4392,10 +4391,21 @@ public sealed class CombatResolver
             return false;
 
         var assassination = new AssassinationService("Data/Assassination");
+        var assassinLevel = Math.Max(1, monster.Template.HitDice);
         var victimLevel = Math.Max(1, target.Level);
-        var success = assassination.TryAssassinate(victimLevel, _rng);
+        var assassinationRoll = assassination.RollAssassination(assassinLevel, victimLevel, _rng);
 
-        if (!success)
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "75Assassin",
+            $"{monster.DisplayName} assassination attempt vs {target.Name}",
+            "Use assassin level vs victim level/hit dice table; roll 1d100 and succeed if roll is less than or equal to chance.",
+            "1",
+            "100",
+            assassinationRoll.Roll.ToString(),
+            $"Assassin level {assassinLevel}, target level {victimLevel}, chance {assassinationRoll.ChancePercent}% => {(assassinationRoll.Success ? "success" : "failure")}.");
+
+        if (!assassinationRoll.Success)
         {
             events.Add(new CombatEvent($"{monster.DisplayName} attempts to assassinate {target.Name} but fails."));
             return true;

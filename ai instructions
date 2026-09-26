@@ -2903,10 +2903,35 @@ in the church when characters can not afford healing ask who will pay.88,8
 ___
 when a trap is triggered that cause a charater to get hp 0 or less then he dies. 89,0
 ___
+Automatically remove lost charaters from the party and roster
 
-Druid can not change class to cleric, since clerics can not be true neutral
-5) Sauron - Human True Neutral Druid L14
-Character #: 5Choose target class:
-A) Cleric
-B) Fighter
-Target class:
+Bug: I changed from 17 level mont to level 1 thief, but the he could still hit hard as a level 17 monk, 
+I think all abilities from the old class should be reset until you reach the same level for the new class in this case 17 level thief
+
+When i changed class from a level 26 magic user, to a level 1 fighter, I could still cast spells,
+I think all abilities from the old class should be reset until you reach the same level for the new class in this case 1 level fighter
+
+in the open chest dialog, introduce a L)eave option and also have a B)ack option to come back the previous selection
+
+if a charater is in position 1,2 or 3 in the party and choose to Fight, the range slot should not be used.
+
+when save throw for charaters, show the same info as in combat round dialog also in And Rules and Dice Info dialog,
+also add a link to "DMG,pg79 Savethrow.png" in Adnd.Game\Assets\Rules as other links in the same dialog usaly do.
+
+when the level thies became level 18 that used to be a level 17 monk then the monk abilites partly came back. 
+The damage with bare hands was restored, but the as was not
+
+The THAC0 is not improve after level 19 for Clerics, Druids and Monks accoding to DMG, pg.74
+The THAC0 is not improve after level 17 forFighters, Paladins, Rangers and Bards accoding to DMG, pg.74
+The THAC0 is not improve after level 21 for Magic users and Illustionists accoding to DMG, pg.74
+The THAC0 is not improve after level 21 for Thiefs and Assassins accoding to DMG, pg.74
+
+Can you follow this table for chanse to assassinate depening levl of assassin and level/hitdice of target Level of the Assassin	
+
+When trying to assassinate 
+when a party memeber or an encounter tries to assassinate, write that in the ADnD Rule and Dice info. show level of 
+assassin and target, what the 1d100 showed and link to the page DMG75Assassin at Adnd.Game\Assets\Rules using the 
+normal methods usally used in RetroDungeon. 91,2
+
+In the inspect charater form: when charater that used to be level 17 monk becomes level 18 thief, 
+there is no need to inform about monk abilites beening supressed any more since they are not surpressed and should not be
