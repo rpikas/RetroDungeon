@@ -23,6 +23,7 @@ public sealed class CombatResolver
     private readonly IDice _dice;
     private readonly SpellCastingService? _spellCastingService;
     private readonly CharacterSavingThrowService _savingThrowService = new();
+    private readonly DualClassService _dualClassService = new();
 
     public CombatResolver(IDice? dice = null, SpellCastingService? spellCastingService = null)
     {
@@ -1284,6 +1285,13 @@ public sealed class CombatResolver
             return;
         }
 
+        var selectedSpell = _spellCastingService.FindSpellById(action.SpellId);
+        if (selectedSpell != null
+            && _dualClassService.IsSpellFromOriginalClass(caster, selectedSpell.SpellClass))
+        {
+            _dualClassService.MarkOriginalClassFunctionUsed(caster);
+        }
+
         var targets = action.Target != null ? new List<SpellCastTarget> { action.Target } : new List<SpellCastTarget>();
 
         var result = _spellCastingService.Cast(new SpellCastRequest
@@ -2138,6 +2146,9 @@ public sealed class CombatResolver
 
     private void ResolveDispellUndead(CombatSession session, Character actor, CombatAction action, List<CombatEvent> events)
     {
+        if (_dualClassService.IsTurnUndeadFromOriginalClass(actor))
+            _dualClassService.MarkOriginalClassFunctionUsed(actor);
+
         var effectiveClericLevel = GetEffectiveTurnUndeadLevel(actor);
         if (effectiveClericLevel < 1)
         {
@@ -2446,11 +2457,17 @@ public sealed class CombatResolver
         var isBackstab = IsThiefBackstabAttack(member, session);
         var backstabMultiplier = isBackstab ? GetThiefBackstabMultiplierByLevel(member.GetClassLevel(CharacterClass.Thief)) : 1;
 
+        if (isBackstab && _dualClassService.IsThiefBackstabFromOriginalClass(member))
+            _dualClassService.MarkOriginalClassFunctionUsed(member);
+
         if (member.Class == CharacterClass.Assassin
             && session.RoundNumber == 1
             && session.MonstersSurprisedRound1
             && target.IsAlive)
         {
+            if (_dualClassService.IsAssassinationFromOriginalClass(member))
+                _dualClassService.MarkOriginalClassFunctionUsed(member);
+
             var assassination = new AssassinationService("Data/Assassination");
             int monsterLevel = target.Template.HitDice;
             bool success = assassination.TryAssassinate(monsterLevel, _rng);

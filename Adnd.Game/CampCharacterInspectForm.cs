@@ -502,6 +502,13 @@ public sealed class CampCharacterInspectForm : Form
             "=== EQUIPPED ITEMS ==="
         };
 
+        var dualClassSummary = FormatDualClassSummary(c);
+        if (!string.IsNullOrWhiteSpace(dualClassSummary))
+        {
+            lines.Insert(1, dualClassSummary);
+            lines.Insert(2, string.Empty);
+        }
+
         foreach (var kv in c.Equipment)
             lines.Add(kv.Value == null ? $" - {kv.Key}: (empty)" : $" - {kv.Key}: {kv.Value.Name}");
 
@@ -678,6 +685,9 @@ public sealed class CampCharacterInspectForm : Form
         sb.AppendLine($"CONSTITUTION {c.Abilities.Constitution,2}");
         sb.AppendLine($"CHARISMA     {c.Abilities.Charisma,2}    STATUS {statusText}");
         sb.AppendLine($"CARRY WT     {c.CurrentCarryWeight,3}/{c.MaxCarryWeight,-3}");
+        var dualClassSummary = FormatDualClassSummary(c);
+        if (!string.IsNullOrWhiteSpace(dualClassSummary))
+            sb.AppendLine($"DUAL CLASS   {dualClassSummary.ToUpperInvariant()}");
         sb.AppendLine();
 
         if (c.Spellcasting != null && c.Spellcasting.Count > 0)
@@ -696,6 +706,17 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         return sb.ToString().TrimEnd();
+    }
+
+    private static string FormatDualClassSummary(Character c)
+    {
+        if (!c.IsDualClassed || !c.DualClass.HasValue)
+            return string.Empty;
+
+        var current = c.DualClass.Value.ToDisplayString();
+        var former = c.DualClassOriginalClass?.ToDisplayString() ?? "Unknown";
+        var formerLevel = Math.Max(0, c.DualClassOriginalLevel);
+        return $"Dual-class: {current} (from {former} L{formerLevel}) - {c.DualClassState}";
     }
 
     private void EquipAction()

@@ -94,6 +94,7 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
             DrawInBox(g, $"{Math.Max(0, _character.Age)}y {Math.Max(0, _character.AgeDays)}d", new Rectangle(44, 188, 120, 36), false, StringAlignment.Center, _handFontSmall10);
+            DrawInBox(g, BuildDualClassSheetLine(_character), new Rectangle(240, 188, 640, 36), false, StringAlignment.Near, _handFontSmall10);
 
             // Ability circles: write only the value inside each circle, not labels.
             if (_character.ExceptionalStrengthPercentile == null)
@@ -306,6 +307,16 @@ namespace Adnd.Game.Windows
                 }
             }
 
+        }
+
+        private static string BuildDualClassSheetLine(Character c)
+        {
+            if (!c.IsDualClassed || !c.DualClass.HasValue)
+                return string.Empty;
+
+            var former = c.DualClassOriginalClass?.ToDisplayString() ?? "Unknown";
+            var formerLevel = Math.Max(0, c.DualClassOriginalLevel);
+            return $"Dual-class: {c.DualClass.Value.ToDisplayString()} (from {former} L{formerLevel}) - {c.DualClassState}";
         }
 
         private static List<string> BuildKnownSpellLines(Character character)

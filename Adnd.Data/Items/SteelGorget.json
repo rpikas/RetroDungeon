@@ -1,0 +1,21 @@
+{
+  "Category": "Armor",
+  "Items": [
+    {
+      "Status": "Implemented",
+      "Name": "Steel Gorget",
+      "Type": "Armor",
+      "Slot": "Neck",
+      "Cost": 1000,
+      "Weight": 2,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric" ],
+      "Rarity": "Uncommon",
+      "Description": "A steel neck guard that offers modest protection.",
+      "Source": "Adnd",
+      "StockQuantity": 0
+    }
+  ]
+}

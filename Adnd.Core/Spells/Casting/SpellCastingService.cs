@@ -31,6 +31,14 @@ public sealed class SpellCastingService
         return _spellsById.Values.FirstOrDefault(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase));
     }
 
+    public Spell? FindSpellById(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        return _spellsById.TryGetValue(id, out var spell) ? spell : null;
+    }
+
     public SpellCastResult CastFromItem(SpellCastRequest request)
     {
         if (IsBlockedFromCasting(request.Caster))

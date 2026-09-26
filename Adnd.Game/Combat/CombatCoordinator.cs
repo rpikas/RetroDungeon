@@ -43,6 +43,7 @@ public sealed class CombatCoordinator
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly PartyRepository _partyRepository = new();
     private readonly LevelUpService _levelUpService = new();
+    private readonly DualClassService _dualClassService = new();
     private readonly SpellRepository _spellRepository = new("Data/Spells");
     private readonly SpellCastingService _spellCastingService;
     private readonly TreasureService _treasureService;
@@ -675,6 +676,7 @@ public sealed class CombatCoordinator
         var baseXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var bonusXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var goldXpByCharacter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var dualClassXpBlockedByCharacter = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
         var classLevelsBeforeByCharacter = new Dictionary<string, Dictionary<CharacterClass, int>>(StringComparer.OrdinalIgnoreCase);
         var allSpells = _spellRepository.LoadAll();
 
@@ -698,7 +700,19 @@ public sealed class CombatCoordinator
             if (gain < 0)
                 gain = 0;
 
-            levelUpResults.Add(_levelUpService.ApplyExperienceAndAutoLevel(survivor, gain, allSpells));
+            var gatedGain = _dualClassService.ApplyAdventureXpGate(survivor, gain);
+            var dualClassBlocked = gain > 0
+                                   && gatedGain == 0
+                                   && survivor.IsDualClassed
+                                   && survivor.DualClassState == DualClassState.TrainingNewClass
+                                   && survivor.UsedOriginalClassFunctionThisAdventure;
+            dualClassXpBlockedByCharacter[survivor.Name] = dualClassBlocked;
+            gain = gatedGain;
+
+            var levelResult = _levelUpService.ApplyExperienceAndAutoLevel(survivor, gain, allSpells);
+            _dualClassService.UpdateStateAfterLevelGain(survivor);
+            _dualClassService.ResetAdventureFlag(survivor);
+            levelUpResults.Add(levelResult);
         }
 
         var totalAwardedXp = levelUpResults.Sum(r => r.ExperienceAfter - r.ExperienceBefore);
@@ -759,6 +773,7 @@ public sealed class CombatCoordinator
             baseXpByCharacter.TryGetValue(r.CharacterName, out var baseGain);
             bonusXpByCharacter.TryGetValue(r.CharacterName, out var bonusGain);
             goldXpByCharacter.TryGetValue(r.CharacterName, out var goldXpGain);
+            dualClassXpBlockedByCharacter.TryGetValue(r.CharacterName, out var dualClassBlocked);
 
             if (survivor != null && survivor.Classes.Count > 1)
             {
@@ -781,6 +796,9 @@ public sealed class CombatCoordinator
                 var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
                 sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
             }
+
+            if (dualClassBlocked)
+                sb.AppendLine("    Dual-class rule: XP set to 0 (used original-class function before surpassing old class level).");
         }
 
         sb.AppendLine();
@@ -2941,6 +2959,9 @@ public sealed class CombatCoordinator
             return;
         }
 
+        if (_dualClassService.IsThiefBackstabFromOriginalClass(inspector))
+            _dualClassService.MarkOriginalClassFunctionUsed(inspector);
+
         var thiefLevel = Math.Max(1, inspector.GetClassLevel(CharacterClass.Thief));
         var chance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var roll = _dice.Roll(100);
@@ -2987,6 +3008,9 @@ public sealed class CombatCoordinator
         var disarmer = PromptSelectPartyMember(owner, session, thieves, "Disarm Trap", "Choose who attempts to disarm:");
         if (disarmer == null)
             return;
+
+        if (_dualClassService.IsThiefBackstabFromOriginalClass(disarmer))
+            _dualClassService.MarkOriginalClassFunctionUsed(disarmer);
 
         var disarmerThiefLevel = Math.Max(1, disarmer.GetClassLevel(CharacterClass.Thief));
         var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(disarmerThiefLevel, disarmer.Race, disarmer.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);

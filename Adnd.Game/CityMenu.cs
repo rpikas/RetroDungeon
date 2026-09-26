@@ -13,12 +13,14 @@ public class CityMenu
     private readonly CharacterRepository _repo = new("Data/Characters");
     private readonly CharacterCreator _creator = new();
     private readonly SpellRepository _spellRepo = new("Data/Spells");
+    private readonly DualClassService _dualClassService = new();
 
     public void Show()
     {
         while (true)
         {
             var all = _repo.GetAll().ToList();
+            var dualClassAvailability = GetDualClassMenuAvailability(all);
 
             Console.Clear();
             Console.WriteLine("=== TRAINING GROUNDS ===");
@@ -46,6 +48,10 @@ public class CityMenu
 
             Console.WriteLine("\nC)reate New Character");
             Console.WriteLine("I)nspect Character");
+            if (dualClassAvailability.Enabled)
+                Console.WriteLine("U) Dual-class (human only)");
+            else
+                Console.WriteLine($"U) Dual-class (unavailable: {dualClassAvailability.Reason})");
             Console.WriteLine("D)elete Character");
             Console.WriteLine("X) Delete All Characters");
             Console.WriteLine("L<-eave");
@@ -54,10 +60,126 @@ public class CityMenu
 
             if (key == ConsoleKey.C) CreateCharacter();
             else if (key == ConsoleKey.I) InspectCharacter(all);
+            else if (key == ConsoleKey.U)
+            {
+                if (!dualClassAvailability.Enabled)
+                {
+                    Console.WriteLine($"Dual-class unavailable: {dualClassAvailability.Reason}");
+                    Console.WriteLine("Press any key...");
+                    Console.ReadKey(true);
+                }
+                else
+                {
+                    StartDualClass(all);
+                }
+            }
             else if (key == ConsoleKey.D) DeleteCharacter(all);
             else if (key == ConsoleKey.X) DeleteAllCharacters(all);
             else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
         }
+    }
+
+    private (bool Enabled, string Reason) GetDualClassMenuAvailability(System.Collections.Generic.List<Character> all)
+    {
+        if (all == null || all.Count == 0)
+            return (false, "no characters");
+
+        var hasHuman = all.Any(c => c.Race == Race.Human);
+        if (!hasHuman)
+            return (false, "no human character");
+
+        var hasNotDualClassedHuman = all.Any(c => c.Race == Race.Human && !c.IsDualClassed);
+        if (!hasNotDualClassedHuman)
+            return (false, "all humans already dual-classed");
+
+        foreach (var c in all.Where(ch => ch.Race == Race.Human && !ch.IsDualClassed))
+        {
+            c.EnsureClassProgressions();
+            var currentClass = c.Classes.Count > 0 ? c.Classes[0] : c.Class;
+
+            foreach (var targetClass in Enum.GetValues<CharacterClass>())
+            {
+                if (targetClass == currentClass)
+                    continue;
+
+                if (_dualClassService.CanStartDualClass(c, targetClass, out _))
+                    return (true, string.Empty);
+            }
+        }
+
+        return (false, "no valid target class for any eligible human");
+    }
+
+    private void StartDualClass(System.Collections.Generic.List<Character> all)
+    {
+        if (all.Count == 0)
+        {
+            Console.WriteLine("No characters available.");
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.Write("Character #: ");
+        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
+        if (!sel.HasValue)
+        {
+            Console.WriteLine("Invalid selection.");
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var character = all[sel.Value - 1];
+        var currentClass = character.Classes.Count > 0 ? character.Classes[0] : character.Class;
+
+        var targets = Enum.GetValues<CharacterClass>()
+            .Where(c => c != currentClass)
+            .OrderBy(c => c.ToDisplayString())
+            .ToList();
+
+        Console.WriteLine("Choose target class:");
+        for (int i = 0; i < targets.Count; i++)
+        {
+            var label = (char)('A' + i);
+            Console.WriteLine($"{label}) {targets[i].ToDisplayString()}");
+        }
+
+        Console.Write("Target class: ");
+        var idx = InputHelper.ReadLetterIndex(targets.Count);
+        if (!idx.HasValue)
+        {
+            Console.WriteLine("Invalid selection.");
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var targetClass = targets[idx.Value];
+
+        Console.WriteLine();
+        Console.WriteLine("Dual-class warning:");
+        Console.WriteLine($"- {DualClassService.NoOldClassProgressionMessage}");
+        Console.WriteLine($"- {DualClassService.OldClassFunctionBlocksXpMessage}");
+        Console.Write("Type Y to confirm: ");
+        var confirm = Console.ReadKey(true).Key;
+        Console.WriteLine();
+        if (confirm != ConsoleKey.Y)
+        {
+            Console.WriteLine("Dual-class cancelled.");
+            Console.WriteLine("Press any key...");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var result = _dualClassService.TryStartDualClass(character, targetClass);
+        Console.WriteLine(result.Message);
+
+        if (result.Success)
+            _repo.Save(character);
+
+        Console.WriteLine("Press any key...");
+        Console.ReadKey(true);
     }
 
     private void CreateCharacter()

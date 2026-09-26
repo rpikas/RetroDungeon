@@ -20,16 +20,22 @@ public class Character
     public int DungeonCellX { get; set; } = 0;
     public int DungeonCellY { get; set; } = 0;
 
-    // Prepared support for human dual-classing (AD&D dual-class mechanic).
-    // Dual-class is a separate mechanic from multiclass: a human may later
-    // change primary class to a second class while retaining progression in the
-    // original class under AD&D rules. The runtime fields are provided now so
-    // the dual-class action can be implemented later without schema changes.
+    // Human dual-classing (AD&D): start in one class, then switch permanently
+    // to a new class for progression. Original-class use during training can
+    // block adventure XP until the new class level surpasses the original level.
     public bool IsDualClassed { get; set; } = false;
-    // The class the character dual-classed into (if any)
+    // The class the character dual-classed into (active progression class).
     public CharacterClass? DualClass { get; set; }
-    // Level in the original class at the time of dual-classing (optional)
+    // Original class at the time of switching.
+    public CharacterClass? DualClassOriginalClass { get; set; }
+    // Level in the original class at the time of dual-classing.
     public int DualClassOriginalLevel { get; set; } = 0;
+    // Current dual-class lifecycle state.
+    public DualClassState DualClassState { get; set; } = DualClassState.None;
+    // Adventure-scoped flag used for XP gating during training phase.
+    public bool UsedOriginalClassFunctionThisAdventure { get; set; } = false;
+    // Optional audit value for when switch occurred.
+    public int DualClassStartedAtExperience { get; set; } = 0;
     public AbilityScores Abilities { get; set; } = new();
     public int? ConstitutionBeforeDisease { get; set; }
     public bool RotGrubFlamePromptPending { get; set; }
@@ -712,7 +718,9 @@ public class Character
             ? " | " + string.Join(" ", Classes.Select(c => $"{c.ToDisplayString()} L{GetClassLevel(c)} XP {GetClassExperience(c)}"))
             : string.Empty;
 
-        var dualInfo = IsDualClassed && DualClass.HasValue ? $" (dual: {DualClass.Value.ToDisplayString()})" : string.Empty;
+        var dualInfo = IsDualClassed && DualClass.HasValue
+            ? $" (dual: {DualClass.Value.ToDisplayString()}, from {DualClassOriginalClass?.ToDisplayString() ?? "?"} L{DualClassOriginalLevel}, {DualClassState})"
+            : string.Empty;
         var alignment = Alignment.ToDisplayString();
         var statusInfo = Status != CharacterStatus.None ? $" [{GetStatusDisplay()}]" : string.Empty;
 

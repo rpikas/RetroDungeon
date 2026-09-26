@@ -35,6 +35,7 @@ public class CharacterRepository
             if (c != null)
             {
                 c.EnsureClassProgressions();
+                NormalizeDualClassDefaults(c);
                 // Keep spell slots in sync with current class levels.
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
@@ -44,6 +45,47 @@ public class CharacterRepository
         }
 
         return list;
+    }
+
+    private static void NormalizeDualClassDefaults(Character character)
+    {
+        if (!character.IsDualClassed)
+        {
+            // Persist-safe defaults for legacy saves that do not carry dual-class fields.
+            character.DualClass = null;
+            character.DualClassOriginalClass = null;
+            character.DualClassOriginalLevel = 0;
+            character.DualClassState = DualClassState.None;
+            character.UsedOriginalClassFunctionThisAdventure = false;
+            character.DualClassStartedAtExperience = Math.Max(0, character.DualClassStartedAtExperience);
+            return;
+        }
+
+        character.DualClassStartedAtExperience = Math.Max(0, character.DualClassStartedAtExperience);
+        character.DualClassOriginalLevel = Math.Max(0, character.DualClassOriginalLevel);
+
+        // Adventure-scoped gate flag must not persist across loads.
+        character.UsedOriginalClassFunctionThisAdventure = false;
+
+        if (!character.DualClass.HasValue && character.Classes.Count > 0)
+            character.DualClass = character.Classes[0];
+
+        if (character.DualClassState == DualClassState.None)
+        {
+            if (character.DualClassOriginalLevel <= 0)
+            {
+                // Conservative default when old level is missing.
+                character.DualClassState = DualClassState.TrainingNewClass;
+            }
+            else
+            {
+                var activeClass = character.Classes.Count > 0 ? character.Classes[0] : character.DualClass;
+                var activeLevel = activeClass.HasValue ? character.GetClassLevel(activeClass.Value) : character.Level;
+                character.DualClassState = activeLevel > character.DualClassOriginalLevel
+                    ? DualClassState.SurpassedOriginal
+                    : DualClassState.TrainingNewClass;
+            }
+        }
     }
 
     private static void HydrateWeaponDamageVsLarge(Character character, IReadOnlyDictionary<string, Item> itemLookup)
