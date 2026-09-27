@@ -2870,6 +2870,7 @@ public sealed class CombatCoordinator
             IncludeLairTreasure = true,
             TrapType = trapType
         };
+        var failedTrapInspectors = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         while (true)
         {
@@ -2892,7 +2893,7 @@ public sealed class CombatCoordinator
                     break;
 
                 case LairChestChoice.Inspect:
-                    if (!HandleInspectTrap(owner, session, survivors, result))
+                    if (!HandleInspectTrap(owner, session, survivors, result, failedTrapInspectors))
                         continue;
                     break;
             }
@@ -2976,11 +2977,17 @@ public sealed class CombatCoordinator
         return true;
     }
 
-    private bool HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    private bool HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result, HashSet<string> failedTrapInspectors)
     {
         var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true).Character;
         if (inspector == null)
             return false;
+
+        if (failedTrapInspectors.Contains(inspector.Name))
+        {
+            Say(owner, "Treasure Chest", $"{inspector.Name} already failed to find the trap and cannot inspect again.", session);
+            return false;
+        }
 
         if (!IsThiefClass(inspector))
         {
@@ -2999,9 +3006,10 @@ public sealed class CombatCoordinator
 
         if (!found)
         {
+            failedTrapInspectors.Add(inspector.Name);
             RuleApplicationInfo.Publish($"Find Traps result: trap not found by {inspector.Name}.");
             Say(owner, "Treasure Chest", $"{inspector.Name} does not find any trap.", session);
-            return true;
+            return false;
         }
 
         result.TrapFound = true;

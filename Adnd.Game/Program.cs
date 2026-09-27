@@ -34,6 +34,7 @@ internal class Program
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
+        using var ruleAndDiceInfoLogger = RuleAndDiceInfoFileLogger.Start();
 
         ItemInstaller.Install();   // ← Kopierar items automatiskt
         SpellInstaller.Install();
