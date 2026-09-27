@@ -3224,7 +3224,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             RuleApplicationInfo.Publish(
                 "DMG",
-                "175-177",
+                "175",
                 "Resolve Humans encounter",
                 "If Humans are encountered, roll 1d100: 01-25 Bandit, 26-30 Berserker, 31-45 Brigand, 46-100 Character.",
                 "1",
