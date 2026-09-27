@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Adnd.Core.Config;
+using Adnd.Core.Diagnostics;
 
 namespace Adnd.Game;
 
@@ -37,9 +38,20 @@ public class SettingsMenu
 
             if (int.TryParse(input.Trim(), out int selected) && selected >= 1 && selected <= properties.Length)
             {
-                EditProperty(rules, properties[selected - 1]);
+                var property = properties[selected - 1];
+                var beforeValue = property.GetValue(rules);
+
+                EditProperty(rules, property);
+
+                var afterValue = property.GetValue(rules);
                 GameRulesProvider.Current = rules;
                 GameRulesProvider.Save();
+
+                if (!Equals(beforeValue, afterValue))
+                {
+                    RuleApplicationInfo.Publish(
+                        $"Settings changed: {property.Name} = {FormatValue(beforeValue)}; now {FormatValue(afterValue)}.");
+                }
             }
         }
     }
