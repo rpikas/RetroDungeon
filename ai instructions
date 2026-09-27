@@ -3003,4 +3003,6 @@ In ADnD Rule and Dice info "DMG, 175-177, Resolve Humans encounter:1d100(98) -> 
 ___
 I want to be able to move ADnD Rule and Dice info with the mouse 93,2
 ___
-The starting position of ADnD Rule and Dice info should be remembered when closing the game and starting it again
+The starting position of ADnD Rule and Dice info should be remembered when closing the game and starting it again. 93,3
+___
+The starting position of Maze form should be remembered when closing the game and starting it again.

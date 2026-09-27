@@ -24,6 +24,8 @@ namespace Adnd.Game;
 
 public sealed class MazeForm : Form
 {
+    private const string MazeWindowStatePath = "Data/Config/maze-window.json";
+
     private enum Direction
     {
         North,
@@ -712,9 +714,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         Text = "Maze";
         ClientSize = new Size(1200, 820);
+        StartPosition = FormStartPosition.CenterScreen;
         KeyPreview = true;
         BackColor = Color.Black;
         ForeColor = GameRulesProvider.Current.DefaultColor;
+
+        var savedLocation = LoadSavedMazeWindowLocation();
+        if (savedLocation.HasValue)
+        {
+            StartPosition = FormStartPosition.Manual;
+            Location = savedLocation.Value;
+        }
 
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
 
@@ -755,6 +765,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         FormClosed += (_, _) =>
         {
+            SaveMazeWindowLocation();
             _viewerControl?.Dispose();
             if (_ruleApplicationInfoHandler != null)
                 RuleApplicationInfo.InfoPublished -= _ruleApplicationInfoHandler;
@@ -763,6 +774,50 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 _ruleApplicationInfoForm.Close();
         };
     }
+
+    private static Point? LoadSavedMazeWindowLocation()
+    {
+        try
+        {
+            if (!File.Exists(MazeWindowStatePath))
+                return null;
+
+            var json = File.ReadAllText(MazeWindowStatePath);
+            var state = JsonSerializer.Deserialize<MazeWindowState>(json);
+            if (state == null)
+                return null;
+
+            var point = new Point(state.Left, state.Top);
+            return Screen.AllScreens.Any(screen => screen.WorkingArea.Contains(point))
+                ? point
+                : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private void SaveMazeWindowLocation()
+    {
+        try
+        {
+            var folder = Path.GetDirectoryName(MazeWindowStatePath);
+            if (!string.IsNullOrWhiteSpace(folder) && !Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            var location = WindowState == FormWindowState.Normal ? Location : RestoreBounds.Location;
+            var state = new MazeWindowState(location.X, location.Y);
+            var json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(MazeWindowStatePath, json);
+        }
+        catch
+        {
+            // Best effort only.
+        }
+    }
+
+    private sealed record MazeWindowState(int Left, int Top);
 
     private void PruneUnavailablePartyMembers()
     {

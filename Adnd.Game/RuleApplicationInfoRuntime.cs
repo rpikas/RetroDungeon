@@ -10,6 +10,7 @@ internal static class RuleApplicationInfoRuntime
     private static readonly object _sync = new();
     private static RuleApplicationInfoForm? _form;
     private static Action<string>? _handler;
+    private static SynchronizationContext? _uiContext;
     private static Thread? _uiThread;
     private static ManualResetEventSlim? _ready;
 
@@ -32,10 +33,26 @@ internal static class RuleApplicationInfoRuntime
                     var form = new RuleApplicationInfoForm();
                     _form = form;
 
-                    _handler = message => form.AppendInfo(message);
+                    form.HandleCreated += (_, _) =>
+                    {
+                        _uiContext = SynchronizationContext.Current;
+                        _ready?.Set();
+                    };
+
+                    _handler = message =>
+                    {
+                        var ctx = _uiContext;
+                        if (ctx == null || form.IsDisposed)
+                            return;
+
+                        ctx.Post(_ =>
+                        {
+                            if (!form.IsDisposed)
+                                form.AppendInfo(message);
+                        }, null);
+                    };
                     RuleApplicationInfo.InfoPublished += _handler;
 
-                    _ready?.Set();
                     Application.Run(form);
                 }
                 finally
@@ -44,6 +61,7 @@ internal static class RuleApplicationInfoRuntime
                         RuleApplicationInfo.InfoPublished -= _handler;
 
                     _handler = null;
+                    _uiContext = null;
                     _form = null;
                 }
             })

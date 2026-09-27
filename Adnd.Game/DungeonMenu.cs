@@ -8,7 +8,6 @@ public class DungeonMenu
     public void Show()
     {
         using var maze = new MazeForm();
-        maze.StartPosition = FormStartPosition.CenterScreen;
 
         maze.Shown += (_, _) =>
         {
