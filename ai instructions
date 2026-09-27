@@ -2992,9 +2992,9 @@ Continously write all info from ADnD Rula and Dice info to a file, Create a new 
  ___
 
  If a player fails to find a trap, then show the screen again where you can select another person to look for traps or cast a 
- find traps spell or open or leave. The same person is not allowed to try fining traps several times
-
+ find traps spell or open or leave. The same person is not allowed to try fining traps several times. 92,7
+ ____
 
 If ADnD Rula and Dice info should open, it should be opened when starting the game
 
-DMG, 175-177, Resolve Humans encounter:1d100(98) -> Selected Character.
+DMG, 175-177, Resolve Humans encounter:1d100(98) -> Selected Character. should be changed to 

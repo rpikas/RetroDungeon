@@ -35,6 +35,7 @@ internal class Program
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         using var ruleAndDiceInfoLogger = RuleAndDiceInfoFileLogger.Start();
+        RuleApplicationInfoRuntime.StartIfEnabled();
 
         ItemInstaller.Install();   // ← Kopierar items automatiskt
         SpellInstaller.Install();
@@ -42,7 +43,14 @@ internal class Program
         TreasureInstaller.Install();
 
         var main = new Adnd.Game.MainMenu();
-        await main.ShowAsync();
+        try
+        {
+            await main.ShowAsync();
+        }
+        finally
+        {
+            RuleApplicationInfoRuntime.Stop();
+        }
     }
 }
 

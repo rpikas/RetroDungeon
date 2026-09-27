@@ -738,16 +738,6 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         Shown += (_, _) =>
         {
-            if (GameRulesProvider.Current.ShowDiceRollAndRuleApplicationInfo)
-            {
-                _ruleApplicationInfoForm = new RuleApplicationInfoForm();
-                _ruleApplicationInfoHandler = message => _ruleApplicationInfoForm?.AppendInfo(message);
-                RuleApplicationInfo.InfoPublished += _ruleApplicationInfoHandler;
-                _ruleApplicationInfoForm.Show();
-                _ruleApplicationInfoForm.BringToFront();
-                RuleApplicationInfo.Publish("Rule/dice diagnostics enabled.");
-            }
-
             if (_position.X == 1 && _position.Y == 2)
             {
                 ShowDungeonElevatorDialog();
