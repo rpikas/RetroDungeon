@@ -3035,7 +3035,16 @@ the alignment (q.v.) possibilities of each character class: (A) means any, (N) m
 (E) means evil only, and (1) means lawful only. (A)* a cleric cannot be true neutral unless of the 
 druid subclass.
 ___
-When creating a new character, write the dice rolls for abilities to ADnD Rule and Dice info.
+When creating a new character, after writing the dice rolls for one ability to ADnD Rule and Dice info. also write the final ability score to ADnD Rule and Dice info.
+with a link to the PHB, with these pages for the different abilities:
+PHB9Strength
+PHB10Intelligence
+PHB11Wisdom
+PHB11Dexterity
+PHB12Constitution
+PHB13Charisma
+___
+
 When seclecting a race, write the race selection to ADnD Rule and Dice info. link to 
 When selecting a class, write the class selection to ADnD Rule and Dice info.
 When creating a new character, write the race and class selection to ADnD Rule and Dice info.

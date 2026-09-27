@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Adnd.Core.Config;
+using Adnd.Core.Diagnostics;
 
 namespace Adnd.Core.Characters;
 
@@ -9,16 +10,23 @@ public class CharacterCreator
    
     public AbilityScores RollAbilities()
     {
+        int RollAbilityWithFinalLog(string abilityName, string phbPageToken, Func<int> roll)
+        {
+            var score = roll();
+            RuleApplicationInfo.PublishLinked("PHB", phbPageToken, $"{abilityName} final ability score: {score}.");
+            return score;
+        }
+
         AbilityScores RollThreeD6InOrder()
         {
             return new AbilityScores
             {
-                Strength = DiceRoller.Roll3d6(),
-                Intelligence = DiceRoller.Roll3d6(),
-                Wisdom = DiceRoller.Roll3d6(),
-                Dexterity = DiceRoller.Roll3d6(),
-                Constitution = DiceRoller.Roll3d6(),
-                Charisma = DiceRoller.Roll3d6()
+                Strength = RollAbilityWithFinalLog("Strength", "9Strength", DiceRoller.Roll3d6),
+                Intelligence = RollAbilityWithFinalLog("Intelligence", "10Intelligence", DiceRoller.Roll3d6),
+                Wisdom = RollAbilityWithFinalLog("Wisdom", "11Wisdom", DiceRoller.Roll3d6),
+                Dexterity = RollAbilityWithFinalLog("Dexterity", "11Dexterity", DiceRoller.Roll3d6),
+                Constitution = RollAbilityWithFinalLog("Constitution", "12Constitution", DiceRoller.Roll3d6),
+                Charisma = RollAbilityWithFinalLog("Charisma", "13Charisma", DiceRoller.Roll3d6)
             };
         }
 
@@ -51,12 +59,12 @@ public class CharacterCreator
         {
             return new AbilityScores
             {
-                Strength = Roll4d6DropLowest(),
-                Intelligence = Roll4d6DropLowest(),
-                Wisdom = Roll4d6DropLowest(),
-                Dexterity = Roll4d6DropLowest(),
-                Constitution = Roll4d6DropLowest(),
-                Charisma = Roll4d6DropLowest()
+                Strength = RollAbilityWithFinalLog("Strength", "9Strength", Roll4d6DropLowest),
+                Intelligence = RollAbilityWithFinalLog("Intelligence", "10Intelligence", Roll4d6DropLowest),
+                Wisdom = RollAbilityWithFinalLog("Wisdom", "11Wisdom", Roll4d6DropLowest),
+                Dexterity = RollAbilityWithFinalLog("Dexterity", "11Dexterity", Roll4d6DropLowest),
+                Constitution = RollAbilityWithFinalLog("Constitution", "12Constitution", Roll4d6DropLowest),
+                Charisma = RollAbilityWithFinalLog("Charisma", "13Charisma", Roll4d6DropLowest)
             };
         }
 
@@ -64,12 +72,12 @@ public class CharacterCreator
         {
             return new AbilityScores
             {
-                Strength = Roll5d6Drop2Lowest(),
-                Intelligence = Roll5d6Drop2Lowest(),
-                Wisdom = Roll5d6Drop2Lowest(),
-                Dexterity = Roll5d6Drop2Lowest(),
-                Constitution = Roll5d6Drop2Lowest(),
-                Charisma = Roll5d6Drop2Lowest()
+                Strength = RollAbilityWithFinalLog("Strength", "9Strength", Roll5d6Drop2Lowest),
+                Intelligence = RollAbilityWithFinalLog("Intelligence", "10Intelligence", Roll5d6Drop2Lowest),
+                Wisdom = RollAbilityWithFinalLog("Wisdom", "11Wisdom", Roll5d6Drop2Lowest),
+                Dexterity = RollAbilityWithFinalLog("Dexterity", "11Dexterity", Roll5d6Drop2Lowest),
+                Constitution = RollAbilityWithFinalLog("Constitution", "12Constitution", Roll5d6Drop2Lowest),
+                Charisma = RollAbilityWithFinalLog("Charisma", "13Charisma", Roll5d6Drop2Lowest)
             };
         }
 
@@ -77,12 +85,12 @@ public class CharacterCreator
         {
             return new AbilityScores
             {
-                Strength = RollBestOfSix(),
-                Intelligence = RollBestOfSix(),
-                Wisdom = RollBestOfSix(),
-                Dexterity = RollBestOfSix(),
-                Constitution = RollBestOfSix(),
-                Charisma = RollBestOfSix()
+                Strength = RollAbilityWithFinalLog("Strength", "9Strength", RollBestOfSix),
+                Intelligence = RollAbilityWithFinalLog("Intelligence", "10Intelligence", RollBestOfSix),
+                Wisdom = RollAbilityWithFinalLog("Wisdom", "11Wisdom", RollBestOfSix),
+                Dexterity = RollAbilityWithFinalLog("Dexterity", "11Dexterity", RollBestOfSix),
+                Constitution = RollAbilityWithFinalLog("Constitution", "12Constitution", RollBestOfSix),
+                Charisma = RollAbilityWithFinalLog("Charisma", "13Charisma", RollBestOfSix)
             };
         }
 
