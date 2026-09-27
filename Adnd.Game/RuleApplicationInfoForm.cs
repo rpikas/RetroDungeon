@@ -1,12 +1,15 @@
 using Adnd.Core.Config;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace Adnd.Game;
 
 public sealed class RuleApplicationInfoForm : Form
 {
+    private const string WindowStatePath = "Data/Config/rule-application-info-window.json";
+
     private readonly RichTextBox _logBox;
     private readonly List<RuleLinkSpan> _ruleLinks = new();
 
@@ -27,6 +30,13 @@ public sealed class RuleApplicationInfoForm : Form
         Size = new Size(700, 420);
         ShowInTaskbar = true;
         TopMost = true;
+
+        var savedPosition = LoadSavedWindowPosition();
+        if (savedPosition.HasValue)
+        {
+            StartPosition = FormStartPosition.Manual;
+            Location = savedPosition.Value;
+        }
 
         var dragBar = new Panel
         {
@@ -167,9 +177,58 @@ public sealed class RuleApplicationInfoForm : Form
             _logBox.Cursor = isOnLink ? Cursors.Hand : Cursors.IBeam;
         };
 
+        FormClosing += (_, _) => SaveWindowPosition();
+
         Controls.Add(_logBox);
         Controls.Add(dragBar);
     }
+
+    private Point? LoadSavedWindowPosition()
+    {
+        try
+        {
+            if (!File.Exists(WindowStatePath))
+                return null;
+
+            var json = File.ReadAllText(WindowStatePath);
+            var state = JsonSerializer.Deserialize<RuleInfoWindowState>(json);
+            if (state == null)
+                return null;
+
+            var point = new Point(state.Left, state.Top);
+            return IsPointVisibleOnAnyScreen(point) ? point : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private void SaveWindowPosition()
+    {
+        try
+        {
+            var folder = Path.GetDirectoryName(WindowStatePath);
+            if (!string.IsNullOrWhiteSpace(folder) && !Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            var location = WindowState == FormWindowState.Normal ? Location : RestoreBounds.Location;
+            var state = new RuleInfoWindowState(location.X, location.Y);
+            var json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(WindowStatePath, json);
+        }
+        catch
+        {
+            // Best effort only; failing to persist position must not affect gameplay.
+        }
+    }
+
+    private static bool IsPointVisibleOnAnyScreen(Point point)
+    {
+        return Screen.AllScreens.Any(screen => screen.WorkingArea.Contains(point));
+    }
+
+    private sealed record RuleInfoWindowState(int Left, int Top);
 
     public void AppendInfo(string message)
     {
