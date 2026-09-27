@@ -2982,5 +2982,10 @@ Dwarven fighters with less than 17strength are limited to 7th level; those with 
 elven magic-users with intelligence of less than 17 are limited to 9th level; those with intelligence of 17are limited to 10th level.
 'Half-elven magic-users with intelligence of less than 17 are limited to 6th level; those with intelligence of 17 are limited to 7th level.
 'Gnome illusionists with intelligence or dexterity under 17 are limited to 5th level; those with both intelligence and dexterity of 17 are limited to 6th level.
-9Half-Orc thieves with dexterity of less than 17 are limited to 6th level; those with dexterity of 17 are limited to 7th level.:
+9Half-Orc thieves with dexterity of less than 17 are limited to 6th level; those with dexterity of 17 are limited to 7th level.: 92,2
 ___
+The same info written to Combat info should also be written to ADnD Rula and Dice info. 92,4
+
+Continously write all info from ADnD Rula and Dice info to a file in C:\dev\AdndRuleAndDiceInfo Create a new file there every time the game is started.
+
+If ADnD Rula and Dice info should open, it should be opened when starting the game

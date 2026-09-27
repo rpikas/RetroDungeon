@@ -2495,6 +2495,13 @@ public sealed class CombatCoordinator
     /// </summary>
     private void Say(IWin32Window owner, string title, string text, CombatSession session)
     {
+        if (!string.IsNullOrWhiteSpace(title)
+            && title.StartsWith("Combat", StringComparison.OrdinalIgnoreCase)
+            && !string.IsNullOrWhiteSpace(text))
+        {
+            RuleApplicationInfo.Publish($"{title}:\n{text}");
+        }
+
         ViewerPromptChanged?.Invoke(session, ViewerMessage.Prompt(Summarise(text)));
         ViewerMessage.Show(owner, title, text);
         ViewerPromptChanged?.Invoke(session, null);
