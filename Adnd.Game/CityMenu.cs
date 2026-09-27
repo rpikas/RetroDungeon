@@ -339,7 +339,15 @@ public class CityMenu
 
             if (classIdx.Value < singleOptions.Count)
             {
-                chosenClasses = new System.Collections.Generic.List<CharacterClass> { singleOptions[classIdx.Value] };
+                var candidateClasses = new System.Collections.Generic.List<CharacterClass> { singleOptions[classIdx.Value] };
+                if (!ConfirmClassLevelLimitWarning(race, abilities, candidateClasses))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Choose Class:");
+                    continue;
+                }
+
+                chosenClasses = candidateClasses;
                 break;
             }
 
@@ -368,7 +376,15 @@ public class CityMenu
 
             if (mcIdx.Value < multiclassPairs.Count)
             {
-                chosenClasses = new System.Collections.Generic.List<CharacterClass>(multiclassPairs[mcIdx.Value]);
+                var candidateClasses = new System.Collections.Generic.List<CharacterClass>(multiclassPairs[mcIdx.Value]);
+                if (!ConfirmClassLevelLimitWarning(race, abilities, candidateClasses))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Choose Class:");
+                    continue;
+                }
+
+                chosenClasses = candidateClasses;
                 break;
             }
 
@@ -458,6 +474,38 @@ public class CityMenu
         {
             Console.WriteLine("Character discarded.");
         }
+    }
+
+    private static bool ConfirmClassLevelLimitWarning(Race race, AbilityScores abilities, System.Collections.Generic.IReadOnlyList<CharacterClass> classes)
+    {
+        var probe = new Character
+        {
+            Race = race,
+            Abilities = abilities
+        };
+
+        var limits = classes
+            .Select(cls => new
+            {
+                Class = cls,
+                MaxLevel = RaceClassLevelLimits.GetMaxLevel(probe, cls)
+            })
+            .Where(x => x.MaxLevel != int.MaxValue)
+            .ToList();
+
+        if (limits.Count == 0)
+            return true;
+
+        Console.WriteLine();
+        Console.WriteLine("WARNING: This race/class has level limits:");
+        foreach (var limit in limits)
+            Console.WriteLine($"- {race.ToDisplayString()} {limit.Class.ToDisplayString()} maximum level: {limit.MaxLevel}");
+
+        Console.Write("Continue with this selection? (Y/N): ");
+        var confirm = Console.ReadKey(true).Key;
+        Console.WriteLine();
+
+        return confirm == ConsoleKey.Y;
     }
 
     private void InitializeSpellcasting(Character character)

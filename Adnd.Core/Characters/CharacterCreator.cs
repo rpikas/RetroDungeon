@@ -77,7 +77,7 @@ public class CharacterCreator
         {
             return new AbilityScores
             {
-                Strength = RollBestOf99(),//TODO: changing this to RollBestOfSix() just for testing.
+                Strength = RollBestOfSix(),
                 Intelligence = RollBestOfSix(),
                 Wisdom = RollBestOfSix(),
                 Dexterity = RollBestOfSix(),

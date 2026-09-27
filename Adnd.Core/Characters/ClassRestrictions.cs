@@ -17,8 +17,8 @@ public static class ClassRestrictions
         if (race == Race.Human && a.Strength >= 12 && a.Charisma >= 17)
             list.Add(CharacterClass.Paladin);
 
-        // Ranger: human only, Str >=13, Dex >=13, Wis >=13
-        if (race == Race.Human && a.Strength >= 13 && a.Dexterity >= 13 && a.Wisdom >= 13)
+        // Ranger: Str >=13, Dex >=13, Wis >=13 (race restriction applied below)
+        if (a.Strength >= 13 && a.Dexterity >= 13 && a.Wisdom >= 13)
             list.Add(CharacterClass.Ranger);
 
         // Cleric: Wis >= 9
@@ -53,7 +53,7 @@ public static class ClassRestrictions
         if (a.Charisma >= 15 && a.Dexterity >= 13)
             list.Add(CharacterClass.Bard);
 
-        // Enforce per-race allowed single-class choices (AD&D 1e canonical restrictions).
+        // Enforce per-race allowed single-class choices from the configured class/race table.
         var allowedForRace = new HashSet<CharacterClass>();
         switch (race)
         {
@@ -68,29 +68,25 @@ public static class ClassRestrictions
                     CharacterClass.Fighter,
                     CharacterClass.MagicUser,
                     CharacterClass.Thief,
-                    CharacterClass.Assassin,
-                    CharacterClass.Ranger,
-                    CharacterClass.Illusionist
+                    CharacterClass.Assassin
                 };
                 break;
             case Race.HalfElf:
                 allowedForRace = new HashSet<CharacterClass>
                 {
-                    CharacterClass.Fighter,
-                    CharacterClass.Ranger,
                     CharacterClass.Cleric,
                     CharacterClass.Druid,
+                    CharacterClass.Fighter,
+                    CharacterClass.Ranger,
                     CharacterClass.MagicUser,
                     CharacterClass.Thief,
-                    CharacterClass.Assassin,
-                    CharacterClass.Bard
+                    CharacterClass.Assassin
                 };
                 break;
             case Race.Dwarf:
                 allowedForRace = new HashSet<CharacterClass>
                 {
                     CharacterClass.Fighter,
-                    CharacterClass.Cleric,
                     CharacterClass.Thief,
                     CharacterClass.Assassin
                 };
@@ -99,9 +95,7 @@ public static class ClassRestrictions
                 allowedForRace = new HashSet<CharacterClass>
                 {
                     CharacterClass.Fighter,
-                    CharacterClass.Thief,
-                    CharacterClass.Assassin,
-                    CharacterClass.Druid
+                    CharacterClass.Thief
                 };
                 break;
             case Race.Gnome:
@@ -110,8 +104,7 @@ public static class ClassRestrictions
                     CharacterClass.Fighter,
                     CharacterClass.Illusionist,
                     CharacterClass.Thief,
-                    CharacterClass.Assassin,
-                    CharacterClass.Cleric
+                    CharacterClass.Assassin
                 };
                 break;
             case Race.HalfOrc:
