@@ -1,5 +1,6 @@
 using Adnd.Core.Config;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Adnd.Game;
@@ -9,6 +10,15 @@ public sealed class RuleApplicationInfoForm : Form
     private readonly RichTextBox _logBox;
     private readonly List<RuleLinkSpan> _ruleLinks = new();
 
+    private const int WM_NCLBUTTONDOWN = 0xA1;
+    private const int HTCAPTION = 0x2;
+
+    [DllImport("user32.dll")]
+    private static extern bool ReleaseCapture();
+
+    [DllImport("user32.dll")]
+    private static extern nint SendMessage(nint hWnd, int msg, nint wParam, nint lParam);
+
 
     public RuleApplicationInfoForm()
     {
@@ -17,6 +27,48 @@ public sealed class RuleApplicationInfoForm : Form
         Size = new Size(700, 420);
         ShowInTaskbar = true;
         TopMost = true;
+
+        var dragBar = new Panel
+        {
+            Dock = DockStyle.Top,
+            Height = 20,
+            BackColor = Color.FromArgb(24, 24, 24),
+            Cursor = Cursors.SizeAll
+        };
+
+        var dragLabel = new Label
+        {
+            Dock = DockStyle.Fill,
+            Text = " Drag window",
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            BackColor = Color.Transparent,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Cursor = Cursors.SizeAll
+        };
+
+        dragBar.Controls.Add(dragLabel);
+
+        void beginDrag(MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            ReleaseCapture();
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+        }
+
+        bool isOverRuleLink(Point location)
+        {
+            var index = _logBox.GetCharIndexFromPosition(location);
+            return FindLinkAt(index) != null
+                   || FindLinkAt(index - 1) != null
+                   || FindLinkAt(index + 1) != null
+                   || FindFirstLinkOnLine(index) != null;
+        }
+
+        dragBar.MouseDown += (_, e) => beginDrag(e);
+        dragLabel.MouseDown += (_, e) => beginDrag(e);
+        MouseDown += (_, e) => beginDrag(e);
 
         _logBox = new RichTextBox
         {
@@ -88,8 +140,23 @@ public sealed class RuleApplicationInfoForm : Form
             viewer.ShowDialog(this);
         }
 
-        _logBox.MouseDown += (_, e) => tryOpenRuleImage(e);
-        _logBox.MouseUp += (_, e) => tryOpenRuleImage(e);
+        _logBox.MouseDown += (_, e) =>
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            if (!isOverRuleLink(e.Location))
+                beginDrag(e);
+        };
+
+        _logBox.MouseUp += (_, e) =>
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            if (isOverRuleLink(e.Location))
+                tryOpenRuleImage(e);
+        };
 
         _logBox.MouseMove += (_, e) =>
         {
@@ -101,6 +168,7 @@ public sealed class RuleApplicationInfoForm : Form
         };
 
         Controls.Add(_logBox);
+        Controls.Add(dragBar);
     }
 
     public void AppendInfo(string message)
