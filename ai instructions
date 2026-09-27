@@ -3013,7 +3013,7 @@ when creating a new character and selecting a race and class, where the class ha
 then warn the user that the max level limit for that class and race combination and ask if he wants to continue.
 ___
 
-when selecting class use this table to update the rules about what race can select what class
+PHB, pg 13: When selecting class use this table to update the rules about what race can select what class
 Class	Dwarven	Elven	Gnome	Half-Elven	Halfling	Half-Orc	Human
 CLERIC (A)*	no	no	no	yes	no	yes	yes
 Druid (N)	no	no	no	yes	no	no	yes
@@ -3026,8 +3026,15 @@ THIEF (N to E)	yes	yes	yes	yes	yes	yes	yes
 Assassin (E)	yes	yes	yes	yes	no	yes	yes
 MONK (L)	no	no	no	no	no	no	yes
 ___
-
-
+PHB, pg 13: When selecting alignment, use this to update the validations if needed 
+CLERIC (A)* Druid (N) FIGHTER (A) Paladin (LG) Ranger (G) MAGIC-USER (A) Illusionist (A) THIEF (N to E) Assassin (E) MONK (L)
+Character Class names are shown in capital letters if the class is major, sub-classes are shown 
+with the first letter capitalized only. The letter or letters appearing after each class indicate
+the alignment (q.v.) possibilities of each character class: (A) means any, (N) means neutral only, 
+(LG) means lawful good only, (G) means good only, (N to E) means any neutral to any evil alignment, 
+(E) means evil only, and (1) means lawful only. (A)* a cleric cannot be true neutral unless of the 
+druid subclass.
+___
 When creating a new character, write the dice rolls for abilities to ADnD Rule and Dice info.
 When seclecting a race, write the race selection to ADnD Rule and Dice info. link to 
 When selecting a class, write the class selection to ADnD Rule and Dice info.
