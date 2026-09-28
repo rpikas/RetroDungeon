@@ -42,10 +42,13 @@ public static class RuleApplicationInfo
         if (TryResolveRuleImagePath(source, page, out var imagePath))
             sourcePageText = $"[[RULEIMG|{sourcePageText}|{imagePath}|{DateTime.Now.Ticks}]]";
 
+        var ruleText = string.IsNullOrWhiteSpace(rule)
+            ? string.Empty
+            : $"{Environment.NewLine}{rule}";
+
         string message =
-            $"{sourcePageText}, {context}:" +
-            $"{numberOfDices}d{sidesOnDices}({resultOfRoll}) -> " +
-            $"{consequenceOfRoll}";
+            $"{sourcePageText}, {context}:{ruleText}{Environment.NewLine}" +
+            $"{numberOfDices}d{sidesOnDices}({resultOfRoll}) -> {consequenceOfRoll}";
 
         InfoPublished?.Invoke($"[{DateTime.Now:HH:mm:ss}] {message}");
     }

@@ -2614,11 +2614,25 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return;
         }
 
-        int numberOfGroups = 1;
-        var groupRoll = _random.NextDouble();
-        if (groupRoll < 0.01) numberOfGroups = 4;
-        else if (groupRoll < 0.06) numberOfGroups = 3;
-        else if (groupRoll < 0.20) numberOfGroups = 2;
+        var groupRoll = _random.Next(1, 101);
+        var numberOfGroups = groupRoll switch
+        {
+            1 => 4,
+            <= 5 => 3,
+            <= 19 => 2,
+            _ => 1
+        };
+
+        RuleApplicationInfo.Publish(
+            "Adnd",
+            "Encounter groups",
+            "Roll number of monster groups",
+            "Chance for multiple groups uses 1d100:\n• 01 → 4 groups (1%)\n• 02-05 → 3 groups (4%)\n• 06-19 → 2 groups (14%)\n• 20-100 → 1 group (81%)",
+            "1",
+            "100",
+            groupRoll.ToString(),
+            $"Encounter has {numberOfGroups} monster group(s)."
+        );
 
         CombatOutcome outcome;
         if (numberOfGroups > 1)
@@ -2636,6 +2650,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 EncounterRoll? additionalRoll = null;
                 string? additionalMonsterName = null;
                 var foundMatchingAlignment = false;
+                var filteredOutByAlignment = 0;
 
                 for (int reroll = 0; reroll < 30; reroll++)
                 {
@@ -2656,6 +2671,22 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                         foundMatchingAlignment = true;
                         break;
                     }
+
+                    filteredOutByAlignment++;
+                }
+
+                if (filteredOutByAlignment > 0)
+                {
+                    RuleApplicationInfo.Publish(
+                        "Adnd",
+                        "Encounter groups",
+                        "Filter additional monster groups by alignment",
+                        "When multiple monster groups are rolled, extra groups (after the first) are rerolled until alignment matches the first group (or unknown alignment).",
+                        "1",
+                        "30",
+                        filteredOutByAlignment.ToString(),
+                        $"Filtered out {filteredOutByAlignment} additional group candidate(s) due to alignment mismatch."
+                    );
                 }
 
                 if (!foundMatchingAlignment || string.IsNullOrWhiteSpace(additionalMonsterName))

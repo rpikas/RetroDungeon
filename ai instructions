@@ -3176,6 +3176,11 @@ When encountering for example monster "Creature": "Toad, giant", according to ro
 this is only an example, so this means that the order of the words could be reversed and then should  "," and " " be ingnored. 96,9
 
 remove the restriction of how many gp an item can be worth when finding it depening on level it is found on.  96,9
+___
+Write in Adnd Rule and Dice Info how the probablity of encoutnering several monstergroups is calculated, what the 1d100 roll was and what the result was. 97,0
+also shown this table when rolling for how many monster groups to meet. •	01 → 4 groups (1%) •	02-05 → 3 groups (4%) •	06-19 → 2 groups (14%) •	20-100 → 1 group (81%)
+
+when several groups are encountered and the encouters that are not the 1st are filtered away because of alignement reaseons, write that in Adnd Rule and Dice Info
 
 ***************************
 
