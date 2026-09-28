@@ -275,7 +275,6 @@ public class CharacterCreator
             case Race.Human:
                 break;
             case Race.Elf:
-                adjusted.Intelligence += 1;
                 adjusted.Dexterity += 1;
                 adjusted.Constitution -= 1;
                 break;
@@ -296,8 +295,8 @@ public class CharacterCreator
                 break;
             case Race.HalfOrc:
                 adjusted.Strength += 1;
-                adjusted.Intelligence -= 1;
-                adjusted.Charisma -= 1;
+                adjusted.Constitution += 1;
+                adjusted.Charisma -= 2;
                 break;
         }
 

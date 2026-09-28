@@ -3053,5 +3053,14 @@ When creating a new character, write the final hit points to ADnD Rule and Dice 
 When creating a new character, write the final saving throws to ADnD Rule and Dice info.
 When creating a new character, write the final THAC0 to ADnD Rule and Dice info.
 When creating a new character, write the final AC to ADnD Rule and Dice info.
+___
+when alignment has been selected actively or by selecting the default value, show to the user in the create user for what alignment was selected.94,2
+___
+when creating character and displaying the character race options, also display race modifiers for the different abilities.
 
-when alignement has been select acivly or by selecting the default value, show to the user in the create user for what alignment was selected
+update the abilities modifiers according to this table
+Race	Penalty or Bonus 
+Dwarf	Constitution +1, Charisma –1
+Elf	Dexterity +1, Constitution –1 
+Half‑Orc	Strength +1, Constitution +1, Charisma –2 
+Halfling	Strength –1, Dexterity +1

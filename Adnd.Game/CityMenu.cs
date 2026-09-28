@@ -267,7 +267,7 @@ public class CityMenu
             {
                 var r = availableRaces[i];
                 var label = (char)('A' + i);
-                Console.WriteLine($"{label}) {r.ToDisplayString()}");
+                Console.WriteLine($"{label}) {r.ToDisplayString()} ({GetRaceAbilityModifierSummary(r)})");
             }
 
             Console.WriteLine("R)eroll abilities");
@@ -769,6 +769,39 @@ public class CityMenu
         Console.WriteLine($"Deleted {all.Count} character(s).");
         Console.WriteLine("Press any key...");
         Console.ReadKey(true);
+    }
+
+    private string GetRaceAbilityModifierSummary(Race race)
+    {
+        var baseline = new AbilityScores
+        {
+            Strength = 10,
+            Intelligence = 10,
+            Wisdom = 10,
+            Dexterity = 10,
+            Constitution = 10,
+            Charisma = 10
+        };
+
+        var adjusted = _creator.ApplyRaceModifiers(baseline, race);
+
+        var parts = new System.Collections.Generic.List<string>();
+        AddModifierPart(parts, "STR", adjusted.Strength - baseline.Strength);
+        AddModifierPart(parts, "INT", adjusted.Intelligence - baseline.Intelligence);
+        AddModifierPart(parts, "WIS", adjusted.Wisdom - baseline.Wisdom);
+        AddModifierPart(parts, "DEX", adjusted.Dexterity - baseline.Dexterity);
+        AddModifierPart(parts, "CON", adjusted.Constitution - baseline.Constitution);
+        AddModifierPart(parts, "CHA", adjusted.Charisma - baseline.Charisma);
+
+        return parts.Count == 0 ? "no ability modifiers" : string.Join(", ", parts);
+    }
+
+    private static void AddModifierPart(System.Collections.Generic.List<string> parts, string ability, int delta)
+    {
+        if (delta == 0)
+            return;
+
+        parts.Add($"{ability} {(delta > 0 ? "+" : string.Empty)}{delta}");
     }
 
     private string GetStatusDisplay(Character c)
