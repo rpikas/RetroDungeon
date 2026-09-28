@@ -3064,3 +3064,12 @@ Dwarf	Constitution +1, Charisma –1
 Elf	Dexterity +1, Constitution –1 
 Half‑Orc	Strength +1, Constitution +1, Charisma –2 
 Halfling	Strength –1, Dexterity +1
+94,4
+___
+Do write the race selection to ADnD Rule and Dice info. link to PHB14PenaltiesAndBonusesForRace.png 
+before the character has selected race, but after the abilities. 94,4
+
+Also before the character has selected race, but after the abilities, inform in ADnD Rule and Dice info:
+If not all races are selectable, it might be because of the ability scores are not applicable for all races. 
+Link to PHB15AbilityScoreMaxMinRaceGender.png using the normal methods usually used in RetroDungeon.
+___

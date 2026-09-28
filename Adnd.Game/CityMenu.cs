@@ -262,6 +262,19 @@ public class CityMenu
                 })
                 .ToList();
 
+            RuleApplicationInfo.PublishLinked(
+                "PHB",
+                "14PenaltiesAndBonusesForRace",
+                $"Choose race after abilities. Available races: {string.Join(", ", availableRaces.Select(r => r.ToDisplayString()))}.");
+
+            if (availableRaces.Count < raceValues.Length)
+            {
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "15AbilityScoreMaxMinRaceGender",
+                    "If not all races are selectable, it might be because the ability scores are not applicable for all races.");
+            }
+
             Console.WriteLine("Choose Race:");
             for (int i = 0; i < availableRaces.Count; i++)
             {
