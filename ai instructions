@@ -3045,7 +3045,7 @@ PHB12Constitution
 PHB13Charisma
 ___
 
-When seclecting a race, write the race selection to ADnD Rule and Dice info. link to 
+When selecting a race, write the race selection to ADnD Rule and Dice info. link to PHB14PenaltiesAndBonusesForRace.png using the normal methods usually used in RetroDungeon.
 When selecting a class, write the class selection to ADnD Rule and Dice info.
 When creating a new character, write the race and class selection to ADnD Rule and Dice info.
 When creating a new character, write the final abilities to ADnD Rule and Dice info.
@@ -3053,3 +3053,5 @@ When creating a new character, write the final hit points to ADnD Rule and Dice 
 When creating a new character, write the final saving throws to ADnD Rule and Dice info.
 When creating a new character, write the final THAC0 to ADnD Rule and Dice info.
 When creating a new character, write the final AC to ADnD Rule and Dice info.
+
+when alignement has been select acivly or by selecting the default value, show to the user in the create user for what alignment was selected

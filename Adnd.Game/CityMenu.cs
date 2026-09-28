@@ -2,6 +2,7 @@
 using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
+using Adnd.Core.Diagnostics;
 using Adnd.Core.Spells;
 using Adnd.Data.Characters;
 using Adnd.Data.Spells;
@@ -14,6 +15,7 @@ public class CityMenu
     private readonly CharacterCreator _creator = new();
     private readonly SpellRepository _spellRepo = new("Data/Spells");
     private readonly DualClassService _dualClassService = new();
+    private readonly CharacterSavingThrowService _savingThrowService = new();
 
     public void Show()
     {
@@ -289,12 +291,14 @@ public class CityMenu
 
         // Confirm race selection and apply racial modifiers, then show modified stats
         Console.WriteLine($"Selected race: {race.ToDisplayString()}");
+        RuleApplicationInfo.PublishLinked("PHB", "14PenaltiesAndBonusesForRace", $"Race selected: {race.ToDisplayString()}.");
         Console.WriteLine();
         abilities = _creator.ApplyRaceModifiers(abilities, race);
         abilities = RaceAbilityScoreLimits.ClampToLimits(abilities, race, gender);
         Console.WriteLine("\nRolled Abilities (after racial modifiers):");
         Console.WriteLine($"Gender: {gender}");
         Console.WriteLine(abilities);
+        PublishFinalAbilities(abilities);
 
         Console.WriteLine("Choose Class:");
         // Determine allowed classes based on abilities after racial modifiers
@@ -396,6 +400,7 @@ public class CityMenu
         // Confirm class selection
         var clsDisplay = chosenClasses.Count == 1 ? chosenClasses[0].ToDisplayString() : string.Join("/", chosenClasses.Select(cc => cc.ToDisplayString()));
         Console.WriteLine($"Selected class: {clsDisplay}");
+        RuleApplicationInfo.Publish($"Class selected: {clsDisplay}.");
        
         int? exceptionalStrengthPercentile = null;
         if (chosenClasses.Count == 1
@@ -424,6 +429,7 @@ public class CityMenu
         Console.Write("Alignment: ");
         var alignIdx = InputHelper.ReadLetterIndex(alignValues.Length);
         Alignment alignment = alignValues.Length > 0 ? alignValues[Math.Max(0, alignIdx ?? 0)] : Alignment.TrueNeutral;
+        Console.WriteLine($"Selected alignment: {alignment.ToDisplayString()}");
 
         // determine HP using the already-rolled constitution
         int hp = _creator.RollHitPoints(chosenClasses[0], abilities.Constitution);
@@ -455,11 +461,22 @@ public class CityMenu
             Age = Random.Shared.Next(17, 29)
         };
 
+        RuleApplicationInfo.Publish($"Creating character '{name}': race {race.ToDisplayString()}, class {clsDisplay}.");
+
         character.EnsureClassProgressions();
         character.RefreshMoveFromArmorAndClass();
         character.RefreshMonkProgressionStats();
 
         InitializeSpellcasting(character);
+
+        var saveVsParalyzation = _savingThrowService.GetSaveTarget(character, SaveThrowType.ParalyzationPoisonDeath);
+        var saveVsBreath = _savingThrowService.GetSaveTarget(character, SaveThrowType.BreathWeapon);
+        var saveVsSpell = _savingThrowService.GetSaveTarget(character, SaveThrowType.Spell);
+
+        RuleApplicationInfo.Publish($"Final hit points: {character.CurrentHitPoints}/{character.MaxHitPoints}.");
+        RuleApplicationInfo.Publish($"Final saving throws: Paralyzation/Poison/Death {saveVsParalyzation}, Breath Weapon {saveVsBreath}, Spell {saveVsSpell}.");
+        RuleApplicationInfo.Publish($"Final THAC0: {character.Thac0Display}.");
+        RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
 
         Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}\n");
 
@@ -474,6 +491,12 @@ public class CityMenu
         {
             Console.WriteLine("Character discarded.");
         }
+    }
+
+    private static void PublishFinalAbilities(AbilityScores abilities)
+    {
+        RuleApplicationInfo.Publish(
+            $"Final abilities: STR {abilities.Strength}, INT {abilities.Intelligence}, WIS {abilities.Wisdom}, DEX {abilities.Dexterity}, CON {abilities.Constitution}, CHA {abilities.Charisma}.");
     }
 
     private static bool ConfirmClassLevelLimitWarning(Race race, AbilityScores abilities, System.Collections.Generic.IReadOnlyList<CharacterClass> classes)
