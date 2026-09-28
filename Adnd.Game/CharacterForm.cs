@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Adnd.Core.Characters;
 using Adnd.Core.Characters.Progression;
+using Adnd.Core.Diagnostics;
+using Adnd.Core.Items;
 using Adnd.Data.Spells;
 
 namespace Adnd.Game.Windows
@@ -13,6 +15,7 @@ namespace Adnd.Game.Windows
     {
         private readonly Character _character;
         private readonly List<string> _knownSpellLines;
+        private readonly CharacterSavingThrowService _savingThrowService = new();
         private const int MaxSpellsOnSheet = 17;
         private readonly Font _handFont = new Font("Bradley Hand ITC", 18, FontStyle.Regular);
         private readonly Font _handFontSmall14 = new Font("Bradley Hand ITC", 14, FontStyle.Regular);
@@ -74,9 +77,140 @@ namespace Adnd.Game.Windows
 
             Shown += (_, _) =>
             {
+                ShowMoreInfoDialog();
                 if (_knownSpellLines.Count > MaxSpellsOnSheet)
                     ShowAllSpellsDialog();
             };
+        }
+
+        private void ShowMoreInfoDialog()
+        {
+            var saveVsParalyzation = _savingThrowService.GetSaveTarget(_character, SaveThrowType.ParalyzationPoisonDeath);
+            var saveVsPetrification = _savingThrowService.GetSaveTarget(_character, SaveThrowType.PetrificationPolymorph);
+            var saveVsRodStaffWand = _savingThrowService.GetSaveTarget(_character, SaveThrowType.RodStaffWand);
+            var saveVsBreath = _savingThrowService.GetSaveTarget(_character, SaveThrowType.BreathWeapon);
+            var saveVsSpell = _savingThrowService.GetSaveTarget(_character, SaveThrowType.Spell);
+            var thac0FromTable = _character.Thac0;
+            var thac0StrengthModifier = _character.Thac0StrengthModifier;
+            var thac0ItemModifier = _character.Thac0ItemModifier;
+            var hasDualWieldWeapon = _character.HasDualWieldOffHandWeapon;
+            var dualWieldPrimaryPenalty = _character.DualWieldPrimaryThac0Penalty;
+            var dualWieldSecondaryPenalty = _character.DualWieldSecondaryThac0Penalty;
+            var damageStrengthModifier = _character.DamageStrengthModifier;
+            var damageMainItemModifier = _character.MainHandItemDamageModifier;
+            var damageOffHandItemModifier = _character.OffHandItemDamageModifier;
+            var weaponBaseDamage = _character.Damage;
+            var damageTotal = _character.DamageTotalDisplay;
+            var mainWeaponName = _character.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainWeapon)
+                                 && mainWeapon != null
+                                 && mainWeapon.Type == ItemType.Weapon
+                ? mainWeapon.Name
+                : "Unarmed";
+            var offHandWeaponName = _character.Equipment.TryGetValue(EquipmentSlot.OffHand, out var offHandWeapon)
+                                    && offHandWeapon != null
+                                    && offHandWeapon.Type == ItemType.Weapon
+                                    && !ReferenceEquals(mainWeapon, offHandWeapon)
+                ? offHandWeapon.Name
+                : string.Empty;
+            var equippedWeaponDisplay = string.IsNullOrWhiteSpace(offHandWeaponName)
+                ? mainWeaponName
+                : $"{mainWeaponName} / {offHandWeaponName}";
+
+            static string FormatSigned(int value) => value >= 0 ? $"+{value}" : value.ToString();
+
+            var thac0StrengthApplied = -thac0StrengthModifier;
+            var thac0ItemApplied = -thac0ItemModifier;
+            var thac0AfterStrengthAndItems = thac0FromTable + thac0StrengthApplied + thac0ItemApplied;
+
+            var lines = new List<string>
+            {
+                $"Alignment: {_character.Alignment.ToDisplayString()}",
+                $"Gender: {_character.Gender}",
+                string.Empty,
+                "Saving Throws:",
+                $"- Paralyzation/Poison/Death: {saveVsParalyzation}",
+                $"- Petrification/Polymorph: {saveVsPetrification}",
+                $"- Rod/Staff/Wand: {saveVsRodStaffWand}",
+                $"- Breath Weapon: {saveVsBreath}",
+                $"- Spell: {saveVsSpell}",
+                string.Empty,
+                $"THAC0 (table): {thac0FromTable}",
+                $"THAC0 modifiers applied: Strength {FormatSigned(thac0StrengthApplied)}, Items {FormatSigned(thac0ItemApplied)}",
+                $"THAC0 calculation: {thac0FromTable} {FormatSigned(thac0StrengthApplied)} {FormatSigned(thac0ItemApplied)} = {thac0AfterStrengthAndItems}"
+            };
+
+            if (_character.IsDualClassed && _character.DualClass.HasValue && _character.DualClassOriginalClass.HasValue)
+            {
+                var currentClass = _character.DualClass.Value;
+                var currentLevel = Math.Max(1, _character.GetClassLevel(currentClass));
+                var previousClass = _character.DualClassOriginalClass.Value;
+                var previousLevel = Math.Max(1, _character.DualClassOriginalLevel);
+
+                lines.Insert(2, $"Current class: {currentClass.ToDisplayString()} L{currentLevel}");
+                lines.Insert(3, $"Previous class: {previousClass.ToDisplayString()} L{previousLevel}");
+                lines.Insert(4, string.Empty);
+            }
+
+            if (hasDualWieldWeapon)
+            {
+                var mainHandFinalThac0 = thac0AfterStrengthAndItems + dualWieldPrimaryPenalty;
+                var offHandFinalThac0 = thac0AfterStrengthAndItems + dualWieldSecondaryPenalty;
+                lines.Add($"Two-weapon THAC0 penalty: primary +{dualWieldPrimaryPenalty}, secondary +{dualWieldSecondaryPenalty} (DEX {_character.Abilities.Dexterity}).");
+                lines.Add($"Final THAC0: primary {thac0AfterStrengthAndItems}+{dualWieldPrimaryPenalty}={mainHandFinalThac0}, secondary {thac0AfterStrengthAndItems}+{dualWieldSecondaryPenalty}={offHandFinalThac0}");
+            }
+            else
+            {
+                lines.Add($"Final THAC0: {thac0AfterStrengthAndItems}");
+            }
+
+            if (_character.HasMonkClass())
+            {
+                lines.Add("Monk rule (PHB p.32): no Strength bonus to THAC0 or damage; item bonuses still apply.");
+            }
+
+            lines.Add(string.Empty);
+            lines.Add($"Weapon equipped: {equippedWeaponDisplay}");
+            lines.Add($"Weapon base damage: {weaponBaseDamage}");
+            lines.Add($"Damage modifiers: Strength {FormatSigned(damageStrengthModifier)}");
+            lines.Add($"Damage total: {damageTotal}");
+
+            RuleApplicationInfo.PublishLinked(
+                "DMG",
+                "79Savethrow",
+                $"{_character.Name} saving throws: Paralyzation/Poison/Death {saveVsParalyzation}, Petrification/Polymorph {saveVsPetrification}, Rod/Staff/Wand {saveVsRodStaffWand}, Breath Weapon {saveVsBreath}, Spell {saveVsSpell}.");
+
+            RuleApplicationInfo.PublishLinked(
+                "DMG",
+                "74ToHitTables",
+                $"{_character.Name} THAC0 from table: {thac0FromTable}. Applied modifiers: Strength {FormatSigned(thac0StrengthApplied)}, Items {FormatSigned(thac0ItemApplied)}. Calculation: {thac0FromTable} {FormatSigned(thac0StrengthApplied)} {FormatSigned(thac0ItemApplied)} = {thac0AfterStrengthAndItems}.");
+
+            if (_character.HasMonkClass())
+            {
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "32MonkStrBonus",
+                    $"Monk rule applied for {_character.Name}: no Strength bonus to THAC0 or damage; item modifiers still apply.");
+            }
+
+            RuleApplicationInfo.Publish(
+                $"{_character.Name} damage with equipped weapon(s): weapon {equippedWeaponDisplay}; base damage {weaponBaseDamage}; modifiers Strength {FormatSigned(damageStrengthModifier)}, Item(main) {FormatSigned(damageMainItemModifier)}, Item(offhand) {FormatSigned(damageOffHandItemModifier)}; total {damageTotal}.");
+
+            if (hasDualWieldWeapon)
+            {
+                var mainHandFinalThac0 = thac0AfterStrengthAndItems + dualWieldPrimaryPenalty;
+                var offHandFinalThac0 = thac0AfterStrengthAndItems + dualWieldSecondaryPenalty;
+                RuleApplicationInfo.PublishLinked(
+                    "DMG",
+                    "70TwoWeapons",
+                    $"{_character.Name} dual-wield THAC0 penalties (DEX {_character.Abilities.Dexterity}): primary +{dualWieldPrimaryPenalty}, secondary +{dualWieldSecondaryPenalty}. Final THAC0 primary {mainHandFinalThac0}, secondary {offHandFinalThac0}.");
+            }
+
+            MessageBox.Show(
+                this,
+                string.Join(Environment.NewLine, lines),
+                "More Info",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -93,8 +227,8 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.Level.ToString(), new Rectangle(640, 80, 46, 40));  
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
-            DrawInBox(g, $"{Math.Max(0, _character.Age)}y {Math.Max(0, _character.AgeDays)}d", new Rectangle(44, 188, 120, 36), false, StringAlignment.Center, _handFontSmall10);
-            DrawInBox(g, BuildDualClassSheetLine(_character), new Rectangle(240, 188, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, string.Empty, new Rectangle(44, 188, 120, 36), false, StringAlignment.Center, _handFontSmall10);
+            DrawInBox(g, string.Empty, new Rectangle(240, 188, 640, 36), false, StringAlignment.Near, _handFontSmall10);
 
             // Ability circles: write only the value inside each circle, not labels.
             if (_character.ExceptionalStrengthPercentile == null)

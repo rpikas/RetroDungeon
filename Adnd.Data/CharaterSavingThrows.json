@@ -135,6 +135,14 @@
           "RodStaffWand": 6,
           "BreathWeapon": 4,
           "Spell": 7
+        },
+        {
+          "LevelRange": "17+",
+          "ParalyzationPoisonDeath": 3,
+          "PetrificationPolymorph": 4,
+          "RodStaffWand": 5,
+          "BreathWeapon": 4,
+          "Spell": 6
         }
       ]
     },

@@ -1818,11 +1818,7 @@ public sealed class CombatCoordinator
 
     private static List<Item> FilterItemsByDungeonLevelCostCap(List<Item> items, int? dungeonLevel)
     {
-        var maxCost = GetMaxFoundItemCostForDungeonLevel(dungeonLevel);
-        if (!maxCost.HasValue)
-            return items;
-
-        return items.Where(i => i.Cost <= maxCost.Value).ToList();
+        return items;
     }
 
     private static int? GetMaxFoundItemCostForDungeonLevel(int? dungeonLevel)
@@ -2820,8 +2816,49 @@ public sealed class CombatCoordinator
 
     private Monster? FindMonsterTemplateByName(string name)
     {
-        return _monsterRepository.GetAll()
-            .FirstOrDefault(m => string.Equals(m.Name, name, StringComparison.OrdinalIgnoreCase));
+        var all = _monsterRepository.GetAll().ToList();
+
+        var exact = all.FirstOrDefault(m => string.Equals(m.Name, name, StringComparison.OrdinalIgnoreCase));
+        if (exact != null)
+            return exact;
+
+        var normalizedRequested = NormalizeEncounterMonsterName(name);
+        var signatureRequested = EncounterMonsterNameSignature(name);
+
+        foreach (var monster in all)
+        {
+            if (string.Equals(NormalizeEncounterMonsterName(monster.Name), normalizedRequested, StringComparison.OrdinalIgnoreCase))
+                return monster;
+
+            if (string.Equals(EncounterMonsterNameSignature(monster.Name), signatureRequested, StringComparison.OrdinalIgnoreCase))
+                return monster;
+        }
+
+        return null;
+    }
+
+    private static string NormalizeEncounterMonsterName(string value)
+    {
+        var normalized = (value ?? string.Empty)
+            .ToLowerInvariant()
+            .Replace(',', ' ')
+            .Replace('-', ' ');
+
+        var chars = normalized
+            .Select(ch => char.IsLetterOrDigit(ch) ? ch : ' ')
+            .ToArray();
+
+        return string.Join(" ", new string(chars)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries));
+    }
+
+    private static string EncounterMonsterNameSignature(string value)
+    {
+        var parts = NormalizeEncounterMonsterName(value)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase);
+
+        return string.Join(" ", parts);
     }
 
     private static bool TryParseRollRange(string? range, out int min, out int max)

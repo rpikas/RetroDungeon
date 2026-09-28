@@ -3318,21 +3318,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         foreach (var candidate in candidateNames)
         {
-            var exact = allMonsters.FirstOrDefault(m => string.Equals(m.Name, candidate, StringComparison.OrdinalIgnoreCase));
-            if (exact != null)
-                return exact.Name;
-        }
-
-        var normalizedCandidates = candidateNames
-            .Select(NormalizeMonsterName)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        foreach (var monster in allMonsters)
-        {
-            var normalizedMonster = NormalizeMonsterName(monster.Name);
-            if (normalizedCandidates.Contains(normalizedMonster, StringComparer.OrdinalIgnoreCase))
-                return monster.Name;
+            var match = FindMonsterByName(allMonsters, candidate);
+            if (match != null)
+                return match.Name;
         }
 
         return null;

@@ -105,17 +105,6 @@ public class CharacterCreator
             return best;
         }
 
-        int RollBestOf99()
-        {
-            int best = 0;
-            for (int i = 0; i < 99; i++)
-            {
-                int v = DiceRoller.Roll3d6();
-                if (v > best) best = v;
-            }
-            return best;
-        }
-
         var method = GameRulesProvider.Current.AbilityRollMethod;
         return method switch
         {

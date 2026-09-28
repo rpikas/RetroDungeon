@@ -27,27 +27,34 @@ public class ItemRepository
 
         foreach (var file in Directory.GetFiles(_folder, "*.json"))
         {
-            var json = File.ReadAllText(file);
-
-            var grouped = JsonSerializer.Deserialize<ItemCategoryJsonModel>(json);
-            if (grouped?.Items != null && grouped.Items.Count > 0)
+            try
             {
-                foreach (var model in grouped.Items)
+                var json = File.ReadAllText(file);
+
+                var grouped = JsonSerializer.Deserialize<ItemCategoryJsonModel>(json);
+                if (grouped?.Items != null && grouped.Items.Count > 0)
                 {
-                    var item = ToItem(model);
+                    foreach (var model in grouped.Items)
+                    {
+                        var item = ToItem(model);
+                        if (item != null)
+                            list.Add(item);
+                    }
+
+                    continue;
+                }
+
+                var single = JsonSerializer.Deserialize<ItemJsonModel>(json);
+                if (single != null)
+                {
+                    var item = ToItem(single);
                     if (item != null)
                         list.Add(item);
                 }
-
-                continue;
             }
-
-            var single = JsonSerializer.Deserialize<ItemJsonModel>(json);
-            if (single != null)
+            catch (JsonException ex)
             {
-                var item = ToItem(single);
-                if (item != null)
-                    list.Add(item);
+                Console.WriteLine($"WARNING: Skipping malformed item json '{Path.GetFileName(file)}': {ex.Message}");
             }
         }
 

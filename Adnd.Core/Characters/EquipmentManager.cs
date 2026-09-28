@@ -34,6 +34,17 @@ public static class EquipmentManager
         }
     }
 
+    private static bool IsAllowedOffHandWeapon(Item item)
+    {
+        if (item == null || item.Type != ItemType.Weapon)
+            return false;
+
+        var name = item.Name ?? string.Empty;
+        return name.Contains("Dagger", StringComparison.OrdinalIgnoreCase)
+               || name.Contains("Hand Axe", StringComparison.OrdinalIgnoreCase)
+               || name.Contains("HandAxe", StringComparison.OrdinalIgnoreCase);
+    }
+
     public static bool Equip(Character c, Item item)
     {
         EnsureEquipmentSlots(c);
@@ -49,6 +60,13 @@ public static class EquipmentManager
         }
 
         var slot = item.Slot.Value;
+
+        if (slot == EquipmentSlot.OffHand
+            && item.Type == ItemType.Weapon
+            && !IsAllowedOffHandWeapon(item))
+        {
+            return false;
+        }
 
         var movedItems = new System.Collections.Generic.HashSet<Item>();
         var isHandSlot = slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand;

@@ -2259,7 +2259,7 @@
       "AllowedClasses": [ "Cleric", "Paladin" ],
       "Rarity": "Legendary",
       "Description": "A powerful talisman that destroys evil creatures who touch it.",
-      "SpecialAbilities": [],
+      "SpecialAbilities": [ "Talisman of Pure Good" ],
       "Source": "Adnd",
       "StockQuantity": 0
     },

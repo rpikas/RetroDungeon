@@ -294,14 +294,14 @@
       },
       {
         "DiceMin": 31,
-        "DiceMax": 99,
+        "DiceMax": 32,
         "Creature": "Dragon",
         "CountMin": 1,
         "CountMax": 1
       },
       {
         "DiceMin": 33,
-        "DiceMax": 34,
+        "DiceMax": 99,
         "Creature": "Fungi, violet",
         "CountMin": 1,
         "CountMax": 3

@@ -6,6 +6,7 @@ namespace Adnd.Core.Characters;
 
 public class Character
 {
+    private const int CarryCapacityFactor = 10;
     public string Name { get; set; } = "";
     public Race Race { get; set; }
     // Keep a computed legacy Class property for compatibility (primary class)
@@ -134,10 +135,8 @@ public class Character
         {
             var baseThac0 = Thac0 - GetStrengthAttackBonus() - GetMainWeaponToHitBonus();
 
-            if (Equipment.TryGetValue(EquipmentSlot.OffHand, out var offHandItem)
-                && offHandItem != null)
+            if (TryGetDualWieldPenalties(out var mainHandPenalty, out var offHandPenalty))
             {
-                var (mainHandPenalty, offHandPenalty) = GetDualWieldThac0Penalties(Abilities.Dexterity);
                 var mainHandThac0 = baseThac0 + mainHandPenalty;
                 var offHandThac0 = baseThac0 + offHandPenalty;
                 return $"{mainHandThac0}/{offHandThac0}";
@@ -146,8 +145,48 @@ public class Character
             return baseThac0.ToString();
         }
     }
+
+    [JsonIgnore]
+    public int Thac0StrengthModifier => GetStrengthAttackBonus();
+
+    [JsonIgnore]
+    public int Thac0ItemModifier => GetMainWeaponToHitBonus();
+
+    [JsonIgnore]
+    public bool HasDualWieldOffHandWeapon => TryGetDualWieldPenalties(out _, out _);
+
+    [JsonIgnore]
+    public int DualWieldPrimaryThac0Penalty
+    {
+        get
+        {
+            return TryGetDualWieldPenalties(out var mainHandPenalty, out _) ? mainHandPenalty : 0;
+        }
+    }
+
+    [JsonIgnore]
+    public int DualWieldSecondaryThac0Penalty
+    {
+        get
+        {
+            return TryGetDualWieldPenalties(out _, out var offHandPenalty) ? offHandPenalty : 0;
+        }
+    }
+
     [JsonIgnore]
     public string DamageDisplay => GetDamageDisplay();
+
+    [JsonIgnore]
+    public int DamageStrengthModifier => GetStrengthDamageBonus();
+
+    [JsonIgnore]
+    public int MainHandItemDamageModifier => GetWeaponItemDamageModifier(EquipmentSlot.MainHand);
+
+    [JsonIgnore]
+    public int OffHandItemDamageModifier => GetWeaponItemDamageModifier(EquipmentSlot.OffHand);
+
+    [JsonIgnore]
+    public string DamageTotalDisplay => GetDamageDisplay(includeItemDamageModifiers: true);
    // public int NumberOfAttacks { get; set; } = 1; // Base attacks per round; can be modified by level/class/weapon
     public float NumberOfAttacks { get; set; } = 1; // Base attacks per round; can be modified by level/class/weapon
     public string Damage { get; set; } = "1d6"; // Base damage or equipped weapon damage
@@ -1006,15 +1045,38 @@ public class Character
         return string.Join(", ", statuses);
     }
 
+    private bool TryGetDualWieldPenalties(out int mainHandPenalty, out int offHandPenalty)
+    {
+        mainHandPenalty = 0;
+        offHandPenalty = 0;
+
+        if (!Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainHandItem)
+            || !Equipment.TryGetValue(EquipmentSlot.OffHand, out var offHandItem)
+            || mainHandItem == null
+            || offHandItem == null
+            || offHandItem.Type != ItemType.Weapon)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(mainHandItem, offHandItem) && mainHandItem.IsTwoHanded)
+            return false;
+
+        (mainHandPenalty, offHandPenalty) = GetDualWieldThac0Penalties(Abilities.Dexterity);
+        return true;
+    }
+
     private static (int MainHandPenalty, int OffHandPenalty) GetDualWieldThac0Penalties(int dexterity)
     {
         return dexterity switch
         {
-            <= 8 => (3, 6),
-            <= 12 => (2, 4),
-            <= 15 => (1, 2),
-            <= 17 => (0, 1),
-            _ => (0, 0)
+            <= 3 => (5, 7),
+            4 => (4, 6),
+            5 => (3, 5),
+            <= 15 => (2, 4),
+            16 => (1, 3),
+            17 => (0, 2),
+            _ => (0, 1)
         };
     }
 
@@ -1035,6 +1097,9 @@ public class Character
 
     private int GetStrengthAttackBonus()
     {
+        if (HasMonkClass())
+            return 0;
+
         var str = Abilities.Strength;
         if (str <= 7) return -2;
         if (str <= 9) return -1;
@@ -1068,6 +1133,9 @@ public class Character
 
     private int GetStrengthDamageBonus()
     {
+        if (HasMonkClass())
+            return 0;
+
         if (PotionGiantStrengthActiveUntilDungeonExit && PotionGiantStrengthDamageBonus > 0)
             return PotionGiantStrengthDamageBonus;
 
@@ -1103,11 +1171,11 @@ public class Character
         };
     }
 
-    private string GetDamageDisplay()
+    private string GetDamageDisplay(bool includeItemDamageModifiers = false)
     {
         var bonus = GetStrengthDamageBonus();
         if (bonus == 0)
-            return Damage;
+            return includeItemDamageModifiers ? ApplyItemDamageModifiers(Damage) : Damage;
 
         if (string.IsNullOrWhiteSpace(Damage))
             return bonus > 0 ? $"+{bonus}" : bonus.ToString();
@@ -1130,7 +1198,41 @@ public class Character
             parts[1] = ApplyDamageModifier(parts[1].Trim(), bonus);
         }
 
+        var withStrength = string.Join("/", parts);
+        return includeItemDamageModifiers ? ApplyItemDamageModifiers(withStrength) : withStrength;
+    }
+
+    private string ApplyItemDamageModifiers(string damageExpression)
+    {
+        if (string.IsNullOrWhiteSpace(damageExpression))
+            return damageExpression;
+
+        var mainHandBonus = GetWeaponItemDamageModifier(EquipmentSlot.MainHand);
+        var offHandBonus = GetWeaponItemDamageModifier(EquipmentSlot.OffHand);
+
+        if (mainHandBonus == 0 && offHandBonus == 0)
+            return damageExpression;
+
+        var parts = damageExpression.Split('/');
+        if (parts.Length >= 1 && mainHandBonus != 0)
+            parts[0] = ApplyDamageModifier(parts[0].Trim(), mainHandBonus);
+
+        if (parts.Length >= 2 && offHandBonus != 0)
+            parts[1] = ApplyDamageModifier(parts[1].Trim(), offHandBonus);
+
         return string.Join("/", parts);
+    }
+
+    private int GetWeaponItemDamageModifier(EquipmentSlot slot)
+    {
+        if (!Equipment.TryGetValue(slot, out var weapon)
+            || weapon == null
+            || weapon.Type != ItemType.Weapon)
+        {
+            return 0;
+        }
+
+        return Math.Max(0, weapon.MagicBonus);
     }
 
     private static string ApplyDamageModifier(string expression, int bonus)
@@ -1179,12 +1281,12 @@ public class Character
     private int GetMaxCarryWeight()
     {
         if (PotionLevitationActiveUntilDungeonExit)
-            return 6000;
+            return 6000 * CarryCapacityFactor;
 
         if (PotionGiantStrengthActiveUntilDungeonExit && PotionGiantStrengthCarryWeightBonus > 0)
-            return Math.Max(0, baseCarryWeightWithoutPotion() + PotionGiantStrengthCarryWeightBonus);
+            return Math.Max(0, (baseCarryWeightWithoutPotion() + PotionGiantStrengthCarryWeightBonus) * CarryCapacityFactor);
 
-        return baseCarryWeightWithoutPotion();
+        return baseCarryWeightWithoutPotion() * CarryCapacityFactor;
     }
 
     private int baseCarryWeightWithoutPotion()

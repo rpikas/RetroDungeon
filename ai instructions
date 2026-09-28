@@ -752,7 +752,7 @@ When CountMin and CountMax is defined in MonsterLevels, use that instead to figu
 radomizing in the log and rule window 28,7
 
 in rules and dice info inform what treasures has been found and what rolls are beeing made with probablity and amount of coins, gems etc 30,1
-make sure individual treasure is parsed when parsing monster json also individial treasure allways appear for the mobs with individual treasure even if not in lair 30,3
+make sure individual treasure is parsed when parsing monster json also individual treasure always appear for the mobs with individual treasure even if not in lair 30,3
 
 when finding treasure in lair that is not individual treasure, adjust the amount of coins found by the number of monsters in the group, 
 The treasure found should be multiplied by the number of monsters in the group. and divided by the expected average number of monsters in the group. 
@@ -1171,7 +1171,7 @@ It only cast cure light wounds if the encounter is damaged. 77,6
 
 when finding treasure inlair, instead of dividing the value of each gem jewelry with the loot factor, divide the number of total gems jewelry found with the loot factor, and round up.
 
-when rolling for individual treasure and the chanse is 0 for a specific coin type, do not write that to the Adnd Rule a roll log.77,9
+when rolling for individual treasure and the chance is 0 for a specific coin type, do not write that to the Adnd Rule a roll log.77,9
 Also when rolling for Chance roll for Treasure Type inlair, also do not write that to the AndndRule and dice info 78,0
 For example this should not be written to the log since the proability is 0. 78,1
 instead of writing all this for every monster "[14:08:31]  Goblin #7: individual  Treasure Type K  Amount  3d6 [4,4,3] => 11 SP found."
@@ -3071,5 +3071,119 @@ before the character has selected race, but after the abilities. 94,4
 
 Also before the character has selected race, but after the abilities, inform in ADnD Rule and Dice info:
 If not all races are selectable, it might be because of the ability scores are not applicable for all races. 
-Link to PHB15AbilityScoreMaxMinRaceGender.png using the normal methods usually used in RetroDungeon.
+Link to PHB15AbilityScoreMaxMinRaceGender.png using the normal methods usually used in RetroDungeon. 94,4
 ___
+The restrictions for what race can be selected based on the ability scores should be be modified with the race adjustments, 
+for example if a character has 18 strength and is a male, he can still select to be a halfling, since halflings have a -1 strength modifier, 
+the character would have 17 strength after the race adjustment.
+
+When opening character sheet, show A more info dialog
+Age
+Alignment
+Gender
+If charater has changed class, show the old class and level and the new class and level
+The saving throws
+THAC0
+
+When showing saving throws in the more info dialog, then also write the status to ADnD Rule and Dice info and link to 
+DMG79Savethrow using the normal methods usually used in RetroDungeon.
+
+Update the save throw table so Fighters, Rangers and Paladins that are level 17 or higher should have the following save 
+throws Paralyzation/Poison/Death Magic: 3 Breath weapon 4 Spell 6: 94,7
+
+can you introduce these save throws for charaters based on class and level 
+Character Class and Experience Level	Petrification or Polymorph*	
+Rod, Staff or Wand Cleric 1-3	13	14 
+Cleric 4-6	12	13 Cleric 7-9	10	11 
+Cleric 10-12	9	10 
+Cleric 13-15	8	9 
+Cleric 16-18	7	8 
+Cleric 19+	5	6 
+Fighter 0	17	18 
+Fighter 1-2	15	16 
+Fighter 3-4	14	15 
+Fighter 5-6	12	13 
+Fighter 7-8	11	12 
+Fighter 9-10	9	10 
+Fighter 11-12	8	9 
+Fighter 13-14	6	7 
+Fighter 15-16	5	6 
+Fighter 17+	4	5 
+Magic-User 1-5	4	5 
+Magic-User 1-5	13	11 
+Magic-User 6-10	11	9 
+Magic-User 11-15	9	7 
+Magic-User 16-20	7	5 
+Magic-User 21+	5	3 
+Thief 1-4	12	14 
+Thief 5-8	11	12 
+Thief 9-12	10	10 
+Thief 13-16	9	8 
+Thief 17-20	8	6 
+Thief 21+	7	4
+Druids saves like Clerics 
+Ranger and Paladin saves like Fighters 
+Illutsionists saves like Magic users
+Assassins and Bards and Monks saves like Thieves 95,0
+
+Do not write age or dual class info in the charater sheet 95,0
+
+When showing THAC0 in the more info dialog, then also write the status to ADnD Rule and Dice info and link to 
+DMG74ToHitTables.png using the normal methods usually used in RetroDungeon. 95,1
+
+Also write THAC0 modifiers from strength and items in more info dialog and ADnD Rule and Dice info.
+
+When equipping a weapon in the second hand it needs to be a dagger or a hand axe.
+adjust the weight how much charaters can carry with a factor *10
+
+DMG70TwoWeapons The use of a second weapon causes the character THAC0 with his or her primary weapon to be +2 and the secondary weapon at +4.
+3 dexterity the secondary/primary penalty is 7/ 5
+4 dexterity the secondary/primary penalty is 6/ 4
+5 dexterity the secondary/primary penalty is 5/ 3
+6-15 dexterity the secondary/primary penalty is 4/ 2
+16 dexterity the secondary/primary penalty is 3/ 1
+atl7 2/0. and 
+at 18 and above 1/0
+
+When a weapon is equipped in the off hand then in the info dialog, 
+then also write how that affects THAC0 and link to DMG70TwoWeapons.png using the normal methods usually used in RetroDungeon. 95,4
+
+show the strength and itmes modifiers on THAC0 as negative show what thac0 is in the table then show the calculations 
+that end up in the final thac0. in More info dilaog and also in Adnd Rule and Dice Info 95,4
+
+If a charater has changed class then in more info, display the current class and level but also the 
+previous class and level reached for that class. 
+
+show how much damage the characters does with his or her weapon equipped, including item damage modifiers any strength modifiers.
+show the strength and item damage modifiers separately and the total damage in More info dialog and also in Adnd Rule and Dice Info. 95,6
+
+reorder in the info in more info dialog so all THAC0 is togehter, Final THAC can be show just after THAC0 calculations
+The damage modifier in more info show +0 for dual wield even when it should be +3. 96,0
+
+in more info and log instead of writing Damage(base weapon) write the name of the weapon equipped. 96,0
+
+According to PHB32 Monks does not get any THAC0 or damage bonus from strength, but they do get the bonus from items.
+also display that in more info dialog and also in Adnd Rule and Dice Info for monks. refer to 
+PHB32MonkStrBonus.png using the normal methods usually used in RetroDungeon. 96,2
+
+Also write the base damage that the weapon/weapons equiped gives
+
+This was allready implemented ai said: Talisman of Pure Good: but nothing happens.
+
+potions helping a person in the party should automatically only target the person who drinks the potion, do do not ask for who in the party the potion should target.
+
+When encountering for example monster "Creature": "Toad, giant", according to roll in MonsterLevel,json, I want the monster with "Name": "Giant Toad", to be found
+this is only an example, so this means that the order of the words could be reversed and then should  "," and " " be ingnored. 96,9
+
+remove the restriction of how many gp an item can be worth when finding it depening on level it is found on.  96,9
+
+***************************
+
+To be implemented when I have tokens                                                  
+***************************
+when encountering charaters, they should all have the same alignment, Neutral, Lawful Good or Chaotic Evil. 
+The alignment should be shown in the encounter dialog and also in the ADnD Rule and Dice info dialog.
+
+When using an item with "SpecialAbilities": [ "Talisman of Pure Good" ] one of the original 7 charges should be used.
+It can only be used by cleric that is level 9 or higher and with alignment Lawful Good, Neutral Good or Chaotic Good if character is not a magic user tries to use it 
+then if selecting an evil cleric as a target

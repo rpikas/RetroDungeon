@@ -255,11 +255,7 @@ public class CityMenu
             Console.WriteLine(abilities);
 
             var availableRaces = raceValues
-                .Where(r =>
-                {
-                    var adjusted = _creator.ApplyRaceModifiers(abilities, r);
-                    return RaceAbilityScoreLimits.IsWithinLimits(adjusted, r, gender);
-                })
+                .Where(r => CanSelectRaceWithAdjustedAbilities(abilities, r, gender))
                 .ToList();
 
             RuleApplicationInfo.PublishLinked(
@@ -483,11 +479,13 @@ public class CityMenu
         InitializeSpellcasting(character);
 
         var saveVsParalyzation = _savingThrowService.GetSaveTarget(character, SaveThrowType.ParalyzationPoisonDeath);
+        var saveVsPetrification = _savingThrowService.GetSaveTarget(character, SaveThrowType.PetrificationPolymorph);
+        var saveVsRodStaffWand = _savingThrowService.GetSaveTarget(character, SaveThrowType.RodStaffWand);
         var saveVsBreath = _savingThrowService.GetSaveTarget(character, SaveThrowType.BreathWeapon);
         var saveVsSpell = _savingThrowService.GetSaveTarget(character, SaveThrowType.Spell);
 
         RuleApplicationInfo.Publish($"Final hit points: {character.CurrentHitPoints}/{character.MaxHitPoints}.");
-        RuleApplicationInfo.Publish($"Final saving throws: Paralyzation/Poison/Death {saveVsParalyzation}, Breath Weapon {saveVsBreath}, Spell {saveVsSpell}.");
+        RuleApplicationInfo.Publish($"Final saving throws: Paralyzation/Poison/Death {saveVsParalyzation}, Petrification/Polymorph {saveVsPetrification}, Rod/Staff/Wand {saveVsRodStaffWand}, Breath Weapon {saveVsBreath}, Spell {saveVsSpell}.");
         RuleApplicationInfo.Publish($"Final THAC0: {character.Thac0Display}.");
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
 
@@ -815,6 +813,12 @@ public class CityMenu
             return;
 
         parts.Add($"{ability} {(delta > 0 ? "+" : string.Empty)}{delta}");
+    }
+
+    private bool CanSelectRaceWithAdjustedAbilities(AbilityScores rolledAbilities, Race race, Gender gender)
+    {
+        var adjusted = _creator.ApplyRaceModifiers(rolledAbilities, race);
+        return RaceAbilityScoreLimits.IsWithinLimits(adjusted, race, gender);
     }
 
     private string GetStatusDisplay(Character c)

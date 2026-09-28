@@ -3683,7 +3683,7 @@ public sealed class CombatResolver
             {
                 var saveMessage = $"{target.Name} resists Sleep (save {saveRoll} vs {saveTarget}).";
                 events.Add(new CombatEvent(saveMessage));
-                RuleApplicationInfo.PublishLinked("DMG", "pg79 Savethrow", saveMessage);
+                RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", saveMessage);
                 continue;
             }
 
@@ -3692,7 +3692,7 @@ public sealed class CombatResolver
             session.SetPartyAsleep(target.Name, rounds);
             var failedSaveMessage = $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s).";
             events.Add(new CombatEvent(failedSaveMessage));
-            RuleApplicationInfo.PublishLinked("DMG", "pg79 Savethrow", failedSaveMessage);
+            RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", failedSaveMessage);
         }
     }
 
@@ -4330,7 +4330,7 @@ public sealed class CombatResolver
 
         if (hostileMonsters.Count == 0)
         {
-            events.Add(new CombatEvent($"{charmedMonster.DisplayName} is charmed and stands by the druid."));
+            events.Add(new CombatEvent($"{charmedMonster.DisplayName} is charmed and does nothing."));
             return;
         }
 

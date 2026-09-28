@@ -5,6 +5,8 @@ namespace Adnd.Core.Characters;
 public enum SaveThrowType
 {
     ParalyzationPoisonDeath,
+    PetrificationPolymorph,
+    RodStaffWand,
     BreathWeapon,
     Spell
 }
@@ -47,6 +49,8 @@ public sealed class CharacterSavingThrowService
         return type switch
         {
             SaveThrowType.ParalyzationPoisonDeath => progression.ParalyzationPoisonDeath,
+            SaveThrowType.PetrificationPolymorph => progression.PetrificationPolymorph,
+            SaveThrowType.RodStaffWand => progression.RodStaffWand,
             SaveThrowType.BreathWeapon => progression.BreathWeapon,
             SaveThrowType.Spell => progression.Spell,
             _ => 20
@@ -102,6 +106,8 @@ public sealed class CharacterSavingThrowService
                     MinLevel = min,
                     MaxLevel = max,
                     ParalyzationPoisonDeath = p.ParalyzationPoisonDeath,
+                    RodStaffWand = p.RodStaffWand,
+                    PetrificationPolymorph = p.PetrificationPolymorph,
                     BreathWeapon = p.BreathWeapon,
                     Spell = p.Spell
                 });
@@ -188,6 +194,8 @@ public sealed class CharacterSavingThrowService
         public int MinLevel { get; set; }
         public int MaxLevel { get; set; }
         public int ParalyzationPoisonDeath { get; set; }
+        public int RodStaffWand { get; set; }
+        public int PetrificationPolymorph { get; set; }
         public int BreathWeapon { get; set; }
         public int Spell { get; set; }
 
