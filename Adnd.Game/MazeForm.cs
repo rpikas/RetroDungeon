@@ -2651,6 +2651,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 string? additionalMonsterName = null;
                 var foundMatchingAlignment = false;
                 var filteredOutByAlignment = 0;
+                var filteredAlignmentDetails = new List<string>();
 
                 for (int reroll = 0; reroll < 30; reroll++)
                 {
@@ -2665,7 +2666,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                         break;
                     }
 
-                    var candidateAxis = GetEncounterMoralAxis(FindMonsterByName(allMonsters, additionalMonsterName));
+                    var candidateMonster = FindMonsterByName(allMonsters, additionalMonsterName);
+                    var candidateAxis = GetEncounterMoralAxis(candidateMonster);
                     if (!candidateAxis.HasValue || candidateAxis.Value == primaryGroupAxis.Value)
                     {
                         foundMatchingAlignment = true;
@@ -2673,10 +2675,19 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     }
 
                     filteredOutByAlignment++;
+                    var expectedAlignment = FormatEncounterMoralAxis(primaryGroupAxis.Value);
+                    var actualAlignment = string.IsNullOrWhiteSpace(candidateMonster?.Alignment)
+                        ? "Unknown"
+                        : candidateMonster!.Alignment;
+                    filteredAlignmentDetails.Add($"{additionalMonsterName}: expected {expectedAlignment}, actual {actualAlignment}");
                 }
 
                 if (filteredOutByAlignment > 0)
                 {
+                    var detailsText = filteredAlignmentDetails.Count == 0
+                        ? string.Empty
+                        : $" {string.Join("; ", filteredAlignmentDetails)}.";
+
                     RuleApplicationInfo.Publish(
                         "Adnd",
                         "Encounter groups",
@@ -2685,7 +2696,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                         "1",
                         "30",
                         filteredOutByAlignment.ToString(),
-                        $"Filtered out {filteredOutByAlignment} additional group candidate(s) due to alignment mismatch."
+                        $"Filtered out {filteredOutByAlignment} additional group candidate(s) due to alignment mismatch.{detailsText}"
                     );
                 }
 
@@ -2841,6 +2852,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         return null;
+    }
+
+    private static string FormatEncounterMoralAxis(EncounterMoralAxis axis)
+    {
+        return axis switch
+        {
+            EncounterMoralAxis.Good => "Good",
+            EncounterMoralAxis.Neutral => "Neutral",
+            EncounterMoralAxis.Evil => "Evil",
+            _ => "Unknown"
+        };
     }
 
     private string? RollDungeonMonsterForLevelExcludingCharacter(int level)

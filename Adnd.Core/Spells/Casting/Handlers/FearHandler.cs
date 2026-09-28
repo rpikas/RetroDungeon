@@ -46,8 +46,8 @@ public sealed class FearHandler : ISpellEffectHandler
             var saved = saveTarget > 0 && saveRoll >= saveTarget;
 
             RuleApplicationInfo.Publish(
-                "PHB",
-                "Fear",
+                "DMG",
+                "79 Savethrow Monster",
                 $"{monster.DisplayName} saving throw vs spell ({spell.Name})",
                 $"Roll d20, need {saveTarget}+ to save. Failed save means creature flees combat.",
                 "1",

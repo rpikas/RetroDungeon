@@ -90,8 +90,8 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
                 var saved = saveTarget > 0 && saveRoll >= saveTarget;
 
                 RuleApplicationInfo.Publish(
-                    "PHB",
-                    "Phantasmal Force",
+                    "DMG",
+                    "79 Savethrow Monster",
                     $"{monster.DisplayName} save vs spell against illusion",
                     $"Roll d20, need {saveTarget}+ to disbelieve.",
                     "1",
@@ -125,8 +125,8 @@ public sealed class PhantasmalForceHandler : ISpellEffectHandler
             var saved = saveTarget > 0 && saveRoll >= saveTarget;
 
             RuleApplicationInfo.Publish(
-                "PHB",
-                breakOnFirstDisbelief ? "Phantasmal Force" : "Spectral Force",
+                "DMG",
+                "79 Savethrow Monster",
                 $"{monster.DisplayName} save vs spell against illusion",
                 breakOnFirstDisbelief
                     ? $"Roll d20, need {saveTarget}+ to disbelieve."

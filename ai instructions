@@ -3180,7 +3180,12 @@ ___
 Write in Adnd Rule and Dice Info how the probablity of encoutnering several monstergroups is calculated, what the 1d100 roll was and what the result was. 97,0
 also shown this table when rolling for how many monster groups to meet. •	01 → 4 groups (1%) •	02-05 → 3 groups (4%) •	06-19 → 2 groups (14%) •	20-100 → 1 group (81%)
 
-when several groups are encountered and the encouters that are not the 1st are filtered away because of alignement reaseons, write that in Adnd Rule and Dice Info
+when several groups are encountered and the encouters that are not the 1st are filtered away because of alignement reaseons, write that in Adnd Rule and Dice Info. 97,4
+
+when showing save throws from monsters in Adnd Rule and Dice Info, link to DMG79SavethrowMonster.png //This did not work...
+
+when writing that a monster group has been filtered out because of alignment, write what monster group was filtered out and what was the alignment expected and what 
+was the actual alignment to fit with the other monsters. 97,5
 
 ***************************
 

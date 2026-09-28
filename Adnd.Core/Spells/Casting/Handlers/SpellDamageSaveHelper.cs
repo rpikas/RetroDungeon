@@ -181,7 +181,7 @@ internal static class SpellDamageSaveHelper
 
         RuleApplicationInfo.Publish(
             "DMG",
-            "Saving Throws",
+            "79 Savethrow Monster",
             $"{monster.DisplayName} saving throw vs spell ({spellName})",
             $"Roll d20, need {saveTarget}+ to save. Success means half damage.",
             "1",
