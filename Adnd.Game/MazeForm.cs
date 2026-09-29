@@ -3220,9 +3220,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             RuleApplicationInfo.Publish(
                 "DMG",
                 page,
-                $"Rolling monster level {monsterLevel})",
+                $"Encounter table level {monsterLevel})",
     //            $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
-                $"Use encounter table Level{monsterLevel};.",
+                $"",
                 "1",
                 "100",
                 roll.ToString(), creature);

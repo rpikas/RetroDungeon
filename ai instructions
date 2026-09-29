@@ -3172,7 +3172,7 @@ This was allready implemented ai said: Talisman of Pure Good: but nothing happen
 
 potions helping a person in the party should automatically only target the person who drinks the potion, do do not ask for who in the party the potion should target.
 
-When encountering for example monster "Creature": "Toad, giant", according to roll in MonsterLevel,json, I want the monster with "Name": "Giant Toad", to be found
+When encountering for example monster "Creature": "Toad, giant", according to rollF in MonsterLevel,json, I want the monster with "Name": "Giant Toad", to be found
 this is only an example, so this means that the order of the words could be reversed and then should  "," and " " be ingnored. 96,9
 
 remove the restriction of how many gp an item can be worth when finding it depening on level it is found on.  96,9
