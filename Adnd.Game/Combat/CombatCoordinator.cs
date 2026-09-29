@@ -2625,7 +2625,8 @@ public sealed class CombatCoordinator
                 "DMG",
                 "174",
                 $"Roll monster level for reinforcement at dungeon level {dungeonLevel}",
-                "Use MonsterEncounterTable: roll 1d20 and map to encounter monster level.",
+ //               "Use MonsterEncounterTable: roll 1d20 and map to encounter monster level.",
+                "",
                 "1",
                 "20",
                 roll.ToString(),
@@ -2683,9 +2684,9 @@ public sealed class CombatCoordinator
                 RuleApplicationInfo.Publish(
                     "DMG",
                     page,
-                   // "175-177",//TODO update to exact page reference
                     $"Roll reinforcement creature for dungeon level {dungeonLevel} (monster level {monsterLevel})",
-                    $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                    $"Use encounter table Level{monsterLevel};",
+    //                $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
                     "1",
                     "100",
                     roll.ToString(),
@@ -2729,7 +2730,8 @@ public sealed class CombatCoordinator
                 "DMG",
                 page,//TODO update to exact page reference
                 $"Roll reinforcement count for '{resolvedMonster}'",
-                "Use CountMin-CountMax from MonsterLevels entry.",
+     //           "Use CountMin-CountMax from MonsterLevels entry.",
+                "",
                 "1",
                 (countMax - countMin + 1).ToString(),
                 (rolledCount - countMin + 1).ToString(),
@@ -2757,7 +2759,8 @@ public sealed class CombatCoordinator
                 "DMG",
                 page,//TODO update to exact page reference
                 $"Roll reinforcement count for '{resolvedMonster}'",
-                "Use CountMin-CountMax from MonsterLevels entry.",
+                "",
+     //           "Use CountMin-CountMax from MonsterLevels entry.",
                 "1",
                 (countMax - countMin + 1).ToString(),
                 (rolledCount - countMin + 1).ToString(),

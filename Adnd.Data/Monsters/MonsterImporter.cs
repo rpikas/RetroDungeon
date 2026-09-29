@@ -14,6 +14,9 @@ public static class MonsterImporter
             return defaultValue;
 
         var trimmed = raw.Trim();
+        if (string.Equals(trimmed, "nil", StringComparison.OrdinalIgnoreCase))
+            return 0;
+
         if (trimmed.EndsWith("%", StringComparison.Ordinal))
             trimmed = trimmed[..^1].Trim();
 
@@ -66,7 +69,7 @@ public static class MonsterImporter
             NumberOfAttacks = json.NumberOfAttacks,
             MagicResistance = magicResistance,
             MagicResistancePercent = ParseMagicResistancePercent(magicResistance),
-            InLairPercent = ParsePercent(json.InLairPercent, 50),
+            InLairPercent = ParsePercent(json.InLairPercent, 0),
             Size = ParseSize(json.Size),
             HitPoints = json.HitPoints,
 

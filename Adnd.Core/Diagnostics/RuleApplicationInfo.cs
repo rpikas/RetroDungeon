@@ -49,10 +49,12 @@ public static class RuleApplicationInfo
 
         var ruleText = string.IsNullOrWhiteSpace(rule)
             ? string.Empty
-            : $"{Environment.NewLine}{rule}";
+  //          : $"{Environment.NewLine}{rule}";
+            : $"{rule}";
 
         string message =
-            $"{sourcePageText}, {context}:{ruleText}{Environment.NewLine}" +
+            $"{sourcePageText}, {context}:{ruleText}" +
+     //       $"{sourcePageText}, {context}:{ruleText}{Environment.NewLine}" +
             $"{numberOfDices}d{sidesOnDices}({resultOfRoll}) -> {consequenceOfRoll}";
 
         var line = $"[{DateTime.Now:HH:mm:ss}] {message}";

@@ -3111,7 +3111,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 "DMG",
                 "174",
                 $"Roll monster level for dungeon level {dungeonLevel}",
-                "Use MonsterEncounterTable: roll 1d20 and map to encounter monster level.",
+                "",
+    //           "Use MonsterEncounterTable: roll 1d20 and map to encounter monster level.",
                 "1",
                 "20",
                 roll.ToString(),
@@ -3220,7 +3221,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 "DMG",
                 page,
                 $"Rolling monster level {monsterLevel})",
-                $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+    //            $"Use encounter table Level{monsterLevel}; roll 1d100 and find matching DiceMin-DiceMax range.",
+                $"Use encounter table Level{monsterLevel};.",
                 "1",
                 "100",
                 roll.ToString(), creature);
@@ -3276,7 +3278,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     page,//page
                     //               $"Roll encounter count for '{creature}' (monster level {monsterLevel})",
                     $"Number of '{creature}s'",//context
-                    "Use CountMin-CountMax from MonsterLevels entry.",//rule
+                    "",//rule
+                //    "Use CountMin-CountMax from MonsterLevels entry.",//rule
                     NumberOfDices.ToString(),//numberOfDices
                     numberOfSidesText,//sidesOnDices
                     countOverride.Value.ToString(),//resultOfRoll
