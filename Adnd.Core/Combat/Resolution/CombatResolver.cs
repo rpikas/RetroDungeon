@@ -1215,12 +1215,16 @@ public sealed class CombatResolver
                                     var saveRoll = _dice.Roll(20);
                                     if (saveRoll >= saveTarget)
                                     {
-                                        events.Add(new CombatEvent($"{target.Name} resists poison (save {saveRoll} vs {saveTarget})."));
+                                        var resistMessage = $"{target.Name} resists poison (save {saveRoll} vs {saveTarget}).";
+                                        events.Add(new CombatEvent(resistMessage));
+                                        RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", resistMessage);
                                     }
                                     else if (!target.HasStatus(CharacterStatus.Poisoned))
                                     {
                                         target.AddStatus(CharacterStatus.Poisoned);
-                                        events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
+                                        var failedPoisonSaveMessage = $"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})";
+                                        events.Add(new CombatEvent(failedPoisonSaveMessage));
+                                        RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", failedPoisonSaveMessage);
                                     }
                                 }
 

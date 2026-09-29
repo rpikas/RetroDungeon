@@ -3191,6 +3191,8 @@ write the content of Adnd Rule and Dice Info to  C:\dev\RetroDungeon\Logs\ inste
 ___
 
 Remove the default chanse of beeing in Lair for monsters, if Nil then the chase is 0%. 97,9
+___
+Messages like Nori resists poison (save 16 vs 3). should link to DMG79Savethrow.png
 
 ***************************
 

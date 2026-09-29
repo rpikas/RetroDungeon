@@ -429,8 +429,9 @@ public sealed class CombatCoordinator
         RuleApplicationInfo.Publish(
             "DMG",
             "62",
-            "Party start",
-            "Before round 1, party rolls 1d6. Monster side rolls 1d6, except special monsters may improve surprise chance. If both surprise each other, treat as no surprise.",
+            "Party surprise roll.",
+            "",
+    //        "Before round 1, party rolls 1d6. Monster side rolls 1d6, except special monsters may improve surprise chance. If both surprise each other, treat as no surprise.",
             "1",
             "6",
             partyRoll.ToString(),
@@ -439,8 +440,9 @@ public sealed class CombatCoordinator
         RuleApplicationInfo.Publish(
             "DMG",
             "62",
-            "Encounter start",
-            $"Monster side roll uses {monsterRollDice}. Threshold is {monsterThreshold}.",
+            "Encounter surprise roll.",
+            "",
+   //         $"Monster side roll uses {monsterRollDice}. Threshold is {monsterThreshold}. ",
             "1",
             monstersRollUsesD100 ? "100" : "6",
             monstersRoll.ToString(),
