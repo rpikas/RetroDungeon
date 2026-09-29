@@ -2624,8 +2624,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         };
 
         RuleApplicationInfo.Publish(
-            "Adnd",
-            "Encounter groups",
+            "HomeBrew",
+            "",
             "Roll number of monster groups",
             "Chance for multiple groups uses 1d100:\n• 01 → 4 groups (1%)\n• 02-05 → 3 groups (4%)\n• 06-19 → 2 groups (14%)\n• 20-100 → 1 group (81%)",
             "1",

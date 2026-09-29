@@ -26,8 +26,9 @@ public sealed class RuleApplicationInfoForm : Form
     public RuleApplicationInfoForm()
     {
         Text = "AD&D Rule and Dice Info";
-        StartPosition = FormStartPosition.CenterScreen;
-        Size = new Size(700, 420);
+        //StartPosition = FormStartPosition.CenterScreen;
+        StartPosition = FormStartPosition.Manual;
+        Size = new Size(700, 920);
         ShowInTaskbar = true;
         TopMost = true;
 
@@ -147,6 +148,12 @@ public sealed class RuleApplicationInfoForm : Form
                 picture.Image = new Bitmap(src);
 
             viewer.Controls.Add(picture);
+
+            viewer.Location = new Point(
+    Screen.PrimaryScreen.WorkingArea.Width - viewer.Width,
+    0
+);
+
             viewer.ShowDialog(this);
         }
 

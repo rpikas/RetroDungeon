@@ -114,12 +114,15 @@ public sealed class EncounterMonsterFactory
         RuleApplicationInfo.Publish(
             lairTemplate.Name,
             "MM",
-            $"Monster Lair % Determine if {lairTemplate.Name} group ({groupId}) is in lair",
-            "Roll 1d100 once per encounter group. If result is less than or equal to %InLair, the group is in lair.",
+          //  $"Monster Lair % Determine if {lairTemplate.Name} group ({groupId}) is in lair",
+            $"{lairTemplate.Name} %InLair={inLairChance}%. ",
+     //       "Roll 1d100 once per encounter group. If result is less than or equal to %InLair, the group is in lair.",
+            "",
             "1",
             "100",
             inLairRoll.ToString(),
-            $"%InLair={inLairChance}%. {(isInLair ? "Group in lair" : "Group not in lair")}.");
+            $" {(isInLair ? "Group in lair" : "Group not in lair")}.");
+    //    $"%InLair={inLairChance}%. {(isInLair ? "Group in lair" : "Group not in lair")}.");
 
         var list = new List<MonsterInstance>(count);
         for (int i = 1; i <= count; i++)

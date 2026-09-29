@@ -3198,13 +3198,20 @@ Edge frågada jag om can you uppdate method, so if  "Name": "Minotaur" then "Sur
 om jag vill att även Troll, Carnivorous Ape ska funka som Minotaur hur lägger jag till det?
 hur lägger jag till "Neo-otyugh are never surprised."
 
-uppdaderade manuellt CombatCoordinator.GetMonsterSpecialSurpriseThreshold flera framtida monster genom att söka i MM efter surprise
+uppdaderade manuellt CombatCoordinator.GetMonsterSpecialSurpriseThreshold flera framtida monster genom att söka i MM efter surprise. 97,9
 ___
 
 ***************************
 
 To be implemented when I have tokens                                                  
 ***************************
+
+In paryt management, for example status disease should be seen
+Church should be able to heal disease
+
+I had a level 21 Magic user, when he chnges class to level 1 fighter and then back to level 21 magic user, he could still cast spells.
+I think all abilities from the old class should be reset until you reach the same level for the new class in this case 21 level magic user
+
 when encountering charaters, they should all have the same alignment, Neutral, Lawful Good or Chaotic Evil. 
 The alignment should be shown in the encounter dialog and also in the ADnD Rule and Dice info dialog.
 
