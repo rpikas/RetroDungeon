@@ -8,7 +8,7 @@ namespace Adnd.Game;
 
 public sealed class RuleApplicationInfoForm : Form
 {
-    private const string WindowStatePath = "Data/Config/rule-application-info-window.json";
+    private const string WindowStatePath = @"C:\dev\RetroDungeon\Logs\rule-application-info-window.json";
 
     private readonly RichTextBox _logBox;
     private readonly List<RuleLinkSpan> _ruleLinks = new();

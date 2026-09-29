@@ -5,6 +5,7 @@ namespace Adnd.Core.Diagnostics;
 
 public static class RuleApplicationInfo
 {
+    private const string RuleAndDiceInfoLogPath = @"C:\dev\RetroDungeon\Logs\AdndRuleAndDiceInfo.log";
     public static event Action<string>? InfoPublished;
 
     public static void PublishLinked(string source, string page, string message)
@@ -19,7 +20,9 @@ public static class RuleApplicationInfo
         if (TryResolveRuleImagePath(source, page, out var imagePath))
             sourcePageText = $"[[RULEIMG|{sourcePageText}|{imagePath}|{DateTime.Now.Ticks}]]";
 
-        InfoPublished?.Invoke($"[{DateTime.Now:HH:mm:ss}] {sourcePageText}: {message}");
+        var line = $"[{DateTime.Now:HH:mm:ss}] {sourcePageText}: {message}";
+        WriteRuleAndDiceInfoLog(line);
+        InfoPublished?.Invoke(line);
     }
 
     public static void Publish(string message)
@@ -30,7 +33,9 @@ public static class RuleApplicationInfo
         if (string.IsNullOrWhiteSpace(message))
             return;
 
-        InfoPublished?.Invoke($"[{DateTime.Now:HH:mm:ss}] {message}");
+        var line = $"[{DateTime.Now:HH:mm:ss}] {message}";
+        WriteRuleAndDiceInfoLog(line);
+        InfoPublished?.Invoke(line);
     }
     public static void Publish(string source, string page, string context, string rule, string numberOfDices, 
         string sidesOnDices, string resultOfRoll, string consequenceOfRoll)
@@ -50,7 +55,28 @@ public static class RuleApplicationInfo
             $"{sourcePageText}, {context}:{ruleText}{Environment.NewLine}" +
             $"{numberOfDices}d{sidesOnDices}({resultOfRoll}) -> {consequenceOfRoll}";
 
-        InfoPublished?.Invoke($"[{DateTime.Now:HH:mm:ss}] {message}");
+        var line = $"[{DateTime.Now:HH:mm:ss}] {message}";
+        WriteRuleAndDiceInfoLog(line);
+        InfoPublished?.Invoke(line);
+    }
+
+    private static void WriteRuleAndDiceInfoLog(string line)
+    {
+        if (string.IsNullOrWhiteSpace(line))
+            return;
+
+        try
+        {
+            var folder = Path.GetDirectoryName(RuleAndDiceInfoLogPath);
+            if (!string.IsNullOrWhiteSpace(folder) && !Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            File.AppendAllText(RuleAndDiceInfoLogPath, line + Environment.NewLine);
+        }
+        catch
+        {
+            // Logging must never interrupt gameplay.
+        }
     }
 
     private static bool TryResolveRuleImagePath(string source, string page, out string imagePath)

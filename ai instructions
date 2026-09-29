@@ -3187,6 +3187,8 @@ when showing save throws from monsters in Adnd Rule and Dice Info, link to DMG79
 when writing that a monster group has been filtered out because of alignment, write what monster group was filtered out and what was the alignment expected and what 
 was the actual alignment to fit with the other monsters. 97,5
 
+write the content of Adnd Rule and Dice Info to  C:\dev\RetroDungeon\Logs\ instead of C:\Users\rober\source\repos\RetroDungeon. 97,7
+
 ***************************
 
 To be implemented when I have tokens                                                  
