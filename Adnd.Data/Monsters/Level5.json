@@ -853,10 +853,6 @@
         {
           "Name": "Regeneration",
           "Description": "Regenerates 3 hit points per round; only fire or acid prevents regeneration."
-        },
-        {
-          "Name": "Surprise Resistance",
-          "Description": "Surprised only on a roll of 1."
         }
       ],
       "MagicResistance": "Standard",
@@ -867,7 +863,7 @@
       "BaseXPValue": 525,
       "XPValuePerHitPoint": 8,
       "Source": "Adnd",
-      "Other": "Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity."
+      "Other": "Surprised only on a roll of 1. Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity."
     },
 
     {

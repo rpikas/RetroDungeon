@@ -3194,6 +3194,13 @@ Remove the default chanse of beeing in Lair for monsters, if Nil then the chase 
 ___
 Messages like Nori resists poison (save 16 vs 3). should link to DMG79Savethrow.png
 
+Edge frågada jag om can you uppdate method, so if  "Name": "Minotaur" then "Surprised only on a roll of 1."
+om jag vill att även Troll, Carnivorous Ape ska funka som Minotaur hur lägger jag till det?
+hur lägger jag till "Neo-otyugh are never surprised."
+
+uppdaderade manuellt CombatCoordinator.GetMonsterSpecialSurpriseThreshold flera framtida monster genom att söka i MM efter surprise
+___
+
 ***************************
 
 To be implemented when I have tokens                                                  

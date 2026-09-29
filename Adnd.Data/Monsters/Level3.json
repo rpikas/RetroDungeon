@@ -647,10 +647,6 @@
         {
           "Name": "Paralyzation",
           "Description": "On hit, victim must save vs. paralyzation or be anesthetized for 5–20 rounds."
-        },
-        {
-          "Name": "Surprise",
-          "Description": "Surprises on 1–3 due to near transparency."
         }
       ],
       "SpecialDefenses": [
@@ -730,10 +726,6 @@
         }
       ],
       "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Can surprise opponents on a roll of 1–4 due to stealth and sewer familiarity."
-        },
         {
           "Name": "Lycanthropy",
           "Description": "Victims bitten must save vs. lycanthropy or become wererats."
@@ -1383,10 +1375,6 @@
         }
       ],
       "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Surprises opponents on a roll of 1–5."
-        },
         {
           "Name": "Poison",
           "Description": "Victim must save vs poison at +1 or suffer effects."

@@ -499,6 +499,7 @@
       "BaseXPValue": 35,
       "XPValuePerHitPoint": 1,
       "TreasureType": "A",
+      "Alignment": "Chaotic Evil",
       "Source": "AD&D",
       "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 31-45",
       "DM comment": "Brigands are better armed and armored than Bandits; typically chaotic evil and more ruthless.  1e Dungeon Masters Guide p.175"
@@ -951,6 +952,7 @@
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Average",
+      "Alignment": "Lawful Evil",
       "Size": "Medium",
       "BaseXPValue": 10,
       "XPValuePerHitPoint": 1,

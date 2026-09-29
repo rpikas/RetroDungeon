@@ -380,9 +380,15 @@ public sealed class CombatCoordinator
         var monstersRollUsesD100 = specialThreshold.HasValue && specialThreshold.Value >= 95;
 
         var monstersRoll = monstersRollUsesD100 ? _dice.Roll(100) : _dice.Roll(6);
+        /*
         var monsterThreshold = monstersRollUsesD100
             ? specialThreshold!.Value
             : Math.Max(2, specialThreshold ?? 2);
+        */
+        var monsterThreshold = monstersRollUsesD100
+    ? specialThreshold!.Value
+    : (specialThreshold ?? 2);
+
         var monstersSurpriseParty = monstersRoll <= monsterThreshold;
         /*
       if (partySurprisesMonsters && monstersSurpriseParty)
@@ -467,6 +473,25 @@ public sealed class CombatCoordinator
         foreach (var monster in monsters)
         {
             var name = monster.Template.Name?.Trim() ?? string.Empty;
+
+            // Minotaur, Troll & Carnivorous Ape: Surprised only on a roll of 1
+            if (name.Equals("Minotaur", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Ettin", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Troll", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Carnivorous Ape", StringComparison.OrdinalIgnoreCase))
+            {
+                threshold = Math.Max(threshold, 1);
+                continue;
+            }
+
+            // Neo-otyugh: Never surprised
+            if (name.Equals("Neo-Otyugh", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Neo Otyugh", StringComparison.OrdinalIgnoreCase))
+            {
+                threshold = int.MaxValue; // Kan aldrig uppnås
+                continue;
+            }
+
             if (name.Equals("Piercer", StringComparison.OrdinalIgnoreCase)
                 || name.StartsWith("Piercer ", StringComparison.OrdinalIgnoreCase))
             {
@@ -474,20 +499,49 @@ public sealed class CombatCoordinator
                 continue;
             }
 
-            if (name.Equals("Xorn", StringComparison.OrdinalIgnoreCase))
-                threshold = Math.Max(threshold, 5);
             else if (name.Equals("Bugbear", StringComparison.OrdinalIgnoreCase)
-                     || name.Equals("Ghoul", StringComparison.OrdinalIgnoreCase)
-                     || name.Equals("Su-Monster", StringComparison.OrdinalIgnoreCase)
-                     || name.Equals("Su Monster", StringComparison.OrdinalIgnoreCase))
+                || name.Equals("Ghoul", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Gelatinous Cube", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Werewolve", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Su-Monster", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Su Monster", StringComparison.OrdinalIgnoreCase))
+            {
                 threshold = Math.Max(threshold, 3);
+            }
             else if (name.Equals("Giant Spider", StringComparison.OrdinalIgnoreCase)
-                     || name.Equals("Troglodyte", StringComparison.OrdinalIgnoreCase))
+                || name.Equals("Aerial Servant", StringComparison.OrdinalIgnoreCase)//Not implemented?
+                || name.Equals("Crab, Giant", StringComparison.OrdinalIgnoreCase)//Not implemented
+                || name.Equals("Crocodile, Giant", StringComparison.OrdinalIgnoreCase)//Not implemented?
+                || name.Equals("Crocodile", StringComparison.OrdinalIgnoreCase)//Not implemented
+                || name.Equals("Doppleganger", StringComparison.OrdinalIgnoreCase)
+                                                                                  //Hafling only in woods
+                || name.Equals("Frog, Giant", StringComparison.OrdinalIgnoreCase)//Not implemented?
+                || name.Equals("Pike, Giant", StringComparison.OrdinalIgnoreCase)//Not implemented
+                || name.Equals("Nomand", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Wererat", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Hell Hound", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Lurker Above", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Lycanthrope, Wererat", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Troglodyte", StringComparison.OrdinalIgnoreCase))
+            {
                 threshold = Math.Max(threshold, 4);
+            }
+
+            if (name.Equals("Xorn", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Invisibel Stalker", StringComparison.OrdinalIgnoreCase)//Not implemented?
+                || name.Equals("Lynx, Giant", StringComparison.OrdinalIgnoreCase)//Not implemented?
+                || name.Equals("Owl, Giant", StringComparison.OrdinalIgnoreCase)//Not implemented
+                || name.Equals("Unicorn", StringComparison.OrdinalIgnoreCase)//Not implemented
+                || name.Equals("Spider, Huge", StringComparison.OrdinalIgnoreCase))
+            {
+                threshold = Math.Max(threshold, 5);
+            }
         }
 
         return threshold > 0 ? threshold : null;
     }
+
+
 
     private static void RestorePersistedRoundEffects(CombatSession session)
     {

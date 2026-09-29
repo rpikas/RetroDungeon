@@ -1765,12 +1765,8 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Surprise",
-          "Description": "Surprises on a roll of 1–4 due to camouflage."
-        },
-        {
           "Name": "Smother Prey",
-          "Description": "Drops onto victims and smothers them in 2–5 rounds."
+          "Description": "Surprises on a roll of 1–4 due to camouflage. Drops onto victims and smothers them in 2–5 rounds."
         }
       ],
       "SpecialDefenses": [],
@@ -2531,12 +2527,7 @@
           "Damage": "6d4"
         }
       ],
-      "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Xorn surprises opponents on a roll of 1–5 due to its ability to move through earth and stone."
-        }
-      ],
+      "SpecialAttacks": [ ],
       "SpecialDefenses": [
         {
           "Name": "Earth Glide",
@@ -2550,12 +2541,12 @@
       "MagicResistance": "Standard",
       "Intelligence": "Average",
       "Alignment": "Neutral",
-      "Size": "Medium (5' tall)",
+      "Size": "Medium",
       "BaseXPValue": 1275,
       "XPValuePerHitPoint": 10,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 7, Roll 98-100",
-      "Other": "Xorn are attracted to precious metals and gems; often negotiate rather than fight."
+      "Other": "Xorn surprises opponents on a roll of 1–5 due to its ability to move through earth and stone. Xorn are attracted to precious metals and gems; often negotiate rather than fight."
     },
 
 

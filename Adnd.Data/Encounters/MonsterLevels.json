@@ -301,14 +301,14 @@
       },
       {
         "DiceMin": 33,
-        "DiceMax": 99,
+        "DiceMax": 34,
         "Creature": "Fungi, violet",
         "CountMin": 1,
         "CountMax": 3
       },
       {
         "DiceMin": 35,
-        "DiceMax": 40,
+        "DiceMax": 99,
         "Creature": "Gelatinous cube",
         "CountMin": 1,
         "CountMax": 1
