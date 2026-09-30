@@ -665,44 +665,89 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 35-40",
       "Other": "Nearly transparent; sweeps up indigestible treasure; fire affects normally."
     },
-
     {
-      "Name": "Giant Weasel",
-      "Type": "Animal",
+      "Name": "Ghoul",
+      "Type": "Undead",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 24,
       "ArmorClass": 6,
-      "Movement": 15,
-      "HitDice": 3,
+      "Movement": 9,
+      "HitDice": 2,
       "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "15",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "WeaselPelt",
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B, T",
+      "IndividualTreasure": "None",
       "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d3"
+        },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "1d6"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Blood Drain",
-          "Description": "On a successful bite, drains 2–12 hit points per round until victim is dead or the weasel is killed."
+          "Name": "Paralyzation",
+          "Description": "Victims struck must save vs. paralyzation or be paralyzed; elves are immune."
         }
       ],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
       "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 3, Roll 41-45",
+      "Other": "Ghouls are undead who feed on corpses and paralyze living victims.Ghouls cannot be affected by sleep or charm spells just like other undead. Originally from the AD&D Monster Manual they can be affected by cold spells, but not in this implemenation.."
+    },
+
+    {
+      "Name": "Giant Lizard",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 5,
+      "Movement": 15,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Double Damage on Natural 20",
+          "Description": "A natural 20 indicates both jaws snap shut, dealing 2–16 damage."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Alignment": "Neutral",
+      "Size": "Large",
       "BaseXPValue": 125,
       "XPValuePerHitPoint": 4,
       "Source": "Adnd",
-      "Other": "Aggressive predator; often attacks larger prey by latching on and draining blood rapidly."
+      "DungeonRandomMonsterTableReference": "Level 3, Roll 46-50",
+      "Other": "Prefers marshes and swamps; capable of engulfing prey due to large jaws."
     },
+
 
     {
       "Name": "Lycanthrope, Wererat",
@@ -744,46 +789,10 @@
       "BaseXPValue": 135,
       "XPValuePerHitPoint": 3,
       "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 3, Roll 51-54",
       "Other": "Wererats often command giant rats; prefer ambushes and stealth; can assume human, rat, or hybrid form."
     },
 
-    {
-      "Name": "Giant Lizard",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 12,
-      "ArmorClass": 5,
-      "Movement": 15,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Double Damage on Natural 20",
-          "Description": "A natural 20 indicates both jaws snap shut, dealing 2–16 damage."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 125,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Prefers marshes and swamps; capable of engulfing prey due to large jaws."
-    },
 
 
 
@@ -936,48 +945,6 @@
       "Source": "Adnd",
       "Other": "Must be killed, burned, or immersed in water to detach before satiation."
     },
-    {
-      "Name": "Ghoul",
-      "Type": "Undead",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 24,
-      "ArmorClass": 6,
-      "Movement": 9,
-      "HitDice": 2,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "20",
-      "TreasureType": "B, T",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d3"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Paralyzation",
-          "Description": "Victims struck must save vs. paralyzation or be paralyzed; elves are immune."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic Evil",
-      "Size": "Medium",
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 2,
-      "Source": "Adnd",
-      "Other": "Ghouls are undead who feed on corpses and paralyze living victims.Ghouls cannot be affected by sleep or charm spells just like other undead. Originally from the AD&D Monster Manual they can be affected by cold spells, but not in this implemenation.."
-    },
 
 
     {
@@ -1126,7 +1093,43 @@
       "Source": "Adnd",
       "Other": "Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity."
     },
-
+    {
+      "Name": "Giant Weasel",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "Movement": 15,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "15",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "WeaselPelt",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Blood Drain",
+          "Description": "On a successful bite, drains 2–12 hit points per round until victim is dead or the weasel is killed."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 125,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Aggressive predator; often attacks larger prey by latching on and draining blood rapidly."
+    },
     {
       "Name": "Vorpal Bunny",
       "Type": "Animal",
