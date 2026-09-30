@@ -3209,16 +3209,19 @@ When entering the dungeon, and one of the characters got Ear Seeker disease, the
 and get the option to not enter the dungeon and go to the church to get healed. 98,3
 ___
 
-When a charater get  Ear Seeker disease, do not show message about rad disease, instead show message about  Ear Seeker disease in combat log.
+When a charater get  Ear Seeker disease, do not show message about rad disease, instead show message about  Ear Seeker disease in combat log. 98,3
 ___
+In party management, for example status disease should be seen, 98,5
+___
+
 
 ***************************
 
 To be implemented when I have tokens                                                  
 ***************************
 
-In paryt management, for example status disease should be seen
-Church should be able to heal disease or not
+
+Church should be able to heal disease for 200 gp,
 
 I had a level 21 Magic user, when he chnges class to level 1 fighter and then back to level 21 magic user, he could still cast spells.
 I think all abilities from the old class should be reset until you reach the same level for the new class in this case 21 level magic user

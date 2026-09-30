@@ -1364,7 +1364,14 @@ public class PartyMenu
         if (c.HasStatus(CharacterStatus.Asleep)) statuses.Add("Asleep");
         if (c.HasStatus(CharacterStatus.Ashes)) statuses.Add("Ashes");
         if (c.HasStatus(CharacterStatus.Lost)) statuses.Add("Lost");
+        if (c.HasStatus(CharacterStatus.Encumbered)) statuses.Add("Encumbered");
         if (c.HasStatus(CharacterStatus.Invisible)) statuses.Add("Invisible");
+        if (c.HasStatus(CharacterStatus.Blind)) statuses.Add("Blind");
+        if (c.HasStatus(CharacterStatus.Diseased)) statuses.Add("Diseased");
+        if (c.HasStatus(CharacterStatus.Feeblemind)) statuses.Add("Feeblemind");
+        if (c.HasStatus(CharacterStatus.Slowed)) statuses.Add("Slowed");
+        if (c.HasStatus(CharacterStatus.DeadlyPoisoned)) statuses.Add("Deadly Poisoned");
+        if (c.HasStatus(CharacterStatus.Confused)) statuses.Add("Confused");
         return string.Join(", ", statuses);
     }
 }
