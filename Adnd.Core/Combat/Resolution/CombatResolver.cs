@@ -4470,7 +4470,7 @@ public sealed class CombatResolver
     private void TryApplyGiantRatDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
     {
         var isGiantRat = string.Equals(monster.Template.Name, "Giant Rat", StringComparison.OrdinalIgnoreCase);
-        if (!isGiantRat && !HasAnySpecialAbility(monster, "Giant Rat Disease", "Disease"))
+        if (!isGiantRat && !HasAnySpecialAbility(monster, "Giant Rat Disease"))
             return;
 
         var diseaseRoll = _dice.Roll(100);
@@ -4532,7 +4532,7 @@ public sealed class CombatResolver
             return;
 
         target.ApplyEarSeekerDisease();
-        events.Add(new CombatEvent($"{target.Name} is diseased by {monster.DisplayName}! They will die upon next dungeon entry unless cured."));
+        events.Add(new CombatEvent($"{target.Name} contracts Ear Seeker disease from {monster.DisplayName}! They will die upon next dungeon entry unless cured."));
     }
 
     private static void TryApplyInfestation(MonsterInstance monster, Character target, List<CombatEvent> events)
