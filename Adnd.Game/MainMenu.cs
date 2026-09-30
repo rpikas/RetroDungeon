@@ -298,6 +298,9 @@ public class MainMenu
     /// </summary>
     private void EnterMaze()
     {
+        if (!ConfirmEarSeekerRiskBeforeDungeonEntry())
+            return;
+
         Enter("EdgeOfTown");
 
         ApplyEarSeekerDungeonEntryDeaths();
@@ -336,6 +339,56 @@ public class MainMenu
 
             _charRepo.Save(member);
         }
+    }
+
+    private bool ConfirmEarSeekerRiskBeforeDungeonEntry()
+    {
+        var party = _partyRepo.Load();
+        if (party.Members.Count == 0)
+            return true;
+
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var atRisk = new List<Character>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var member))
+                continue;
+
+            if (!member.EarSeekerDeathOnNextDungeonEntry
+                || member.HasStatus(CharacterStatus.Dead)
+                || member.HasStatus(CharacterStatus.Ashes)
+                || member.HasStatus(CharacterStatus.Lost)
+                || member.CurrentHitPoints <= 0)
+            {
+                continue;
+            }
+
+            atRisk.Add(member);
+        }
+
+        if (atRisk.Count == 0)
+            return true;
+
+        Console.WriteLine();
+        Console.WriteLine("*** WARNING: EAR SEEKER DISEASE ***");
+        Console.WriteLine("The following character(s) are infected:");
+        foreach (var member in atRisk)
+            Console.WriteLine($"- {member.Name}");
+
+        Console.WriteLine("If you enter the dungeon now, infected character(s) will die on entry unless cured.");
+        Console.WriteLine("Go to the Church of Chant to cast Cure Disease before entering.");
+        Console.Write("Enter dungeon anyway? (Y = enter dungeon, N = go to church): ");
+
+        var key = Console.ReadKey(true).Key;
+        Console.WriteLine();
+
+        if (key == ConsoleKey.Y)
+            return true;
+
+        Enter("Temple");
+        _templeMenu.Show();
+        return false;
     }
 
     private void RecalculatePartyCombatStateOnDungeonEntry()

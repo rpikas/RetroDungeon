@@ -3204,6 +3204,11 @@ ___
 Remove N)ext place option in the city. 98,2
 Manually added ConsoleKey.Escape as an option for L)
 
+___
+When entering the dungeon, and one of the characters got Ear Seeker disease, then the party should be warned about that and what it means
+and get the option to not enter the dungeon and go to the church to get healed.
+___
+
 ***************************
 
 To be implemented when I have tokens                                                  
