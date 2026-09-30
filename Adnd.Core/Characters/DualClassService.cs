@@ -282,7 +282,10 @@ public sealed class DualClassService
             return;
 
         if (character.DualClassState == DualClassState.SurpassedOriginal)
+        {
+            RestoreOriginalClassProgressionIfUnlocked(character);
             return;
+        }
 
         var activeClass = character.Classes.Count > 0 ? character.Classes[0] : character.DualClass;
         if (!activeClass.HasValue)
@@ -293,11 +296,70 @@ public sealed class DualClassService
         {
             character.DualClassState = DualClassState.SurpassedOriginal;
 
+            if (character.DualClassOriginalClass.HasValue)
+            {
+                var originalClass = character.DualClassOriginalClass.Value;
+                character.EnsureClassProgressions();
+
+                var originalProgression = character.ClassProgressions.Find(cp => cp.Class == originalClass);
+                if (originalProgression == null)
+                {
+                    character.ClassProgressions.Add(new ClassProgression
+                    {
+                        Class = originalClass,
+                        Level = Math.Max(1, character.DualClassOriginalLevel),
+                        Experience = 0
+                    });
+                }
+                else if (originalProgression.Level < Math.Max(1, character.DualClassOriginalLevel))
+                {
+                    originalProgression.Level = Math.Max(1, character.DualClassOriginalLevel);
+                }
+
+                if (!character.Classes.Contains(originalClass))
+                    character.Classes.Add(originalClass);
+
+                _ = new SpellProgressionService().RecalculateFromClassProgressions(character);
+            }
+
             // Re-apply derived combat stats when original class features unlock.
             character.RecalculateArmorClassFromState();
             character.RefreshMoveFromArmorAndClass();
             character.RefreshMonkProgressionStats();
         }
+    }
+
+    private static void RestoreOriginalClassProgressionIfUnlocked(Character character)
+    {
+        if (!character.IsDualClassed
+            || character.DualClassState != DualClassState.SurpassedOriginal
+            || !character.DualClassOriginalClass.HasValue)
+        {
+            return;
+        }
+
+        var originalClass = character.DualClassOriginalClass.Value;
+        character.EnsureClassProgressions();
+
+        if (!character.Classes.Contains(originalClass))
+            character.Classes.Add(originalClass);
+
+        var originalProgression = character.ClassProgressions.Find(cp => cp.Class == originalClass);
+        if (originalProgression == null)
+        {
+            character.ClassProgressions.Add(new ClassProgression
+            {
+                Class = originalClass,
+                Level = Math.Max(1, character.DualClassOriginalLevel),
+                Experience = 0
+            });
+        }
+        else if (originalProgression.Level < Math.Max(1, character.DualClassOriginalLevel))
+        {
+            originalProgression.Level = Math.Max(1, character.DualClassOriginalLevel);
+        }
+
+        _ = new SpellProgressionService().RecalculateFromClassProgressions(character);
     }
 
     public void ResetAdventureFlag(Character character)

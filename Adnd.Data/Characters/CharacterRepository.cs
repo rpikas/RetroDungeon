@@ -179,6 +179,32 @@ public class CharacterRepository
                     : DualClassState.TrainingNewClass;
             }
         }
+
+        if (character.DualClassState == DualClassState.SurpassedOriginal
+            && character.DualClassOriginalClass.HasValue)
+        {
+            var originalClass = character.DualClassOriginalClass.Value;
+
+            if (!character.Classes.Contains(originalClass))
+                character.Classes.Add(originalClass);
+
+            var originalProgression = character.ClassProgressions
+                .FirstOrDefault(cp => cp.Class == originalClass);
+
+            if (originalProgression == null)
+            {
+                character.ClassProgressions.Add(new ClassProgression
+                {
+                    Class = originalClass,
+                    Level = Math.Max(1, character.DualClassOriginalLevel),
+                    Experience = 0
+                });
+            }
+            else if (originalProgression.Level < Math.Max(1, character.DualClassOriginalLevel))
+            {
+                originalProgression.Level = Math.Max(1, character.DualClassOriginalLevel);
+            }
+        }
     }
 
     private static void HydrateWeaponDamageVsLarge(Character character, IReadOnlyDictionary<string, Item> itemLookup)
