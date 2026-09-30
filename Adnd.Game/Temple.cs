@@ -18,6 +18,7 @@ public static class Temple
     public const int HealCost = 10;
     public const int CurePoisonCost = 100;
     public const int CureParalysisCost = 200;
+    public const int CureDiseaseCost = 200;
     public const int CureFeeblemindCost = 400;
 
     public const int RaiseDeadCost = 100;
@@ -44,7 +45,7 @@ public static class Temple
             cost += CureParalysisCost;
 
         if (c.HasStatus(CharacterStatus.Diseased))
-            cost += CurePoisonCost;
+            cost += CureDiseaseCost;
 
         if (c.HasStatus(CharacterStatus.Feeblemind))
             cost += CureFeeblemindCost;

@@ -3213,6 +3213,8 @@ When a charater get  Ear Seeker disease, do not show message about rad disease, 
 ___
 In party management, for example status disease should be seen, 98,5
 ___
+Church should be able to heal disease for 200 gp, 98,6
+___
 
 
 ***************************
@@ -3220,8 +3222,6 @@ ___
 To be implemented when I have tokens                                                  
 ***************************
 
-
-Church should be able to heal disease for 200 gp,
 
 I had a level 21 Magic user, when he chnges class to level 1 fighter and then back to level 21 magic user, he could still cast spells.
 I think all abilities from the old class should be reset until you reach the same level for the new class in this case 21 level magic user

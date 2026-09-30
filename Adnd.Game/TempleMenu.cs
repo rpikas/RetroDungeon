@@ -129,7 +129,7 @@ public class TempleMenu
             return;
         }
 
-        Console.WriteLine($"Healing costs: {Temple.HealCost} gp (HP), +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureFeeblemindCost} gp (feeblemind).");
+        Console.WriteLine($"Healing costs: {Temple.HealCost} gp (HP), +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureDiseaseCost} gp (disease), +{Temple.CureFeeblemindCost} gp (feeblemind).");
 
         var healedCount = 0;
         var skipped = new List<string>();
