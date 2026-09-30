@@ -77,7 +77,7 @@ public class CityMenu
             }
             else if (key == ConsoleKey.D) DeleteCharacter(all);
             else if (key == ConsoleKey.X) DeleteAllCharacters(all);
-            else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
+            else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
     }
 

@@ -204,7 +204,7 @@ public class ShopMenu
                 continue;
             }
         //    else if (key == ConsoleKey.F) FilterItemsa();
-            else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
+            else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
 
         }
     }
@@ -668,7 +668,7 @@ public class ShopMenu
                 if (EquipmentManager.Unequip(c, slot))
                     _charRepo.Save(c);
             }
-            else if (key == ConsoleKey.L || key == ConsoleKey.Enter)
+            else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter)
             {
                 break;
             }

@@ -51,7 +51,7 @@ public class TempleMenu
 
             if (key == ConsoleKey.H) HealParty(party);
             else if (key == ConsoleKey.R) RaiseDead(party);
-            else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
+            else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
     }
 

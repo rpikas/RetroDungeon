@@ -159,7 +159,7 @@ public class PartyMenu
             else if (key == ConsoleKey.R) RemoveMember(party);
             else if (key == ConsoleKey.I) InspectMember(party);
             else if (key == ConsoleKey.C) ChangeOrderOfMembers(party);
-            else if (key == ConsoleKey.L || key == ConsoleKey.Enter) break;
+            else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
     }
 
@@ -1237,7 +1237,7 @@ public class PartyMenu
             Console.WriteLine("L<-eave");
 
             var key = Console.ReadKey(true).Key;
-            if (key == ConsoleKey.L || key == ConsoleKey.Enter)
+            if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter)
                 return false;
 
             if (key != ConsoleKey.R)
@@ -1301,7 +1301,7 @@ public class PartyMenu
 
                 var inputKey = Console.ReadKey(true);
 
-                if (inputKey.Key == ConsoleKey.L)
+                if (inputKey.Key == ConsoleKey.L || inputKey.Key == ConsoleKey.Escape)
                     break;
 
                 if (inputKey.Key == ConsoleKey.Backspace)

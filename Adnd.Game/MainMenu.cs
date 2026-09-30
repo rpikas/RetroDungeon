@@ -70,7 +70,6 @@ public class MainMenu
             Console.Clear();
             Console.WriteLine("=== WELCOME TO THE CITY OF MYTHGAR ===\n");
             Console.WriteLine($"The party is at {PlaceName(_standing)}.\n");
-            Console.WriteLine("N)ext place  (or click Next on the table)");
             Console.WriteLine("T)raining Ground");
             Console.WriteLine("G)ilgamash Tavern");
             Console.WriteLine("C)hurch of Chant");
@@ -86,8 +85,7 @@ public class MainMenu
             // does not know.
             if (command != null)
             {
-                if (command == "next") WalkOn();
-                else if (command.StartsWith("go:", StringComparison.Ordinal)) GoInto(command.Substring(3));
+                if (command.StartsWith("go:", StringComparison.Ordinal)) GoInto(command.Substring(3));
                 else if (command == "enter") EnterStanding();
                 else if (command == "maze" && HasPartyMembers()) EnterMaze();
                 continue;
@@ -95,10 +93,6 @@ public class MainMenu
 
             switch (key)
             {
-                case ConsoleKey.N:
-                    WalkOn();
-                    break;
-
                 case ConsoleKey.T:
                     Enter("TrainingGrounds");
                     _cityMenu.Show();
@@ -146,6 +140,8 @@ public class MainMenu
                     break;
 
                 case ConsoleKey.L:
+                    return;
+                case ConsoleKey.Escape:
                     return;
                 case ConsoleKey.Enter:
                     return;

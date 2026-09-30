@@ -3200,6 +3200,9 @@ hur lägger jag till "Neo-otyugh are never surprised."
 
 uppdaderade manuellt CombatCoordinator.GetMonsterSpecialSurpriseThreshold flera framtida monster genom att söka i MM efter surprise. 97,9
 ___
+30/9
+Remove N)ext place option in the city. 98,2
+Manually added ConsoleKey.Escape as an option for L)
 
 ***************************
 
@@ -3207,13 +3210,15 @@ To be implemented when I have tokens
 ***************************
 
 In paryt management, for example status disease should be seen
-Church should be able to heal disease
+Church should be able to heal disease or not, it is autoamtically cured when leaving dungon?
 
 I had a level 21 Magic user, when he chnges class to level 1 fighter and then back to level 21 magic user, he could still cast spells.
 I think all abilities from the old class should be reset until you reach the same level for the new class in this case 21 level magic user
 
 when encountering charaters, they should all have the same alignment, Neutral, Lawful Good or Chaotic Evil. 
 The alignment should be shown in the encounter dialog and also in the ADnD Rule and Dice info dialog.
+
+Ear seeker disease currently work like rat disease but it should be different.
 
 When using an item with "SpecialAbilities": [ "Talisman of Pure Good" ] one of the original 7 charges should be used.
 It can only be used by cleric that is level 9 or higher and with alignment Lawful Good, Neutral Good or Chaotic Good if character is not a magic user tries to use it 
