@@ -239,7 +239,8 @@ public sealed class EncounterForm : Form
 
             var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
             var displayName = count > 1 ? name + "s" : name;
-            return $"{count} {displayName}{statusText}";
+            var alignment = DisplayOrUnknown(monstersInGroup.First().Template.Alignment);
+            return $"{count} {displayName} [{alignment}]{statusText}";
         }).Where(d => d != null).ToList();
 
         // Om det finns 3 eller 4 grupper, skapa en separat lista för de senare
@@ -268,7 +269,8 @@ public sealed class EncounterForm : Form
 
                 var statusText = statusBits.Count > 0 ? $" ({string.Join(", ", statusBits)})" : string.Empty;
                 var displayName = count > 1 ? name + "s" : name;
-                return $"{count} {displayName}{statusText}";
+                var alignment = DisplayOrUnknown(monstersInGroup.First().Template.Alignment);
+                return $"{count} {displayName} [{alignment}]{statusText}";
             }).Where(d => d != null).ToList();
         }
         /*

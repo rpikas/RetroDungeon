@@ -3217,14 +3217,16 @@ Church should be able to heal disease for 200 gp, 98,6
 ___
 I had a level 21 Magic user, when he changes class to fighter and then when fighter reached level 22 , he could still not cast spells. 
 I think all abilities from the old class should be restored when you reach a higher level for the new class in this case 22 level fighter. 100%
-
-***************************
-
-To be implemented when I have tokens                                                  
-***************************
-
-when encountering charaters, they should all have the same alignment, Neutral, Lawful Good or Chaotic Evil. 
+___
+when encountering Human charaters, they should all have the same alignment, Neutral, Lawful Good or Chaotic Evil. 
 The alignment should be shown in the encounter dialog and also in the ADnD Rule and Dice info dialog.
+Bandits, Berserker and Brignad should have the alignment defined in teh jsons, THisa rule is applicable only for  otherhum,an  
+charaters lfor example fighters, magic users and thiefs
+
+
+***************************
+
+To be implemented 
 
 
 When using an item with "SpecialAbilities": [ "Talisman of Pure Good" ] one of the original 7 charges should be used.

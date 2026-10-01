@@ -79,6 +79,11 @@ public sealed class EncounterMonsterFactory
 
     public List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId)
     {
+        return CreateGroup(monsterName, count, groupId, forcedHumanAlignment: null);
+    }
+
+    private List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId, string? forcedHumanAlignment)
+    {
         count = Math.Max(1, count);
         if (count > GameRulesProvider.Current.MaxSizeEncounter)
         {
@@ -106,7 +111,36 @@ public sealed class EncounterMonsterFactory
 
         template ??= BuildFallback(monsterName);
 
+        string? encounterHumanAlignment = null;
+        if (IsHumanCharacterTemplate(template))
+        {
+            encounterHumanAlignment = forcedHumanAlignment;
+            if (string.IsNullOrWhiteSpace(encounterHumanAlignment))
+            {
+                var roll = _random.Next(1, 4);
+                encounterHumanAlignment = roll switch
+                {
+                    1 => "Neutral",
+                    2 => "Lawful Good",
+                    _ => "Chaotic Evil"
+                };
+
+                RuleApplicationInfo.Publish(
+                    "Human Encounter Alignment",
+                    "DMG",
+                    "Human encounter alignment roll",
+                    "All encountered human characters in this encounter use one shared alignment: Neutral, Lawful Good, or Chaotic Evil.",
+                    "1",
+                    "3",
+                    roll.ToString(),
+                    $"Alignment selected: {encounterHumanAlignment}.");
+            }
+        }
+
         var lairTemplate = CloneMonster(template);
+        if (!string.IsNullOrWhiteSpace(encounterHumanAlignment))
+            lairTemplate.Alignment = encounterHumanAlignment;
+
         var inLairRoll = _random.Next(1, 101);
         var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
         var isInLair = inLairRoll <= inLairChance;
@@ -128,6 +162,9 @@ public sealed class EncounterMonsterFactory
         for (int i = 1; i <= count; i++)
         {
             var cloned = CloneMonster(template);
+            if (!string.IsNullOrWhiteSpace(encounterHumanAlignment))
+                cloned.Alignment = encounterHumanAlignment;
+
             list.Add(new MonsterInstance(cloned, i, groupId)
             {
                 IsInLair = isInLair
@@ -231,12 +268,35 @@ public sealed class EncounterMonsterFactory
 
     public List<MonsterInstance> CreateMultipleGroups(List<(string monsterName, int count)> groups)
     {
+        string? sharedHumanAlignment = null;
+        var includesHumanCharacters = groups.Any(g => IsLikelyHumanCharacterName(g.monsterName));
+        if (includesHumanCharacters)
+        {
+            var roll = _random.Next(1, 4);
+            sharedHumanAlignment = roll switch
+            {
+                1 => "Neutral",
+                2 => "Lawful Good",
+                _ => "Chaotic Evil"
+            };
+
+            RuleApplicationInfo.Publish(
+                "Human Encounter Alignment",
+                "DMG",
+                "Shared alignment for encountered human groups",
+                "When multiple human groups are encountered, all human characters share one alignment for the whole encounter.",
+                "1",
+                "3",
+                roll.ToString(),
+                $"Shared human alignment: {sharedHumanAlignment}.");
+        }
+
         var allMonsters = new List<MonsterInstance>();
         for (int groupIndex = 0; groupIndex < groups.Count; groupIndex++)
         {
             var (monsterName, count) = groups[groupIndex];
             var groupId = $"Group{groupIndex + 1}";
-            allMonsters.AddRange(CreateGroup(monsterName, count, groupId));
+            allMonsters.AddRange(CreateGroup(monsterName, count, groupId, sharedHumanAlignment));
         }
         return allMonsters;
     }
@@ -340,5 +400,32 @@ public sealed class EncounterMonsterFactory
                 })
                 .ToList()
         };
+    }
+
+    private static bool IsHumanCharacterTemplate(Monster monster)
+    {
+        if (monster == null)
+            return false;
+
+        return IsLikelyHumanCharacterName(monster.Name);
+    }
+
+    private static bool IsLikelyHumanCharacterName(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        var normalized = name.Trim();
+        // Keep fixed-alignment human entries (e.g. Bandit/Berserker/Brigand) as defined in JSON.
+        // Shared encounter alignment is only for class-like human characters.
+        return normalized.Contains("Magic-User", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Cleric", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Fighter", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Thief", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Assassin", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Paladin", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Ranger", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Illusionist", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("Druid", StringComparison.OrdinalIgnoreCase);
     }
 }

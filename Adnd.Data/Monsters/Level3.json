@@ -792,10 +792,48 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 51-54",
       "Other": "Wererats often command giant rats; prefer ambushes and stealth; can assume human, rat, or hybrid form."
     },
-
-
-
-
+    {
+      "Name": "Ochre Jelly",
+      "Type": "Ooze",
+      "Frequency": "Uncommon",
+      "ArmorClass": 8,
+      "HitDice": 5,
+      "HitPoints": 22,
+      "Movement": 10,
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": { "Value": 12 },
+      "Attacks": [
+        {
+          "Name": "Pseudopod",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Acid",
+          "Description": "Dissolves wood, leather, and organic material; damages metal slowly."
+        },
+        {
+          "Name": "Split",
+          "Description": "Slashing or lightning attacks divide the jelly into two smaller jellies."
+        },
+        {
+          "Name": "Immunity",
+          "Description": "Immune to cold; takes half damage from fire."
+        }
+      ],
+      "BaseXPValue": 300,
+      "TreasureType": "None",
+      "DungeonRandomMonsterTableReference": "Level 3, Roll 55-60",
+      "Source": "Adnd"
+    },
     {
       "Name": "Giant Beetle",
       "Type": "Insect",
@@ -863,47 +901,7 @@
       "Other": "Ogres are ugly-tempered, voracious, and cruel; leaders and chieftains gain additional bonuses to damage."
     },
 
-    {
-      "Name": "Ochre Jelly",
-      "Type": "Ooze",
-      "Frequency": "Uncommon",
-      "ArmorClass": 8,
-      "HitDice": 5,
-      "HitPoints": 22,
-      "Movement": 10,
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Pseudopod",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Acid",
-          "Description": "Dissolves wood, leather, and organic material; damages metal slowly."
-        },
-        {
-          "Name": "Split",
-          "Description": "Slashing or lightning attacks divide the jelly into two smaller jellies."
-        },
-        {
-          "Name": "Immunity",
-          "Description": "Immune to cold; takes half damage from fire."
-        }
-      ],
-      "BaseXPValue": 300,
-      "TreasureType": "None",
-      "Source": "Adnd"
-    },
+
     {
       "Name": "Giant Tick",
       "Type": "Animal",
