@@ -41,6 +41,12 @@ public sealed class FearHandler : ISpellEffectHandler
 
         foreach (var monster in targetMonsters)
         {
+            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(monster, spell.Id))
+            {
+                result.Events.Add($"{monster.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+                continue;
+            }
+
             var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 0);
             var saveRoll = rng.Next(1, 21);
             var saved = saveTarget > 0 && saveRoll >= saveTarget;

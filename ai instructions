@@ -3227,8 +3227,12 @@ When using an item with "SpecialAbilities": [ "Talisman of Pure Good" ] one of t
 It can only be used by cleric that is level 9 or higher and with alignment Lawful Good, Neutral Good or Chaotic Good-
 then if selecting an evil cleric as a target the evil cleric goes to the center of the earth and is destroyed. 
 if neutral (LN, TN or CN) cleric tries to use it then he takes 7-28 damage himself since the talisman is not meant for him.
-if evil (LE, NE or CE) cleric tries to use it then he takes 12-48 damage himself since the talisman is not meant for him.
+if evil (LE, NE or CE) cleric tries to use it then he takes 12-48 damage himself since the talisman is not meant for him. 0,6
 
+Implement this: 
+Devil, Lemure "SpecialDefenses": "Regeneration","Regenerates 1 hp per melee round",
+Implement "SpecialDefenses":"Mind-affecting spells Immunity", "Immune to charm, sleep, and all mind-affecting spells"
+___
 ***************************
 
 To be implemented 
@@ -3239,8 +3243,8 @@ SpecialAttacks
          "Name": "Paralyzation",
           "Description": "On hit, victim must save vs. paralyzation or be anesthetized for 5–20 rounds."
 
-Implement this: 
-Devil, Lemure "SpecialDefenses": "Regeneration","Regenerates 1 hp per melee round", "Mind-affecting spells Immunity", "Immune to charm, sleep, and all mind-affecting spells"
+
+
 
 Gas Spore "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die and spawn 2-8 gas spores." "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
 

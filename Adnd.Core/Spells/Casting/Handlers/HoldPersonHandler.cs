@@ -74,6 +74,12 @@ public sealed class HoldPersonHandler : ISpellEffectHandler
 
         foreach (var target in targets)
         {
+            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, spell.Id))
+            {
+                result.Events.Add($"{target.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+                continue;
+            }
+
             var baseSaveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
             var saveTarget = Math.Min(20, baseSaveTarget + savePenalty);
             var saveRoll = rng.Next(1, 21);

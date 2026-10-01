@@ -4380,12 +4380,35 @@ public sealed class CombatResolver
         if (!monster.IsAlive || monster.CurrentHitPoints >= monster.MaxHitPoints)
             return;
 
+        var perRound = GetMonsterRegenerationPerRound(monster);
+        if (perRound <= 0)
+            perRound = 1;
+
         var before = monster.CurrentHitPoints;
-        monster.CurrentHitPoints = Math.Min(monster.MaxHitPoints, monster.CurrentHitPoints + 1);
+        monster.CurrentHitPoints = Math.Min(monster.MaxHitPoints, monster.CurrentHitPoints + perRound);
         var healed = monster.CurrentHitPoints - before;
 
         if (healed > 0)
             events.Add(new CombatEvent($"{monster.DisplayName} regenerates {healed} HP. HP {before}->{monster.CurrentHitPoints}."));
+    }
+
+    private static int GetMonsterRegenerationPerRound(MonsterInstance monster)
+    {
+        if (monster?.Template?.SpecialDefenses == null)
+            return 1;
+
+        foreach (var defense in monster.Template.SpecialDefenses)
+        {
+            if (!string.Equals(defense?.Name?.Trim(), "Regeneration", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            var description = defense.Description ?? string.Empty;
+            var m = Regex.Match(description, @"regenerates\s+(?<n>\d+)\s*(?:hit\s*points|hp)", RegexOptions.IgnoreCase);
+            if (m.Success && int.TryParse(m.Groups["n"].Value, out var parsed) && parsed > 0)
+                return parsed;
+        }
+
+        return 1;
     }
 
     private static void ApplySwordOfWoundingOngoingDamage(CombatSession session, MonsterInstance monster, List<CombatEvent> events)

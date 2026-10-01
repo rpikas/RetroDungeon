@@ -73,6 +73,12 @@ public sealed class ConfusionDruidHandler : ISpellEffectHandler
 
         foreach (var monster in affected)
         {
+            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(monster, spell.Id))
+            {
+                result.Events.Add($"{monster.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+                continue;
+            }
+
             monster.SetStatus(MonsterStatus.Confused, durationRounds);
             result.Events.Add($"{monster.DisplayName} is confused for up to {durationRounds} round(s).");
         }

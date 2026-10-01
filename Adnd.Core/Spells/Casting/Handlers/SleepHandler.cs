@@ -64,6 +64,12 @@ public sealed class SleepHandler : ISpellEffectHandler
 
         foreach (var monster in targets)
         {
+            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(monster, spell.Id))
+            {
+                result.Events.Add($"{monster.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+                continue;
+            }
+
             if (SpellDamageSaveHelper.IsUndeadImmuneToSpell(monster, spell.Id))
             {
                 result.Events.Add($"{monster.DisplayName} is undead and immune to {spell.Name}.");

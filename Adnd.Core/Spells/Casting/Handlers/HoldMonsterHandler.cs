@@ -61,6 +61,12 @@ public sealed class HoldMonsterHandler : ISpellEffectHandler
             return result;
         }
 
+        if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, spell.Id))
+        {
+            result.Events.Add($"{target.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+            return result;
+        }
+
         var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
         var saveRoll = rng.Next(1, 21);
 

@@ -41,6 +41,12 @@ public sealed class FeeblemindHandler : ISpellEffectHandler
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
 
+        if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, spell.Id))
+        {
+            result.Events.Add($"{target.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+            return result;
+        }
+
         if (saveRoll >= saveTarget)
         {
             result.Events.Add($"{target.DisplayName} resists feeblemind (save {saveRoll} vs {saveTarget}).");

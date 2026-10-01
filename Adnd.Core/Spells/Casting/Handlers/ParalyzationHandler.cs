@@ -70,6 +70,12 @@ public sealed class ParalyzationHandler : ISpellEffectHandler
 
         foreach (var target in selected)
         {
+            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, spell.Id))
+            {
+                result.Events.Add($"{target.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+                continue;
+            }
+
             var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
             var saveRoll = rng.Next(1, 21);
 
