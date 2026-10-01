@@ -2547,8 +2547,52 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             _characterRepository.Save(c);
         }
 
+        ApplyInfestationProgressForDungeonExitDay();
+
         if (messages.Count > 0)
             SayOnBoth("Disease", string.Join(Environment.NewLine, messages));
+    }
+
+    private void ApplyInfestationProgressForDungeonExitDay()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (c.InfestationDeathDaysRemaining <= 0
+                || c.HasStatus(CharacterStatus.Dead)
+                || c.HasStatus(CharacterStatus.Ashes)
+                || c.HasStatus(CharacterStatus.Lost)
+                || c.CurrentHitPoints <= 0)
+            {
+                continue;
+            }
+
+            c.InfestationDeathDaysRemaining = Math.Max(0, c.InfestationDeathDaysRemaining - 1);
+
+            if (c.InfestationDeathDaysRemaining > 0)
+            {
+                _characterRepository.Save(c);
+                continue;
+            }
+
+            c.CurrentHitPoints = 0;
+            c.AddStatus(CharacterStatus.Dead);
+            messages.Add($"{c.Name} dies from untreated gas spore infestation.");
+
+            var spores = Random.Shared.Next(2, 9);
+            messages.Add($"{c.Name}'s body erupts and spawns {spores} gas spore(s).");
+
+            _characterRepository.Save(c);
+        }
+
+        if (messages.Count > 0)
+            SayOnBoth("Infestation", string.Join(Environment.NewLine, messages));
     }
 
     private void ApplyPartyAgingForDungeonExitDay()

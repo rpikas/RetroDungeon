@@ -3231,20 +3231,17 @@ if evil (LE, NE or CE) cleric tries to use it then he takes 12-48 damage himself
 
 Implement this: 
 Devil, Lemure "SpecialDefenses": "Regeneration","Regenerates 1 hp per melee round",
-Implement "SpecialDefenses":"Mind-affecting spells Immunity", "Immune to charm, sleep, and all mind-affecting spells"
+Implement "SpecialDefenses":"Mind-affecting spells Immunity", "Immune to charm, sleep, and all mind-affecting spells" 1,1
 ___
+
+Gas Spore 
+Implement "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die and spawn 2-8 gas spores." 
+"SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
+___
+
 ***************************
 
 To be implemented 
-
-
-Is this implmented ?
-SpecialAttacks
-         "Name": "Paralyzation",
-          "Description": "On hit, victim must save vs. paralyzation or be anesthetized for 5–20 rounds."
-
-
-
 
 Gas Spore "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die and spawn 2-8 gas spores." "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
 

@@ -43,6 +43,7 @@ public class Character
     public int RotGrubDeathRoundsRemaining { get; set; }
     public int ParalyzedRoundsRemaining { get; set; }
     public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
+    public int InfestationDeathDaysRemaining { get; set; }
     public int Level { get; set; } = 1;
     public int GoodEncounterAttackWarningCount { get; set; }
     public bool LayOnHandsUsedToday { get; set; }
@@ -996,6 +997,7 @@ public class Character
         RotGrubDeathRoundsRemaining = 0;
         ClearParalysis();
         EarSeekerDeathOnNextDungeonEntry = false;
+        InfestationDeathDaysRemaining = 0;
 
         if (ConstitutionBeforeDisease.HasValue)
         {
@@ -1028,7 +1030,7 @@ public class Character
     public void ApplyInfestationDisease()
     {
         ApplyDisease();
-        EarSeekerDeathOnNextDungeonEntry = true;
+        InfestationDeathDaysRemaining = Math.Max(1, InfestationDeathDaysRemaining);
     }
 
     private string GetStatusDisplay()

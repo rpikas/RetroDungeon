@@ -4734,7 +4734,7 @@ public sealed class CombatResolver
             return;
         }
 
-        if (target.EarSeekerDeathOnNextDungeonEntry)
+        if (target.InfestationDeathDaysRemaining > 0)
             return;
 
         target.ApplyInfestationDisease();
@@ -4779,6 +4779,9 @@ public sealed class CombatResolver
         if (!monster.IsAlive)
             return false;
 
+        var isGasSpore = string.Equals(monster.Template.Name, "Gas Spore", StringComparison.OrdinalIgnoreCase)
+                         || string.Equals(monster.Template.TypeName, "Gas Spore", StringComparison.OrdinalIgnoreCase);
+
         var rolledDamage = 0;
         for (int i = 0; i < 6; i++)
             rolledDamage += _dice.Roll(6);
@@ -4788,9 +4791,10 @@ public sealed class CombatResolver
 
         foreach (var member in session.AliveParty.ToList())
         {
+            var saveThrowType = isGasSpore ? SaveThrowType.RodStaffWand : SaveThrowType.Spell;
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
                 member,
-                _savingThrowService.GetSaveTarget(member, SaveThrowType.Spell));
+                _savingThrowService.GetSaveTarget(member, saveThrowType));
             var fireSaveBonus = GetFireResistanceSaveBonus(member);
             if (fireSaveBonus > 0)
                 saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
@@ -4805,7 +4809,9 @@ public sealed class CombatResolver
                 continue;
             }
 
-            var applied = saveRoll >= saveTarget ? Math.Max(1, preSaveDamage / 2) : preSaveDamage;
+            var applied = saveRoll >= saveTarget
+                ? (isGasSpore ? (preSaveDamage / 2) : Math.Max(1, preSaveDamage / 2))
+                : preSaveDamage;
 
             var before = member.CurrentHitPoints;
             member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - applied);
