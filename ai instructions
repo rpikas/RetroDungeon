@@ -3239,11 +3239,17 @@ Implement "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate fl
 "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
 ___
 
+Stirge 
+Implement "SpecialAttacks":  "Drain Blood","After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
+___
+
+when writing two clases in tables for dual classed charaters, write the former class withinparenthasis 1,7
+Also when witing the abbreviations of the clases in the class colum in the Encounter dialog i want you to use parenthatis for the former class
+___
+
 ***************************
 
 To be implemented 
-
-Gas Spore "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die and spawn 2-8 gas spores." "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
 
 Stirge "SpecialAttacks":  "Drain Blood","After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
 

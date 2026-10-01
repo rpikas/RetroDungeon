@@ -840,6 +840,13 @@ public class Character
         if (Classes == null || Classes.Count == 0)
             return GetClassDisplayName(Class);
 
+        if (IsDualClassed && DualClassOriginalClass.HasValue && Classes.Count >= 2)
+        {
+            var currentClass = DualClass.HasValue ? GetClassDisplayName(DualClass.Value) : GetClassDisplayName(Classes[0]);
+            var formerClass = GetClassDisplayName(DualClassOriginalClass.Value);
+            return $"{currentClass}{separator}({formerClass})";
+        }
+
         return string.Join(separator, Classes.Select(GetClassDisplayName));
     }
 

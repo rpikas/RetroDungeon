@@ -2366,9 +2366,23 @@ public sealed class EncounterForm : Form
             ? c.Classes
             : new List<CharacterClass> { c.Class };
 
-        var clsCode = string.Join("/", classes
-            .Select(cls => cls.ToDisplayString())
-            .Select(name => name.Length >= 3 ? name[..3].ToUpperInvariant() : name.ToUpperInvariant()));
+        static string ToAbbrev(CharacterClass cls)
+        {
+            var name = cls.ToDisplayString();
+            return name.Length >= 3 ? name[..3].ToUpperInvariant() : name.ToUpperInvariant();
+        }
+
+        string clsCode;
+        if (c.IsDualClassed && c.DualClassOriginalClass.HasValue)
+        {
+            var current = c.DualClass.HasValue ? ToAbbrev(c.DualClass.Value) : ToAbbrev(classes[0]);
+            var former = ToAbbrev(c.DualClassOriginalClass.Value);
+            clsCode = $"{current}/({former})";
+        }
+        else
+        {
+            clsCode = string.Join("/", classes.Select(ToAbbrev));
+        }
 
         var raceCode = c.Race.ToDisplayString();
         raceCode = raceCode.Length > 0 ? raceCode[..1].ToUpperInvariant() : "?";
