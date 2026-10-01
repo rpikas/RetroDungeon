@@ -1369,6 +1369,7 @@ public sealed class CombatResolver
                                 || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var grantsDustOfAppearance = ItemSpecialAbilityParser.HasCastsAbility(item, "Dust of Appearance")
                                      || string.Equals(item.Name, "Dust of Appearance", StringComparison.OrdinalIgnoreCase);
+        var grantsTalismanOfPureGood = ItemSpecialAbilityParser.HasSpecialAbility(item, "Talisman of Pure Good");
         var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
 
         bool IsDirectEffectConsumable()
@@ -1678,6 +1679,13 @@ public sealed class CombatResolver
             spellId = spell?.Id;
         }
 
+        if (string.Equals(action.SpellId, "__talisman_pure_good__", StringComparison.OrdinalIgnoreCase)
+            || grantsTalismanOfPureGood)
+        {
+            ResolveTalismanOfPureGoodUse(session, user, action, item, events);
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(spellId))
         {
             if (!IsDirectEffectConsumable())
@@ -1738,6 +1746,163 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+    }
+
+    private void ResolveTalismanOfPureGoodUse(CombatSession session, Character user, CombatAction action, Item talisman, List<CombatEvent> events)
+    {
+        var charges = GetOrAssignTalismanOfPureGoodCharges(talisman);
+        if (charges <= 0)
+        {
+            events.Add(new CombatEvent($"{user.Name} tries to use {talisman.Name}, but it has no charges remaining."));
+            return;
+        }
+
+        SetTalismanOfPureGoodCharges(talisman, charges - 1);
+        events.Add(new CombatEvent($"{user.Name} invokes {talisman.Name}. Charges remaining: {Math.Max(0, charges - 1)}."));
+
+        var clericLevel = user.Classes.Contains(CharacterClass.Cleric)
+            ? user.GetClassLevel(CharacterClass.Cleric)
+            : 0;
+
+        if (clericLevel < 9)
+        {
+            events.Add(new CombatEvent($"{talisman.Name} can only be properly used by a cleric of level 9 or higher."));
+            return;
+        }
+
+        if (IsNeutralAlignment(user.Alignment))
+        {
+            var damage = RollNd4(7);
+            ApplyDirectDamageToCharacter(user, damage, events,
+                $"{talisman.Name} lashes back at {user.Name} for {{0}} damage (neutral alignment). HP {{1}}->{{2}}.");
+            return;
+        }
+
+        if (IsEvilAlignment(user.Alignment))
+        {
+            var damage = RollNd4(12);
+            ApplyDirectDamageToCharacter(user, damage, events,
+                $"{talisman.Name} devastates {user.Name} for {{0}} damage (evil alignment). HP {{1}}->{{2}}.");
+            return;
+        }
+
+        if (!IsGoodAlignment(user.Alignment))
+        {
+            events.Add(new CombatEvent($"{talisman.Name} does not respond to {user.Name}."));
+            return;
+        }
+
+        var target = FindTargetedEvilCleric(session, action);
+        if (target == null)
+        {
+            events.Add(new CombatEvent($"No evil cleric is affected by {talisman.Name}."));
+            return;
+        }
+
+        target.CurrentHitPoints = 0;
+        events.Add(new CombatEvent($"{target.DisplayName} is sent to the center of the earth and destroyed by {talisman.Name}!"));
+    }
+
+    private static MonsterInstance? FindTargetedEvilCleric(CombatSession session, CombatAction action)
+    {
+        IEnumerable<MonsterInstance> candidates = session.Monsters.Where(m => m.IsAlive);
+
+        var targetGroup = action.Target?.TargetGroupId;
+        if (!string.IsNullOrWhiteSpace(targetGroup) && !string.Equals(targetGroup, "default", StringComparison.OrdinalIgnoreCase))
+            candidates = candidates.Where(m => string.Equals(m.GroupId, targetGroup, StringComparison.OrdinalIgnoreCase));
+
+        return candidates.FirstOrDefault(IsEvilClericMonster);
+    }
+
+    private static bool IsEvilClericMonster(MonsterInstance monster)
+    {
+        if (monster == null || !monster.IsAlive)
+            return false;
+
+        if (!IsMonsterLikelyCleric(monster))
+            return false;
+
+        return IsEvilAlignmentText(monster.Template.Alignment);
+    }
+
+    private static bool IsMonsterLikelyCleric(MonsterInstance monster)
+    {
+        var name = monster.Template.Name ?? string.Empty;
+        if (name.Contains("Cleric", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return monster.Template.SpecialAbilities.Any(a =>
+            (a.Name ?? string.Empty).Contains("Cleric", StringComparison.OrdinalIgnoreCase)
+            || (a.Description ?? string.Empty).Contains("Cleric", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsGoodAlignment(Alignment alignment)
+        => alignment is Alignment.LawfulGood or Alignment.NeutralGood or Alignment.ChaoticGood;
+
+    private static bool IsNeutralAlignment(Alignment alignment)
+        => alignment is Alignment.LawfulNeutral or Alignment.TrueNeutral or Alignment.ChaoticNeutral;
+
+    private static bool IsEvilAlignment(Alignment alignment)
+        => alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil;
+
+    private static bool IsEvilAlignmentText(string? alignment)
+    {
+        if (string.IsNullOrWhiteSpace(alignment))
+            return false;
+
+        var text = alignment.Trim();
+        return text.Equals("Lawful Evil", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("Neutral Evil", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("Chaotic Evil", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("LE", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("NE", StringComparison.OrdinalIgnoreCase)
+               || text.Equals("CE", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private int RollNd4(int count)
+    {
+        var total = 0;
+        for (var i = 0; i < Math.Max(0, count); i++)
+            total += _dice.Roll(4);
+
+        return total;
+    }
+
+    private static void ApplyDirectDamageToCharacter(Character target, int damage, List<CombatEvent> events, string messageTemplate)
+    {
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - Math.Max(0, damage));
+        events.Add(new CombatEvent(string.Format(messageTemplate, Math.Max(0, damage), before, target.CurrentHitPoints)));
+
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain by the talisman's backlash."));
+        }
+    }
+
+    private static int GetOrAssignTalismanOfPureGoodCharges(Item talisman)
+    {
+        talisman.SpecialAbilities ??= new List<string>();
+
+        var existing = talisman.SpecialAbilities
+            .FirstOrDefault(a => a.StartsWith("TalismanPureGoodCharges:", StringComparison.OrdinalIgnoreCase));
+
+        if (existing != null
+            && int.TryParse(existing.Split(':', 2)[1], out var parsed))
+        {
+            return Math.Max(0, parsed);
+        }
+
+        talisman.SpecialAbilities.Add("TalismanPureGoodCharges:7");
+        return 7;
+    }
+
+    private static void SetTalismanOfPureGoodCharges(Item talisman, int charges)
+    {
+        talisman.SpecialAbilities ??= new List<string>();
+        talisman.SpecialAbilities.RemoveAll(a => a.StartsWith("TalismanPureGoodCharges:", StringComparison.OrdinalIgnoreCase));
+        talisman.SpecialAbilities.Add($"TalismanPureGoodCharges:{Math.Max(0, charges)}");
     }
 
     private bool TryResolveRingOfMammalControlUse(CombatSession session, Character user, List<CombatEvent> events)

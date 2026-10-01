@@ -915,9 +915,10 @@ public sealed class EncounterForm : Form
                 index,
                 spell = ResolveItemSpell(item, allSpells),
                 grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
-                grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase)
+                grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase),
+                grantsTalismanPureGood = Adnd.Core.Items.ItemSpecialAbilityParser.HasSpecialAbility(item, "Talisman of Pure Good")
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsMammalControlRing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsMammalControlRing || x.grantsTalismanPureGood)
             .ToList();
 
         var hasEquippedMammalControlRing =
@@ -939,6 +940,8 @@ public sealed class EncounterForm : Form
         {
             label = x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
+                : x.grantsTalismanPureGood
+                    ? $"{x.item.Name} (banish evil cleric)"
                 : x.grantsMammalControlRing
                     ? $"{x.item.Name} (controls mammals)"
                     : $"{x.item.Name} (grants regeneration)",
@@ -989,6 +992,21 @@ public sealed class EncounterForm : Form
             if (ally == null)
                 return;
             target = SpellCastTarget.Ally(ally);
+        }
+        else if (chosen.grantsTalismanPureGood)
+        {
+            if (_multipleGroups && _session != null)
+            {
+                var targetGroupId = PromptGroupSelection(user);
+                if (targetGroupId == null)
+                    return;
+
+                target = SpellCastTarget.EnemyGroup(targetGroupId);
+            }
+            else
+            {
+                target = SpellCastTarget.EnemyGroup("default");
+            }
         }
         else if (spell == null)
         {
@@ -1045,7 +1063,11 @@ public sealed class EncounterForm : Form
         {
             Type = CombatActionType.UseItem,
             ItemInventoryIndex = chosen.index,
-            SpellId = chosen.grantsMammalControlRing ? "__ring_mammal_control__" : spell?.Id,
+            SpellId = chosen.grantsMammalControlRing
+                ? "__ring_mammal_control__"
+                : chosen.grantsTalismanPureGood
+                    ? "__talisman_pure_good__"
+                    : spell?.Id,
             Target = target
         };
 
