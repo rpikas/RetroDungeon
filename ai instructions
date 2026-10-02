@@ -3268,10 +3268,15 @@ add info about weapon type to hit adjustments in the in Adnd Rule and Dice Info.
 ___
 when informing about weapon type to hit adjustments, also show the weapon type, the adjustment and link to 
 PHB38WeaponTypeToHitAdjustment.png using the normal methods usually used in RetroDungeon. 2,8
-
 ___ 
 
-if hitting a ta target 
+if hitting a target that is stunned, paralyzed or asleep, or can not move then the weapon type to hit adjustment should be +4 also when that applies inform in Adnd Rule and Dice Info and link to PHB38WeaponTypeToHitAdjustment.png using the normal methods usually used in RetroDungeon. 
+This rule is applicable for all monsters and charaters.
+
+when  it comes to weapon type to hit adjustments and no similar weapon can be found, the fallback should be to not adjust at all accodring to the table I gave you.
+___
+Fist or Open Hand to hit adjustment does not apply for monks.
+___
 
 ***************************
 

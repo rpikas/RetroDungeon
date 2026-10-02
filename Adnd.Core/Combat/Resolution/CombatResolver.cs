@@ -1310,6 +1310,15 @@ public sealed class CombatResolver
                         thac0 += 1;
                     if (monsterBackstabInfo.Enabled)
                         thac0 -= 4;
+                    var incapacitatedCharacterReason = GetIncapacitatedTargetReason(target, session);
+                    if (!string.IsNullOrWhiteSpace(incapacitatedCharacterReason))
+                    {
+                        thac0 -= 4;
+                        RuleApplicationInfo.PublishLinked(
+                            "PHB",
+                            "38WeaponTypeToHitAdjustment",
+                            $"Weapon type to-hit adjustment: {monster.DisplayName} attacks {target.Name}. Weapon type: natural attack. Adjustment: +4 because target is {incapacitatedCharacterReason}.");
+                    }
                     if (monster.HasStatus(MonsterStatus.Blinded)
                         && !target.HasStatus(CharacterStatus.Invisible))
                     {
@@ -2906,7 +2915,25 @@ public sealed class CombatResolver
 
             var weaponVsAcKey = ResolveWeaponVsArmorTableKey(mainHand, useRanged);
             var weaponVsAcAdjustment = GetWeaponVsArmorClassAdjustment(mainHand, target.ArmorClass, useRanged);
+            if (!useRanged && mainHand == null && member.IsMonk())
+            {
+                weaponVsAcKey = null;
+                weaponVsAcAdjustment = 0;
+            }
+
             thac0Modifier += weaponVsAcAdjustment;
+
+            var incapacitatedMonsterReason = GetIncapacitatedTargetReason(target);
+            if (!string.IsNullOrWhiteSpace(incapacitatedMonsterReason))
+            {
+                const int incapacitatedToHitAdjustment = 4;
+                thac0Modifier += incapacitatedToHitAdjustment;
+                var weaponType = !string.IsNullOrWhiteSpace(weaponVsAcKey) ? weaponVsAcKey : (mainHand?.Name ?? "fist or open hand");
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "38WeaponTypeToHitAdjustment",
+                    $"Weapon type to-hit adjustment: {member.Name} attacks {target.DisplayName}. Weapon type: {weaponType}. Adjustment: +{incapacitatedToHitAdjustment} because target is {incapacitatedMonsterReason}.");
+            }
 
             if (target.ArmorClass >= 2 && target.ArmorClass <= 10)
             {
@@ -6451,6 +6478,36 @@ public sealed class CombatResolver
             return 0;
 
         return row[targetArmorClass - 2];
+    }
+
+    private static string? GetIncapacitatedTargetReason(MonsterInstance target)
+    {
+        if (target.HasStatus(MonsterStatus.Paralyzed))
+            return "paralyzed";
+        if (target.HasStatus(MonsterStatus.Stunned))
+            return "stunned";
+        if (target.HasStatus(MonsterStatus.Asleep))
+            return "asleep";
+        if (target.HasStatus(MonsterStatus.Unconscious))
+            return "unable to move (unconscious)";
+        if (target.HasStatus(MonsterStatus.Petrified))
+            return "unable to move (petrified)";
+
+        return null;
+    }
+
+    private static string? GetIncapacitatedTargetReason(Character target, CombatSession session)
+    {
+        if (target.HasStatus(CharacterStatus.Paralyzed))
+            return "paralyzed";
+
+        if (target.HasStatus(CharacterStatus.Asleep) || session.GetPartyAsleepRounds(target.Name) > 0)
+            return "asleep";
+
+        if (target.HasStatus(CharacterStatus.Petrified))
+            return "unable to move (petrified)";
+
+        return null;
     }
 
     private static string? ResolveWeaponVsArmorTableKey(Item? weapon, bool isRanged)
