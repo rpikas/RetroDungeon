@@ -101,6 +101,7 @@ namespace Adnd.Game.Windows
             var damageOffHandItemModifier = _character.OffHandItemDamageModifier;
             var weaponBaseDamage = _character.Damage;
             var damageTotal = _character.DamageTotalDisplay;
+            var weaponProficiencies = _character.GetWeaponProficienciesDisplay();
             var mainWeaponName = _character.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainWeapon)
                                  && mainWeapon != null
                                  && mainWeapon.Type == ItemType.Weapon
@@ -170,6 +171,7 @@ namespace Adnd.Game.Windows
 
             lines.Add(string.Empty);
             lines.Add($"Weapon equipped: {equippedWeaponDisplay}");
+            lines.Add($"Weapon proficiencies: {weaponProficiencies}");
             lines.Add($"Weapon base damage: {weaponBaseDamage}");
             lines.Add($"Damage modifiers: Strength {FormatSigned(damageStrengthModifier)}");
             lines.Add($"Damage total: {damageTotal}");
@@ -195,6 +197,11 @@ namespace Adnd.Game.Windows
             RuleApplicationInfo.Publish(
                 $"{_character.Name} damage with equipped weapon(s): weapon {equippedWeaponDisplay}; base damage {weaponBaseDamage}; modifiers Strength {FormatSigned(damageStrengthModifier)}, Item(main) {FormatSigned(damageMainItemModifier)}, Item(offhand) {FormatSigned(damageOffHandItemModifier)}; total {damageTotal}.");
 
+            RuleApplicationInfo.PublishLinked(
+                "PHB",
+                "37WeaponProficiency",
+                $"{_character.Name} weapon proficiencies on character sheet: {weaponProficiencies}.");
+
             if (hasDualWieldWeapon)
             {
                 var mainHandFinalThac0 = thac0AfterStrengthAndItems + dualWieldPrimaryPenalty;
@@ -212,10 +219,32 @@ namespace Adnd.Game.Windows
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
+        public static (string first, string second, string third) SplitCommaString(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return ("", "", "");
+
+            // Dela upp på kommatecken
+            var parts = input.Split(',')
+                             .Select(p => p.Trim())
+                             .ToList();
+
+            // Första 4
+            string first = string.Join(", ", parts.Take(4));
+
+            // Element 5–8
+            string second = string.Join(", ", parts.Skip(4).Take(4));
+
+            // Resten
+            string third = string.Join(", ", parts.Skip(8));
+
+            return (first, second, third);
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+string first, second, third;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             DrawInBox(g, _character.Name, new Rectangle(45, 80, 198, 40));
@@ -227,8 +256,11 @@ namespace Adnd.Game.Windows
             DrawInBox(g, _character.Level.ToString(), new Rectangle(640, 80, 46, 40));  
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
-            DrawInBox(g, string.Empty, new Rectangle(44, 188, 120, 36), false, StringAlignment.Center, _handFontSmall10);
-            DrawInBox(g, string.Empty, new Rectangle(240, 188, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+
+            (first, second, third) = SplitCommaString(_character.GetWeaponProficienciesDisplay());
+            DrawInBox(g, first, new Rectangle(500, 180, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, second, new Rectangle(500, 195, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, third, new Rectangle(500, 210, 640, 36), false, StringAlignment.Near, _handFontSmall10);
 
             // Ability circles: write only the value inside each circle, not labels.
             if (_character.ExceptionalStrengthPercentile == null)
@@ -246,8 +278,8 @@ namespace Adnd.Game.Windows
             DrawInCircle(g, _character.Abilities.Charisma.ToString(), new Rectangle(815, 300, 66, 66));
 
             //STRENGTH MODIFIER
-            DrawInBox(g, AbilitiesTables.StrengthTHModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 390, 95, 66));
-            DrawInBox(g, AbilitiesTables.StrengthDamageModifier(_character.Abilities.Strength).ToString(), new Rectangle(40, 427, 95, 66));
+            DrawInBox(g, AbilitiesTables.StrengthTHModifier(_character.Abilities.Strength, _character.ExceptionalStrengthPercentile).ToString(), new Rectangle(40, 390, 95, 66));
+            DrawInBox(g, AbilitiesTables.StrengthDamageModifier(_character.Abilities.Strength, _character.ExceptionalStrengthPercentile).ToString(), new Rectangle(40, 427, 95, 66));
             DrawInBox(g, AbilitiesTables.StrengthWeightAllowanceModifier(_character.Abilities.Strength).ToString(), new Rectangle(35, 465, 111, 66));
             DrawInBox(g, AbilitiesTables.StrengthOpenDoors(_character.Abilities.Strength, _character.ExceptionalStrengthPercentile).ToString(), new Rectangle(40, 507, 95, 66));
             DrawInBox(g, AbilitiesTables.StrengthBendBars(_character.Abilities.Strength).ToString() + "%", new Rectangle(30, 542, 95, 66));

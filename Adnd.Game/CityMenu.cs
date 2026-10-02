@@ -532,7 +532,13 @@ public class CityMenu
         character.WeaponProficiencies ??= new System.Collections.Generic.List<string>();
 
         if (primaryClass == CharacterClass.Monk)
+        {
             WeaponProficiencyRules.AddProficiency(character, "Fist or Open Hand");
+            RuleApplicationInfo.PublishLinked(
+                "PHB",
+                "37WeaponProficiency",
+                $"Weapon proficiency selection: {character.Name} gains mandatory monk proficiency Fist or Open Hand.");
+        }
 
         Console.WriteLine();
         Console.WriteLine($"Select {slots} weapon proficienc{(slots == 1 ? "y" : "ies")} for {primaryClass.ToDisplayString()}:");
@@ -558,6 +564,10 @@ public class CityMenu
             var chosenWeapon = options[idx];
             WeaponProficiencyRules.AddProficiency(character, chosenWeapon);
             Console.WriteLine($"Selected: {chosenWeapon}");
+            RuleApplicationInfo.PublishLinked(
+                "PHB",
+                "37WeaponProficiency",
+                $"Weapon proficiency selection: {character.Name} selected {chosenWeapon} ({pick + 1} of {slots}) at character creation.");
         }
     }
 

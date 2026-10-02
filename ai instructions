@@ -3531,3 +3531,6 @@ do you see more risks for inconsistency when it comes to other bouses for abilit
 2.	Combat damage now respects exceptional strength percentile
 3.	Constitution HP bonus centralized
 yes, please apply these refactors now so ability bonus behavior is consistent across combat, UI, and progression.
+___
+write the weapon proficiency selection to ADnD Rule and Dice info when creating a new character and when reaching a new level.
+show the weapon proficiency in the character sheet. manually tweeked it
