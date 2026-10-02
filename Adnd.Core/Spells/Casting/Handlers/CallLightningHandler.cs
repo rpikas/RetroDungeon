@@ -43,6 +43,8 @@ public sealed class CallLightningHandler : ISpellEffectHandler
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
         result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, rolled, outcome));
+        if (SpellDamageSaveHelper.HasImmunityToSomeAttacks(target))
+            result.Events.Add($"{target.DisplayName} is immune to electricity.");
         if (!target.IsAlive)
             result.Events.Add($"{target.DisplayName} is struck down.");
 

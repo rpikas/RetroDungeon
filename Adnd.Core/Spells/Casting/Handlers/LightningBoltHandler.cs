@@ -50,6 +50,8 @@ public sealed class LightningBoltHandler : ISpellEffectHandler
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome));
+            if (SpellDamageSaveHelper.HasImmunityToSomeAttacks(monster))
+                result.Events.Add($"{monster.DisplayName} is immune to electricity.");
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is electrocuted!");
         }

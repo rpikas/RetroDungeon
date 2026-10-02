@@ -122,7 +122,54 @@ internal static class SpellDamageSaveHelper
 
     internal static bool IsNegatedByMindAffectingImmunity(MonsterInstance monster, string? spellIdOrName)
     {
-        return HasMindAffectingImmunity(monster) && IsMindAffectingSpell(spellIdOrName);
+        return (HasMindAffectingImmunity(monster) && IsMindAffectingSpell(spellIdOrName))
+               || (HasImmunityToSomeAttacks(monster) && IsSomeAttackImmunitySpell(spellIdOrName));
+    }
+
+    internal static bool HasImmunityToSomeAttacks(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d.Name?.Trim() ?? string.Empty;
+            var description = d.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}".ToLowerInvariant();
+
+            return string.Equals(name, "Immunity to Some Attacks", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Immunity to Some Attacks", StringComparison.OrdinalIgnoreCase)
+                   || (merged.Contains("immune to electricity", StringComparison.Ordinal)
+                       && merged.Contains("fear", StringComparison.Ordinal)
+                       && merged.Contains("hold", StringComparison.Ordinal)
+                       && merged.Contains("paralyzation", StringComparison.Ordinal)
+                       && merged.Contains("polymorph", StringComparison.Ordinal)
+                       && merged.Contains("sleep", StringComparison.Ordinal));
+        });
+    }
+
+    private static bool IsSomeAttackImmunitySpell(string? spellIdOrName)
+    {
+        if (string.IsNullOrWhiteSpace(spellIdOrName))
+            return false;
+
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("fear", StringComparison.Ordinal)
+               || key.Contains("hold", StringComparison.Ordinal)
+               || key.Contains("paralyzation", StringComparison.Ordinal)
+               || key.Contains("sleep", StringComparison.Ordinal)
+               || key.Contains("polymorph", StringComparison.Ordinal);
+    }
+
+    private static bool IsElectricitySpell(string spellIdOrName)
+    {
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("lightning", StringComparison.Ordinal)
+               || key.Contains("electric", StringComparison.Ordinal);
+    }
+
+    private static bool IsColdSpell(string spellIdOrName)
+    {
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("cold", StringComparison.Ordinal)
+               || key.Contains("ice", StringComparison.Ordinal);
     }
 
     internal static string FormatSaveAndDamageLine(string targetDisplayName, int rolledDamage, Outcome outcome, string? rolledDamageText = null)
@@ -158,10 +205,32 @@ internal static class SpellDamageSaveHelper
 
     internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName)
     {
+        if (HasImmunityToSomeAttacks(monster) && IsElectricitySpell(spellName))
+        {
+            return new Outcome(
+                SaveTarget: 0,
+                SaveRoll: 0,
+                Saved: true,
+                AppliedDamage: 0,
+                BeforeHp: monster.CurrentHitPoints,
+                AfterHp: monster.CurrentHitPoints,
+                ActualDamage: 0,
+                MagicResisted: false,
+                MagicResistanceRoll: null,
+                MagicResistancePercent: null);
+        }
+
+        var adjustedRolledDamage = rolledDamage;
+        if (HasImmunityToSomeAttacks(monster) && IsColdSpell(spellName))
+        {
+            adjustedRolledDamage = Math.Max(0, rolledDamage / 2);
+            monster.SetStatus(MonsterStatus.Slowed, 2);
+        }
+
         var saveTarget = GetMonsterMagicSaveTarget(monster, 0);
         var saveRoll = rng.Next(1, 21);
         var saved = saveTarget > 0 && saveRoll >= saveTarget;
-        var appliedDamage = saved ? rolledDamage / 2 : rolledDamage;
+        var appliedDamage = saved ? adjustedRolledDamage / 2 : adjustedRolledDamage;
         var resistance = CheckMagicResistance(monster, rng, spellName);
         if (resistance.Resisted)
             appliedDamage = 0;

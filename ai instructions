@@ -3247,20 +3247,29 @@ when writing two clases in tables for dual classed charaters, write the former c
 Also when witing the abbreviations of the clases in the class colum in the Encounter dialog i want you to use parenthatis for the former class
 ___
 
+Gelatinous Cube 
+Implement "SpecialDefenses": "Name": "Immunity to Some Attacks",
+ "Immune to electricity, fear, hold, paralyzation, polymorph, and sleep. Cold slows movement and reduces damage."
+
+ Giant Lizard 
+ Implement "SpecialAttacks":  "Name": "Double Damage on Natural 20","A natural 20 indicates both jaws snap shut, dealing 2–16 damage."
+ This means that when rolling the to hit roll, if the result is a 20, the damage dealt is doubled. 
+ For example, if the normal damage is 1d8, on a natural 20 it would be 2d8.
+
+ Lycanthrope, Wererat 
+Implement "SpecialDefenses":"Name": "Immunity to Normal Weapons","Can only be hit by silver or +1 or better magic weapons." 2,4
+
+Implement weapon type to hit adjustments. see PHB38WeaponTypeToHitAdjustment.xls
+yes please add  a strict fallback map using exact item IDs/names from your data files to avoid any ambiguity from name parsing.
+so for example "Long sword +1" should have the same adjustment as "Long swrod"
+
+add info about weapon type to hit adjustments in the in Adnd Rule and Dice Info. 2,8
+
 ***************************
 
 To be implemented 
 
-Stirge "SpecialAttacks":  "Drain Blood","After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
-
-Gelatinous Cube "SpecialDefenses": "Name": "Immunity to Some Attacks",
- "Immune to electricity, fear, hold, paralyzation, polymorph, and sleep. Cold slows movement and reduces damage."
-
-Giant Lizard "SpecialAttacks":  "Name": "Double Damage on Natural 20","A natural 20 indicates both jaws snap shut, dealing 2–16 damage."
-
-Lycanthrope, Wererat "SpecialAttacks": "Name": "Lycanthropy","Victims bitten must save vs. lycanthropy or become wererats."
-
-Lycanthrope, Wererat "SpecialDefenses":"Name": "Immunity to Normal Weapons","Can only be hit by silver or +1 or better magic weapons."
+Implement, Wererat "SpecialAttacks": "Name": "Lycanthropy","Victims bitten must save vs. lycanthropy or become wererats."
 
 Implement weapon type to hit adjustments. see PHB38WeaponTypeToHitAdjustment.xls
 

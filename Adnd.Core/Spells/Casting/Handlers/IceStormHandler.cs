@@ -37,6 +37,8 @@ public sealed class IceStormHandler : ISpellEffectHandler
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, damage, rng, spell.Name);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, damage, outcome));
+            if (SpellDamageSaveHelper.HasImmunityToSomeAttacks(monster))
+                result.Events.Add($"{monster.DisplayName} is slowed by cold and suffers reduced damage.");
 
             if (monster.CurrentHitPoints <= 0)
                 result.Events.Add($"{monster.DisplayName} is frozen solid!");

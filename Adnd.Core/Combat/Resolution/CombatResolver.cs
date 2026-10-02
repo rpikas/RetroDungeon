@@ -18,6 +18,194 @@ namespace Adnd.Core.Combat.Resolution;
 
 public sealed class CombatResolver
 {
+    private static readonly Dictionary<string, int[]> MeleeWeaponVsArmorAdjustments = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["axe battle"] = [-3, -2, -1, -1, 0, 0, 1, 1, 1],
+        ["axe hand"] = [-3, -2, -1, 0, 0, 1, 1, 1, 1],
+        ["bardiche"] = [-2, -2, -1, 1, 1, 2, 2, 3, 3],
+        ["boc de corbin"] = [2, 2, 0, 0, 0, 0, 0, -1, -1],
+        ["bill guisarme"] = [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ["bo stick"] = [-9, -7, -5, -3, -1, 0, 1, 0, 3],
+        ["club"] = [-5, -4, -3, -2, -1, -1, 0, 1, 1],
+        ["dagger"] = [-3, -3, -2, -2, -1, 0, 1, 1, 3],
+        ["fauchard"] = [-2, -2, -1, -1, 0, 0, 1, 1, 1],
+        ["fauchard fork"] = [-1, -1, -1, 0, 0, 1, 1, 1, 4],
+        ["fist or open hand"] = [-7, -5, -3, -1, 0, 1, 1, 0, 1],
+        ["flail footman"] = [2, 1, 2, 2, 1, 1, 1, -1, -1],
+        ["flail horseman"] = [2, 2, 0, 0, 0, 0, 0, 0, 0],
+        ["flail military"] = [-2, -1, -1, 0, 0, 1, 1, 0, 1],
+        ["glaive"] = [-1, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["glaive guisarme"] = [-1, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["guisarme"] = [-2, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["guisarme voulge"] = [-1, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["halberd"] = [1, 1, 1, 2, 2, 2, 1, 1, 0],
+        ["hammer lucern"] = [1, 1, 2, 2, 1, 1, 0, 0, 0],
+        ["hammer"] = [0, 1, 2, 2, 1, 1, 0, 0, 0],
+        ["jo stick"] = [-8, -6, -4, -2, -2, -1, 0, 1, 2],
+        ["lance heavy horse"] = [3, 3, 2, 2, 1, 1, 0, 0, 0],
+        ["lance light horse"] = [-2, -2, -1, 0, 0, 0, 1, 0, 0],
+        ["lance medium horse"] = [1, 1, 1, 1, 0, 0, 0, 0, 0],
+        ["mace footman"] = [1, 1, 0, 0, 0, 0, 0, 1, 1],
+        ["mace horseman"] = [1, 1, 0, 0, 0, 0, 0, 0, 1],
+        ["morning star"] = [0, 0, 0, 0, 0, 0, 1, 1, 0],
+        ["partisan"] = [0, 0, 0, 0, 0, 0, 1, 0, 0],
+        ["pick military footman"] = [2, 2, 1, 1, 0, 0, 0, 1, 2],
+        ["pick military horseman"] = [1, 1, 1, 0, 0, 0, 0, 0, 0],
+        ["pike awl"] = [-1, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["ranseur"] = [-2, -2, -1, 0, 0, 0, 0, 0, 0],
+        ["scimitar"] = [-3, -2, -2, -1, 0, 0, 1, 1, 3],
+        ["spear"] = [-2, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["spetum"] = [-2, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["staff quarter"] = [-7, -5, -3, -1, 0, 1, 1, 1, 0],
+        ["sword bastard"] = [0, 0, -1, -1, 0, 0, 1, 1, 2],
+        ["sword broad"] = [-3, -2, -1, -1, 0, 0, 1, 1, 2],
+        ["sword long"] = [-2, -2, -1, 0, 0, 0, 0, 0, 0],
+        ["sword short"] = [-2, -1, -1, 0, 0, 1, 1, 0, 2],
+        ["sword two handed"] = [2, 2, 2, 3, 3, 3, 1, 0, 0],
+        ["trident"] = [-3, -2, -1, 0, 0, 0, 0, 0, 0],
+        ["voulge"] = [-1, -1, -1, 0, 0, 1, 1, 0, 0]
+    };
+
+    private static readonly Dictionary<string, int[]> RangedWeaponVsArmorAdjustments = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["axe hand"] = [-3, -3, -1, 0, 1, 2, 3, 3, 3],
+        ["bow composite long"] = [-2, -1, -1, 0, 2, 3, 3, 3, 3],
+        ["bow composite short"] = [-3, -3, -1, 0, 2, 2, 2, 2, 2],
+        ["bow long"] = [-4, -3, -1, 0, 1, 2, 2, 2, 3],
+        ["bow short"] = [-3, -1, 0, 0, 1, 1, 2, 3, 3],
+        ["club"] = [-7, -5, -3, -1, 0, 1, 0, 0, 0],
+        ["crossbow heavy"] = [-1, -1, 1, 2, 3, 4, 4, 3, 0],
+        ["crossbow light"] = [-2, -1, 0, 1, 2, 3, 3, 3, 3],
+        ["dagger"] = [-5, -4, -3, -2, -1, 0, 1, 1, 0],
+        ["dart"] = [-4, -3, -2, -1, 0, 0, 1, 1, 0],
+        ["hammer"] = [-2, -1, -1, 0, 0, 0, 0, 0, 0],
+        ["javelin"] = [-5, -4, -3, -2, -1, 0, 1, 1, 3],
+        ["sling bullet"] = [-5, -4, -2, -1, 0, 1, 2, 3, 3],
+        ["sling stone"] = [-4, -3, -2, -1, 0, 0, 1, 1, 0],
+        ["spear"] = [-3, -2, -2, -1, 0, 0, 0, 0, 0]
+    };
+
+    // Strict mappings from exact item names in Adnd.Data/Items/*.json to table keys.
+    private static readonly Dictionary<string, string> ExactMeleeWeaponNameToTableKey = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Club"] = "club",
+        ["Spear"] = "spear",
+        ["Battle Axe"] = "axe battle",
+        ["Battle Axe +1"] = "axe battle",
+        ["Axe, Hand or throwing"] = "axe hand",
+        ["Axe +1"] = "axe hand",
+        ["Axe +2"] = "axe hand",
+        ["Axe +3"] = "axe hand",
+        ["Mace"] = "mace footman",
+        ["Mace+1"] = "mace footman",
+        ["Mace+2"] = "mace footman",
+        ["Mace+3"] = "mace footman",
+        ["Mace Pro Poison +2"] = "mace footman",
+        ["Dagger"] = "dagger",
+        ["Dagger +1"] = "dagger",
+        ["Dagger +2"] = "dagger",
+        ["Dagger +3"] = "dagger",
+        ["Dagger of Speed"] = "dagger",
+        ["Thieves Dagger"] = "dagger",
+        ["Staff"] = "staff quarter",
+        ["Staff +1"] = "staff quarter",
+        ["Staff +2"] = "staff quarter",
+        ["Staff +3"] = "staff quarter",
+        ["Staff of Silence"] = "staff quarter",
+        ["Flail"] = "flail military",
+        ["Flail +1"] = "flail military",
+        ["Flail, footman's"] = "flail footman",
+        ["Flail, horseman's"] = "flail horseman",
+        ["Fork, Military"] = "flail military",
+        ["Hammer"] = "hammer",
+        ["Hammer +1"] = "hammer",
+        ["Hammer, Lucern"] = "hammer lucern",
+        ["Bardiche"] = "bardiche",
+        ["Bec de corbin"] = "boc de corbin",
+        ["Bill-Guisarme"] = "bill guisarme",
+        ["Bo Stick"] = "bo stick",
+        ["Fauchard"] = "fauchard",
+        ["Fauchard-Fork"] = "fauchard fork",
+        ["Glaive"] = "glaive",
+        ["Glaive-Guisarme"] = "glaive guisarme",
+        ["Guisarme"] = "guisarme",
+        ["Guisarme-Voulge"] = "guisarme voulge",
+        ["Halberd"] = "halberd",
+        ["Jo Stick"] = "jo stick",
+        ["Sword, Bastard"] = "sword bastard",
+        ["Sword, Broad"] = "sword broad",
+        ["Two Handed Sword"] = "sword two handed",
+        ["Long Sword"] = "sword long",
+        ["Long Sword +1"] = "sword long",
+        ["Long Sword +2"] = "sword long",
+        ["Long Sword +3"] = "sword long",
+        ["Long Sword +4"] = "sword long",
+        ["Long Sword +5"] = "sword long",
+        ["Short Sword"] = "sword short",
+        ["Short Sword +1"] = "sword short",
+        ["Short Sword +2"] = "sword short",
+        ["Short Sword +3"] = "sword short",
+        ["Short Sword +4"] = "sword short",
+        ["Short Sword +5"] = "sword short",
+        ["Short Sword -2"] = "sword short",
+        ["Sword +1 (No Special Abilities)"] = "sword long",
+        ["Sword +1, +2 vs. magic-using & enchanted creatures"] = "sword long",
+        ["Sword +1, +3 vs. lycanthropes & shape changers"] = "sword long",
+        ["Sword +1, +3 vs. regenerating creatures"] = "sword long",
+        ["Sword +1, +4 vs. reptiles"] = "sword long",
+        ["Sword +1, Flame Tongue"] = "sword long",
+        ["Sword +1, Luck Blade"] = "sword long",
+        ["Sword +1"] = "sword long",
+        ["Sword +2"] = "sword long",
+        ["Sword +2, Giant Slayer"] = "sword long",
+        ["Sword +2, Dragon Slayer"] = "sword long",
+        ["Sword +2, Nine Lives Stealer"] = "sword long",
+        ["Sword +3, Frost Brand"] = "sword long",
+        ["Sword +3 (No Special Abilities)"] = "sword long",
+        ["Sword +4, Defender"] = "sword long",
+        ["Sword +5, Holy Avenger"] = "sword long",
+        ["Sword of Dancing"] = "sword long",
+        ["Sword, Vorpal Weapon"] = "sword long",
+        ["Sword of Sharpness"] = "sword long",
+        ["Sword of Life Stealing"] = "sword long",
+        ["Sword of Wounding"] = "sword long",
+        ["Vorpal Blade +1"] = "sword long",
+        ["Mage Masher"] = "sword short",
+        ["Were Slayer"] = "sword long",
+        ["Dragon Slayer"] = "sword long",
+        ["Shuriken"] = "dagger",
+        ["Muramasa Blade"] = "sword long"
+    };
+
+    private static readonly Dictionary<string, string> ExactRangedWeaponNameToTableKey = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Hand Axe (Thrown)"] = "axe hand",
+        ["Composite Long Bow"] = "bow composite long",
+        ["Composite Short Bow"] = "bow composite short",
+        ["Long Bow"] = "bow long",
+        ["Short Bow"] = "bow short",
+        ["Bow +1"] = "bow long",
+        ["Club (Thrown)"] = "club",
+        ["Heavy Crossbow"] = "crossbow heavy",
+        ["Light Crossbow"] = "crossbow light",
+        ["Dagger (Thrown)"] = "dagger",
+        ["Dart"] = "dart",
+        ["Hammer (Thrown)"] = "hammer",
+        ["Hammer of Thunderbolts"] = "hammer",
+        ["Javelin"] = "javelin",
+        ["Sling"] = "sling stone",
+        ["Spear (Thrown)"] = "spear",
+        ["Dagger of Venom"] = "dagger",
+        ["Hammer +3, Dwarven Thrower"] = "hammer",
+        ["Crossbow of Speed"] = "crossbow light",
+        ["Crossbow of Speed (Heavy Crossbow)"] = "crossbow heavy",
+        ["Crossbow of Distance"] = "crossbow light",
+        ["Crossbow of Distance (Heavy Crossbow)"] = "crossbow heavy",
+        ["Crossbow of Accuracy, +3"] = "crossbow light",
+        ["Crossbow of Accuracy, +3 (Heavy Crossbow)"] = "crossbow heavy",
+        ["Javelin of Lightning"] = "javelin"
+    };
+
     private readonly Random _rng = new();//for assassination rolls 
 
     private readonly IDice _dice;
@@ -1129,6 +1317,7 @@ public sealed class CombatResolver
                     }
                     int needed = thac0 - targetAc;
                     int roll = _dice.Roll(20);
+                    var hasDoubleDamageOnNaturalTwenty = HasAnySpecialAbility(monster, "Double Damage on Natural 20");
 
                     if (GameRulesProvider.Current.ShowToHitRoll)
                     {
@@ -1170,6 +1359,14 @@ public sealed class CombatResolver
                             damage *= monsterBackstabInfo.Multiplier;
                             events.Add(new CombatEvent($"{monster.DisplayName} backstabs! +4 to hit, damage x{monsterBackstabInfo.Multiplier} ({baseDamage}->{damage})."));
                         }
+
+                        if (hasDoubleDamageOnNaturalTwenty && roll == 20)
+                        {
+                            var beforeDouble = damage;
+                            damage *= 2;
+                            events.Add(new CombatEvent($"{monster.DisplayName} rolled a natural 20: Double Damage on Natural 20 ({beforeDouble}->{damage})."));
+                        }
+
                         target.CurrentHitPoints -= damage;
                         var enemyDamageModText = enemyDamagePenaltyApplied ? " (chant/prayer -1 damage)" : string.Empty;
                         events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name} for {damage}.{enemyDamageModText}"));
@@ -2707,6 +2904,26 @@ public sealed class CombatResolver
             if (swordSituationalBonus > 0)
                 thac0Modifier += swordSituationalBonus;
 
+            var weaponVsAcKey = ResolveWeaponVsArmorTableKey(mainHand, useRanged);
+            var weaponVsAcAdjustment = GetWeaponVsArmorClassAdjustment(mainHand, target.ArmorClass, useRanged);
+            thac0Modifier += weaponVsAcAdjustment;
+
+            if (target.ArmorClass >= 2 && target.ArmorClass <= 10)
+            {
+                var mode = useRanged ? "ranged" : "melee";
+                var weaponName = mainHand?.Name ?? "Fist or Open Hand";
+                if (!string.IsNullOrWhiteSpace(weaponVsAcKey))
+                {
+                    RuleApplicationInfo.Publish(
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName} (table row '{weaponVsAcKey}') vs AC {target.ArmorClass} => to-hit adjustment {weaponVsAcAdjustment:+#;-#;0}.");
+                }
+                else
+                {
+                    RuleApplicationInfo.Publish(
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName} vs AC {target.ArmorClass}, but no weapon table row matched; to-hit adjustment 0.");
+                }
+            }
+
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
             int roll = _dice.Roll(20);
             var wasNaturalTwenty = roll == 20;
@@ -2714,7 +2931,10 @@ public sealed class CombatResolver
             if (GameRulesProvider.Current.ShowToHitRoll)
             {
                 var effectiveThac0 = member.Thac0 - thac0Modifier;
-                events.Add(new CombatEvent($"TO-HIT: {member.Name} THAC0 {effectiveThac0}, {target.DisplayName} AC {target.ArmorClass}, needs {needed} on 1d20, rolled {roll}."));
+                var weaponAdjText = weaponVsAcAdjustment == 0
+                    ? string.Empty
+                    : $" Weapon vs AC adj: {weaponVsAcAdjustment:+#;-#;0}.";
+                events.Add(new CombatEvent($"TO-HIT: {member.Name} THAC0 {effectiveThac0}, {target.DisplayName} AC {target.ArmorClass}, needs {needed} on 1d20, rolled {roll}.{weaponAdjText}"));
             }
 
             if (roll < needed)
@@ -6169,12 +6389,157 @@ public sealed class CombatResolver
 
     private static bool CanWeaponHarmTargetByMagicRequirement(Item? weapon, MonsterInstance target)
     {
+        if (HasImmunityToNormalWeapons(target))
+        {
+            if (IsSilverWeapon(weapon))
+                return true;
+
+            var effectiveWeaponBonus = GetEffectiveWeaponBonusForHitRequirement(weapon);
+            return effectiveWeaponBonus >= 1;
+        }
+
         var requiredBonus = GetRequiredWeaponBonusToHit(target);
         if (requiredBonus <= 0)
             return true;
 
         var effectiveWeaponBonus = GetEffectiveWeaponBonusForHitRequirement(weapon);
         return effectiveWeaponBonus >= requiredBonus;
+    }
+
+    private static bool HasImmunityToNormalWeapons(MonsterInstance target)
+    {
+        if (target?.Template?.SpecialDefenses == null)
+            return false;
+
+        return target.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d.Name?.Trim() ?? string.Empty;
+            var description = d.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}".ToLowerInvariant();
+
+            return string.Equals(name, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
+                   || (merged.Contains("can only be hit by silver", StringComparison.Ordinal)
+                       && merged.Contains("+1", StringComparison.Ordinal));
+        });
+    }
+
+    private static bool IsSilverWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var text = $"{weapon.Name} {weapon.Description}";
+        return text.Contains("silver", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static int GetWeaponVsArmorClassAdjustment(Item? weapon, int targetArmorClass, bool isRanged)
+    {
+        if (targetArmorClass < 2 || targetArmorClass > 10)
+            return 0;
+
+        var key = ResolveWeaponVsArmorTableKey(weapon, isRanged);
+        if (string.IsNullOrWhiteSpace(key))
+            return 0;
+
+        var table = isRanged ? RangedWeaponVsArmorAdjustments : MeleeWeaponVsArmorAdjustments;
+        if (!table.TryGetValue(key, out var row) || row.Length < 9)
+            return 0;
+
+        return row[targetArmorClass - 2];
+    }
+
+    private static string? ResolveWeaponVsArmorTableKey(Item? weapon, bool isRanged)
+    {
+        if (weapon == null)
+            return isRanged ? null : "fist or open hand";
+
+        var exactTable = isRanged ? ExactRangedWeaponNameToTableKey : ExactMeleeWeaponNameToTableKey;
+        if (exactTable.TryGetValue(weapon.Name.Trim(), out var exactKey))
+            return exactKey;
+
+        var normalized = NormalizeWeaponName(weapon.Name);
+        if (string.IsNullOrWhiteSpace(normalized))
+            return isRanged ? null : "fist or open hand";
+
+        if (isRanged)
+        {
+            if (normalized.Contains("composite") && normalized.Contains("long") && normalized.Contains("bow")) return "bow composite long";
+            if (normalized.Contains("composite") && normalized.Contains("short") && normalized.Contains("bow")) return "bow composite short";
+            if (normalized.Contains("long") && normalized.Contains("bow")) return "bow long";
+            if (normalized.Contains("short") && normalized.Contains("bow")) return "bow short";
+            if (normalized.Contains("crossbow") && normalized.Contains("heavy")) return "crossbow heavy";
+            if (normalized.Contains("crossbow") && normalized.Contains("light")) return "crossbow light";
+            if (normalized.Contains("sling") && normalized.Contains("bullet")) return "sling bullet";
+            if (normalized.Contains("sling") && normalized.Contains("stone")) return "sling stone";
+            if (normalized.Contains("sling")) return "sling stone";
+            if (normalized.Contains("javelin")) return "javelin";
+            if (normalized.Contains("dart")) return "dart";
+            if (normalized.Contains("hand") && normalized.Contains("axe")) return "axe hand";
+            if (normalized.Contains("dagger")) return "dagger";
+            if (normalized.Contains("club")) return "club";
+            if (normalized.Contains("hammer")) return "hammer";
+            if (normalized.Contains("spear")) return "spear";
+            return null;
+        }
+
+        if (normalized.Contains("battle") && normalized.Contains("axe")) return "axe battle";
+        if (normalized.Contains("hand") && normalized.Contains("axe")) return "axe hand";
+        if (normalized.Contains("bardiche")) return "bardiche";
+        if (normalized.Contains("boc") && normalized.Contains("corbin")) return "boc de corbin";
+        if (normalized.Contains("bill") && normalized.Contains("guisarme")) return "bill guisarme";
+        if (normalized.Contains("bo stick")) return "bo stick";
+        if (normalized.Contains("club")) return "club";
+        if (normalized.Contains("dagger")) return "dagger";
+        if (normalized.Contains("fauchard") && normalized.Contains("fork")) return "fauchard fork";
+        if (normalized.Contains("fauchard")) return "fauchard";
+        if (normalized.Contains("flail") && normalized.Contains("footman")) return "flail footman";
+        if (normalized.Contains("flail") && normalized.Contains("horseman")) return "flail horseman";
+        if (normalized.Contains("flail") && normalized.Contains("military")) return "flail military";
+        if (normalized.Contains("glaive") && normalized.Contains("guisarme")) return "glaive guisarme";
+        if (normalized.Equals("glaive")) return "glaive";
+        if (normalized.Contains("guisarme") && normalized.Contains("voulge")) return "guisarme voulge";
+        if (normalized.Equals("guisarme")) return "guisarme";
+        if (normalized.Contains("halberd")) return "halberd";
+        if (normalized.Contains("lucern") && normalized.Contains("hammer")) return "hammer lucern";
+        if (normalized.Equals("hammer") || normalized.Contains("war hammer")) return "hammer";
+        if (normalized.Contains("jo stick")) return "jo stick";
+        if (normalized.Contains("lance") && normalized.Contains("heavy")) return "lance heavy horse";
+        if (normalized.Contains("lance") && normalized.Contains("light")) return "lance light horse";
+        if (normalized.Contains("lance") && normalized.Contains("medium")) return "lance medium horse";
+        if (normalized.Contains("mace") && normalized.Contains("footman")) return "mace footman";
+        if (normalized.Contains("mace") && normalized.Contains("horseman")) return "mace horseman";
+        if (normalized.Contains("morning") && normalized.Contains("star")) return "morning star";
+        if (normalized.Contains("partisan")) return "partisan";
+        if (normalized.Contains("pick") && normalized.Contains("military") && normalized.Contains("footman")) return "pick military footman";
+        if (normalized.Contains("pick") && normalized.Contains("military") && normalized.Contains("horseman")) return "pick military horseman";
+        if (normalized.Contains("pike") && normalized.Contains("awl")) return "pike awl";
+        if (normalized.Contains("ranseur")) return "ranseur";
+        if (normalized.Contains("scimitar")) return "scimitar";
+        if (normalized.Equals("spear")) return "spear";
+        if (normalized.Contains("spetum")) return "spetum";
+        if (normalized.Contains("quarter") && normalized.Contains("staff")) return "staff quarter";
+        if (normalized.Contains("bastard") && normalized.Contains("sword")) return "sword bastard";
+        if (normalized.Contains("broad") && normalized.Contains("sword")) return "sword broad";
+        if (normalized.Contains("long") && normalized.Contains("sword")) return "sword long";
+        if (normalized.Contains("short") && normalized.Contains("sword")) return "sword short";
+        if (normalized.Contains("two") && normalized.Contains("handed") && normalized.Contains("sword")) return "sword two handed";
+        if (normalized.Contains("trident")) return "trident";
+        if (normalized.Contains("voulge")) return "voulge";
+
+        return null;
+    }
+
+    private static string NormalizeWeaponName(string? weaponName)
+    {
+        if (string.IsNullOrWhiteSpace(weaponName))
+            return string.Empty;
+
+        var text = weaponName.Trim().ToLowerInvariant();
+        text = Regex.Replace(text, @"\+\d+", string.Empty);
+        text = text.Replace("(", " ").Replace(")", " ").Replace(",", " ").Replace("-", " ");
+        text = Regex.Replace(text, @"\s+", " ").Trim();
+        return text;
     }
 
     private static int GetEffectiveWeaponBonusForHitRequirement(Item? weapon)
