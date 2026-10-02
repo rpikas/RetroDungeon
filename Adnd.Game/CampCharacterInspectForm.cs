@@ -685,6 +685,7 @@ public sealed class CampCharacterInspectForm : Form
         sb.AppendLine($"CONSTITUTION {c.Abilities.Constitution,2}");
         sb.AppendLine($"CHARISMA     {c.Abilities.Charisma,2}    STATUS {statusText}");
         sb.AppendLine($"CARRY WT     {c.CurrentCarryWeight,3}/{c.MaxCarryWeight,-3}");
+        sb.AppendLine($"WEAP PROF    {c.GetWeaponProficienciesDisplay().ToUpperInvariant()}");
         var dualClassSummary = FormatDualClassSummary(c);
         if (!string.IsNullOrWhiteSpace(dualClassSummary))
             sb.AppendLine($"DUAL CLASS   {dualClassSummary.ToUpperInvariant()}");

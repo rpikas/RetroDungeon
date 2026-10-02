@@ -48,10 +48,11 @@ public class CharacterRepository
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
                 NormalizeAttackCadence(c);
+                var proficiencyChanged = WeaponProficiencyRules.EnsureAutoProficiencies(c);
                 var abilityScoresChanged = NormalizeAbilityScoresByRaceGender(c);
                 HydrateWeaponDamageVsLarge(c, itemLookup);
 
-                if (abilityScoresChanged || classLevelCapsChanged)
+                if (abilityScoresChanged || classLevelCapsChanged || proficiencyChanged)
                     Save(c);
 
                 list.Add(c);

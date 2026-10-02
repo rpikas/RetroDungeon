@@ -475,6 +475,7 @@ public class CityMenu
         character.EnsureClassProgressions();
         character.RefreshMoveFromArmorAndClass();
         character.RefreshMonkProgressionStats();
+        WeaponProficiencyRules.EnsureAutoProficiencies(character);
 
         InitializeSpellcasting(character);
 
@@ -488,6 +489,7 @@ public class CityMenu
         RuleApplicationInfo.Publish($"Final saving throws: Paralyzation/Poison/Death {saveVsParalyzation}, Petrification/Polymorph {saveVsPetrification}, Rod/Staff/Wand {saveVsRodStaffWand}, Breath Weapon {saveVsBreath}, Spell {saveVsSpell}.");
         RuleApplicationInfo.Publish($"Final THAC0: {character.Thac0Display}.");
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
+        RuleApplicationInfo.PublishLinked("PHB", "37WeaponProficiency", $"Weapon proficiencies (auto): {character.GetWeaponProficienciesDisplay()}.");
 
         Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}\n");
 

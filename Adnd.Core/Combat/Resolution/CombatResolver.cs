@@ -2909,6 +2909,18 @@ public sealed class CombatResolver
                 thac0Modifier += GetHammerOfThunderboltsToHitBonus(member, rangedWeapon);
             }
 
+            var nonProficiencyPenalty = WeaponProficiencyRules.GetNonProficiencyPenalty(member, mainHand, useRanged);
+            if (nonProficiencyPenalty > 0)
+            {
+                thac0Modifier -= nonProficiencyPenalty;
+                var profWeaponType = WeaponProficiencyRules.ResolveWeaponProficiencyKey(mainHand, useRanged, member.IsMonk());
+                var profWeaponName = mainHand?.Name ?? (member.IsMonk() ? "Fist or Open Hand" : "Unarmed");
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "37WeaponProficiency",
+                    $"Non-proficiency penalty: {member.Name} attacks with {profWeaponName} ({profWeaponType}). Not proficient => to-hit penalty -{nonProficiencyPenalty}.");
+            }
+
             var swordSituationalBonus = GetSituationalSwordBonusAgainstTarget(mainHand, target);
             if (swordSituationalBonus > 0)
                 thac0Modifier += swordSituationalBonus;

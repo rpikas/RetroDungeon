@@ -84,6 +84,8 @@ public sealed class LevelUpService
 
         result.SpellSlotChanges = _spellProgressionService.RecalculateFromClassProgressions(character);
 
+        WeaponProficiencyRules.EnsureAutoProficiencies(character);
+
         character.RefreshMoveFromArmorAndClass();
         character.RefreshMonkProgressionStats();
 

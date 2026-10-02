@@ -3279,7 +3279,7 @@ Fist or Open Hand to hit adjustment does not apply for monks.
 ___
 
 make the filename AdndRuleAndDiceInfo located at C:\dev\RetroDungeon\Logs unique by adding a timestamp to the filename, for example AdndRuleAndDiceInfo_2024-06-15_14-30-00.txt.
-
+3,1
 *************************
 
 To be implemented 
@@ -3288,7 +3288,11 @@ Implement, Wererat "SpecialAttacks": "Name": "Lycanthropy","Victims bitten must 
 
 
 Implement weapon proficiency adjustments.
+Det betyder att man kan välja vapen/det väljs automatiskt vapen som man är proficient i och att alla andra vapen får man ett straff på att träffa med.
 
+beroede på klass får man ett visst antal vapen som man är proficient i och sedan får man fler vapen per level.
+olika klasser har olika straff för att träffa med vapen som man inte är proficient i. T ex Cleric har -3 i straff för att träffa med vapen som han inte är proficient i, medan en Fighter har -2 i straff.
+Så här ser tabellen ut för de olika klasserna:
 Class of Character	Initial Number of Weapons	Non‑proficiency Penalty	Added Proficiency in Weapons per Level
 Cleric	2	−3	1/4 levels
 Druid	2	−4	1/5 levels
@@ -3301,17 +3305,18 @@ Thief	2	−3	1/4 levels
 Assassin	3	−3	1/4 levels
 Monk	1	−3	1/2 levels
 
-välj vapen från start som man har som proficiency in, 
+Välj automatiskt vapen från start som man har som proficiency in, 
 Klass	Start	Level där nya vapen tillkommer
-Fighter/Paladin/Ranger	LS, Spear, LBow, Dagger	4, 7, 10, 13, 16, 19
+Fighter/Paladin/Ranger	Spear, Longbow, Long sword, Broad sword	4, 7, 10, 13, 16, 19
 Cleric	Mace, Staff	5, 9, 13, 17
-Druid	Scimitar, Spear	6, 11, 16
-Thief	SSword, Dagger	5, 9, 13, 17
-Bard	LSword, Dagger, SBow	5, 9, 13, 17
+Druid	Scimitar, Staff	6, 11, 16
+Thief	Short Sword, Dagger	5, 9, 13, 17
+Bard	Longsword, Dagger, Longbow	5, 9, 13, 17
 Magic‑User	Dagger	7, 13, 19
 Illusionist	Dagger	6, 11, 16
+Senare kommer jag eventuellt att implementera att en inställning kan styra att man kan välja vapen som man är proficient i, men som inte är automatiskt valt.
 
-och när man når en ny level så väljs automatisktett nytt vapen som man blir proficient i enligt detta:
+och när man når en ny level så väljs automatiskt ett nytt vapen som man blir proficient i enligt detta:
 🛡 FIGHTER / PALADIN / RANGER
 Startar med 4 vapen:
 Longsword, Spear, Longbow, Dagger

@@ -113,6 +113,7 @@ public class Character
     public int Age { get; set; }
     public int AgeDays { get; set; }
     public List<Item> Inventory { get; set; } = new();
+    public List<string> WeaponProficiencies { get; set; } = new();
     public Dictionary<EquipmentSlot, Item?> Equipment { get; set; } = new();
     public int? ExceptionalStrengthPercentile { get; set; }
     public List<SpellcastingState> Spellcasting { get; set; } = new();
@@ -867,6 +868,19 @@ public class Character
     }
 
     public bool IsMonkImmuneToPoison() => IsMonk() && GetMonkLevel() >= 11;
+
+    public string GetWeaponProficienciesDisplay()
+    {
+        WeaponProficiencies ??= new List<string>();
+        if (WeaponProficiencies.Count == 0)
+            return "-";
+
+        return string.Join(", ", WeaponProficiencies
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .Select(WeaponProficiencyRules.CanonicalizeProficiencyName)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase));
+    }
 
     public int GetPaladinLevel() => IsPaladin()
         ? (Classes.Contains(CharacterClass.Paladin)
