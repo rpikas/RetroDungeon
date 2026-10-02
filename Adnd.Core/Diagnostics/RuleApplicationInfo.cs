@@ -5,7 +5,10 @@ namespace Adnd.Core.Diagnostics;
 
 public static class RuleApplicationInfo
 {
-    private const string RuleAndDiceInfoLogPath = @"C:\dev\RetroDungeon\Logs\AdndRuleAndDiceInfo.log";
+    private const string RuleAndDiceInfoLogFolder = @"C:\dev\RetroDungeon\Logs";
+    private static readonly string RuleAndDiceInfoLogPath = Path.Combine(
+        RuleAndDiceInfoLogFolder,
+        $"AdndRuleAndDiceInfo_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt");
     public static event Action<string>? InfoPublished;
 
     public static void PublishLinked(string source, string page, string message)

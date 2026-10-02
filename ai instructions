@@ -3278,13 +3278,14 @@ ___
 Fist or Open Hand to hit adjustment does not apply for monks.
 ___
 
-***************************
+make the filename AdndRuleAndDiceInfo located at C:\dev\RetroDungeon\Logs unique by adding a timestamp to the filename, for example AdndRuleAndDiceInfo_2024-06-15_14-30-00.txt.
+
+*************************
 
 To be implemented 
 
 Implement, Wererat "SpecialAttacks": "Name": "Lycanthropy","Victims bitten must save vs. lycanthropy or become wererats."
 
-Implement weapon type to hit adjustments. see PHB38WeaponTypeToHitAdjustment.xls
 
 Implement weapon proficiency adjustments.
 

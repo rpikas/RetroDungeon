@@ -2938,20 +2938,20 @@ public sealed class CombatResolver
             if (target.ArmorClass >= 2 && target.ArmorClass <= 10)
             {
                 var mode = useRanged ? "ranged" : "melee";
-                var weaponName = mainHand?.Name ?? "Fist or Open Hand";
+                var weaponNameForAdjustment = mainHand?.Name ?? "Fist or Open Hand";
                 if (!string.IsNullOrWhiteSpace(weaponVsAcKey))
                 {
                     RuleApplicationInfo.PublishLinked(
                         "PHB",
                         "38WeaponTypeToHitAdjustment",
-                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName}. Weapon type: {weaponVsAcKey}. Adjustment vs AC {target.ArmorClass}: {weaponVsAcAdjustment:+#;-#;0}.");
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponNameForAdjustment}. Weapon type: {weaponVsAcKey}. Adjustment vs AC {target.ArmorClass}: {weaponVsAcAdjustment:+#;-#;0}.");
                 }
                 else
                 {
                     RuleApplicationInfo.PublishLinked(
                         "PHB",
                         "38WeaponTypeToHitAdjustment",
-                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName}. Weapon type: unknown (no table row matched). Adjustment vs AC {target.ArmorClass}: 0.");
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponNameForAdjustment}. Weapon type: unknown (no table row matched). Adjustment vs AC {target.ArmorClass}: 0.");
                 }
             }
 
@@ -6425,8 +6425,8 @@ public sealed class CombatResolver
             if (IsSilverWeapon(weapon))
                 return true;
 
-            var effectiveWeaponBonus = GetEffectiveWeaponBonusForHitRequirement(weapon);
-            return effectiveWeaponBonus >= 1;
+            var effectiveBonusForNormalWeaponImmunity = GetEffectiveWeaponBonusForHitRequirement(weapon);
+            return effectiveBonusForNormalWeaponImmunity >= 1;
         }
 
         var requiredBonus = GetRequiredWeaponBonusToHit(target);
