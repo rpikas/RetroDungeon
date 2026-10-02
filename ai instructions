@@ -3265,6 +3265,14 @@ so for example "Long sword +1" should have the same adjustment as "Long swrod"
 
 add info about weapon type to hit adjustments in the in Adnd Rule and Dice Info. 2,8
 
+___
+when informing about weapon type to hit adjustments, also show the weapon type, the adjustment and link to 
+PHB38WeaponTypeToHitAdjustment.png using the normal methods usually used in RetroDungeon. 2,8
+
+___ 
+
+if hitting a ta target 
+
 ***************************
 
 To be implemented 

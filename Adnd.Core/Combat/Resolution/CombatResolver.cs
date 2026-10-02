@@ -2914,13 +2914,17 @@ public sealed class CombatResolver
                 var weaponName = mainHand?.Name ?? "Fist or Open Hand";
                 if (!string.IsNullOrWhiteSpace(weaponVsAcKey))
                 {
-                    RuleApplicationInfo.Publish(
-                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName} (table row '{weaponVsAcKey}') vs AC {target.ArmorClass} => to-hit adjustment {weaponVsAcAdjustment:+#;-#;0}.");
+                    RuleApplicationInfo.PublishLinked(
+                        "PHB",
+                        "38WeaponTypeToHitAdjustment",
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName}. Weapon type: {weaponVsAcKey}. Adjustment vs AC {target.ArmorClass}: {weaponVsAcAdjustment:+#;-#;0}.");
                 }
                 else
                 {
-                    RuleApplicationInfo.Publish(
-                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName} vs AC {target.ArmorClass}, but no weapon table row matched; to-hit adjustment 0.");
+                    RuleApplicationInfo.PublishLinked(
+                        "PHB",
+                        "38WeaponTypeToHitAdjustment",
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponName}. Weapon type: unknown (no table row matched). Adjustment vs AC {target.ArmorClass}: 0.");
                 }
             }
 
