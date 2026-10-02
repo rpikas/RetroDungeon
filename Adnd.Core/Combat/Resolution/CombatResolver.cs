@@ -2960,10 +2960,20 @@ public sealed class CombatResolver
                 }
                 else
                 {
+                    if (!useRanged && mainHand == null && member.IsMonk())
+                    {
+                        RuleApplicationInfo.PublishLinked(
+                            "PHB",
+                            "38WeaponTypeToHitAdjustment",
+                            "Weapon vs AC adjustment is not applicable for kombinationen monks och Fist or Open Hand.");
+                    }
+                    else
+                    {
                     RuleApplicationInfo.PublishLinked(
                         "PHB",
                         "38WeaponTypeToHitAdjustment",
                         $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponNameForAdjustment}. Weapon type: unknown (no table row matched). Adjustment vs AC {target.ArmorClass}: 0.");
+                    }
                 }
             }
 
