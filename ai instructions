@@ -3280,12 +3280,6 @@ ___
 
 make the filename AdndRuleAndDiceInfo located at C:\dev\RetroDungeon\Logs unique by adding a timestamp to the filename, for example AdndRuleAndDiceInfo_2024-06-15_14-30-00.txt.
 3,1
-*************************
-
-To be implemented 
-
-Implement, Wererat "SpecialAttacks": "Name": "Lycanthropy","Victims bitten must save vs. lycanthropy or become wererats."
-
 
 Implement weapon proficiency adjustments.
 Det betyder att man kan välja vapen/det väljs automatiskt vapen som man är proficient i och att alla andra vapen får man ett straff på att träffa med.
@@ -3374,3 +3368,98 @@ Level 11 — +Dart
 Level 16 — +Sling
 
 När man inspecterar en karaktär, visa vilka vapen som karaktären är proficient i.
+
+Ge dessa klasser följande initial weapon profficency
+
+Klass	Antal	Initiala vapen
+Thief	2	Short Sword, Dagger
+Assassin	3	Dagger, Short Sword, Garrote (eller Light Crossbow)
+Monk	1	Staff
+
+förutom det ska Monks alltid ha weapon proficiency på Fist or Open Hand
+
+Ge dessa klasser följande nya vapen per level
+THIEF
+Startar med 2:
+Short Sword, Dagger  
+Nya: 1/4 levels → level 5, 9, 13, 17
+
+Level 5 — +Sling
+Level 9 — +Shortbow
+Level 13 — +Club
+Level 17 — +Hand Crossbow
+
+🗡🔪 ASSASSIN
+Startar med 3:
+Dagger, Short Sword,  Light Crossbow 
+Nya: 1/4 levels → level 5, 9, 13, 17
+
+Level 5 — +Light Crossbow
+Level 9 — +Poisoned Dart
+Level 13 — +Scimitar
+Level 17 — +Blowgun
+
+🥋 MONK
+Startar med 1:
+Staff  
+Nya: 1/2 levels → level 3, 5, 7, 9, 11, 13, 15, 17, 19
+
+Level 3 — +Spear
+Level 5 — +Club
+Level 7 — +Dart
+Level 9 — +Sling
+Level 11 — +Jo‑stick 
+Level 13 — +Hand Axe (Thrown)
+Level 15 — +Quarterstaff 
+Level 17 — +Light Crossbow
+
+___
+När monks slår med Fist or Open Hand skriv att Weapon vs AC adjustment is not applicable for kombinationen 
+monks och Fist or Open Hand istället för "Weapon vs AC adjustment (melee): Shian uses Fist or Open Hand.
+Weapon type: unknown (no table row matched). Adjustment vs AC 4: 0."
+___
+
+I meddelandet på Adnd Rule and Dice Info borde man länka till PHB37WeaponProficiency.
+proficcenty adjustment görs åt fel håll, det ska bli svårare att träffa utan weapon profficeny, 
+desutom skrivs inte något om hur det påverkar i Adnd Rule and Dice Info, t ex står det så här nu
+TO-HIT: PHB, 37, Profficent with weapon, Gimli is not profficent with Club and get 3 in To hit Adjustment 
+THAC0 7, Bandit #3 AC 6, needs 7 on 1d20, rolled 8. Weapon vs AC adj: -1.
+
+Weapon vs AC adj går också åt fel håll.
+Just nu står det så här
+TO-HIT: Gimli THAC0 9, Lvl 1 Fighter #1 AC 4, needs 5 on 1d20, rolled 13. Weapon vs AC adj: -3. Non-proficiency penalty: 2.
+Det borde stå så här
+TO-HIT: Gimli THAC0 9, Weapon vs AC adj: 3. Non-proficiency penalty: 2.  Lvl 1 Fighter #1 AC 4, needs 10 (5+3+2) on 1d20
+this row should also be written to AnD Rule and Dice info
+TO-HIT: Gimli THAC0 4, Weapon vs AC adj: 1. Non-proficiency penalty: 2. Orc #3 AC 6, needs 1 (-2+1+2) on 1d20, rolled 10.
+
+TO-HIT: Gimli THAC0 4, Weapon vs AC adj: 3. Non-proficiency penalty: 2. Fire Beetle #3 AC 4, needs 5 (0+3+2) on 1d20, rolled 17.
+should 
+TO-HIT: Gimli THAC0 4, Weapon vs AC adj: 3. Non-proficiency penalty: 2. Fire Beetle #3 AC 4, needs 5 +3+2 =9 on 1d20, rolled 17.
+So Gimli need 9 in this case, since table say 5 for ac 4 when level 17 + fighter then 2 in penalty for non proficeny and an 
+additional 3 in penalty for club on ac 4
+
+I mean this is partly correct and partyl incorrect
+TO-HIT: Gimli THAC0 4, Weapon vs AC adj: 1. Non-proficiency penalty: 2. Orc #3 AC 6, needs 4 1+1+2 =4 on 1d20, rolled 10.
+Gimli THAC0 4 is correct since he is a Level 17 fighter
+Weapon vs AC adj: 1. is correct since tht is the adjustment club should get on ac 6.
+ Non-proficiency penalty: 2 is correct since that is the adjustment fighters should get.
+ AC 6, needs 4 1+1+2 =4 is incorrect, AC needs -2 without adjustments and with adjustments it should be-2+1+2=1 please fix accodringly
+
+ Implement
+       "SpecialAbilities": "Name": "Split",
+          "Description": "Slashing or lightning attacks divide the jelly into two smaller jellies doing 1d6 damage each"
+       5,3
+
+
+        Rename "Special attack" blood drain to Stirge Blood drain.
+
+              "SpecialAttacks": [
+        {
+          "Name": "Tick Blood Drain",
+          "Description": "After attaching, drains 1–6 HP per round until total drained equals its hit points."
+        },
+        {
+          "Name": "Tick Disease",
+          "Description": "50% chance of contracting a fatal disease; victim dies in 2–8 days unless cured."
+        }

@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Combat.Resolution;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -40,13 +41,21 @@ public sealed class ShockingGraspHandler : ISpellEffectHandler
         if (target == null)
             return SpellCastResult.Failure("No valid enemy target selected.");
 
+        var result = new SpellCastResult { Success = true };
         var rolled = rng.Next(1, 9) + Math.Max(1, request.Caster.Level); // 1d8 +1/level
         var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
 
-        var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
         result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, rolled, outcome));
-        if (!target.IsAlive)
+
+        var splitFromLightning = MonsterSplitResolver.TryResolveSplit(
+            session,
+            target,
+            outcome.ActualDamage,
+            JellySplitTrigger.Lightning,
+            message => result.Events.Add(message));
+
+        if (!splitFromLightning && !target.IsAlive)
             result.Events.Add($"{target.DisplayName} is destroyed.");
 
         result.HpChanges[target.DisplayName] = -outcome.ActualDamage;

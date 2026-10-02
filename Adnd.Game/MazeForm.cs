@@ -2750,6 +2750,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 groups.Add((additionalMonsterName, ResolveEncounterGroupCount(additionalMonsterName, additionalRoll?.CountOverride)));
             }
 
+            var askedLeaveOrAttack = false;
+
             if (AreAllEncounterGroupsNeutral(groups.Select(g => g.name)) && _random.Next(1, 101) <= 50)
             {
                 var distinctNames = groups.Select(g => g.name).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
@@ -2762,6 +2764,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     PublishToViewer();
                     return;
                 }
+
+                askedLeaveOrAttack = true;
             }
 
             var isFriendlyGoodEncounter = ShouldOfferFriendlyEncounterChoice(party, groups.Select(g => g.name));
@@ -2778,6 +2782,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     return;
                 }
 
+                askedLeaveOrAttack = true;
                 ApplyGoodEncounterAttackConsequences(party, friendlyName);
             }
 
@@ -2792,11 +2797,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 groups,
                 party,
                 _characterRepository,
-                _currentDungeonLevel);
+                _currentDungeonLevel,
+                skipSurpriseRoll: askedLeaveOrAttack);
         }
         else
         {
             var numberOfMonsters = ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride);
+            var askedLeaveOrAttack = false;
 
             if (AreAllEncounterGroupsNeutral(new[] { monsterName }) && _random.Next(1, 101) <= 50)
             {
@@ -2805,6 +2812,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     PublishToViewer();
                     return;
                 }
+
+                askedLeaveOrAttack = true;
             }
 
             var isFriendlyGoodEncounter = ShouldOfferFriendlyEncounterChoice(party, new[] { monsterName });
@@ -2816,6 +2825,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     return;
                 }
 
+                askedLeaveOrAttack = true;
                 ApplyGoodEncounterAttackConsequences(party, monsterName);
             }
 
@@ -2825,7 +2835,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 _characterRepository.Save(member);
             }
 
-            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel);
+            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel, skipSurpriseRoll: askedLeaveOrAttack);
         }
 
         if (outcome == CombatOutcome.Defeat)

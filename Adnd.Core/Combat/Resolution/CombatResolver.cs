@@ -2912,13 +2912,15 @@ public sealed class CombatResolver
             var nonProficiencyPenalty = WeaponProficiencyRules.GetNonProficiencyPenalty(member, mainHand, useRanged);
             if (nonProficiencyPenalty > 0)
             {
+                var neededBeforeNonProficiencyPenalty = (member.Thac0 - thac0Modifier) - target.ArmorClass;
                 thac0Modifier -= nonProficiencyPenalty;
+                var neededAfterNonProficiencyPenalty = (member.Thac0 - thac0Modifier) - target.ArmorClass;
                 var profWeaponType = WeaponProficiencyRules.ResolveWeaponProficiencyKey(mainHand, useRanged, member.IsMonk());
                 var profWeaponName = mainHand?.Name ?? (member.IsMonk() ? "Fist or Open Hand" : "Unarmed");
                 RuleApplicationInfo.PublishLinked(
                     "PHB",
                     "37WeaponProficiency",
-                    $"Non-proficiency penalty: {member.Name} attacks with {profWeaponName} ({profWeaponType}). Not proficient => to-hit penalty -{nonProficiencyPenalty}.");
+                    $"Weapon proficiency: {member.Name} attacks with {profWeaponName} ({profWeaponType}). Not proficient => to-hit penalty {nonProficiencyPenalty}. Needed roll changes {neededBeforeNonProficiencyPenalty} -> {neededAfterNonProficiencyPenalty}.");
             }
 
             var swordSituationalBonus = GetSituationalSwordBonusAgainstTarget(mainHand, target);
@@ -2933,7 +2935,10 @@ public sealed class CombatResolver
                 weaponVsAcAdjustment = 0;
             }
 
-            thac0Modifier += weaponVsAcAdjustment;
+            // Table values are expressed as weapon-vs-armor adjustments.
+            // For needed-roll clarity: a negative table value increases needed roll.
+            var neededAdjustmentFromWeaponVsAc = -weaponVsAcAdjustment;
+            thac0Modifier -= neededAdjustmentFromWeaponVsAc;
 
             var incapacitatedMonsterReason = GetIncapacitatedTargetReason(target);
             if (!string.IsNullOrWhiteSpace(incapacitatedMonsterReason))
@@ -2956,7 +2961,7 @@ public sealed class CombatResolver
                     RuleApplicationInfo.PublishLinked(
                         "PHB",
                         "38WeaponTypeToHitAdjustment",
-                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponNameForAdjustment}. Weapon type: {weaponVsAcKey}. Adjustment vs AC {target.ArmorClass}: {weaponVsAcAdjustment:+#;-#;0}.");
+                        $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponNameForAdjustment}. Weapon type: {weaponVsAcKey}. Needed-roll adjustment vs AC {target.ArmorClass}: {neededAdjustmentFromWeaponVsAc:+#;-#;0}.");
                 }
                 else
                 {
@@ -2978,16 +2983,25 @@ public sealed class CombatResolver
             }
 
             int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
+            var neededFromThac0AndAcOnly = member.Thac0 - target.ArmorClass;
             int roll = _dice.Roll(20);
             var wasNaturalTwenty = roll == 20;
 
             if (GameRulesProvider.Current.ShowToHitRoll)
             {
-                var effectiveThac0 = member.Thac0 - thac0Modifier;
-                var weaponAdjText = weaponVsAcAdjustment == 0
+                var weaponAdjText = neededAdjustmentFromWeaponVsAc == 0
                     ? string.Empty
-                    : $" Weapon vs AC adj: {weaponVsAcAdjustment:+#;-#;0}.";
-                events.Add(new CombatEvent($"TO-HIT: {member.Name} THAC0 {effectiveThac0}, {target.DisplayName} AC {target.ArmorClass}, needs {needed} on 1d20, rolled {roll}.{weaponAdjText}"));
+                    : $" Weapon vs AC adj: {neededAdjustmentFromWeaponVsAc}.";
+                var nonProfText = nonProficiencyPenalty > 0
+                    ? $" Non-proficiency penalty: {nonProficiencyPenalty}."
+                    : string.Empty;
+                var neededBreakdownText = string.Empty;
+                if (neededAdjustmentFromWeaponVsAc != 0 || nonProficiencyPenalty > 0)
+                    neededBreakdownText = $" {neededFromThac0AndAcOnly}{(neededAdjustmentFromWeaponVsAc >= 0 ? "+" : string.Empty)}{neededAdjustmentFromWeaponVsAc}{(nonProficiencyPenalty >= 0 ? "+" : string.Empty)}{nonProficiencyPenalty} ={needed}";
+
+                var toHitMessage = $"TO-HIT: {member.Name} THAC0 {member.Thac0},{weaponAdjText}{nonProfText} {target.DisplayName} AC {target.ArmorClass}, needs {needed}{neededBreakdownText} on 1d20, rolled {roll}.";
+                events.Add(new CombatEvent(toHitMessage));
+                RuleApplicationInfo.Publish(toHitMessage);
             }
 
             if (roll < needed)
@@ -3184,6 +3198,18 @@ public sealed class CombatResolver
             var partyDamageModText = partyDamageBonusApplied ? " +1 chant/prayer" : string.Empty;
             events.Add(new CombatEvent(
                 $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}{partyDamageModText}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
+
+            var didSplitFromSlashing = actualDamageToTarget > 0
+                && IsSlashingAttack(mainHand)
+                && MonsterSplitResolver.TryResolveSplit(
+                    session,
+                    target,
+                    actualDamageToTarget,
+                    JellySplitTrigger.Slashing,
+                    message => events.Add(new CombatEvent(message)));
+
+            if (didSplitFromSlashing)
+                break;
 
             if (actualDamageToTarget > 0 && TryResolveMonsterExplosionOnHit(target, session, events))
                 break;
@@ -5678,6 +5704,14 @@ public sealed class CombatResolver
             string.Equals(d.Name?.Trim(), "Half Damage from Sharp Weapons", StringComparison.OrdinalIgnoreCase));
     }
 
+    private static bool IsSlashingAttack(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        return string.Equals(weapon.DamageType?.Trim(), "Slashing", StringComparison.OrdinalIgnoreCase);
+    }
+
     private static bool IsSwordPlusOnePlusTwoVsMagicUsingAndEnchantedCreatures(Item? weapon)
     {
         if (weapon == null || weapon.Type != ItemType.Weapon)
@@ -6014,6 +6048,12 @@ public sealed class CombatResolver
         {
             events.Add(new CombatEvent($"{thrower.Name}'s Javelin of Lightning discharges for 20 electrical damage on {impactTarget.DisplayName}. HP {primaryBefore}->{impactTarget.CurrentHitPoints}."));
             WakeMonsterIfAsleepAfterDamage(impactTarget, primaryLightningDamage, events);
+            MonsterSplitResolver.TryResolveSplit(
+                session,
+                impactTarget,
+                primaryLightningDamage,
+                JellySplitTrigger.Lightning,
+                message => events.Add(new CombatEvent(message)));
         }
 
         var backStrokeTargets = session.GetAliveMonstersByGroup(impactTarget.GroupId)
@@ -6038,7 +6078,13 @@ public sealed class CombatResolver
                 : $"Backstroke lightning rakes {secondary.DisplayName}: save {saveRoll} vs {saveTarget}, takes 20 electrical damage. HP {beforeSecondary}->{secondary.CurrentHitPoints}."));
 
             WakeMonsterIfAsleepAfterDamage(secondary, actualSecondary, events);
-            if (secondary.CurrentHitPoints <= 0)
+            var splitFromLightning = MonsterSplitResolver.TryResolveSplit(
+                session,
+                secondary,
+                actualSecondary,
+                JellySplitTrigger.Lightning,
+                message => events.Add(new CombatEvent(message)));
+            if (!splitFromLightning && secondary.CurrentHitPoints <= 0)
                 events.Add(new CombatEvent($"{secondary.DisplayName} is destroyed by the lightning backstroke."));
         }
 

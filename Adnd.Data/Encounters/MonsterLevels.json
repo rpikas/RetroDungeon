@@ -308,7 +308,7 @@
       },
       {
         "DiceMin": 35,
-        "DiceMax": 99,
+        "DiceMax": 40,
         "Creature": "Gelatinous cube",
         "CountMin": 1,
         "CountMax": 1
@@ -336,7 +336,7 @@
       },
       {
         "DiceMin": 55,
-        "DiceMax": 60,
+        "DiceMax": 99,
         "Creature": "Ochre jelly",
         "CountMin": 1,
         "CountMax": 1

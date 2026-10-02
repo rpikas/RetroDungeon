@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Combat.Resolution;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -38,14 +39,19 @@ public sealed class CallLightningHandler : ISpellEffectHandler
 
         var rolled = rng.Next(1, 7) + rng.Next(1, 7) + rng.Next(1, 7);
 
-        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
-
         var result = new SpellCastResult { Success = true };
+        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
         result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(target.DisplayName, rolled, outcome));
+        var splitFromLightning = MonsterSplitResolver.TryResolveSplit(
+            session,
+            target,
+            outcome.ActualDamage,
+            JellySplitTrigger.Lightning,
+            message => result.Events.Add(message));
         if (SpellDamageSaveHelper.HasImmunityToSomeAttacks(target))
             result.Events.Add($"{target.DisplayName} is immune to electricity.");
-        if (!target.IsAlive)
+        if (!splitFromLightning && !target.IsAlive)
             result.Events.Add($"{target.DisplayName} is struck down.");
 
         result.HpChanges[target.DisplayName] = -outcome.ActualDamage;

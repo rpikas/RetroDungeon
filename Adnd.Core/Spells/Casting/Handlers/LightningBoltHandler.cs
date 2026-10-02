@@ -1,4 +1,5 @@
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Combat.Resolution;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -50,9 +51,17 @@ public sealed class LightningBoltHandler : ISpellEffectHandler
 
             var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome));
+
+            var splitFromLightning = MonsterSplitResolver.TryResolveSplit(
+                session,
+                monster,
+                outcome.ActualDamage,
+                JellySplitTrigger.Lightning,
+                message => result.Events.Add(message));
+
             if (SpellDamageSaveHelper.HasImmunityToSomeAttacks(monster))
                 result.Events.Add($"{monster.DisplayName} is immune to electricity.");
-            if (!monster.IsAlive)
+            if (!splitFromLightning && !monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is electrocuted!");
         }
 

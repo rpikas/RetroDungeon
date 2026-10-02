@@ -165,12 +165,22 @@ public sealed class CombatCoordinator
         _chestTrapTableProvider = new ChestTrapTableProvider(Path.Combine("Data", "Treasure", "chest-traps.json"));
     }
 
-    public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null)
+    public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
     {
         var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount);
         var session = new CombatSession(party, monsters);
         RestorePersistedRoundEffects(session);
-        ResolveEncounterSurprise(session);
+        if (skipSurpriseRoll)
+        {
+            session.PartySurprisedRound1 = false;
+            session.MonstersSurprisedRound1 = false;
+            session.SurpriseResolved = true;
+            session.SurpriseSummary = "No surprise";
+        }
+        else
+        {
+            ResolveEncounterSurprise(session);
+        }
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
@@ -241,7 +251,7 @@ public sealed class CombatCoordinator
         return session.Outcome;
     }
 
-    public CombatOutcome StartEncounterWithGroupCounts(IWin32Window owner, List<(string name, int count)> groups, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null)
+    public CombatOutcome StartEncounterWithGroupCounts(IWin32Window owner, List<(string name, int count)> groups, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
     {
         var normalized = groups
             .Where(g => !string.IsNullOrWhiteSpace(g.name))
@@ -254,7 +264,17 @@ public sealed class CombatCoordinator
         var monsters = _monsterFactory.CreateMultipleGroups(normalized);
         var session = new CombatSession(party, monsters);
         RestorePersistedRoundEffects(session);
-        ResolveEncounterSurprise(session);
+        if (skipSurpriseRoll)
+        {
+            session.PartySurprisedRound1 = false;
+            session.MonstersSurprisedRound1 = false;
+            session.SurpriseResolved = true;
+            session.SurpriseSummary = "No surprise";
+        }
+        else
+        {
+            ResolveEncounterSurprise(session);
+        }
         EncounterStarted?.Invoke(session);
 
         
@@ -300,7 +320,7 @@ public sealed class CombatCoordinator
         return session.Outcome;
     }
 
-    public CombatOutcome StartEncounterWithMultipleGroups(IWin32Window owner, string[] monsterNames, List<Character> party, CharacterRepository characterRepository, MonsterRepository monsterRepository, int? dungeonLevel = null)
+    public CombatOutcome StartEncounterWithMultipleGroups(IWin32Window owner, string[] monsterNames, List<Character> party, CharacterRepository characterRepository, MonsterRepository monsterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
     {
         var groups = new List<(string name, int count)>();
         foreach (var monsterName in monsterNames)
@@ -321,7 +341,17 @@ public sealed class CombatCoordinator
         var monsters = _monsterFactory.CreateMultipleGroups(groups);
         var session = new CombatSession(party, monsters);
         RestorePersistedRoundEffects(session);
-        ResolveEncounterSurprise(session);
+        if (skipSurpriseRoll)
+        {
+            session.PartySurprisedRound1 = false;
+            session.MonstersSurprisedRound1 = false;
+            session.SurpriseResolved = true;
+            session.SurpriseSummary = "No surprise";
+        }
+        else
+        {
+            ResolveEncounterSurprise(session);
+        }
         EncounterStarted?.Invoke(session);
 
         while (session.Outcome == CombatOutcome.InProgress)
