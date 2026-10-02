@@ -59,6 +59,7 @@ public class GameRules
     public int DelayInMsbetweenActions { get; set; } =0;
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
     public bool ShowToHitRoll { get; set; } = false;
+    public bool PlayerSelectsWeaponProficiencies { get; set; } = false;
     public int MaxSizeEncounter { get; set; } = 2;
     public Color ForegroundColor { get; set; } = Color.White;
     [JsonIgnore]

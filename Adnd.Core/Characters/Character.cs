@@ -147,7 +147,10 @@ public class Character
     {
         get
         {
-            var baseThac0 = Thac0 - GetStrengthAttackBonus() - GetMainWeaponToHitBonus();
+            var strengthAttackBonus = HasMonkClass()
+                ? 0
+                : AbilitiesTables.StrengthTHModifier(Abilities.Strength, ExceptionalStrengthPercentile);
+            var baseThac0 = Thac0 - strengthAttackBonus - GetMainWeaponToHitBonus();
 
             if (TryGetDualWieldPenalties(out var mainHandPenalty, out var offHandPenalty))
             {
@@ -161,7 +164,9 @@ public class Character
     }
 
     [JsonIgnore]
-    public int Thac0StrengthModifier => GetStrengthAttackBonus();
+    public int Thac0StrengthModifier => HasMonkClass()
+        ? 0
+        : AbilitiesTables.StrengthTHModifier(Abilities.Strength, ExceptionalStrengthPercentile);
 
     [JsonIgnore]
     public int Thac0ItemModifier => GetMainWeaponToHitBonus();
@@ -1290,42 +1295,6 @@ public class Character
         return Abilities.Strength.ToString();
     }
 
-    private int GetStrengthAttackBonus()
-    {
-        if (HasMonkClass())
-            return 0;
-
-        var str = Abilities.Strength;
-        if (str <= 7) return -2;
-        if (str <= 9) return -1;
-        if (str <= 12) return 0;
-        if (str <= 15) return 1;
-        if (str <= 18)
-        {
-            if (str == 18 && ExceptionalStrengthPercentile.HasValue)
-            {
-                var pct = ExceptionalStrengthPercentile.Value;
-                if (pct <= 75) return 3;
-                if (pct <= 90) return 4;
-                if (pct <= 99) return 5;
-                return 6;
-            }
-
-            return 2;
-        }
-
-        return str switch
-        {
-            19 => 3,
-            20 => 3,
-            21 => 4,
-            22 => 4,
-            23 => 5,
-            24 => 6,
-            _ => 7
-        };
-    }
-
     private int GetStrengthDamageBonus()
     {
         if (HasMonkClass())
@@ -1334,36 +1303,7 @@ public class Character
         if (PotionGiantStrengthActiveUntilDungeonExit && PotionGiantStrengthDamageBonus > 0)
             return PotionGiantStrengthDamageBonus;
 
-        var str = Abilities.Strength;
-        if (str <= 5) return -2;
-        if (str <= 7) return -1;
-        if (str <= 12) return 0;
-        if (str <= 15) return 1;
-        if (str == 16) return 2;
-        if (str <= 18)
-        {
-            if (str == 18 && ExceptionalStrengthPercentile.HasValue)
-            {
-                var pct = ExceptionalStrengthPercentile.Value;
-                if (pct <= 75) return 3;
-                if (pct <= 90) return 4;
-                if (pct <= 99) return 5;
-                return 6;
-            }
-
-            return 3;
-        }
-
-        return str switch
-        {
-            19 => 7,
-            20 => 8,
-            21 => 9,
-            22 => 10,
-            23 => 11,
-            24 => 12,
-            _ => 14
-        };
+        return AbilitiesTables.StrengthDamageModifier(Abilities.Strength, ExceptionalStrengthPercentile);
     }
 
     private string GetDamageDisplay(bool includeItemDamageModifiers = false)

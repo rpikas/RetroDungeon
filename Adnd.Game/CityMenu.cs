@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
@@ -475,7 +476,16 @@ public class CityMenu
         character.EnsureClassProgressions();
         character.RefreshMoveFromArmorAndClass();
         character.RefreshMonkProgressionStats();
-        WeaponProficiencyRules.EnsureAutoProficiencies(character);
+        if (GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
+        {
+            SelectInitialWeaponProficiencies(character, chosenClasses);
+            RuleApplicationInfo.PublishLinked("PHB", "37WeaponProficiency", $"Weapon proficiencies (player-selected): {character.GetWeaponProficienciesDisplay()}.");
+        }
+        else
+        {
+            WeaponProficiencyRules.EnsureAutoProficiencies(character);
+            RuleApplicationInfo.PublishLinked("PHB", "37WeaponProficiency", $"Weapon proficiencies (auto): {character.GetWeaponProficienciesDisplay()}.");
+        }
 
         InitializeSpellcasting(character);
 
@@ -489,7 +499,6 @@ public class CityMenu
         RuleApplicationInfo.Publish($"Final saving throws: Paralyzation/Poison/Death {saveVsParalyzation}, Petrification/Polymorph {saveVsPetrification}, Rod/Staff/Wand {saveVsRodStaffWand}, Breath Weapon {saveVsBreath}, Spell {saveVsSpell}.");
         RuleApplicationInfo.Publish($"Final THAC0: {character.Thac0Display}.");
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
-        RuleApplicationInfo.PublishLinked("PHB", "37WeaponProficiency", $"Weapon proficiencies (auto): {character.GetWeaponProficienciesDisplay()}.");
 
         Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}\n");
 
@@ -503,6 +512,52 @@ public class CityMenu
         else
         {
             Console.WriteLine("Character discarded.");
+        }
+    }
+
+    private static void SelectInitialWeaponProficiencies(Character character, System.Collections.Generic.List<CharacterClass> chosenClasses)
+    {
+        if (character == null)
+            return;
+
+        var primaryClass = chosenClasses.Count > 0 ? chosenClasses[0] : character.Class;
+        var slots = WeaponProficiencyRules.GetInitialProficiencySlots(primaryClass);
+        if (slots <= 0)
+            return;
+
+        var available = WeaponProficiencyRules.GetAllSelectableWeaponsForClass(primaryClass).ToList();
+        if (available.Count == 0)
+            return;
+
+        character.WeaponProficiencies ??= new System.Collections.Generic.List<string>();
+
+        if (primaryClass == CharacterClass.Monk)
+            WeaponProficiencyRules.AddProficiency(character, "Fist or Open Hand");
+
+        Console.WriteLine();
+        Console.WriteLine($"Select {slots} weapon proficienc{(slots == 1 ? "y" : "ies")} for {primaryClass.ToDisplayString()}:");
+
+        for (int pick = 0; pick < slots; pick++)
+        {
+            var already = new HashSet<string>(character.WeaponProficiencies, StringComparer.OrdinalIgnoreCase);
+            var options = available.Where(w => !already.Contains(w)).ToList();
+            if (options.Count == 0)
+                break;
+
+            Console.WriteLine();
+            Console.WriteLine($"Pick {pick + 1} of {slots}:");
+            for (int i = 0; i < options.Count; i++)
+            {
+                var label = (char)('A' + i);
+                Console.WriteLine($"{label}) {options[i]}");
+            }
+
+            Console.Write("Weapon: ");
+            var selected = InputHelper.ReadLetterIndex(options.Count);
+            var idx = selected.HasValue ? Math.Max(0, selected.Value) : 0;
+            var chosenWeapon = options[idx];
+            WeaponProficiencyRules.AddProficiency(character, chosenWeapon);
+            Console.WriteLine($"Selected: {chosenWeapon}");
         }
     }
 

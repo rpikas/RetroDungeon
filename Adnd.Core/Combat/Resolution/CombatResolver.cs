@@ -3232,7 +3232,7 @@ public sealed class CombatResolver
 
             var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
             var strengthDamageBonus = mainHand != null && mainHand.Type == ItemType.Weapon
-                ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength)
+                ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength, member.ExceptionalStrengthPercentile)
                 : 0;
 
             int damage = RollDamage(damageExpression) + strengthDamageBonus;
@@ -5380,7 +5380,8 @@ public sealed class CombatResolver
         ApplyBasicWarriorAttackProgressionAfterLevelDrain(target, newLevel);
         target.RefreshMoveFromArmorAndClass();
         target.RefreshMonkProgressionStats();
-        WeaponProficiencyRules.EnsureAutoProficiencies(target);
+        if (!GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
+            WeaponProficiencyRules.EnsureAutoProficiencies(target);
 
         return true;
     }

@@ -1,4 +1,5 @@
 using Adnd.Core.Spells;
+using Adnd.Core.Config;
 
 namespace Adnd.Core.Characters.Progression;
 
@@ -84,7 +85,15 @@ public sealed class LevelUpService
 
         result.SpellSlotChanges = _spellProgressionService.RecalculateFromClassProgressions(character);
 
-        WeaponProficiencyRules.EnsureAutoProficiencies(character);
+        if (GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
+        {
+            var gainedWeapons = WeaponProficiencyRules.GetLevelGainedWeapons(primaryClass, result.OldLevel, result.NewLevel);
+            result.WeaponProficienciesGained = gainedWeapons.ToList();
+        }
+        else
+        {
+            WeaponProficiencyRules.EnsureAutoProficiencies(character);
+        }
 
         character.RefreshMoveFromArmorAndClass();
         character.RefreshMonkProgressionStats();

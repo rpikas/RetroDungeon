@@ -796,6 +796,13 @@ public sealed class CombatCoordinator
             gain = gatedGain;
 
             var levelResult = _levelUpService.ApplyExperienceAndAutoLevel(survivor, gain, allSpells);
+            if (GameRulesProvider.Current.PlayerSelectsWeaponProficiencies && levelResult.WeaponProficienciesGained.Count > 0)
+            {
+                var primaryClass = survivor.Classes.Count > 0 ? survivor.Classes[0] : survivor.Class;
+                var selectedWeapons = PromptSelectWeaponProficienciesOnLevelUp(owner, session, survivor, primaryClass, levelResult.WeaponProficienciesGained.Count);
+                levelResult.WeaponProficienciesGained = selectedWeapons;
+            }
+
             _dualClassService.UpdateStateAfterLevelGain(survivor);
             _dualClassService.ResetAdventureFlag(survivor);
             levelUpResults.Add(levelResult);
@@ -1026,10 +1033,168 @@ public sealed class CombatCoordinator
                 {
                     sb.AppendLine($"    Spells learned: {string.Join(", ", r.SpellsLearned)}");
                 }
+
+                if (r.WeaponProficienciesGained.Count > 0)
+                {
+                    sb.AppendLine($"    Weapon proficiencies gained: {string.Join(", ", r.WeaponProficienciesGained)}");
+                }
             }
         }
 
         Say(owner, "Combat Rewards", sb.ToString(), session);
+    }
+
+    private List<string> PromptSelectWeaponProficienciesOnLevelUp(
+        IWin32Window owner,
+        CombatSession session,
+        Character character,
+        CharacterClass primaryClass,
+        int slotsToChoose)
+    {
+        var selected = new List<string>();
+        if (slotsToChoose <= 0)
+            return selected;
+
+        var allOptions = WeaponProficiencyRules.GetAllSelectableWeaponsForClass(primaryClass)
+            .Where(w => !string.IsNullOrWhiteSpace(w))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (allOptions.Count == 0)
+            return selected;
+
+        for (int pick = 0; pick < slotsToChoose; pick++)
+        {
+            var existing = new HashSet<string>(character.WeaponProficiencies ?? new List<string>(), StringComparer.OrdinalIgnoreCase);
+            foreach (var s in selected)
+                existing.Add(s);
+
+            var options = allOptions
+                .Where(w => !existing.Contains(w))
+                .ToList();
+
+            if (options.Count == 0)
+                break;
+
+            var chosen = PromptSelectWeaponProficiency(owner, session, character, primaryClass, options, pick + 1, slotsToChoose);
+            if (string.IsNullOrWhiteSpace(chosen))
+                chosen = options[0];
+
+            if (WeaponProficiencyRules.AddProficiency(character, chosen))
+            {
+                RuleApplicationInfo.PublishLinked("PHB", "37WeaponProficiency", $"{character.Name} gained weapon proficiency: {chosen}.");
+            }
+
+            selected.Add(chosen);
+        }
+
+        return selected;
+    }
+
+    private string PromptSelectWeaponProficiency(
+        IWin32Window owner,
+        CombatSession session,
+        Character character,
+        CharacterClass primaryClass,
+        List<string> options,
+        int pickNumber,
+        int totalPicks)
+    {
+        if (options.Count == 0)
+            return string.Empty;
+
+        using var form = new Form
+        {
+            Text = "Weapon Proficiency",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(900, 460),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 12,
+            Width = framePanel.ClientSize.Width,
+            Height = 28,
+            Text = "WEAPON PROFICIENCY",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 16f, FontStyle.Bold)
+        };
+
+        var lines = options
+            .Take(26)
+            .Select((w, i) => $"{(char)('A' + i)}) {w}")
+            .ToList();
+
+        var body = new Label
+        {
+            Left = 16,
+            Top = 48,
+            Width = framePanel.ClientSize.Width - 32,
+            Height = framePanel.ClientSize.Height - 72,
+            Text = $"{character.Name} ({primaryClass.ToDisplayString()}) reached a new level.{Environment.NewLine}"
+                 + $"Select weapon proficiency {pickNumber} of {totalPicks}:{Environment.NewLine}{Environment.NewLine}"
+                 + string.Join(Environment.NewLine, lines)
+                 + Environment.NewLine + Environment.NewLine
+                 + "B)ack",
+            TextAlign = ContentAlignment.TopLeft,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 11f, FontStyle.Bold)
+        };
+
+        string chosen = string.Empty;
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.B)
+            {
+                form.DialogResult = DialogResult.Cancel;
+                form.Close();
+                return;
+            }
+
+            var keyValue = (int)e.KeyCode;
+            if (keyValue >= (int)Keys.A && keyValue <= (int)Keys.Z)
+            {
+                var idx = keyValue - (int)Keys.A;
+                if (idx >= 0 && idx < lines.Count)
+                {
+                    chosen = options[idx];
+                    form.DialogResult = DialogResult.OK;
+                    form.Close();
+                }
+            }
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(body);
+        form.Controls.Add(framePanel);
+
+        var result = form.ShowDialog(owner);
+
+        if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(chosen))
+            return chosen;
+
+        return string.Empty;
     }
 
 

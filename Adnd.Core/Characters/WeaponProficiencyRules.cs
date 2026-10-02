@@ -59,6 +59,84 @@ public static class WeaponProficiencyRules
             [(3, "Spear"), (5, "Club"), (7, "Dart"), (9, "Sling"), (11, "Jo-stick"), (13, "Hand Axe (Thrown)"), (15, "Quarterstaff"), (17, "Light Crossbow")])
     };
 
+    public static int GetInitialProficiencySlots(CharacterClass cls)
+    {
+        return Profiles.TryGetValue(cls, out var profile)
+            ? Math.Max(0, profile.InitialCount)
+            : 0;
+    }
+
+    public static IReadOnlyList<string> GetLevelGainedWeapons(CharacterClass cls, int oldLevel, int newLevel)
+    {
+        if (!Profiles.TryGetValue(cls, out var profile))
+            return Array.Empty<string>();
+
+        if (newLevel <= oldLevel)
+            return Array.Empty<string>();
+
+        var gained = profile.LevelWeaponGains
+            .Where(g => g.Level > oldLevel && g.Level <= newLevel)
+            .Select(g => CanonicalizeProficiencyName(g.Weapon))
+            .Where(w => !string.IsNullOrWhiteSpace(w))
+            .ToList();
+
+        return gained;
+    }
+
+    public static int GetLevelGainedWeaponCount(CharacterClass cls, int oldLevel, int newLevel)
+    {
+        if (!Profiles.TryGetValue(cls, out var profile))
+            return 0;
+
+        if (newLevel <= oldLevel)
+            return 0;
+
+        return profile.LevelWeaponGains.Count(g => g.Level > oldLevel && g.Level <= newLevel);
+    }
+
+    public static IReadOnlyList<string> GetAllSelectableWeaponsForClass(CharacterClass cls)
+    {
+        if (!Profiles.TryGetValue(cls, out var profile))
+            return Array.Empty<string>();
+
+        var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var weapon in profile.StartingWeapons)
+            set.Add(CanonicalizeProficiencyName(weapon));
+
+        foreach (var gain in profile.LevelWeaponGains)
+            set.Add(CanonicalizeProficiencyName(gain.Weapon));
+
+        if (cls == CharacterClass.Monk)
+            set.Add(CanonicalizeProficiencyName("Fist or Open Hand"));
+
+        return set
+            .Where(w => !string.IsNullOrWhiteSpace(w))
+            .OrderBy(w => w)
+            .ToList();
+    }
+
+    public static bool AddProficiency(Character character, string weaponName)
+    {
+        if (character == null || string.IsNullOrWhiteSpace(weaponName))
+            return false;
+
+        var canonical = CanonicalizeProficiencyName(weaponName);
+        if (string.IsNullOrWhiteSpace(canonical))
+            return false;
+
+        character.WeaponProficiencies ??= new List<string>();
+        var set = new HashSet<string>(character.WeaponProficiencies, StringComparer.OrdinalIgnoreCase)
+        {
+            canonical
+        };
+
+        var changed = set.Count != character.WeaponProficiencies.Count;
+        if (changed)
+            character.WeaponProficiencies = set.ToList();
+
+        return changed;
+    }
+
     public static bool EnsureAutoProficiencies(Character character)
     {
         if (character == null)

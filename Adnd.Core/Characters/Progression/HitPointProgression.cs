@@ -99,15 +99,6 @@ public static class HitPointProgression
     private static int GetConstitutionHpAdjustment(int con, CharacterClass cls)
     {
         bool warrior = cls is CharacterClass.Fighter or CharacterClass.Paladin or CharacterClass.Ranger;
-
-        return con switch
-        {
-            <= 6 => -1,
-            <= 14 => 0,
-            15 => 1,
-            16 => 2,
-            17 => warrior ? 3 : 2,
-            _ => warrior ? 4 : 2
-        };
+        return AbilitiesTables.ConstitutionHpBonus(con, warrior);
     }
 }

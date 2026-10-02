@@ -6,6 +6,7 @@ using Adnd.Data.Party;
 using Adnd.Data.Items;
 using Adnd.Core.Characters;
 using Adnd.Core.Characters.Progression;
+using Adnd.Core.Config;
 using Adnd.Core.Items;
 
 namespace Adnd.Data.Characters;
@@ -48,7 +49,9 @@ public class CharacterRepository
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
                 NormalizeAttackCadence(c);
-                var proficiencyChanged = WeaponProficiencyRules.EnsureAutoProficiencies(c);
+                var proficiencyChanged = false;
+                if (!GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
+                    proficiencyChanged = WeaponProficiencyRules.EnsureAutoProficiencies(c);
                 var abilityScoresChanged = NormalizeAbilityScoresByRaceGender(c);
                 HydrateWeaponDamageVsLarge(c, itemLookup);
 
