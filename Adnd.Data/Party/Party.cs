@@ -15,5 +15,7 @@ public class Party
     public List<string> Members { get; set; } = new();
     // Index of the member currently shopping. -1 means none selected.
     public int CurrentShopperIndex { get; set; } = -1;
+    // Number of dungeon days completed (incremented when leaving the dungeon).
+    public int DungeonDaysElapsed { get; set; } = 0;
 }
 

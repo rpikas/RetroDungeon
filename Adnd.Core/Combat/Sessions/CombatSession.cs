@@ -39,6 +39,8 @@ public sealed class CombatSession
     public Dictionary<string, List<int>> ThunderboltsThrowRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ThunderboltsRestRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> DrainBloodRemaining { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> DrainBloodDieSides { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, string> DrainBloodEffectNames { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -730,18 +732,39 @@ public sealed class CombatSession
 
     public void SetPartyDrainBlood(string characterName, int totalToDrain)
     {
+        SetPartyDrainBlood(characterName, totalToDrain, 4, "Drain Blood");
+    }
+
+    public void SetPartyDrainBlood(string characterName, int totalToDrain, int dieSides, string effectName)
+    {
         if (totalToDrain <= 0)
         {
             DrainBloodRemaining.Remove(characterName);
+            DrainBloodDieSides.Remove(characterName);
+            DrainBloodEffectNames.Remove(characterName);
             return;
         }
 
         DrainBloodRemaining[characterName] = totalToDrain;
+        DrainBloodDieSides[characterName] = Math.Max(1, dieSides);
+        DrainBloodEffectNames[characterName] = string.IsNullOrWhiteSpace(effectName) ? "Drain Blood" : effectName.Trim();
     }
 
     public int GetPartyDrainBloodRemaining(string characterName)
     {
         return DrainBloodRemaining.TryGetValue(characterName, out var remaining) ? Math.Max(0, remaining) : 0;
+    }
+
+    public int GetPartyDrainBloodDieSides(string characterName)
+    {
+        return DrainBloodDieSides.TryGetValue(characterName, out var dieSides) ? Math.Max(1, dieSides) : 4;
+    }
+
+    public string GetPartyDrainBloodEffectName(string characterName)
+    {
+        return DrainBloodEffectNames.TryGetValue(characterName, out var effectName) && !string.IsNullOrWhiteSpace(effectName)
+            ? effectName
+            : "Drain Blood";
     }
 
     public int ConsumePartyDrainBlood(string characterName, int attemptedDrain)
@@ -753,7 +776,11 @@ public sealed class CombatSession
         remaining -= actual;
 
         if (remaining <= 0)
+        {
             DrainBloodRemaining.Remove(characterName);
+            DrainBloodDieSides.Remove(characterName);
+            DrainBloodEffectNames.Remove(characterName);
+        }
         else
             DrainBloodRemaining[characterName] = remaining;
 

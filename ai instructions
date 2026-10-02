@@ -3451,10 +3451,11 @@ Weapon vs AC adj: 1. is correct since tht is the adjustment club should get on a
           "Description": "Slashing or lightning attacks divide the jelly into two smaller jellies doing 1d6 damage each"
        5,3
 
-
         Rename "Special attack" blood drain to Stirge Blood drain.
 
-              "SpecialAttacks": [
+
+Tick
+ "SpecialAttacks": [
         {
           "Name": "Tick Blood Drain",
           "Description": "After attaching, drains 1–6 HP per round until total drained equals its hit points."
@@ -3463,3 +3464,75 @@ Weapon vs AC adj: 1. is correct since tht is the adjustment club should get on a
           "Name": "Tick Disease",
           "Description": "50% chance of contracting a fatal disease; victim dies in 2–8 days unless cured."
         }
+
+Wight
+"SpecialAttacks": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Target loses 1 level unless save vs death."
+        },
+SpecialDefenses {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold."
+        }6,5
+
+
+Spider large
+"SpecialAttacks": [
+        {
+          "Name": "Weak Poison",
+          "Description": "Victim must save vs poison at +2 or suffer effects."
+
+Huge Spider Poison
+"SpecialAttacks": [
+        {
+          "Name": "Huge Spider Poison",
+          "Description": "Victim must save vs poison at +1 or suffer effects."
+
+Shadow
+"SpecialAttacks": [
+{ "Name": "Strength Drain", "Description": "Victim loses 1 points of Strength; if reduced to 0, they die." }
+original strength will return when exiting the dungeon.
+
+"SpecialDefenses": [
+        {
+          "Name": "Hit only by magic weapons",
+          "Description": "Shadow can only be harmed by magic weapons."
+        },
+
+Rust monser
+              "SpecialAttacks": [
+        {
+          "Name": "Destroy Metal",
+          "Description": "Touch with antennae rusts or corrodes metal instantly; magical items gain a saving throw."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit on Monster Destroys Metal",
+          "Description": "Weapons striking the rust monster corrode as if touched by its antennae."
+        }
+
+        var 30 dag som man går ner i grottan är det fullmåne, skriv att det är fullmåne då i en dialog med retro design.
+        8,6
+
+Lycanthrope, Wererat
+Implementera "SpecialAttacks": [
+        {
+                  "Name": "Lycanthropy",
+          "Description": "Victims bitten must save vs. lycanthropy or become wererats."
+          En humanoid som får ett bett som gör ≥50% av max HP blir smittad.
+          Cure Disease från en cleric level 12 eller högre måste ske inom 3 dagar annars blir det permanent och personen blir lykanthrop inom 7-14 dagar.
+          varje gång man går ner i en grotta går det en dag.
+          efter att personen blivit lykanthrop så triggas det av att man tar skada eller att det är fullmåne när man går ner i en grotta.
+          när man blir helad från sin skada eller går upp ur grottan försvinner förvandlingen berorande på vad som triggat den.
+          när man är en lycanthrop så får man samma alignment som den typ av lycanthrop som skadade en.
+          när man är en lycanthrop kan man inte attakera andra lycanthroper.
+          när man är en lycanthrop så kan man inte kasta spells eller använda sina klass egenskaper som t ex paladins och monks har.
+          när man är en lycanthrop så kan man inte bli skadad av vanliga vapen som inte silver eller är magiska eller +1 eller bättre.
+          när man är en lycanthrop så har man 3d8 extra i hp och ac blir 4.
+          när man är en lycanthrop så kan man inte använda vapen men har tre attacker 2 claw 1d4 och 1 bite 2d5 i skada varje runda.
+
+          when a weapon that is wielded, rusts and diesapears also make sure that the damage the charater gives untill equipping a new weapon is the 
+          same as for bare hands.
+          

@@ -123,7 +123,43 @@ internal static class SpellDamageSaveHelper
     internal static bool IsNegatedByMindAffectingImmunity(MonsterInstance monster, string? spellIdOrName)
     {
         return (HasMindAffectingImmunity(monster) && IsMindAffectingSpell(spellIdOrName))
+               || (HasUndeadTraitsCharmSleepHoldImmunity(monster) && IsCharmSleepHoldSpell(spellIdOrName))
                || (HasImmunityToSomeAttacks(monster) && IsSomeAttackImmunitySpell(spellIdOrName));
+    }
+
+    private static bool HasUndeadTraitsCharmSleepHoldImmunity(MonsterInstance monster)
+    {
+        bool Matches(string? name, string? description)
+        {
+            var n = name?.Trim() ?? string.Empty;
+            var d = description?.Trim() ?? string.Empty;
+            var merged = $"{n} {d}".ToLowerInvariant();
+
+            if (string.Equals(n, "Undead Traits", StringComparison.OrdinalIgnoreCase)
+                && merged.Contains("immune", StringComparison.Ordinal)
+                && merged.Contains("charm", StringComparison.Ordinal)
+                && merged.Contains("sleep", StringComparison.Ordinal)
+                && merged.Contains("hold", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        return monster.Template.SpecialAbilities.Any(a => Matches(a.Name, a.Description))
+               || monster.Template.SpecialDefenses.Any(d => Matches(d.Name, d.Description));
+    }
+
+    private static bool IsCharmSleepHoldSpell(string? spellIdOrName)
+    {
+        if (string.IsNullOrWhiteSpace(spellIdOrName))
+            return false;
+
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("charm", StringComparison.Ordinal)
+               || key.Contains("sleep", StringComparison.Ordinal)
+               || key.Contains("hold", StringComparison.Ordinal);
     }
 
     internal static bool HasImmunityToSomeAttacks(MonsterInstance monster)

@@ -639,6 +639,7 @@ public sealed class EncounterForm : Form
             return null;
 
         var character = _party[_currentIndex];
+        var isLycanthropeTransformed = character.HasStatus(CharacterStatus.LycanthropeTransformed);
         var rank = GetActionableRank(_currentIndex);
         var options = new List<ViewerPromptOption>();
 
@@ -684,14 +685,16 @@ public sealed class EncounterForm : Form
         if (rank is < 1 or > 3)
             options.Add(new ViewerPromptOption("confirm", "Auto: parry"));
 
-        options.Add(new ViewerPromptOption("spell", "Cast a spell"));
-        if (CanUseDispellUndead(character))
+        if (!isLycanthropeTransformed)
+            options.Add(new ViewerPromptOption("spell", "Cast a spell"));
+        if (!isLycanthropeTransformed && CanUseDispellUndead(character))
             options.Add(new ViewerPromptOption("dispellUndead", "Dispell undead"));
-        if (character.IsPaladin())
+        if (!isLycanthropeTransformed && character.IsPaladin())
             options.Add(new ViewerPromptOption("layOnHands", character.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
-        if (CanUseMonkBodyHeal(character))
+        if (!isLycanthropeTransformed && CanUseMonkBodyHeal(character))
             options.Add(new ViewerPromptOption("monkBodyHeal", character.MonkBodyHealUsedToday ? "Body Heal (used today)" : "Body Heal"));
-        options.Add(new ViewerPromptOption("useItem", "Use an item"));
+        if (!isLycanthropeTransformed)
+            options.Add(new ViewerPromptOption("useItem", "Use an item"));
         options.Add(new ViewerPromptOption("run", "Run"));
         options.Add(new ViewerPromptOption("info", "Info"));
 
@@ -2338,6 +2341,7 @@ public sealed class EncounterForm : Form
         && !c.HasStatus(CharacterStatus.Dead)
         && !c.HasStatus(CharacterStatus.Paralyzed)
         && !c.HasStatus(CharacterStatus.Asleep);
+
 
     private int GetActionableRank(int partyIndex)
     {

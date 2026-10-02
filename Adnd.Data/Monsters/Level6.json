@@ -1155,6 +1155,92 @@
     },
 
     {
+      "Name": "Troll",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 6,
+      "%InLair": "40",
+      "TreasureType": "D",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Clawed Forelimb",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        },
+        {
+          "Name": "Clawed Forelimb",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        },
+        {
+          "Name": "Great Teeth",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 3 hit points per round; only fire or acid prevents regeneration."
+        },
+        {
+          "Name": "Surprise Resistance",
+          "Description": "Surprised only on a roll of 1."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Strength": 21,
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Large",
+      "BaseXPValue": 525,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity."
+    },
+    {
+      "Name": "Wight",
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitPoints": 20,
+      "Movement": 30,
+      "Attacks": [
+        {
+          "Name": "Energy Drain Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Target loses 1 level unless save vs death."
+        }
+
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold."
+        }
+      ],
+      "BaseXPValue": 175,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "D",
+      "Source": "Adnd"
+    },
+
+    {
       "Name": "Level 4 Thief",
       "Type": "Humanoid",
       "NumberOfAppearancesMin": 1,

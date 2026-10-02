@@ -8,6 +8,7 @@ using Adnd.Core.Diagnostics;
 using Adnd.Core.Dices;
 using Adnd.Core.Items;
 using Adnd.Core.Monsters;
+using Adnd.Core.Characters.Progression;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
@@ -339,7 +340,9 @@ public sealed class CombatResolver
             var drainRemaining = session.GetPartyDrainBloodRemaining(member.Name);
             if (drainRemaining > 0)
             {
-                var drainRoll = _dice.Roll(4);
+                var drainDieSides = session.GetPartyDrainBloodDieSides(member.Name);
+                var drainEffectName = session.GetPartyDrainBloodEffectName(member.Name);
+                var drainRoll = _dice.Roll(drainDieSides);
                 var drainAmount = session.ConsumePartyDrainBlood(member.Name, drainRoll);
                 if (drainAmount > 0)
                 {
@@ -349,7 +352,7 @@ public sealed class CombatResolver
                     WakeCharacterIfAsleepAfterDamage(member, actualDrain, events);
 
                     var remainingAfter = session.GetPartyDrainBloodRemaining(member.Name);
-                    events.Add(new CombatEvent($"{member.Name} suffers Drain Blood for {actualDrain} (rolled {drainRoll}). Remaining drain: {remainingAfter}. HP {beforeHp}->{member.CurrentHitPoints}."));
+                    events.Add(new CombatEvent($"{member.Name} suffers {drainEffectName} for {actualDrain} (rolled {drainRoll} on 1d{drainDieSides}). Remaining drain: {remainingAfter}. HP {beforeHp}->{member.CurrentHitPoints}."));
 
                     if (member.CurrentHitPoints <= 0)
                     {
@@ -454,6 +457,7 @@ public sealed class CombatResolver
                         events.Add(new CombatEvent($"{member.Name}'s Barkskin fades (+{bonus} AC removed)."));
                     }
                 }
+            }
 
             var hasteRounds = session.GetHasteRounds(member.Name);
             if (hasteRounds > 0)
@@ -468,7 +472,6 @@ public sealed class CombatResolver
                     session.ClearHaste(member.Name);
                     events.Add(new CombatEvent($"{member.Name}'s Haste fades."));
                 }
-            }
             }
 
             var strengthRounds = session.GetStrengthBuffRounds(member.Name);
@@ -658,6 +661,12 @@ public sealed class CombatResolver
                     ResolvePartyUseItem(session, member, action, events);
                     break;
                 case CombatActionType.DispellUndead:
+                    if (member.HasStatus(CharacterStatus.LycanthropeTransformed))
+                    {
+                        events.Add(new CombatEvent($"{member.Name} is transformed by lycanthropy and cannot use class abilities."));
+                        break;
+                    }
+
                     if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
                     {
                         session.BreakChant();
@@ -1376,10 +1385,26 @@ public sealed class CombatResolver
                             events.Add(new CombatEvent($"{monster.DisplayName} rolled a natural 20: Double Damage on Natural 20 ({beforeDouble}->{damage})."));
                         }
 
+                        if (target.HasStatus(CharacterStatus.LycanthropeTransformed)
+                            && !CanMonsterHarmLycanthropeForm(monster))
+                        {
+                            events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name}, but lycanthrope form ignores non-silver, non-magical attacks."));
+                            continue;
+                        }
+
                         target.CurrentHitPoints -= damage;
                         var enemyDamageModText = enemyDamagePenaltyApplied ? " (chant/prayer -1 damage)" : string.Empty;
                         events.Add(new CombatEvent($"{monster.DisplayName} hits {target.Name} with {attack.Name} for {damage}.{enemyDamageModText}"));
                         WakeCharacterIfAsleepAfterDamage(target, damage, events);
+
+                        if (damage > 0
+                            && target.CanBecomeLycanthropeNow()
+                            && target.TriggerLycanthropeTransformationByDamage())
+                        {
+                            events.Add(new CombatEvent($"{target.Name} transforms into lycanthrope form after taking damage!"));
+                        }
+
+                        TryApplyDestroyMetalOnMonsterHit(monster, target, events);
 
                         if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, target.Name, StringComparison.OrdinalIgnoreCase) && damage > 0)
                         {
@@ -1396,13 +1421,17 @@ public sealed class CombatResolver
                         }
                         else
                         {
+                            TryApplyLycanthropy(monster, target, attack.Name, damage, events);
                             TryApplyEarSeekerDisease(monster, target, events);
                             TryApplyInfestation(monster, target, events);
+                            TryApplyTickDisease(monster, target, events);
+                            TryApplyEnergyDrain(monster, target, session, events);
+                            TryApplyStrengthDrain(monster, target, events);
                             TryApplyDrainBlood(monster, target, session, events);
                             TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
 
-                            if (HasSpecialAbility(monster, "Poison"))
+                            if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison"))
                             {
                                 if (target.IsMonkImmuneToPoison())
                                 {
@@ -1416,19 +1445,28 @@ public sealed class CombatResolver
                                     var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
                                         target,
                                         _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+                                    var isWeakPoison = HasSpecialAbility(monster, "Weak Poison");
+                                    var isHugeSpiderPoison = HasSpecialAbility(monster, "Huge Spider Poison");
+                                    var poisonSaveBonus = isWeakPoison ? 2 : isHugeSpiderPoison ? 1 : 0;
+                                    if (poisonSaveBonus > 0)
+                                        saveTarget = Math.Max(1, saveTarget - poisonSaveBonus);
                                     if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
                                         saveTarget = Math.Max(1, saveTarget - 1);
                                     var saveRoll = _dice.Roll(20);
                                     if (saveRoll >= saveTarget)
                                     {
-                                        var resistMessage = $"{target.Name} resists poison (save {saveRoll} vs {saveTarget}).";
+                                        var resistMessage = poisonSaveBonus > 0
+                                            ? $"{target.Name} resists {(isWeakPoison ? "weak poison" : "huge spider poison")} (save {saveRoll} vs {saveTarget}, +{poisonSaveBonus} save bonus)."
+                                            : $"{target.Name} resists poison (save {saveRoll} vs {saveTarget}).";
                                         events.Add(new CombatEvent(resistMessage));
                                         RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", resistMessage);
                                     }
                                     else if (!target.HasStatus(CharacterStatus.Poisoned))
                                     {
                                         target.AddStatus(CharacterStatus.Poisoned);
-                                        var failedPoisonSaveMessage = $"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})";
+                                        var failedPoisonSaveMessage = poisonSaveBonus > 0
+                                            ? $"{target.Name} is poisoned by {(isWeakPoison ? "weak poison" : "huge spider poison")} from {monster.DisplayName}! (save {saveRoll} vs {saveTarget}, +{poisonSaveBonus} save bonus)"
+                                            : $"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})";
                                         events.Add(new CombatEvent(failedPoisonSaveMessage));
                                         RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", failedPoisonSaveMessage);
                                     }
@@ -1480,6 +1518,12 @@ public sealed class CombatResolver
 
     private void ResolvePartySpell(CombatSession session, Character caster, CombatAction action, List<CombatEvent> events)
     {
+        if (caster.HasStatus(CharacterStatus.LycanthropeTransformed))
+        {
+            events.Add(new CombatEvent($"{caster.Name} is transformed by lycanthropy and cannot cast spells."));
+            return;
+        }
+
         if (caster.BreakRingInaudibilityForSpeaking())
             events.Add(new CombatEvent($"{caster.Name} speaks and loses ring inaudibility."));
 
@@ -2443,6 +2487,12 @@ public sealed class CombatResolver
 
     private static void ResolveLayOnHands(CombatSession session, Character paladin, CombatAction action, List<CombatEvent> events)
     {
+        if (paladin.HasStatus(CharacterStatus.LycanthropeTransformed))
+        {
+            events.Add(new CombatEvent($"{paladin.Name} is transformed by lycanthropy and cannot use Lay on Hands."));
+            return;
+        }
+
         if (!paladin.IsPaladin())
         {
             events.Add(new CombatEvent($"{paladin.Name} cannot use Lay on Hands."));
@@ -2716,12 +2766,109 @@ public sealed class CombatResolver
         return 1;
     }
 
+    private bool TryResolveLycanthropeCharacterAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
+    {
+        if (!member.HasStatus(CharacterStatus.LycanthropeTransformed))
+            return false;
+
+        MonsterInstance? target = null;
+
+        if (!string.IsNullOrEmpty(action.TargetMonsterId))
+        {
+            var named = session.FindMonster(action.TargetMonsterId);
+            if (named != null && named.IsAlive)
+                target = named;
+        }
+
+        if (target is null && action.SpreadTargets)
+        {
+            var spreadable = (string.IsNullOrEmpty(action.TargetGroupId)
+                    ? session.AliveMonsters
+                    : session.GetAliveMonstersByGroup(action.TargetGroupId))
+                .ToList();
+
+            if (spreadable.Count > 0)
+            {
+                var at = ((session.SpreadCursor % spreadable.Count) + spreadable.Count) % spreadable.Count;
+                target = spreadable[at];
+                session.SpreadCursor = at + 1;
+            }
+        }
+
+        if (target is null && !string.IsNullOrEmpty(action.TargetGroupId))
+        {
+            var groupMonsters = session.GetAliveMonstersByGroup(action.TargetGroupId).ToList();
+            if (groupMonsters.Count > 0)
+                target = groupMonsters.First();
+        }
+
+        target ??= session.AliveMonsters.FirstOrDefault();
+        if (target is null)
+            return true;
+
+        if (IsLycanthropeMonster(target))
+        {
+            events.Add(new CombatEvent($"{member.Name} is a lycanthrope and refuses to attack {target.DisplayName}."));
+            return true;
+        }
+
+        var thac0Modifier = (session.IsBlessed(member.Name) ? 1 : 0) + ((session.IsChantActive || session.IsPrayerActive) ? 1 : 0);
+        var attacks = 3;
+
+        for (var attackIndex = 0; attackIndex < attacks; attackIndex++)
+        {
+            if (!target.IsAlive)
+                break;
+
+            var roll = _dice.Roll(20);
+            var needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
+            if (roll == 1 || (roll != 20 && roll < needed))
+            {
+                var attackNameMiss = attackIndex < 2 ? "claw" : "bite";
+                events.Add(new CombatEvent($"{member.Name} misses {target.DisplayName} with {attackNameMiss}."));
+                continue;
+            }
+
+            var damageExpression = attackIndex < 2 ? "1d4" : "2d5";
+            var before = target.CurrentHitPoints;
+            var damage = RollDamage(damageExpression);
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            var attackName = attackIndex < 2 ? "claw" : "bite";
+            events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} with {attackName} ({damageExpression}) for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
+            WakeMonsterIfAsleepAfterDamage(target, actual, events);
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                events.Add(new CombatEvent($"{target.DisplayName} is destroyed."));
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool IsLycanthropeMonster(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        var name = monster.Template.Name ?? string.Empty;
+        var typeName = monster.Template.TypeName ?? string.Empty;
+        return name.Contains("Lycanthrope", StringComparison.OrdinalIgnoreCase)
+               || typeName.Contains("Lycanthrope", StringComparison.OrdinalIgnoreCase)
+               || HasAnySpecialAbility(monster, "Lycanthropy");
+    }
+
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
         var chantOrPrayerBonus = (session.IsChantActive || session.IsPrayerActive) ? 1 : 0;
 
         if (member.BreakRingInvisibilityOnHostileAction())
             events.Add(new CombatEvent($"{member.Name}'s ring invisibility breaks on attack."));
+
+        if (member.HasStatus(CharacterStatus.LycanthropeTransformed) && TryResolveLycanthropeCharacterAttack(session, member, action, events))
+            return;
 
         var rangedWeapon = member.Equipment.TryGetValue(EquipmentSlot.Range, out var rw) ? rw : null;
         var ammo = member.Equipment.TryGetValue(EquipmentSlot.Ammo, out var am) ? am : null;
@@ -3068,6 +3215,8 @@ public sealed class CombatResolver
                 if (target.CurrentHitPoints <= 0)
                     break;
             }
+
+            TryApplyHitOnMonsterDestroysMetal(member, target, mainHand, events);
 
             if (!CanWeaponHarmTargetByMagicRequirement(mainHand, target))
             {
@@ -5040,9 +5189,425 @@ public sealed class CombatResolver
         events.Add(new CombatEvent($"{target.Name} suffers infestation by {monster.DisplayName}: rhizomes penetrate flesh. Cure Disease is required within 24 hours or death will occur."));
     }
 
+    private void TryApplyTickDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Tick Disease"))
+            return;
+
+        var diseaseRoll = _dice.Roll(100);
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Tick Disease",
+            $"{monster.DisplayName} tick disease check after hit on {target.Name}",
+            "Roll 1d100. Result 1-50 means fatal tick disease is contracted.",
+            "1",
+            "100",
+            diseaseRoll.ToString(),
+            diseaseRoll <= 50
+                ? "Result is within 1-50, tick disease is contracted."
+                : "Result is outside 1-50, no tick disease.");
+
+        if (diseaseRoll > 50)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} carries Tick Disease. Infection roll: {diseaseRoll} on 1d100 (needs 1-50)."));
+            return;
+        }
+
+        if (target.IsMonkImmuneToDiseaseSlowHaste())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to disease from {monster.DisplayName}. (Tick Disease roll: {diseaseRoll} on 1d100, needs 1-50)"));
+            return;
+        }
+
+        if (target.TickDiseaseDeathDaysRemaining > 0)
+        {
+            events.Add(new CombatEvent($"{target.Name} is hit by {monster.DisplayName}, but Tick Disease is already active ({target.TickDiseaseDeathDaysRemaining} day(s) until death unless cured)."));
+            return;
+        }
+
+        var deathInDays = _dice.Roll(7) + 1;
+        target.ApplyTickDisease(deathInDays);
+        events.Add(new CombatEvent($"{target.Name} contracts Tick Disease from {monster.DisplayName}! Fatal disease will kill in {deathInDays} day(s) unless cured (infection roll: {diseaseRoll} on 1d100, needs 1-50)."));
+    }
+
+    private void TryApplyLycanthropy(MonsterInstance monster, Character target, string? attackName, int biteDamage, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Lycanthropy"))
+            return;
+
+        if (string.IsNullOrWhiteSpace(attackName)
+            || !attackName.Contains("bite", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        var isHumanoidVictim = target.Race is Race.Human or Race.Elf or Race.Dwarf or Race.Gnome or Race.Halfling or Race.HalfElf or Race.HalfOrc;
+        if (!isHumanoidVictim)
+            return;
+
+        if (target.IsMonkImmuneToDiseaseSlowHaste())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to lycanthropy disease from {monster.DisplayName}."));
+            return;
+        }
+
+        var hpThreshold = (int)Math.Ceiling(Math.Max(1, target.MaxHitPoints) * 0.5);
+        if (biteDamage < hpThreshold)
+            return;
+
+        if (target.LycanthropyInfected)
+        {
+            events.Add(new CombatEvent($"{target.Name} is bitten by {monster.DisplayName}, but lycanthropy infection is already active."));
+            return;
+        }
+
+        var onsetDays = _dice.Roll(8) + 6; // 7-14
+        var sourceType = string.IsNullOrWhiteSpace(monster.Template.Name) ? "Lycanthrope" : monster.Template.Name;
+        var sourceAlignment = ParseAlignmentOrFallback(monster.Template.Alignment, target.Alignment);
+        target.InfectWithLycanthropy(sourceType, sourceAlignment, onsetDays);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Lycanthropy",
+            $"{monster.DisplayName} lycanthropy check after bite on {target.Name}",
+            "A humanoid bitten for at least 50% of max HP is infected. Cure Disease from cleric level 12+ must occur within 3 days. Otherwise infection becomes permanent, and onset occurs in 7-14 days.",
+            hpThreshold.ToString(),
+            target.MaxHitPoints.ToString(),
+            biteDamage.ToString(),
+            $"Bite damage {biteDamage} >= threshold {hpThreshold}. Infection applied. Onset in {onsetDays} day(s). Cure window: 3 day(s)."
+        );
+
+        events.Add(new CombatEvent($"{target.Name} is infected with lycanthropy by {monster.DisplayName}! Bite damage {biteDamage} (threshold {hpThreshold}). Cure Disease from cleric level 12+ is required within 3 days or it becomes permanent. Onset in {onsetDays} day(s)."));
+    }
+
+    private static Alignment ParseAlignmentOrFallback(string? text, Alignment fallback)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return fallback;
+
+        var normalized = text.Trim().ToLowerInvariant();
+        return normalized switch
+        {
+            "lawful good" => Alignment.LawfulGood,
+            "neutral good" => Alignment.NeutralGood,
+            "chaotic good" => Alignment.ChaoticGood,
+            "lawful neutral" => Alignment.LawfulNeutral,
+            "true neutral" or "neutral" => Alignment.TrueNeutral,
+            "chaotic neutral" => Alignment.ChaoticNeutral,
+            "lawful evil" => Alignment.LawfulEvil,
+            "neutral evil" => Alignment.NeutralEvil,
+            "chaotic evil" => Alignment.ChaoticEvil,
+            _ => fallback
+        };
+    }
+
+    private void TryApplyEnergyDrain(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Energy Drain"))
+            return;
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        if (session.IsChantActive || session.IsPrayerActive)
+            saveTarget = Math.Max(1, saveTarget - 1);
+
+        var saveRoll = _dice.Roll(20);
+        var failedSave = saveRoll < saveTarget;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Energy Drain",
+            $"{monster.DisplayName} energy drain attack on {target.Name}",
+            "Target rolls saving throw vs Death. On failed save, target loses 1 level.",
+            "1",
+            "20",
+            saveRoll.ToString(),
+            $"Save target {saveTarget}. {(failedSave ? "Failed save: lose 1 level." : "Successful save: no level loss.")}");
+
+        if (!failedSave)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists energy drain (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        if (!TryDrainOneLevel(target, out var oldLevel, out var newLevel))
+        {
+            events.Add(new CombatEvent($"{target.Name} fails save vs energy drain ({saveRoll} vs {saveTarget}) but cannot lose levels below 1."));
+            return;
+        }
+
+        events.Add(new CombatEvent($"{target.Name} fails save vs energy drain ({saveRoll} vs {saveTarget}) and loses 1 level ({oldLevel}->{newLevel})."));
+    }
+
+    private static bool TryDrainOneLevel(Character target, out int oldLevel, out int newLevel)
+    {
+        target.EnsureClassProgressions();
+
+        var primaryClass = target.Classes.Count > 0 ? target.Classes[0] : target.Class;
+        var progression = target.ClassProgressions.FirstOrDefault(p => p.Class == primaryClass);
+        if (progression == null)
+        {
+            oldLevel = target.Level;
+            newLevel = target.Level;
+            return false;
+        }
+
+        oldLevel = Math.Max(1, progression.Level);
+        if (oldLevel <= 1)
+        {
+            newLevel = oldLevel;
+            return false;
+        }
+
+        newLevel = oldLevel - 1;
+        progression.Level = newLevel;
+        progression.Experience = Math.Min(
+            progression.Experience,
+            Math.Max(0, ExperienceTable.GetThresholdForLevel(primaryClass, newLevel)));
+
+        if (target.Classes.Count <= 1)
+        {
+            target.Level = newLevel;
+            target.Experience = progression.Experience;
+        }
+        else
+        {
+            target.Level = Math.Max(1, target.GetClassLevel(primaryClass));
+            target.Experience = Math.Max(0, target.ClassProgressions.Sum(x => x.Experience));
+        }
+
+        ApplyBasicWarriorAttackProgressionAfterLevelDrain(target, newLevel);
+        target.RefreshMoveFromArmorAndClass();
+        target.RefreshMonkProgressionStats();
+        WeaponProficiencyRules.EnsureAutoProficiencies(target);
+
+        return true;
+    }
+
+    private void TryApplyStrengthDrain(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Strength Drain"))
+            return;
+
+        if (!IsAlive(target) || target.CurrentHitPoints <= 0)
+            return;
+
+        var drainAmount = 1;
+        var beforeStrength = Math.Max(0, target.Abilities.Strength);
+        var actualDrain = target.ApplyStrengthDrainUntilDungeonExit(drainAmount);
+        var afterStrength = Math.Max(0, target.Abilities.Strength);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Strength Drain",
+            $"{monster.DisplayName} strength drain on {target.Name}",
+            "On hit, victim loses 1 Strength. If Strength reaches 0, victim dies. Original Strength returns on dungeon exit.",
+            "1",
+            "1",
+            drainAmount.ToString(),
+            $"Strength {beforeStrength}->{afterStrength} (drained {actualDrain}).");
+
+        events.Add(new CombatEvent($"{target.Name} suffers Strength Drain from {monster.DisplayName}: STR {beforeStrength}->{afterStrength} (drained {actualDrain})."));
+
+        if (target.Abilities.Strength > 0)
+            return;
+
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        events.Add(new CombatEvent($"{target.Name} is reduced to 0 Strength and dies!"));
+    }
+
+    private void TryApplyDestroyMetalOnMonsterHit(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Destroy Metal"))
+            return;
+
+        var equipmentSlots = new[]
+        {
+            EquipmentSlot.MainHand,
+            EquipmentSlot.OffHand,
+            EquipmentSlot.Body,
+            EquipmentSlot.Head,
+            EquipmentSlot.Hands
+        };
+
+        var metalTargets = equipmentSlots
+            .Select(slot => (slot, item: target.Equipment.TryGetValue(slot, out var i) ? i : null))
+            .Where(x => x.item != null && IsMetalItem(x.item))
+            .ToList();
+
+        if (metalTargets.Count == 0)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} brushes {target.Name} with rusting antennae, but no exposed metal is affected."));
+            return;
+        }
+
+        var selected = metalTargets[_dice.Roll(metalTargets.Count) - 1];
+        var item = selected.item!;
+
+        if (IsMagicalItem(item))
+        {
+            var saveRoll = _dice.Roll(20);
+            const int saveTarget = 11;
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "Item Save",
+                $"{item.Name} saving throw vs rust/corrosion",
+                "Magical metal item touched by rust effect gets a saving throw; success resists corrosion.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                saveRoll >= saveTarget
+                    ? $"Save succeeded ({saveRoll} vs {saveTarget}); item resists corrosion."
+                    : $"Save failed ({saveRoll} vs {saveTarget}); item corrodes.");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name}'s {item.Name} resists corrosion (save {saveRoll} vs {saveTarget})."));
+                return;
+            }
+        }
+
+        DestroyEquippedItem(target, item, events, $"{monster.DisplayName} corrodes");
+    }
+
+    private void TryApplyHitOnMonsterDestroysMetal(Character attacker, MonsterInstance target, Item? strikingWeapon, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(target, "Hit on Monster Destroys Metal"))
+            return;
+
+        if (strikingWeapon == null || !IsMetalItem(strikingWeapon))
+            return;
+
+        if (IsMagicalItem(strikingWeapon))
+        {
+            var saveRoll = _dice.Roll(20);
+            const int saveTarget = 11;
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "Item Save",
+                $"{strikingWeapon.Name} saving throw vs rusting hide",
+                "Magical metal weapon that strikes a rusting monster gets a saving throw to avoid corrosion.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                saveRoll >= saveTarget
+                    ? $"Save succeeded ({saveRoll} vs {saveTarget}); weapon resists corrosion."
+                    : $"Save failed ({saveRoll} vs {saveTarget}); weapon corrodes.");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{attacker.Name}'s {strikingWeapon.Name} resists corrosion (save {saveRoll} vs {saveTarget})."));
+                return;
+            }
+        }
+
+        var slots = attacker.Equipment
+            .Where(kv => kv.Value != null && ReferenceEquals(kv.Value, strikingWeapon))
+            .Select(kv => kv.Key)
+            .Distinct()
+            .ToList();
+
+        if (slots.Count == 0)
+        {
+            attacker.Inventory.RemoveAll(i => ReferenceEquals(i, strikingWeapon));
+            events.Add(new CombatEvent($"{attacker.Name}'s {strikingWeapon.Name} corrodes away after striking {target.DisplayName}!"));
+            return;
+        }
+
+        foreach (var slot in slots)
+            attacker.Equipment[slot] = null;
+
+        attacker.Inventory.RemoveAll(i => ReferenceEquals(i, strikingWeapon));
+        attacker.RefreshRingProtectionEffects();
+        attacker.RefreshRingWizardryEffects();
+        EquipmentManager.RecalculateDamageFromEquipment(attacker);
+        attacker.RefreshMoveFromArmorAndClass();
+        attacker.RefreshMonkProgressionStats();
+
+        events.Add(new CombatEvent($"{attacker.Name}'s {strikingWeapon.Name} corrodes away after striking {target.DisplayName}!"));
+    }
+
+    private static bool IsMagicalItem(Item item)
+    {
+        if (item == null)
+            return false;
+
+        if (item.MagicBonus > 0 || item.ToHitBonus > 0)
+            return true;
+
+        return item.SpecialAbilities != null && item.SpecialAbilities.Count > 0;
+    }
+
+    private static bool IsMetalItem(Item? item)
+    {
+        if (item == null)
+            return false;
+
+        var type = item.Type;
+        if (type != ItemType.Weapon && type != ItemType.Armor && type != ItemType.Shield)
+            return false;
+
+        var text = $"{item.Name} {item.Description}".ToLowerInvariant();
+        if (text.Contains("wood", StringComparison.Ordinal)
+            || text.Contains("leather", StringComparison.Ordinal)
+            || text.Contains("cloth", StringComparison.Ordinal)
+            || text.Contains("bone", StringComparison.Ordinal)
+            || text.Contains("stone", StringComparison.Ordinal)
+            || text.Contains("hide", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void DestroyEquippedItem(Character target, Item item, List<CombatEvent> events, string source)
+    {
+        foreach (var slot in target.Equipment
+                     .Where(kv => kv.Value != null && ReferenceEquals(kv.Value, item))
+                     .Select(kv => kv.Key)
+                     .ToList())
+        {
+            target.Equipment[slot] = null;
+        }
+
+        target.Inventory.RemoveAll(i => ReferenceEquals(i, item));
+        target.RefreshRingProtectionEffects();
+        target.RefreshRingWizardryEffects();
+        EquipmentManager.RecalculateDamageFromEquipment(target);
+        target.RefreshMoveFromArmorAndClass();
+        target.RefreshMonkProgressionStats();
+
+        events.Add(new CombatEvent($"{source} {target.Name}'s {item.Name}; it rusts away instantly!"));
+    }
+
+    private static void ApplyBasicWarriorAttackProgressionAfterLevelDrain(Character target, int effectiveLevel)
+    {
+        if (target.Classes.Count == 0)
+            return;
+
+        var primary = target.Classes[0];
+        if (primary is CharacterClass.Fighter or CharacterClass.Paladin or CharacterClass.Ranger)
+        {
+            if (effectiveLevel < 7)
+                target.NumberOfAttacks = 1f;
+            else if (effectiveLevel < 13)
+                target.NumberOfAttacks = 1.5f;
+            else
+                target.NumberOfAttacks = 2f;
+
+            return;
+        }
+
+        if (!target.IsMonk())
+            target.NumberOfAttacks = 1f;
+    }
+
     private static void TryApplyDrainBlood(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
     {
-        if (!HasAnySpecialAbility(monster, "Drain Blood"))
+        if (!(HasAnySpecialAbility(monster, "Stirge Blood drain") || HasAnySpecialAbility(monster, "Tick Blood Drain")))
             return;
 
         if (!IsAlive(target) || target.CurrentHitPoints <= 0)
@@ -5051,12 +5616,18 @@ public sealed class CombatResolver
         var remaining = session.GetPartyDrainBloodRemaining(target.Name);
         if (remaining <= 0)
         {
-            session.SetPartyDrainBlood(target.Name, 12);
-            events.Add(new CombatEvent($"{target.Name} is afflicted by Drain Blood from {monster.DisplayName}! 12 HP will be drained over subsequent rounds (1-4 per round)."));
+            var isTickDrain = HasAnySpecialAbility(monster, "Tick Blood Drain");
+            var effectName = isTickDrain ? "Tick Blood Drain" : "Stirge Blood drain";
+            var dieSides = isTickDrain ? 6 : 4;
+            var totalToDrain = isTickDrain ? Math.Max(1, monster.MaxHitPoints) : 12;
+
+            session.SetPartyDrainBlood(target.Name, totalToDrain, dieSides, effectName);
+            events.Add(new CombatEvent($"{target.Name} is afflicted by {effectName} from {monster.DisplayName}! {totalToDrain} HP will be drained over subsequent rounds (1-{dieSides} per round)."));
             return;
         }
 
-        events.Add(new CombatEvent($"{target.Name} is hit again by {monster.DisplayName}, but Drain Blood is already active ({remaining} HP remaining to drain)."));
+        var currentEffectName = session.GetPartyDrainBloodEffectName(target.Name);
+        events.Add(new CombatEvent($"{target.Name} is hit again by {monster.DisplayName}, but {currentEffectName} is already active ({remaining} HP remaining to drain)."));
     }
 
     private static bool IsShrieker(MonsterInstance monster)
@@ -6505,6 +7076,31 @@ public sealed class CombatResolver
         return effectiveWeaponBonus >= requiredBonus;
     }
 
+    private static bool CanMonsterHarmLycanthropeForm(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        if (monster.Template.Name?.Contains("silver", StringComparison.OrdinalIgnoreCase) == true)
+            return true;
+
+        var text = string.Join(" ",
+            new[]
+            {
+                monster.Template.Name,
+                monster.Template.TypeName,
+                string.Join(" ", monster.Template.SpecialAbilities.Select(a => $"{a.Name} {a.Description}")),
+                string.Join(" ", monster.Template.SpecialAttacks.Select(a => $"{a.Name} {a.Description}")),
+                string.Join(" ", monster.Template.SpecialDefenses.Select(a => $"{a.Name} {a.Description}"))
+            }.Where(s => !string.IsNullOrWhiteSpace(s)));
+
+        return text.Contains("magic weapon", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("+1", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("+2", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("+3", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("enchanted", StringComparison.OrdinalIgnoreCase);
+    }
+
     private static bool HasImmunityToNormalWeapons(MonsterInstance target)
     {
         if (target?.Template?.SpecialDefenses == null)
@@ -6518,6 +7114,10 @@ public sealed class CombatResolver
 
             return string.Equals(name, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(description, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(name, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
+                   || merged.Contains("hit only by magic weapon", StringComparison.Ordinal)
+                   || merged.Contains("only be harmed by magic weapon", StringComparison.Ordinal)
                    || (merged.Contains("can only be hit by silver", StringComparison.Ordinal)
                        && merged.Contains("+1", StringComparison.Ordinal));
         });

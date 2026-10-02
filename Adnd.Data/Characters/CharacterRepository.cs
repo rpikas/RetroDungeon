@@ -222,16 +222,20 @@ public class CharacterRepository
         if (item == null || item.Type != ItemType.Weapon)
             return;
 
-        if (!string.IsNullOrWhiteSpace(item.DamageVsLarge))
-            return;
-
         if (!itemLookup.TryGetValue(item.Name, out var template))
             return;
 
-        if (string.IsNullOrWhiteSpace(template.DamageVsLarge))
-            return;
+        if (string.IsNullOrWhiteSpace(item.DamageVsLarge)
+            && !string.IsNullOrWhiteSpace(template.DamageVsLarge))
+        {
+            item.DamageVsLarge = template.DamageVsLarge;
+        }
 
-        item.DamageVsLarge = template.DamageVsLarge;
+        if (string.IsNullOrWhiteSpace(item.DamageType)
+            && !string.IsNullOrWhiteSpace(template.DamageType))
+        {
+            item.DamageType = template.DamageType;
+        }
     }
 
     public void Save(Character character)

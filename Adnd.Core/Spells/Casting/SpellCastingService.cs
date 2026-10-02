@@ -323,7 +323,8 @@ public sealed class SpellCastingService
 
     private static bool IsBlockedFromCasting(Character caster)
     {
-        return caster.HasStatus(CharacterStatus.Feeblemind);
+        return caster.HasStatus(CharacterStatus.Feeblemind)
+               || caster.HasStatus(CharacterStatus.LycanthropeTransformed);
     }
 
     private static bool IsContextAllowed(Spell spell, SpellUseContext context)

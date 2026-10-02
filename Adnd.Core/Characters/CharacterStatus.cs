@@ -22,6 +22,7 @@ public enum CharacterStatus
     Feeblemind = 1 << 11,        // Character is feebleminded
     Slowed = 1 << 12,  // Character is slowed
     DeadlyPoisoned = 1 << 13,  // Character is deadly poisoned
-    Confused = 1 << 14  // Character is confused
+    Confused = 1 << 14,  // Character is confused
+    LycanthropeTransformed = 1 << 15 // Character is currently transformed by lycanthropy
 
 }

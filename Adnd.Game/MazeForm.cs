@@ -67,6 +67,7 @@ public sealed class MazeForm : Form
     private readonly TabletopViewerBridge _viewer = new();
     private RuleApplicationInfoForm? _ruleApplicationInfoForm;
     private Action<string>? _ruleApplicationInfoHandler;
+    private bool _fullMoonShownForThisDungeonTrip;
 
     // Lets the viewer send moves back. Null when no viewer is configured, and idle when none is
     // running; the keyboard is unaffected either way.
@@ -1303,11 +1304,51 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         _currentDungeonLevel = selected.Value;
         BuildMazeForLevel(_currentDungeonLevel);
 
+        if (!_fullMoonShownForThisDungeonTrip && IsFullMoonNight())
+        {
+            ShowFullMoonDialogRetro();
+            _fullMoonShownForThisDungeonTrip = true;
+        }
+
+        ApplyLycanthropyStateForDungeonDescent();
+
         // Elevator landing.
         _position = new Point(1, 2);
 
         Invalidate();
         PublishToViewer();
+    }
+
+    private void ApplyLycanthropyStateForDungeonDescent()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var isFullMoon = IsFullMoonNight();
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            c.AdvanceLycanthropyByOneDay();
+
+            if (!c.CanBecomeLycanthropeNow())
+            {
+                _characterRepository.Save(c);
+                continue;
+            }
+
+            if (isFullMoon && c.TriggerLycanthropeTransformationByFullMoon())
+            {
+                messages.Add($"{c.Name} transforms under the full moon ({c.LycanthropySourceType}).");
+            }
+
+            _characterRepository.Save(c);
+        }
+
+        if (messages.Count > 0)
+            SayOnBoth("Lycanthropy", string.Join(Environment.NewLine, messages));
     }
 
     /// <param name="tableOptions">
@@ -2397,6 +2438,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
                 if (result == DialogResult.Yes)
                 {
+                    RestoreStrengthDrainedOnDungeonExit();
+                    RevertLycanthropeTransformationsOnDungeonExit();
                     ApplyPartyAgingForDungeonExitDay();
                     ApplyDiseaseProgressForDungeonExitDay();
                     Close();
@@ -2412,6 +2455,53 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
     }
 
+    private void RestoreStrengthDrainedOnDungeonExit()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var restored = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (!c.RestoreStrengthDrainedUntilDungeonExit())
+                continue;
+
+            _characterRepository.Save(c);
+            restored.Add(c.Name);
+        }
+
+        if (restored.Count > 0)
+            SayOnBoth("Strength", $"Strength restored after leaving dungeon: {string.Join(", ", restored)}.");
+    }
+
+    private void RevertLycanthropeTransformationsOnDungeonExit()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var reverted = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (!c.LycanthropyTriggeredByFullMoon)
+                continue;
+
+            if (!c.EndLycanthropeTransformation())
+                continue;
+
+            _characterRepository.Save(c);
+            reverted.Add(c.Name);
+        }
+
+        if (reverted.Count > 0)
+            SayOnBoth("Lycanthropy", $"Lycanthrope form fades after leaving dungeon: {string.Join(", ", reverted)}.");
+    }
+
     private void ApplyPoisonDamageForStep()
     {
         var party = _partyRepository.Load();
@@ -2423,6 +2513,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             if (!roster.TryGetValue(name, out var c))
                 continue;
+
+            var wasLycanthropeDamageTriggered = c.LycanthropyTriggeredByDamage;
 
             if (c.RotGrubDeathRoundsRemaining > 0
                 && !c.HasStatus(CharacterStatus.Dead)
@@ -2474,6 +2566,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     messages.Add($"{c.Name} remains paralyzed ({afterRounds} round(s) remaining). Step consumed 1 round.");
                 else if (beforeRounds > 0)
                     messages.Add($"{c.Name} is no longer paralyzed.");
+            }
+
+            if (wasLycanthropeDamageTriggered
+                && c.HasStatus(CharacterStatus.LycanthropeTransformed)
+                && c.CurrentHitPoints >= c.MaxHitPoints)
+            {
+                c.EndLycanthropeTransformation();
+                changed = true;
+                messages.Add($"{c.Name} recovers and returns from lycanthrope form.");
             }
 
             if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead) || !c.HasStatus(CharacterStatus.Poisoned))
@@ -2593,6 +2694,47 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (messages.Count > 0)
             SayOnBoth("Infestation", string.Join(Environment.NewLine, messages));
+
+        ApplyTickDiseaseProgressForDungeonExitDay();
+    }
+
+    private void ApplyTickDiseaseProgressForDungeonExitDay()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (c.TickDiseaseDeathDaysRemaining <= 0
+                || c.HasStatus(CharacterStatus.Dead)
+                || c.HasStatus(CharacterStatus.Ashes)
+                || c.HasStatus(CharacterStatus.Lost)
+                || c.CurrentHitPoints <= 0)
+            {
+                continue;
+            }
+
+            c.TickDiseaseDeathDaysRemaining = Math.Max(0, c.TickDiseaseDeathDaysRemaining - 1);
+
+            if (c.TickDiseaseDeathDaysRemaining > 0)
+            {
+                messages.Add($"{c.Name} suffers from Tick Disease ({c.TickDiseaseDeathDaysRemaining} day(s) until death unless cured).");
+                _characterRepository.Save(c);
+                continue;
+            }
+
+            c.CurrentHitPoints = 0;
+            c.AddStatus(CharacterStatus.Dead);
+            messages.Add($"{c.Name} dies from untreated Tick Disease.");
+            _characterRepository.Save(c);
+        }
+
+        if (messages.Count > 0)
+            SayOnBoth("Tick Disease", string.Join(Environment.NewLine, messages));
     }
 
     private void ApplyPartyAgingForDungeonExitDay()
@@ -2608,6 +2750,101 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             c.AdvanceAgeByDays(1);
             _characterRepository.Save(c);
         }
+
+        party.DungeonDaysElapsed = Math.Max(0, party.DungeonDaysElapsed) + 1;
+        _partyRepository.Save(party);
+    }
+
+    private bool IsFullMoonNight()
+    {
+        var party = _partyRepository.Load();
+        var dungeonDaysElapsed = Math.Max(0, party.DungeonDaysElapsed);
+        // Every 30th day descending is a full moon night.
+        var daysOnNextDescent = dungeonDaysElapsed + 1;
+        return daysOnNextDescent % 30 == 0;
+    }
+
+    private void ShowFullMoonDialogRetro()
+    {
+        using var form = new Form
+        {
+            Text = "Full Moon",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(700, 150),
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = "FULL MOON",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var messageLabel = new Label
+        {
+            Left = 12,
+            Top = 58,
+            Width = framePanel.ClientSize.Width - 24,
+            Height = 56,
+            Text = "Tonight is a full moon as the party descends into the dungeon.",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 13f, FontStyle.Bold)
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(messageLabel);
+        form.Controls.Add(framePanel);
+
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape || e.KeyCode == Keys.Space)
+            {
+                e.SuppressKeyPress = true;
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            }
+        };
+
+        form.MouseDown += (_, _) =>
+        {
+            form.DialogResult = DialogResult.OK;
+            form.Close();
+        };
+
+        ViewerDialog.RunModal(form, this, new ViewerPrompt("info", "Full moon tonight.", null, new[]
+        {
+            new ViewerPromptOption("continue", "Continue")
+        }), new Dictionary<string, DialogResult>
+        {
+            ["continue"] = DialogResult.OK
+        }, PublishTable);
+
+        PublishToViewer();
     }
 
     private static bool HasEquippedRegeneration(Character c)

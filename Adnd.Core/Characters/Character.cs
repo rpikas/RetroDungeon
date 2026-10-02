@@ -42,8 +42,20 @@ public class Character
     public bool RotGrubFlamePromptPending { get; set; }
     public int RotGrubDeathRoundsRemaining { get; set; }
     public int ParalyzedRoundsRemaining { get; set; }
+    public int? StrengthBeforeDrainUntilDungeonExit { get; set; }
     public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
     public int InfestationDeathDaysRemaining { get; set; }
+    public int TickDiseaseDeathDaysRemaining { get; set; }
+    public bool LycanthropyInfected { get; set; }
+    public bool LycanthropyPermanent { get; set; }
+    public int LycanthropyDaysSinceInfection { get; set; }
+    public int LycanthropyDaysUntilOnset { get; set; }
+    public string LycanthropySourceType { get; set; } = string.Empty;
+    public Alignment? LycanthropySourceAlignment { get; set; }
+    public bool LycanthropyTriggeredByDamage { get; set; }
+    public bool LycanthropyTriggeredByFullMoon { get; set; }
+    public int LycanthropyBonusHitPointsRemaining { get; set; }
+    public int? LycanthropyArmorClassBeforeTransformation { get; set; }
     public int Level { get; set; } = 1;
     public int GoodEncounterAttackWarningCount { get; set; }
     public bool LayOnHandsUsedToday { get; set; }
@@ -1019,12 +1031,144 @@ public class Character
         ClearParalysis();
         EarSeekerDeathOnNextDungeonEntry = false;
         InfestationDeathDaysRemaining = 0;
+        TickDiseaseDeathDaysRemaining = 0;
 
         if (ConstitutionBeforeDisease.HasValue)
         {
             Abilities.Constitution = Math.Max(0, ConstitutionBeforeDisease.Value);
             ConstitutionBeforeDisease = null;
         }
+    }
+
+    public void InfectWithLycanthropy(string lycanthropeType, Alignment sourceAlignment, int daysUntilOnset)
+    {
+        LycanthropyInfected = true;
+        LycanthropyDaysSinceInfection = 0;
+        LycanthropyDaysUntilOnset = Math.Max(1, daysUntilOnset);
+        LycanthropySourceType = lycanthropeType ?? string.Empty;
+        LycanthropySourceAlignment = sourceAlignment;
+        LycanthropyTriggeredByDamage = false;
+        LycanthropyTriggeredByFullMoon = false;
+    }
+
+    public void AdvanceLycanthropyByOneDay()
+    {
+        if (!LycanthropyInfected)
+            return;
+
+        LycanthropyDaysSinceInfection = Math.Max(0, LycanthropyDaysSinceInfection + 1);
+        if (!LycanthropyPermanent && LycanthropyDaysSinceInfection > 3)
+            LycanthropyPermanent = true;
+    }
+
+    public bool CanBecomeLycanthropeNow()
+    {
+        if (!LycanthropyInfected)
+            return false;
+
+        return LycanthropyDaysSinceInfection >= Math.Max(1, LycanthropyDaysUntilOnset);
+    }
+
+    public bool IsLycanthropeTransformed() => HasStatus(CharacterStatus.LycanthropeTransformed);
+
+    public bool TriggerLycanthropeTransformationByDamage()
+    {
+        if (!CanBecomeLycanthropeNow() || IsLycanthropeTransformed())
+            return false;
+
+        AddStatus(CharacterStatus.LycanthropeTransformed);
+        LycanthropyTriggeredByDamage = true;
+        LycanthropyTriggeredByFullMoon = false;
+        if (LycanthropySourceAlignment.HasValue)
+            Alignment = LycanthropySourceAlignment.Value;
+
+        var bonus = RollLycanthropeHpBonus();
+        LycanthropyBonusHitPointsRemaining = bonus;
+        LycanthropyArmorClassBeforeTransformation = ArmorClass;
+        MaxHitPoints += bonus;
+        CurrentHitPoints += bonus;
+        ArmorClass = 4;
+        return true;
+    }
+
+    public bool TriggerLycanthropeTransformationByFullMoon()
+    {
+        if (!CanBecomeLycanthropeNow() || IsLycanthropeTransformed())
+            return false;
+
+        AddStatus(CharacterStatus.LycanthropeTransformed);
+        LycanthropyTriggeredByDamage = false;
+        LycanthropyTriggeredByFullMoon = true;
+        if (LycanthropySourceAlignment.HasValue)
+            Alignment = LycanthropySourceAlignment.Value;
+
+        var bonus = RollLycanthropeHpBonus();
+        LycanthropyBonusHitPointsRemaining = bonus;
+        LycanthropyArmorClassBeforeTransformation = ArmorClass;
+        MaxHitPoints += bonus;
+        CurrentHitPoints += bonus;
+        ArmorClass = 4;
+        return true;
+    }
+
+    public bool EndLycanthropeTransformation()
+    {
+        if (!IsLycanthropeTransformed())
+            return false;
+
+        RemoveStatus(CharacterStatus.LycanthropeTransformed);
+        LycanthropyTriggeredByDamage = false;
+        LycanthropyTriggeredByFullMoon = false;
+
+        if (LycanthropyBonusHitPointsRemaining > 0)
+        {
+            MaxHitPoints = Math.Max(1, MaxHitPoints - LycanthropyBonusHitPointsRemaining);
+            CurrentHitPoints = Math.Min(CurrentHitPoints, MaxHitPoints);
+            LycanthropyBonusHitPointsRemaining = 0;
+        }
+
+        if (LycanthropyArmorClassBeforeTransformation.HasValue)
+        {
+            ArmorClass = LycanthropyArmorClassBeforeTransformation.Value;
+            LycanthropyArmorClassBeforeTransformation = null;
+        }
+
+        return true;
+    }
+
+    public bool TryCureLycanthropyFromCleric(int clericLevel)
+    {
+        if (!LycanthropyInfected)
+            return false;
+
+        if (clericLevel < 12)
+            return false;
+
+        if (LycanthropyPermanent)
+            return false;
+
+        ClearLycanthropy();
+        return true;
+    }
+
+    public void ClearLycanthropy()
+    {
+        LycanthropyInfected = false;
+        LycanthropyPermanent = false;
+        LycanthropyDaysSinceInfection = 0;
+        LycanthropyDaysUntilOnset = 0;
+        LycanthropySourceType = string.Empty;
+        LycanthropySourceAlignment = null;
+        LycanthropyTriggeredByDamage = false;
+        LycanthropyTriggeredByFullMoon = false;
+        LycanthropyArmorClassBeforeTransformation = null;
+        EndLycanthropeTransformation();
+    }
+
+    private static int RollLycanthropeHpBonus()
+    {
+        var rng = Random.Shared;
+        return rng.Next(1, 9) + rng.Next(1, 9) + rng.Next(1, 9);
     }
 
     public void MarkRotGrubExposurePendingFlame()
@@ -1052,6 +1196,34 @@ public class Character
     {
         ApplyDisease();
         InfestationDeathDaysRemaining = Math.Max(1, InfestationDeathDaysRemaining);
+    }
+
+    public void ApplyTickDisease(int deathInDays)
+    {
+        ApplyDisease();
+        TickDiseaseDeathDaysRemaining = Math.Max(1, deathInDays);
+    }
+
+    public int ApplyStrengthDrainUntilDungeonExit(int amount)
+    {
+        if (amount <= 0)
+            return 0;
+
+        StrengthBeforeDrainUntilDungeonExit ??= Math.Max(0, Abilities.Strength);
+
+        var before = Math.Max(0, Abilities.Strength);
+        Abilities.Strength = Math.Max(0, before - amount);
+        return before - Abilities.Strength;
+    }
+
+    public bool RestoreStrengthDrainedUntilDungeonExit()
+    {
+        if (!StrengthBeforeDrainUntilDungeonExit.HasValue)
+            return false;
+
+        Abilities.Strength = Math.Max(0, StrengthBeforeDrainUntilDungeonExit.Value);
+        StrengthBeforeDrainUntilDungeonExit = null;
+        return true;
     }
 
     private string GetStatusDisplay()

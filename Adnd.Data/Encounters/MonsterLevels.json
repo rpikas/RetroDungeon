@@ -499,7 +499,7 @@
       },
       {
         "DiceMin": 79,
-        "DiceMax": 80,
+        "DiceMax": 99,
         "Creature": "Rust monster",
         "CountMin": 1,
         "CountMax": 1

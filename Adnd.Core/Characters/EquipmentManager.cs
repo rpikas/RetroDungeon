@@ -141,6 +141,11 @@ public static class EquipmentManager
         return true;
     }
 
+    public static void RecalculateDamageFromEquipment(Character c)
+    {
+        RecalculateDamage(c);
+    }
+
     private static void RecalculateDamage(Character c)
     {
         EnsureEquipmentSlots(c);

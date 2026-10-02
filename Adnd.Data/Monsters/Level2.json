@@ -620,7 +620,7 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Drain Blood",
+          "Name": "Stirge Blood drain",
           "Description": "After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
         }
       ],

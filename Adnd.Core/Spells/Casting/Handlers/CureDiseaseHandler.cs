@@ -31,6 +31,9 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
         }
 
         var wasDiseased = target.HasStatus(CharacterStatus.Diseased);
+        var clericLevel = request.EffectiveCasterLevel
+                          ?? request.Caster.GetClassLevel(CharacterClass.Cleric);
+        var curedLycanthropy = target.TryCureLycanthropyFromCleric(clericLevel);
         target.CureDiseaseAndRestoreConstitution();
 
         var result = new SpellCastResult { Success = true };
@@ -38,6 +41,9 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
         result.Events.Add(wasDiseased
             ? $"{target.Name} is no longer diseased and Constitution is restored."
             : $"{target.Name} is not diseased.");
+
+        if (curedLycanthropy)
+            result.Events.Add($"{target.Name}'s lycanthropy infection is cured before becoming permanent (cleric level {clericLevel}).");
 
         return result;
     }

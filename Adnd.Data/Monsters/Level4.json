@@ -154,14 +154,6 @@
         {
           "Name": "Hit only by magic weapons",
           "Description": "Shadow can only be harmed by magic weapons."
-        },
-        {
-          "Name": "90% undetectable",
-          "Description": "Shadow is nearly invisible and extremely difficult to detect (90%)."
-        },
-        {
-          "Name": "Not affected by sleep, charm, or hold; immune to cold-based attacks",
-          "Description": "Shadow is immune to sleep, charm, hold, and cold-based attacks."
         }
       ],
       "MagicResistance": "Standard",
@@ -171,7 +163,7 @@
       "BaseXPValue": 255,
       "XPValuePerHitPoint": 4,
       "Source": "Adnd",
-      "Other": "Shadow creatures drain strength and are difficult to detect."
+      "Other": "Shadow creatures drain strength and are difficult to detect. Shadow is immune to sleep, charm, hold, and cold-based attacks like many undeads"
     },
     {
       "Name": "Rust Monster",
