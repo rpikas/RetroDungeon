@@ -29,6 +29,7 @@ public class PartyMenu
             new CureCriticalWoundsHandler(),
             new RemoveParalysisHandler(),
             new HealHandler(),
+            new StoneToFleshHandler(),
             new NeutralizePoisonHandler(),
             new CureDiseaseHandler(),
             new RaiseDeadHandler(),

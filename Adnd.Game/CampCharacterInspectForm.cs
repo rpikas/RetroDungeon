@@ -55,6 +55,7 @@ public sealed class CampCharacterInspectForm : Form
             new CureCriticalWoundsHandler(),
             new RemoveParalysisHandler(),
             new HealHandler(),
+            new StoneToFleshHandler(),
             new NeutralizePoisonHandler(),
             new CureDiseaseHandler(),
             new RaiseDeadHandler(),
@@ -590,6 +591,12 @@ public sealed class CampCharacterInspectForm : Form
             return;
 
         var target = targets[targetIdx.Value];
+        if (target.HasStatus(CharacterStatus.Petrified))
+        {
+            SayOnBoth("Lay on Hands", $"{target.Name} is petrified and cannot be healed this way.");
+            return;
+        }
+
         var healAmount = Math.Max(0, paladin.GetPaladinLevel()) * 2;
         var before = target.CurrentHitPoints;
         target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + healAmount);
@@ -628,6 +635,12 @@ public sealed class CampCharacterInspectForm : Form
         if (monk.HasStatus(CharacterStatus.Dead) || monk.HasStatus(CharacterStatus.Ashes) || monk.HasStatus(CharacterStatus.Lost))
         {
             SayOnBoth("Body Heal", $"{monk.Name} cannot use Body Heal right now.");
+            return;
+        }
+
+        if (monk.HasStatus(CharacterStatus.Petrified))
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} is petrified and cannot use Body Heal.");
             return;
         }
 
@@ -959,6 +972,12 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
+        if (c.HasStatus(CharacterStatus.Petrified))
+        {
+            SayOnBoth("Memorize", $"{c.Name} is petrified and cannot memorize spells.");
+            return;
+        }
+
         var states = c.Spellcasting;
         if (states == null || states.Count == 0)
             return;
@@ -1018,6 +1037,12 @@ public sealed class CampCharacterInspectForm : Form
         var c = GetCharacter();
         if (c == null)
             return;
+
+        if (c.HasStatus(CharacterStatus.Petrified))
+        {
+            SayOnBoth("Cast Spell", $"{c.Name} is petrified and cannot cast spells.");
+            return;
+        }
 
         var states = c.Spellcasting;
         if (states == null || states.Count == 0)
@@ -1130,6 +1155,12 @@ public sealed class CampCharacterInspectForm : Form
         var c = GetCharacter();
         if (c == null)
             return;
+
+        if (c.HasStatus(CharacterStatus.Petrified))
+        {
+            SayOnBoth("Use Item", $"{c.Name} is petrified and cannot use items.");
+            return;
+        }
         //    using var sheetForm = new ShowCharaterSheet(c);
         using var sheet = new Adnd.Game.Windows.CharacterForm(c);
         sheet.ShowDialog(this);
@@ -1442,6 +1473,12 @@ public sealed class CampCharacterInspectForm : Form
 
         if (isPotionOfHealing)
         {
+            if (user.HasStatus(CharacterStatus.Petrified))
+            {
+                SayOnBoth("Use Item", $"{user.Name} is petrified and cannot drink Potion of Healing.");
+                return;
+            }
+
             var heal = Random.Shared.Next(1, 5) + Random.Shared.Next(1, 5) + 2;
             var before = user.CurrentHitPoints;
             user.CurrentHitPoints = Math.Min(user.MaxHitPoints, user.CurrentHitPoints + heal);

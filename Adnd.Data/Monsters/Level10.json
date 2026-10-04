@@ -22,7 +22,12 @@
           "Damage": "2-8"
         }
       ],
-
+      "SpecialAttacks": [
+        {
+          "Name": "Petrifying Gaze",
+          "Description": "Any creature meeting its gaze must save or turn to stone."
+        }
+      ],
       "MagicResistance": "Special",
       "Intelligence": "Exceptional",
       "Size": "Large",

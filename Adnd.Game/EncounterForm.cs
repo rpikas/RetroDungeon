@@ -2340,6 +2340,7 @@ public sealed class EncounterForm : Form
         c.CurrentHitPoints > 0
         && !c.HasStatus(CharacterStatus.Dead)
         && !c.HasStatus(CharacterStatus.Paralyzed)
+        && !c.HasStatus(CharacterStatus.Petrified)
         && !c.HasStatus(CharacterStatus.Asleep);
 
 

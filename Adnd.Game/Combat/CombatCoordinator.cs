@@ -92,6 +92,7 @@ public sealed class CombatCoordinator
             new RemoveParalysisHandler(),
             new CureBlindnessHandler(),
             new HealHandler(),
+            new StoneToFleshHandler(),
             new NeutralizePoisonHandler(),
             new CureDiseaseHandler(),
             new RaiseDeadHandler(),

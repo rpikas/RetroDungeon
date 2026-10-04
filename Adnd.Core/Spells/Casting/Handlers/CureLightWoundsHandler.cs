@@ -32,6 +32,7 @@ public sealed class CureLightWoundsHandler : ISpellEffectHandler
         if (target.HasStatus(CharacterStatus.Dead)
             || target.HasStatus(CharacterStatus.Ashes)
             || target.HasStatus(CharacterStatus.Lost)
+            || target.HasStatus(CharacterStatus.Petrified)
             || target.CurrentHitPoints <= 0)
         {
             return SpellCastResult.Failure($"{spell.Name} cannot heal {target.Name} in current condition.");

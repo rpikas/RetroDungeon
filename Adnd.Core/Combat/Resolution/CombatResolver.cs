@@ -622,6 +622,12 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (member.HasStatus(CharacterStatus.Petrified))
+            {
+                events.Add(new CombatEvent($"{member.Name} is petrified and cannot act."));
+                continue;
+            }
+
             if (member.RotGrubDeathRoundsRemaining > 0)
             {
                 member.RotGrubDeathRoundsRemaining = Math.Max(0, member.RotGrubDeathRoundsRemaining - 1);
@@ -1430,6 +1436,7 @@ public sealed class CombatResolver
                             TryApplyDrainBlood(monster, target, session, events);
                             TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
+                            TryApplyPetrificationFromSpecialAttacks(monster, target, events);
 
                             if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison"))
                             {
@@ -1518,6 +1525,12 @@ public sealed class CombatResolver
 
     private void ResolvePartySpell(CombatSession session, Character caster, CombatAction action, List<CombatEvent> events)
     {
+        if (caster.HasStatus(CharacterStatus.Petrified))
+        {
+            events.Add(new CombatEvent($"{caster.Name} is petrified and cannot cast spells."));
+            return;
+        }
+
         if (caster.HasStatus(CharacterStatus.LycanthropeTransformed))
         {
             events.Add(new CombatEvent($"{caster.Name} is transformed by lycanthropy and cannot cast spells."));
@@ -1572,6 +1585,12 @@ public sealed class CombatResolver
 
     private void ResolvePartyUseItem(CombatSession session, Character user, CombatAction action, List<CombatEvent> events)
     {
+        if (user.HasStatus(CharacterStatus.Petrified))
+        {
+            events.Add(new CombatEvent($"{user.Name} is petrified and cannot use items."));
+            return;
+        }
+
         if (user.BreakRingInaudibilityForSpeaking())
             events.Add(new CombatEvent($"{user.Name} speaks and loses ring inaudibility."));
 
@@ -5101,6 +5120,40 @@ public sealed class CombatResolver
             "Character is paralyzed until duration expires or they leave the dungeon.");
 
         events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName} for {rounds} round(s)! (save {saveRoll} vs {saveTarget})"));
+    }
+
+    private void TryApplyPetrificationFromSpecialAttacks(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Petrifying Gaze", "Petrification Touch"))
+            return;
+
+        if (target.HasStatus(CharacterStatus.Petrified))
+            return;
+
+        var saveTarget = _savingThrowService.GetSaveTarget(target, SaveThrowType.PetrificationPolymorph);
+        var saveRoll = _dice.Roll(20);
+        var failedSave = saveRoll < saveTarget;
+
+        var attackName = HasAnySpecialAbility(monster, "Petrification Touch") ? "Petrification Touch" : "Petrifying Gaze";
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Petrification",
+            $"{monster.DisplayName} {attackName} on {target.Name}",
+            "Target rolls saving throw vs Petrification/Polymorph. On failed save, target turns to stone until cured.",
+            "1",
+            "20",
+            saveRoll.ToString(),
+            $"Save target {saveTarget}. {(failedSave ? "Failed save." : "Successful save.")}");
+
+        if (!failedSave)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists petrification (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        target.AddStatus(CharacterStatus.Petrified);
+        events.Add(new CombatEvent($"{target.Name} is petrified by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
     }
 
     private void TryApplyGiantRatDisease(MonsterInstance monster, Character target, List<CombatEvent> events)

@@ -36,6 +36,7 @@ public sealed class HealHandler : ISpellEffectHandler
         target.RemoveStatus(CharacterStatus.Feeblemind);
         target.RemoveStatus(CharacterStatus.Poisoned);
         target.RemoveStatus(CharacterStatus.Slowed);
+        target.RemoveStatus(CharacterStatus.Petrified);
 
         var healed = Math.Max(0, target.CurrentHitPoints - beforeHp);
 
@@ -44,7 +45,7 @@ public sealed class HealHandler : ISpellEffectHandler
         result.Events.Add(healed > 0
             ? $"{target.Name} is fully healed for {healed} HP."
             : $"{target.Name} is already at full health.");
-        result.Events.Add($"{target.Name} is cured of blindness, disease (with Constitution restored), feeblemind, poison, and slow.");
+        result.Events.Add($"{target.Name} is cured of blindness, disease (with Constitution restored), feeblemind, poison, slow, and petrification.");
         result.HpChanges[target.Name] = healed;
 
         return result;

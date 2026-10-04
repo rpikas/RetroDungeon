@@ -1312,9 +1312,9 @@
           "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Stone",
+          "Name": "Petrifying Gaze",
           "Description": "Gaze may petrify."
         }
       ],
@@ -2376,9 +2376,9 @@
           "Damage": "1d3"
         }
       ],
-      "SpecialAbilities": [
+      "SpecialAttacks": [
         {
-          "Name": "Stone",
+          "Name": "Petrifying Gaze",
           "Description": "Gaze may petrify."
         }
       ],

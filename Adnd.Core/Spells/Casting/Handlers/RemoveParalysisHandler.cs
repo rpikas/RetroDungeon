@@ -23,6 +23,7 @@ public sealed class RemoveParalysisHandler : ISpellEffectHandler
         if (target.HasStatus(CharacterStatus.Dead)
             || target.HasStatus(CharacterStatus.Ashes)
             || target.HasStatus(CharacterStatus.Lost)
+            || target.HasStatus(CharacterStatus.Petrified)
             || target.CurrentHitPoints <= 0)
         {
             return SpellCastResult.Failure($"{spell.Name} cannot affect {target.Name} in current condition.");

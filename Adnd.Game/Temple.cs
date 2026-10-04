@@ -15,19 +15,21 @@ namespace Adnd.Game;
 public static class Temple
 {
     /// <summary>Per character who needs it, paid out of that character's own purse.</summary>
-    public const int HealCost = 10;
-    public const int CurePoisonCost = 100;
+    public const int HealCostPerHp = 10;
+    public const int CurePoisonCost = 1000;
     public const int CureParalysisCost = 200;
-    public const int CureDiseaseCost = 200;
-    public const int CureFeeblemindCost = 400;
+    public const int CureDiseaseCost = 500;
+    public const int CureFeeblemindCost = 3000;
+    public const int RestorePetrificationCost = 3000;
 
-    public const int RaiseDeadCost = 100;
-    public const int RaiseFromAshesCost = 500;
+    public const int RaiseDeadCost = 5000;
+    public const int RaiseFromAshesCost = 7000;
 
     public static bool NeedsHealing(Character c) =>
         c.CurrentHitPoints < c.MaxHitPoints
         || c.HasStatus(CharacterStatus.Poisoned)
         || c.HasStatus(CharacterStatus.Paralyzed)
+        || c.HasStatus(CharacterStatus.Petrified)
         || c.HasStatus(CharacterStatus.Diseased)
         || c.HasStatus(CharacterStatus.Feeblemind);
 
@@ -36,13 +38,16 @@ public static class Temple
         var cost = 0;
 
         if (c.CurrentHitPoints < c.MaxHitPoints)
-            cost += HealCost;
+            cost += (c.MaxHitPoints - c.CurrentHitPoints) * HealCostPerHp;
 
         if (c.HasStatus(CharacterStatus.Poisoned))
             cost += CurePoisonCost;
 
         if (c.HasStatus(CharacterStatus.Paralyzed))
             cost += CureParalysisCost;
+
+        if (c.HasStatus(CharacterStatus.Petrified))
+            cost += RestorePetrificationCost;
 
         if (c.HasStatus(CharacterStatus.Diseased))
             cost += CureDiseaseCost;
@@ -84,6 +89,7 @@ public static class Temple
         target.CurrentHitPoints = target.MaxHitPoints;
         target.RemoveStatus(CharacterStatus.Poisoned);
         target.ClearParalysis();
+        target.RemoveStatus(CharacterStatus.Petrified);
         target.CureDiseaseAndRestoreConstitution();
         target.RemoveStatus(CharacterStatus.Feeblemind);
         Save(target, payer, repo);

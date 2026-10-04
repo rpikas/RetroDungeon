@@ -2,11 +2,9 @@ using Adnd.Core.Characters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
-public sealed class CureDiseaseHandler : ISpellEffectHandler
+public sealed class StoneToFleshHandler : ISpellEffectHandler
 {
-    public bool CanHandle(string spellId) =>
-        string.Equals(spellId, "cure_disease", StringComparison.OrdinalIgnoreCase)
-        || string.Equals(spellId, "cure_disease_druid", StringComparison.OrdinalIgnoreCase);
+    public bool CanHandle(string spellId) => string.Equals(spellId, "stone_to_flesh", StringComparison.OrdinalIgnoreCase);
 
     public SpellCastResult Resolve(SpellCastRequest request)
     {
@@ -25,26 +23,20 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
         if (target.HasStatus(CharacterStatus.Dead)
             || target.HasStatus(CharacterStatus.Ashes)
             || target.HasStatus(CharacterStatus.Lost)
-            || target.HasStatus(CharacterStatus.Petrified)
             || target.CurrentHitPoints <= 0)
         {
             return SpellCastResult.Failure($"{spell.Name} cannot affect {target.Name} in current condition.");
         }
 
-        var wasDiseased = target.HasStatus(CharacterStatus.Diseased);
-        var clericLevel = request.EffectiveCasterLevel
-                          ?? request.Caster.GetClassLevel(CharacterClass.Cleric);
-        var curedLycanthropy = target.TryCureLycanthropyFromCleric(clericLevel);
-        target.CureDiseaseAndRestoreConstitution();
+        var wasPetrified = target.HasStatus(CharacterStatus.Petrified);
+        if (wasPetrified)
+            target.RemoveStatus(CharacterStatus.Petrified);
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add(wasDiseased
-            ? $"{target.Name} is no longer diseased and Constitution is restored."
-            : $"{target.Name} is not diseased.");
-
-        if (curedLycanthropy)
-            result.Events.Add($"{target.Name}'s lycanthropy infection is cured before becoming permanent (cleric level {clericLevel}).");
+        result.Events.Add(wasPetrified
+            ? $"{target.Name} is restored from petrification."
+            : $"{target.Name} is not petrified.");
 
         return result;
     }

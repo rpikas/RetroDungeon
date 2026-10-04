@@ -2539,6 +2539,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             if (c.CurrentHitPoints > 0
                 && !c.HasStatus(CharacterStatus.Dead)
+                && !c.HasStatus(CharacterStatus.Petrified)
                 && c.CurrentHitPoints < c.MaxHitPoints
                 && HasEquippedRegeneration(c))
             {

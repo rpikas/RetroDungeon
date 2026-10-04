@@ -1,0 +1,13 @@
+{
+  "Id": "stone_to_flesh",
+  "Name": "Stone to Flesh",
+  "Class": "MagicUser",
+  "Level": 6,
+  "Description": "Restores one petrified creature to flesh.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Removes petrification from one ally."
+}

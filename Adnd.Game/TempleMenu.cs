@@ -129,7 +129,7 @@ public class TempleMenu
             return;
         }
 
-        Console.WriteLine($"Healing costs: {Temple.HealCost} gp (HP), +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureDiseaseCost} gp (disease), +{Temple.CureFeeblemindCost} gp (feeblemind).");
+        Console.WriteLine($"Healing costs: {Temple.HealCostPerHp} gp/HP, +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureDiseaseCost} gp (disease), +{Temple.CureFeeblemindCost} gp (feeblemind), +{Temple.RestorePetrificationCost} gp (restore from petrification).");
 
         var healedCount = 0;
         var skipped = new List<string>();

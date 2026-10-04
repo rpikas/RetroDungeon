@@ -3537,14 +3537,36 @@ show the weapon proficiency in the character sheet. manually tweeked it
 ___
 Add more weapons to choose from when selecting a weapon that the character is not proficient in.
 ___
-can you update the prices in the temple to
 
+Introduce a new status for characters: Petrified. 
+Petrification has no timer, the character is petrified until healed by for example the spell Heal or in temple.
+When a character is petrified, he or she can not move, can not attack, can not cast spells, can not use items, 
+can not be healed by normal healing methods, can not be healed by potions.
+Implement Stone to Flesh (6th‑level magic-user spell) that cures petrification.
+Also introduce a special attack  "Name": "Petrifying Gaze", "Description": "Any creature meeting its gaze must save or turn to stone." 
+and "Petrification Touch", "Description": "Touch petrifies; save vs. stone or be turned to stone."
+
+can you update the prices and services in the temple to
 Service / Spell	Suggested Fee (gp)
 Heal hit points 	10 gp/hp
-Cure poison (Neutralize Poison)	1,000 gp
-Remove paralyzation (Remove Paralysis / similar)	200 gp
+Cure poison 1,000 gp
+Remove paralyzation	200 gp
 Raise dead	5,000 gp
 Resurrection	7,000 gp
 Cure feeblemind	3,000 gp
-Cure disease (Cure Disease)	500 gp
-Restore from petrification (Stone to Flesh)	3,000 gp
+Cure disease	500 gp
+Restore from petrification	3,000 gp
+
+___
+In the city introduce Adventures Inn where the party can rest 
+First ask who in the party wants to rest (1-6) or A)ll, 
+then ask what kind of room they want:
+A)  THE STABLES (FREE!) Heals 1 HP per day.  0 GP/WEEK
+B)  A COT.  10 GP/WEEK Heals 2 HP per day.
+C)  ECONOMY ROOMS.  50 GP/WEEK Heals 4 HP per day.
+D)  MERCHANT SUITES.  200 GP/WEEK Heals 8 HP per day.
+E)  THE ROYAL SUITE.  500 GP/WEEK Heals 16 HP per day.
+
+for each character that wants to rest, write to ADnD Rule and Dice info what kind of room they selected and how much it cost.
+
+They will get older by 7 days per week they need to rest
