@@ -15,7 +15,7 @@ namespace Adnd.Game;
 public static class Temple
 {
     /// <summary>Per character who needs it, paid out of that character's own purse.</summary>
-    public const int HealCostPerHp = 10;
+    public const int HealCostPerHp = 15;
     public const int CurePoisonCost = 1000;
     public const int CureParalysisCost = 200;
     public const int CureDiseaseCost = 500;

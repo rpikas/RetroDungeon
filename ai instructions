@@ -3555,7 +3555,7 @@ Raise dead	5,000 gp
 Resurrection	7,000 gp
 Cure feeblemind	3,000 gp
 Cure disease	500 gp
-Restore from petrification	3,000 gp
+Restore from petrification	3,000 gp 13,7
 
 ___
 In the city introduce Adventures Inn where the party can rest 
@@ -3570,3 +3570,7 @@ E)  THE ROYAL SUITE.  500 GP/WEEK Heals 16 HP per day.
 for each character that wants to rest, write to ADnD Rule and Dice info what kind of room they selected and how much it cost.
 
 They will get older by 7 days per week they need to rest
+___
+update the price in the temple to 15 gp/hp
+___
+when entring the church show
