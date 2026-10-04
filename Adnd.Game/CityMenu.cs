@@ -188,6 +188,10 @@ public class CityMenu
         Console.WriteLine("Dual-class warning:");
         Console.WriteLine($"- {DualClassService.NoOldClassProgressionMessage}");
         Console.WriteLine($"- {DualClassService.OldClassFunctionBlocksXpMessage}");
+        if (targetClass == CharacterClass.Bard)
+        {
+            Console.WriteLine("- Bard path: Fighter (5-7) -> Thief (5-8) -> Bard.");
+        }
         Console.Write("Type Y to confirm: ");
         var confirm = Console.ReadKey(true).Key;
         Console.WriteLine();
@@ -472,6 +476,7 @@ public class CityMenu
 
         var abilitiesBeforeAgeAdjustment = CloneAbilities(character.Abilities);
         var exceptionalBeforeAgeAdjustment = character.ExceptionalStrengthPercentile;
+        var exceptionalRolledAfterAgeAdjustment = false;
         character.ApplyAgeCategoryAdjustmentsForCreation();
 
         if (chosenClasses.Count == 1
@@ -480,6 +485,7 @@ public class CityMenu
             && IsExceptionalStrengthClass(chosenClasses[0]))
         {
             character.ExceptionalStrengthPercentile = DiceRoller.Roll(1, 100);
+            exceptionalRolledAfterAgeAdjustment = true;
             var adjustedPctDisplay = character.ExceptionalStrengthPercentile.Value == 100
                 ? "00"
                 : character.ExceptionalStrengthPercentile.Value.ToString("00");
@@ -494,7 +500,25 @@ public class CityMenu
             character.ExceptionalStrengthPercentile);
 
         RuleApplicationInfo.Publish($"Creating character '{name}': race {race.ToDisplayString()}, class {clsDisplay}.");
+        if (race == Race.Human)
+        {
+            RuleApplicationInfo.PublishLinked(
+                "DMG",
+                "12StartingAgeHuman",
+                $"Human starting age table used for {chosenClasses[0].ToDisplayString()}.");
+        }
+        else
+        {
+            RuleApplicationInfo.PublishLinked(
+                "DMG",
+                "12StartingAgeNonHuman",
+                $"Non-human starting age table used for {race.ToDisplayString()} ({chosenClasses[0].ToDisplayString()}).");
+        }
         RuleApplicationInfo.Publish($"Starting age rolled: {character.Age} years ({race.ToDisplayString()} / {chosenClasses[0].ToDisplayString()}).");
+        RuleApplicationInfo.PublishLinked(
+            "DMG",
+            "13AgeCategoriesWithModifiers",
+            $"Age category: {character.GetAgeCategoryDisplay()}. Age adjustment applied: {ageAdjustmentSummary}.");
         RuleApplicationInfo.Publish($"Age category adjustment applied ({character.GetAgeCategoryDisplay()}): {ageAdjustmentSummary}.");
 
         character.EnsureClassProgressions();
@@ -526,6 +550,13 @@ public class CityMenu
 
         Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}, Age: {Math.Max(0, character.Age)}y {Math.Max(0, character.AgeDays)}d ({character.GetAgeCategoryDisplay()})\n");
         Console.WriteLine($"Age adjustment ({character.GetAgeCategoryDisplay()}): {ageAdjustmentSummary}");
+        if (exceptionalRolledAfterAgeAdjustment && character.ExceptionalStrengthPercentile.HasValue)
+        {
+            var pctDisplay = character.ExceptionalStrengthPercentile.Value == 100
+                ? "00"
+                : character.ExceptionalStrengthPercentile.Value.ToString("00");
+            Console.WriteLine($"Exceptional Strength result: 18/{pctDisplay}");
+        }
 
         Console.Write("Save character? (Y/N): ");
         var saveKey = Console.ReadKey(true).Key;

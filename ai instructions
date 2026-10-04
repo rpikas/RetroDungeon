@@ -3635,5 +3635,46 @@ For example, if a Human character is 40 years old and becomes 41 years old, then
 should get -1 point of strength, -1 point of constitution, +1 point of intelligence, and +1 point of wisdom.
 
 show the age adjustments made when creating the the charcter and just just before asking if you want keep it or not.
-also if a ranger, paladin or fighter gets str 18 after adjustment, roll the exceptional strength roll and show that also.
+also if a ranger, paladin or fighter gets str 18 after adjustment, roll the exceptional strength roll and show that also.14,7
 ___
+the age adjustment makes the character get a strength of 18, then roll for exceptional strength and show the result in the dialog.
+
+General rule: when I refer to the log I mean ADnD Rule and Dice info
+
+if creating a character and not a human, then refer to in the ADnD Rule and Dice Info to the table for starting age for non humans: DMG12StartingAgeNonHuman.png
+After an age determined in the log refre to DMG13AgeCategoriesWithModifiers to show the age category and the age adjustments that should be made to the ability scores.
+
+When a character gets older so it changes age category, then refer to in the ADnD Rule and Dice Info to the table for age categories 
+with modifiers: DMG13AgeCategoriesWithModifiers.png
+14,8
+If a character is a human, then refer to in the ADnD Rule and Dice Info to the table for starting age for humans: DMG12StartingAgeHuman.png
+___
+Bard is a class that should not be possible to select from start but possible to change into.
+Bard Progression Path (AD&D 1e)
+To become a Bard, you must multi‑class sequentially through three classes:
+
+Start as a Fighter
+Advance to at least Fighter level 5–7.
+You must meet the Bard’s ability prerequisites (high Strength, Dexterity, Intelligence, Wisdom, and Charisma).
+Then become a Thief
+Train as a Thief until level 5–8.
+You retain your Fighter abilities but stop advancing in Fighter.
+Finally become a Bard
+
+According to PHB page 117
+Bards can be
+•	Neutral Good
+•	Lawful Neutral
+•	True Neutral
+•	Chaotic Neutral
+•	Neutral Evil
+
+Bards can not be
+•	Lawful Good
+•	Chaotic Good
+•	Lawful Evil
+•	Chaotic Evil
+14,9
+
+
+

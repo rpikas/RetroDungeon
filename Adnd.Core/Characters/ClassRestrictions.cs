@@ -49,9 +49,7 @@ public static class ClassRestrictions
         if (race == Race.Human && a.Strength >= 15 && a.Dexterity >= 15 && a.Constitution >= 15)
             list.Add(CharacterClass.Monk);
 
-        // Bard: Cha >= 15, Dex >= 13
-        if (a.Charisma >= 15 && a.Dexterity >= 13)
-            list.Add(CharacterClass.Bard);
+        // Bard is not selectable at character creation.
 
         // Enforce per-race allowed single-class choices from the configured class/race table.
         var allowedForRace = new HashSet<CharacterClass>();

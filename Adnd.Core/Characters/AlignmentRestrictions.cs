@@ -68,6 +68,16 @@ public static class AlignmentRestrictions
             // (L)
             CharacterClass.Monk => new[] { Alignment.LawfulGood, Alignment.LawfulNeutral, Alignment.LawfulEvil },
 
+            // Bard: Neutral Good, Lawful Neutral, True Neutral, Chaotic Neutral, Neutral Evil
+            CharacterClass.Bard => new[]
+            {
+                Alignment.NeutralGood,
+                Alignment.LawfulNeutral,
+                Alignment.TrueNeutral,
+                Alignment.ChaoticNeutral,
+                Alignment.NeutralEvil
+            },
+
             // (A)
             _ => all
         };

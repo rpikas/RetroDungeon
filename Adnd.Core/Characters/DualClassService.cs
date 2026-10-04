@@ -96,6 +96,41 @@ public sealed class DualClassService
         }
 
         var originalClass = character.Classes[0];
+
+        if (targetClass == CharacterClass.Bard)
+        {
+            if (originalClass != CharacterClass.Thief)
+            {
+                reason = "To become a bard, the character must currently be a thief (after first being a fighter).";
+                return false;
+            }
+
+            var thiefLevel = character.GetClassLevel(CharacterClass.Thief);
+            if (thiefLevel < 5 || thiefLevel > 8)
+            {
+                reason = "Bard transition requires thief level 5-8.";
+                return false;
+            }
+
+            if (character.DualClassOriginalClass != CharacterClass.Fighter)
+            {
+                reason = "Bard progression requires the prior class to be fighter.";
+                return false;
+            }
+
+            if (character.DualClassOriginalLevel < 5 || character.DualClassOriginalLevel > 7)
+            {
+                reason = "Bard progression requires fighter level 5-7 before switching to thief.";
+                return false;
+            }
+
+            if (!MeetsBardAbilityPrerequisites(character.Abilities))
+            {
+                reason = "Bard requires high Strength, Dexterity, Intelligence, Wisdom, and Charisma (15+ each).";
+                return false;
+            }
+        }
+
         if (originalClass == targetClass)
         {
             reason = "Target class must be different from original class.";
@@ -424,6 +459,15 @@ public sealed class DualClassService
             CharacterClass.Assassin => alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil,
             _ => true
         };
+    }
+
+    private static bool MeetsBardAbilityPrerequisites(AbilityScores abilities)
+    {
+        return abilities.Strength >= 15
+               && abilities.Dexterity >= 15
+               && abilities.Intelligence >= 15
+               && abilities.Wisdom >= 15
+               && abilities.Charisma >= 15;
     }
 }
 

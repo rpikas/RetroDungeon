@@ -1,6 +1,7 @@
 ﻿// Characters/Character.cs
 using Adnd.Core.Items;
 using Adnd.Core.Spells;
+using Adnd.Core.Diagnostics;
 using System.Text.Json.Serialization;
 namespace Adnd.Core.Characters;
 
@@ -995,6 +996,11 @@ public class Character
             {
                 foreach (var entered in GetAgeCategoriesEntered(previousCategory, currentCategory))
                     ApplyAgeCategoryAdjustment(entered);
+
+                RuleApplicationInfo.PublishLinked(
+                    "DMG",
+                    "13AgeCategoriesWithModifiers",
+                    $"{Name} advanced in age category: {GetAgeCategoryDisplay()}. Applied age-based ability modifiers.");
             }
         }
     }
