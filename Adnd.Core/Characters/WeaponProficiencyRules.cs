@@ -4,6 +4,38 @@ namespace Adnd.Core.Characters;
 
 public static class WeaponProficiencyRules
 {
+    private static readonly string[] ExpandedSelectableWeapons =
+    [
+        "Longsword",
+        "Short Sword",
+        "Broad Sword",
+        "Two-Handed Sword",
+        "Battle Axe",
+        "Hand Axe (Thrown)",
+        "Halberd",
+        "Morning Star",
+        "Warhammer",
+        "Hammer (throwing)",
+        "Mace",
+        "Flail",
+        "Jo-stick",
+        "Quarterstaff",
+        "Staff",
+        "Scimitar",
+        "Spear",
+        "Dagger",
+        "Club",
+        "Poisoned Dart",
+        "Dart",
+        "Sling",
+        "Blowgun",
+        "Hand Crossbow",
+        "Light Crossbow",
+        "Longbow",
+        "Shortbow",
+        "Fist or Open Hand"
+    ];
+
     private sealed record ProficiencyProfile(
         int InitialCount,
         int NonProficiencyPenalty,
@@ -100,6 +132,10 @@ public static class WeaponProficiencyRules
             return Array.Empty<string>();
 
         var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var weapon in ExpandedSelectableWeapons)
+            set.Add(CanonicalizeProficiencyName(weapon));
+
         foreach (var weapon in profile.StartingWeapons)
             set.Add(CanonicalizeProficiencyName(weapon));
 

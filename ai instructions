@@ -3534,3 +3534,17 @@ yes, please apply these refactors now so ability bonus behavior is consistent ac
 ___
 write the weapon proficiency selection to ADnD Rule and Dice info when creating a new character and when reaching a new level.
 show the weapon proficiency in the character sheet. manually tweeked it
+___
+Add more weapons to choose from when selecting a weapon that the character is not proficient in.
+___
+can you update the prices in the temple to
+
+Service / Spell	Suggested Fee (gp)
+Heal hit points 	10 gp/hp
+Cure poison (Neutralize Poison)	1,000 gp
+Remove paralyzation (Remove Paralysis / similar)	200 gp
+Raise dead	5,000 gp
+Resurrection	7,000 gp
+Cure feeblemind	3,000 gp
+Cure disease (Cure Disease)	500 gp
+Restore from petrification (Stone to Flesh)	3,000 gp
