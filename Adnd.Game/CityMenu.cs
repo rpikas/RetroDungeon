@@ -468,10 +468,11 @@ public class CityMenu
             ExceptionalStrengthPercentile = exceptionalStrengthPercentile,
             NumberOfAttacks = 1,  // Base 1 attack per round at level 1
             Damage = "1d2",  // Default unarmed or no-weapon damage; will be replaced when weapon equipped
-            Age = Random.Shared.Next(17, 29)
+            Age = RollStartingAgeYears(race, chosenClasses)
         };
 
         RuleApplicationInfo.Publish($"Creating character '{name}': race {race.ToDisplayString()}, class {clsDisplay}.");
+        RuleApplicationInfo.Publish($"Starting age rolled: {character.Age} years ({race.ToDisplayString()} / {chosenClasses[0].ToDisplayString()}).");
 
         character.EnsureClassProgressions();
         character.RefreshMoveFromArmorAndClass();
@@ -500,7 +501,7 @@ public class CityMenu
         RuleApplicationInfo.Publish($"Final THAC0: {character.Thac0Display}.");
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
 
-        Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}\n");
+        Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}, Age: {Math.Max(0, character.Age)}y {Math.Max(0, character.AgeDays)}d\n");
 
         Console.Write("Save character? (Y/N): ");
         var saveKey = Console.ReadKey(true).Key;
@@ -513,6 +514,117 @@ public class CityMenu
         {
             Console.WriteLine("Character discarded.");
         }
+    }
+
+    private static int RollStartingAgeYears(Race race, List<CharacterClass> chosenClasses)
+    {
+        var cls = chosenClasses.Count > 0 ? chosenClasses[0] : CharacterClass.Fighter;
+
+        if (race == Race.Human)
+            return RollHumanStartingAge(cls);
+
+        return RollDemihumanStartingAge(race, cls);
+    }
+
+    private static int RollHumanStartingAge(CharacterClass cls)
+    {
+        return cls switch
+        {
+            CharacterClass.Cleric => 18 + RollDice(1, 4),
+            CharacterClass.Druid => 18 + RollDice(1, 4),
+            CharacterClass.Fighter => 15 + RollDice(1, 4),
+            CharacterClass.Paladin => 17 + RollDice(1, 4),
+            CharacterClass.Ranger => 20 + RollDice(1, 4),
+            CharacterClass.MagicUser => 24 + RollDice(2, 8),
+            CharacterClass.Illusionist => 30 + RollDice(1, 6),
+            CharacterClass.Thief => 18 + RollDice(1, 4),
+            CharacterClass.Assassin => 20 + RollDice(1, 4),
+            CharacterClass.Monk => 21 + RollDice(1, 4),
+            CharacterClass.Bard => 20 + RollDice(1, 4),
+            _ => 18 + RollDice(1, 4)
+        };
+    }
+
+    private static int RollDemihumanStartingAge(Race race, CharacterClass cls)
+    {
+        var archetype = GetDemihumanAgeArchetype(cls);
+
+        return race switch
+        {
+            Race.Dwarf => archetype switch
+            {
+                DemihumanAgeArchetype.Cleric => 250 + RollDice(2, 20),
+                DemihumanAgeArchetype.Fighter => 40 + RollDice(5, 4),
+                DemihumanAgeArchetype.Thief => 75 + RollDice(3, 6),
+                _ => 40 + RollDice(5, 4)
+            },
+            Race.Elf => archetype switch
+            {
+                DemihumanAgeArchetype.Cleric => 500 + RollDice(1, 10),
+                DemihumanAgeArchetype.Fighter => 130 + RollDice(5, 6),
+                DemihumanAgeArchetype.MagicUser => 150 + RollDice(5, 6),
+                DemihumanAgeArchetype.Thief => 100 + RollDice(5, 6),
+                _ => 130 + RollDice(5, 6)
+            },
+            Race.Gnome => archetype switch
+            {
+                DemihumanAgeArchetype.Cleric => 300 + RollDice(3, 12),
+                DemihumanAgeArchetype.Fighter => 60 + RollDice(5, 4),
+                DemihumanAgeArchetype.MagicUser => 100 + RollDice(2, 12),
+                DemihumanAgeArchetype.Thief => 80 + RollDice(3, 6),
+                _ => 60 + RollDice(5, 4)
+            },
+            Race.HalfElf => archetype switch
+            {
+                DemihumanAgeArchetype.Cleric => 40 + RollDice(2, 4),
+                DemihumanAgeArchetype.Fighter => 22 + RollDice(3, 4),
+                DemihumanAgeArchetype.MagicUser => 30 + RollDice(2, 8),
+                DemihumanAgeArchetype.Thief => 22 + RollDice(3, 8),
+                _ => 22 + RollDice(3, 4)
+            },
+            Race.Halfling => archetype switch
+            {
+                DemihumanAgeArchetype.Fighter => 20 + RollDice(3, 4),
+                DemihumanAgeArchetype.Thief => 40 + RollDice(2, 4),
+                _ => 20 + RollDice(3, 4)
+            },
+            Race.HalfOrc => archetype switch
+            {
+                DemihumanAgeArchetype.Cleric => 20 + RollDice(1, 4),
+                DemihumanAgeArchetype.Fighter => 13 + RollDice(1, 4),
+                DemihumanAgeArchetype.Thief => 20 + RollDice(2, 4),
+                _ => 13 + RollDice(1, 4)
+            },
+            _ => RollHumanStartingAge(cls)
+        };
+    }
+
+    private static DemihumanAgeArchetype GetDemihumanAgeArchetype(CharacterClass cls)
+    {
+        return cls switch
+        {
+            CharacterClass.Cleric or CharacterClass.Druid => DemihumanAgeArchetype.Cleric,
+            CharacterClass.MagicUser or CharacterClass.Illusionist => DemihumanAgeArchetype.MagicUser,
+            CharacterClass.Thief or CharacterClass.Assassin or CharacterClass.Bard => DemihumanAgeArchetype.Thief,
+            _ => DemihumanAgeArchetype.Fighter
+        };
+    }
+
+    private static int RollDice(int count, int sides)
+    {
+        var total = 0;
+        for (int i = 0; i < count; i++)
+            total += Random.Shared.Next(1, sides + 1);
+
+        return total;
+    }
+
+    private enum DemihumanAgeArchetype
+    {
+        Cleric,
+        Fighter,
+        MagicUser,
+        Thief
     }
 
     private static void SelectInitialWeaponProficiencies(Character character, System.Collections.Generic.List<CharacterClass> chosenClasses)
@@ -691,6 +803,7 @@ public class CityMenu
             Console.Clear();
             var c = all[sel.Value - 1];
             Console.WriteLine(c);
+            Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d");
 
             Console.WriteLine("\n=== SPELLCASTING ===");
             if (c.Spellcasting == null || c.Spellcasting.Count == 0)

@@ -3584,7 +3584,7 @@ S)plit gold with the same funtion
 If in adventures inn and all player in the party has been selected show all the room alternativis and  S)plit gold and L)eave  14,2
 
 ___
-depending on race and class this should be the starting age for non humans
+Depending on race and class this should be the starting age for non humans
 
 Race	✝️ Cleric	⚔️ Fighter	🔮 Magic‑User	🗡️ Thief
 Dwarf	250 + 2d20	40 + 5d4	—	75 + 3d6
@@ -3593,3 +3593,29 @@ Gnome	300 + 3d12	60 + 5d4	100 + 2d12	80 + 3d6
 Half‑Elf	40 + 2d4	22 + 3d4	30 + 2d8	22 + 3d8
 Halfling	—	20 + 3d4	—	40 + 2d4
 Half‑Orc	20 + 1d4	13 + 1d4	—	20 + 2d4
+
+Human stating age.
+Class	🎂 Age + Variable
+Cleric	18 + 1d4
+Druid	18 + 1d4
+Fighter	15 + 1d4
+Paladin	17 + 1d4
+Ranger	20 + 1d4
+Magic‑User	24 + 2d8
+Illusionist	30 + 1d6
+Thief	18 + 1d4
+Assassin	20 + 1d4
+Monk	21 + 1d4
+
+when completed createing the charatcer, show also the age. when inspecting a charter show the age
+
+___
+
+Race	🧒 Young Adult	🧓 Mature	👴 Middle Aged	🧙 Old	🪨 Venerable
+Dwarf	35–50	51–150	151–250	251–350	351–450
+El	75–150	151–500	501–1000	1001–1100	1101–1350
+Gnome	50–90	91–400	401–450	451–600	601–750
+Half‑Elf	24–40	41–90	91–175	176–250	251–325
+Halfling	20–33	34–69	70–104	105–140	141–175
+Half‑Orc	14–30	31–45	46–60	61–80	81–100
+Human	14–20	21–40	41–60	61–90	91–120
