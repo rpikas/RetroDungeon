@@ -3153,6 +3153,7 @@ public sealed class CombatCoordinator
         public ChestTrapType TrapType { get; set; }
         public bool TrapFound { get; set; }
         public bool TrapDisarmed { get; set; }
+        public bool TrapTriggered { get; set; }
     }
 
     private LairChestResolutionResult ResolveLairChestInteraction(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, ChestTrapType trapType)
@@ -3180,12 +3181,12 @@ public sealed class CombatCoordinator
                     return result;
 
                 case LairChestChoice.CastFindTraps:
-                    if (!HandleCastFindTraps(owner, session, survivors, result))
+                    if (!HandleCastFindTraps(owner, session, survivors, dungeonDepth, result))
                         continue;
                     break;
 
                 case LairChestChoice.Inspect:
-                    if (!HandleInspectTrap(owner, session, survivors, result, failedTrapInspectors))
+                    if (!HandleInspectTrap(owner, session, survivors, dungeonDepth, result, failedTrapInspectors))
                         continue;
                     break;
             }
@@ -3205,7 +3206,7 @@ public sealed class CombatCoordinator
             if (opener == null)
                 continue;
 
-            var shouldTrigger = !result.TrapDisarmed && trapType != ChestTrapType.None;
+            var shouldTrigger = !result.TrapDisarmed && !result.TrapTriggered && trapType != ChestTrapType.None;
             if (shouldTrigger)
             {
                 var triggerRoll = _dice.Roll(100);
@@ -3220,7 +3221,7 @@ public sealed class CombatCoordinator
         }
     }
 
-    private bool HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    private bool HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, LairChestResolutionResult result)
     {
         var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:", includeClassInList: true).Character;
         if (caster == null)
@@ -3265,11 +3266,11 @@ public sealed class CombatCoordinator
             return true;
         }
 
-        TryDisarmByAnyThief(owner, session, survivors, result);
+        TryDisarmByAnyThief(owner, session, survivors, dungeonLevel, result);
         return true;
     }
 
-    private bool HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result, HashSet<string> failedTrapInspectors)
+    private bool HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, LairChestResolutionResult result, HashSet<string> failedTrapInspectors)
     {
         var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true).Character;
         if (inspector == null)
@@ -3290,7 +3291,7 @@ public sealed class CombatCoordinator
         if (_dualClassService.IsThiefBackstabFromOriginalClass(inspector))
             _dualClassService.MarkOriginalClassFunctionUsed(inspector);
 
-        var thiefLevel = Math.Max(1, inspector.GetClassLevel(CharacterClass.Thief));
+        var thiefLevel = GetEffectiveThiefSkillLevel(inspector);
         var chance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var roll = _dice.Roll(100);
         var found = roll <= chance && result.TrapType != ChestTrapType.None;
@@ -3322,12 +3323,16 @@ public sealed class CombatCoordinator
         if (disarmed)
             Say(owner, "Treasure Chest", $"{inspector.Name} disarms the trap.", session);
         else
+        {
             Say(owner, "Treasure Chest", $"{inspector.Name} fails to disarm the trap.", session);
+            RuleApplicationInfo.Publish($"Failed disarm triggers trap immediately ({FormatTrapName(result.TrapType)}).");
+            ApplyChestTrapEffect(owner, session, survivors, inspector, dungeonLevel, result.TrapType, result);
+        }
 
         return true;
     }
 
-    private void TryDisarmByAnyThief(IWin32Window owner, CombatSession session, List<Character> survivors, LairChestResolutionResult result)
+    private void TryDisarmByAnyThief(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, LairChestResolutionResult result)
     {
         var thieves = survivors.Where(IsThiefClass).ToList();
         if (thieves.Count == 0)
@@ -3343,7 +3348,7 @@ public sealed class CombatCoordinator
         if (_dualClassService.IsThiefBackstabFromOriginalClass(disarmer))
             _dualClassService.MarkOriginalClassFunctionUsed(disarmer);
 
-        var disarmerThiefLevel = Math.Max(1, disarmer.GetClassLevel(CharacterClass.Thief));
+        var disarmerThiefLevel = GetEffectiveThiefSkillLevel(disarmer);
         var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(disarmerThiefLevel, disarmer.Race, disarmer.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var disarmRoll = _dice.Roll(100);
         var disarmed = disarmRoll <= disarmChance;
@@ -3353,11 +3358,17 @@ public sealed class CombatCoordinator
         if (disarmed)
             Say(owner, "Treasure Chest", $"{disarmer.Name} disarms the trap.", session);
         else
+        {
             Say(owner, "Treasure Chest", $"{disarmer.Name} fails to disarm the trap.", session);
+            RuleApplicationInfo.Publish($"Failed disarm triggers trap immediately ({FormatTrapName(result.TrapType)}).");
+            ApplyChestTrapEffect(owner, session, survivors, disarmer, dungeonLevel, result.TrapType, result);
+        }
     }
 
     private void ApplyChestTrapEffect(IWin32Window owner, CombatSession session, List<Character> survivors, Character opener, int dungeonLevel, ChestTrapType trapType, LairChestResolutionResult result)
     {
+        result.TrapTriggered = trapType != ChestTrapType.None;
+
         switch (trapType)
         {
             case ChestTrapType.PoisonNeedle:
@@ -3803,7 +3814,21 @@ public sealed class CombatCoordinator
     }
 
     private static bool IsThiefClass(Character c)
-        => c.Classes.Contains(CharacterClass.Thief) || c.Classes.Contains(CharacterClass.Assassin);
+        => c.Classes.Contains(CharacterClass.Thief)
+           || c.Classes.Contains(CharacterClass.Assassin)
+           || c.Classes.Contains(CharacterClass.Bard);
+
+    private static int GetEffectiveThiefSkillLevel(Character c)
+    {
+        var thiefLevel = c.GetClassLevel(CharacterClass.Thief);
+        if (thiefLevel > 0)
+            return thiefLevel;
+
+        if (c.Classes.Contains(CharacterClass.Bard))
+            return Math.Max(1, c.DualClassOriginalLevel > 0 ? c.DualClassOriginalLevel : c.GetClassLevel(CharacterClass.Bard));
+
+        return 1;
+    }
 
     private static bool IsMageOrIllusionist(Character c)
         => c.Classes.Contains(CharacterClass.MagicUser) || c.Classes.Contains(CharacterClass.Illusionist);

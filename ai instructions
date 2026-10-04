@@ -3702,7 +3702,14 @@ This table shows hwo many different druid spells a Bard should get per level ? E
 21	1: 5  2: 5  3: 4  4: 4  5: 4
 22	1: 5  2: 5  3: 5  4: 4  5: 4
 23	1: 5  2: 5  3: 5  4: 5  5: 5
+15,1
+___
 
+changing class to Bard is an exception to the rule that you can only change class once
 
+When i switched from fighter to thief and then to bard, i found two different problems:
+1. I could not use my thief skills not even after level 9 bard
+2. I appeard to be a multi class Bard fighter, where both clases got xp and gainedl level, 
+but when a charater is a Bard, it should not be possible to get xp or gain level in other classes.
 
-
+failing to disarm a trap should automatically trigger it.16,5

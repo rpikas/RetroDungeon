@@ -81,13 +81,27 @@ public sealed class DualClassService
             return false;
         }
 
+        character.EnsureClassProgressions();
+
+        if (targetClass == CharacterClass.Bard)
+        {
+            if (!CanStartBardTransition(character, out reason))
+                return false;
+
+            if (!IsAlignmentAllowedForClass(character.Alignment, targetClass))
+            {
+                reason = "Alignment does not allow the target class.";
+                return false;
+            }
+
+            return true;
+        }
+
         if (character.IsDualClassed)
         {
             reason = "Character has already dual-classed.";
             return false;
         }
-
-        character.EnsureClassProgressions();
 
         if (character.Classes.Count != 1)
         {
@@ -165,6 +179,9 @@ public sealed class DualClassService
         if (!CanStartDualClass(character, targetClass, out reason))
             return false;
 
+        if (targetClass == CharacterClass.Bard && character.IsDualClassed)
+            return StartBardTransition(character, out reason);
+
         character.EnsureClassProgressions();
 
         var originalClass = character.Classes[0];
@@ -198,6 +215,103 @@ public sealed class DualClassService
 
         // Keep HP/HD as-is per AD&D dual-class rule, but recalculate derived combat state
         // so old-class combat values (e.g., monk open-hand damage/attacks) do not leak.
+        character.RecalculateArmorClassFromState();
+        character.RefreshMoveFromArmorAndClass();
+        character.NumberOfAttacks = 1f;
+        character.Damage = GetCurrentWeaponDamageOrUnarmed(character);
+
+        return true;
+    }
+
+    private static bool CanStartBardTransition(Character character, out string reason)
+    {
+        reason = string.Empty;
+
+        if (!character.IsDualClassed)
+        {
+            reason = "Bard transition requires prior class changes (Fighter -> Thief).";
+            return false;
+        }
+
+        if (character.Classes.Count == 0)
+        {
+            reason = "Character has no active class.";
+            return false;
+        }
+
+        var currentClass = character.Classes[0];
+        if (currentClass != CharacterClass.Thief)
+        {
+            reason = "To become a bard, the character must currently be a thief (after first being a fighter).";
+            return false;
+        }
+
+        var thiefLevel = character.GetClassLevel(CharacterClass.Thief);
+        if (thiefLevel < 5 || thiefLevel > 8)
+        {
+            reason = "Bard transition requires thief level 5-8.";
+            return false;
+        }
+
+        if (character.DualClassOriginalClass != CharacterClass.Fighter)
+        {
+            reason = "Bard progression requires the prior class to be fighter.";
+            return false;
+        }
+
+        if (character.DualClassOriginalLevel < 5 || character.DualClassOriginalLevel > 7)
+        {
+            reason = "Bard progression requires fighter level 5-7 before switching to thief.";
+            return false;
+        }
+
+        if (!MeetsBardAbilityPrerequisites(character.Abilities))
+        {
+            reason = "Bard requires high Strength, Dexterity, Intelligence, Wisdom, and Charisma (15+ each).";
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool StartBardTransition(Character character, out string reason)
+    {
+        reason = string.Empty;
+
+        if (!CanStartBardTransition(character, out reason))
+            return false;
+
+        character.EnsureClassProgressions();
+
+        // Bard path is a special second class change (Fighter -> Thief -> Bard).
+        // After this transition, thief becomes the "original class" for dual-class
+        // lock/unlock semantics so thief features can unlock again once bard level
+        // surpasses thief level.
+        var thiefLevel = Math.Max(1, character.GetClassLevel(CharacterClass.Thief));
+        character.DualClassOriginalClass = CharacterClass.Thief;
+        character.DualClassOriginalLevel = thiefLevel;
+
+        character.DualClass = CharacterClass.Bard;
+        character.DualClassState = DualClassState.TrainingNewClass;
+        character.UsedOriginalClassFunctionThisAdventure = false;
+        character.DualClassStartedAtExperience = Math.Max(0, character.Experience);
+
+        character.Classes = new List<CharacterClass> { CharacterClass.Bard };
+        character.ClassProgressions = new List<ClassProgression>
+        {
+            new()
+            {
+                Class = CharacterClass.Bard,
+                Level = 1,
+                Experience = 0
+            }
+        };
+
+        character.Level = 1;
+        character.Experience = 0;
+
+        _ = new SpellProgressionService().RecalculateFromClassProgressions(character);
+
         character.RecalculateArmorClassFromState();
         character.RefreshMoveFromArmorAndClass();
         character.NumberOfAttacks = 1f;
@@ -315,6 +429,12 @@ public sealed class DualClassService
     {
         if (character == null || !character.IsDualClassed)
             return;
+
+        if (character.DualClass == CharacterClass.Bard)
+        {
+            NormalizeBardClassState(character);
+            return;
+        }
 
         if (character.DualClassState == DualClassState.SurpassedOriginal)
         {
@@ -459,6 +579,19 @@ public sealed class DualClassService
             CharacterClass.Assassin => alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil,
             _ => true
         };
+    }
+
+    private static void NormalizeBardClassState(Character character)
+    {
+        character.Classes = new List<CharacterClass> { CharacterClass.Bard };
+
+        character.ClassProgressions ??= new List<ClassProgression>();
+        var bardProgression = character.ClassProgressions.FirstOrDefault(cp => cp.Class == CharacterClass.Bard)
+                            ?? new ClassProgression { Class = CharacterClass.Bard, Level = 1, Experience = 0 };
+
+        character.ClassProgressions = new List<ClassProgression> { bardProgression };
+        character.Level = Math.Max(1, bardProgression.Level);
+        character.Experience = Math.Max(0, bardProgression.Experience);
     }
 
     private static bool MeetsBardAbilityPrerequisites(AbilityScores abilities)

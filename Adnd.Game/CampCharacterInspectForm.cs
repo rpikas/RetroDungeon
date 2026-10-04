@@ -378,7 +378,8 @@ public sealed class CampCharacterInspectForm : Form
     private static bool IsThiefReader(Character c)
     {
         return c.Classes.Any(cls => cls == CharacterClass.Thief)
-               || c.Class == CharacterClass.Thief;
+               || c.Class == CharacterClass.Thief
+               || (c.Classes.Contains(CharacterClass.Bard) && c.GetClassLevel(CharacterClass.Thief) > 0);
     }
 
     private static bool TryThiefReadMagic(Character c, out double chancePercent, out int roll)

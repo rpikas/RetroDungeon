@@ -91,11 +91,11 @@ public class CityMenu
         if (!hasHuman)
             return (false, "no human character");
 
-        var hasNotDualClassedHuman = all.Any(c => c.Race == Race.Human && !c.IsDualClassed);
-        if (!hasNotDualClassedHuman)
-            return (false, "all humans already dual-classed");
+        var hasHumanCandidate = all.Any(c => c.Race == Race.Human);
+        if (!hasHumanCandidate)
+            return (false, "no human candidate");
 
-        foreach (var c in all.Where(ch => ch.Race == Race.Human && !ch.IsDualClassed))
+        foreach (var c in all.Where(ch => ch.Race == Race.Human))
         {
             if (GetEligibleDualClassTargets(c).Count > 0)
                 return (true, string.Empty);
@@ -115,7 +115,7 @@ public class CityMenu
         }
 
         var eligibleCharacters = all
-            .Where(c => c.Race == Race.Human && !c.IsDualClassed)
+            .Where(c => c.Race == Race.Human)
             .Where(c => GetEligibleDualClassTargets(c).Count > 0)
             .ToList();
 
