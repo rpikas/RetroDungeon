@@ -870,6 +870,31 @@ public class Character
 
     public bool IsMonkImmuneToDiseaseSlowHaste() => IsMonk() && GetMonkLevel() >= 5;
 
+    public string GetAgeCategoryDisplay()
+    {
+        var age = Math.Max(0, Age);
+
+        return Race switch
+        {
+            Race.Dwarf => GetAgeCategoryByUpperBounds(age, 50, 150, 250, 350),
+            Race.Elf => GetAgeCategoryByUpperBounds(age, 150, 500, 1000, 1100),
+            Race.Gnome => GetAgeCategoryByUpperBounds(age, 90, 400, 450, 600),
+            Race.HalfElf => GetAgeCategoryByUpperBounds(age, 40, 90, 175, 250),
+            Race.Halfling => GetAgeCategoryByUpperBounds(age, 33, 69, 104, 140),
+            Race.HalfOrc => GetAgeCategoryByUpperBounds(age, 30, 45, 60, 80),
+            _ => GetAgeCategoryByUpperBounds(age, 20, 40, 60, 90),
+        };
+    }
+
+    private static string GetAgeCategoryByUpperBounds(int age, int youngAdultMax, int matureMax, int middleAgedMax, int oldMax)
+    {
+        if (age <= youngAdultMax) return "Young Adult";
+        if (age <= matureMax) return "Mature";
+        if (age <= middleAgedMax) return "Middle Aged";
+        if (age <= oldMax) return "Old";
+        return "Venerable";
+    }
+
     public void AdvanceAgeByDays(int days)
     {
         if (days <= 0)

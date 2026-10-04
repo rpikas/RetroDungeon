@@ -501,7 +501,7 @@ public class CityMenu
         RuleApplicationInfo.Publish($"Final THAC0: {character.Thac0Display}.");
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
 
-        Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}, Age: {Math.Max(0, character.Age)}y {Math.Max(0, character.AgeDays)}d\n");
+        Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}, Age: {Math.Max(0, character.Age)}y {Math.Max(0, character.AgeDays)}d ({character.GetAgeCategoryDisplay()})\n");
 
         Console.Write("Save character? (Y/N): ");
         var saveKey = Console.ReadKey(true).Key;
@@ -803,7 +803,7 @@ public class CityMenu
             Console.Clear();
             var c = all[sel.Value - 1];
             Console.WriteLine(c);
-            Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d");
+            Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d ({c.GetAgeCategoryDisplay()})");
 
             Console.WriteLine("\n=== SPELLCASTING ===");
             if (c.Spellcasting == null || c.Spellcasting.Count == 0)

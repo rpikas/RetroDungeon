@@ -3610,6 +3610,7 @@ Monk	21 + 1d4
 when completed createing the charatcer, show also the age. when inspecting a charter show the age
 
 ___
+Define age category for each race and the age ranges for each category.
 
 Race	🧒 Young Adult	🧓 Mature	👴 Middle Aged	🧙 Old	🪨 Venerable
 Dwarf	35–50	51–150	151–250	251–350	351–450
