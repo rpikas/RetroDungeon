@@ -23,6 +23,16 @@ public class TempleMenu
 
             Console.Clear();
             Console.WriteLine("=== Church of Chant ===");
+            Console.WriteLine("Service / Spell                Fee");
+            Console.WriteLine("Heal hit points                15 gp/hp");
+            Console.WriteLine($"Cure poison                    {Temple.CurePoisonCost} gp");
+            Console.WriteLine($"Remove paralyzation            {Temple.CureParalysisCost} gp");
+            Console.WriteLine($"Raise dead                     {Temple.RaiseDeadCost} gp");
+            Console.WriteLine($"Resurrection                   {Temple.RaiseFromAshesCost} gp");
+            Console.WriteLine($"Cure feeblemind                {Temple.CureFeeblemindCost} gp");
+            Console.WriteLine($"Cure disease                   {Temple.CureDiseaseCost} gp");
+            Console.WriteLine($"Restore from petrification     {Temple.RestorePetrificationCost} gp");
+            Console.WriteLine();
             Console.WriteLine("H)eal Party");
             Console.WriteLine("R)aise Dead");
             Console.WriteLine("L<-eave");

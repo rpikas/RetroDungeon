@@ -3556,21 +3556,40 @@ Resurrection	7,000 gp
 Cure feeblemind	3,000 gp
 Cure disease	500 gp
 Restore from petrification	3,000 gp 13,7
-
+___
+update the price in the temple to 15 gp/hp
+___
+when entring the church show the price list. 13,8
 ___
 In the city introduce Adventures Inn where the party can rest 
 First ask who in the party wants to rest (1-6) or A)ll, 
 then ask what kind of room they want:
-A)  THE STABLES (FREE!) Heals 1 HP per day.  0 GP/WEEK
+A)  THE STABLES (FREE!) Heals 1 HP per day.
 B)  A COT.  10 GP/WEEK Heals 2 HP per day.
-C)  ECONOMY ROOMS.  50 GP/WEEK Heals 4 HP per day.
-D)  MERCHANT SUITES.  200 GP/WEEK Heals 8 HP per day.
-E)  THE ROYAL SUITE.  500 GP/WEEK Heals 16 HP per day.
+C)  ECONOMY ROOMS.  50 GP/WEEK Heals 6 HP per day.
+D)  MERCHANT SUITES.  200 GP/WEEK Heals 20 HP per day.
+E)  THE ROYAL SUITE.  500 GP/WEEK Heals 40 HP per day.
+L)eave the inn without resting.
 
-for each character that wants to rest, write to ADnD Rule and Dice info what kind of room they selected and how much it cost.
+For each character that wants to rest, write to ADnD Rule and Dice info what kind of room they selected and how much it cost.
 
 They will get older by 7 days per week they need to rest
+
+If in adventures inn and one player has been selected show a P)ool gold alternative
+If in adventures inn and all player in the party has been selected show a D)istribute gold evenly as an alternative and implement that
+
+If in adventures inn and all player in the party has been selected change names of a D)istribute gold evenly as an alternative to 
+S)plit gold with the same funtion
+
+If in adventures inn and all player in the party has been selected show all the room alternativis and  S)plit gold and L)eave  14,2
+
 ___
-update the price in the temple to 15 gp/hp
-___
-when entring the church show
+depending on race and class this should be the starting age for non humans
+
+Race	✝️ Cleric	⚔️ Fighter	🔮 Magic‑User	🗡️ Thief
+Dwarf	250 + 2d20	40 + 5d4	—	75 + 3d6
+Elf	500 + 1d10	130 + 5d6	150 + 5d6	100 + 5d6
+Gnome	300 + 3d12	60 + 5d4	100 + 2d12	80 + 3d6
+Half‑Elf	40 + 2d4	22 + 3d4	30 + 2d8	22 + 3d8
+Halfling	—	20 + 3d4	—	40 + 2d4
+Half‑Orc	20 + 1d4	13 + 1d4	—	20 + 2d4

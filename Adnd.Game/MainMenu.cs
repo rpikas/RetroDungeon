@@ -18,6 +18,7 @@ public class MainMenu
     private readonly CityMenu _cityMenu = new();
     private readonly PartyMenu _partyMenu = new();
     private readonly TempleMenu _templeMenu = new();
+    private readonly AdventuresInnMenu _adventuresInnMenu = new();
     private readonly ShopMenu _shopMenu = new();
     private readonly DungeonMenu _dungeonMenu = new();
     private readonly SettingsMenu _settingsMenu = new();
@@ -31,13 +32,14 @@ public class MainMenu
     /// row, and back to the gate. The ids are the shared vocabulary -- where each one SITS on the table is
     /// the viewer's business, but which ones exist is the game's.
     /// </summary>
-    private static readonly string[] TownWalk = { "EdgeOfTown", "TrainingGrounds", "Tavern", "Temple", "Shop" };
+    private static readonly string[] TownWalk = { "EdgeOfTown", "TrainingGrounds", "Tavern", "AdventuresInn", "Temple", "Shop" };
 
     private static readonly Dictionary<string, string> PlaceNames = new()
     {
         ["EdgeOfTown"] = "the edge of town",
         ["TrainingGrounds"] = "the training ground",
         ["Tavern"] = "Gilgamash Tavern",
+        ["AdventuresInn"] = "Adventures Inn",
         ["Temple"] = "the Church of Chant",
         ["Shop"] = "Boltac's Trading Post",
     };
@@ -72,6 +74,7 @@ public class MainMenu
             Console.WriteLine($"The party is at {PlaceName(_standing)}.\n");
             Console.WriteLine("T)raining Ground");
             Console.WriteLine("G)ilgamash Tavern");
+            Console.WriteLine("A)dventures Inn");
             Console.WriteLine("C)hurch of Chant");
             Console.WriteLine("B)oltac's Trading Post");
             Console.WriteLine("M)aze");
@@ -112,6 +115,17 @@ public class MainMenu
 
                     Enter("Temple");
                     _templeMenu.Show();
+                    break;
+
+                case ConsoleKey.A:
+                    if (!HasPartyMembers())
+                    {
+                        ShowPartyRequiredMessage();
+                        break;
+                    }
+
+                    Enter("AdventuresInn");
+                    _adventuresInnMenu.Show();
                     break;
 
                 case ConsoleKey.B:
@@ -266,6 +280,12 @@ public class MainMenu
             case "Tavern":
                 Enter("Tavern");
                 _partyMenu.Show();
+                break;
+
+            case "AdventuresInn":
+                if (!HasPartyMembers()) { ShowPartyRequiredMessage(); break; }
+                Enter("AdventuresInn");
+                _adventuresInnMenu.Show();
                 break;
 
             case "Temple":
