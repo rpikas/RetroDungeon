@@ -3620,3 +3620,20 @@ Half‑Elf	24–40	41–90	91–175	176–250	251–325
 Halfling	20–33	34–69	70–104	105–140	141–175
 Half‑Orc	14–30	31–45	46–60	61–80	81–100
 Human	14–20	21–40	41–60	61–90	91–120
+14,4
+___
+When creating a character, adjust the ability scores based on the age category of the character. 
+Young Adult: Subtract 1 point of wisdom, add 1 point of constitution.
+Mature: Add I point of strength, add 1 point of wisdom.
+Middle Aged: Subtraci 1 point (or half exceptional rating) of strength and 1 point of constitution; add I point of intelligence and 1 point of wisdom.
+Old: Subtract 2 paints of strength, 2 points of dexterity, and 1point of constitution; add 1 point of wisdom.
+Venerable: Subtract 1 point of strength, I point of dexterity, and I point of constitution; add 1 painl of intelligence and 1 point of wisdom.
+
+For example, if a character is a 40 year old human, then he or she is in the Mature age category and should get +1 point of strength and +1 point of wisdom.
+When a person becomes older then also adjust the ability scores based on the new age category. 
+For example, if a Human character is 40 years old and becomes 41 years old, then he or she is in the Middle Aged category and 
+should get -1 point of strength, -1 point of constitution, +1 point of intelligence, and +1 point of wisdom.
+
+show the age adjustments made when creating the the charcter and just just before asking if you want keep it or not.
+also if a ranger, paladin or fighter gets str 18 after adjustment, roll the exceptional strength roll and show that also.
+___

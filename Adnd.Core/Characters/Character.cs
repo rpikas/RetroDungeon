@@ -6,6 +6,15 @@ namespace Adnd.Core.Characters;
 
 public class Character
 {
+    private enum CharacterAgeCategory
+    {
+        YoungAdult = 0,
+        Mature = 1,
+        MiddleAged = 2,
+        Old = 3,
+        Venerable = 4
+    }
+
     private const int CarryCapacityFactor = 10;
     public string Name { get; set; } = "";
     public Race Race { get; set; }
@@ -872,6 +881,23 @@ public class Character
 
     public string GetAgeCategoryDisplay()
     {
+        return GetAgeCategory() switch
+        {
+            CharacterAgeCategory.YoungAdult => "Young Adult",
+            CharacterAgeCategory.Mature => "Mature",
+            CharacterAgeCategory.MiddleAged => "Middle Aged",
+            CharacterAgeCategory.Old => "Old",
+            _ => "Venerable"
+        };
+    }
+
+    public void ApplyAgeCategoryAdjustmentsForCreation()
+    {
+        ApplyAgeCategoryAdjustment(GetAgeCategory());
+    }
+
+    private CharacterAgeCategory GetAgeCategory()
+    {
         var age = Math.Max(0, Age);
 
         return Race switch
@@ -886,13 +912,68 @@ public class Character
         };
     }
 
-    private static string GetAgeCategoryByUpperBounds(int age, int youngAdultMax, int matureMax, int middleAgedMax, int oldMax)
+    private static CharacterAgeCategory GetAgeCategoryByUpperBounds(int age, int youngAdultMax, int matureMax, int middleAgedMax, int oldMax)
     {
-        if (age <= youngAdultMax) return "Young Adult";
-        if (age <= matureMax) return "Mature";
-        if (age <= middleAgedMax) return "Middle Aged";
-        if (age <= oldMax) return "Old";
-        return "Venerable";
+        if (age <= youngAdultMax) return CharacterAgeCategory.YoungAdult;
+        if (age <= matureMax) return CharacterAgeCategory.Mature;
+        if (age <= middleAgedMax) return CharacterAgeCategory.MiddleAged;
+        if (age <= oldMax) return CharacterAgeCategory.Old;
+        return CharacterAgeCategory.Venerable;
+    }
+
+    private void ApplyAgeCategoryAdjustment(CharacterAgeCategory category)
+    {
+        Abilities ??= new AbilityScores();
+
+        switch (category)
+        {
+            case CharacterAgeCategory.YoungAdult:
+                Abilities.Wisdom = ClampAbility(Abilities.Wisdom - 1);
+                Abilities.Constitution = ClampAbility(Abilities.Constitution + 1);
+                break;
+            case CharacterAgeCategory.Mature:
+                Abilities.Strength = ClampAbility(Abilities.Strength + 1);
+                Abilities.Wisdom = ClampAbility(Abilities.Wisdom + 1);
+                break;
+            case CharacterAgeCategory.MiddleAged:
+                if (Abilities.Strength == 18 && ExceptionalStrengthPercentile.HasValue && ExceptionalStrengthPercentile.Value > 0)
+                {
+                    ExceptionalStrengthPercentile = Math.Max(1, ExceptionalStrengthPercentile.Value / 2);
+                }
+                else
+                {
+                    Abilities.Strength = ClampAbility(Abilities.Strength - 1);
+                }
+
+                Abilities.Constitution = ClampAbility(Abilities.Constitution - 1);
+                Abilities.Intelligence = ClampAbility(Abilities.Intelligence + 1);
+                Abilities.Wisdom = ClampAbility(Abilities.Wisdom + 1);
+                break;
+            case CharacterAgeCategory.Old:
+                Abilities.Strength = ClampAbility(Abilities.Strength - 2);
+                Abilities.Dexterity = ClampAbility(Abilities.Dexterity - 2);
+                Abilities.Constitution = ClampAbility(Abilities.Constitution - 1);
+                Abilities.Wisdom = ClampAbility(Abilities.Wisdom + 1);
+                break;
+            case CharacterAgeCategory.Venerable:
+                Abilities.Strength = ClampAbility(Abilities.Strength - 1);
+                Abilities.Dexterity = ClampAbility(Abilities.Dexterity - 1);
+                Abilities.Constitution = ClampAbility(Abilities.Constitution - 1);
+                Abilities.Intelligence = ClampAbility(Abilities.Intelligence + 1);
+                Abilities.Wisdom = ClampAbility(Abilities.Wisdom + 1);
+                break;
+        }
+
+        if (Abilities.Strength != 18)
+            ExceptionalStrengthPercentile = null;
+    }
+
+    private static int ClampAbility(int value) => Math.Clamp(value, 1, 25);
+
+    private static IEnumerable<CharacterAgeCategory> GetAgeCategoriesEntered(CharacterAgeCategory from, CharacterAgeCategory to)
+    {
+        for (var c = (int)from + 1; c <= (int)to; c++)
+            yield return (CharacterAgeCategory)c;
     }
 
     public void AdvanceAgeByDays(int days)
@@ -900,12 +981,21 @@ public class Character
         if (days <= 0)
             return;
 
+        var previousCategory = GetAgeCategory();
+
         AgeDays = Math.Max(0, AgeDays) + days;
         var extraYears = AgeDays / 365;
         if (extraYears > 0)
         {
             Age = Math.Max(0, Age + extraYears);
             AgeDays %= 365;
+
+            var currentCategory = GetAgeCategory();
+            if (currentCategory > previousCategory)
+            {
+                foreach (var entered in GetAgeCategoriesEntered(previousCategory, currentCategory))
+                    ApplyAgeCategoryAdjustment(entered);
+            }
         }
     }
 

@@ -415,15 +415,14 @@ public class CityMenu
         int? exceptionalStrengthPercentile = null;
         if (chosenClasses.Count == 1
             && abilities.Strength == 18
-            && (chosenClasses[0] == CharacterClass.Fighter
-                || chosenClasses[0] == CharacterClass.Ranger
-                || chosenClasses[0] == CharacterClass.Paladin))
+            && IsExceptionalStrengthClass(chosenClasses[0]))
         {
             exceptionalStrengthPercentile = DiceRoller.Roll(1, 100);
             var pctDisplay = exceptionalStrengthPercentile.Value == 100
                 ? "00"
                 : exceptionalStrengthPercentile.Value.ToString("00");
             Console.WriteLine($"Exceptional Strength: 18/{pctDisplay}");
+            RuleApplicationInfo.Publish($"Exceptional Strength rolled at character creation: 18/{pctDisplay}.");
         }
 
         // After class selection, prompt the user to choose alignment with class-based restrictions.
@@ -471,8 +470,32 @@ public class CityMenu
             Age = RollStartingAgeYears(race, chosenClasses)
         };
 
+        var abilitiesBeforeAgeAdjustment = CloneAbilities(character.Abilities);
+        var exceptionalBeforeAgeAdjustment = character.ExceptionalStrengthPercentile;
+        character.ApplyAgeCategoryAdjustmentsForCreation();
+
+        if (chosenClasses.Count == 1
+            && character.Abilities.Strength == 18
+            && !character.ExceptionalStrengthPercentile.HasValue
+            && IsExceptionalStrengthClass(chosenClasses[0]))
+        {
+            character.ExceptionalStrengthPercentile = DiceRoller.Roll(1, 100);
+            var adjustedPctDisplay = character.ExceptionalStrengthPercentile.Value == 100
+                ? "00"
+                : character.ExceptionalStrengthPercentile.Value.ToString("00");
+            Console.WriteLine($"Exceptional Strength (after age adjustment): 18/{adjustedPctDisplay}");
+            RuleApplicationInfo.Publish($"Exceptional Strength rolled after age adjustment: 18/{adjustedPctDisplay}.");
+        }
+
+        var ageAdjustmentSummary = BuildAgeAdjustmentSummary(
+            abilitiesBeforeAgeAdjustment,
+            character.Abilities,
+            exceptionalBeforeAgeAdjustment,
+            character.ExceptionalStrengthPercentile);
+
         RuleApplicationInfo.Publish($"Creating character '{name}': race {race.ToDisplayString()}, class {clsDisplay}.");
         RuleApplicationInfo.Publish($"Starting age rolled: {character.Age} years ({race.ToDisplayString()} / {chosenClasses[0].ToDisplayString()}).");
+        RuleApplicationInfo.Publish($"Age category adjustment applied ({character.GetAgeCategoryDisplay()}): {ageAdjustmentSummary}.");
 
         character.EnsureClassProgressions();
         character.RefreshMoveFromArmorAndClass();
@@ -502,6 +525,7 @@ public class CityMenu
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
 
         Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}, Age: {Math.Max(0, character.Age)}y {Math.Max(0, character.AgeDays)}d ({character.GetAgeCategoryDisplay()})\n");
+        Console.WriteLine($"Age adjustment ({character.GetAgeCategoryDisplay()}): {ageAdjustmentSummary}");
 
         Console.Write("Save character? (Y/N): ");
         var saveKey = Console.ReadKey(true).Key;
@@ -625,6 +649,57 @@ public class CityMenu
         Fighter,
         MagicUser,
         Thief
+    }
+
+    private static AbilityScores CloneAbilities(AbilityScores source)
+    {
+        return new AbilityScores
+        {
+            Strength = source.Strength,
+            Intelligence = source.Intelligence,
+            Wisdom = source.Wisdom,
+            Dexterity = source.Dexterity,
+            Constitution = source.Constitution,
+            Charisma = source.Charisma
+        };
+    }
+
+    private static string BuildAgeAdjustmentSummary(AbilityScores before, AbilityScores after, int? exceptionalBefore, int? exceptionalAfter)
+    {
+        var changes = new List<string>();
+
+        AppendDelta(changes, "STR", before.Strength, after.Strength);
+        AppendDelta(changes, "INT", before.Intelligence, after.Intelligence);
+        AppendDelta(changes, "WIS", before.Wisdom, after.Wisdom);
+        AppendDelta(changes, "DEX", before.Dexterity, after.Dexterity);
+        AppendDelta(changes, "CON", before.Constitution, after.Constitution);
+        AppendDelta(changes, "CHA", before.Charisma, after.Charisma);
+
+        if (exceptionalBefore != exceptionalAfter)
+        {
+            var beforePct = exceptionalBefore.HasValue ? exceptionalBefore.Value.ToString("00") : "--";
+            var afterPct = exceptionalAfter.HasValue ? exceptionalAfter.Value.ToString("00") : "--";
+            changes.Add($"Exceptional STR {beforePct}->{afterPct}");
+        }
+
+        return changes.Count == 0 ? "No ability score changes" : string.Join(", ", changes);
+    }
+
+    private static void AppendDelta(List<string> output, string label, int before, int after)
+    {
+        if (before == after)
+            return;
+
+        var delta = after - before;
+        var sign = delta > 0 ? "+" : string.Empty;
+        output.Add($"{label} {sign}{delta} ({before}->{after})");
+    }
+
+    private static bool IsExceptionalStrengthClass(CharacterClass characterClass)
+    {
+        return characterClass == CharacterClass.Fighter
+               || characterClass == CharacterClass.Ranger
+               || characterClass == CharacterClass.Paladin;
     }
 
     private static void SelectInitialWeaponProficiencies(Character character, System.Collections.Generic.List<CharacterClass> chosenClasses)
