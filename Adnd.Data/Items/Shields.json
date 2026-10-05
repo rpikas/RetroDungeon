@@ -5,6 +5,51 @@
       "Name": "Small Shield",
       "Type": "Shield",
       "Slot": "OffHand",
+      "Cost": 10,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "Rarity": "Common",
+      "Description": "A small shield offering basic protection./Small Shield",
+      "Source": "Adnd",
+      "StockQuantity": 6
+    },
+    {
+      "Name": "Large Shield",
+      "Type": "Shield",
+      "Slot": "OffHand",
+      "Cost": 15,
+      "Weight": 100,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "Rarity": "Common",
+      "Description": "A small shield offering basic protection./Small Shield",
+      "Source": "Adnd",
+      "StockQuantity": 6
+    },
+    {
+      "Name": "Small Shield,wooden",
+      "Type": "Shield",
+      "Slot": "OffHand",
+      "Cost": 1,
+      "Weight": 40,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "Rarity": "Common",
+      "Description": "A small shield offering basic protection./Small Shield",
+      "Source": "Adnd",
+      "StockQuantity": 6
+    },
+    {
+      "Name": "Small Shield",
+      "Type": "Shield",
+      "Slot": "OffHand",
       "Cost": 20,
       "Weight": 50,
       "IsShopBuyable": true,
@@ -106,5 +151,5 @@
       "Source": "Adnd",
       "StockQuantity": 0
     }
-    ]
+  ]
 }

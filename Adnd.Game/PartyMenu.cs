@@ -113,8 +113,8 @@ public class PartyMenu
             else
             {
                 // Column headers
-                Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Align",-5} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
-                Console.WriteLine(new string('-', 93));
+                Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Align",-5} {"Class",-25} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
+                Console.WriteLine(new string('-', 100));
 
                 for (int i = 0; i < activeMembers.Count; i++)
                 {
@@ -126,7 +126,7 @@ public class PartyMenu
                     var levelDisplay = GetLevelDisplay(c);
                     var align = c.Alignment.ToAbbreviation();
 
-                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
                 }
                 Console.WriteLine();
             }

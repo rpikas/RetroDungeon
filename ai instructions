@@ -4093,3 +4093,6 @@ monks have the same abilities as thiefs at the same level  when it comes to
 Monks when using weapon add thier level/2 rounded down in damage when they hit. refer to PHB page 30 
 in the log when monks hit and use weapons
 ___
+When creating charater, do not ask for the name until after they question, do you want to keep this character
+when displaying the party in party management give the class column 7 more charaters spac. 27,3
+updated default selection of weapon proficiencies for new characters

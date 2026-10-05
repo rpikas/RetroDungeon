@@ -59,8 +59,8 @@ public static class WeaponProficiencyRules
             [(4, "Battle Axe"), (7, "Mace"), (10, "Two-Handed Sword"), (13, "Flail"), (16, "Morning Star"), (19, "Halberd")]),
         [CharacterClass.Cleric] = new(
             2, -3, 4,
-            ["Mace", "Staff"],
-            [(5, "Warhammer"), (9, "Flail"), (13, "Morning Star"), (17, "Hammer (throwing)")]),
+            ["Mace", "Hammer (throwing)"],
+            [(5, "Warhammer"), (9, "Flail"), (13, "Morning Star"), (17, "Staff")]),
         [CharacterClass.Druid] = new(
             2, -4, 5,
             ["Scimitar", "Spear"],
@@ -68,27 +68,27 @@ public static class WeaponProficiencyRules
         [CharacterClass.Thief] = new(
             2, -3, 4,
             ["Short Sword", "Dagger"],
-            [(5, "Sling"), (9, "Shortbow"), (13, "Club"), (17, "Hand Crossbow")]),
+            [(5, "Sling"), (9, "Shortbow"), (13, "Club"), (17, "Dart")]),
         [CharacterClass.Assassin] = new(
             3, -3, 4,
-            ["Dagger", "Short Sword", "Light Crossbow"],
-            [(5, "Light Crossbow"), (9, "Poisoned Dart"), (13, "Scimitar"), (17, "Blowgun")]),
+            ["Dagger", "Longsword", "Light Crossbow"],
+            [(5, "Heavy Crossbow"), (9, "Dart"), (13, "Scimitar"), (17, "Spear")]),
         [CharacterClass.Bard] = new(
             3, -3, 4,
             ["Longsword", "Dagger", "Shortbow"],
             [(5, "Spear"), (9, "Staff"), (13, "Scimitar"), (17, "Sling")]),
         [CharacterClass.MagicUser] = new(
             1, -5, 6,
-            ["Dagger"],
-            [(7, "Staff"), (13, "Dart"), (19, "Sling")]),
+            ["Staff"],
+            [(7, "Dagger"), (13, "Dart"), (19, "Sling")]),
         [CharacterClass.Illusionist] = new(
             1, -5, 6,
-            ["Dagger"],
-            [(6, "Staff"), (11, "Dart"), (16, "Sling")]),
+            ["Staff"],
+            [(6, "Dagger"), (11, "Dart"), (16, "Sling")]),
         [CharacterClass.Monk] = new(
             1, -3, 2,
-            ["Staff"],
-            [(3, "Spear"), (5, "Club"), (7, "Dart"), (9, "Sling"), (11, "Jo-stick"), (13, "Hand Axe (Thrown)"), (15, "Quarterstaff"), (17, "Light Crossbow")])
+            ["Halebard"],
+            [(3, "Spear"), (5, "Light Crossbow"), (7, "Club"), (9, "Sling"), (11, "Jo-stick"), (13, "Hand Axe (Thrown)"), (15, "Quarterstaff"), (17, "Light Crossbow")])
     };
 
     public static int GetInitialProficiencySlots(CharacterClass cls)

@@ -106,8 +106,7 @@ public static class Shop
     }
 
     private static bool IsAdndSource(string? source) =>
-        !string.IsNullOrWhiteSpace(source)
-        && source.Contains("adnd", StringComparison.OrdinalIgnoreCase);
+        !IsWizardrySource(source);
 
     private static bool IsWizardrySource(string? source) =>
         !string.IsNullOrWhiteSpace(source)

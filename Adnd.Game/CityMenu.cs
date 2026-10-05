@@ -233,16 +233,6 @@ public class CityMenu
         Console.Clear();
         Console.WriteLine("=== CREATE CHARACTER ===\n");
 
-        Console.Write("Name: ");
-        string name = Console.ReadLine() ?? "Unknown";
-
-        // Enforce max length of 15 characters
-        if (name.Length > 15)
-        {
-            name = name.Substring(0, 15);
-            Console.WriteLine($"(Name truncated to: {name})");
-        }
-
         var gender = Gender.Male;
 
         // Roll abilities before race selection so player can choose race with knowledge
@@ -452,7 +442,7 @@ public class CityMenu
 
         var character = new Character
         {
-            Name = name,
+            Name = "Unknown",
             Race = race,
             Classes = new System.Collections.Generic.List<CharacterClass>(chosenClasses),
             Abilities = abilities,
@@ -507,7 +497,7 @@ public class CityMenu
             exceptionalBeforeAgeAdjustment,
             character.ExceptionalStrengthPercentile);
 
-        RuleApplicationInfo.Publish($"Creating character '{name}': race {race.ToDisplayString()}, class {clsDisplay}.");
+        RuleApplicationInfo.Publish($"Creating character '{character.Name}': race {race.ToDisplayString()}, class {clsDisplay}.");
         if (race == Race.Human)
         {
             RuleApplicationInfo.PublishLinked(
@@ -576,6 +566,19 @@ public class CityMenu
         var saveKey = Console.ReadKey(true).Key;
         if (saveKey == ConsoleKey.Y || (saveKey != ConsoleKey.N && saveKey != ConsoleKey.Y))
         {
+            Console.Write("Name: ");
+            var name = (Console.ReadLine() ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(name))
+                name = "Unknown";
+
+            // Enforce max length of 15 characters
+            if (name.Length > 15)
+            {
+                name = name.Substring(0, 15);
+                Console.WriteLine($"(Name truncated to: {name})");
+            }
+
+            character.Name = name;
             _repo.Save(character);
             Console.WriteLine("Character saved.");
         }
