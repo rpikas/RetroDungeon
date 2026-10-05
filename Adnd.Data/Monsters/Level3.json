@@ -74,7 +74,7 @@
       "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
+      "ArmorClass": 8,
       "HitDice": 3,
       "HitDiceType": 4,
       "ExtraHitPoints": 2,

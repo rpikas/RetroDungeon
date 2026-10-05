@@ -4034,3 +4034,23 @@ help, but in complete surprise situations the held crossbow will enable its user
 portion. Otherwise, it allows first fire in any melee round, and end of round fire also, when applicable, 
 10% of these weapons are heavy crossbows, The weapon has a 41 bonus. 24,2
 ___
+can you update the ac for all npc magic users accoring to this?
+Level	Typical AC	Reasoning 
+1	9	No items, Dex 12–13. Very squishy. 
+2	9	Same as level 1. Maybe Shield spell occasionally. 
+3	8	Dex 14 or occasional Shield spell. 
+4	7	First magic item possible: Bracers AC 7 or Ring +1. 
+5	7	Same gear level; Shield spell used more often.
+6	6	Bracers AC 6 + Dex bonus. 
+7	6	Ring +1 + Dex 15. 
+8	5	Bracers AC 6 + Ring +1 + Shield spell.
+9	5	Same as level 8; reliable defensive spell use. 
+10	4	Bracers AC 5 + Ring +2. 
+11	4	Same gear; MU now has strong spell defenses.
+12	3	Bracers AC 5 + Ring +2 + Dex 16. 
+13	3	Same gear; often protected by magical wards. 
+14	2	Bracers AC 4 + Ring +2 or +3. 
+15	2	Same gear; layered magical defenses. 
+16	1	Bracers AC 4 + Ring +3 + Dex 16 + Shield spell.
+24,7
+___

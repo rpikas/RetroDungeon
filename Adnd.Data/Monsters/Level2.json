@@ -263,7 +263,7 @@
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 10,
+      "ArmorClass": 9,
       "Movement": 12,
       "HitDice": 2,
       "HitDiceType": 4,

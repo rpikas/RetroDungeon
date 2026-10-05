@@ -46,6 +46,7 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 4,
+      "ArmorClassNote": "Kept at 4 for explicit table alignment.",
       "HitDice": 10,
       "HitDiceType": 4,
       "ExtraHitPoints": 2,
