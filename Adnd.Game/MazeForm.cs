@@ -3104,8 +3104,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var numberOfGroups = groupRoll switch
         {
             1 => 4,
-            <= 5 => 3,
-            <= 19 => 2,
+            <= 2 => 3,
+            <= 4 => 2,
             _ => 1
         };
 
