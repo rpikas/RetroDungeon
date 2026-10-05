@@ -110,7 +110,7 @@
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
+      "ArmorClass": 5,
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -133,10 +133,6 @@
         {
           "Name": "Level 2 Cleric spells",
           "Description": "Access to 1st–2nd level spells."
-        },
-        {
-          "Name": "Turn Undead",
-          "Description": "Can repel undead creatures."
         }
       ],
       "BaseXPValue": 150,
@@ -224,7 +220,7 @@
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 8,
+      "ArmorClass": 7,
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -335,7 +331,7 @@
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 3,
-      "ArmorClass": 5,
+      "ArmorClass": 6,
       "HitDice": 3,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -372,7 +368,7 @@
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 2,
-      "ArmorClass": 5,
+      "ArmorClass": 4,
       "HitDice": 4,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -404,7 +400,7 @@
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
+      "ArmorClass": 7,
       "HitDice": 3,
       "HitDiceType": 4,
       "ExtraHitPoints": 2,

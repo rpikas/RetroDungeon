@@ -4059,3 +4059,17 @@ In boltax for weapons show the damage also and for armor show the ac
 ___
 When all characters are down, but not dead, then the game is stuck and the player can not do anything. 
 I want a message to be shown that all characters are down with an ok button that accepts and continues actions from monsters.
+___
+Manually adjusted ac for npc.
+
+Class	Level 1	Level 2	Level 3	Level 4	Level 5
+Fighter	6	5	4	4	3
+Paladin	4	3	3	2	2
+Ranger	6	5	4	4	3
+Cleric	6	5	5	4	4
+Druid	7	6	6	5	5
+Thief	7	6	6	5	5
+Assassin	7	6	6	5	5
+Monk	9	8	7	6	5
+Magic‑User	9	9	8	7	7
+Illusionist	9	8	7	6	5
