@@ -499,6 +499,32 @@ public sealed class EncounterForm : Form
         ViewerPromptChanged?.Invoke(BuildViewerPrompt());
     }
 
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        // Closing the encounter before actions are completed is treated as a run attempt.
+        // Ask for confirmation for Escape, title-bar close, Alt+F4, etc.
+        if (!e.Cancel && DialogResult != DialogResult.OK)
+        {
+            var confirm = MessageBox.Show(
+                this,
+                "Closing combat now counts as trying to run away. Do you want to run away?",
+                "Run away?",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (confirm != DialogResult.Yes)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            DialogResult = DialogResult.Cancel;
+        }
+
+        base.OnFormClosing(e);
+    }
+
     private static void ShowTimedSurpriseDialog(IWin32Window owner, string titleText, string messageText, int autoCloseMilliseconds)
     {
         using var form = new Form

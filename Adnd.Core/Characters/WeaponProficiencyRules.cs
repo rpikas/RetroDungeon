@@ -27,13 +27,23 @@ public static class WeaponProficiencyRules
         "Club",
         "Poisoned Dart",
         "Dart",
+        "Javelin",
         "Sling",
         "Blowgun",
         "Hand Crossbow",
         "Light Crossbow",
+        "Heavy Crossbow",
         "Longbow",
         "Shortbow",
         "Fist or Open Hand"
+    ];
+
+    private static readonly string[] AllSwordProficiencies =
+    [
+        "Longsword",
+        "Short Sword",
+        "Broad Sword",
+        "Two-Handed Sword"
     ];
 
     private sealed record ProficiencyProfile(
@@ -133,22 +143,92 @@ public static class WeaponProficiencyRules
 
         var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var weapon in ExpandedSelectableWeapons)
+        foreach (var weapon in GetAllowedWeaponsForClassSelection(cls, profile))
             set.Add(CanonicalizeProficiencyName(weapon));
-
-        foreach (var weapon in profile.StartingWeapons)
-            set.Add(CanonicalizeProficiencyName(weapon));
-
-        foreach (var gain in profile.LevelWeaponGains)
-            set.Add(CanonicalizeProficiencyName(gain.Weapon));
-
-        if (cls == CharacterClass.Monk)
-            set.Add(CanonicalizeProficiencyName("Fist or Open Hand"));
 
         return set
             .Where(w => !string.IsNullOrWhiteSpace(w))
             .OrderBy(w => w)
             .ToList();
+    }
+
+    private static IEnumerable<string> GetAllowedWeaponsForClassSelection(CharacterClass cls, ProficiencyProfile profile)
+    {
+        switch (cls)
+        {
+            // any****
+            case CharacterClass.Fighter:
+            case CharacterClass.Paladin:
+            case CharacterClass.Ranger:
+            case CharacterClass.Assassin:
+                return ExpandedSelectableWeapons.Where(w => !string.Equals(w, "Fist or Open Hand", StringComparison.OrdinalIgnoreCase));
+
+            // club, flail, hammer, mace, staff
+            case CharacterClass.Cleric:
+                return
+                [
+                    "Club",
+                    "Flail",
+                    "Warhammer",
+                    "Hammer (throwing)",
+                    "Mace",
+                    "Staff"
+                ];
+
+            // club, dagger, dart, hammer, scimitar, sling, spear, staff
+            case CharacterClass.Druid:
+                return
+                [
+                    "Club",
+                    "Dagger",
+                    "Dart",
+                    "Warhammer",
+                    "Hammer (throwing)",
+                    "Scimitar",
+                    "Sling",
+                    "Spear",
+                    "Staff"
+                ];
+
+            // dagger, dart, staff
+            case CharacterClass.MagicUser:
+            case CharacterClass.Illusionist:
+                return ["Dagger", "Dart", "Staff"];
+
+            // club, dagger, dart, sling, sword****
+            case CharacterClass.Thief:
+                return new[] { "Club", "Dagger", "Dart", "Sling" }.Concat(AllSwordProficiencies);
+
+            // bo sticks, club, crossbow, dagger, hand axe, javelin, jo stick, pole arm, spear, staff
+            case CharacterClass.Monk:
+                return
+                [
+                    "Jo-stick",
+                    "Club",
+                    "Hand Crossbow",
+                    "Light Crossbow",
+                    "Heavy Crossbow",
+                    "Dagger",
+                    "Hand Axe (Thrown)",
+                    "Javelin",
+                    "Halberd",
+                    "Spear",
+                    "Staff",
+                    "Quarterstaff",
+                    "Fist or Open Hand"
+                ];
+
+            // Keep existing profile-based behavior for classes not covered by supplied table (e.g. Bard).
+            default:
+            {
+                var fallback = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var weapon in profile.StartingWeapons)
+                    fallback.Add(weapon);
+                foreach (var gain in profile.LevelWeaponGains)
+                    fallback.Add(gain.Weapon);
+                return fallback;
+            }
+        }
     }
 
     public static bool AddProficiency(Character character, string weaponName)
@@ -290,9 +370,16 @@ public static class WeaponProficiencyRules
             "long bow" => "Longbow",
             "longbow" => "Longbow",
             "fist/open hand" => "Fist or Open Hand",
+            "fist or open hand" => "Fist or Open Hand",
             "jo stick" => "Jo-stick",
             "jo-stick" => "Jo-stick",
+            "jo sticks" => "Jo-stick",
             "bo stick" => "Jo-stick",
+            "bo sticks" => "Jo-stick",
+            "pole arm" => "Halberd",
+            "pole arms" => "Halberd",
+            "polearm" => "Halberd",
+            "crossbow" => "Light Crossbow",
             "quarter staff" => "Quarterstaff",
             _ => value
         };

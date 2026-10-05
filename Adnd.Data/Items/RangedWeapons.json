@@ -199,7 +199,7 @@
       "AmmoType": "",
       "Quantity": 0,
       "IsShopBuyable": true,
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Thief", "Assassin", "Monk", "Magic‑User", "Illusionist", "Druid", "Bard" ],
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Thief", "Assassin", "Monk", "MagicUser", "Illusionist", "Druid", "Bard" ],
       "Rarity": "Common",
       "Description": "Thrown dagger."
     },
@@ -219,7 +219,7 @@
       "AmmoType": "",
       "Quantity": 0,
       "IsShopBuyable": true,
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Thief", "Assassin", "Magic‑User", "Illusionist", "Druid", "Bard" ],
+      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Thief", "Assassin", "MagicUser", "Illusionist", "Druid", "Bard" ],
       "Rarity": "Common",
       "Description": "Thrown dart."
     },
