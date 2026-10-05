@@ -1008,6 +1008,20 @@ public class Character
 
     public bool IsMonkImmuneToPoison() => IsMonk() && GetMonkLevel() >= 11;
 
+    public bool IsBard() => Classes.Contains(CharacterClass.Bard)
+                            || (IsDualClassed && DualClass == CharacterClass.Bard);
+
+    public int GetBardLevel()
+    {
+        if (!IsBard())
+            return 0;
+
+        if (Classes.Contains(CharacterClass.Bard))
+            return Math.Max(1, GetClassLevel(CharacterClass.Bard));
+
+        return Math.Max(1, Level);
+    }
+
     public string GetWeaponProficienciesDisplay()
     {
         WeaponProficiencies ??= new List<string>();

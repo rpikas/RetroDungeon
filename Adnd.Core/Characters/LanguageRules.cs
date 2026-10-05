@@ -63,14 +63,27 @@ public static class LanguageRules
 
     public static List<string> GetAdditionalLanguageChoices(Character character)
     {
-        var known = BuildBaseKnownLanguages(character);
+        return GetAdditionalLanguageChoices(character, character.KnownLanguages);
+    }
+
+    public static List<string> GetAdditionalLanguageChoices(Character character, IEnumerable<string>? existingKnownLanguages)
+    {
+        var known = existingKnownLanguages?.ToList() ?? BuildBaseKnownLanguages(character);
+        if (known.Count == 0)
+            known = BuildBaseKnownLanguages(character);
+
         var set = new HashSet<string>(known, StringComparer.OrdinalIgnoreCase);
         return AdditionalLanguagePool.Where(l => !set.Contains(l)).OrderBy(l => l, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
     public static List<string> PickRandomAdditionalLanguages(Character character, int count)
     {
-        var choices = GetAdditionalLanguageChoices(character);
+        return PickRandomAdditionalLanguages(character, count, character.KnownLanguages);
+    }
+
+    public static List<string> PickRandomAdditionalLanguages(Character character, int count, IEnumerable<string>? existingKnownLanguages)
+    {
+        var choices = GetAdditionalLanguageChoices(character, existingKnownLanguages);
         if (count <= 0 || choices.Count == 0)
             return new List<string>();
 

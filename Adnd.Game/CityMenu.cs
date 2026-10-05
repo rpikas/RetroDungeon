@@ -960,6 +960,19 @@ public class CityMenu
             Console.WriteLine($"Languages: {c.GetKnownLanguagesDisplay()}");
             RuleApplicationInfo.Publish($"Inspect character: {c.Name} languages known: {c.GetKnownLanguagesDisplay()}.");
 
+            if (c.IsBard())
+            {
+                var bardLevel = c.GetBardLevel();
+                var bardProgress = BardRules.GetProgressForLevel(bardLevel);
+                Console.WriteLine($"Bard college: {bardProgress.College}");
+                Console.WriteLine($"Bard charm chance: {bardProgress.CharmPercentage}%");
+                Console.WriteLine($"Legend/lore & item knowledge chance: {bardProgress.LegendLoreItemKnowledgePercentage}%");
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "118BardTabeII",
+                    $"Inspect bard: {c.Name} L{bardLevel} => college {bardProgress.College}, charm {bardProgress.CharmPercentage}%, legend/lore {bardProgress.LegendLoreItemKnowledgePercentage}%, additional languages known {bardProgress.AdditionalLanguagesKnown}.");
+            }
+
             Console.WriteLine("\n=== SPELLCASTING ===");
             if (c.Spellcasting == null || c.Spellcasting.Count == 0)
             {

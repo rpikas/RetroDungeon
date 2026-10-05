@@ -3917,3 +3917,39 @@ Which languages are knowable in a campaign is strictly up to the DM who runs it.
 languages typically used:
 Dwarvish, Elvish, Gnomish, Halfling, Orcish, Goblin, Hobgoblin, Gnoll, Kobold
 Ogrish, Lizardman, Troll, Giant, Dragon, Pixie, Sprite, Centaur
+___
+
+Bards learn additional languages as they gain levels. The number of additional languages a Bard is outlined in the table
+Bard got Charm person skill they can use in combat. The chance to successfully use the skill is based on the Bard’s level 
+and is outlined in the table below. 
+The Bard also has a chance to know about legends, lore, and items based on their level, as outlined in the table below.
+Level of Experience	? College	?￯ﾸﾏ Additional Languages Known	? Charm Percentage	? Legend Lore & Item Knowledge Percentage
+1	(Probationer)	0	15 %	0 %
+2	Fochlucan	0	20 %	5 %
+3	Fochlucan	0	22 %	7 %
+4	Fochlucan	1	24 %	10 %
+5	Mac‑Fuirmidh	0	30 %	13 %
+6	Mac‑Fuirmidh	1	32 %	16 %
+7	Mac‑Fuirmidh	1	34 %	20 %
+8	Doss	0	42 %	25 %
+9	Doss	1	44 %	30 %
+10	Canaith	0	50 %	40 %
+11	Canaith	1	53 %	45 %
+12	Cli	0	56 %	50 %
+13	Cli	1	59 %	55 %
+14	Cli	1	63 %	60 %
+15	Cli	1	66 %	65 %
+16	Cli	1	69 %	70 %
+17	Anstruth	1	73 %	75 %
+18	Anstruth	1	76 %	80 %
+19	Anstruth	1	79 %	85 %
+20	Ollamh	1	84 %	89 %
+21	Ollamh	1	88 %	94 %
+22	Magna Alumnae	1	95 %	99 %
+23	Magna Alumnae	1	95 %	99 %
+
+
+When a Bard reaches a new level, they may choose to learn a new language from the list of available languages.
+Write this in the log and refer to: PHB118BardTabeII.png
+___
+

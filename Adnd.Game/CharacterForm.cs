@@ -174,6 +174,20 @@ namespace Adnd.Game.Windows
             lines.Add($"Weapon equipped: {equippedWeaponDisplay}");
             lines.Add($"Weapon proficiencies: {weaponProficiencies}");
             lines.Add($"Languages: {knownLanguages}");
+
+            if (_character.IsBard())
+            {
+                var bardLevel = _character.GetBardLevel();
+                var bardProgress = BardRules.GetProgressForLevel(bardLevel);
+                lines.Add($"Bard college: {bardProgress.College}");
+                lines.Add($"Bard charm chance: {bardProgress.CharmPercentage}%");
+                lines.Add($"Legend/Lore & item knowledge chance: {bardProgress.LegendLoreItemKnowledgePercentage}%");
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "118BardTabeII",
+                    $"{_character.Name} bard profile: L{bardLevel}, college {bardProgress.College}, charm {bardProgress.CharmPercentage}%, legend/lore {bardProgress.LegendLoreItemKnowledgePercentage}%, additional languages known {bardProgress.AdditionalLanguagesKnown}.");
+            }
+
             lines.Add($"Weapon base damage: {weaponBaseDamage}");
             lines.Add($"Damage modifiers: Strength {FormatSigned(damageStrengthModifier)}");
             lines.Add($"Damage total: {damageTotal}");

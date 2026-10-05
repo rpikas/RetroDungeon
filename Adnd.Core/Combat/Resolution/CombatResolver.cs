@@ -666,6 +666,15 @@ public sealed class CombatResolver
                     }
                     ResolvePartyUseItem(session, member, action, events);
                     break;
+                case CombatActionType.BardCharm:
+                    if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        session.BreakChant();
+                        chantActiveAtRoundStart = false;
+                        events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
+                    }
+                    ResolveBardCharm(session, member, action, events);
+                    break;
                 case CombatActionType.DispellUndead:
                     if (member.HasStatus(CharacterStatus.LycanthropeTransformed))
                     {
@@ -1581,6 +1590,60 @@ public sealed class CombatResolver
 
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+    }
+
+    private void ResolveBardCharm(CombatSession session, Character bard, CombatAction action, List<CombatEvent> events)
+    {
+        if (bard.HasStatus(CharacterStatus.LycanthropeTransformed))
+        {
+            events.Add(new CombatEvent($"{bard.Name} is transformed by lycanthropy and cannot use bard abilities."));
+            return;
+        }
+
+        if (!bard.IsBard())
+        {
+            events.Add(new CombatEvent($"{bard.Name} cannot use bard charm."));
+            return;
+        }
+
+        var bardLevel = bard.GetBardLevel();
+        var charmPercent = BardRules.GetCharmPercentage(bardLevel);
+        if (charmPercent <= 0)
+        {
+            events.Add(new CombatEvent($"{bard.Name} cannot use bard charm yet."));
+            return;
+        }
+
+        var candidates = string.IsNullOrWhiteSpace(action.TargetGroupId)
+            ? session.AliveMonsters.ToList()
+            : session.GetAliveMonstersByGroup(action.TargetGroupId).ToList();
+
+        candidates = candidates
+            .Where(m => !m.HasStatus(MonsterStatus.Charmed))
+            .Where(m => m.InstanceMonsterType == MonsterType.Humanoid || m.InstanceMonsterType == MonsterType.Other)
+            .ToList();
+
+        if (candidates.Count == 0)
+        {
+            events.Add(new CombatEvent($"{bard.Name} uses bard charm, but there are no suitable targets."));
+            return;
+        }
+
+        var target = candidates[_rng.Next(candidates.Count)];
+        var roll = _dice.Roll(100);
+        RuleApplicationInfo.PublishLinked(
+            "PHB",
+            "118BardTabeII",
+            $"Bard charm: {bard.Name} L{bardLevel} has {charmPercent}% chance (rolled {roll}) against {target.DisplayName}.");
+
+        if (roll <= charmPercent)
+        {
+            target.SetStatus(MonsterStatus.Charmed, int.MaxValue);
+            events.Add(new CombatEvent($"{bard.Name} charms {target.DisplayName} ({roll} <= {charmPercent})."));
+            return;
+        }
+
+        events.Add(new CombatEvent($"{bard.Name} fails to charm {target.DisplayName} ({roll} > {charmPercent})."));
     }
 
     private void ResolvePartyUseItem(CombatSession session, Character user, CombatAction action, List<CombatEvent> events)
@@ -4998,8 +5061,8 @@ public sealed class CombatResolver
             attacker: charmedMonster,
             target: target,
             events: events,
-            missText: $"{charmedMonster.DisplayName} fights for the druid and misses {target.DisplayName}.",
-            hitText: $"{charmedMonster.DisplayName} fights for the druid and hits {target.DisplayName}",
+            missText: $"{charmedMonster.DisplayName} fights for the Bard and misses {target.DisplayName}.",
+            hitText: $"{charmedMonster.DisplayName} fights for the Bard and hits {target.DisplayName}",
             slainText: $"{target.DisplayName} is slain by the charmed ally!");
     }
 

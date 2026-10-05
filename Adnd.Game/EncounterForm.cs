@@ -624,6 +624,12 @@ public sealed class EncounterForm : Form
             return;
         }
 
+        if (string.Equals(command, "bardCharm", StringComparison.OrdinalIgnoreCase))
+        {
+            ChooseBardCharmAction();
+            return;
+        }
+
         // Auto has no branch here on purpose: it answers to Enter, which this form's own key handler already
         // understands, so the pump injects the key and the game decides. See the note on Enter in
         // EncounterForm_KeyDown -- one path for both surfaces, rather than a table-only shortcut that could
@@ -759,6 +765,9 @@ public sealed class EncounterForm : Form
                 break;
             case Keys.U:
                 ChooseUseItemAction();
+                break;
+            case Keys.C:
+                ChooseBardCharmAction();
                 break;
             case Keys.R:
                 ChooseAction(CombatActionType.Run);
@@ -896,6 +905,35 @@ public sealed class EncounterForm : Form
         }
 
         _actions[caster.Name] = combatAction;
+        AdvanceActor();
+    }
+
+    private void ChooseBardCharmAction()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _party.Count)
+            return;
+
+        var bard = _party[_currentIndex];
+        if (!IsActionable(bard))
+            return;
+
+        if (!bard.IsBard())
+        {
+            SayOnBoth("Bard Charm", $"{bard.Name} is not a bard.");
+            return;
+        }
+
+        var combatAction = CombatAction.OfType(CombatActionType.BardCharm);
+
+        if (_multipleGroups && _session != null)
+        {
+            var targetGroupId = PromptGroupSelection(bard);
+            if (targetGroupId == null)
+                return;
+            combatAction.TargetGroupId = targetGroupId;
+        }
+
+        _actions[bard.Name] = combatAction;
         AdvanceActor();
     }
 
@@ -1814,6 +1852,9 @@ public sealed class EncounterForm : Form
                                && _currentIndex < _party.Count
                                && _party[_currentIndex].IsMonk()
                                && _party[_currentIndex].GetMonkLevel() >= 7;
+        var showBardCharm = _currentIndex >= 0
+                            && _currentIndex < _party.Count
+                            && _party[_currentIndex].IsBard();
 
         // Determine which action is mapped to Enter
         string fightText, parryText;
@@ -1840,8 +1881,14 @@ public sealed class EncounterForm : Form
         if (showMonkBodyHeal)
             secondLine = $"S)PELL   H)EAL BODY  {parryText}      T)AKE BACK";
 
+        if (showBardCharm)
+            secondLine = $"S)PELL   C)HARM      {parryText}      T)AKE BACK";
+
         if (_currentIndex >= 0 && _currentIndex < _party.Count && CanUseDispellUndead(_party[_currentIndex]))
             secondLine = $"S)PELL   D)ISPELL UNDEAD  {parryText}      T)AKE BACK";
+
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && showBardCharm && CanUseDispellUndead(_party[_currentIndex]))
+            secondLine = $"S)PELL   C)HARM  D)ISPELL UNDEAD  {parryText}";
 
         if (_currentIndex >= 0 && _currentIndex < _party.Count && showLayOnHands && CanUseDispellUndead(_party[_currentIndex]))
             secondLine = $"S)PELL   D)ISPELL UNDEAD  L)AY HANDS  {parryText}";
