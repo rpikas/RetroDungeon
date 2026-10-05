@@ -4073,3 +4073,22 @@ Assassin	7	6	6	5	5
 Monk	9	8	7	6	5
 Magic‑User	9	9	8	7	7
 Illusionist	9	8	7	6	5
+___
+Manually Updated Range weapons class usage 25,8
+___
+when inspecting charaters from camp, show how much xp they have and how much they need to next level
+___
+Introduce a new setting in Boltax for showing onlyADND, OnlyWizardry or BothAdndAndWizardry items
+
+can you move the  NEXT LVL XP to the bellow the spells. in the inspect charater form
+
+monks have the same abilities as thiefs at the same level  when it comes to
+1.	Open locks
+2.	Find/Remove Traps
+3.	Move Silently
+4.	Hide in Shadows
+5.	Hear Noise
+6.	Climb Walls
+
+Monks when using weapon add thier level/2 rounded down in damage when they hit. refer to PHB page 30 
+in the log when monks hit and use weapons

@@ -341,8 +341,10 @@ namespace Adnd.Game.Windows
             //DEXTERITY ARMOR CLASS ADJUSTMENT
             DrawInBox(g, AbilitiesTables.DexterityACModifier(_character.Abilities.Dexterity).ToString() , new Rectangle(670, 452, 95, 40));
 
-            //DEXTERITY OPEN LOCKS etc. (all dexterity related Theif skills)
-            if (_character.GetClassLevel(CharacterClass.Thief) <= 0 && !_character.Classes.Contains(CharacterClass.Bard))
+            //DEXTERITY OPEN LOCKS etc. (all dexterity related thief/monk skills)
+            if (_character.GetClassLevel(CharacterClass.Thief) <= 0
+                && !_character.Classes.Contains(CharacterClass.Bard)
+                && _character.GetClassLevel(CharacterClass.Monk) <= 0)
             {
                 DrawInBox(g, "NA", new Rectangle(660, 537, 95, 66));
             }
@@ -350,7 +352,9 @@ namespace Adnd.Game.Windows
             {
                 var thiefLevel = _character.GetClassLevel(CharacterClass.Thief) > 0
                     ? _character.GetClassLevel(CharacterClass.Thief)
-                    : Math.Max(1, _character.DualClassOriginalLevel > 0 ? _character.DualClassOriginalLevel : _character.GetClassLevel(CharacterClass.Bard));
+                    : _character.GetClassLevel(CharacterClass.Monk) > 0
+                        ? _character.GetClassLevel(CharacterClass.Monk)
+                        : Math.Max(1, _character.DualClassOriginalLevel > 0 ? _character.DualClassOriginalLevel : _character.GetClassLevel(CharacterClass.Bard));
                 DrawInBox(g, AbilitiesTables.ThiefPickPockets(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(660, 537, 95, 66));
                 DrawInBox(g, AbilitiesTables.ThiefOpenLocks(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(660, 578, 95, 66));
                 DrawInBox(g, AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, _character.Race, _character.Abilities.Dexterity).ToString("0.#") + "%", new Rectangle(560, 618, 95, 66));

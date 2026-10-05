@@ -4,6 +4,7 @@ using Adnd.Core.Characters;
 using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
 using Adnd.Core.Items;
+using Adnd.Core.Characters.Progression;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
@@ -555,6 +556,9 @@ public sealed class CampCharacterInspectForm : Form
             }
         }
 
+        lines.Add(string.Empty);
+        lines.Add($"XP to next level: {GetXpToNextLevelDisplay(c)}");
+
         _detailsBox.Text = string.Join(Environment.NewLine, lines);
     }
 
@@ -675,6 +679,8 @@ public sealed class CampCharacterInspectForm : Form
         static string RowWithRightColumn(string left, string middle, string rightLabel, string rightValue)
             => $"{left,-20}{middle,-26}{rightLabel,-5}{rightValue,4}";
 
+        var xpToNextLevelText = GetXpToNextLevelDisplay(c);
+
         sb.AppendLine($"{c.Name.ToUpperInvariant(),-8} L {levelText,-3} {classText,-14} {raceText} {alignmentText}");
         sb.AppendLine();
 
@@ -721,7 +727,39 @@ public sealed class CampCharacterInspectForm : Form
             }
         }
 
+        sb.AppendLine($"NEXT LVL XP {xpToNextLevelText}");
+
         return sb.ToString().TrimEnd();
+    }
+
+    private static string GetXpToNextLevelDisplay(Character c)
+    {
+        c.EnsureClassProgressions();
+
+        if (c.Classes == null || c.Classes.Count == 0)
+            return "N/A";
+
+        if (c.Classes.Count == 1)
+        {
+            var cls = c.Classes[0];
+            var currentClassXp = Math.Max(0, c.GetClassExperience(cls));
+            var currentLevel = Math.Max(1, c.GetClassLevel(cls));
+            var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, currentLevel + 1);
+            var needed = Math.Max(0, nextThreshold - currentClassXp);
+            return needed.ToString();
+        }
+
+        var parts = new List<string>();
+        foreach (var cls in c.Classes)
+        {
+            var currentClassXp = Math.Max(0, c.GetClassExperience(cls));
+            var currentLevel = Math.Max(1, c.GetClassLevel(cls));
+            var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, currentLevel + 1);
+            var needed = Math.Max(0, nextThreshold - currentClassXp);
+            parts.Add($"{cls.ToDisplayString().ToUpperInvariant()}:{needed}");
+        }
+
+        return string.Join(" ", parts);
     }
 
     private static string FormatDualClassSummary(Character c)

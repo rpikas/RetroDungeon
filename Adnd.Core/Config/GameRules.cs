@@ -42,6 +42,13 @@ public enum SourceOptions
     All
 }
 
+public enum BoltacItemSourceOptions
+{
+    OnlyAdnd,
+    OnlyWizardry,
+    BothAdndAndWizardry
+}
+
 public class GameRules
 {
     public double TreasureFindChance { get; set; } = 0.80;      // 0.0 - 1.0
@@ -55,6 +62,7 @@ public class GameRules
     public float ProbabilityFindingEachItem { get; set; } = 0.05f;
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
     public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
+    public BoltacItemSourceOptions BoltacItemSourceFilter { get; set; } = BoltacItemSourceOptions.BothAdndAndWizardry;
     public bool UIOldStyle { get; set; } = true;
     public int DelayInMsbetweenActions { get; set; } =0;
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;

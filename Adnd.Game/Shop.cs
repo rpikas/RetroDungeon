@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Adnd.Core.Characters;
+using Adnd.Core.Config;
 using Adnd.Core.Items;
 using Adnd.Data.Characters;
 using Adnd.Data.Items;
@@ -79,11 +80,38 @@ public static class Shop
     /// than Boltac admits to.
     /// </summary>
     public static List<Item> Stock(ItemRepository items) =>
+        FilterBoltacItemsBySource(
         items.LoadAll()
             .Where(i => i.IsShopBuyable || (i.StockQuantity.HasValue && i.StockQuantity.Value > 0))
             .Where(i => !i.StockQuantity.HasValue || i.StockQuantity.Value > 0)
             .Take(9999)
-            .ToList();
+            .ToList(),
+        GameRulesProvider.Current.BoltacItemSourceFilter);
+
+    private static List<Item> FilterBoltacItemsBySource(List<Item> items, BoltacItemSourceOptions sourceFilter)
+    {
+        return sourceFilter switch
+        {
+            BoltacItemSourceOptions.OnlyAdnd => items
+                .Where(i => IsAdndSource(i.Source))
+                .ToList(),
+            BoltacItemSourceOptions.OnlyWizardry => items
+                .Where(i => IsWizardrySource(i.Source))
+                .ToList(),
+            BoltacItemSourceOptions.BothAdndAndWizardry => items
+                .Where(i => IsAdndSource(i.Source) || IsWizardrySource(i.Source))
+                .ToList(),
+            _ => items
+        };
+    }
+
+    private static bool IsAdndSource(string? source) =>
+        !string.IsNullOrWhiteSpace(source)
+        && source.Contains("adnd", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsWizardrySource(string? source) =>
+        !string.IsNullOrWhiteSpace(source)
+        && source.Contains("wizardry", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>Boltac buys at half value, tracked in silver pieces.</summary>
     public static int SellPriceInSilverPieces(Item item) => CostInSilverPieces(item) / 2;

@@ -4090,13 +4090,18 @@ public sealed class CombatCoordinator
     private static bool IsThiefClass(Character c)
         => c.Classes.Contains(CharacterClass.Thief)
            || c.Classes.Contains(CharacterClass.Assassin)
-           || c.Classes.Contains(CharacterClass.Bard);
+           || c.Classes.Contains(CharacterClass.Bard)
+           || c.Classes.Contains(CharacterClass.Monk);
 
     private static int GetEffectiveThiefSkillLevel(Character c)
     {
         var thiefLevel = c.GetClassLevel(CharacterClass.Thief);
         if (thiefLevel > 0)
             return thiefLevel;
+
+        var monkLevel = c.GetClassLevel(CharacterClass.Monk);
+        if (monkLevel > 0)
+            return monkLevel;
 
         if (c.Classes.Contains(CharacterClass.Bard))
             return Math.Max(1, c.DualClassOriginalLevel > 0 ? c.DualClassOriginalLevel : c.GetClassLevel(CharacterClass.Bard));

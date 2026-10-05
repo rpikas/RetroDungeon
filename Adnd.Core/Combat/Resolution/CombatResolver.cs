@@ -3399,6 +3399,10 @@ public sealed class CombatResolver
             if (thunderboltsDamageDiceMultiplier > 1)
                 damage *= thunderboltsDamageDiceMultiplier;
 
+            var monkWeaponDamageBonus = 0;
+            if (member.IsMonk() && mainHand?.Type == ItemType.Weapon)
+                monkWeaponDamageBonus = Math.Max(0, member.GetMonkLevel() / 2);
+
             if (CanWieldHammerOfThunderboltsAsPlusFive(member, mainHand)
                 && IsTargetGiantOrKinForHammerOfThunderbolts(target))
             {
@@ -3412,6 +3416,17 @@ public sealed class CombatResolver
                 var beforeBackstab = damage;
                 damage *= backstabMultiplier;
                 events.Add(new CombatEvent($"{member.Name} backstabs! +4 to hit, damage x{backstabMultiplier} ({beforeBackstab}->{damage})."));
+            }
+
+            if (monkWeaponDamageBonus > 0)
+            {
+                damage += monkWeaponDamageBonus;
+                var monkWeaponName = mainHand?.Name ?? "weapon";
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "30Monk",
+                    $"Monk weapon damage bonus: {member.Name} L{member.GetMonkLevel()} uses {monkWeaponName}. Bonus +{monkWeaponDamageBonus} damage (level/2, rounded down)."
+                );
             }
 
             if (IsHalfDamageFromSharpWeapons(target, mainHand))
@@ -3460,6 +3475,8 @@ public sealed class CombatResolver
             var damageFormula = strengthDamageBonus == 0
                 ? damageExpression
                 : $"{damageExpression}+{strengthDamageBonus}";
+            if (monkWeaponDamageBonus > 0)
+                damageFormula += $"+{monkWeaponDamageBonus}(monk)";
 
             var partyDamageModText = partyDamageBonusApplied ? " +1 chant/prayer" : string.Empty;
             events.Add(new CombatEvent(
