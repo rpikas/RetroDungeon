@@ -102,6 +102,7 @@ namespace Adnd.Game.Windows
             var weaponBaseDamage = _character.Damage;
             var damageTotal = _character.DamageTotalDisplay;
             var weaponProficiencies = _character.GetWeaponProficienciesDisplay();
+            var knownLanguages = _character.GetKnownLanguagesDisplay();
             var mainWeaponName = _character.Equipment.TryGetValue(EquipmentSlot.MainHand, out var mainWeapon)
                                  && mainWeapon != null
                                  && mainWeapon.Type == ItemType.Weapon
@@ -172,6 +173,7 @@ namespace Adnd.Game.Windows
             lines.Add(string.Empty);
             lines.Add($"Weapon equipped: {equippedWeaponDisplay}");
             lines.Add($"Weapon proficiencies: {weaponProficiencies}");
+            lines.Add($"Languages: {knownLanguages}");
             lines.Add($"Weapon base damage: {weaponBaseDamage}");
             lines.Add($"Damage modifiers: Strength {FormatSigned(damageStrengthModifier)}");
             lines.Add($"Damage total: {damageTotal}");
@@ -244,7 +246,8 @@ namespace Adnd.Game.Windows
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-string first, second, third;
+            string first4WeaponProficiency, second4WeaponProficiency, third4WeaponProficiency;
+            string first4KnownLanguages, second4KnownLanguages, third4KnownLanguages;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             DrawInBox(g, _character.Name, new Rectangle(45, 80, 198, 40));
@@ -257,10 +260,15 @@ string first, second, third;
             DrawInBox(g, _character.CurrentHitPoints.ToString(), new Rectangle(710, 80, 95, 40));
             DrawInBox(g, _character.ArmorClass.ToString(), new Rectangle(844, 80, 45, 40));
 
-            (first, second, third) = SplitCommaString(_character.GetWeaponProficienciesDisplay());
-            DrawInBox(g, first, new Rectangle(500, 180, 640, 36), false, StringAlignment.Near, _handFontSmall10);
-            DrawInBox(g, second, new Rectangle(500, 195, 640, 36), false, StringAlignment.Near, _handFontSmall10);
-            DrawInBox(g, third, new Rectangle(500, 210, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+            (first4KnownLanguages, second4KnownLanguages, third4KnownLanguages) = SplitCommaString(_character.GetKnownLanguagesDisplay());
+            DrawInBox(g, first4KnownLanguages, new Rectangle(45, 180, 400, 40), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, second4KnownLanguages, new Rectangle(45, 195, 400, 40), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, third4KnownLanguages, new Rectangle(45, 210, 400, 40), false, StringAlignment.Near, _handFontSmall10);
+
+            (first4WeaponProficiency, second4WeaponProficiency, third4WeaponProficiency) = SplitCommaString(_character.GetWeaponProficienciesDisplay());
+            DrawInBox(g, first4WeaponProficiency, new Rectangle(500, 180, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, second4WeaponProficiency, new Rectangle(500, 195, 640, 36), false, StringAlignment.Near, _handFontSmall10);
+            DrawInBox(g, third4WeaponProficiency, new Rectangle(500, 210, 640, 36), false, StringAlignment.Near, _handFontSmall10);
 
             // Ability circles: write only the value inside each circle, not labels.
             if (_character.ExceptionalStrengthPercentile == null)

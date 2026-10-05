@@ -616,30 +616,37 @@ change: shrikers should use thir special ability every round and they have 50% c
 "Level 1 Priest spells" and "Level 1 Cleric spells" also mean the same thing +2 11,6
 
 if an encounter got "SpecialAbilities":  "Level 1 Druid spells", then it is 50% chanse they cast Engangle and 50% Faerie Fire at the party
-if an encounter got "SpecialAbilities":  "Level 1 Illusionist spells", then it is 50% chanse they cast color spray and 50% phantasm force at the party. +156 etc, 12,1
+if an encounter got "SpecialAbilities":  "Level 1 Illusionist spells", then it is 50% chanse they cast color spray 
+and 50% phantasm force at the party. +156 etc, 12,1
 
 when shreikers manage to attract more monster groups, the monsters shold be dungeon level 2 mobs +1, 12,2
 
 when charaters are enountered, roll 1d4+1 to see the numbers och charaters dmg, pg. 175
 then roll 1d100 2-5 times to see what is classes the encounter got. the level of the classes should be the same as the dungeon level.
-1-17 Cleric, 18-20 Druid 21-60 Fighter, 61-62 Paladin, 63-65 Ranger, 66-86 Magic-User, 87-88 Illusionist, 89-98 Thief, 99 Assassin, 100 Monk or Bard. 
-if 5 charaters are encountered, and 5 different clasess are rolled, then reroll the classes until at least 2 charaters have the same class. +56, +128, 13.1
+1-17 Cleric, 18-20 Druid 21-60 Fighter, 61-62 Paladin, 63-65 Ranger, 66-86 Magic-User, 87-88 Illusionist, 89-98 Thief, 
+99 Assassin, 100 Monk or Bard. 
+if 5 charaters are encountered, and 5 different clasess are rolled, then reroll the classes until at least 
+2 charaters have the same class. +56, +128, 13.1
 
-When enoutering Characters, do not select Adventurers, but select 2-5 charaters with different classes one monster group per class encoutered (1-4)
+When enoutering Characters, do not select Adventurers, but select 2-5 charaters with different classes one monster 
+group per class encoutered (1-4)
 that you just implemnted with CombatCoordinator.StartEncounterWithGroupCounts and MazeForm.ResolveCharacterEncounter -10 +36 13,4
 
 i think there should be a 50% chanse to try cast a spell  every round. 13.7
 
-when i encounter seveal monstergroups at the same time and one group is charater, reroll, they can not be combinded with other groups since they have 
+when i encounter seveal monstergroups at the same time and one group is charater, reroll, they can not be combinded 
+with other groups since they have 
 special handling and are allready several groups +24 13,9
 
 implement a level 7 druid spell called Fire Storm. It should do 2d8 damage+1 per level of the spell caster to all enemy groups. 
 If the encounter makes a save vs. spell, they only take half damage. 14,6
 
-implement a level 6 druid spell called Wall of Thorns. It should work like a wall of fire, but it should do 8 damage+1 per armor class of the encounter. 
+implement a level 6 druid spell called Wall of Thorns. It should work like a wall of fire, but it should do 8 damage+1 
+per armor class of the encounter. 
 If the encounter makes a save vs. spell, they only take half damage. 15,3
 
-Implement a level 6 druid spell called Feeblemind. It causes one encounter in one group to be Feebleminded permanently if they fail their save vs. spell. 
+Implement a level 6 druid spell called Feeblemind. It causes one encounter in one group to be Feebleminded permanently 
+if they fail their save vs. spell. 
 If they make their save, they are not feebleminded. When feebleminded, the encounter can not cast spells and they have. 15,8
 
 cure serious wounds that currently is a level 3 cleric spell should also be a level 4 druid spell working in the exactly same way. 16,2
@@ -658,7 +665,8 @@ not affected by the -4 thac0. 17,9
 
 I want MagicItem json be devided into 3 json files Rings.json, RodsStavesWands.json and MiscMagic.json 18,1
 
-implement a level 3 illusionist spell called Paralyzation. The number of monsters affected depends on the level of the spell caster and HD of the monsters.
+implement a level 3 illusionist spell called Paralyzation. The number of monsters affected depends on the level
+of the spell caster and HD of the monsters.
 The combined HD of the monsters affected can not be higher than the level of the spell caster multiplied by 2.
 The monsters have to roll a save vs. spell, if they fail they are paralyzed.If they make their save, they are not paralyzed. 18,4
 
@@ -667,7 +675,8 @@ ______________________
 
 260905
 for item class inctruduce Status
-when parsing items json make sure  "Status": "NotImplemented" updatest status to NotImplemented. No items with       "Status": "NotImplemented",
+when parsing items json make sure  "Status": "NotImplemented" updatest status to NotImplemented. No items with
+"Status": "NotImplemented",
 can be found in the dungeson or sold in the shop 19,9
 
 if dragon is encountered on level 3 roll 1d100 to determine what dragon
@@ -678,25 +687,32 @@ if dragon is encountered on level 3 roll 1d100 to determine what dragon
 manually added chars for level2, level3, level4, level5, level6, level7, level8, level9 and level10 to MonsterLevels.json
 
 
-when trying to find a picture for monster also try to look for file names without "," so for example Ape, Carnevourus could use the picture 
+when trying to find a picture for monster also try to look for file names without "," so for example Ape, 
+Carnevourus could use the picture 
 file named "ApeCarnevourus.png" 21.3
 
-i was supposed to encounter level 3 monsters Dragon on level 1. I expecte the dragon roll  1d100 to determine what dragon 1-28 Black dragon 
+i was supposed to encounter level 3 monsters Dragon on level 1. I expecte the dragon rol
+1d100 to determine what dragon 1-28 Black dragon 
 29-62 Brass dragon 63-100 White dragon 21,8
 
 when encountering level 4 dragons, use this table to see what dragon to encoutter:
-Dice Score	Dragon Type	Age Category (Hit Points/Die) 01–10	Black	very old (7) 11–21	Blue	old (6) 22–29	Brass	very old (7) 30–36	
-Bronze	old (6) 37–48	Copper	old (6) 49–52	Gold	old (6) 53–66	Green	old (6) 67–80	Red	old (6) 81–87	Silver	old (6) 88–00	
+Dice Score	Dragon Type	Age Category (Hit Points/Die) 01–10	Black	very old (7) 11–21	Blue	
+old (6) 22–29	Brass	very old (7) 30–36	
+Bronze	old (6) 37–48	Copper	old (6) 49–52	Gold	old (6) 53–66	Green	old (6) 67–80	
+Red	old (6) 81–87	Silver	old (6) 88–00	
 White	very old (7) 22,5
 
 i want for example "Manes Deamon" to match "Demon, manes" when finding a monster to encounter 24,3
 
-When Encounter "Character — see Character Subtable" use the same table as when character is enountered under the Human table on level 1
+When Encounter "Character — see Character Subtable" use the same table as when character is
+enountered under the Human table on level 1
 only difference is that the lvl of the chartars should correspond to the level of the dungeon. 25,0
 
-when encountering demon price, I want to randomly pick one of the monsters with   "Type": "Demon Prince", (currently Orcus and Demagorgon) 25,4
+when encountering demon price, I want to randomly pick one of the monsters with   "Type": "Demon Prince", 
+(currently Orcus and Demagorgon) 25,4
 
-When encountering a level 8 dragon, roll 1d100 and use the following table to determin what dragon the group encounters. 
+When encountering a level 8 dragon, roll 1d100 and use the following table to determin what dragon 
+the group encounters. 
 (the numer in parentasis is the number of HitDice the dragon got)
 DMG page 179
 01–13  Black  ancient (8)
@@ -741,25 +757,33 @@ Make sure to parse the following fields that I plan to introduce in monster json
 Default if tags does not exist should be
       "%InLair": "50",
       "MagicResistance": "Standard",
-If MagicResistance is Standard there is no effect. If there is a number, for example 20%, then besides the normal save that is applicable for some spells, 
+If MagicResistance is Standard there is no effect. If there is a number, for example 20%, then 
+besides the normal save that is applicable for some spells, 
 there is also a 20% chanse that the spell effect is totaly avoidid.
 If the monster is not InLair, then no treasure can be found. 26,9
 
-write in ADnD Rule and Dice Info when roling if monster is inLair or not. Also when rolling Magic resistance inform in the same dialog 27,1
+write in ADnD Rule and Dice Info when roling if monster is inLair or not. Also when rolling Magic
+resistance inform in the same dialog 27,1
 The inLair roll should not be done per monster but per group of encounters 27,2
 
-When CountMin and CountMax is defined in MonsterLevels, use that instead to figure out how many monsters are in the group, show what you are 
+When CountMin and CountMax is defined in MonsterLevels, use that instead to figure out how many 
+monsters are in the group, show what you are 
 radomizing in the log and rule window 28,7
 
-in rules and dice info inform what treasures has been found and what rolls are beeing made with probablity and amount of coins, gems etc 30,1
-make sure individual treasure is parsed when parsing monster json also individual treasure always appear for the mobs with individual treasure even if not in lair 30,3
+in rules and dice info inform what treasures has been found and what rolls are beeing made with 
+probablity and amount of coins, gems etc 30,1
+make sure individual treasure is parsed when parsing monster json also individual treasure always 
+appear for the mobs with individual treasure even if not in lair 30,3
 
-when finding treasure in lair that is not individual treasure, adjust the amount of coins found by the number of monsters in the group, 
-The treasure found should be multiplied by the number of monsters in the group. and divided by the expected average number of monsters in the group. 
+when finding treasure in lair that is not individual treasure, adjust the amount of coins found 
+by the number of monsters in the group, 
+The treasure found should be multiplied by the number of monsters in the group. and divided by the 
+expected average number of monsters in the group. 
 the expected average number of monsters in the group is calculated by (NumberOfAppearancesMin+NumberOfAppearancesMax)/2. 30,5
 show what you are doing in the rules and dice info window
 also adjust the amount of gems and magic items, gems and jewelry found in the same way. but then adjust the probability of 
-finding magic items, gems and jewelry by the number of monsters in the group divided by the expected average number of monsters in the group.
+finding magic items, gems and jewelry by the number of monsters in the group divided by the expected 
+average number of monsters in the group.
 show what you are doing in the rules and dice info window 30,5
 
 if found something in "Table": "Any", 
@@ -789,9 +813,11 @@ the probability to find gems and jewely should alsso be divided by 	ExpectedAver
 Then number of coins found when in lair should be divided by ExpectedAverageNumberOfMonsters 31,4
 number of gold pieces found should add to the xp gained. 1 extra xp per gold piece found. 31,5
 Then number of cp,sp,ep,gp and pp found when in lair should be divided by ExpectedAverageNumberOfMonsters
-do not write the failed rolls for individual treasure in the dice and rule log, only write it when something is found for individual treasure.31,7
+do not write the failed rolls for individual treasure in the dice and rule log, only write it when 
+something is found for individual treasure.31,7
 
-in the dice and rule log wirte clearly coins found before dividing by ExpectedAverageNumberOfMonsters and after dividing by ExpectedAverageNumberOfMonsters 31,7
+in the dice and rule log wirte clearly coins found before dividing by ExpectedAverageNumberOfMonsters 
+and after dividing by ExpectedAverageNumberOfMonsters 31,7
 in combat rewards also write xp gained from finding gp 31,9
 ___________________
 260908
@@ -804,7 +830,8 @@ monster but instead the proablity to find items for the group of minsters should
 erOfMonsters and Lootfactor should be float numbers. The probablitis should also be floats and could be inbetween 0 and 1. 32,4
 The number of coins should be rounded off. 32,5
 
-change plaese of xp calculation and treasure calculations in reward summary dialog, so xp from gp can be included in the total xp summary per charater 32,6
+change plaese of xp calculation and treasure calculations in reward summary dialog, so xp from gp can be included in the 
+total xp summary per charater 32,6
 also gp value from gems and jewelry should be added t to xp where 1 gp of value should give 1 xp. 32,7
 
 in xp rewards after the total xp for eaxh indicidual, also say how much is needed for next level 33,0
@@ -822,20 +849,24 @@ info from from the corresponding item json 34,0
 
 when identifying an item also show the SpecialAbilities from the json 34,2
 _______
-Introdue an option I)nfo in the Encounter dialog. When I pressed, open a new window presending info about the monster groups from the json files 35,3
+Introdue an option I)nfo in the Encounter dialog. When I pressed, open a new window presending info 
+about the monster groups from the json files 35,3
 In encounter Monster info dialog:
 Frequency and Alignment are shown as empty strings, they should not be that
 present the info in this order 35,6
-Frequency and Alignment and Movement are Unknown, show the same values as in the json. If the monster object is not populated with this info, 
+Frequency and Alignment and Movement are Unknown, show the same values as in the json. If the monster 
+object is not populated with this info, 
 pleaes include these fields in the monster json parsing.35,8
 can you fix this Movement: Unknown and show the number instead, parse it if needed in the general monster json parsing.
 If preseneted, also show SpecialAttacks, SpecialDefenses, SpecialAbilities 36,3
 
 Show the option I)nfo in the encounter dialog when charaters should select action.
-when parsing SpecialAttacks, it should be interpreted in the same way as SpecialAbilities. Add a new attribut of the same structure to the Monster class: 
+when parsing SpecialAttacks, it should be interpreted in the same way as SpecialAbilities. Add a new 
+attribut of the same structure to the Monster class: 
 SpecialDefenses it should also be parsed in the monster parsing and populate the monster object 36,9
 
-If THAC0 can be calculated for a group of monsters with existing methods, populate THAC0 for the monster objects and show that in the monster info dialog. 37,6
+If THAC0 can be calculated for a group of monsters with existing methods, populate THAC0 for the monster 
+objects and show that in the monster info dialog. 37,6
 
 When found something in "Table": "Any", and rolling 46–60	Misc Magic get somthin grom MiscMagic,json 38,0
 manaully removed save throw and morale for all monsters
@@ -845,7 +876,8 @@ if an encounter got "SpecialAbilities" "Lay on Hands" and that encounter or anot
 healed by the encounter with SpecialAbilities" "Lay on Hands" for 2 hp * HitDice of the caster once per battle 39,5
 _____
 
-When a Giant Rat hits a party member show in adnd rule and dice roll what the 1d100 dice roll was and explain that only 1-5 on the d100 will cause a disease. 39,7
+When a Giant Rat hits a party member show in adnd rule and dice roll what the 1d100 dice roll was and 
+explain that only 1-5 on the d100 will cause a disease. 39,7
 I did not see any info about the 5% roll for disease  in the adnd rule and dice info when a party member got hit by a giant rat 40,0
 
 If an encounter got SpecialAbilities":  "Pick pockets", there is a chanse = 25%+HitDice*5% that one of the party members get coins 
@@ -878,7 +910,8 @@ In the encounter dialog, when a character should select action, always show the 
 I still dont see the I)nfo option in the Encounter dialog 45,1
 
 in the Item info dialog that could be accessed from identify, if inscpecting a weapon also show DamageType 45,3
-if  "SpecialDefenses":  "Half Damage from Sharp Weapons", then the enounter take half damage when hit by a weapon with damage type Piercing or Slashing 45,7
+if  "SpecialDefenses":  "Half Damage from Sharp Weapons", then the enounter take half damage when 
+hit by a weapon with damage type Piercing or Slashing 45,7
 
 In Encounter Info dialog check if there is a picture with a name that correspons to the monster, but with suffix MM located at 
 Adnd.Game\Assets\Monsters\MM1 if so, add a button in the dialog to show that picture 46,1
@@ -926,7 +959,8 @@ Banded Mail	6
 Plate Mail	6
 Full Plate	6
 
-Monk får bättre move när de går upp level, de får även bättre ac, fler attacker och ger mer skada när de slår utan vapen enligt denna tabell, kan du implementera det?
+Monk får bättre move när de går upp level, de får även bättre ac, fler attacker och ger mer skada 
+när de slår utan vapen enligt denna tabell, kan du implementera det?
 Level	Effective Armor Class	Move	Open Hand Attacks per Melee Round	Open Hand Damage
 1	10	15	1	1–3
 2	9	16	1	1–4
@@ -950,14 +984,16 @@ dex ac bonus should be included when calculating monk ac without armor 48,5
 
 stength damage bonus should not be added when hitting with bare hands 48,6
 
-I have changed my mind, the monk should have 1,25 attacks per melee round, not 1,5 attacks per melee round when level 4 and 5. other should remain the same. 48,7
+I have changed my mind, the monk should have 1,25 attacks per melee round, not 1,5 attacks per melee 
+round when level 4 and 5. other should remain the same. 48,7
 ______________
 
 when selecting what charater to delete, let the user enter two chars before automaticly trigger enter.48,7
 when number of attacks is 1,25 then every 4th round the player should have 2 attacks
 _________
 
-implement magic user spell Hold person. It is similar to cleric level 2 hold person spell, they both target one gorup of monsters I only affect humanoids. Differences are
+implement magic user spell Hold person. It is similar to cleric level 2 hold person spell, 
+they both target one gorup of monsters I only affect humanoids. Differences are
 Duration for cleric hold person is 4 rounds + 1 per level of caster
 Duration for magic user  hold person is 2 rounds per level of caster
 Max number of humanoids affected for cleric spell is 3
@@ -965,13 +1001,16 @@ Max number of humanoids affected for magic user  spell is 4
 If only one humanoid is in the group save thow is -2 for cleric spell but -3 for magic user spell 49,3
 ______
 
-At 7th level the monk gains the ability to heal damage on his or her body. The amount of damage which can be healed is 2–5 hit points (d4 + 1), 
-and this amount increases by 1 hit point with each experience level gained thereafter, i.e. 3–6 HP at 8th level, 4–7 at 9th, etc. This may be done once per day.
+At 7th level the monk gains the ability to heal damage on his or her body. The amount of damage which can be
+healed is 2–5 hit points (d4 + 1), 
+and this amount increases by 1 hit point with each experience level gained thereafter,
+i.e. 3–6 HP at 8th level, 4–7 at 9th, etc. This may be done once per day.
 PHB page 31, E. 50,3
 
 ____
 
-Implement a level 3 magic user spell called Haste. I can be cast on one member of the party. The duration is 3+1 round per level of the caster. 
+Implement a level 3 magic user spell called Haste. I can be cast on one member of the party.
+The duration is 3+1 round per level of the caster. 
 The target can move and attack twice per round. the move speed is also doubled. 50,7
 
 ______
@@ -993,11 +1032,13 @@ Saving throw (negates) — lyckas de, påverkas de inte alls 52,0
 Fix: Slowed mobs hits every round, but only every second round they should be able to attack. 52,2
 __________
 
-If "SpecialAbilities":  "Level 3 Magic-User spells" then let it be 50 % chanse the ecounters cast Slow and 50% chanse they cast Fireball. 53,8
+If "SpecialAbilities":  "Level 3 Magic-User spells" then let it be 50 % chanse the ecounters cast 
+Slow and 50% chanse they cast Fireball. 53,8
 Added level 6-9 all classes to the encounter table manually
 ____
 
-when finding gems use the following table to determine the value of the gem is found one by one, write to the dice and rule log what what you rolled and the value of each gem.
+when finding gems use the following table to determine the value of the gem is found one by one, 
+write to the dice and rule log what what you rolled and the value of each gem.
 Dice Score	Base Value
 01–25	10 g.p. each
 26–50	50 g.p. each
@@ -1006,7 +1047,8 @@ Dice Score	Base Value
 91–99	1,000 g.p. each
 100	    5,000 g.p. each
 
-If finding jewelry, use the following table to determine the value of the jewelry found one by one, write to the dice and rule log what what you 
+If finding jewelry, use the following table to determine the value of the jewelry found one by one, write to the 
+dice and rule log what what you 
 rolled and the value of each jewelry.
 Dice Roll	Base Value
 01–10	100–1,000 g.p.
@@ -1021,10 +1063,12 @@ Manuellt uppdaterat monster 54,1
 ______________________
 När en party stöter på en eller flera grupper av monster ska man börja med innan första rundan och bara innan första rundan 
 att party gruppen slår 1d6 och alla monster grupper slår en gemensam 1d6 för att 
-avgöra om någon av grupperna blivt överraskade. Normalt betyder 1-2 på 1d6 att man överraksar. visa i ADnD Rule and Dice info vad man slog på 1d6 och 
+avgöra om någon av grupperna blivt överraskade. Normalt betyder 1-2 på 1d6 att man överraksar. visa i 
+ADnD Rule and Dice info vad man slog på 1d6 och 
 om partyt eller monster grupperna blev överraskade.
 ifall båda överraskar blir det precis som att ingen överraskat. 
-Om bara partyt överraskas, så får partyt inte agera i den första rundan och ifall monster grupperna överraskas så får de inte agera i den första rundan.
+Om bara partyt överraskas, så får partyt inte agera i den första rundan och ifall monster grupperna överraskas så 
+får de inte agera i den första rundan.
 En del monster har större chans att överraska partyt
 Xorn: överraskar på 1–5
 Bugbear: överraskar på 1–3
@@ -1036,11 +1080,14 @@ ifall någon av sidorana har överraskat, visa det i enounter dialogen. 56,9
 
 the surprise message should only be there during the 1st round in the enounter dialog 57,0
 
-When pary is surprised, instead of showing (Round 1: Party can not act) in the encounter dialog and asking what actions the party members should take, 
+When pary is surprised, instead of showing (Round 1: Party can not act) in the encounter dialog and asking what
+actions the party members should take, 
 show a separate dialog with the info that the party has been surprised and  Party can not act 58,2
 
-show the separate dialog with the info that the party has been surprised after the enounter dialog has been shown, but before the party is asked what actions they should take.
-And dont ask what actions the party members should take they when surprised before the 1 st round, they will all automatically just parry once ok is pressed in the dialog. 59,0
+show the separate dialog with the info that the party has been surprised after the enounter dialog has been shown, 
+but before the party is asked what actions they should take.
+And dont ask what actions the party members should take they when surprised before the 1 st round, they will all 
+automatically just parry once ok is pressed in the dialog. 59,0
 
 ifall man träffar på en Piercer, ska man slumpa ut vilken typ av Piercer det är, det finns 4 olika typer av Piercer.
 Piercer Small
@@ -1056,18 +1103,23 @@ Piercer Medium
 Piercer Large
 Piercer Huge
 
-måste klättra upp för väggen innan de kan attackera partyt efter första attacken. När de klättrar upp för väggen så kan de inte attackera partyt. 
+måste klättra upp för väggen innan de kan attackera partyt efter första attacken. När de klättrar upp för väggen 
+så kan de inte attackera partyt. 
 Det tar 4 rundor för Piercer att klättra upp för väggen. 60,4
 ___________
 
-Implement SpecialAbilities "Level 3 Druid spells" give it a 50% chanse to cast Call Lightning and 50% chanse to cast Summon Insects. 61,7
+Implement SpecialAbilities "Level 3 Druid spells" give it a 50% chanse to cast Call Lightning and 50% chanse 
+to cast Summon Insects. 61,7
 
-I want The dialog shown when you have been surprised by the moster to automatically close after 3 secounds or before that if enter or escape is pressed, 
-I want the dialog to have the same styling as when entering the stairs. I also want I dialog with the same styling to be shown and autoatically 
+I want The dialog shown when you have been surprised by the moster to automatically close after 3 secounds 
+or before that if enter or escape is pressed, 
+I want the dialog to have the same styling as when entering the stairs. I also want I dialog with the same 
+styling to be shown and autoatically 
 closed when the party has surprised the monsters 61,9
 ____________
 
-if treasure is found in lair, then show a picture of a treasure chest in the encounter dialog. Use this Adnd.Game\Assets\ScenPictures\TreasureChest.png
+if treasure is found in lair, then show a picture of a treasure chest in the encounter dialog. Use this 
+Adnd.Game\Assets\ScenPictures\TreasureChest.png
 Show a dialog in the same style as shown when entering the stairs in a dialog as if the party wants to 
 O)pen 
 C)ast spell Find traps, 
@@ -1088,36 +1140,48 @@ If choosing to OPEN then ask what party member should open the chest. If the che
 then roll 1d100 to see if the trap is triggered. 
 If Poinson Needle trap is triggered, then the person opening the chest will be poisoned.
 If Explosding Box trap is triggered, then every body in the party will take 1d6 damage multiplied with the level of the dungon. 
-If Gas Bomb trap is triggered, then everybody should roll a save vs. poison and everybody that failed saving in the party will be poisoned. 
+If Gas Bomb trap is triggered, then everybody should roll a save vs. poison and everybody that failed saving 
+in the party will be poisoned. 
 If Crossbow Bolt trap is triggered, then the person opening the chest will take 1d6 damage.
 If Alarm trap is triggered, then a new monster group will arrive. 
-If Mage Blaster trap is triggered, then all magic-users and illusionists in the party will take 1d6 damage and be paralyzed until leaving the dungeon or until cured by a spell.
-If Priest Blaster trap is triggered, then all Clerics and Druids in the party will take 1d6 damage and be paralyzed until leaving the dungeon or until cured by a spell.
+If Mage Blaster trap is triggered, then all magic-users and illusionists in the party will take 1d6 damage 
+and be paralyzed until leaving the dungeon or until cured by a spell.
+If Priest Blaster trap is triggered, then all Clerics and Druids in the party will take 1d6 damage and be 
+paralyzed until leaving the dungeon or until cured by a spell.
 If No trap is found, then nothing happens.
 
 If choosing to INSPECT then ask what party member should inspect the chest. If the party member has a thief class, 
-then roll 1d100 to see if the trap is found using their thief skills Find Traps also shown in the charater sheet. Show the result of the roll in the ADnD Rule and Dice info.
-If the trap is found, then the party member can chose to Disarm the trap or not. If chosing to try to disarm the trap and the charater is a thief class,
+then roll 1d100 to see if the trap is found using their thief skills Find Traps also shown in the charater sheet. 
+Show the result of the roll in the ADnD Rule and Dice info.
+If the trap is found, then the party member can chose to Disarm the trap or not. If chosing to try to disarm the
+trap and the charater is a thief class,
 then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the charater sheet. 
-Show the result of the roll in the ADnD Rule and Dice info. If the trap is disarmed, then nothing happens when opening the chest.
+Show the result of the roll in the ADnD Rule and Dice info. If the trap is disarmed, then nothing happens
+when opening the chest.
 
 If the party chooses to cast spell Find Traps, then ask what party member should cast the spell. 
-If the party has a member with the spell Find Traps then it is cast and the info what trap is found is shown. in the encounter dialog.
+If the party has a member with the spell Find Traps then it is cast and the info what trap is found is 
+shown. in the encounter dialog.
 the party chan chose then disarm the trap or not. If chosing to try to disarm the trap and a charater is a thief class exists, 
-then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the charater sheet. Show the result of the roll 
+then roll 1d100 to see if the trap is disarmed using their thief skills Disarm Traps also shown in the 
+charater sheet. Show the result of the roll 
 in the ADnD Rule and Dice info.
 
 After the trap is opend go the the reward summary dialog and show the treasure found in the chest. 
-If choosing to leave the chest alone, then go the the reward summary dialog but leave out all in lair treasure found in the chest. 64,8
+If choosing to leave the chest alone, then go the the reward summary dialog but leave out all in lair treasure 
+found in the chest. 64,8
 
 Implement a new level 2 cleric spell called Find Traps that could be used to find traps in the treasure chest. 65,3
 
-in the treasure chest dialog I want to show a picture of the chest. Use the following picture Adnd.Game\Assets\ScenPictures\TreasureChest.png 65,5
+in the treasure chest dialog I want to show a picture of the chest. Use the following picture
+Adnd.Game\Assets\ScenPictures\TreasureChest.png 65,5
 
-when chosing party member to open or inspect the chest, only show party members that are alive and not paralyzed also  make it bigger, so all party members 
+when chosing party member to open or inspect the chest, only show party members that are alive and not
+paralyzed also  make it bigger, so all party members 
 can be seen without scrolling.65,6
 
-Show in ADnD Rule and Dice info what the d100 role was and if the trap was found in the chest and if it was disarmed or not. 66,1
+Show in ADnD Rule and Dice info what the d100 role was and if the trap was found in the chest and if it was 
+disarmed or not. 66,1
 __________
 in the cast find traps dilaog where you select charater to cast that spell also show the class of the charaters
 in inspct chest dialog selecting char to inspect, also show class66,8
@@ -1125,15 +1189,18 @@ ___
 
 when the trap thats summons monsters and when Shriekers summon monsters, use the same way to randomize what level monsters that should appear, 
 what monster that should appear 
-and how many monsters that should appear first MonsterEncounter.json for what level of the monsters and then MonsterLevels to see what monsters and how many 67,5
+and how many monsters that should appear first MonsterEncounter.json for what level of the monsters and then 
+MonsterLevels to see what monsters and how many 67,5
 ____
 
-when the trap i triggereds show a dialog whith the same look and feel as when entering the stairs. The dialog should show what trap was triggered and what happened. 67,7
+when the trap i triggereds show a dialog whith the same look and feel as when entering the stairs. 
+The dialog should show what trap was triggered and what happened. 67,7
 
 update the thief skills depening on level of the thies and race of the thief according to thse tables Level of the Thief	
 Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	Climb Walls	Read Languages 1	
 30%	25%	20%	15%	10%	10%	85%	-0 2	35%	29%	25%	21%	15%	10%	86%	-0 3	40%	33%	30%	27%	20%	15%	87%	-0 4	etc
-Race of the Thief	Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	Climb Walls	Read Languages 
+Race of the Thief	Pick Pockets	Open Locks	Find/ Remove Traps	Move Silently	Hide In Shadows	Hear Noise	
+Climb Walls	Read Languages 
 Dwarf		+15%			+10%	-10%	-5% 
 Elf         +5%	-5%		+5%	+10%			-0 
 Gnome		+5%	+10%	+5%	+5%	+10%	-15%	 
@@ -1169,7 +1236,8 @@ _________
 Implement a special ability druid spells level2 that gives the encounter a 50% chanse to cast Barkskin and 50% chanse to cast Cure Light Wounds. 
 It only cast cure light wounds if the encounter is damaged. 77,6
 
-when finding treasure inlair, instead of dividing the value of each gem jewelry with the loot factor, divide the number of total gems jewelry found with the loot factor, and round up.
+when finding treasure inlair, instead of dividing the value of each gem jewelry with the loot factor, divide the 
+number of total gems jewelry found with the loot factor, and round up.
 
 when rolling for individual treasure and the chance is 0 for a specific coin type, do not write that to the Adnd Rule a roll log.77,9
 Also when rolling for Chance roll for Treasure Type inlair, also do not write that to the AndndRule and dice info 78,0
@@ -1180,7 +1248,8 @@ Do not write to adnd rule and dice info when probabilty is 0, for example do not
  Chance roll for Treasure Type Q Gem chance: probability 0 => fail
 [14:36:05]     Chance roll for Treasure Type Q Jewelry chance: probability 0 => fail
 [14:36:05]     Chance roll for Treasure Type Q Art chance: probability 0 => fail
-when for exampel  Q(x20) appears, instead of rolling 20 times and dividing the proabilty  or amount with the loot factor divide the x20 with the loot factor 78,5
+when for exampel  Q(x20) appears, instead of rolling 20 times and dividing the proabilty  or amount with the loot 
+factor divide the x20 with the loot factor 78,5
 I meant multiply the x20 with the loot factor, not divide...78,6
 The number of gems should not be divided by loot factor, but mulitplied 78,7
 
@@ -1258,25 +1327,32 @@ MonsterLevels,json to determin what monste to encounter depnding on level of mon
 
 First MonsterEncounter is used to determin have level the monster got, lets say it is a level 1 monster, 
 then a 1d100 is rolled to determine what monster, asume a 2 is rolled, then a the party should encounter 
-an Ant, ginat, according to "MonsterLevels": { "Level1": [ { "DiceMin": 1, "DiceMax": 2, "Creature": "Ant, giant", "CountMin": 1, "CountMax": 4 },97,4
+an Ant, ginat, according to "MonsterLevels": { "Level1": [ { "DiceMin": 1, "DiceMax": 2, "Creature": "Ant, giant", 
+"CountMin": 1, "CountMax": 4 },97,4
 
-can you implement  "SpecialAbilities":  "Dragon breath", it gives damage to everyone in the party equal to the monsters current hp, 
+can you implement  "SpecialAbilities":  "Dragon breath", it gives damage to everyone in the party equal to the 
+monsters current hp, 
 if they succed in saving vs. Breath blir det bara hälften av skadan.
-I similar logic exists for implementing the "20 hp damage breath" that has now been removed in the monster jsons, so the new Dragon breash also needs to be implemented now. 99,6
+I similar logic exists for implementing the "20 hp damage breath" that has now been removed in the monster jsons, 
+so the new Dragon breash also needs to be implemented now. 99,6
 updated subscription to copilot max so now 34,9 
 
-implement a cleric level 7  spell: Resurection, that can make a charater that is ashes alive again. same save as raise dead. If it succeds, 
+implement a cleric level 7  spell: Resurection, that can make a charater that is ashes alive again. same save as 
+raise dead. If it succeds, 
 the the resurected person loose 1 point in con, if it fails, person is lost
 
-Implement a level 7 magic user spell called Finger of Death. It targets one humanoid and if it fails a save vs. death, it dies instantly. If it succeds.
+Implement a level 7 magic user spell called Finger of Death. It targets one humanoid and if it fails a save vs. 
+death, it dies instantly. If it succeds.
 Allready implemented 35,4.
 
 Can you give me a complete list of all spells implemented sorted per class and level. 35,9
 
-implement special attack assassination for encounters. Both party assassins and encounter assassins can only be assassinate the first round and when attaer is surprising the oponent.
+implement special attack assassination for encounters. Both party assassins and encounter assassins can only be 
+assassinate the first round and when attaer is surprising the oponent.
 Cure light wounds should be a level 2 druid spell and a level 1 cleric spell.
 
-in the Encounter dialog, in the table where the party members are shown, the column Class, make it a bit wider and show all classes that a multi class member got. 36,7
+in the Encounter dialog, in the table where the party members are shown, the column Class, make it a bit wider and 
+show all classes that a multi class member got. 36,7
 ____
 
 Insect Plague is not only a level 5 cleric spell, but also a level 5 druid spell. 36,7
@@ -1389,12 +1465,17 @@ Can you implement this cleric spell?
 
 Implement cleric spell cure blindness and cause blindness Cure Blindness (Abjuration) Reversible
 Level: 3 Components: V: S Range: Touch Duration: Permanent Saving Throw: None Area of Effect: Creature touched
-Explanation/Description: By touching the creature afflicted, the cleric employing the spell can permanently cure most forms of blindness. Its reverse, cause blindness, requires a successful touch upon the victim, and if the victim then makes the saving throw, the effect is negated
+Explanation/Description: By touching the creature afflicted, the cleric employing the spell can permanently 
+cure most forms of blindness. Its reverse, cause blindness, requires a successful touch upon the victim, and if 
+the victim then makes the saving throw, the effect is negated
 
 
-Implement "SpecialAbilities":  Level 4 cleric spells, 50% chanse each to cast, Cure Serious Wounds (cure_serious_wounds),Cause Serious Wounds (cause_serious_wounds)
-Implement "SpecialAbilities":  Level 4 druid spells, 50% chanse each to cast, Cure Serious Wounds (cure_serious_wounds),Cause Serious Wounds (cause_serious_wounds) 
-Implement "SpecialAbilities":  Level 4 Magic-user spells, 50% chanse each to cast Ice Storm (ice_storm), Wall of Fire (wall_of_fire)
+Implement "SpecialAbilities":  Level 4 cleric spells, 50% chanse each to cast, Cure Serious Wounds (cure_serious_wounds),
+Cause Serious Wounds (cause_serious_wounds)
+Implement "SpecialAbilities":  Level 4 druid spells, 50% chanse each to cast, Cure Serious Wounds (cure_serious_wounds),
+Cause Serious Wounds (cause_serious_wounds) 
+Implement "SpecialAbilities":  Level 4 Magic-user spells, 50% chanse each to cast Ice Storm (ice_storm),
+Wall of Fire (wall_of_fire)
 Implement "SpecialAbilities":  Level 4 illusionist spells, 50% chanse each to cast Confusion, Improved Invisibility
 
 Confusion should not only be a druid level 7 spell, but also a level 4 illusionist spell.
@@ -1406,13 +1487,17 @@ Implement "SpecialAbilities":  Level 5 illusionist spells, 50% chanse each to ca
 
 Implement "SpecialDefenses": "Regeneration": "Regenerates 1 hp per melee round",
 Implement "SpecialDefenses": "Mind-affecting spells Immunity", "Immune to charm, sleep, and all mind-affecting spells"
-Implement "SpecialAttacks": "Infestation", "Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die"
-Implement "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) to all in the party" 43,1
+Implement "SpecialAttacks": "Infestation", "Touch causes rhizomes to penetrate flesh; victim must receive cure disease 
+within 24 hours or die"
+Implement "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) 
+to all in the party" 43,1
 Implement "SpecialAttacks":  "Drain Blood","After a successful hit, drains 1–4 HP per round until 12 HP total is drained."
 
 
-When finding MAGIC ITEMS, roll this table to determine what type of magic item is found. Write the result to the ADnD Rule and Dice info dialog.
-all tables are not defined yes, so only the ones that are defined will be rolled for. If a table is not defined, then it will be skipped and not rolled for.
+When finding MAGIC ITEMS, roll this table to determine what type of magic item is found. Write the result to the 
+ADnD Rule and Dice info dialog.
+all tables are not defined yes, so only the ones that are defined will be rolled for. If a table is not defined, 
+then it will be skipped and not rolled for.
 Die* Results
 01-20 Potions (A.)
 21-35 Scrolls (8.)
@@ -2086,7 +2171,8 @@ Sword, two-handed	30 g.p.
 Trident	4 g.p.
 Voulge	2 g.p.
 47,9
-Bugfix: When equipping for example Heavy Crossbow from chatater inspect in dungeon it should go into Range slot, not Main hand or Off hand 
+Bugfix: When equipping for example Heavy Crossbow from chatater inspect in dungeon it should go into Range slot, 
+not Main hand or Off hand 
 Update all prices, weights damage to M and damage to L also for weapons not ranged.48,5
 
 In the shop the prices should be shown in gp, sp and cp if needed. If it only costs gp, no need to write sp or cp. 1gp=10sp=100cp. 
@@ -2099,14 +2185,18 @@ update class restrictions for these newly added weapons to strict AD&D 1e values
 Bugfix: in this table 2-5 does not mean 2d5, it means 1d4+1 49,9
 ____
 
-Add all the itmes from the WornEquipment tables I, II, III and IV into the .json files as full entries with costs/weights/damage S,M/L and 
+Add all the itmes from the WornEquipment tables I, II, III and IV into the .json files as full entries 
+with costs/weights/damage S,M/L and 
 class restrictions to strict AD&D 1e values in one pass.
 
-Dont you think the items in the WornEquipment tables needs to be in Adnd.Data\Itmes\ in the differet json files for the different types of items? 51,3
-Ok, I want the players to be abel to use the items they find, so can you please add them to Adnd.Data\Itmes\ if needed and preferably one json file 
+Dont you think the items in the WornEquipment tables needs to be in Adnd.Data\Itmes\ in the differet json 
+files for the different types of items? 51,3
+Ok, I want the players to be abel to use the items they find, so can you please add them to Adnd.Data\Itmes\ 
+if needed and preferably one json file 
 per Potions (A), Scrolls (B), Rings (C), Rods/Staves/Wands (D), E1, E2, E3, E4, E5, F, G, H
 do •	Option C (clean refactor): create full table files and remove/migrate duplicates from old files.
-do •	Scope 1 (recommended): migrate only items referenced by the current treasure roll tables/resolvers (A, B, C, D, E1–E5, F, G, H).
+do •	Scope 1 (recommended): migrate only items referenced by the current treasure roll tables/resolvers 
+(A, B, C, D, E1–E5, F, G, H).
 start with 1.	A–D (Potions/Scrolls/Rings/Rods-Staves-Wands)
 Keep the tables you added, but when I think about it, maybe it is better to start with the itmes defined in WornEquipment 
 tables I, II, III and IV and make sure they are usable by the players, can you do that? 53,6
@@ -2146,7 +2236,11 @@ So i dont get this behaviour:
 - Unclaimed magic items:
     Scroll of 3 Spells (Level 2-9 or 2-7) (from Scroll of 3 Spells (Level 2-9 or 2-7)) (no matching item defined)
 55,1
-When for example this found "Miscellaneous magic plus 1 potion" I want 1 random item using 1d100 and this table just like any Die* Results 01-20 Potions (A.) 21-35 Scrolls (8.) 36-40 Rings (C) 41-45 Rods, Staves & Wands [0.) 46-48 Miscellaneous Magic (E.l.J 49-51 Miscellaneous Magic (E.2.) 52-54 Miscellaneos Magic (£.3.) 55-57 Miscellaneous Magic (E 4.) SS-60 Miscellaneous Magic {E.5.) 61 -75 Armor & Sh telds (F.) 76-86 Swords (G) 87-00 Miscellaneous Weapons (H,) to determine what is found and on top of that I also want the party to find one extra item from Potions (A.) list.
+When for example this found "Miscellaneous magic plus 1 potion" I want 1 random item using 1d100 and this table just like 
+any Die* Results 01-20 Potions (A.) 21-35 Scrolls (8.) 36-40 Rings (C) 41-45 Rods, Staves & Wands [0.) 46-48 Miscellaneous 
+Magic (E.l.J 49-51 Miscellaneous Magic (E.2.) 52-54 Miscellaneos Magic (£.3.) 55-57 Miscellaneous Magic (E 4.) 
+SS-60 Miscellaneous Magic {E.5.) 61 -75 Armor & Sh telds (F.) 76-86 Swords (G) 87-00 Miscellaneous Weapons (H,) 
+to determine what is found and on top of that I also want the party to find one extra item from Potions (A.) list.
 So I do not want this behaviour:
 •	Unclaimed magic items: Miscellaneous magic plus 1 potion (no matching item defined)
 55,2
@@ -2169,7 +2263,8 @@ also add corresponding scroll for this spell to the game so that players can fin
 
 Implement druid spell Protection From Lightning (Abjuration)
 Level: 4 Components: V, S, M Range: Touch Casting Time: 6 segments Duration: Special . Saving Throw: None Area of Effect: Creature touched
-Explanation/Description: This spell is exactly the same as the 3rd level protection from fire spell (q.v.) except that it applies to electrical/lightning attacks.
+Explanation/Description: This spell is exactly the same as the 3rd level protection from fire spell (q.v.) except
+that it applies to electrical/lightning attacks.
 i ment only treat dragon with lightning breath as lightning that means the only dragon this is spell is applicable for is blue dragon.
 also add corresponding scroll for this spell to the game so that players can find and use them. 57,5
 
@@ -2273,7 +2368,12 @@ Gl-70Magk-user then 01 -10 illusionist
 Only the indicated doss of charader can use Ihe scroll, except thieves
 
 Spell level of Scroll Spells: AIJ scroll spells ore assumed lo be written so as to moke if as easy and quick as possible for the writer. 
-Thus, the level of the spell, its characteristics with respect to range, duration, area of effect, etc., where level is a factor, is typically bui 1 level higher than that re¬ quired to actually use the spell, but never below 6fh level of experience. Thus, o sixlh level magic-user spell is written ai 13ih level of ability, a seventh at 15th level, etc. A scroll firebailJ or lightning bolt spell is of 6 dice (6d6) in most cases, but as DM you may decide to moke certain scroll spells more powerful by increasing the level ot which they are written; however, this will certainly affect thechonce of spell failure as given below:
+Thus, the level of the spell, its characteristics with respect to range, duration, area of effect, etc., 
+where level is a factor, is typically bui 1 level higher than that re¬ quired to actually use the spell, 
+but never below 6fh level of experience. Thus, o sixlh level magic-user spell is written ai 13ih level of ability, 
+a seventh at 15th level, etc. A scroll firebailJ or lightning bolt spell is of 6 dice (6d6) in most cases, 
+but as DM you may decide to moke certain scroll spells more powerful by increasing the level ot which they are written;
+however, this will certainly affect thechonce of spell failure as given below:
 
 Magic Spell Failure: If a spell-user acquires a scroll with a spell(s) of o level(s) not yet usable by the character, 
 the spell-user may still attempt to use the spell; the chance of failure, or other bad effect, is 5% per level 
@@ -2312,7 +2412,9 @@ appropriate SPELL TABLES fcf PLAYER'S HANDBOOK!.
 Can you please use the read magic skill shown in the charater sheet to detemine if a thief can read a scroll when trying?
 
 can you implement protection from evil
-Protection from Evil is one of those deceptively simple AD&D spells that actually has very specific mechanical effects. Since your DMG page doesn’t contain the spell text itself, I’ll give you the full rules‑accurate breakdown based on the Player’s Handbook (PHB) and DMG clarifications.
+Protection from Evil is one of those deceptively simple AD&D spells that actually has very specific mechanical effects. 
+Since your DMG page doesn’t contain the spell text itself, I’ll give you the full rules‑accurate breakdown based on the 
+Player’s Handbook (PHB) and DMG clarifications.
 ✨ Protection from Evil — AD&D 1st Edition (PHB)
 🎯 Core Effects
 Protection from Evil creates a magical defensive aura around the caster (or the touched creature). It provides three distinct benefits:
@@ -2416,7 +2518,8 @@ the properties of a given ring use the table below:
 
 ___
 
-Implement potion of Human Control: A potion of human conrrol allows the imbiber to control up to 32 levels/hit dice of humans/humanoids/demi-humans 
+Implement potion of Human Control: A potion of human conrrol allows the imbiber to control up to 32 
+levels/hit dice of humans/humanoids/demi-humans 
 as If a charm person spell had been cast, ond the human types to be controlled are en¬ titled to saving throws versus magic.
 Any pluses on hit dice are rounded down to the lowest whole die, U. 1 + 2= 1,3 + 6= 2. 
 The type of humon(s) which can be controlled Is randomly determined on the table
@@ -2436,7 +2539,8 @@ ____
 Characters should not be able to cast spells when feebleminded, now they are not able to cast spells 
 ____
 Potion of Super-Heroism: 
-This potion gives the individual o temporary increase in life energy levels (cf heroism potion) if he or she has fewer than 13 levels of experience:
+This potion gives the individual o temporary increase in life energy levels (cf heroism potion) if he or she
+has fewer than 13 levels of experience:
 Potion of Super‑Heroism Table
 Level of Consumer	Number of Energy Levels Bestowed	10‑Sided Dice for Accumulated Damage Bestowed
 0	6	5
@@ -2465,11 +2569,17 @@ or humanoids. (Cf. Ring of MammaJ Control)
 ___
 
 Implement Scroll of Protection from Magic
-Reading time: 8 segments. This scroll invokes a very powerful and invisible globe of anti-magic in a 5' radius from the reader. It prevents any form of magic from passing into or our of its con¬ fines, but normal things ore not restricted by it, As with other protections, the globe of anti-magic moves with its invoker. 
-Any magical item which touches the globe must be soved for with a 50% likelihood of the object being drained of all magic from the power of the globe, he. save equals 11 or better with d2Q The protection fasts for 5-30 (5d6) rounds.
-If multiple magic items encounter the globe simultaneously, the leading item (o magic sword held in advance of its holder, for instance) is the first affected, then the others are checked in order of decreasing power until the first item fails its save, at which time the globe Is cancelled and the item is drained of its magic.
+Reading time: 8 segments. This scroll invokes a very powerful and invisible globe of anti-magic in a 5' 
+radius from the reader. It prevents any form of magic from passing into or our of its con¬ fines, but normal 
+things ore not restricted by it, As with other protections, the globe of anti-magic moves with its invoker. 
+Any magical item which touches the globe must be soved for with a 50% likelihood of the object being drained 
+of all magic from the power of the globe, he. save equals 11 or better with d2Q The protection fasts for 5-30 (5d6) rounds.
+If multiple magic items encounter the globe simultaneously, the leading item (o magic sword held in advance 
+of its holder, for instance) is the first affected, then the others are checked in order of decreasing power
+until the first item fails its save, at which time the globe Is cancelled and the item is drained of its magic.
 Protection from Magic (Scroll) — Explained Clearly
-This scroll creates a 5‑foot radius invisible anti‑magic globe around the reader. Think of it as a mobile anti‑magic shell that follows the character.
+This scroll creates a 5‑foot radius invisible anti‑magic globe around the reader. Think of it as a mobile
+anti‑magic shell that follows the character.
 Maybe you agree with this interpreation?
 Here’s what it actually does:
 
@@ -2576,7 +2686,8 @@ Obviously, rats, weasels, herd animals, dolphins, and even unicorns are mammals,
 preclude control of the better ones. Control time is 3 segments.
 ___
 
-add all items  from F. ARMOR AND SHIELD that are missing inC:\Users\rober\source\repos\RetroDungeon\Adnd.Data\Items\Armor.json to that file
+add all items  from F. ARMOR AND SHIELD that are missing in
+C:\Users\rober\source\repos\RetroDungeon\Adnd.Data\Items\Armor.json to that file
 ___
 SeparateAdnd.Data\Items\Weapons.json into MISCELLANEOUS_WEAPONS.json and SWORDS.json
 ___
@@ -2586,7 +2697,8 @@ add all items from G. SWORDS that are missing from SWORDS.json to SWORDS.json
 ___
 Crossbows and other weapons should all have a weight that is > 0
 ___
-70% of swords are longs wards, 20% are broadswords, 5% are short swords, 4% are bastard swords, 1 h are two-handed swords. so when looting a sword roll 1d100 
+70% of swords are longs wards, 20% are broadswords, 5% are short swords, 4% are bastard swords, 
+1 h are two-handed swords. so when looting a sword roll 1d100 
 1-70 Long sword
 71-91 Broad sword
 91-96 Short sword
@@ -2594,7 +2706,8 @@ ___
 100 Two-handed sword
 
 Implement Sword + 1, +2 vs. magic-using and enchanted creature*
-It gives its +1 bonus always, +2 when employed against magic-users, monsiers which can cost spells, conjured, created, gated, or summoned creatures. 
+It gives its +1 bonus always, +2 when employed against magic-users, monsiers which can cost spells, conjured, 
+created, gated, or summoned creatures. 
 Note that the +2 would not operate against a creature magically empowered by some item to cast spells —such as a ring of spell storing
 69,6
 ____
@@ -2725,9 +2838,11 @@ ___
 When selling things in the shop make an option to sell all items not equipped. 73,6
 
 updated manually inventory to 0 for scrolls and many new weapons
-Crossbow of accuracy, +3, gives a +3 bonus to its missiles and oil ranges are considered short. 10% of these weapons will be heavy crossbows- 74,4
+Crossbow of accuracy, +3, gives a +3 bonus to its missiles and oil ranges are considered short. 
+10% of these weapons will be heavy crossbows- 74,4
 ____
-Crossbow of Distance has double range in all categories. 10% of these weapons will be heavy crossbows. It is otherwise 41 "to hit" and far damage.
+Crossbow of Distance has double range in all categories. 10% of these weapons will be heavy crossbows. 
+It is otherwise 41 "to hit" and far damage.
 ____
 Crossbow of speed allows ils possessor to double the rate of fire normal for the weapon. 
 If It is grasped, the crossbow of speed will automatically cock Hself. In surprise situations 
@@ -2859,7 +2974,8 @@ in charater sheet only show max 17 spells. If the charater got more than 17 spel
 
 when selecting heal party in town, also heal Feeblemind, it cost 400 gp
 
-Bug: monsters with for example "MagicResistance": "85%" should have a 15% chance to be affected by magic, but they are always affected. Fix this.
+Bug: monsters with for example "MagicResistance": "85%" should have a 15% chance to be affected by magic, 
+but they are always affected. Fix this.
 
 rename Javelin of Lightning (3) to Javelin of Lightning
 
@@ -2958,7 +3074,8 @@ Charisma	Max.	16/16	18/18	18/18	18/18	18/18	12/12
 
 instead of having the the choise Female and Male, let is be Random, and disply it at the same time as the abilities.
 ___
-According to PHB,pg 14 there is a limit to what levels can be reached for different classes depending on the race of the character. This table apply
+According to PHB,pg 14 there is a limit to what levels can be reached for different classes depending on the race of the character. 
+This table apply
 
 Character Class	Dwarven	Elven	Gnome	Half-Elven	Halfling	Half-Orc	Human
 CLERIC	(8)	(7)	(7)	5	no	4	U
@@ -2978,10 +3095,13 @@ Dwarven fighters with less than 17strength are limited to 7th level; those with 
 'Elven fighters with less than 17strength are limited to 5th level; those with 17strength are limited to 6th level.
 3Gnome fighters of less than 18 strength are limited to 5th level.
 4Half-elven fighters of less than 17strength are limited to 6th level; those of 17strength are limited to 7th level.
-'Halfling fighters of hairfeet sub-race, as well as all other types of sub-races with strength of under 17, are limited to 4th level. Tallfellows of 17strength and Stouts of I8 strength can work up to 5th level. Tallfellows that somehow obtain 18 strength can work up to 6th level.
+'Halfling fighters of hairfeet sub-race, as well as all other types of sub-races with strength of under 17, 
+are limited to 4th level. Tallfellows of 17strength and Stouts of I8 strength can work up to 5th level. 
+Tallfellows that somehow obtain 18 strength can work up to 6th level.
 elven magic-users with intelligence of less than 17 are limited to 9th level; those with intelligence of 17are limited to 10th level.
 'Half-elven magic-users with intelligence of less than 17 are limited to 6th level; those with intelligence of 17 are limited to 7th level.
-'Gnome illusionists with intelligence or dexterity under 17 are limited to 5th level; those with both intelligence and dexterity of 17 are limited to 6th level.
+'Gnome illusionists with intelligence or dexterity under 17 are limited to 5th level; those with both 
+intelligence and dexterity of 17 are limited to 6th level.
 9Half-Orc thieves with dexterity of less than 17 are limited to 6th level; those with dexterity of 17 are limited to 7th level.: 92,2
 ___
 The same info written to Combat info should also be written to ADnD Rula and Dice info. 92,4
@@ -3035,7 +3155,8 @@ the alignment (q.v.) possibilities of each character class: (A) means any, (N) m
 (E) means evil only, and (1) means lawful only. (A)* a cleric cannot be true neutral unless of the 
 druid subclass.
 ___
-When creating a new character, after writing the dice rolls for one ability to ADnD Rule and Dice info. also write the final ability score to ADnD Rule and Dice info.
+When creating a new character, after writing the dice rolls for one ability to ADnD Rule and Dice info. 
+also write the final ability score to ADnD Rule and Dice info.
 with a link to the PHB, with these pages for the different abilities:
 PHB9Strength
 PHB10Intelligence
@@ -3045,7 +3166,8 @@ PHB12Constitution
 PHB13Charisma
 ___
 
-When selecting a race, write the race selection to ADnD Rule and Dice info. link to PHB14PenaltiesAndBonusesForRace.png using the normal methods usually used in RetroDungeon.
+When selecting a race, write the race selection to ADnD Rule and Dice info. link to 
+PHB14PenaltiesAndBonusesForRace.png using the normal methods usually used in RetroDungeon.
 When selecting a class, write the class selection to ADnD Rule and Dice info.
 When creating a new character, write the race and class selection to ADnD Rule and Dice info.
 When creating a new character, write the final abilities to ADnD Rule and Dice info.
@@ -3170,21 +3292,27 @@ Also write the base damage that the weapon/weapons equiped gives
 
 This was allready implemented ai said: Talisman of Pure Good: but nothing happens.
 
-potions helping a person in the party should automatically only target the person who drinks the potion, do do not ask for who in the party the potion should target.
+potions helping a person in the party should automatically only target the person who drinks the potion, 
+do do not ask for who in the party the potion should target.
 
-When encountering for example monster "Creature": "Toad, giant", according to rollF in MonsterLevel,json, I want the monster with "Name": "Giant Toad", to be found
+When encountering for example monster "Creature": "Toad, giant", according to rollF in MonsterLevel,json, 
+I want the monster with "Name": "Giant Toad", to be found
 this is only an example, so this means that the order of the words could be reversed and then should  "," and " " be ingnored. 96,9
 
 remove the restriction of how many gp an item can be worth when finding it depening on level it is found on.  96,9
 ___
-Write in Adnd Rule and Dice Info how the probablity of encoutnering several monstergroups is calculated, what the 1d100 roll was and what the result was. 97,0
-also shown this table when rolling for how many monster groups to meet. •	01 → 4 groups (1%) •	02-05 → 3 groups (4%) •	06-19 → 2 groups (14%) •	20-100 → 1 group (81%)
+Write in Adnd Rule and Dice Info how the probablity of encoutnering several monstergroups is calculated, 
+what the 1d100 roll was and what the result was. 97,0
+also shown this table when rolling for how many monster groups to meet. •	01 → 4 groups (1%) •	
+02-05 → 3 groups (4%) •	06-19 → 2 groups (14%) •	20-100 → 1 group (81%)
 
-when several groups are encountered and the encouters that are not the 1st are filtered away because of alignement reaseons, write that in Adnd Rule and Dice Info. 97,4
+when several groups are encountered and the encouters that are not the 1st are filtered away because of 
+alignement reaseons, write that in Adnd Rule and Dice Info. 97,4
 
 when showing save throws from monsters in Adnd Rule and Dice Info, link to DMG79SavethrowMonster.png //This did not work...
 
-when writing that a monster group has been filtered out because of alignment, write what monster group was filtered out and what was the alignment expected and what 
+when writing that a monster group has been filtered out because of alignment, write what monster group was 
+filtered out and what was the alignment expected and what 
 was the actual alignment to fit with the other monsters. 97,5
 
 write the content of Adnd Rule and Dice Info to  C:\dev\RetroDungeon\Logs\ instead of C:\Users\rober\source\repos\RetroDungeon. 97,7
@@ -3235,7 +3363,8 @@ Implement "SpecialDefenses":"Mind-affecting spells Immunity", "Immune to charm, 
 ___
 
 Gas Spore 
-Implement "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate flesh; victim must receive cure disease within 24 hours or die and spawn 2-8 gas spores." 
+Implement "SpecialAttacks": "Infestation","Touch causes rhizomes to penetrate flesh; victim must receive 
+cure disease within 24 hours or die and spawn 2-8 gas spores." 
 "SpecialDefenses": "Explosion","If struck for any damage, explodes for 6–36 damage (3–18 on save vs wands) in 20' radius."
 ___
 
@@ -3244,7 +3373,8 @@ Implement "SpecialAttacks":  "Drain Blood","After a successful hit, drains 1–4
 ___
 
 when writing two clases in tables for dual classed charaters, write the former class withinparenthasis 1,7
-Also when witing the abbreviations of the clases in the class colum in the Encounter dialog i want you to use parenthatis for the former class
+Also when witing the abbreviations of the clases in the class colum in the Encounter dialog i want you 
+to use parenthatis for the former class
 ___
 
 Gelatinous Cube 
@@ -3270,22 +3400,28 @@ when informing about weapon type to hit adjustments, also show the weapon type, 
 PHB38WeaponTypeToHitAdjustment.png using the normal methods usually used in RetroDungeon. 2,8
 ___ 
 
-if hitting a target that is stunned, paralyzed or asleep, or can not move then the weapon type to hit adjustment should be +4 also when that applies inform in Adnd Rule and Dice Info and link to PHB38WeaponTypeToHitAdjustment.png using the normal methods usually used in RetroDungeon. 
+if hitting a target that is stunned, paralyzed or asleep, or can not move then the weapon type to hit 
+adjustment should be +4 also when that applies inform in Adnd Rule and Dice Info and link to 
+PHB38WeaponTypeToHitAdjustment.png using the normal methods usually used in RetroDungeon. 
 This rule is applicable for all monsters and charaters.
 
-when  it comes to weapon type to hit adjustments and no similar weapon can be found, the fallback should be to not adjust at all accodring to the table I gave you.
+when  it comes to weapon type to hit adjustments and no similar weapon can be found, the fallback should 
+be to not adjust at all accodring to the table I gave you.
 ___
 Fist or Open Hand to hit adjustment does not apply for monks.
 ___
 
-make the filename AdndRuleAndDiceInfo located at C:\dev\RetroDungeon\Logs unique by adding a timestamp to the filename, for example AdndRuleAndDiceInfo_2024-06-15_14-30-00.txt.
+make the filename AdndRuleAndDiceInfo located at C:\dev\RetroDungeon\Logs unique by adding a timestamp to 
+the filename, for example AdndRuleAndDiceInfo_2024-06-15_14-30-00.txt.
 3,1
 
 Implement weapon proficiency adjustments.
-Det betyder att man kan välja vapen/det väljs automatiskt vapen som man är proficient i och att alla andra vapen får man ett straff på att träffa med.
+Det betyder att man kan välja vapen/det väljs automatiskt vapen som man är proficient i och att alla andra 
+vapen får man ett straff på att träffa med.
 
 beroede på klass får man ett visst antal vapen som man är proficient i och sedan får man fler vapen per level.
-olika klasser har olika straff för att träffa med vapen som man inte är proficient i. T ex Cleric har -3 i straff för att träffa med vapen som han inte är proficient i, medan en Fighter har -2 i straff.
+olika klasser har olika straff för att träffa med vapen som man inte är proficient i. T ex Cleric har -3 i 
+straff för att träffa med vapen som han inte är proficient i, medan en Fighter har -2 i straff.
 Så här ser tabellen ut för de olika klasserna:
 Class of Character	Initial Number of Weapons	Non‑proficiency Penalty	Added Proficiency in Weapons per Level
 Cleric	2	−3	1/4 levels
@@ -3308,7 +3444,8 @@ Thief	Short Sword, Dagger	5, 9, 13, 17
 Bard	Longsword, Dagger, Longbow	5, 9, 13, 17
 Magic‑User	Dagger	7, 13, 19
 Illusionist	Dagger	6, 11, 16
-Senare kommer jag eventuellt att implementera att en inställning kan styra att man kan välja vapen som man är proficient i, men som inte är automatiskt valt.
+Senare kommer jag eventuellt att implementera att en inställning kan styra att man kan välja vapen som man är 
+proficient i, men som inte är automatiskt valt.
 
 och när man når en ny level så väljs automatiskt ett nytt vapen som man blir proficient i enligt detta:
 🛡 FIGHTER / PALADIN / RANGER
@@ -3517,7 +3654,8 @@ när man är en lycanthrop så kan man inte använda vapen men har tre attacker 
 when a weapon that is wielded, rusts and diesapears also make sure that the damage the charater gives untill equipping a new weapon is the 
 same as for bare hands. 11,0
 ___
-introduce a setting that can be turned on or off that the weapons in weapons of proficiency adjustments can be selected by the player or automatically selected by the game.
+introduce a setting that can be turned on or off that the weapons in weapons of proficiency 
+adjustments can be selected by the player or automatically selected by the game.
 if the setting is on then the player can select which weapons he wants to be proficient in, then when creating a new character, 
 the player can select which weapons he wants to be proficient in, 
 and then when reaching a new level, the player can select which new weapon he wants to be proficient in.
@@ -3625,11 +3763,14 @@ ___
 When creating a character, adjust the ability scores based on the age category of the character. 
 Young Adult: Subtract 1 point of wisdom, add 1 point of constitution.
 Mature: Add I point of strength, add 1 point of wisdom.
-Middle Aged: Subtraci 1 point (or half exceptional rating) of strength and 1 point of constitution; add I point of intelligence and 1 point of wisdom.
+Middle Aged: Subtraci 1 point (or half exceptional rating) of strength and 1 point of constitution; 
+add I point of intelligence and 1 point of wisdom.
 Old: Subtract 2 paints of strength, 2 points of dexterity, and 1point of constitution; add 1 point of wisdom.
-Venerable: Subtract 1 point of strength, I point of dexterity, and I point of constitution; add 1 painl of intelligence and 1 point of wisdom.
+Venerable: Subtract 1 point of strength, I point of dexterity, and I point of constitution; add 1 painl of 
+intelligence and 1 point of wisdom.
 
-For example, if a character is a 40 year old human, then he or she is in the Mature age category and should get +1 point of strength and +1 point of wisdom.
+For example, if a character is a 40 year old human, then he or she is in the Mature age category and should 
+get +1 point of strength and +1 point of wisdom.
 When a person becomes older then also adjust the ability scores based on the new age category. 
 For example, if a Human character is 40 years old and becomes 41 years old, then he or she is in the Middle Aged category and 
 should get -1 point of strength, -1 point of constitution, +1 point of intelligence, and +1 point of wisdom.
@@ -3641,13 +3782,17 @@ the age adjustment makes the character get a strength of 18, then roll for excep
 
 General rule: when I refer to the log I mean ADnD Rule and Dice info
 
-if creating a character and not a human, then refer to in the ADnD Rule and Dice Info to the table for starting age for non humans: DMG12StartingAgeNonHuman.png
-After an age determined in the log refre to DMG13AgeCategoriesWithModifiers to show the age category and the age adjustments that should be made to the ability scores.
+if creating a character and not a human, then refer to in the ADnD Rule and Dice Info to the table for 
+starting age for non humans: DMG12StartingAgeNonHuman.png
+After an age determined in the log refre to DMG13AgeCategoriesWithModifiers to show the age category and 
+the age adjustments that should be made to the ability scores.
 
-When a character gets older so it changes age category, then refer to in the ADnD Rule and Dice Info to the table for age categories 
+When a character gets older so it changes age category, then refer to in the ADnD Rule and Dice Info to the
+table for age categories 
 with modifiers: DMG13AgeCategoriesWithModifiers.png
 14,8
-If a character is a human, then refer to in the ADnD Rule and Dice Info to the table for starting age for humans: DMG12StartingAgeHuman.png
+If a character is a human, then refer to in the ADnD Rule and Dice Info to the table for starting age for 
+humans: DMG12StartingAgeHuman.png
 ___
 Bard is a class that should not be possible to select from start but possible to change into.
 Bard Progression Path (AD&D 1e)
@@ -3713,3 +3858,62 @@ When i switched from fighter to thief and then to bard, i found two different pr
 but when a charater is a Bard, it should not be possible to get xp or gain level in other classes.
 
 failing to disarm a trap should automatically trigger it.16,5
+___
+Every charater knows the languages of his or her race. For example, a human knows Common, a dwarf knows Dwarvish 
+and Common, an elf knows Elvish and Common, etc. 
+When creating a character, show the languages known in the character sheet and in the ADnD Rule and Dice Info.
+When inspecting a character, show the languages known in the character sheet and in the ADnD Rule and Dice Info.
+
+Introduce a new setting that can be turned on or off that when a character is created, the player can select which 
+languages the character knows.
+All characters know common and the languages of his or her race. Besides that the character can know a number of 
+additional languages depending on his or her intelligence modifier.
+Druids and only druids will know the language: Druidic
+Thieves and only Thieves will know Thieves’ Cant
+if the setting is on, then when creating a character, the player can select which additional languages the character 
+knows else random languages will be selected for the character. 
+This table shows how many additional languages a character can know depending on his or her intelligence modifier.
+Ability Score	Possible Number of Additional Languages
+3	0
+4	0
+5	0
+6	0
+7	0
+8	1
+9	1
+10	2
+11	2
+12	3
+13	3
+14	4
+15	4
+16	4
+17	5
+18	7
+
+All humans, as well as those semi‑humans and non‑humans in close contact with people, speak the common tongue. 
+This language is spoken by all states in the central campaign area, but your referee may have regions in which the 
+common tongue differs from that which your character speaks.
+In addition to the common tongue, all intelligent creatures able to converse in speech use special languages particular 
+to their alignment. These alignment languages are: Chaotic Evil, Chaotic Good, Chaotic Neutral, Lawful Evil, Lawful Good, 
+Lawful Neutral, Neutral Evil, Neutral Good, and True Neutral. The alignment of your character dictates which language he 
+or she speaks, for only one alignment dialect can be used by a character (cf. Character Classes, The Assassin). 
+If a character changes alignment, the previously known language can no longer be spoken.
+In addition to the above, druids have their own special tongue, and thieves have their secret speech, the Thieves’ Cant.
+Therefore, a character will speak at least two languages: common and alignment. He or she might also be able to converse 
+in the special patois of druids or thieves. Semi‑human and non‑human characters are able to speak racial tongues as well 
+(see Character Races). In most campaigns, openly speaking an alignment language is likely to be frowned upon as a serious 
+breach of social etiquette.
+A character can learn additional languages. Even those of rather slow wit (8 Intelligence) can learn one additional 
+language, although their vocabulary, usage, and ability to translate must necessarily be limited. The very bright can 
+learn five, six, or even seven (for details of the number of tongues which can be learned, see Character Abilities, Intelligence). 
+Here is how a new language is learned:
+The character must find a person (human, semi‑human, or non‑human) or a talking creature who speaks the language to be
+learned. The character must then be in close proximity to his or her instructor for up to one year, and this period can 
+be shortened by one month for each point of Intelligence above 12. Thus, a character with 13 Intelligence learns the new
+language in 11 months; 14 Intelligence learns it in 10 months; and so on, down to 18 Intelligence, which requires only 
+six months. Only one new language can be studied at any given time.
+Which languages are knowable in a campaign is strictly up to the DM who runs it. The following list gives some of the 
+languages typically used:
+Dwarvish, Elvish, Gnomish, Halfling, Orcish, Goblin, Hobgoblin, Gnoll, Kobold
+Ogrish, Lizardman, Troll, Giant, Dragon, Pixie, Sprite, Centaur

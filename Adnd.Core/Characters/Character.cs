@@ -136,6 +136,7 @@ public class Character
     public int AgeDays { get; set; }
     public List<Item> Inventory { get; set; } = new();
     public List<string> WeaponProficiencies { get; set; } = new();
+    public List<string> KnownLanguages { get; set; } = new();
     public Dictionary<EquipmentSlot, Item?> Equipment { get; set; } = new();
     public int? ExceptionalStrengthPercentile { get; set; }
     public List<SpellcastingState> Spellcasting { get; set; } = new();
@@ -794,7 +795,7 @@ public class Character
 
         var levelPart = Classes.Count > 1 ? string.Empty : $"Lvl {Level}, ";
 
-        return $"{Name} - {Race.ToDisplayString()} {alignment} {classes}{dualInfo} ({levelPart}HP {CurrentHitPoints}/{MaxHitPoints}, XP {Experience}, GP {GoldPieces}, SP {SilverPieces}, EP {ElectrumPieces}, CP {CopperPieces}, PP {PlatinumPieces}, AC {ArmorClass}, MV {Move}, THAC0 {Thac0Display}, Attacks {NumberOfAttacks}, Dmg {DamageDisplay}){statusInfo}{classLevels}\n" +
+        return $"{Name} - {Race.ToDisplayString()} {alignment} {classes}{dualInfo} ({levelPart}HP {CurrentHitPoints}/{MaxHitPoints}, XP {Experience}, GP {GoldPieces}, SP {SilverPieces}, EP {ElectrumPieces}, CP {CopperPieces}, PP {PlatinumPieces}, AC {ArmorClass}, MV {Move}, THAC0 {Thac0Display}, Attacks {NumberOfAttacks}, Dmg {DamageDisplay}, Languages {GetKnownLanguagesDisplay()}){statusInfo}{classLevels}\n" +
                $"STR {GetStrengthDisplay()}, INT {Abilities.Intelligence}, WIS {Abilities.Wisdom}, DEX {Abilities.Dexterity}, CON {Abilities.Constitution}, CHA {Abilities.Charisma}";
     }
 
@@ -1018,6 +1019,19 @@ public class Character
             .Select(WeaponProficiencyRules.CanonicalizeProficiencyName)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase));
+    }
+
+    public string GetKnownLanguagesDisplay()
+    {
+        KnownLanguages ??= new List<string>();
+        if (KnownLanguages.Count == 0)
+            return "-";
+
+        return string.Join(", ", KnownLanguages
+            .Where(l => !string.IsNullOrWhiteSpace(l))
+            .Select(l => l.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(l => l, StringComparer.OrdinalIgnoreCase));
     }
 
     public int GetPaladinLevel() => IsPaladin()

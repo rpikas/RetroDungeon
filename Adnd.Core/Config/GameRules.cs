@@ -60,6 +60,7 @@ public class GameRules
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
     public bool ShowToHitRoll { get; set; } = false;
     public bool PlayerSelectsWeaponProficiencies { get; set; } = false;
+    public bool PlayerSelectsLanguagesOnCreation { get; set; } = false;
     public int MaxSizeEncounter { get; set; } = 2;
     public Color ForegroundColor { get; set; } = Color.White;
     [JsonIgnore]

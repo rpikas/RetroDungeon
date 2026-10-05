@@ -474,6 +474,18 @@ public class CityMenu
             Age = RollStartingAgeYears(race, chosenClasses)
         };
 
+        var additionalLanguageSlots = LanguageRules.GetAdditionalLanguageCount(character.Abilities.Intelligence);
+        List<string> additionalLanguages;
+        if (GameRulesProvider.Current.PlayerSelectsLanguagesOnCreation)
+        {
+            additionalLanguages = SelectAdditionalLanguages(character, additionalLanguageSlots);
+        }
+        else
+        {
+            additionalLanguages = LanguageRules.PickRandomAdditionalLanguages(character, additionalLanguageSlots);
+        }
+        character.KnownLanguages = LanguageRules.CombineKnownLanguages(character, additionalLanguages);
+
         var abilitiesBeforeAgeAdjustment = CloneAbilities(character.Abilities);
         var exceptionalBeforeAgeAdjustment = character.ExceptionalStrengthPercentile;
         var exceptionalRolledAfterAgeAdjustment = false;
@@ -520,6 +532,7 @@ public class CityMenu
             "13AgeCategoriesWithModifiers",
             $"Age category: {character.GetAgeCategoryDisplay()}. Age adjustment applied: {ageAdjustmentSummary}.");
         RuleApplicationInfo.Publish($"Age category adjustment applied ({character.GetAgeCategoryDisplay()}): {ageAdjustmentSummary}.");
+        RuleApplicationInfo.Publish($"Languages known: {character.GetKnownLanguagesDisplay()}.");
 
         character.EnsureClassProgressions();
         character.RefreshMoveFromArmorAndClass();
@@ -549,6 +562,7 @@ public class CityMenu
         RuleApplicationInfo.Publish($"Final AC: {character.ArmorClass}.");
 
         Console.WriteLine($"HP: {character.CurrentHitPoints}/{character.MaxHitPoints}, GP: {character.GoldPieces}, Age: {Math.Max(0, character.Age)}y {Math.Max(0, character.AgeDays)}d ({character.GetAgeCategoryDisplay()})\n");
+        Console.WriteLine($"Languages: {character.GetKnownLanguagesDisplay()}");
         Console.WriteLine($"Age adjustment ({character.GetAgeCategoryDisplay()}): {ageAdjustmentSummary}");
         if (exceptionalRolledAfterAgeAdjustment && character.ExceptionalStrengthPercentile.HasValue)
         {
@@ -900,6 +914,39 @@ public class CityMenu
         return 0;
     }
 
+    private static List<string> SelectAdditionalLanguages(Character character, int slots)
+    {
+        var selected = new List<string>();
+        if (slots <= 0)
+            return selected;
+
+        var available = LanguageRules.GetAdditionalLanguageChoices(character);
+        for (int pick = 0; pick < slots; pick++)
+        {
+            var options = available
+                .Where(l => !selected.Contains(l, StringComparer.OrdinalIgnoreCase))
+                .ToList();
+
+            if (options.Count == 0)
+                break;
+
+            Console.WriteLine();
+            Console.WriteLine($"Select additional language {pick + 1} of {slots}:");
+            for (int i = 0; i < options.Count; i++)
+            {
+                var label = (char)('A' + i);
+                Console.WriteLine($"{label}) {options[i]}");
+            }
+
+            Console.Write("Language: ");
+            var selectedIndex = InputHelper.ReadLetterIndex(options.Count);
+            var idx = selectedIndex.HasValue ? Math.Max(0, selectedIndex.Value) : 0;
+            selected.Add(options[idx]);
+        }
+
+        return selected;
+    }
+
     private void InspectCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
@@ -910,6 +957,8 @@ public class CityMenu
             var c = all[sel.Value - 1];
             Console.WriteLine(c);
             Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d ({c.GetAgeCategoryDisplay()})");
+            Console.WriteLine($"Languages: {c.GetKnownLanguagesDisplay()}");
+            RuleApplicationInfo.Publish($"Inspect character: {c.Name} languages known: {c.GetKnownLanguagesDisplay()}.");
 
             Console.WriteLine("\n=== SPELLCASTING ===");
             if (c.Spellcasting == null || c.Spellcasting.Count == 0)

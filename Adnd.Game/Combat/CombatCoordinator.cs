@@ -3181,12 +3181,12 @@ public sealed class CombatCoordinator
                     return result;
 
                 case LairChestChoice.CastFindTraps:
-                    if (!HandleCastFindTraps(owner, session, survivors, dungeonDepth, result))
+                    if (!HandleCastFindTraps(owner, session, survivors, dungeonLevel, result))
                         continue;
                     break;
 
                 case LairChestChoice.Inspect:
-                    if (!HandleInspectTrap(owner, session, survivors, dungeonDepth, result, failedTrapInspectors))
+                    if (!HandleInspectTrap(owner, session, survivors, dungeonLevel, result, failedTrapInspectors))
                         continue;
                     break;
             }
