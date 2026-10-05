@@ -3,6 +3,8 @@ namespace Adnd.Core.Items;
 public static class ItemSpecialAbilityParser
 {
     private const string CastsPrefix = "Casts ";
+    private const string DelusionTrueIdentityPrefix = "DelusionTrueIdentity:";
+    private const string DelusionDisguisedAsPrefix = "DelusionDisguisedAs:";
 
     public static bool HasSpecialAbility(Item item, string abilityName)
     {
@@ -44,5 +46,80 @@ public static class ItemSpecialAbilityParser
         }
 
         return false;
+    }
+
+    public static bool IsPotionOfDelusion(Item item)
+    {
+        if (item == null)
+            return false;
+
+        if (string.Equals(item.Name, "Potion of Delusion", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return TryGetDelusionTrueIdentity(item, out _)
+               || HasSpecialAbility(item, "DelusionPotion");
+    }
+
+    public static bool TryGetDelusionTrueIdentity(Item item, out string trueIdentity)
+    {
+        trueIdentity = string.Empty;
+        if (item?.SpecialAbilities == null || item.SpecialAbilities.Count == 0)
+            return false;
+
+        var marker = item.SpecialAbilities
+            .FirstOrDefault(a => !string.IsNullOrWhiteSpace(a)
+                                 && a.StartsWith(DelusionTrueIdentityPrefix, StringComparison.OrdinalIgnoreCase));
+        if (string.IsNullOrWhiteSpace(marker))
+            return false;
+
+        trueIdentity = marker[DelusionTrueIdentityPrefix.Length..].Trim();
+        return !string.IsNullOrWhiteSpace(trueIdentity);
+    }
+
+    public static bool TryGetDelusionDisguiseName(Item item, out string disguiseName)
+    {
+        disguiseName = string.Empty;
+        if (item?.SpecialAbilities == null || item.SpecialAbilities.Count == 0)
+            return false;
+
+        var marker = item.SpecialAbilities
+            .FirstOrDefault(a => !string.IsNullOrWhiteSpace(a)
+                                 && a.StartsWith(DelusionDisguisedAsPrefix, StringComparison.OrdinalIgnoreCase));
+        if (string.IsNullOrWhiteSpace(marker))
+            return false;
+
+        disguiseName = marker[DelusionDisguisedAsPrefix.Length..].Trim();
+        return !string.IsNullOrWhiteSpace(disguiseName);
+    }
+
+    public static void SetDelusionDisguise(Item item, string disguiseName)
+    {
+        if (item == null || string.IsNullOrWhiteSpace(disguiseName))
+            return;
+
+        item.SpecialAbilities ??= new List<string>();
+
+        item.SpecialAbilities.RemoveAll(a => !string.IsNullOrWhiteSpace(a)
+                                             && (a.StartsWith(DelusionTrueIdentityPrefix, StringComparison.OrdinalIgnoreCase)
+                                                 || a.StartsWith(DelusionDisguisedAsPrefix, StringComparison.OrdinalIgnoreCase)));
+
+        if (!HasSpecialAbility(item, "DelusionPotion"))
+            item.SpecialAbilities.Add("DelusionPotion");
+
+        item.SpecialAbilities.Add("DelusionTrueIdentity:Potion of Delusion");
+        item.SpecialAbilities.Add($"DelusionDisguisedAs:{disguiseName.Trim()}");
+        item.Name = disguiseName.Trim();
+    }
+
+    public static bool RevealDelusionIdentity(Item item)
+    {
+        if (!TryGetDelusionTrueIdentity(item, out var trueIdentity))
+            return false;
+
+        item.Name = trueIdentity;
+        item.SpecialAbilities.RemoveAll(a => !string.IsNullOrWhiteSpace(a)
+                                             && (a.StartsWith(DelusionTrueIdentityPrefix, StringComparison.OrdinalIgnoreCase)
+                                                 || a.StartsWith(DelusionDisguisedAsPrefix, StringComparison.OrdinalIgnoreCase)));
+        return true;
     }
 }

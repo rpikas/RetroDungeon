@@ -1504,11 +1504,12 @@ public sealed class CombatCoordinator
                     if (!receiver.CanCarry(item))
                         continue;
 
+                PrepareDelusionDisguiseIfNeeded(item, receiver.Inventory);
                     receiver.Inventory.Add(item);
                     result.AssignedItems.Add(new AssignedMagicItem
                     {
                         ReceiverName = receiver.Name,
-                        ItemName = item.Name
+                    ItemName = GetInventoryDisplayNameForTreasureLog(item)
                     });
 
                     nextReceiverIndex = (idx + 1) % survivors.Count;
@@ -1517,7 +1518,7 @@ public sealed class CombatCoordinator
                 }
 
                 if (!assigned)
-                    result.UnassignedItems.Add(item.Name + " (no one can carry)");
+                result.UnassignedItems.Add(GetInventoryDisplayNameForTreasureLog(item) + " (no one can carry)");
             }
         }
 
@@ -1535,6 +1536,7 @@ public sealed class CombatCoordinator
             return false;
 
         var resolved = placeholder.ResolvedName;
+        var resolvedIndicatesHeavyCrossbow = resolved.Contains("Heavy Crossbow", StringComparison.OrdinalIgnoreCase);
         var parenIndex = resolved.IndexOf('(');
         if (parenIndex > 0)
             resolved = resolved[..parenIndex].Trim();
@@ -1586,6 +1588,16 @@ public sealed class CombatCoordinator
 
             if (resolved.StartsWith("Mace +", StringComparison.OrdinalIgnoreCase))
                 candidates.Add(resolved.Replace("Mace +", "Mace+", StringComparison.OrdinalIgnoreCase));
+
+            if (resolvedIndicatesHeavyCrossbow)
+            {
+                if (resolved.StartsWith("Crossbow of Speed", StringComparison.OrdinalIgnoreCase))
+                    candidates.Add("Crossbow of Speed (Heavy Crossbow)");
+                else if (resolved.StartsWith("Crossbow of Distance", StringComparison.OrdinalIgnoreCase))
+                    candidates.Add("Crossbow of Distance (Heavy Crossbow)");
+                else if (resolved.StartsWith("Crossbow of Accuracy, +3", StringComparison.OrdinalIgnoreCase))
+                    candidates.Add("Crossbow of Accuracy, +3 (Heavy Crossbow)");
+            }
         }
 
         if (placeholder.Table.Contains("sword", StringComparison.OrdinalIgnoreCase))
@@ -2208,11 +2220,12 @@ public sealed class CombatCoordinator
                 if (!receiver.CanCarry(item))
                     continue;
 
+                    PrepareDelusionDisguiseIfNeeded(item, receiver.Inventory);
                 receiver.Inventory.Add(item);
                 result.AssignedItems.Add(new AssignedMagicItem
                 {
                     ReceiverName = receiver.Name,
-                    ItemName = item.Name
+                        ItemName = GetInventoryDisplayNameForTreasureLog(item)
                 });
 
                 nextReceiverIndex = (idx + 1) % survivors.Count;
@@ -2593,11 +2606,13 @@ public sealed class CombatCoordinator
             if (!receiver.CanCarry(item))
                 continue;
 
+            PrepareDelusionDisguiseIfNeeded(item, receiver.Inventory);
+
             receiver.Inventory.Add(item);
             result.AssignedItems.Add(new AssignedMagicItem
             {
                 ReceiverName = receiver.Name,
-                ItemName = item.Name
+                ItemName = GetInventoryDisplayNameForTreasureLog(item)
             });
 
             nextReceiverIndex = (idx + 1) % survivors.Count;
@@ -2626,6 +2641,50 @@ public sealed class CombatCoordinator
             AllowedClasses = new List<CharacterClass>(source.AllowedClasses),
             SpecialAbilities = new List<string>(source.SpecialAbilities)
         };
+    }
+
+    private static void PrepareDelusionDisguiseIfNeeded(Item item, List<Item> existingInventory)
+    {
+        if (!ItemSpecialAbilityParser.IsPotionOfDelusion(item))
+            return;
+
+        if (ItemSpecialAbilityParser.TryGetDelusionDisguiseName(item, out _))
+            return;
+
+        var potionNames = existingInventory
+            .Where(i => i != null
+                        && i.Type == ItemType.Potion
+                        && !ItemSpecialAbilityParser.IsPotionOfDelusion(i)
+                        && !string.IsNullOrWhiteSpace(i.Name))
+            .Select(i => i.Name.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (potionNames.Count == 0)
+        {
+            potionNames = new List<string>
+            {
+                "Potion of Healing",
+                "Potion of Extra Healing",
+                "Potion of Cure Poison",
+                "Potion of Heroism",
+                "Potion of Speed",
+                "Potion of Invisibility",
+                "Potion of Levitation",
+                "Potion of Fire Resistance"
+            };
+        }
+
+        var disguise = potionNames[Random.Shared.Next(potionNames.Count)];
+        ItemSpecialAbilityParser.SetDelusionDisguise(item, disguise);
+    }
+
+    private static string GetInventoryDisplayNameForTreasureLog(Item item)
+    {
+        if (ItemSpecialAbilityParser.IsPotionOfDelusion(item))
+            return "Potion of Delusion";
+
+        return item.Name;
     }
 
     private sealed class MagicAwardResult
@@ -3128,7 +3187,7 @@ public sealed class CombatCoordinator
                 }
 
                 var resolved = ResolveEncounterCreatureToMonsterName(creature, monsterLevel);
-                string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
+                string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
 
                 RuleApplicationInfo.Publish(
                     "DMG",
@@ -3173,7 +3232,7 @@ public sealed class CombatCoordinator
             countMin = Math.Max(1, countMin);
             countMax = Math.Max(1, countMax);
             var rolledCount = _random.Next(countMin, countMax + 1);
-            string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
+            string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
 
             RuleApplicationInfo.Publish(
                 "DMG",
@@ -3202,7 +3261,7 @@ public sealed class CombatCoordinator
             countMin = Math.Max(1, countMin);
             countMax = Math.Max(1, countMax);
             var rolledCount = _random.Next(countMin, countMax + 1);
-            string page = MazeForm.GetDMGpageForMonsterEncounterTable(monsterLevel);
+            string page = GetDMGpageForMonsterEncounterTable(monsterLevel);
 
             RuleApplicationInfo.Publish(
                 "DMG",
@@ -3225,6 +3284,24 @@ public sealed class CombatCoordinator
         var min = Math.Max(1, template.NumberOfAppearancesMin);
         var max = Math.Max(min, template.NumberOfAppearancesMax);
         return _random.Next(min, max + 1);
+    }
+
+    private static string GetDMGpageForMonsterEncounterTable(int monsterLevel)
+    {
+        return monsterLevel switch
+        {
+            1 => "175_Level1",
+            2 => "177_Level2",
+            3 => "177_Level3",
+            4 => "177_Level4",
+            5 => "177_Level5",
+            6 => "178_Level6",
+            7 => "178_Level7",
+            8 => "178_Level8",
+            9 => "179_Level9",
+            10 => "179_Level10",
+            _ => "175-177"
+        };
     }
 
     private string? ResolveEncounterCreatureToMonsterName(string? creature, int monsterLevel)

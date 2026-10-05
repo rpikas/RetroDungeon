@@ -134,6 +134,9 @@ public class Character
     public Alignment Alignment { get; set; }
     public int Age { get; set; }
     public int AgeDays { get; set; }
+    public int? MaximumNaturalAgeYears { get; set; }
+    public bool DiedOfOldAge { get; set; }
+    public bool HasLifeExtensionProtection { get; set; }
     public List<Item> Inventory { get; set; } = new();
     public List<string> WeaponProficiencies { get; set; } = new();
     public List<string> KnownLanguages { get; set; } = new();
@@ -992,6 +995,9 @@ public class Character
             Age = Math.Max(0, Age + extraYears);
             AgeDays %= 365;
 
+            EnsureMaximumNaturalAgeRolledIfNeeded();
+            TryApplyDeathDueToOldAge();
+
             var currentCategory = GetAgeCategory();
             if (currentCategory > previousCategory)
             {
@@ -1004,6 +1010,141 @@ public class Character
                     $"{Name} advanced in age category: {GetAgeCategoryDisplay()}. Applied age-based ability modifiers.");
             }
         }
+    }
+
+    private void EnsureMaximumNaturalAgeRolledIfNeeded()
+    {
+        if (MaximumNaturalAgeYears.HasValue)
+            return;
+
+        var category = GetAgeCategory();
+        if (category < CharacterAgeCategory.Old)
+            return;
+
+        MaximumNaturalAgeYears = RollMaximumNaturalAgeYears();
+    }
+
+    private void TryApplyDeathDueToOldAge()
+    {
+        if (!MaximumNaturalAgeYears.HasValue)
+            return;
+
+        if (DiedOfOldAge)
+            return;
+
+        if (HasLifeExtensionProtection)
+        {
+            RuleApplicationInfo.PublishLinked(
+                "DMG",
+                "15DeathDuetoAge",
+                $"{Name} reached the natural age limit ({MaximumNaturalAgeYears.Value}) but lifespan-extending magic delays death.");
+            return;
+        }
+
+        if (Age < MaximumNaturalAgeYears.Value)
+            return;
+
+        DiedOfOldAge = true;
+        CurrentHitPoints = 0;
+        AddStatus(CharacterStatus.Dead);
+        AddStatus(CharacterStatus.Lost);
+
+        RuleApplicationInfo.PublishLinked(
+            "DMG",
+            "15DeathDuetoAge",
+            $"{Name} reached maximum age ({MaximumNaturalAgeYears.Value}) and died of old age. Death is final; normal resurrection magic cannot restore permanent life.");
+    }
+
+    private int RollMaximumNaturalAgeYears()
+    {
+        var (_, _, middleAgedMax, oldMax) = GetAgeBounds();
+        var oldLowest = middleAgedMax + 1;
+        var oldHighest = oldMax;
+        var oldSpan = Math.Max(1, oldHighest - oldLowest + 1);
+        var venerableLowest = oldHighest + 1;
+        var venerableHighest = venerableLowest + oldSpan - 1;
+        var intervalYears = GetAgeRollIntervalYears(oldHighest);
+
+        var percentile = Random.Shared.Next(1, 101);
+
+        int rollValue;
+        int computedMaxAge;
+        string ruleBranch;
+
+        if (percentile <= 10)
+        {
+            rollValue = RollScaledDieIncludingZero(8);
+            computedMaxAge = oldLowest + (rollValue * intervalYears);
+            ruleBranch = "01-10: Old, lowest age + d8";
+        }
+        else if (percentile <= 25)
+        {
+            rollValue = RollScaledDieIncludingZero(4);
+            computedMaxAge = oldHighest - (rollValue * intervalYears);
+            ruleBranch = "11-25: Old, highest age - d4";
+        }
+        else if (percentile <= 60)
+        {
+            rollValue = RollScaledDieIncludingZero(6);
+            computedMaxAge = venerableLowest + (rollValue * intervalYears);
+            ruleBranch = "26-60: Venerable, lowest age + d6";
+        }
+        else if (percentile <= 90)
+        {
+            rollValue = RollScaledDieIncludingZero(10);
+            computedMaxAge = venerableHighest - (rollValue * intervalYears);
+            ruleBranch = "61-90: Venerable, highest age - d10";
+        }
+        else
+        {
+            rollValue = RollScaledDieIncludingZero(20);
+            computedMaxAge = venerableHighest + (rollValue * intervalYears);
+            ruleBranch = "91-00: Venerable, highest age + d20";
+        }
+
+        computedMaxAge = Math.Max(oldLowest, computedMaxAge);
+
+        RuleApplicationInfo.PublishLinked(
+            "DMG",
+            "15DeathDuetoAge",
+            $"Maximum age roll for {Name} ({Race.ToDisplayString()}): d100={percentile}. {ruleBranch}. " +
+            $"Old range {oldLowest}-{oldHighest}, venerable range {venerableLowest}-{venerableHighest}, interval {intervalYears} year(s), die roll {rollValue}. " +
+            $"Maximum natural age = {computedMaxAge} years.");
+
+        return computedMaxAge;
+    }
+
+    private (int YoungAdultMax, int MatureMax, int MiddleAgedMax, int OldMax) GetAgeBounds()
+    {
+        return Race switch
+        {
+            Race.Dwarf => (50, 150, 250, 350),
+            Race.Elf => (150, 500, 1000, 1100),
+            Race.Gnome => (90, 400, 450, 600),
+            Race.HalfElf => (40, 90, 175, 250),
+            Race.Halfling => (33, 69, 104, 140),
+            Race.HalfOrc => (30, 45, 60, 80),
+            _ => (20, 40, 60, 90),
+        };
+    }
+
+    private static int GetAgeRollIntervalYears(int oldHighest)
+    {
+        if (oldHighest <= 100)
+            return 1;
+
+        if (oldHighest <= 350)
+            return 10;
+
+        return 20;
+    }
+
+    private static int RollScaledDieIncludingZero(int dieSides)
+    {
+        if (dieSides <= 0)
+            return 0;
+
+        return Random.Shared.Next(0, dieSides + 1);
     }
 
     public bool IsMonkImmuneToPoison() => IsMonk() && GetMonkLevel() >= 11;

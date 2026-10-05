@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
+using Adnd.Core.Diagnostics;
 using Adnd.Core.Items;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
@@ -1195,9 +1196,10 @@ public sealed class CampCharacterInspectForm : Form
                 grantsProtectionFromMagicScroll = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Protection from Magic") || string.Equals(item.Name, "Scroll of Protection from Magic", StringComparison.OrdinalIgnoreCase),
                 grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase),
                 grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
+                grantsTreasureFindingPotion = string.Equals(item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing)
             .ToList();
 
         var hasEquippedRingInvisibility = user.TryGetEquippedRingOfInvisibility(out var equippedRingOfInvisibility)
@@ -1231,7 +1233,9 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         var itemIdx = PromptChoice("Use Item", usableItems.Select(x =>
-            x.item.Type == ItemType.Scroll && !x.item.ScrollContentsKnown
+            ItemSpecialAbilityParser.TryGetDelusionDisguiseName(x.item, out var disguisedName)
+                ? disguisedName
+                : x.item.Type == ItemType.Scroll && !x.item.ScrollContentsKnown
                 ? $"{x.item.Name} (unread magical scroll)"
                 : x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
@@ -1255,6 +1259,8 @@ public sealed class CampCharacterInspectForm : Form
                                     ? $"{x.item.Name} (grants levitation)"
                                 : x.grantsSpeedPotion
                                     ? $"{x.item.Name} (grants speed)"
+                                : x.grantsTreasureFindingPotion
+                                    ? $"{x.item.Name} (finds hidden treasure cache)"
                                 : $"{x.item.Name} (heals 2d4+2)").ToList());
         if (!itemIdx.HasValue)
             return;
@@ -1292,6 +1298,22 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         var selected = usableItems[itemIdx.Value];
+        if (ItemSpecialAbilityParser.IsPotionOfDelusion(selected.item))
+        {
+            var disguisedAs = ItemSpecialAbilityParser.TryGetDelusionDisguiseName(selected.item, out var disguiseName)
+                ? disguiseName
+                : selected.item.Name;
+
+            ItemSpecialAbilityParser.RevealDelusionIdentity(selected.item);
+            user.Inventory.RemoveAt(selected.index);
+            _characterRepository.Save(user);
+            RefreshView();
+
+            RuleApplicationInfo.Publish($"Potion consumed revealed true identity: Potion of Delusion (appeared as {disguisedAs}).");
+            SayOnBoth("Use Item", $"{user.Name} drinks {disguisedAs}. It was a Potion of Delusion!");
+            return;
+        }
+
         var spell = selected.spell;
         var grantsRegenerationUntilDungeonExit = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Fire Resistance");
@@ -1303,6 +1325,7 @@ public sealed class CampCharacterInspectForm : Form
         var grantsProtectionFromMagicScroll = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Protection from Magic") || string.Equals(selected.item.Name, "Scroll of Protection from Magic", StringComparison.OrdinalIgnoreCase);
         var grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Levitate") || string.Equals(selected.item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase);
         var grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Haste") || string.Equals(selected.item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
+        var grantsTreasureFindingPotion = string.Equals(selected.item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
         var isPotionItem = (selected.item.Name ?? string.Empty).Contains("Potion", StringComparison.OrdinalIgnoreCase);
         var targets = new List<SpellCastTarget>();
@@ -1405,7 +1428,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsAnimalControlPotion && !grantsHeroismPotion && !grantsSuperHeroismPotion && !grantsInvulnerabilityPotion && !grantsProtectionFromMagicScroll && !grantsLevitationPotion && !grantsSpeedPotion && !isPotionOfHealing)
+        if (spell == null && !grantsRegenerationUntilDungeonExit && !grantsFireResistancePotion && !grantsGiantStrengthPotion && !grantsAnimalControlPotion && !grantsHeroismPotion && !grantsSuperHeroismPotion && !grantsInvulnerabilityPotion && !grantsProtectionFromMagicScroll && !grantsLevitationPotion && !grantsSpeedPotion && !grantsTreasureFindingPotion && !isPotionOfHealing)
         {
             SayOnBoth("Use Item", $"{selected.item.Name} has no usable effect.");
             return;
@@ -1563,6 +1586,26 @@ public sealed class CampCharacterInspectForm : Form
         {
             user.Age = Math.Max(0, user.Age + 1);
             result.Events.Add($"{user.Name} drinks Potion of Speed: movement and combat capability are doubled for 5-20 combat rounds; ages 1 year permanently.");
+        }
+
+        if (grantsTreasureFindingPotion)
+        {
+            var party = _partyRepository.Load();
+            var rounds = Random.Shared.Next(5, 21);
+            var cp = Random.Shared.Next(10000, 20001);
+            var gems = Random.Shared.Next(100, 201);
+
+            party.TreasureFindingActive = true;
+            party.TreasureFindingStepsRemaining = rounds;
+            party.TreasureFindingTargetLevel = 0;
+            party.TreasureFindingTargetX = -1;
+            party.TreasureFindingTargetY = -1;
+            party.TreasureFindingCopperPieces = cp;
+            party.TreasureFindingGemCount = gems;
+            _partyRepository.Save(party);
+
+            RuleApplicationInfo.Publish($"Potion of Treasure Finding activated: hidden cache prepared ({cp} cp, {gems} gems), duration {rounds} step(s).");
+            result.Events.Add($"{user.Name} drinks Potion of Treasure Finding. A hidden treasure cache exists somewhere in the dungeon for {rounds} step(s).");
         }
 
         foreach (var member in partyMembers)
@@ -1810,6 +1853,36 @@ public sealed class CampCharacterInspectForm : Form
                 return;
 
             var selected = entries[list.SelectedIndex].Item;
+
+            if (ItemSpecialAbilityParser.IsPotionOfDelusion(selected) && c.IsBard() && c.GetBardLevel() > 0)
+            {
+                var bardLevel = Math.Max(1, c.GetBardLevel());
+                var chance = Math.Clamp(BardRules.GetLegendLoreItemKnowledgePercentage(bardLevel), 0, 100);
+                var roll = Random.Shared.Next(1, 101);
+                var success = roll <= chance;
+
+                if (success)
+                {
+                    var appearedAs = ItemSpecialAbilityParser.TryGetDelusionDisguiseName(selected, out var disguise)
+                        ? disguise
+                        : selected.Name;
+
+                    ItemSpecialAbilityParser.RevealDelusionIdentity(selected);
+                    _characterRepository.Save(c);
+                    RefreshView();
+
+                    RuleApplicationInfo.Publish($"Bard legend/lore item knowledge identified potion delusion: roll {roll} <= {chance}% => Potion of Delusion (appeared as {appearedAs}).");
+                    ViewerMessage.Show(form, "Item Info", $"Bard legend/lore succeeds ({roll} <= {chance}%).\nTrue identity revealed: Potion of Delusion (appeared as {appearedAs}).");
+                }
+                else
+                {
+                    RuleApplicationInfo.Publish($"Bard legend/lore item knowledge failed to identify potion delusion: roll {roll} > {chance}%. Appears as {selected.Name}.");
+                    ViewerMessage.Show(form, "Item Info", $"Bard legend/lore fails ({roll} > {chance}%).\nThe potion still appears as {selected.Name}.");
+                }
+
+                return;
+            }
+
             if (selected.Type == ItemType.Scroll
                 && !selected.ScrollContentsKnown
                 && !CanDetermineScrollContents(c, out var decipherAttemptMessage))

@@ -830,7 +830,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 roster.TryGetValue(name, out var c)
                 && !c.HasStatus(CharacterStatus.Dead)
                 && !c.HasStatus(CharacterStatus.Ashes)
-                && !c.HasStatus(CharacterStatus.Lost))
+                && !c.HasStatus(CharacterStatus.Lost)
+                && !c.HasStatus(CharacterStatus.Out))
             .ToList();
 
         if (filtered.Count == party.Members.Count)
@@ -1453,7 +1454,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                     ShowPartyPopup("Party Status");
                     return;
                 case Keys.I:
-                    ShowPartyPopup("Party Inspect");
+                    TryRecoverOutCharactersAtCurrentPosition();
                     return;
             }
 
@@ -1463,6 +1464,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         switch (e.KeyCode)
         {
+            case Keys.I:
+                TryRecoverOutCharactersAtCurrentPosition();
+                Invalidate();
+                break;
             case Keys.W:
             case Keys.Up:
                 TryMoveForward();
@@ -1922,7 +1927,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             KeyPreview = true,
-            ClientSize = new Size(430, 110),
+            ClientSize = new Size(820, 190),
         };
 
         var framePanel = new Panel
@@ -1941,7 +1946,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Top = 10,
             Width = framePanel.ClientSize.Width,
             Height = 36,
-            Text = "STAIRS UP",
+            Text = string.IsNullOrWhiteSpace(title) ? "QUESTION" : title.ToUpperInvariant(),
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -1951,14 +1956,27 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var questionLabel = new Label
         {
             Left = 0,
-            Top = 48,
+            Top = 52,
             Width = framePanel.ClientSize.Width,
-            Height = 34,
-            Text = "TAKE THEM (Y/N) ?",
+            Height = 80,
+            Text = string.IsNullOrWhiteSpace(question) ? "(Y/N)?" : question.ToUpperInvariant(),
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 22f, FontStyle.Bold)
+            Font = new Font("Consolas", 18f, FontStyle.Bold)
+        };
+
+        var optionsLabel = new Label
+        {
+            Left = 0,
+            Top = 132,
+            Width = framePanel.ClientSize.Width,
+            Height = 34,
+            Text = "Y)es    N)o",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 14f, FontStyle.Bold)
         };
 
         form.KeyDown += (_, e) =>
@@ -1977,6 +1995,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         framePanel.Controls.Add(titleLabel);
         framePanel.Controls.Add(questionLabel);
+        framePanel.Controls.Add(optionsLabel);
         form.Controls.Add(framePanel);
 
         var prompt = new ViewerPrompt("choice", question, null, new[]
@@ -2359,7 +2378,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             options.Add(new ViewerPromptOption("camp", "Camp"));
             options.Add(new ViewerPromptOption("status", "Party status"));
-            options.Add(new ViewerPromptOption("inspect", "Inspect"));
+            options.Add(new ViewerPromptOption("inspect", "Inspect/Recover"));
         }
 
         return new ViewerPrompt("maze", "The party waits in the maze.", For: null, options);
@@ -2422,37 +2441,222 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         var v = GetForwardVector(_direction);
         var candidate = new Point(_position.X + v.X, _position.Y + v.Y);
-        if (IsOpen(candidate))
+        if (!IsOpen(candidate))
+            return;
+
+        _position = candidate;
+        ApplyPoisonDamageForStep();
+
+        if (_position.X == 1 && _position.Y == 2)
+            ShowDungeonElevatorDialog();
+
+        ProcessTreasureFindingStep();
+
+        if (_currentDungeonLevel == 1
+            && _position.X == 0
+            && _position.Y == 0
+            && !HasRecoverableOutCharacterAtCurrentPosition())
         {
-            _position = candidate;
-            ApplyPoisonDamageForStep();
+            var result = AskOnBoth("Stairs", "Stairs up, take them?");
 
-            if (_position.X == 1 && _position.Y == 2)
+            if (result == DialogResult.Yes)
             {
-                ShowDungeonElevatorDialog();
+                RestoreStrengthDrainedOnDungeonExit();
+                RevertLycanthropeTransformationsOnDungeonExit();
+                ApplyPartyAgingForDungeonExitDay();
+                ApplyDiseaseProgressForDungeonExitDay();
+                Close();
+                return;
             }
-
-            if (_currentDungeonLevel == 1 && _position.X == 0 && _position.Y == 0)
-            {
-                var result = AskOnBoth("Stairs", "Stairs up, take them?");
-
-                if (result == DialogResult.Yes)
-                {
-                    RestoreStrengthDrainedOnDungeonExit();
-                    RevertLycanthropeTransformationsOnDungeonExit();
-                    ApplyPartyAgingForDungeonExitDay();
-                    ApplyDiseaseProgressForDungeonExitDay();
-                    Close();
-                    return;
-                }
-            }
-
-            TryRandomEncounter();
-
-            var delayMs = Math.Max(0, GameRulesProvider.Current.DelayInMsbetweenActions);
-            if (delayMs > 0)
-                Thread.Sleep(delayMs);
         }
+
+        TryRandomEncounter();
+
+        var delayMs = Math.Max(0, GameRulesProvider.Current.DelayInMsbetweenActions);
+        if (delayMs > 0)
+            Thread.Sleep(delayMs);
+    }
+
+    private void ProcessTreasureFindingStep()
+    {
+        var party = _partyRepository.Load();
+        if (!party.TreasureFindingActive)
+            return;
+
+        if (party.TreasureFindingStepsRemaining <= 0)
+        {
+            party.TreasureFindingActive = false;
+            party.TreasureFindingStepsRemaining = 0;
+            _partyRepository.Save(party);
+            SayOnBoth("Treasure Finding", "The potion's sensing magic fades.");
+            return;
+        }
+
+        EnsureTreasureFindingTarget(party);
+
+        if (party.TreasureFindingTargetLevel == _currentDungeonLevel
+            && party.TreasureFindingTargetX == _position.X
+            && party.TreasureFindingTargetY == _position.Y)
+        {
+            AwardTreasureFindingCacheToParty(party);
+            return;
+        }
+
+        var direction = GetTreasureFindingDirectionHint(
+            _position,
+            _currentDungeonLevel,
+            new Point(party.TreasureFindingTargetX, party.TreasureFindingTargetY),
+            party.TreasureFindingTargetLevel);
+
+        party.TreasureFindingStepsRemaining = Math.Max(0, party.TreasureFindingStepsRemaining - 1);
+        var stepsLeft = party.TreasureFindingStepsRemaining;
+
+        if (stepsLeft == 0)
+        {
+            party.TreasureFindingActive = false;
+            _partyRepository.Save(party);
+            SayOnBoth("Treasure Finding", "The magical trail fades before the treasure is found.");
+            return;
+        }
+
+        _partyRepository.Save(party);
+        SayOnBoth("Treasure Finding", $"The treasure lies to the {direction}. ({stepsLeft} step(s) remaining)");
+    }
+
+    private void EnsureTreasureFindingTarget(Party party)
+    {
+        if (party.TreasureFindingTargetLevel > 0
+            && party.TreasureFindingTargetX >= 0
+            && party.TreasureFindingTargetY >= 0)
+            return;
+
+        var candidateLevels = Enumerable
+            .Range(MinDungeonLevel, MaxDungeonLevel - MinDungeonLevel + 1)
+            .OrderBy(_ => _random.Next())
+            .ToList();
+
+        foreach (var level in candidateLevels)
+        {
+            var candidates = GetOpenTiles(level)
+                .Where(p => level != _currentDungeonLevel || p.X != _position.X || p.Y != _position.Y)
+                .ToList();
+
+            if (candidates.Count == 0)
+                candidates = GetOpenTiles(level);
+
+            if (candidates.Count == 0)
+                continue;
+
+            var target = candidates[_random.Next(candidates.Count)];
+            party.TreasureFindingTargetLevel = level;
+            party.TreasureFindingTargetX = target.X;
+            party.TreasureFindingTargetY = target.Y;
+
+            RuleApplicationInfo.Publish($"Potion of Treasure Finding cache placed on cleared square at L{party.TreasureFindingTargetLevel} ({party.TreasureFindingTargetX},{party.TreasureFindingTargetY}).");
+            return;
+        }
+
+        // Fallback: keep effect active but with no target if no valid tile was found.
+        party.TreasureFindingTargetLevel = 0;
+        party.TreasureFindingTargetX = -1;
+        party.TreasureFindingTargetY = -1;
+        RuleApplicationInfo.Publish("Potion of Treasure Finding could not place cache: no cleared square found.");
+    }
+
+    private List<Point> GetOpenTiles(int level)
+    {
+        var previousMaze = _maze;
+        BuildMazeForLevel(level);
+
+        var open = new List<Point>();
+        for (var y = 0; y < _maze.GetLength(1); y++)
+        {
+            for (var x = 0; x < _maze.GetLength(0); x++)
+            {
+                if (_maze[x, y] == CellType.Floor)
+                    open.Add(new Point(x, y));
+            }
+        }
+
+        _maze = previousMaze;
+        return open;
+    }
+
+    private static string GetTreasureFindingDirectionHint(Point partyPos, int partyLevel, Point targetPos, int targetLevel)
+    {
+        var horizontal = "none";
+        var vertical = "none";
+        var level = "same level";
+
+        var dx = targetPos.X - partyPos.X;
+        var dy = targetPos.Y - partyPos.Y;
+
+        if (dx > 0)
+            horizontal = "east";
+        else if (dx < 0)
+            horizontal = "west";
+
+        if (dy > 0)
+            vertical = "south";
+        else if (dy < 0)
+            vertical = "north";
+
+        if (targetLevel > partyLevel)
+            level = "up";
+        else if (targetLevel < partyLevel)
+            level = "down";
+
+        return $"horizontal {horizontal}, vertical {vertical}, level {level}";
+    }
+
+    private void AwardTreasureFindingCacheToParty(Party party)
+    {
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var members = party.Members
+            .Where(name => roster.ContainsKey(name))
+            .Select(name => roster[name])
+            .ToList();
+
+        if (members.Count == 0)
+        {
+            party.TreasureFindingActive = false;
+            party.TreasureFindingStepsRemaining = 0;
+            _partyRepository.Save(party);
+            SayOnBoth("Treasure Finding", "Treasure found, but no active party members could collect it.");
+            return;
+        }
+
+        var receiver = members[_random.Next(members.Count)];
+        receiver.CopperPieces = Math.Max(0, receiver.CopperPieces + Math.Max(0, party.TreasureFindingCopperPieces));
+        receiver.Inventory.Add(new Adnd.Core.Items.Item
+        {
+            Name = $"Gem Cache x{Math.Max(0, party.TreasureFindingGemCount)}",
+            Type = Adnd.Core.Items.ItemType.Misc,
+            Weight = 0,
+            IsShopBuyable = false,
+            Description = "Gem cache found via Potion of Treasure Finding."
+        });
+
+        _characterRepository.Save(receiver);
+
+        party.TreasureFindingActive = false;
+        party.TreasureFindingStepsRemaining = 0;
+        _partyRepository.Save(party);
+
+        RuleApplicationInfo.Publish($"Potion of Treasure Finding cache recovered at L{_currentDungeonLevel} ({_position.X},{_position.Y}): {party.TreasureFindingCopperPieces} cp and {party.TreasureFindingGemCount} gems.");
+        SayOnBoth("Treasure Finding", $"Treasure found! {receiver.Name} collects {party.TreasureFindingCopperPieces} cp and {party.TreasureFindingGemCount} gems.");
+    }
+
+    private bool HasRecoverableOutCharacterAtCurrentPosition()
+    {
+        var party = _partyRepository.Load();
+        return _characterRepository.GetAll()
+            .Where(c => c.HasStatus(CharacterStatus.Out))
+            .Where(c => c.DungeonLevel == _currentDungeonLevel
+                        && c.DungeonCellX == _position.X
+                        && c.DungeonCellY == _position.Y)
+            .Where(c => !party.Members.Contains(c.Name, StringComparer.OrdinalIgnoreCase))
+            .Any(c => !c.HasStatus(CharacterStatus.Ashes));
     }
 
     private void RestoreStrengthDrainedOnDungeonExit()
@@ -4010,6 +4214,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         var partyData = _partyRepository.Load();
         var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var movedOut = new List<string>();
 
         foreach (var memberName in partyData.Members)
         {
@@ -4019,7 +4224,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             character.DungeonLevel = _currentDungeonLevel;
             character.DungeonCellX = _position.X;
             character.DungeonCellY = _position.Y;
+            character.AddStatus(CharacterStatus.Out);
+            movedOut.Add(character.Name);
             _characterRepository.Save(character);
+        }
+
+        if (movedOut.Count > 0)
+        {
+            RuleApplicationInfo.Publish(
+                $"Party defeat: moved characters to dungeon position L{_currentDungeonLevel} ({_position.X},{_position.Y}) and marked OUT: {string.Join(", ", movedOut)}.");
         }
 
         partyData.Members.Clear();
@@ -4037,11 +4250,110 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         foreach (var memberName in party.Members)
         {
-            if (roster.TryGetValue(memberName, out var c))
+            if (roster.TryGetValue(memberName, out var c)
+                && !c.HasStatus(CharacterStatus.Out))
                 result.Add(c);
         }
 
         return result;
+    }
+
+    private void TryRecoverOutCharactersAtCurrentPosition()
+    {
+        var party = _partyRepository.Load();
+        if (party.Members.Count >= 6)
+            return;
+
+        var roster = _characterRepository.GetAll().ToList();
+        var outAtCurrentPosition = roster
+            .Where(c => c.HasStatus(CharacterStatus.Out))
+            .Where(c => c.DungeonLevel == _currentDungeonLevel
+                        && c.DungeonCellX == _position.X
+                        && c.DungeonCellY == _position.Y)
+            .Where(c => !party.Members.Contains(c.Name, StringComparer.OrdinalIgnoreCase))
+            .OrderBy(c => c.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var recoverable = outAtCurrentPosition
+            .Where(c => !c.HasStatus(CharacterStatus.Ashes))
+            .ToList();
+
+        if (recoverable.Count == 0)
+        {
+            if (outAtCurrentPosition.Count > 0)
+            {
+                var unavailable = string.Join(", ", outAtCurrentPosition.Select(c => $"{c.Name} ({c.Status})"));
+                SayOnBoth("Inspect Area", $"Found OUT character(s) here, but unavailable for recovery: {unavailable}.");
+                return;
+            }
+
+            SayOnBoth("Inspect Area", "No out character found here.");
+            return;
+        }
+
+        var ask = AskOnBoth("Inspect Area", "Add found character to party (Y/N)?");
+        if (ask != DialogResult.Yes)
+            return;
+
+        var freeSlots = Math.Max(0, 6 - party.Members.Count);
+        if (freeSlots <= 0)
+        {
+            SayOnBoth("Inspect Area", "Party is full.");
+            return;
+        }
+
+        var picks = new List<Character>();
+        var remaining = recoverable.ToList();
+        while (remaining.Count > 0 && picks.Count < freeSlots)
+        {
+            Character chosen;
+            if (remaining.Count == 1)
+            {
+                chosen = remaining[0];
+            }
+            else
+            {
+                var prompt = new StringBuilder();
+                prompt.AppendLine("Choose character to add:");
+                prompt.AppendLine();
+                for (int i = 0; i < remaining.Count; i++)
+                    prompt.AppendLine($"{i + 1}. {remaining[i].Name}");
+
+                var selected = PromptForNumber("Recover Character", prompt.ToString(), 1, remaining.Count);
+                if (!selected.HasValue)
+                    break;
+
+                chosen = remaining[selected.Value - 1];
+            }
+
+            chosen.RemoveStatus(CharacterStatus.Out);
+            chosen.RemoveStatus(CharacterStatus.Lost);
+            if (chosen.CurrentHitPoints <= 0 && !chosen.HasStatus(CharacterStatus.Dead) && !chosen.HasStatus(CharacterStatus.Ashes) && !chosen.HasStatus(CharacterStatus.Lost))
+                chosen.CurrentHitPoints = 1;
+
+            _characterRepository.Save(chosen);
+
+            if (!party.Members.Contains(chosen.Name, StringComparer.OrdinalIgnoreCase))
+                party.Members.Add(chosen.Name);
+
+            picks.Add(chosen);
+            remaining.RemoveAll(c => string.Equals(c.Name, chosen.Name, StringComparison.OrdinalIgnoreCase));
+
+            if (remaining.Count > 0 && picks.Count < freeSlots)
+            {
+                var addMore = AskOnBoth("Recover Character", "Add another out character from this location?");
+                if (addMore != DialogResult.Yes)
+                    break;
+            }
+        }
+
+        if (picks.Count > 0)
+        {
+            _partyRepository.Save(party);
+            RuleApplicationInfo.Publish(
+                $"Recovered out character(s) at L{_currentDungeonLevel} ({_position.X},{_position.Y}): {string.Join(", ", picks.Select(c => c.Name))}. Status changed OUT->IN and added to party.");
+            SayOnBoth("Inspect Area", $"Added to party: {string.Join(", ", picks.Select(c => c.Name))}.");
+        }
     }
 
     private static string GetStatusDisplay(Character c)
@@ -4055,6 +4367,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (c.HasStatus(CharacterStatus.Asleep)) statuses.Add("Asleep");
         if (c.HasStatus(CharacterStatus.Ashes)) statuses.Add("Ashes");
         if (c.HasStatus(CharacterStatus.Lost)) statuses.Add("Lost");
+        if (c.HasStatus(CharacterStatus.Out)) statuses.Add("Out");
         if (c.HasStatus(CharacterStatus.Invisible)) statuses.Add("Invisible");
         return string.Join(", ", statuses);
     }

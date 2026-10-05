@@ -1125,6 +1125,13 @@ public class PartyMenu
             }
             else
             {
+                if (chosen.HasStatus(CharacterStatus.Out))
+                {
+                    Console.WriteLine("Character is Out and cannot join until found in the dungeon.");
+                    Console.ReadKey(true);
+                    return;
+                }
+
                 party.Members.Add(chosen.Name);
                 _partyRepo.Save(party);
                 // No confirmation message; return directly to party menu
@@ -1373,6 +1380,7 @@ public class PartyMenu
         if (c.HasStatus(CharacterStatus.Slowed)) statuses.Add("Slowed");
         if (c.HasStatus(CharacterStatus.DeadlyPoisoned)) statuses.Add("Deadly Poisoned");
         if (c.HasStatus(CharacterStatus.Confused)) statuses.Add("Confused");
+        if (c.HasStatus(CharacterStatus.Out)) statuses.Add("Out");
         return string.Join(", ", statuses);
     }
 }

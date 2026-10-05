@@ -23,6 +23,7 @@ public enum CharacterStatus
     Slowed = 1 << 12,  // Character is slowed
     DeadlyPoisoned = 1 << 13,  // Character is deadly poisoned
     Confused = 1 << 14,  // Character is confused
-    LycanthropeTransformed = 1 << 15 // Character is currently transformed by lycanthropy
+    LycanthropeTransformed = 1 << 15, // Character is currently transformed by lycanthropy
+    Out = 1 << 16 // Character is out in the dungeon and unavailable until found
 
 }

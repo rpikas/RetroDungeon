@@ -448,11 +448,7 @@ public class CityMenu
         int hp = _creator.RollHitPoints(chosenClasses[0], abilities.Constitution);
         int armorClass = 10 + AbilitiesTables.DexterityACModifier(abilities.Dexterity);
 
-        var minGold = GameRulesProvider.Current.CharacterCreationMinGold;
-        var maxGold = GameRulesProvider.Current.CharacterCreationMaxGold;
-        var startingGold = minGold == maxGold
-            ? minGold
-            : Random.Shared.Next(minGold, maxGold + 1);
+        var startingGold = RollStartingGold(chosenClasses[0]);
 
         var character = new Character
         {
@@ -527,6 +523,10 @@ public class CityMenu
                 $"Non-human starting age table used for {race.ToDisplayString()} ({chosenClasses[0].ToDisplayString()}).");
         }
         RuleApplicationInfo.Publish($"Starting age rolled: {character.Age} years ({race.ToDisplayString()} / {chosenClasses[0].ToDisplayString()}).");
+        RuleApplicationInfo.PublishLinked(
+            "PHB",
+            "35StartingMoney",
+            $"Starting gold for {character.Name} ({chosenClasses[0].ToDisplayString()}): {startingGold} gp.");
         RuleApplicationInfo.PublishLinked(
             "DMG",
             "13AgeCategoriesWithModifiers",
@@ -947,6 +947,20 @@ public class CityMenu
         return selected;
     }
 
+    private static int RollStartingGold(CharacterClass primaryClass)
+    {
+        return primaryClass switch
+        {
+            CharacterClass.Cleric or CharacterClass.Druid => DiceRoller.Roll(3, 6, 0, "Starting gold: Cleric 3d6 x 10") * 10,
+            CharacterClass.Fighter or CharacterClass.Paladin or CharacterClass.Ranger => DiceRoller.Roll(5, 4, 0, "Starting gold: Fighter 5d4 x 10") * 10,
+            CharacterClass.MagicUser or CharacterClass.Illusionist => DiceRoller.Roll(2, 4, 0, "Starting gold: Magic-User 2d4 x 10") * 10,
+            CharacterClass.Thief or CharacterClass.Assassin => DiceRoller.Roll(2, 6, 0, "Starting gold: Thief 2d6 x 10") * 10,
+            CharacterClass.Monk => DiceRoller.Roll(5, 4, 0, "Starting gold: Monk 5d4"),
+            CharacterClass.Bard => DiceRoller.Roll(2, 6, 0, "Starting gold: Bard uses Thief 2d6 x 10") * 10,
+            _ => DiceRoller.Roll(5, 4, 0, "Starting gold: default 5d4 x 10") * 10
+        };
+    }
+
     private void InspectCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
@@ -959,6 +973,13 @@ public class CityMenu
             Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d ({c.GetAgeCategoryDisplay()})");
             Console.WriteLine($"Languages: {c.GetKnownLanguagesDisplay()}");
             RuleApplicationInfo.Publish($"Inspect character: {c.Name} languages known: {c.GetKnownLanguagesDisplay()}.");
+
+            if (c.HasStatus(CharacterStatus.Out))
+            {
+                Console.WriteLine($"Out position: L{c.DungeonLevel} ({c.DungeonCellX},{c.DungeonCellY})");
+                RuleApplicationInfo.Publish(
+                    $"Inspect character: {c.Name} is OUT at dungeon position L{c.DungeonLevel} ({c.DungeonCellX},{c.DungeonCellY}) with status {c.Status}.");
+            }
 
             if (c.IsBard())
             {
@@ -1173,6 +1194,7 @@ public class CityMenu
     {
         var statuses = new System.Collections.Generic.List<string>();
         if (c.HasStatus(CharacterStatus.Dead)) statuses.Add("Dead");
+        if (c.HasStatus(CharacterStatus.Out)) statuses.Add("Out");
         if (c.HasStatus(CharacterStatus.Poisoned)) statuses.Add("Poisoned");
         if (c.HasStatus(CharacterStatus.Paralyzed)) statuses.Add("Paralyzed");
         if (c.HasStatus(CharacterStatus.Petrified)) statuses.Add("Petrified");

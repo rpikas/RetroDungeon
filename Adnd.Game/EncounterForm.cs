@@ -1115,6 +1115,9 @@ public sealed class EncounterForm : Form
 
     private static Spell? ResolveItemSpell(Adnd.Core.Items.Item item, List<Spell> allSpells)
     {
+        if (Adnd.Core.Items.ItemSpecialAbilityParser.IsPotionOfDelusion(item))
+            return null;
+
         if (!Adnd.Core.Items.ItemSpecialAbilityParser.TryGetCastedSpellName(item, out var spellName))
         {
             spellName = InferSpellNameFromItemName(item);

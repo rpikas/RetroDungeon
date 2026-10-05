@@ -205,6 +205,9 @@ public sealed class SpellCastingService
 
     public Spell? FindSpellFromItem(Item item)
     {
+        if (ItemSpecialAbilityParser.IsPotionOfDelusion(item))
+            return null;
+
         if (!ItemSpecialAbilityParser.TryGetCastedSpellName(item, out var spellName))
             spellName = InferSpellNameFromItemName(item);
 

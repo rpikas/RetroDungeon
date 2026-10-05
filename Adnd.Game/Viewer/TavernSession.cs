@@ -115,6 +115,7 @@ public sealed class TavernSession
         }
 
         if (!Roster().TryGetValue(name, out var character)) return false;
+        if (character.HasStatus(CharacterStatus.Out)) return false;
         if (Party().Count >= PartySlots) return false;   // full; the table shows six slots and no more
 
         // Appended, so the order figurines are picked up in is the order they march in.
@@ -163,7 +164,7 @@ public sealed class TavernSession
     /// Exclude only permanently lost characters from auto-pick.
     /// Dead and ashes can still be added to the party.
     /// </summary>
-    private static bool IsUnfitForDuty(Character c) => c.HasStatus(CharacterStatus.Lost);
+    private static bool IsUnfitForDuty(Character c) => c.HasStatus(CharacterStatus.Lost) || c.HasStatus(CharacterStatus.Out);
 
     private static readonly CharacterClass[] FrontRankClasses =
     {

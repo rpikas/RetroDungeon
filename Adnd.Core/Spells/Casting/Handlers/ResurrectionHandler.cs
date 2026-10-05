@@ -20,6 +20,9 @@ public sealed class ResurrectionHandler : ISpellEffectHandler
         if (target == null)
             return SpellCastResult.Failure("No valid ally target selected.");
 
+        if (target.DiedOfOldAge)
+            return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; death due to old age is final (DMG 15).");
+
         if (target.HasStatus(CharacterStatus.Lost))
             return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; the character is lost.");
 

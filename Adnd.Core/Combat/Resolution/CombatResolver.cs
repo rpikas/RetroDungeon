@@ -333,8 +333,16 @@ public sealed class CombatResolver
 
             if (session.RoundNumber == 1 && session.PartySurprisedRound1)
             {
-                events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
-                continue;
+                if (!partyActions.TryGetValue(member.Name, out var surpriseAction))
+                    surpriseAction = CombatAction.OfType(CombatActionType.Parry);
+
+                if (!CanActDuringCompleteSurpriseWithCrossbowOfSpeed(member, surpriseAction))
+                {
+                    events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
+                    continue;
+                }
+
+                events.Add(new CombatEvent($"{member.Name}'s Crossbow of Speed snaps to readiness and can fire once despite complete surprise (2nd segment effect)."));
             }
 
             var drainRemaining = session.GetPartyDrainBloodRemaining(member.Name);
@@ -1349,12 +1357,19 @@ public sealed class CombatResolver
                         thac0 += 4;
                     }
                     int needed = thac0 - targetAc;
-                    int roll = _dice.Roll(20);
+                    var cloakDisplacementAutoMiss = ShouldApplyCloakOfDisplacementAutoMiss(session, target);
+                    int roll = cloakDisplacementAutoMiss ? 0 : _dice.Roll(20);
                     var hasDoubleDamageOnNaturalTwenty = HasAnySpecialAbility(monster, "Double Damage on Natural 20");
 
                     if (GameRulesProvider.Current.ShowToHitRoll)
                     {
                         events.Add(new CombatEvent($"TO-HIT: {monster.DisplayName} THAC0 {thac0}, {target.Name} AC {targetAc}, needs {needed} on 1d20, rolled {roll}."));
+                    }
+
+                    if (cloakDisplacementAutoMiss)
+                    {
+                        events.Add(new CombatEvent($"{monster.DisplayName} attacks where {target.Name} appears to be, but the cloak's displacement causes the strike to miss!"));
+                        continue;
                     }
 
                     if (roll >= needed)
@@ -1679,6 +1694,17 @@ public sealed class CombatResolver
 
         var item = user.Inventory[action.ItemInventoryIndex.Value];
         var spellId = action.SpellId;
+
+        if (ItemSpecialAbilityParser.IsPotionOfDelusion(item))
+        {
+            var appearedAs = ItemSpecialAbilityParser.TryGetDelusionDisguiseName(item, out var disguise)
+                ? disguise
+                : item.Name;
+
+            user.Inventory.RemoveAt(action.ItemInventoryIndex.Value);
+            events.Add(new CombatEvent($"{user.Name} drinks {appearedAs}. It was a Potion of Delusion!"));
+            return;
+        }
 
         if (user.HasActiveProtectionFromMagicScroll)
         {
@@ -3056,6 +3082,15 @@ public sealed class CombatResolver
         int attacks = useRanged && rangedWeapon != null
             ? GetRangedAttacksPerRound(rangedWeapon.FireRate, session.RoundNumber)
             : GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
+
+        if (session.RoundNumber == 1
+            && session.PartySurprisedRound1
+            && useRanged
+            && IsCrossbowOfSpeed(rangedWeapon))
+        {
+            attacks = Math.Min(attacks, 1);
+        }
+
         if (session.IsHasted(member.Name))
             attacks *= 2;
         if (session.IsPartySlowed(member.Name))
@@ -3489,6 +3524,29 @@ public sealed class CombatResolver
             return parsed;
 
         return 1;
+    }
+
+    private static bool CanActDuringCompleteSurpriseWithCrossbowOfSpeed(Character member, CombatAction? action)
+    {
+        if (member?.Equipment == null)
+            return false;
+
+        if (action?.Type != CombatActionType.Fight)
+            return false;
+
+        if (!member.Equipment.TryGetValue(EquipmentSlot.Range, out var rangedWeapon))
+            return false;
+
+        return IsCrossbowOfSpeed(rangedWeapon);
+    }
+
+    private static bool IsCrossbowOfSpeed(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        return string.Equals(weapon.Name, "Crossbow of Speed", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(weapon.Name, "Crossbow of Speed (Heavy Crossbow)", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsThiefBackstabAttack(Character member, CombatSession session)
@@ -5949,6 +6007,9 @@ public sealed class CombatResolver
         if (luckBladeSaveBonus > 0)
             adjusted = Math.Max(1, adjusted - luckBladeSaveBonus);
 
+        if (HasEquippedCloakOfDisplacement(target))
+            adjusted = Math.Max(1, adjusted - 2);
+
         return adjusted;
     }
 
@@ -6216,6 +6277,34 @@ public sealed class CombatResolver
 
         var attackBonusAllocation = GetDefenderAttackBonusAllocation(mainHand!);
         return Math.Max(0, 4 - attackBonusAllocation);
+    }
+
+    private static bool ShouldApplyCloakOfDisplacementAutoMiss(CombatSession session, Character target)
+    {
+        if (session == null || target == null)
+            return false;
+
+        if (!HasEquippedCloakOfDisplacement(target))
+            return false;
+
+        return session.CloakOfDisplacementFirstMissUsed.Add(target.Name);
+    }
+
+    private static bool HasEquippedCloakOfDisplacement(Character target)
+    {
+        if (target?.Equipment == null)
+            return false;
+
+        if (!target.Equipment.TryGetValue(EquipmentSlot.Back, out var back)
+            || back == null)
+        {
+            return false;
+        }
+
+        if (string.Equals(back.Name, "Cloak of Displacement", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return ItemSpecialAbilityParser.HasSpecialAbility(back, "Displacement");
     }
 
     private static bool IsMonsterAttackFromHandheldWeapon(Adnd.Core.Monsters.MonsterAttack attack)

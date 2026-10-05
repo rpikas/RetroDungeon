@@ -17,5 +17,14 @@ public class Party
     public int CurrentShopperIndex { get; set; } = -1;
     // Number of dungeon days completed (incremented when leaving the dungeon).
     public int DungeonDaysElapsed { get; set; } = 0;
+
+    // Potion of Treasure Finding state.
+    public bool TreasureFindingActive { get; set; } = false;
+    public int TreasureFindingStepsRemaining { get; set; } = 0;
+    public int TreasureFindingTargetLevel { get; set; } = 0;
+    public int TreasureFindingTargetX { get; set; } = -1;
+    public int TreasureFindingTargetY { get; set; } = -1;
+    public int TreasureFindingCopperPieces { get; set; } = 0;
+    public int TreasureFindingGemCount { get; set; } = 0;
 }
 

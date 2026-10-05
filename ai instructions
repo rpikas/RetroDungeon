@@ -3952,4 +3952,85 @@ Level of Experience	? College	?￯ﾸﾏ Additional Languages Known	? Ch
 When a Bard reaches a new level, they may choose to learn a new language from the list of available languages.
 Write this in the log and refer to: PHB118BardTabeII.png
 ___
+Old Age and Death
+When a character dies of old age, no normal resurrection magic can bring them back permanently.
+Only magic that extends lifespan (like potions of longevity, wishes, or special artifacts) can delay aging.
+Once a character dies from venerable age, it’s final — even resurrection won’t help.
+This rule encourages players to think about legacy and family lines as a form of immortality.
 
+🧓 Determining Maximum Age
+Every race has a maximum natural lifespan.
+
+When a character reaches old age, roll dice to determine the exact age of death using the Maximum Character Age Table:
+01–10: Old, lowest age → + d8
+11–25: Old, highest age → − d4
+26–60: Venerable, lowest age → + d6
+61–90: Venerable, highest age → − d10
+91–00: Venerable, highest age → + d20
+The dice roll modifies the lifespan depending on the race’s age range:
+Under 100 years → 1‑year intervals
+100–250 years → 10‑year intervals
+Over 250 years → 20‑year intervals
+Rolls of 0 count as 0 years (not 10 or 20).
+In log use ref to DMG15DeathDuetoAge.png
+
+
+Example:
+A dwarf living to “old, lowest age + d8” might reach 251 + (10–80) years.
+A half‑orc living to “venerable, highest + d20” might reach 80–99 years.
+A high elf living to “venerable, lowest + d6” could reach 1221–1340 years.
+
+When a party is defeated and all characters die, then save the position for all the the characters and also write that to  the log.
+And update the status of all characters to out. Charaters that are out can not be used in the game or be added to they until they are found.
+Change the functionality of I)nspect in the dungoun. If it is pressed when in the same position as a character that is out is located in,
+then show a dialog that says: "You found a character that is out. Do you want to add them to the party?" 
+If yes, then select chartar to add if several in the same position and change the status of the character to in and add them to the party. 
+If no, then do nothing.
+
+Your character is unusual—exceptional compared to the norm. This applies to abilities and funds as well. 
+Therefore, he or she begins with a generous supply of coins to purchase equipment and supplies for adventuring.
+The amount of gold pieces a player starts with depends on the character class:
+
+🧙 Character Class	💰 Starting Gold Range (g.p.)	🎲 Dice Roll Formula
+Cleric	30 – 180 g.p.	3d6 × 10
+Fighter	50 – 200 g.p.	5d4 × 10
+Magic‑User	20 – 80 g.p.	2d4 × 10
+Thief	20 – 120 g.p.	2d6 × 10
+Monk	5 – 20 g.p.	5d4
+To determine the number of gold pieces your character has at the start, simply roll the appropriate dice and 
+total the sum (adding a decimal place if necessary).
+In the log, refer to: PHB35StartingMoney.png 20,4
+
+When listing all chaters in traning grounds also show in the status column which charters are out.
+i only want to get the stairs question in pos 0,0
+when in exact position of a lost charater and there is room in the party, and pressing i, I want the question 
+about if you want to pick up the lost charater to the party or not
+now I get the correct message I also want a question if I want to add the charater found to the party
+
+mplement Potion of Delusion that will be named as another random potion, only in the logs it will appear as Potion of Delusion, 
+when it is consumed it will be revealed it was a Potion of Delusion. Also if a bard succeed to use his skill 
+Legned Lore skill on the item its true identity will be revealed. 22,7
+
+If drinking a potion of Treasure Finding then make a treasure with 10000-20000 cp and 100-200 gems appear in a 
+random square in the dungeon.
+For every step the party takes in the dungeon for 5-20 rounds (steps) a message saying if the treasure is east 
+or west or north or south or up or down of the party should be shown. 
+When the party reaches the treasure, show a message that they found the treasure and add it to their inventory. 
+after drinking potion of Treasure Finding, I dont only want info if the treasure is east, I also want to know 
+if it is north or south and also if it is up or down.
+I did not see anything about up, down or same level after drinking the Potion of Treasure Finding. make sure the 
+treasure is in a square that is cleared, write what square it is in the log. 23,2
+
+DMG140 Implement Cloak of Displacement: This item appears to be a normal cloak, but when it is worn by a character its magical 
+properties distort ond warp light waves, Th Is displacement of fighi waves causes the wearer lo appear to be from r to 2' from 
+his or her actual position. Any attack by missile or meiee strike which is aimed ai the wearer will automatically miss the first 
+time*. Thereafter the cloak affords +2 protection, i.e 2 dosses better on armor class, as well as + 2 on saving throw dice 
+versus attack forms directed at the wearer (such as spells, gaze weapon attacks, spitting and breath attacks, etc. which are 
+aimed at the wearer of the cloak of displacement. 23,9
+
+DMG168 Implement Crossbow of speed allows its possessor to double the rate of fire normal for the weapon. 
+If It is grasped, the crossbow of speed will automatically cock itself. In surprise situations it is of no 
+help, but in complete surprise situations the held crossbow will enable its user to fire in the 2nd segment 
+portion. Otherwise, it allows first fire in any melee round, and end of round fire also, when applicable, 
+10% of these weapons are heavy crossbows, The weapon has a 41 bonus. 24,2
+___
