@@ -4054,3 +4054,8 @@ Level	Typical AC	Reasoning
 16	1	Bracers AC 4 + Ring +3 + Dex 16 + Shield spell.
 24,7
 ___
+in boltax if something cost less than 1 gp then price should be shown in sp
+In boltax for weapons show the damage also and for armor show the ac
+___
+When all characters are down, but not dead, then the game is stuck and the player can not do anything. 
+I want a message to be shown that all characters are down with an ok button that accepts and continues actions from monsters.

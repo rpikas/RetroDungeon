@@ -147,7 +147,9 @@ public class ShopMenu
                     var notEquipableTag = shopper != null && !IsEquipableBy(shopper, it) ? " - (Not Equipable)" : string.Empty;
                     var stockText = GetStockDisplay(it);
                     var label = GetShopLabel(i - startIndex);
-                    Console.WriteLine($"{label}. {it.Name}{notEquipableTag} - Cost: {Shop.FormatCost(it)} - Stock: {stockText}");
+                    var statText = Shop.FormatBoltacItemStat(it);
+                    var statSegment = string.IsNullOrWhiteSpace(statText) ? string.Empty : $" - {statText}";
+                    Console.WriteLine($"{label}. {it.Name}{notEquipableTag}{statSegment} - Cost: {Shop.FormatCost(it)} - Stock: {stockText}");
             }
 
             Console.WriteLine("\nB)uy Items");
@@ -485,11 +487,12 @@ public class ShopMenu
         for (int i = 0; i < entries.Count; i++)
         {
             var e = entries[i];
-            var price = e.item.Cost / 2;
+            var priceSp = Shop.SellPriceInSilverPieces(e.item);
+            var priceText = Shop.FormatCostFromSilverPieces(priceSp);
             if (e.equipped)
-                Console.WriteLine($"{i + 1}. [EQUIPPED:{e.slot}] {e.item.Name} (sell {price} gp)");
+                Console.WriteLine($"{i + 1}. [EQUIPPED:{e.slot}] {e.item.Name} (sell {priceText})");
             else
-                Console.WriteLine($"{i + 1}. {e.item.Name} (sell {price} gp)");
+                Console.WriteLine($"{i + 1}. {e.item.Name} (sell {priceText})");
         }
 
         Console.WriteLine("A) Sell all unequipped items");
@@ -510,8 +513,8 @@ public class ShopMenu
                 return;
             }
 
-            var total = toSell.Sum(i => i.Cost / 2);
-            Console.WriteLine($"Sell all unequipped items ({toSell.Count} item(s)) for {total} gp? (Y/N)");
+            var totalSp = toSell.Sum(Shop.SellPriceInSilverPieces);
+            Console.WriteLine($"Sell all unequipped items ({toSell.Count} item(s)) for {Shop.FormatCostFromSilverPieces(totalSp)}? (Y/N)");
             var confirmAll = Console.ReadKey(true).Key;
             if (confirmAll != ConsoleKey.Y)
             {
@@ -523,12 +526,12 @@ public class ShopMenu
             foreach (var item in toSell)
             {
                 seller.Inventory.Remove(item);
-                seller.GoldPieces += item.Cost / 2;
+                Shop.AddSilverPieces(seller, Shop.SellPriceInSilverPieces(item));
                 _itemRepo.TryAdjustStock(item.Name, +1);
             }
 
-            Console.WriteLine($"Sold {toSell.Count} unequipped item(s) for {total} gp.");
-            Console.WriteLine($"Gold after: {seller.GoldPieces} gp");
+            Console.WriteLine($"Sold {toSell.Count} unequipped item(s) for {Shop.FormatCostFromSilverPieces(totalSp)}.");
+            Console.WriteLine($"Gold after: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
             _charRepo.Save(seller);
             _partyRepo.Save(party);
             Console.ReadKey(true);
@@ -539,8 +542,9 @@ public class ShopMenu
         {
             var entry = entries[idx - 1];
             var it = entry.item;
-            Console.WriteLine($"Gold before: {seller.GoldPieces} gp");
-            var sellPrice = it.Cost / 2;
+            Console.WriteLine($"Gold before: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
+            var sellPriceSp = Shop.SellPriceInSilverPieces(it);
+            var sellPriceText = Shop.FormatCostFromSilverPieces(sellPriceSp);
 
             if (entry.equipped && entry.slot.HasValue)
             {
@@ -564,7 +568,7 @@ public class ShopMenu
 
                 EquipmentManager.Unequip(seller, slot);
 
-                Console.WriteLine($"Unequipped {equippedItem.Name} to inventory. Sell for {sellPrice} gp? (Y/N)");
+                Console.WriteLine($"Unequipped {equippedItem.Name} to inventory. Sell for {sellPriceText}? (Y/N)");
                 var key2 = Console.ReadKey(true).Key;
                 if (key2 != ConsoleKey.Y)
                 {
@@ -582,10 +586,10 @@ public class ShopMenu
                 seller.Inventory.Remove(it);
             }
 
-            seller.GoldPieces += sellPrice;
+            Shop.AddSilverPieces(seller, sellPriceSp);
             _itemRepo.TryAdjustStock(it.Name, +1);
-            Console.WriteLine($"Sold {it.Name} for {sellPrice} gp.");
-            Console.WriteLine($"Gold after: {seller.GoldPieces} gp");
+            Console.WriteLine($"Sold {it.Name} for {sellPriceText}.");
+            Console.WriteLine($"Gold after: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
             _charRepo.Save(seller);
             _partyRepo.Save(party);
         }

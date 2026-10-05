@@ -97,7 +97,12 @@ public sealed class ShopSession
                      : !Shop.IsEquipableBy(shopper, it) ? "cannot use"
                      : "";
 
-            wares.Add(new { Id = it.Name, it.Name, Price = Shop.FormatCost(it), Note = note, Side = ViewerIds.ShopSide });
+            var statText = Shop.FormatBoltacItemStat(it);
+            var displayName = string.IsNullOrWhiteSpace(statText)
+                ? it.Name
+                : $"{it.Name} ({statText})";
+
+            wares.Add(new { Id = it.Name, Name = displayName, Price = Shop.FormatCost(it), Note = note, Side = ViewerIds.ShopSide });
         }
 
         for (var i = 0; i < shopper.Inventory.Count; i++)
@@ -109,7 +114,7 @@ public sealed class ShopSession
             {
                 Id = i.ToString(),
                 it.Name,
-                Price = Shop.SellPrice(it) + " gp",
+                Price = Shop.FormatSellPrice(it),
                 Note = slot.HasValue ? "worn" : "",
                 Side = ViewerIds.PackSide,
             });
@@ -142,14 +147,19 @@ public sealed class ShopSession
             if (Shop.CostInSilverPieces(it) > availableSp) continue;
             if (!shopper.CanCarry(Shop.CopyOf(it))) continue;
 
-            options.Add(new ViewerPromptOption("take:" + it.Name, $"Buy {it.Name} ({Shop.FormatCost(it)})",
+            var statText = Shop.FormatBoltacItemStat(it);
+            var buyLabelName = string.IsNullOrWhiteSpace(statText)
+                ? it.Name
+                : $"{it.Name} [{statText}]";
+
+            options.Add(new ViewerPromptOption("take:" + it.Name, $"Buy {buyLabelName} ({Shop.FormatCost(it)})",
                                               Target: ViewerIds.Ware(ViewerIds.ShopSide, it.Name)));
         }
 
         for (var i = 0; i < shopper.Inventory.Count; i++)
         {
             var it = shopper.Inventory[i];
-            options.Add(new ViewerPromptOption($"give:{i}", $"Sell {it.Name} ({Shop.SellPrice(it)} gp)",
+            options.Add(new ViewerPromptOption($"give:{i}", $"Sell {it.Name} ({Shop.FormatSellPrice(it)})",
                                               Target: ViewerIds.Ware(ViewerIds.PackSide, i.ToString())));
         }
 

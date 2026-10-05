@@ -32,6 +32,9 @@ public static class Shop
     {
         totalSp = Math.Max(0, totalSp);
 
+        if (totalSp < 10)
+            return $"{totalSp} sp";
+
         var gp = totalSp / 10;
         var sp = totalSp % 10;
 
@@ -43,6 +46,32 @@ public static class Shop
 
     public static string FormatCost(Item item)
         => FormatCostFromSilverPieces(CostInSilverPieces(item));
+
+    public static string FormatBoltacItemStat(Item item)
+    {
+        if (item == null)
+            return string.Empty;
+
+        if (item.Type == ItemType.Weapon)
+        {
+            if (!string.IsNullOrWhiteSpace(item.DamageVsLarge)
+                && !string.Equals(item.Damage, item.DamageVsLarge, StringComparison.OrdinalIgnoreCase))
+            {
+                return $"DMG {item.Damage} (L:{item.DamageVsLarge})";
+            }
+
+            return string.IsNullOrWhiteSpace(item.Damage)
+                ? string.Empty
+                : $"DMG {item.Damage}";
+        }
+
+        if (item.Type == ItemType.Armor || item.Type == ItemType.Shield)
+        {
+            return $"AC +{Math.Max(0, item.ArmorClassBonus)}";
+        }
+
+        return string.Empty;
+    }
 
     /// <summary>
     /// What is on the shelves: buyable, and not sold out. The cap (formerly 52) is now raised to allow up to
@@ -56,8 +85,14 @@ public static class Shop
             .Take(9999)
             .ToList();
 
-    /// <summary>Boltac buys at half. He is a merchant.</summary>
-    public static int SellPrice(Item item) => item.Cost / 2;
+    /// <summary>Boltac buys at half value, tracked in silver pieces.</summary>
+    public static int SellPriceInSilverPieces(Item item) => CostInSilverPieces(item) / 2;
+
+    /// <summary>Legacy GP sell price, kept for compatibility.</summary>
+    public static int SellPrice(Item item) => SellPriceInSilverPieces(item) / 10;
+
+    public static string FormatSellPrice(Item item)
+        => FormatCostFromSilverPieces(SellPriceInSilverPieces(item));
 
     public static bool InStock(Item item) => !item.StockQuantity.HasValue || item.StockQuantity.Value > 0;
 
@@ -179,7 +214,7 @@ public static class Shop
     public static string Sell(Character seller, Item item, EquipmentSlot? equippedIn, ItemRepository items,
                              CharacterRepository characters, PartyRepository parties, Party party)
     {
-        var price = SellPrice(item);
+        var priceSp = SellPriceInSilverPieces(item);
 
         if (equippedIn.HasValue)
         {
@@ -195,11 +230,27 @@ public static class Shop
             return $"{seller.Name} no longer has {item.Name}.";
         }
 
-        seller.GoldPieces += price;
+        AddSilverPieces(seller, priceSp);
         items.TryAdjustStock(item.Name, +1);
         characters.Save(seller);
         parties.Save(party);
 
-        return $"{seller.Name} sells {item.Name} for {price} gp, and has {seller.GoldPieces} now.";
+        return $"{seller.Name} sells {item.Name} for {FormatCostFromSilverPieces(priceSp)}.";
+    }
+
+    public static int TotalSilverPieces(Character c) => ToSilverPieces(c);
+
+    public static void AddSilverPieces(Character c, int amountSp)
+    {
+        var totalSp = checked(ToSilverPieces(c) + Math.Max(0, amountSp));
+
+        c.PlatinumPieces = totalSp / 50;
+        totalSp %= 50;
+        c.GoldPieces = totalSp / 10;
+        totalSp %= 10;
+        c.ElectrumPieces = totalSp / 5;
+        totalSp %= 5;
+        c.SilverPieces = totalSp;
+        c.CopperPieces = 0;
     }
 }
