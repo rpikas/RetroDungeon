@@ -286,7 +286,8 @@ public class PartyMenu
             Console.WriteLine("E)quip");
             Console.WriteLine("N)unequip");
             Console.WriteLine("U)se Item");
-            Console.WriteLine("T)rade");
+            Console.WriteLine("T)rade Item");
+            Console.WriteLine("G)ive Gold");
             Console.WriteLine("D)rop");
             Console.WriteLine("P)ool Gold");
             Console.WriteLine("I)dentify");
@@ -306,6 +307,7 @@ public class PartyMenu
             else if (key == ConsoleKey.N) UnequipAction(c);
             else if (key == ConsoleKey.U) UseItemAction(c, party);
             else if (key == ConsoleKey.T) TradeAction(c, party);
+            else if (key == ConsoleKey.G) GiveGoldAction(c, party);
             else if (key == ConsoleKey.D) DropAction(c);
             else if (key == ConsoleKey.P) PoolGoldAction(c, party);
             else if (key == ConsoleKey.I) IdentifyAction(c);
@@ -978,6 +980,72 @@ public class PartyMenu
         _repo.Save(receiver);
 
         Console.WriteLine($"\nTraded {item.Name} from {giver.Name} to {receiver.Name}.");
+        Console.ReadKey(true);
+    }
+
+    private void GiveGoldAction(Character c, Party party)
+    {
+        var members = party.Members
+            .Select(name => _repo.GetAll().FirstOrDefault(x => x.Name == name))
+            .Where(x => x != null)
+            .Cast<Character>()
+            .ToList();
+
+        var giver = members.FirstOrDefault(m => string.Equals(m.Name, c.Name, StringComparison.OrdinalIgnoreCase));
+        if (giver == null)
+        {
+            Console.WriteLine("\nActive character is not in the current party.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        if (giver.GoldPieces <= 0)
+        {
+            Console.WriteLine($"\n{giver.Name} has no gold to give.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var recipients = members
+            .Where(m => !string.Equals(m.Name, giver.Name, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (recipients.Count == 0)
+        {
+            Console.WriteLine("\nNo other party member to give gold to.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.WriteLine("\nGive gold to:");
+        for (int i = 0; i < recipients.Count; i++)
+            Console.WriteLine($"{i + 1}. {recipients[i].Name} ({recipients[i].Class})");
+
+        Console.Write("Choose #: ");
+        var recipientSelection = InputHelper.ReadNumber(1, recipients.Count);
+        if (!recipientSelection.HasValue)
+            return;
+
+        var receiver = recipients[recipientSelection.Value - 1];
+
+        Console.Write($"\nEnter gold amount to give (1-{giver.GoldPieces}): ");
+        var amountInput = Console.ReadLine();
+        if (!int.TryParse((amountInput ?? string.Empty).Trim(), out var amountToGive)
+            || amountToGive < 1
+            || amountToGive > giver.GoldPieces)
+        {
+            Console.WriteLine("Invalid gold amount.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        giver.GoldPieces -= amountToGive;
+        receiver.GoldPieces += amountToGive;
+
+        _repo.Save(giver);
+        _repo.Save(receiver);
+
+        Console.WriteLine($"\nGave {amountToGive} gp from {giver.Name} to {receiver.Name}.");
         Console.ReadKey(true);
     }
 

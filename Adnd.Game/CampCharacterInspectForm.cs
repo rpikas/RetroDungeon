@@ -2017,12 +2017,6 @@ public sealed class CampCharacterInspectForm : Form
         if (giver == null)
             return;
 
-        if (giver.Inventory.Count == 0)
-        {
-            SayOnBoth("Trade", "No items to trade.");
-            return;
-        }
-
         var members = GetPartyCharacters();
         var recipients = members
             .Where(m => !string.Equals(m.Name, giver.Name, StringComparison.OrdinalIgnoreCase))
@@ -2039,6 +2033,42 @@ public sealed class CampCharacterInspectForm : Form
             return;
 
         var receiver = recipients[recipientIdx.Value];
+
+        var tradeModes = new List<string> { "Item", "Gold" };
+        var tradeModeIdx = PromptChoice("Trade Type", tradeModes);
+        if (!tradeModeIdx.HasValue)
+            return;
+
+        if (tradeModeIdx.Value == 1)
+        {
+            if (giver.GoldPieces <= 0)
+            {
+                SayOnBoth("Trade", $"{giver.Name} has no gold to trade.");
+                return;
+            }
+
+            var amountToTrade = PromptNumberInput("Trade Gold", "Enter gold amount:", 1, giver.GoldPieces);
+            if (!amountToTrade.HasValue)
+                return;
+
+            var goldToTrade = amountToTrade.Value;
+
+            giver.GoldPieces -= goldToTrade;
+            receiver.GoldPieces += goldToTrade;
+
+            _characterRepository.Save(giver);
+            _characterRepository.Save(receiver);
+
+            RefreshView();
+            SayOnBoth("Trade", $"Traded {goldToTrade} gp from {giver.Name} to {receiver.Name}.");
+            return;
+        }
+
+        if (giver.Inventory.Count == 0)
+        {
+            SayOnBoth("Trade", "No items to trade.");
+            return;
+        }
 
         var itemIdx = PromptChoice("Choose Item", giver.Inventory.Select(i => $"{i.Name} (Wt {i.Weight})").ToList());
         if (!itemIdx.HasValue)
@@ -2061,5 +2091,56 @@ public sealed class CampCharacterInspectForm : Form
         RefreshView();
 
         SayOnBoth("Trade", $"Traded {item.Name} from {giver.Name} to {receiver.Name}.");
+    }
+
+    private int? PromptNumberInput(string title, string labelText, int min, int max)
+    {
+        using var form = new Form();
+        form.Text = title;
+        form.FormBorderStyle = FormBorderStyle.FixedDialog;
+        form.StartPosition = FormStartPosition.CenterParent;
+        form.ClientSize = new Size(420, 140);
+        form.MinimizeBox = false;
+        form.MaximizeBox = false;
+
+        var label = new Label
+        {
+            Left = 12,
+            Top = 14,
+            Width = 396,
+            Height = 24,
+            Text = $"{labelText} ({min}-{max})"
+        };
+
+        var input = new TextBox
+        {
+            Left = 12,
+            Top = 46,
+            Width = 396
+        };
+
+        var ok = new Button { Text = "OK", Left = 252, Top = 90, Width = 75, DialogResult = DialogResult.OK };
+        var cancel = new Button { Text = "Cancel", Left = 333, Top = 90, Width = 75, DialogResult = DialogResult.Cancel };
+
+        form.Controls.Add(label);
+        form.Controls.Add(input);
+        form.Controls.Add(ok);
+        form.Controls.Add(cancel);
+        form.AcceptButton = ok;
+        form.CancelButton = cancel;
+
+        input.Focus();
+
+        var result = form.ShowDialog(this);
+        if (result != DialogResult.OK)
+            return null;
+
+        if (!int.TryParse((input.Text ?? string.Empty).Trim(), out var value))
+            return null;
+
+        if (value < min || value > max)
+            return null;
+
+        return value;
     }
 }

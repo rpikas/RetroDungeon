@@ -4097,10 +4097,12 @@ When creating charater, do not ask for the name until after they question, do yo
 when displaying the party in party management give the class column 7 more charaters spac. 27,3
 updated default selection of weapon proficiencies for new characters
 ___
-If combat dialog is closed with Esc or in other way before battle is completed it counts as tyring to run away, ask for confirmation if that is done
+If combat dialog is closed with Esc or in other way before battle is completed it counts as tyring to run away, 
+ask for confirmation if that is done
 ___
 PHB19
-When selecting weapon proficiencies for a new character or when reaching a new level only show the weapons that the character is allowed to select based on his or her class.
+When selecting weapon proficiencies for a new character or when reaching a new level only show the weapons that 
+the character is allowed to select based on his or her class.
 Here is the table of allowed weapons based on class:
 Class of Character	Armor	Shield	Weapons*
 Cleric	any	any	club, flail, hammer, mace, staff
@@ -4114,3 +4116,9 @@ Thief	leather	none	club, dagger, dart, sling, sword****
 Assassin	leather	any	any****
 Monk	none	none	bo sticks, club, crossbow, dagger, hand axe, javelin, jo stick, pole arm, spear, staff 27,7
 ___
+Bugfix: I had about 3400 gp, then I sold a banded mail for 45 gp then I only had 2 gp left
+When trading inbetween characters also give the option to trade gold.
+when trading gold, let the charater enter the number of gold with the keyboard into an input field. Also make it. 28,8
+possible to trade gold when trading from inspect charater in the city.
+When selecting c charater from party management rename T)rade to T)rade Item and introduce a new option 
+G)ive Gold when you can give away gold to another charater- 29,1

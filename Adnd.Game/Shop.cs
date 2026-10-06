@@ -221,13 +221,11 @@ public static class Shop
     {
         var remaining = Math.Max(0, ToSilverPieces(c) - Math.Max(0, costSp));
 
-        c.PlatinumPieces = remaining / 50;
-        remaining %= 50;
+        // Keep shop accounting in gp/sp for predictable UI in Boltac.
         c.GoldPieces = remaining / 10;
-        remaining %= 10;
-        c.ElectrumPieces = remaining / 5;
-        remaining %= 5;
-        c.SilverPieces = remaining;
+        c.SilverPieces = remaining % 10;
+        c.PlatinumPieces = 0;
+        c.ElectrumPieces = 0;
         c.CopperPieces = 0;
     }
 
@@ -271,13 +269,11 @@ public static class Shop
     {
         var totalSp = checked(ToSilverPieces(c) + Math.Max(0, amountSp));
 
-        c.PlatinumPieces = totalSp / 50;
-        totalSp %= 50;
+        // Keep shop accounting in gp/sp for predictable UI in Boltac.
         c.GoldPieces = totalSp / 10;
-        totalSp %= 10;
-        c.ElectrumPieces = totalSp / 5;
-        totalSp %= 5;
-        c.SilverPieces = totalSp;
+        c.SilverPieces = totalSp % 10;
+        c.PlatinumPieces = 0;
+        c.ElectrumPieces = 0;
         c.CopperPieces = 0;
     }
 }

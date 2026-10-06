@@ -185,17 +185,18 @@ public class MainMenu
                 continue;
             }
 
-            // 1 gp = 10 sp = 100 cp, 1 ep = 5 sp = 0.5 gp, 1 pp = 10 gp
-            var totalCopperValue =
-                (character.GoldPieces * 100)
-                + (character.PlatinumPieces * 1000)
-                + (character.ElectrumPieces * 50)
-                + (character.SilverPieces * 10)
-                + character.CopperPieces;
+            // Keep town normalization consistent with shop currency math (silver-piece base):
+            // 1 gp = 10 sp, 1 pp = 50 sp, 1 ep = 5 sp, 10 cp = 1 sp.
+            var totalSilverValue =
+                (character.GoldPieces * 10)
+                + (character.PlatinumPieces * 50)
+                + (character.ElectrumPieces * 5)
+                + character.SilverPieces
+                + (character.CopperPieces / 10);
 
-            character.GoldPieces = Math.Max(0, totalCopperValue / 100);
+            character.GoldPieces = Math.Max(0, totalSilverValue / 10);
+            character.SilverPieces = Math.Max(0, totalSilverValue % 10);
             character.CopperPieces = 0;
-            character.SilverPieces = 0;
             character.ElectrumPieces = 0;
             character.PlatinumPieces = 0;
 
