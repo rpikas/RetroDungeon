@@ -1503,11 +1503,6 @@ public sealed class CombatResolver
                                     }
                                 }
 
-            if (isPiercer)
-            {
-                session.SetPiercerClimbRounds(monster, 4);
-                events.Add(new CombatEvent($"{monster.DisplayName} starts climbing up the wall and cannot attack for 4 rounds."));
-            }
                             }
 
                             if (HasAnySpecialAbility(monster, "Paralyze", "Paralyzation", "Paralysis"))
@@ -1521,6 +1516,12 @@ public sealed class CombatResolver
                         events.Add(new CombatEvent($"{monster.DisplayName} misses {target.Name}."));
                     }
                 }
+            }
+
+            if (isPiercer)
+            {
+                session.SetPiercerClimbRounds(monster, 5);
+                events.Add(new CombatEvent($"{monster.DisplayName} starts climbing up the wall and cannot attack for 5 rounds."));
             }
         }
 

@@ -32,8 +32,8 @@ public class CityMenu
             if (all.Count > 0)
             {
                 // Column headers
-                Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Alignment",-15} {"Class",-18} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
-                Console.WriteLine(new string('-', 104));
+                Console.WriteLine($"{"#",-3} {"Name",-15} {"Race",-10} {"Alignment",-15} {"Class",-25} {"Lvl",-7} {"HP",7} {"AC",3} {"Status",-20}");
+                Console.WriteLine(new string('-', 111));
 
                 for (int i = 0; i < all.Count; i++)
                 {
@@ -44,7 +44,7 @@ public class CityMenu
                     var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
                     var levelDisplay = GetLevelDisplay(c);
 
-                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {alignment,-15} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {alignment,-15} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
                 }
                 Console.WriteLine();
             }
