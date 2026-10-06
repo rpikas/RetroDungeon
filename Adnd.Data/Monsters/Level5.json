@@ -1200,7 +1200,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Magic Weapon Immunity",
+          "Name": "+1 or better weapons to hit",
           "Description": "Only hit by magic weapons."
         }
       ],

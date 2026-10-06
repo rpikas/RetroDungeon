@@ -772,6 +772,15 @@ public sealed class CombatResolver
             events.Add(new CombatEvent("The party fails to escape!"));
         }
 
+        ResolveFigurineAnimalAllies(session, events);
+
+        if (!session.AliveMonsters.Any())
+        {
+            session.Outcome = CombatOutcome.Victory;
+            events.Add(new CombatEvent("All monsters are defeated!"));
+            return FinalizeRound(session, events);
+        }
+
         foreach (var monster in session.AliveMonsters.ToList())
         {
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
@@ -1329,6 +1338,114 @@ public sealed class CombatResolver
                         events.Add(new CombatEvent("The party is defeated."));
                         return FinalizeRound(session, events);
                     }
+
+    private void ResolveFigurineAnimalAllies(CombatSession session, List<CombatEvent> events)
+    {
+        foreach (var summoner in session.Party)
+        {
+            if (!IsAlive(summoner))
+                continue;
+
+            var activeFigurines = summoner.Inventory
+                .Where(FigurineOfWondrousPower.IsActiveInAnimalForm)
+                .ToList();
+
+            foreach (var figurine in activeFigurines)
+            {
+                var kind = FigurineOfWondrousPower.GetKind(figurine);
+                switch (kind)
+                {
+                    case FigurineKind.GoldenLions:
+                        ResolveGoldenLionsAttacks(session, summoner, figurine, events);
+                        break;
+                    case FigurineKind.SerpentineOwl:
+                        ResolveSerpentineOwlAttack(session, summoner, figurine, events);
+                        break;
+                    case FigurineKind.EbonyFly:
+                        events.Add(new CombatEvent($"{summoner.Name}'s Ebony Fly circles overhead and can assist with travel, but makes no direct attacks."));
+                        break;
+                }
+            }
+        }
+    }
+
+    private void ResolveGoldenLionsAttacks(CombatSession session, Character summoner, Item figurine, List<CombatEvent> events)
+    {
+        for (int lion = 1; lion <= 2; lion++)
+        {
+            for (int attackIndex = 0; attackIndex < 3; attackIndex++)
+            {
+                var target = SelectFigurineTargetMonster(session);
+                if (target == null)
+                    return;
+
+                var roll = _dice.Roll(20);
+                const int needed = 11;
+                if (roll < needed)
+                {
+                    events.Add(new CombatEvent($"{summoner.Name}'s Golden Lion #{lion} misses {target.DisplayName} (rolled {roll} vs {needed})."));
+                    continue;
+                }
+
+                var damage = attackIndex == 2 ? RollDamage("1d8") : RollDamage("1d4");
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+                var actual = before - target.CurrentHitPoints;
+                events.Add(new CombatEvent($"{summoner.Name}'s Golden Lion #{lion} hits {target.DisplayName} for {actual} damage."));
+
+                if (target.CurrentHitPoints <= 0)
+                {
+                    target.CurrentHitPoints = 0;
+                    events.Add(new CombatEvent($"{target.DisplayName} is slain by {summoner.Name}'s Golden Lion #{lion}."));
+                }
+            }
+        }
+    }
+
+    private void ResolveSerpentineOwlAttack(CombatSession session, Character summoner, Item figurine, List<CombatEvent> events)
+    {
+        var isGiant = FigurineOfWondrousPower.IsSerpentineOwlGiantForm(figurine);
+        var target = SelectFigurineTargetMonster(session);
+        if (target == null)
+            return;
+
+        var attacks = isGiant ? 2 : 2;
+        var damageExpr = isGiant ? "1d6" : "1d2";
+        var needed = isGiant ? 11 : 14;
+
+        for (int i = 0; i < attacks; i++)
+        {
+            var roll = _dice.Roll(20);
+            if (roll < needed)
+            {
+                events.Add(new CombatEvent($"{summoner.Name}'s {(isGiant ? "Giant " : string.Empty)}Serpentine Owl misses {target.DisplayName} (rolled {roll} vs {needed})."));
+                continue;
+            }
+
+            var damage = RollDamage(damageExpr);
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            events.Add(new CombatEvent($"{summoner.Name}'s {(isGiant ? "Giant " : string.Empty)}Serpentine Owl hits {target.DisplayName} for {actual} damage."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.CurrentHitPoints = 0;
+                events.Add(new CombatEvent($"{target.DisplayName} is slain by {summoner.Name}'s Serpentine Owl."));
+                break;
+            }
+        }
+
+    private MonsterInstance? SelectFigurineTargetMonster(CombatSession session)
+    {
+        var aliveMonsters = session.AliveMonsters.ToList();
+        if (aliveMonsters.Count == 0)
+            return null;
+
+        var index = _dice.Roll(aliveMonsters.Count) - 1;
+        return aliveMonsters[index];
+    }
+    }
 
                     var invulnerabilityAcBonus = target.HasActivePotionInvulnerability
                         ? target.PotionInvulnerabilityArmorClassBonus

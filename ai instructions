@@ -4123,13 +4123,106 @@ possible to trade gold when trading from inspect charater in the city.
 When selecting c charater from party management rename T)rade to T)rade Item and introduce a new option 
 G)ive Gold when you can give away gold to another charater- 29,1
 ___
-In the Traning grounds table of characters, expand the class column with 7 more characters so that the class name can be fully shown.
-All kind of Piercers should only be allowed to attack 1st round and then wait 5 rounds before they can attack again, since they have 
+In the Traning grounds table of characters, expand the class column with 7 more characters so that the class name 
+can be fully shown.
+All kind of Piercers should only be allowed to attack 1st round and then wait 5 rounds before they can attack again, 
+since they have 
 to crawl back up agin before they drop. so they can only attack every 6th round. 29,9
 ___
-In the church when asking who will pay, then introduce an option S)hare the costs. If that is selected take evely money from the 
+In the church when asking who will pay, then introduce an option S)hare the costs. If that is selected take evely
+money from the 
 charaters that got money. 30,0
 
 In the Camp Reorder  Party dialog make it wider an increase the class column.
 Bug: All kind of piercers should have 90% chanse of surprise, that does not appear to work
+___
+paralyzation should not go away when leaving or entering the maze 30,6
 
+
+DMG 144
+Implement Figurines of Wondrous Power: There ore various figurines, but all have the following in common, 
+Each is apparently a statuette of small size, bui an inch or so high. When the figurine is tossed down and a 
+command word spoken, however, it becomes a living creature which obeys and serves its owner, If any figurine 
+is destroyed in its stafueite form it is forever ruined, all magic is lost, and it has no power, if slain in
+animal-like form the figurine simply reverts to Its statuette conformation and can be used again at o later 
+time as long as the statuette is nol broken. When figurines of wondrous power are indicated, roll on the table 
+below to determine the Type:
+01-15 ebony fly
+16-30 golden lions (pair)
+31-40 Ivory goats (trio)
+41-55 marble elephant
+56-65 obsidian steed
+66-85 onyx dog
+86-00 serpentine owl
+Ebony Ffy: At a word the small carving grows to the size of □ pony The ebony fiy is armor class 4, has 4 4- 4 
+hit dice, air maneuverability class C, and flies at 48" movement rate without a rider, at 36" carrying up to 
+210 pounds weight, and 24" carrying from 211 to 350 pounds weight. The item can be used a maximum of 3 times 
+per week, 12 hours per day. When 12 hours have expired, or in any event when the command word is spoken, 
+the ebony fiy shrinks to statuette size.
+Golden Lions. A pair of golden lions are exceptionally useful as they be¬ come 2 normal odult male lions 
+(armor class 5/6, 5 + 2 hit dice, and normal attack modes). If slain in combat, the lions cannot be brought 
+back from statuette form for ) full week; otherwise, they can be used once every day, They enlarge and shrink 
+upon speaking the command word,
+Ivory Goats: Each goat of this trio of statuettes looks slightly different, for each has a different function. 
+These are:
+1 The Goat of Trove/ling: This statuette provides a speedy and enduring mount of armor class 6, with 24 hit
+points and 2 attacks (horns) for 1-8 each (consider os 4 hit dice monster). It moves at 40" bearing 280 pounds 
+or less, and at I" for every additional 14 pounds of weight carried. The goat can travel a maximum of 1 day 
+each week — continuously or in any combination of periods totalling 24 hours. At this paint, or when the command 
+word isuttered, it returns io its small form for not less than I day before It can again be used.
+2. The Goat of Travail: When commanded, this statuette becomes an enormous creature, larger than a bull, 
+with sharp hooves (4-10/410), a vicious bite (2-8), and a pair of wicked horns of exceptional size (2-12/2-12), 
+If it is charging to attack, it may only use its horns, but +6 damage is added to each hit on that round, i.e,, 
+8IS h p damage per horn It is armor class 0„ has 96 hit points, and attacks as a 16 hit dice monster If can be 
+called to life but once per month. It moves24".
+3. The Goaf of Terror: When colled upon with the proper command word, this statuette becomes a destrierdike mount, 
+36" move¬ ment, armor class 2, 48 hit points, and no attacks itself. However, its rider can employ the goat's 
+horns as weapons, one born os a -1-3 speor (lance), the other os a +6 sword, When ridden versus an opponent, 
+the goat of terror radiates terror in a 3" radius, and any opponent In this radius must moke a saving ihrow 
+versus magic or lose 50 % of strength and suffer al least -3 on "to hit" dice rolls, all due to weakness caused 
+by terror. When all opponents are slain, or upon the proper command, the goaf returns to its statuette form. 
+It can be used once every 2 weeks.
+Afier 3 uses each of the goats loses Its magical abilities forever.
+Marble Elephant; These are the largest of the figurines, each statuette being about the size of a human hand. 
+Upon utterance of the command word, a marble elephant con be caused to grow to the size and specifi¬ cations of 
+a true eEephqnt or return to statuette form. The onimal created from the statuette is fully obedient to its 
+commander, serving as a beast of burden, mount, or attacking alone. The type of morble elephant obtained is 
+determined as follows:
+01-50 Asiatic (Elephant)
+51-90 African (Loxadonl)
+91-93 Prehistoric (Mammoth)
+94-00 Prehistoric (Mastodon)
+Details of each type of creature are found in the MONSTER MANUAL, The statuette con be used a maximum of 24
+hours at a time, 4 times per month.
+Obsidian Steed: An obsidian steed appears as a small, nearly shapeless lump of black stone Only careful 
+inspection will reveal that it vaguely resembles some form of quadruped, and of course, if magic is detected 
+for, rhe piece of rock which is the steed figurine will be noted os radiating some dweomer (magic). Upon 
+speaking the command word, the near formless piece of obsidian becomes a true nightmare. It will allow itself 
+to be ridden, but if the rider is of good alignment it is 10% likely per use to carry its "master" to the 
+floor of Hades firsi layer and then return to its statuette form, See MONSTER MANUAL for details of the nightmare. 
+The statuette can be used for a 24 hour period maximum, once per week. Note Thai when the obsidian steed 
+becomes astral or ethereal its rider and gear likewise so become, thus travel to other planes is easily 
+accomplished by means of this Item,
+Onyx Dog; Whan commanded, this statuette changes into a creature which has the same properties os a war dog, 
+except that it is endowed with intelligence of 6-10, can communicate in the common tongue, and has exceptional 
+olfactory ond visual abilities The olfactory power enables the onyx dog to scent the frail of a known creature 
+100% of the Time if it is 1 hour or less old, -10% per hour thereafter, and subject to being thrown off by 
+false trails, breaks, water, and masking or blocking substances or scents. The visual power enables the onyx 
+dog to use 90' range infravision, spotting hidden (such as in shadows) things 80% of the time, normally 
+invisible (hings 65% of the time, and noting astral, ethereal, and out-of-phase things 50% of the time. 
+For details, see DOG, WAR in the MONSTER MANUAL, An onyx dog can be used for up to 6 continuous hours, once 
+per week. It obeys only its owner.
+Serpentine Owl: A serpentine owl becomes a normal-sized horned owl (AC 7; 24" move; 2-4 hit poinis; I -2/1-2 
+hit points of damage when at¬ tacking) if iis possessor so commands, or it con become a giant owl if its 
+owner so requires. The latter usage, however, is limned To 3 times; thereafter the statuette loses oil of 
+its magical properties. The normalsized form of the magical statuette moves with 95% silence, has infravision 
+to 90' r can see in normal, above ground darkness as if it were full
+light, ond twice as well os a human or ihat. Its hearing is so keen as to be able to detect a mouse moving at 
+60' distance; thus, silent movement chances are reduced 50% with respect to the serpentine aw/ in smaller form. 
+Furthermore r It con ond will communicate with its owner by telepathic means, informing of all if sees and 
+hears according lo its (low, 2-4) intelligence in normalsize. If commanded to giant-size, a serpenrine owl 
+is in oil respects the same as a giant aw 1 For information see Owl. giant, in the MONSTER MANUAL As with 
+most other figurines of wondrous power, this one readily obeys oil commands of its owner
+
+Can you implement  Figurines of Wondrous Power: Serpentine Owl
+can you make the different animals that can be summoned by Figurines of Wondrous Power also help in battle

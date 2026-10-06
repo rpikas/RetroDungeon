@@ -1224,6 +1224,7 @@ public sealed class CampCharacterInspectForm : Form
                 item,
                 index,
                 spell = _spellCastingService.FindSpellFromItem(item),
+                isFigurine = FigurineOfWondrousPower.IsFigurine(item),
                 grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
                 grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
@@ -1237,7 +1238,7 @@ public sealed class CampCharacterInspectForm : Form
                 grantsTreasureFindingPotion = string.Equals(item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing)
             .ToList();
 
         var hasEquippedRingInvisibility = user.TryGetEquippedRingOfInvisibility(out var equippedRingOfInvisibility)
@@ -1277,6 +1278,8 @@ public sealed class CampCharacterInspectForm : Form
                 ? $"{x.item.Name} (unread magical scroll)"
                 : x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
+                : x.isFigurine
+                    ? $"{x.item.Name} (figurine command)"
                 : x.grantsRegeneration
                     ? $"{x.item.Name} (grants regeneration)"
                     : x.grantsFireResistancePotion
@@ -1336,6 +1339,43 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         var selected = usableItems[itemIdx.Value];
+        if (selected.isFigurine)
+        {
+            var party = _partyRepository.Load();
+            var dungeonDay = Math.Max(0, party.DungeonDaysElapsed) + 1;
+            var kind = FigurineOfWondrousPower.GetKind(selected.item);
+            var preferGiantForm = false;
+            if (kind == FigurineKind.SerpentineOwl)
+            {
+                var formChoice = PromptChoice("Serpentine Owl", new List<string>
+                {
+                    "Normal-size horned owl",
+                    "Giant owl (limited uses)"
+                });
+
+                if (!formChoice.HasValue)
+                    return;
+
+                preferGiantForm = formChoice.Value == 1;
+            }
+
+            if (FigurineOfWondrousPower.TryUse(selected.item, dungeonDay, out var figurineEvents, preferGiantForm))
+            {
+                _characterRepository.Save(user);
+                RefreshView();
+                SayOnBoth("Use Item", string.Join(Environment.NewLine, figurineEvents));
+            }
+            else
+            {
+                var msg = figurineEvents.Count > 0
+                    ? string.Join(Environment.NewLine, figurineEvents)
+                    : $"{selected.item.Name} does not respond.";
+                SayOnBoth("Use Item", msg);
+            }
+
+            return;
+        }
+
         if (ItemSpecialAbilityParser.IsPotionOfDelusion(selected.item))
         {
             var disguisedAs = ItemSpecialAbilityParser.TryGetDelusionDisguiseName(selected.item, out var disguiseName)

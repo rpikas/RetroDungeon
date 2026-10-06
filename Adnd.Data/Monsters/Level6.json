@@ -2,6 +2,59 @@
     "Level": 6,
   "Monsters": [
     {
+      "Name": "Brown Mold",
+      "Type": "Mold",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 0,
+      "HitDice": 0,
+      "HitDiceType": 0,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Freezing Aura",
+          "Description": "Drains heat from creatures within 5 feet. Each melee round inflicts 1d8 cold damage for every 10 degrees of body heat above 55 degrees."
+        },
+        {
+          "Name": "Heat-Fed Growth",
+          "Description": "Exposure to heat causes rapid expansion. Torches, flaming oil, and fire-based spells can increase its area by 2, 4, or 8 times."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Immune to Normal Attacks",
+          "Description": "Unaffected by non-magical attacks."
+        },
+        {
+          "Name": "Affected Only by Magical Cold",
+          "Description": "Only magical cold has a significant effect on brown mold."
+        },
+        {
+          "Name": "Dormancy",
+          "Description": "Cold causes the mold to become dormant for 5-30 turns."
+        },
+        {
+          "Name": "Cold Creature Immunity",
+          "Description": "Its draining effect does not harm creatures that naturally use or embody cold."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Non-",
+      "Size": "Medium",
+      "Alignment": "Neutral",
+      "BaseXPValue": 0,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "",
+      "Other": "Brown mold feeds on radiant energy and body heat rather than light. It is not affected by light spells or faerie fire. White dragon breath or a wand of cold will kill it. Psionic Ability: Nil. Attack/Defense Modes: Nil."
+    },
+    {
       "Name": "Lvl 6 Magic-User",
       "Type": "Humanoid",
       "Frequency": "Common",

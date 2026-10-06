@@ -708,9 +708,10 @@ public class PartyMenu
                 item,
                 index,
                 spell = _spellCastingService.FindSpellFromItem(item),
+                isFigurine = FigurineOfWondrousPower.IsFigurine(item),
                 grantsRegeneration = ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration")
             })
-            .Where(x => x.spell != null || x.grantsRegeneration)
+            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration)
             .ToList();
 
         if (usableItems.Count == 0)
@@ -725,6 +726,8 @@ public class PartyMenu
         {
             var details = usableItems[i].spell != null
                 ? $"casts {usableItems[i].spell!.Name}"
+                : usableItems[i].isFigurine
+                    ? "figurine command"
                 : "grants regeneration";
             Console.WriteLine($"{i + 1}. {usableItems[i].item.Name} ({details})");
         }
@@ -735,6 +738,39 @@ public class PartyMenu
             return;
 
         var selected = usableItems[itemSel.Value - 1];
+        if (selected.isFigurine)
+        {
+            var dungeonDay = Math.Max(0, party.DungeonDaysElapsed) + 1;
+            var kind = FigurineOfWondrousPower.GetKind(selected.item);
+            var preferGiantForm = false;
+            if (kind == FigurineKind.SerpentineOwl)
+            {
+                Console.WriteLine("\nSerpentine Owl form:");
+                Console.WriteLine("1. Normal-size horned owl");
+                Console.WriteLine("2. Giant owl (limited uses)");
+                Console.Write("Choose #: ");
+                var formSel = InputHelper.ReadNumber(1, 2);
+                if (!formSel.HasValue)
+                    return;
+
+                preferGiantForm = formSel.Value == 2;
+            }
+
+            if (FigurineOfWondrousPower.TryUse(selected.item, dungeonDay, out var figurineEvents, preferGiantForm))
+            {
+                _repo.Save(user);
+                foreach (var line in figurineEvents)
+                    Console.WriteLine($"\n{line}");
+            }
+            else
+            {
+                Console.WriteLine($"\n{(figurineEvents.Count > 0 ? string.Join(Environment.NewLine, figurineEvents) : selected.item.Name + " does not respond.")}");
+            }
+
+            Console.ReadKey(true);
+            return;
+        }
+
         var spell = selected.spell;
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var targets = new List<SpellCastTarget>();

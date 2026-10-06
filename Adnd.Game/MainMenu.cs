@@ -358,6 +358,15 @@ public class MainMenu
             if (removedRegenMarkers > 0)
                 changed = true;
 
+            foreach (var item in member.Inventory)
+            {
+                if (!FigurineOfWondrousPower.IsFigurine(item))
+                    continue;
+
+                if (FigurineOfWondrousPower.TickDayTransition(item, party.DungeonDaysElapsed + 1, out _))
+                    changed = true;
+            }
+
             _charRepo.Save(member);
         }
     }
