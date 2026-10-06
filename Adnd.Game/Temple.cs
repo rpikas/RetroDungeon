@@ -7,6 +7,9 @@
 // of that would eventually disagree, and the disagreement would be about whether somebody's character is gone
 // forever. So the table decides WHO and WHO PAYS, and this decides what happens.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Data.Characters;
 
@@ -86,14 +89,59 @@ public static class Temple
             return false;
 
         payer.GoldPieces -= cost;
+        ApplyHealing(target);
+        Save(target, payer, repo);
+        return true;
+    }
+
+    /// <summary>
+    /// Heals <paramref name="target"/>, charging the party members in order until the full fee is covered.
+    /// Returns false when the party cannot cover the fee.
+    /// </summary>
+    public static bool HealShared(Character target, IEnumerable<Character> partyMembers, CharacterRepository repo, out List<string> paymentLines)
+    {
+        paymentLines = new List<string>();
+        var cost = CostToHeal(target);
+        if (cost <= 0)
+            return false;
+
+        var payers = partyMembers
+            .Where(c => c.GoldPieces > 0)
+            .ToList();
+
+        if (payers.Sum(p => p.GoldPieces) < cost)
+            return false;
+
+        var remaining = cost;
+        var contributors = new List<Character>();
+        foreach (var payer in payers)
+        {
+            if (remaining <= 0)
+                break;
+
+            var contribution = Math.Min(payer.GoldPieces, remaining);
+            if (contribution <= 0)
+                continue;
+
+            payer.GoldPieces -= contribution;
+            remaining -= contribution;
+            contributors.Add(payer);
+            paymentLines.Add($"{payer.Name} paid {contribution} gp toward {target.Name}'s healing.");
+        }
+
+        ApplyHealing(target);
+        Save(target, contributors, repo);
+        return true;
+    }
+
+    private static void ApplyHealing(Character target)
+    {
         target.CurrentHitPoints = target.MaxHitPoints;
         target.RemoveStatus(CharacterStatus.Poisoned);
         target.ClearParalysis();
         target.RemoveStatus(CharacterStatus.Petrified);
         target.CureDiseaseAndRestoreConstitution();
         target.RemoveStatus(CharacterStatus.Feeblemind);
-        Save(target, payer, repo);
-        return true;
     }
 
     /// <summary>
@@ -172,12 +220,116 @@ public static class Temple
         return events;
     }
 
+    /// <summary>
+    /// Attempts a raise, charging the party members in order until the full fee is covered.
+    /// Returns event lines describing both payment and raise outcome.
+    /// </summary>
+    public static List<string> RaiseShared(Character target, IEnumerable<Character> partyMembers, CharacterRepository repo)
+    {
+        var events = new List<string>();
+        var cost = CostToRaise(target);
+        var payers = partyMembers
+            .Where(c => c.GoldPieces > 0)
+            .ToList();
+
+        if (payers.Sum(p => p.GoldPieces) < cost)
+        {
+            events.Add($"The party does not have enough gold to cover {cost} gp.");
+            return events;
+        }
+
+        var remainingCost = cost;
+        var contributors = new List<Character>();
+        foreach (var payer in payers)
+        {
+            if (remainingCost <= 0)
+                break;
+
+            var contribution = Math.Min(payer.GoldPieces, remainingCost);
+            if (contribution <= 0)
+                continue;
+
+            payer.GoldPieces -= contribution;
+            remainingCost -= contribution;
+            contributors.Add(payer);
+            events.Add($"{payer.Name} paid {contribution} gp.");
+        }
+
+        var fromAshes = target.HasStatus(CharacterStatus.Ashes);
+
+        if (target.Abilities.Constitution <= 0)
+        {
+            target.RemoveStatus(CharacterStatus.Dead);
+            target.RemoveStatus(CharacterStatus.Ashes);
+            target.AddStatus(CharacterStatus.Lost);
+            target.CurrentHitPoints = 0;
+
+            events.Add($"{target.Name} has Constitution 0 and is automatically Lost.");
+            Save(target, contributors, repo);
+            return events;
+        }
+
+        var chance = SystemShockSurvivalChance(target.Abilities.Constitution);
+        var roll = Random.Shared.Next(1, 101);
+        events.Add($"System Shock roll for {target.Name}: {roll} (needs {chance} or less)");
+
+        if (roll <= chance)
+        {
+            target.RemoveStatus(CharacterStatus.Dead);
+            target.RemoveStatus(CharacterStatus.Ashes);
+            target.RemoveStatus(CharacterStatus.Lost);
+
+            if (target.CurrentHitPoints <= 0)
+                target.CurrentHitPoints = 1;
+
+            target.Abilities.Constitution = Math.Max(0, target.Abilities.Constitution - 1);
+
+            events.Add($"{target.Name} has been raised.");
+            events.Add($"{target.Name} loses 1 Constitution (now {target.Abilities.Constitution}).");
+        }
+        else if (fromAshes)
+        {
+            target.RemoveStatus(CharacterStatus.Dead);
+            target.RemoveStatus(CharacterStatus.Ashes);
+            target.AddStatus(CharacterStatus.Lost);
+            target.CurrentHitPoints = 0;
+
+            events.Add($"Revival failed. {target.Name} is now Lost and can never be revived again.");
+        }
+        else
+        {
+            target.RemoveStatus(CharacterStatus.Dead);
+            target.AddStatus(CharacterStatus.Ashes);
+            target.CurrentHitPoints = 0;
+
+            events.Add($"Raise Dead failed. {target.Name} is now ashes.");
+        }
+
+        Save(target, contributors, repo);
+        return events;
+    }
+
     /// <summary>Saves both, and only once when one character is both target and payer.</summary>
     private static void Save(Character target, Character payer, CharacterRepository repo)
     {
         repo.Save(target);
         if (!string.Equals(target.Name, payer.Name, StringComparison.OrdinalIgnoreCase))
             repo.Save(payer);
+    }
+
+    private static void Save(Character target, IEnumerable<Character> payers, CharacterRepository repo)
+    {
+        repo.Save(target);
+
+        var saved = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { target.Name };
+        foreach (var payer in payers)
+        {
+            if (payer == null)
+                continue;
+
+            if (saved.Add(payer.Name))
+                repo.Save(payer);
+        }
     }
 
     /// <summary>Not the 1e table; the game's own curve, kept exactly as it was when this moved here.</summary>

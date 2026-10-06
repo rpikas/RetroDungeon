@@ -87,6 +87,10 @@ public sealed class TempleSession
                 options.Add(new ViewerPromptOption("pay:" + payer.Name, $"{payer.Name} pays ({payer.GoldPieces} gp)",
                                                    Target: ViewerIds.Character(payer.Name)));
 
+            var totalGold = party.Where(p => p.GoldPieces > 0).Sum(p => p.GoldPieces);
+            if (totalGold >= cost)
+                options.Add(new ViewerPromptOption("pay:share", $"Share costs ({totalGold} gp total)"));
+
             options.Add(new ViewerPromptOption("cancel", "Never mind"));
 
             var text = options.Count > 1
@@ -174,10 +178,21 @@ public sealed class TempleSession
             if (_raising == null) return false;
 
             var target = Find(_raising);
-            var payer = Find(command.Substring(4));
+            var payerToken = command.Substring(4);
             _raising = null;
 
-            if (target == null || payer == null) return true;
+            if (target == null)
+                return true;
+
+            if (string.Equals(payerToken, "share", StringComparison.OrdinalIgnoreCase))
+            {
+                _events.AddRange(Temple.RaiseShared(target, Party(), _characters));
+                return true;
+            }
+
+            var payer = Find(payerToken);
+            if (payer == null)
+                return true;
 
             _events.AddRange(Temple.Raise(target, payer, _characters));
             return true;

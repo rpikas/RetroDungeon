@@ -1007,7 +1007,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.Text = "Camp - Reorder Party";
         form.FormBorderStyle = FormBorderStyle.FixedDialog;
         form.StartPosition = FormStartPosition.CenterParent;
-        form.ClientSize = new Size(860, 215);
+        form.ClientSize = new Size(980, 215);
         form.MinimizeBox = false;
         form.MaximizeBox = false;
         form.KeyPreview = true;
@@ -1016,7 +1016,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             Left = 12,
             Top = 10,
-            Width = 836,
+            Width = 956,
             Height = 24,
             Text = "Select a member and use > to add to new order, < to remove. Enter = confirm, Esc = cancel"
         };
@@ -1025,16 +1025,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             Left = 12,
             Top = 38,
-            Width = 370,
+            Width = 430,
             Height = 24,
             Text = "Old order"
         };
 
         var newLabel = new Label
         {
-            Left = 478,
+            Left = 538,
             Top = 38,
-            Width = 370,
+            Width = 430,
             Height = 24,
             Text = "New order"
         };
@@ -1043,16 +1043,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             Left = 12,
             Top = 62,
-            Width = 370,
+            Width = 430,
             Height = 110,
             Font = new Font("Consolas", 10f)
         };
 
         var newList = new ListBox
         {
-            Left = 478,
+            Left = 538,
             Top = 62,
-            Width = 370,
+            Width = 430,
             Height = 110,
             Font = new Font("Consolas", 10f)
         };
@@ -1060,7 +1060,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var moveRightBtn = new Button
         {
             Text = ">",
-            Left = 400,
+            Left = 460,
             Top = 82,
             Width = 60,
             Height = 30
@@ -1069,7 +1069,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var moveLeftBtn = new Button
         {
             Text = "<",
-            Left = 400,
+            Left = 460,
             Top = 122,
             Width = 60,
             Height = 30
@@ -1078,7 +1078,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var confirmBtn = new Button
         {
             Text = "Confirm",
-            Left = 692,
+            Left = 812,
             Top = 178,
             Width = 75,
             DialogResult = DialogResult.None
@@ -1087,7 +1087,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var cancelBtn = new Button
         {
             Text = "Cancel",
-            Left = 773,
+            Left = 893,
             Top = 178,
             Width = 75,
             DialogResult = DialogResult.Cancel
@@ -1097,7 +1097,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             var cls = c.Classes.Count > 0 ? string.Join("/", c.Classes.Select(x => x.ToDisplayString())) : c.Class.ToDisplayString();
             var hp = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
-            return $"{row,2}. {c.Name,-12} {cls,-14} HP {hp,-7} AC {c.ArmorClass,2}";
+            return $"{row,2}. {c.Name,-12} {cls,-24} HP {hp,-7} AC {c.ArmorClass,2}";
         }
 
         void RefreshLists()
@@ -1972,7 +1972,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Top = 132,
             Width = framePanel.ClientSize.Width,
             Height = 34,
-            Text = "Y)es    N)o",
+            Text = "Y)ES    N)O",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,

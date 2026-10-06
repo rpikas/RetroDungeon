@@ -178,16 +178,35 @@ public class TempleMenu
                 var canAfford = payerCandidate.GoldPieces >= cost ? "" : " (not enough)";
                 Console.WriteLine($"{i + 1}. {payerCandidate.Name} ({payerCandidate.GoldPieces} gp){canAfford}");
             }
+            Console.WriteLine("S)hare costs");
 
-            Console.Write("Choose #: ");
-            var payerSelection = InputHelper.ReadNumber(1, partyCharacters.Count);
-            if (!payerSelection.HasValue)
+            Console.Write("Choose # or S: ");
+            var payerChoice = Console.ReadLine()?.Trim();
+            if (string.Equals(payerChoice, "S", StringComparison.OrdinalIgnoreCase))
+            {
+                if (Temple.HealShared(c, partyCharacters, _charRepo, out var sharedPaymentLines))
+                {
+                    healedCount++;
+                    payments.AddRange(sharedPaymentLines);
+                }
+                else
+                {
+                    Console.WriteLine($"The party does not have enough gold to cover {cost} gp for {c.Name}.");
+                    skipped.Add(c.Name);
+                }
+
+                continue;
+            }
+
+            if (!int.TryParse(payerChoice, out var payerIndex)
+                || payerIndex < 1
+                || payerIndex > partyCharacters.Count)
             {
                 skipped.Add(c.Name);
                 continue;
             }
 
-            var payer = partyCharacters[payerSelection.Value - 1];
+            var payer = partyCharacters[payerIndex - 1];
             if (Temple.Heal(c, payer, _charRepo))
             {
                 healedCount++;
@@ -269,10 +288,23 @@ public class TempleMenu
             var canAfford = payer.GoldPieces >= revivalCost ? "" : " (not enough)";
             Console.WriteLine($"{i + 1}. {payer.Name} ({payer.GoldPieces} gp){canAfford}");
         }
+        Console.WriteLine("S)hare costs");
 
-        Console.Write("Choose #: ");
-        var payerSelection = InputHelper.ReadNumber(1, partyCharacters.Count);
-        if (!payerSelection.HasValue)
+        Console.Write("Choose # or S: ");
+        var payerChoice = Console.ReadLine()?.Trim();
+        if (string.Equals(payerChoice, "S", StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine();
+            foreach (var line in Temple.RaiseShared(target, partyCharacters, _charRepo))
+                Console.WriteLine(line);
+
+            Console.ReadKey(true);
+            return;
+        }
+
+        if (!int.TryParse(payerChoice, out var payerIndex)
+            || payerIndex < 1
+            || payerIndex > partyCharacters.Count)
         {
             Console.WriteLine("Invalid selection.");
             Console.ReadKey(true);
@@ -280,7 +312,7 @@ public class TempleMenu
         }
 
         Console.WriteLine();
-        foreach (var line in Temple.Raise(target, partyCharacters[payerSelection.Value - 1], _charRepo))
+        foreach (var line in Temple.Raise(target, partyCharacters[payerIndex - 1], _charRepo))
             Console.WriteLine(line);
 
         Console.ReadKey(true);
