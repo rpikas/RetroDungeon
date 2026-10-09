@@ -66,6 +66,7 @@ public class GameRules
     public bool UIOldStyle { get; set; } = true;
     public int DelayInMsbetweenActions { get; set; } =0;
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
+    public bool ShowReferencesInRuleAndDiceInfo { get; set; } = true;
     public bool ShowToHitRoll { get; set; } = false;
     public bool PlayerSelectsWeaponProficiencies { get; set; } = false;
     public bool PlayerSelectsLanguagesOnCreation { get; set; } = false;

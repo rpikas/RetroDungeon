@@ -19,6 +19,12 @@ public static class RuleApplicationInfo
         if (string.IsNullOrWhiteSpace(message))
             return;
 
+        if (!GameRulesProvider.Current.ShowReferencesInRuleAndDiceInfo)
+        {
+            Publish(message);
+            return;
+        }
+
         var sourcePageText = $"{source}, {page}";
         if (TryResolveRuleImagePath(source, page, out var imagePath))
             sourcePageText = $"[[RULEIMG|{sourcePageText}|{imagePath}|{DateTime.Now.Ticks}]]";
@@ -45,6 +51,20 @@ public static class RuleApplicationInfo
     {
         if (!GameRulesProvider.Current.ShowDiceRollAndRuleApplicationInfo)
             return;
+
+        if (!GameRulesProvider.Current.ShowReferencesInRuleAndDiceInfo)
+        {
+            var ruleTextWithoutReference = string.IsNullOrWhiteSpace(rule)
+                ? string.Empty
+                : rule;
+
+            string messageWithoutReference =
+                $"{context}:{ruleTextWithoutReference}" +
+                $"{numberOfDices}d{sidesOnDices}({resultOfRoll}) -> {consequenceOfRoll}";
+
+            Publish(messageWithoutReference);
+            return;
+        }
 
         var sourcePageText = $"{source}, {page}";
         if (TryResolveRuleImagePath(source, page, out var imagePath))
@@ -93,6 +113,7 @@ public static class RuleApplicationInfo
         var sourceToken = sourceRaw.Replace(" ", string.Empty);
         var pageToken = pageRaw.Replace(" ", string.Empty);
         var fileName = $"{sourceToken}{pageToken}.png";
+        var reversedFileName = $"{pageToken}{sourceToken}.png";
         var humanEncounterFileName = $"{sourceToken}{pageToken}HumanEncounter.png";
         var sourceCommaPageFileName = $"{sourceRaw},{pageRaw}.png";
         var sourceCommaSpacePageFileName = $"{sourceRaw}, {pageRaw}.png";
@@ -104,10 +125,15 @@ public static class RuleApplicationInfo
         var candidates = new[]
         {
             Path.Combine(AppContext.BaseDirectory, "Assets", "Monsters","MM1", fileName),
+            Path.Combine(AppContext.BaseDirectory, "Assets", "Monsters","MM1", reversedFileName),
             Path.Combine(AppContext.BaseDirectory,  "..", "..", "..", "Assets", "Monsters","MM1", fileName),
+            Path.Combine(AppContext.BaseDirectory,  "..", "..", "..", "Assets", "Monsters","MM1", reversedFileName),
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Monsters","MM1", fileName),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Adnd.Game", "Assets", "Monsters","MM1", reversedFileName),
             Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Monsters","MM1", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Monsters","MM1", reversedFileName),
             Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets",  "Monsters","MM1", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "Adnd.Game", "Assets",  "Monsters","MM1", reversedFileName),
 
             Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", fileName),
             Path.Combine(AppContext.BaseDirectory, "Assets", "Rules", humanEncounterFileName),

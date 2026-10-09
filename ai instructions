@@ -1187,7 +1187,8 @@ in the cast find traps dilaog where you select charater to cast that spell also 
 in inspct chest dialog selecting char to inspect, also show class66,8
 ___
 
-when the trap thats summons monsters and when Shriekers summon monsters, use the same way to randomize what level monsters that should appear, 
+when the trap thats summons monsters and when Shriekers summon monsters, use the same way to randomize what 
+level monsters that should appear, 
 what monster that should appear 
 and how many monsters that should appear first MonsterEncounter.json for what level of the monsters and then 
 MonsterLevels to see what monsters and how many 67,5
@@ -1293,12 +1294,16 @@ Manually commented away code related to treasure Art with //
 Tried to manually implement BadgerPelt but needed help from ai 87,2
 implement a similar solution for WeaselPelt that drops from Giant Weasel. WeaselPelts sell from1000 to 6000 87,7
 
-if an item used with "SpecialAbilities": [ "Casts Regeneration" ], then the person drinking it start regenerating until they exit the dungeon 89,8
+if an item used with "SpecialAbilities": [ "Casts Regeneration" ], then the person drinking it start 
+regenerating until they exit the dungeon 89,8
 ______
-DMG, pg175 if dungeon level is 3 or higher and encounter roll is 03-04 badger then the party should instead encounter a 2-8 Hobgoblin 90,7
+DMG, pg175 if dungeon level is 3 or higher and encounter roll is 03-04 badger then the party should 
+instead encounter a 2-8 Hobgoblin 90,7
 ___
-Implement "SpecialDefenses": "Name": "+1 or better weapons to hit", It means that non magical weapons can not hit the monster. if some one tries, 
-please write that to the ADnD Rule and Dice Info dialog. Weapons without + in the name and without special abilities can not hit the monster. 91,3
+Implement "SpecialDefenses": "Name": "+1 or better weapons to hit", It means that non magical weapons 
+can not hit the monster. if some one tries, 
+please write that to the ADnD Rule and Dice Info dialog. Weapons without + in the name and without 
+special abilities can not hit the monster. 91,3
 ___
 implement  "SpecialDefenses":  "Name": "90% magic resistance vs sleep". If the encounter got that and is hit hit by s sleep spell roll 
 1d100 to determine if the 90% avoidance chanse hinders the spell for having effect on the encounter. 
@@ -1361,12 +1366,15 @@ implement level 5 magic user spell: cone of cold that gives damage= (1d4+1)*leve
 ____
 Feeblemind is not only a level 6 druid spell but also a level 5 magic user spell. 37,0
 ____
-Implement level 4 Illusionist spell: Phantasmal killer. The target is one single monster in one group of monsters. The target must roll 3d6 and if
-the total is less than or equal to the intelligence of the target, then the target will die from fear immediately, else the target will be uneffected. 
+Implement level 4 Illusionist spell: Phantasmal killer. The target is one single monster in one group of monsters. 
+The target must roll 3d6 and if
+the total is less than or equal to the intelligence of the target, then the target will die from fear immediately, 
+else the target will be uneffected. 
 The target will not roll a save vs. spell. if the intelligence of the target is unknown, then it is assumed to be 10.
 targets with Non- intelligence are not affected by this spell. 
 
-This table can be used to determine the intelligence, create method GetIntelligenceForMonster(string monsterName) that returns the intelligence 
+This table can be used to determine the intelligence, create method GetIntelligenceForMonster(string monsterName) 
+that returns the intelligence 
 for a monster, that could be used in the Phantasmal killer and other spells that needs to know the intelligence of a monster.
 Category	INT Range	Average (rounded up)
 Non-	0–1	1
@@ -1413,11 +1421,13 @@ Intelligence Score	Period Between Checks
 Day break is when you leave the dungeon.
 When it is charmed, it will not attack you and will help you in combat. 
 
-implement 1st level magic-user spell charm person. It will work like level 2 Druid spell Charm person of mammal but it only woks on humanoids
+implement 1st level magic-user spell charm person. It will work like level 2 Druid spell Charm person of mammal
+but it only woks on humanoids
 
 All level 1 magic-user spells are also level 7 illusionist spells. so Charm person is also a level 7 illusionist spell. 
 ____
-When the party surprise an encounter the thief can backstab. +4 på “to hit” and gives more damage with a multiplie according to this table
+When the party surprise an encounter the thief can backstab. +4 på “to hit” and gives more damage with a 
+multiplie according to this table
 
 Thief Level	Multiplikator
 1–4	×2 damage
@@ -2262,7 +2272,8 @@ and reduces damage sustained from magical fires by 50%.
 also add corresponding scroll for this spell to the game so that players can find and use them. 57,0
 
 Implement druid spell Protection From Lightning (Abjuration)
-Level: 4 Components: V, S, M Range: Touch Casting Time: 6 segments Duration: Special . Saving Throw: None Area of Effect: Creature touched
+Level: 4 Components: V, S, M Range: Touch Casting Time: 6 segments Duration: Special . Saving Throw: None Area of Effect: 
+Creature touched
 Explanation/Description: This spell is exactly the same as the 3rd level protection from fire spell (q.v.) except
 that it applies to electrical/lightning attacks.
 i ment only treat dragon with lightning breath as lightning that means the only dragon this is spell is applicable for is blue dragon.
@@ -2296,7 +2307,8 @@ Implement potion Giant Strength
 When a giant strength potion is consumed, the drinker gains immense strength and damage bonuses with any hand‑held or thrown weapon. 
 They can also hurl rocks according to the table above.
 The type of giant strength is determined randomly by die roll.
-Compare these abilities to the girdle of giant strength — the potion can only be used by fighters and does not grant the same powers as a girdle.
+Compare these abilities to the girdle of giant strength — the potion can only be used by fighters and does not 
+grant the same powers as a girdle.
 
 Potion Table
 Die Score	Strength Equivalent	Weight Allow.	Damage Bonus	Rock Hurling Range	Rock Hurling Damage	Bend Bars/Lift Gates
@@ -2310,7 +2322,8 @@ Die Score	Strength Equivalent	Weight Allow.	Damage Bonus	Rock Hurling Range	Rock
 _____
 
 Implement Potion of Healing; 
-An entire potion must be consumed in a single drinking (round) in order for this liquor to  restore 4-10 (2d4 + 2) hit points of damage. (Cf, extro-heoimg.J
+An entire potion must be consumed in a single drinking (round) in order for this liquor to  restore 4-10 (2d4 + 2) 
+hit points of damage. (Cf, extro-heoimg.J
 _____
 
 Potion of Heroism
@@ -2331,9 +2344,12 @@ Restriction:  This potion may only be used by men‑at‑arms and fighters.
 ____
 
 Implement Potion of Speed: 
-A potion of speed increases the movement and combat capabilities of the imbiber by 100% Thus, a movement rote of 9" becomes 18", 
-and a character normally able to attack but once per round would gain double attacks in a round. Noie that this does not reduce spell casting time, 
-how¬ ever (cf, haste spell). Use of o speed potion oges the individual by t year. The other effecis lost for 5-20 rounds, the aging is permanent.
+A potion of speed increases the movement and combat capabilities of the imbiber by 100% Thus, a movement 
+rote of 9" becomes 18", 
+and a character normally able to attack but once per round would gain double attacks in a round. Noie that 
+this does not reduce spell casting time, 
+how¬ ever (cf, haste spell). Use of o speed potion oges the individual by t year. The other effecis lost 
+for 5-20 rounds, the aging is permanent.
 ____
 
 Keep track of the individual characters' age in years and days.
@@ -3633,44 +3649,58 @@ Rust monser
 "Name": "Hit on Monster Destroys Metal",
 "Description": "Weapons striking the rust monster corrode as if touched by its antennae."
 
-var 30 dag som man går ner i grottan är det fullmåne, skriv att det är fullmåne då i en dialog med retro design.8,6
+var 30 dag som man går ner i grottan är det fullmåne, skriv att det är 
+fullmåne då i en dialog med retro design.8,6
 
 Lycanthrope, Wererat
 Implementera "SpecialAttacks": [
 "Name": "Lycanthropy",
 "Description": "Victims bitten must save vs. lycanthropy or become wererats."
 En humanoid som får ett bett som gör ≥50% av max HP blir smittad.
-Cure Disease från en cleric level 12 eller högre måste ske inom 3 dagar annars blir det permanent och personen blir lykanthrop inom 7-14 dagar.
+Cure Disease från en cleric level 12 eller högre måste ske inom 3 dagar annars 
+blir det permanent och personen blir lykanthrop inom 7-14 dagar.
 varje gång man går ner i en grotta går det en dag.
-efter att personen blivit lykanthrop så triggas det av att man tar skada eller att det är fullmåne när man går ner i en grotta.
-när man blir helad från sin skada eller går upp ur grottan försvinner förvandlingen berorande på vad som triggat den.
+efter att personen blivit lykanthrop så triggas det av att man tar skada eller 
+att det är fullmåne när man går ner i en grotta.
+när man blir helad från sin skada eller går upp ur grottan försvinner förvandlingen 
+berorande på vad som triggat den.
 när man är en lycanthrop så får man samma alignment som den typ av lycanthrop som skadade en.
 när man är en lycanthrop kan man inte attakera andra lycanthroper.
-när man är en lycanthrop så kan man inte kasta spells eller använda sina klass egenskaper som t ex paladins och monks har.
-när man är en lycanthrop så kan man inte bli skadad av vanliga vapen som inte silver eller är magiska eller +1 eller bättre.
+när man är en lycanthrop så kan man inte kasta spells eller använda sina klass 
+egenskaper som t ex paladins och monks har.
+när man är en lycanthrop så kan man inte bli skadad av vanliga vapen som inte 
+silver eller är magiska eller +1 eller bättre.
 när man är en lycanthrop så har man 3d8 extra i hp och ac blir 4.
-när man är en lycanthrop så kan man inte använda vapen men har tre attacker 2 claw 1d4 och 1 bite 2d5 i skada varje runda.
+när man är en lycanthrop så kan man inte använda vapen men har tre attacker 
+2 claw 1d4 och 1 bite 2d5 i skada varje runda.
 
-when a weapon that is wielded, rusts and diesapears also make sure that the damage the charater gives untill equipping a new weapon is the 
+when a weapon that is wielded, rusts and diesapears also make sure that the 
+damage the charater gives untill equipping a new weapon is the 
 same as for bare hands. 11,0
 ___
 introduce a setting that can be turned on or off that the weapons in weapons of proficiency 
 adjustments can be selected by the player or automatically selected by the game.
-if the setting is on then the player can select which weapons he wants to be proficient in, then when creating a new character, 
+if the setting is on then the player can select which weapons he wants to be 
+proficient in, then when creating a new character, 
 the player can select which weapons he wants to be proficient in, 
-and then when reaching a new level, the player can select which new weapon he wants to be proficient in.
+and then when reaching a new level, the player can select which new weapon he 
+wants to be proficient in.
 
-Character.GetStrengthAttackBonus in incorrect, instead AbilitiesTables.StrengthTHModifier should be used. 
-I suggest Character.GetStrengthAttackBonus should be removed and calls to it should be replaced if possible with 
+Character.GetStrengthAttackBonus in incorrect, 
+instead AbilitiesTables.StrengthTHModifier should be used. 
+I suggest Character.GetStrengthAttackBonus should be removed and calls 
+to it should be replaced if possible with 
 calls to AbilitiesTables.StrengthTHModifier. Or solved in another way to avoid inconsistency.
 
 do you see more risks for inconsistency when it comes to other bouses for abilities?
 1.	Strength damage bonus centralized
 2.	Combat damage now respects exceptional strength percentile
 3.	Constitution HP bonus centralized
-yes, please apply these refactors now so ability bonus behavior is consistent across combat, UI, and progression.
+yes, please apply these refactors now so ability bonus behavior is consistent 
+across combat, UI, and progression.
 ___
-write the weapon proficiency selection to ADnD Rule and Dice info when creating a new character and when reaching a new level.
+write the weapon proficiency selection to ADnD Rule and Dice info when creating a 
+new character and when reaching a new level.
 show the weapon proficiency in the character sheet. manually tweeked it
 ___
 Add more weapons to choose from when selecting a weapon that the character is not proficient in.
@@ -3681,7 +3711,8 @@ Petrification has no timer, the character is petrified until healed by for examp
 When a character is petrified, he or she can not move, can not attack, can not cast spells, can not use items, 
 can not be healed by normal healing methods, can not be healed by potions.
 Implement Stone to Flesh (6th‑level magic-user spell) that cures petrification.
-Also introduce a special attack  "Name": "Petrifying Gaze", "Description": "Any creature meeting its gaze must save or turn to stone." 
+Also introduce a special attack  "Name": "Petrifying Gaze", "Description": 
+"Any creature meeting its gaze must save or turn to stone." 
 and "Petrification Touch", "Description": "Touch petrifies; save vs. stone or be turned to stone."
 
 can you update the prices and services in the temple to
@@ -3709,17 +3740,21 @@ D)  MERCHANT SUITES.  200 GP/WEEK Heals 20 HP per day.
 E)  THE ROYAL SUITE.  500 GP/WEEK Heals 40 HP per day.
 L)eave the inn without resting.
 
-For each character that wants to rest, write to ADnD Rule and Dice info what kind of room they selected and how much it cost.
+For each character that wants to rest, write to ADnD Rule and Dice info what kind of room 
+they selected and how much it cost.
 
 They will get older by 7 days per week they need to rest
 
 If in adventures inn and one player has been selected show a P)ool gold alternative
-If in adventures inn and all player in the party has been selected show a D)istribute gold evenly as an alternative and implement that
+If in adventures inn and all player in the party has been selected show a D)istribute
+gold evenly as an alternative and implement that
 
-If in adventures inn and all player in the party has been selected change names of a D)istribute gold evenly as an alternative to 
+If in adventures inn and all player in the party has been selected change names of a
+D)istribute gold evenly as an alternative to 
 S)plit gold with the same funtion
 
-If in adventures inn and all player in the party has been selected show all the room alternativis and  S)plit gold and L)eave  14,2
+If in adventures inn and all player in the party has been selected show all the room 
+alternativis and  S)plit gold and L)eave  14,2
 
 ___
 Depending on race and class this should be the starting age for non humans
@@ -3772,13 +3807,17 @@ intelligence and 1 point of wisdom.
 For example, if a character is a 40 year old human, then he or she is in the Mature age category and should 
 get +1 point of strength and +1 point of wisdom.
 When a person becomes older then also adjust the ability scores based on the new age category. 
-For example, if a Human character is 40 years old and becomes 41 years old, then he or she is in the Middle Aged category and 
+For example, if a Human character is 40 years old and becomes 41 years old, then he or she 
+is in the Middle Aged category and 
 should get -1 point of strength, -1 point of constitution, +1 point of intelligence, and +1 point of wisdom.
 
-show the age adjustments made when creating the the charcter and just just before asking if you want keep it or not.
-also if a ranger, paladin or fighter gets str 18 after adjustment, roll the exceptional strength roll and show that also.14,7
+show the age adjustments made when creating the the charcter and just just before asking 
+if you want keep it or not.
+also if a ranger, paladin or fighter gets str 18 after adjustment, roll the exceptional strength roll 
+and show that also.14,7
 ___
-the age adjustment makes the character get a strength of 18, then roll for exceptional strength and show the result in the dialog.
+the age adjustment makes the character get a strength of 18, then roll for exceptional strength and 
+show the result in the dialog.
 
 General rule: when I refer to the log I mean ADnD Rule and Dice info
 
@@ -3906,7 +3945,8 @@ in the special patois of druids or thieves. Semi‑human and non‑human charact
 breach of social etiquette.
 A character can learn additional languages. Even those of rather slow wit (8 Intelligence) can learn one additional 
 language, although their vocabulary, usage, and ability to translate must necessarily be limited. The very bright can 
-learn five, six, or even seven (for details of the number of tongues which can be learned, see Character Abilities, Intelligence). 
+learn five, six, or even seven (for details of the number of tongues which can be learned, 
+see Character Abilities, Intelligence). 
 Here is how a new language is learned:
 The character must find a person (human, semi‑human, or non‑human) or a talking creature who speaks the language to be
 learned. The character must then be in close proximity to his or her instructor for up to one year, and this period can 
@@ -3980,11 +4020,15 @@ A dwarf living to “old, lowest age + d8” might reach 251 + (10–8
 A half‑orc living to “venerable, highest + d20” might reach 80–99 years.
 A high elf living to “venerable, lowest + d6” could reach 1221–1340 years.
 
-When a party is defeated and all characters die, then save the position for all the the characters and also write that to  the log.
-And update the status of all characters to out. Charaters that are out can not be used in the game or be added to they until they are found.
-Change the functionality of I)nspect in the dungoun. If it is pressed when in the same position as a character that is out is located in,
+When a party is defeated and all characters die, then save the position for all the the characters 
+and also write that to  the log.
+And update the status of all characters to out. Charaters that are out can not be used in the game 
+or be added to they until they are found.
+Change the functionality of I)nspect in the dungoun. If it is pressed when in the same position as 
+a character that is out is located in,
 then show a dialog that says: "You found a character that is out. Do you want to add them to the party?" 
-If yes, then select chartar to add if several in the same position and change the status of the character to in and add them to the party. 
+If yes, then select chartar to add if several in the same position and change the status of 
+the character to in and add them to the party. 
 If no, then do nothing.
 
 Your character is unusual—exceptional compared to the norm. This applies to abilities and funds as well. 
@@ -4007,7 +4051,8 @@ when in exact position of a lost charater and there is room in the party, and pr
 about if you want to pick up the lost charater to the party or not
 now I get the correct message I also want a question if I want to add the charater found to the party
 
-mplement Potion of Delusion that will be named as another random potion, only in the logs it will appear as Potion of Delusion, 
+mplement Potion of Delusion that will be named as another random potion, only in the logs it will appear 
+as Potion of Delusion, 
 when it is consumed it will be revealed it was a Potion of Delusion. Also if a bard succeed to use his skill 
 Legned Lore skill on the item its true identity will be revealed. 22,7
 
@@ -4021,11 +4066,16 @@ if it is north or south and also if it is up or down.
 I did not see anything about up, down or same level after drinking the Potion of Treasure Finding. make sure the 
 treasure is in a square that is cleared, write what square it is in the log. 23,2
 
-DMG140 Implement Cloak of Displacement: This item appears to be a normal cloak, but when it is worn by a character its magical 
-properties distort ond warp light waves, Th Is displacement of fighi waves causes the wearer lo appear to be from r to 2' from 
-his or her actual position. Any attack by missile or meiee strike which is aimed ai the wearer will automatically miss the first 
-time*. Thereafter the cloak affords +2 protection, i.e 2 dosses better on armor class, as well as + 2 on saving throw dice 
-versus attack forms directed at the wearer (such as spells, gaze weapon attacks, spitting and breath attacks, etc. which are 
+DMG140 Implement Cloak of Displacement: This item appears to be a normal cloak, but when it is worn 
+by a character its magical 
+properties distort ond warp light waves, Th Is displacement of fighi waves causes the wearer lo 
+appear to be from r to 2' from 
+his or her actual position. Any attack by missile or meiee strike which is aimed ai the wearer 
+will automatically miss the first 
+time*. Thereafter the cloak affords +2 protection, i.e 2 dosses better on armor class, as well 
+as + 2 on saving throw dice 
+versus attack forms directed at the wearer (such as spells, gaze weapon attacks, spitting and 
+breath attacks, etc. which are 
 aimed at the wearer of the cloak of displacement. 23,9
 
 DMG168 Implement Crossbow of speed allows its possessor to double the rate of fire normal for the weapon. 
@@ -4058,7 +4108,8 @@ in boltax if something cost less than 1 gp then price should be shown in sp
 In boltax for weapons show the damage also and for armor show the ac
 ___
 When all characters are down, but not dead, then the game is stuck and the player can not do anything. 
-I want a message to be shown that all characters are down with an ok button that accepts and continues actions from monsters.
+I want a message to be shown that all characters are down with an ok button that accepts and 
+continues actions from monsters.
 ___
 Manually adjusted ac for npc.
 
@@ -4114,11 +4165,13 @@ Magic‑User	none	none	dagger, dart, staff
 Illusionist	none	none	dagger, dart, staff
 Thief	leather	none	club, dagger, dart, sling, sword****
 Assassin	leather	any	any****
-Monk	none	none	bo sticks, club, crossbow, dagger, hand axe, javelin, jo stick, pole arm, spear, staff 27,7
+Monk	none	none	bo sticks, club, crossbow, dagger, hand axe, javelin, jo stick, pole arm, spear, 
+staff 27,7
 ___
 Bugfix: I had about 3400 gp, then I sold a banded mail for 45 gp then I only had 2 gp left
 When trading inbetween characters also give the option to trade gold.
-when trading gold, let the charater enter the number of gold with the keyboard into an input field. Also make it. 28,8
+when trading gold, let the charater enter the number of gold with the keyboard into an input field. 
+Also make it. 28,8
 possible to trade gold when trading from inspect charater in the city.
 When selecting c charater from party management rename T)rade to T)rade Item and introduce a new option 
 G)ive Gold when you can give away gold to another charater- 29,1
@@ -4226,3 +4279,93 @@ most other figurines of wondrous power, this one readily obeys oil commands of i
 
 Can you implement  Figurines of Wondrous Power: Serpentine Owl
 can you make the different animals that can be summoned by Figurines of Wondrous Power also help in battle
+
+I got this message: "TO-HIT: Brigand #2 THAC0 20, UrSnabb AC -1, needs 21 on 1d20," but Brigand got hd 1 and 
+should hit like a level 1 fighter. and a level 1 fighter should follow this table and hitts AC -1 with a 20 
+AC	0	1-2	3-4	5-6	7-8	9-10	11-12	13-14	15-16	17 and up 
+-9	25	24	22	20	20	20	19	17	15	13 
+-8	24	23	21	20	20	20	18	16	14	12 
+-7	23	22	20	20	20	19	17	15	13	11 
+-6	22	21	20	20	20	18	16	14	12	10
+-5	21	20	20	20	19	17	15	13	11	9
+-4	20	20	20	20	18	16	14	12	10	8
+-3	20	20	20	19	17	15	13	11	9	7
+-2	20	20	20	18	16	14	12	10	8	6
+-1	20	20	19	17	15	13	11	9	7	5
+0	20	20	18	16	14	12	10	8	6	4
+1	20	19	17	15	13	11	9	7	5	3
+2	19	18	16	14	12	10	8	6	4	2
+3	18	17	15	13	11	9	7	5	3	1
+4	17	16	14	12	10	8	6	4	2	0
+5	16	15	13	11	9	7	5	3	1	-1
+6	15	14	12	10	8	6	4	2	0	-2
+7	14	13	11	9	7	5	3	1	-1	-3
+8	13	12	10	8	6	4	2	0	-2	-4
+9	12	11	9	7	5	3	1	-1	-3	-5
+10	11	10	8	6	4	2	0	-2	-4	-6
+33,3
+
+when writing "Weapon vs AC adj" then also write what what weapon. 33,8
+
+I saw this: "TO-HIT: UrStor THAC0 14, Badger #1 AC 9, needs 4 on 1d20," 
+UrStor is a level 7 fighter so THAC0 is 14, that is correct. 
+AC 9 needs 5 -bonus for weapon type, -bonus for strength -bonus for magic effect on weapon. 
+UrStor got strengh 18/91 that gives a +2 to hit bouns 
+an a long sword +1 that gives +1 bonus aginst all ac 
+and an additional +1 because it is a longsword 5-1-2-1=1 please write that 33,8
+
+I saw this "UrStor THAC0 14, Berserker #1 AC 7, needs 4 7+0-2-1+0=4"
+caculation is correct, but write were the numbers come from, for exampel
+"UrStor THAC0 14, Berserker #1 AC 7, needs 4 7+0(ac adj)-2(str adj)-1(Magic weapon)+0=4"
+I am not sure what the last 0 is, but write that also. 33,9
+
+intorduce a setting ShowReferencesInRuleAndDiceInfo that could be yes or no. 
+Only show refences to DMG, PH and MM in the log if ShowReferencesInRuleAndDiceInfo=yes
+
+The information in Combat Round dialog and the log  if ShowReferencesInRuleAndDiceInfo= no is good, 
+for example;
+TO-HIT: UrStor THAC0 14, Hobgoblin #1 AC 5, needs 6 
+9+0(ac adj)-2(str adj)-1(magic weapon)+0(special weapon)+0(non-prof)=6 on 1d20, rolled 7.
+
+But if ShowReferencesInRuleAndDiceInfo= yes then show the information like in the log:
+TO-HIT: UrStor THAC0 14, Hobgoblin #1 AC 5, needs 6 
+9(base)+0(ac adj)-2(str adj)-1(magic weapon)+0(special weapon)+0(non-prof)=6 on 1d20, rolled 7.
+
+UrStor THAC0 14
+UrStor is a level 7 Fighther and then THAC0=14 according to DMG, 74 ToHitTables then link to DMG74ToHitTables
+
+Hobgoblin #1 AC 5
+According to MM Hobgoblin got AC5 then link to \Assets\Monsters\MM1\HobgoblinMM.png
+
+9(base) comes from 9=14-5 (THAC0=14 and AC=5)
+
+0(ac adj)
+Wepon type used: Long sword, AC: 5 then 0(ac adj) According to PHB 23, 
+WeaponTypeToHitAdjustment =0 and link to Adnd.Game\Assets\Rules\PHB38WeaponTypeToHitAdjustment.png
+
+-2(str adj)
+Strength 18/91 gives +2 to hit bonus according to PHB 8, Ability Score Modifiers then 
+link to Adnd.Game\Assets\Rules\PHB8AbilityScoreModifiers.png
+
+-1(magic weapon) 
+Source: DMG 165 that says that a +1 magic weapon gives +1 to hit bonus then link to 
+Adnd.Game\Assets\Rules\DMG165MagicWeapons.png
+
++0(non-prof)
+Class Fighter and LongSword selected as proficency gives +0 according to PHB 37 and 
+link to PHB37WeaponProficiency
+
+In the log it should be written like this:
+[15:37:26] DMG, 74ToHitTables: UrStor THAC0 14 from class/level table.
+It should be written like this
+[15:37:26] DMG, 74ToHitTables: UrStor THAC0 14 from class:Fighter/level:7
+
+[15:37:26] MM, Hobgoblin: Hobgoblin #1 base armor class is 5.
+should be
+[15:37:26] MM, Hobgoblin: Hobgoblin #1 AC:5.
+
+The rest is good, do not change that.
+
+in log for example -2(str adj) Strength 18/91 gives +2 to hit bonus according to PHB 8, 
+Ability Score Modifiers then link to Adnd.Game\Assets\Rules\PHB9StrengthModifyers.png. 34,3
+___

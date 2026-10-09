@@ -1339,114 +1339,6 @@ public sealed class CombatResolver
                         return FinalizeRound(session, events);
                     }
 
-    private void ResolveFigurineAnimalAllies(CombatSession session, List<CombatEvent> events)
-    {
-        foreach (var summoner in session.Party)
-        {
-            if (!IsAlive(summoner))
-                continue;
-
-            var activeFigurines = summoner.Inventory
-                .Where(FigurineOfWondrousPower.IsActiveInAnimalForm)
-                .ToList();
-
-            foreach (var figurine in activeFigurines)
-            {
-                var kind = FigurineOfWondrousPower.GetKind(figurine);
-                switch (kind)
-                {
-                    case FigurineKind.GoldenLions:
-                        ResolveGoldenLionsAttacks(session, summoner, figurine, events);
-                        break;
-                    case FigurineKind.SerpentineOwl:
-                        ResolveSerpentineOwlAttack(session, summoner, figurine, events);
-                        break;
-                    case FigurineKind.EbonyFly:
-                        events.Add(new CombatEvent($"{summoner.Name}'s Ebony Fly circles overhead and can assist with travel, but makes no direct attacks."));
-                        break;
-                }
-            }
-        }
-    }
-
-    private void ResolveGoldenLionsAttacks(CombatSession session, Character summoner, Item figurine, List<CombatEvent> events)
-    {
-        for (int lion = 1; lion <= 2; lion++)
-        {
-            for (int attackIndex = 0; attackIndex < 3; attackIndex++)
-            {
-                var target = SelectFigurineTargetMonster(session);
-                if (target == null)
-                    return;
-
-                var roll = _dice.Roll(20);
-                const int needed = 11;
-                if (roll < needed)
-                {
-                    events.Add(new CombatEvent($"{summoner.Name}'s Golden Lion #{lion} misses {target.DisplayName} (rolled {roll} vs {needed})."));
-                    continue;
-                }
-
-                var damage = attackIndex == 2 ? RollDamage("1d8") : RollDamage("1d4");
-                var before = target.CurrentHitPoints;
-                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
-                var actual = before - target.CurrentHitPoints;
-                events.Add(new CombatEvent($"{summoner.Name}'s Golden Lion #{lion} hits {target.DisplayName} for {actual} damage."));
-
-                if (target.CurrentHitPoints <= 0)
-                {
-                    target.CurrentHitPoints = 0;
-                    events.Add(new CombatEvent($"{target.DisplayName} is slain by {summoner.Name}'s Golden Lion #{lion}."));
-                }
-            }
-        }
-    }
-
-    private void ResolveSerpentineOwlAttack(CombatSession session, Character summoner, Item figurine, List<CombatEvent> events)
-    {
-        var isGiant = FigurineOfWondrousPower.IsSerpentineOwlGiantForm(figurine);
-        var target = SelectFigurineTargetMonster(session);
-        if (target == null)
-            return;
-
-        var attacks = isGiant ? 2 : 2;
-        var damageExpr = isGiant ? "1d6" : "1d2";
-        var needed = isGiant ? 11 : 14;
-
-        for (int i = 0; i < attacks; i++)
-        {
-            var roll = _dice.Roll(20);
-            if (roll < needed)
-            {
-                events.Add(new CombatEvent($"{summoner.Name}'s {(isGiant ? "Giant " : string.Empty)}Serpentine Owl misses {target.DisplayName} (rolled {roll} vs {needed})."));
-                continue;
-            }
-
-            var damage = RollDamage(damageExpr);
-            var before = target.CurrentHitPoints;
-            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
-            var actual = before - target.CurrentHitPoints;
-            events.Add(new CombatEvent($"{summoner.Name}'s {(isGiant ? "Giant " : string.Empty)}Serpentine Owl hits {target.DisplayName} for {actual} damage."));
-
-            if (target.CurrentHitPoints <= 0)
-            {
-                target.CurrentHitPoints = 0;
-                events.Add(new CombatEvent($"{target.DisplayName} is slain by {summoner.Name}'s Serpentine Owl."));
-                break;
-            }
-        }
-
-    private MonsterInstance? SelectFigurineTargetMonster(CombatSession session)
-    {
-        var aliveMonsters = session.AliveMonsters.ToList();
-        if (aliveMonsters.Count == 0)
-            return null;
-
-        var index = _dice.Roll(aliveMonsters.Count) - 1;
-        return aliveMonsters[index];
-    }
-    }
-
                     var invulnerabilityAcBonus = target.HasActivePotionInvulnerability
                         ? target.PotionInvulnerabilityArmorClassBonus
                         : 0;
@@ -1473,7 +1365,7 @@ public sealed class CombatResolver
                     {
                         thac0 += 4;
                     }
-                    int needed = thac0 - targetAc;
+                    int needed = Math.Clamp(thac0 - targetAc, 1, 20);
                     var cloakDisplacementAutoMiss = ShouldApplyCloakOfDisplacementAutoMiss(session, target);
                     int roll = cloakDisplacementAutoMiss ? 0 : _dice.Roll(20);
                     var hasDoubleDamageOnNaturalTwenty = HasAnySpecialAbility(monster, "Double Damage on Natural 20");
@@ -3258,11 +3150,14 @@ public sealed class CombatResolver
             if (isBackstab)
                 thac0Modifier += 4;
 
+            var weaponMagicToHitBonus = 0;
+
             Item? mainHand = null;
             if (member.Equipment.TryGetValue(EquipmentSlot.MainHand, out var equipped) && equipped != null)
             {
                 mainHand = equipped;
-                thac0Modifier += Math.Max(0, mainHand.ToHitBonus);
+                weaponMagicToHitBonus = Math.Max(0, mainHand.ToHitBonus);
+                thac0Modifier += weaponMagicToHitBonus;
 
                 var dancingSwordToHitBonus = GetSwordOfDancingCurrentBonus(mainHand, session);
                 if (dancingSwordToHitBonus > 0)
@@ -3283,13 +3178,17 @@ public sealed class CombatResolver
             if (useRanged && rangedWeapon != null)
             {
                 mainHand = rangedWeapon;
-                thac0Modifier += Math.Max(0, rangedWeapon.ToHitBonus);
+                weaponMagicToHitBonus = Math.Max(0, rangedWeapon.ToHitBonus);
+                thac0Modifier += weaponMagicToHitBonus;
 
                 if (CanUseDwarvenThrowerFullPower(member, rangedWeapon))
                     thac0Modifier += 1;
 
                 thac0Modifier += GetHammerOfThunderboltsToHitBonus(member, rangedWeapon);
             }
+
+            var strengthToHitBonus = useRanged ? 0 : member.Thac0StrengthModifier;
+            thac0Modifier += strengthToHitBonus;
 
             var nonProficiencyPenalty = WeaponProficiencyRules.GetNonProficiencyPenalty(member, mainHand, useRanged);
             if (nonProficiencyPenalty > 0)
@@ -3371,19 +3270,67 @@ public sealed class CombatResolver
 
             if (GameRulesProvider.Current.ShowToHitRoll)
             {
+                var showReferences = GameRulesProvider.Current.ShowReferencesInRuleAndDiceInfo;
+                var weaponNameForToHit = mainHand?.Name ?? (useRanged ? "Ranged attack" : "Fist or Open Hand");
                 var weaponAdjText = neededAdjustmentFromWeaponVsAc == 0
                     ? string.Empty
-                    : $" Weapon vs AC adj: {neededAdjustmentFromWeaponVsAc}.";
+                    : $" Weapon vs AC adj ({weaponNameForToHit}): {neededAdjustmentFromWeaponVsAc}.";
                 var nonProfText = nonProficiencyPenalty > 0
                     ? $" Non-proficiency penalty: {nonProficiencyPenalty}."
                     : string.Empty;
-                var neededBreakdownText = string.Empty;
-                if (neededAdjustmentFromWeaponVsAc != 0 || nonProficiencyPenalty > 0)
-                    neededBreakdownText = $" {neededFromThac0AndAcOnly}{(neededAdjustmentFromWeaponVsAc >= 0 ? "+" : string.Empty)}{neededAdjustmentFromWeaponVsAc}{(nonProficiencyPenalty >= 0 ? "+" : string.Empty)}{nonProficiencyPenalty} ={needed}";
+                var strengthNeededAdjustment = -strengthToHitBonus;
+                var weaponMagicNeededAdjustment = -weaponMagicToHitBonus;
+                var swordSituationalNeededAdjustment = -swordSituationalBonus;
+                var baseBreakdown = showReferences
+                    ? $"{neededFromThac0AndAcOnly}(base)"
+                    : $"{neededFromThac0AndAcOnly}";
+                var neededBreakdownText =
+                    $" {baseBreakdown}" +
+                    $"{(neededAdjustmentFromWeaponVsAc >= 0 ? "+" : string.Empty)}{neededAdjustmentFromWeaponVsAc}(ac adj)" +
+                    $"{(strengthNeededAdjustment >= 0 ? "+" : string.Empty)}{strengthNeededAdjustment}(str adj)" +
+                    $"{(weaponMagicNeededAdjustment >= 0 ? "+" : string.Empty)}{weaponMagicNeededAdjustment}(magic weapon)" +
+                    $"{(swordSituationalNeededAdjustment >= 0 ? "+" : string.Empty)}{swordSituationalNeededAdjustment}(special weapon)" +
+                    $"{(nonProficiencyPenalty >= 0 ? "+" : string.Empty)}{nonProficiencyPenalty}(non-prof)={needed}";
 
                 var toHitMessage = $"TO-HIT: {member.Name} THAC0 {member.Thac0},{weaponAdjText}{nonProfText} {target.DisplayName} AC {target.ArmorClass}, needs {needed}{neededBreakdownText} on 1d20, rolled {roll}.";
                 events.Add(new CombatEvent(toHitMessage));
                 RuleApplicationInfo.Publish(toHitMessage);
+
+                if (showReferences)
+                {
+                    RuleApplicationInfo.PublishLinked(
+                        "DMG",
+                        "74ToHitTables",
+                        $"{member.Name} THAC0 {member.Thac0} from class:{member.Class.ToDisplayString()}/level:{member.GetClassLevel(member.Class)}");
+
+                    RuleApplicationInfo.PublishLinked(
+                        "MM",
+                        target.Template.Name ?? target.DisplayName,
+                        $"{target.DisplayName} AC:{target.ArmorClass}.");
+
+                    RuleApplicationInfo.PublishLinked(
+                        "PHB",
+                        "38WeaponTypeToHitAdjustment",
+                        $"Weapon vs AC adjustment: {weaponNameForToHit} vs AC {target.ArmorClass} => {neededAdjustmentFromWeaponVsAc:+#;-#;0}.");
+
+                    var strengthLabel = member.Abilities.Strength == 18 && member.ExceptionalStrengthPercentile.HasValue
+                        ? $"18/{member.ExceptionalStrengthPercentile.Value:00}"
+                        : member.Abilities.Strength.ToString();
+                    RuleApplicationInfo.PublishLinked(
+                        "PHB",
+                        "9StrengthModifyers",
+                        $"Strength {strengthLabel} gives {strengthToHitBonus:+#;-#;0} to hit bonus according to PHB 8, Ability Score Modifiers.");
+
+                    RuleApplicationInfo.PublishLinked(
+                        "DMG",
+                        "165MagicWeapons",
+                        $"Magic weapon bonus from {weaponNameForToHit}: {weaponMagicToHitBonus:+#;-#;0} to hit.");
+
+                    RuleApplicationInfo.PublishLinked(
+                        "PHB",
+                        "37WeaponProficiency",
+                        $"Weapon proficiency adjustment for {weaponNameForToHit}: {nonProficiencyPenalty:+#;-#;0} (penalty)." );
+                }
             }
 
             if (roll < needed)
@@ -4500,6 +4447,114 @@ public sealed class CombatResolver
         return frontline[index];
     }
 
+    private void ResolveFigurineAnimalAllies(CombatSession session, List<CombatEvent> events)
+    {
+        foreach (var summoner in session.Party)
+        {
+            if (!IsAlive(summoner))
+                continue;
+
+            var activeFigurines = summoner.Inventory
+                .Where(FigurineOfWondrousPower.IsActiveInAnimalForm)
+                .ToList();
+
+            foreach (var figurine in activeFigurines)
+            {
+                var kind = FigurineOfWondrousPower.GetKind(figurine);
+                switch (kind)
+                {
+                    case FigurineKind.GoldenLions:
+                        ResolveGoldenLionsAttacks(session, summoner, figurine, events);
+                        break;
+                    case FigurineKind.SerpentineOwl:
+                        ResolveSerpentineOwlAttack(session, summoner, figurine, events);
+                        break;
+                    case FigurineKind.EbonyFly:
+                        events.Add(new CombatEvent($"{summoner.Name}'s Ebony Fly circles overhead and can assist with travel, but makes no direct attacks."));
+                        break;
+                }
+            }
+        }
+    }
+
+    private void ResolveGoldenLionsAttacks(CombatSession session, Character summoner, Item figurine, List<CombatEvent> events)
+    {
+        for (int lion = 1; lion <= 2; lion++)
+        {
+            for (int attackIndex = 0; attackIndex < 3; attackIndex++)
+            {
+                var target = SelectFigurineTargetMonster(session);
+                if (target == null)
+                    return;
+
+                var roll = _dice.Roll(20);
+                const int needed = 11;
+                if (roll < needed)
+                {
+                    events.Add(new CombatEvent($"{summoner.Name}'s Golden Lion #{lion} misses {target.DisplayName} (rolled {roll} vs {needed})."));
+                    continue;
+                }
+
+                var damage = attackIndex == 2 ? RollDamage("1d8") : RollDamage("1d4");
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+                var actual = before - target.CurrentHitPoints;
+                events.Add(new CombatEvent($"{summoner.Name}'s Golden Lion #{lion} hits {target.DisplayName} for {actual} damage."));
+
+                if (target.CurrentHitPoints <= 0)
+                {
+                    target.CurrentHitPoints = 0;
+                    events.Add(new CombatEvent($"{target.DisplayName} is slain by {summoner.Name}'s Golden Lion #{lion}."));
+                }
+            }
+        }
+    }
+
+    private void ResolveSerpentineOwlAttack(CombatSession session, Character summoner, Item figurine, List<CombatEvent> events)
+    {
+        var isGiant = FigurineOfWondrousPower.IsSerpentineOwlGiantForm(figurine);
+        var target = SelectFigurineTargetMonster(session);
+        if (target == null)
+            return;
+
+        var attacks = isGiant ? 2 : 2;
+        var damageExpr = isGiant ? "1d6" : "1d2";
+        var needed = isGiant ? 11 : 14;
+
+        for (int i = 0; i < attacks; i++)
+        {
+            var roll = _dice.Roll(20);
+            if (roll < needed)
+            {
+                events.Add(new CombatEvent($"{summoner.Name}'s {(isGiant ? "Giant " : string.Empty)}Serpentine Owl misses {target.DisplayName} (rolled {roll} vs {needed})."));
+                continue;
+            }
+
+            var damage = RollDamage(damageExpr);
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            events.Add(new CombatEvent($"{summoner.Name}'s {(isGiant ? "Giant " : string.Empty)}Serpentine Owl hits {target.DisplayName} for {actual} damage."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.CurrentHitPoints = 0;
+                events.Add(new CombatEvent($"{target.DisplayName} is slain by {summoner.Name}'s Serpentine Owl."));
+                break;
+            }
+        }
+    }
+
+    private MonsterInstance? SelectFigurineTargetMonster(CombatSession session)
+    {
+        var aliveMonsters = session.AliveMonsters.ToList();
+        if (aliveMonsters.Count == 0)
+            return null;
+
+        var index = _dice.Roll(aliveMonsters.Count) - 1;
+        return aliveMonsters[index];
+    }
+
     private (bool Enabled, int Multiplier) TryGetMonsterThiefBackstabInfo(CombatSession session, MonsterInstance monster)
     {
         if (session.RoundNumber != 1 || !session.PartySurprisedRound1)
@@ -5271,7 +5326,7 @@ public sealed class CombatResolver
                      ?? new MonsterAttack { Name = "Claw", NumberOfAttacks = 1, Damage = "1d4" };
 
         var thac0 = GetMonsterThac0(attacker);
-        var needed = thac0 - target.ArmorClass;
+        var needed = Math.Clamp(thac0 - target.ArmorClass, 1, 20);
         var roll = _dice.Roll(20);
 
         if (roll < needed)

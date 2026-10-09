@@ -442,7 +442,7 @@ public sealed class EncounterForm : Form
 
         _partyList.Columns.Add("#", 50);
         _partyList.Columns.Add("Character Name", 220);
-        _partyList.Columns.Add("Class", 140);
+        _partyList.Columns.Add("Class", 160);
         _partyList.Columns.Add("AC", 80);
         _partyList.Columns.Add("Hits", 100);
         _partyList.Columns.Add("Status", 280);
