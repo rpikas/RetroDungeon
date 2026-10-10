@@ -4503,9 +4503,19 @@ is encountered, roll 1d100:
 01-10 Black, 11-21 Blue, 22-29 Brass, 30-36 Bronze, 37-48 Copper, 49-52 Gold, 
 53-66 Green, 67-80 Red, 81-87 Silver, 88-100 White.1d100(93)  [[RULEIMG|DMG, 177_Level4|, 
 Number of 'Dragon — see Dragon Subtable belows':1d1(1) -> 1 Dragon — see Dragon Subtable belows
-[08:28:54] DMG, Dragon Subtable: White Dragon age category Adult => 5 HP per die.
+[08:28:54] DMG, Dragon Subtable: White Dragon age category Adult => 5 HP per die. 36,8
+___
 
-
+Implement SpecialAbilities
+          "Name": "XX% Level Y Magic Use ",
+          "Description": "XX% chance to use Yst level magic."
+This could for example be "10% Level 1 Magic Use", "20% Level 1 Magic Use", "30% Level 4 Magic Use", "40% Level 2 Magic Use",  
+or any other percentage and level.
+roll a d100 to determine if the monster will use magic or not. 
+If the roll is equal to or less than the percentage then the monster will use magic, otherwise it will not use magic. 
+write in the log if the monster will use magic or not.
+If it is for example level 2 Magic Use the magic use should randomly be selectect among "SpecialAbilities": 
+"Level 2 Cleric spells","Level 2 Druid spells","Level 2 Illustionist spells","Level 2 Magic User spells,
 
 
 

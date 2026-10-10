@@ -499,8 +499,8 @@
           "Description": "Can exhale a corrosive breath causing damage to all creatures in its path."
         },
         {
-          "Name": "Magic Use Level 1, 10%",
-          "Description": "Has a 10% chance to use magic when encountered."
+          "Name": "10% Level 1 Magic Use ",
+          "Description": "10% chance to use 1st level magic."
         },
         {
           "Name": "Sleeping 50%",

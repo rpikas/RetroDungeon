@@ -786,6 +786,8 @@ public sealed class CombatResolver
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
                 continue;
 
+            var levelMagicUseDecisions = new Dictionary<int, MonsterLevelMagicUseDecision>();
+
             ApplySwordOfWoundingOngoingDamage(session, monster, events);
             if (!monster.IsAlive)
                 continue;
@@ -889,77 +891,86 @@ public sealed class CombatResolver
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 5 Illusionist spells")
                 && ResolveLevel5IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasAnySpecialAbility(monster, "Level 5 Mage spells", "Level 5 Magic-User spells")
                 && ResolveLevel5MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 5 Druid spells")
                 && ResolveLevel5DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasAnySpecialAbility(monster, "Level 5 Priest spells", "Level 5 Cleric spells")
                 && ResolveLevel5ClericSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 4 Illusionist spells")
                 && ResolveLevel4IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasAnySpecialAbility(monster, "Level 4 Mage spells", "Level 4 Magic-User spells")
                 && ResolveLevel4MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
                 && HasAnySpecialAbility(monster, "Level 3 Mage spells", "Level 3 Magic-User spells")
-                && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel3MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 3 Illusionist spells")
                 && ResolveLevel3IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasAnySpecialAbility(monster, "Level 3 Priest spells", "Level 3 Cleric spells")
                 && ResolveLevel3ClericSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
                 && HasSpecialAbility(monster, "Level 2 Illusionist spells")
-                && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel2IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
                 && HasAnySpecialAbility(monster, "Level 2 Mage spells", "Level 2 Magic-User spells")
-                && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel2MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
                 && HasAnySpecialAbility(monster, "Level 1 Mage spells", "Level 1 Magic-User spells")
-                && ShouldTryMonsterLevel1SpellCast())
+                )
             {
                 ResolveLevel1MageSpells(monster, session, events);
                 continue;
@@ -967,39 +978,43 @@ public sealed class CombatResolver
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
                 && HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
-                && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1PriestSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 4 Druid spells")
                 && ResolveLevel4DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 3 Druid spells")
                 && ResolveLevel3DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 2 Druid spells")
                 && ResolveLevel2DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
                 && HasSpecialAbility(monster, "Level 1 Druid spells")
                 && ResolveLevel1DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
+                && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
                 && HasSpecialAbility(monster, "Level 1 Illusionist spells")
-                && ShouldTryMonsterLevel1SpellCast()
                 && ResolveLevel1IllusionistSpell(monster, session, events))
                 continue;
 
@@ -4673,9 +4688,152 @@ public sealed class CombatResolver
         return true;
     }
 
-    private bool ShouldTryMonsterLevel1SpellCast()
+    private enum MonsterSpellTradition
     {
-        return _dice.Roll(100) <= 50;
+        MagicUser,
+        Cleric,
+        Druid,
+        Illusionist
+    }
+
+    private sealed record MonsterLevelMagicUseChance(int ChancePercent, int SpellLevel);
+    private sealed record MonsterLevelMagicUseDecision(bool ShouldUseMagic, int Roll, int ChancePercent, MonsterSpellTradition? SelectedTradition);
+
+    private bool CanMonsterAttemptLevelSpell(
+        MonsterInstance monster,
+        int spellLevel,
+        MonsterSpellTradition requestedTradition,
+        List<CombatEvent> events,
+        Dictionary<int, MonsterLevelMagicUseDecision> decisionCache,
+        bool useDefaultFiftyPercentWhenNoConfiguredChance)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        if (!MonsterHasSpellTraditionAtLevel(monster, spellLevel, requestedTradition))
+            return false;
+
+        if (decisionCache.TryGetValue(spellLevel, out var cachedDecision))
+        {
+            if (!cachedDecision.ShouldUseMagic)
+                return false;
+
+            return !cachedDecision.SelectedTradition.HasValue || cachedDecision.SelectedTradition.Value == requestedTradition;
+        }
+
+        var configuredChance = TryGetMonsterLevelMagicUseChance(monster, spellLevel);
+        if (configuredChance == null && !useDefaultFiftyPercentWhenNoConfiguredChance)
+            return true;
+
+        var chancePercent = configuredChance?.ChancePercent ?? 50;
+        var roll = _dice.Roll(100);
+        var shouldUseMagic = roll <= chancePercent;
+
+        MonsterSpellTradition? selectedTradition = null;
+        if (shouldUseMagic)
+            selectedTradition = SelectSpellTraditionForLevel(monster, spellLevel);
+
+        decisionCache[spellLevel] = new MonsterLevelMagicUseDecision(shouldUseMagic, roll, chancePercent, selectedTradition);
+
+        var traditionText = selectedTradition.HasValue
+            ? $" Will use {FormatTraditionName(selectedTradition.Value)} level {spellLevel} spells."
+            : string.Empty;
+
+        events.Add(new CombatEvent(
+            $"{monster.DisplayName} level {spellLevel} magic use roll: d100={roll} vs {chancePercent}% => {(shouldUseMagic ? "will use magic." : "will not use magic.")}{traditionText}"));
+
+        if (!shouldUseMagic)
+            return false;
+
+        return !selectedTradition.HasValue || selectedTradition.Value == requestedTradition;
+    }
+
+    private static bool MonsterHasSpellTraditionAtLevel(MonsterInstance monster, int spellLevel, MonsterSpellTradition tradition)
+    {
+        return tradition switch
+        {
+            MonsterSpellTradition.MagicUser => HasAnySpecialAbility(monster, $"Level {spellLevel} Mage spells", $"Level {spellLevel} Magic-User spells"),
+            MonsterSpellTradition.Cleric => HasAnySpecialAbility(monster, $"Level {spellLevel} Priest spells", $"Level {spellLevel} Cleric spells"),
+            MonsterSpellTradition.Druid => HasSpecialAbility(monster, $"Level {spellLevel} Druid spells"),
+            MonsterSpellTradition.Illusionist => HasSpecialAbility(monster, $"Level {spellLevel} Illusionist spells"),
+            _ => false
+        };
+    }
+
+    private MonsterSpellTradition? SelectSpellTraditionForLevel(MonsterInstance monster, int spellLevel)
+    {
+        var availableTraditions = new List<MonsterSpellTradition>();
+
+        if (HasAnySpecialAbility(monster, $"Level {spellLevel} Mage spells", $"Level {spellLevel} Magic-User spells"))
+            availableTraditions.Add(MonsterSpellTradition.MagicUser);
+
+        if (HasAnySpecialAbility(monster, $"Level {spellLevel} Priest spells", $"Level {spellLevel} Cleric spells"))
+            availableTraditions.Add(MonsterSpellTradition.Cleric);
+
+        if (HasSpecialAbility(monster, $"Level {spellLevel} Druid spells"))
+            availableTraditions.Add(MonsterSpellTradition.Druid);
+
+        if (HasSpecialAbility(monster, $"Level {spellLevel} Illusionist spells"))
+            availableTraditions.Add(MonsterSpellTradition.Illusionist);
+
+        if (availableTraditions.Count == 0)
+            return null;
+
+        var picked = _dice.Roll(availableTraditions.Count) - 1;
+        return availableTraditions[picked];
+    }
+
+    private static string FormatTraditionName(MonsterSpellTradition tradition)
+    {
+        return tradition switch
+        {
+            MonsterSpellTradition.MagicUser => "Magic-User",
+            MonsterSpellTradition.Cleric => "Cleric",
+            MonsterSpellTradition.Druid => "Druid",
+            MonsterSpellTradition.Illusionist => "Illusionist",
+            _ => "Unknown"
+        };
+    }
+
+    private static MonsterLevelMagicUseChance? TryGetMonsterLevelMagicUseChance(MonsterInstance monster, int spellLevel)
+    {
+        if (monster?.Template?.SpecialAbilities == null || monster.Template.SpecialAbilities.Count == 0)
+            return null;
+
+        foreach (var ability in monster.Template.SpecialAbilities)
+        {
+            if (ability == null || string.IsNullOrWhiteSpace(ability.Name))
+                continue;
+
+            if (!TryParseMonsterLevelMagicUseAbility(ability.Name, out var parsed))
+                continue;
+
+            if (parsed.SpellLevel == spellLevel)
+                return parsed;
+        }
+
+        return null;
+    }
+
+    private static bool TryParseMonsterLevelMagicUseAbility(string abilityName, out MonsterLevelMagicUseChance parsed)
+    {
+        var trimmed = abilityName?.Trim() ?? string.Empty;
+        var match = Regex.Match(
+            trimmed,
+            @"^(?<chance>\d{1,3})\s*%\s*Level\s*(?<level>\d+)\s*Magic\s*Use$",
+            RegexOptions.IgnoreCase);
+
+        if (match.Success
+            && int.TryParse(match.Groups["chance"].Value, out var chance)
+            && int.TryParse(match.Groups["level"].Value, out var level)
+            && level > 0)
+        {
+            parsed = new MonsterLevelMagicUseChance(Math.Clamp(chance, 0, 100), level);
+            return true;
+        }
+
+        parsed = null!;
+        return false;
     }
 
     private bool ResolveLevel1DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
