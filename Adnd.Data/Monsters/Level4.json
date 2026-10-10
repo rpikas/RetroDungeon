@@ -557,6 +557,10 @@
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
         },
         {
+          "Name": "40% Level Age related Magic Use",
+          "Description": "40% chance to use age-related level magic."
+        },
+        {
           "Name": "Sleeping 20%",
           "Description": "Has a 20% chance to be asleep when encountered."
         }

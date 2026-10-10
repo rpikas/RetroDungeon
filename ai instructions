@@ -4515,9 +4515,13 @@ roll a d100 to determine if the monster will use magic or not.
 If the roll is equal to or less than the percentage then the monster will use magic, otherwise it will not use magic. 
 write in the log if the monster will use magic or not.
 If it is for example level 2 Magic Use the magic use should randomly be selectect among "SpecialAbilities": 
-"Level 2 Cleric spells","Level 2 Druid spells","Level 2 Illustionist spells","Level 2 Magic User spells,
+"Level 2 Cleric spells","Level 2 Druid spells","Level 2 Illustionist spells","Level 2 Magic User spells, 37,1
+___
 
-
-
+Implement SpecialAbilities
+          "Name": "XX% Level Age related Magic Use ",
+          "Description": "XX% chance to use magic with age level/2"
+This means with a XX% chanse the dragon will use magic with a level based on its age.
+ At the first two ages the red dragon gains a Ist level spell, at the next two a 2nd level spell is gained, at the fifth and sixth ages a 3rd level spell is gained, and at the lost two ages a 4th level spell is goined.
 
 

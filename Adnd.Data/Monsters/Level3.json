@@ -548,6 +548,10 @@
           "Description": "Can exhale a scorching breath causing damage to all creatures in its path."
         },
         {
+          "Name": "30% Level 2 Magic Use ",
+          "Description": "30% chance to use 2nd level magic."
+        },
+        {
           "Name": "Sleeping 50%",
           "Description": "Has a 60% chance to be asleep when encountered."
         }
@@ -587,6 +591,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale a freezing breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "5% Level 1 Magic Use ",
+          "Description": "5% chance to use 1st level magic."
         },
         {
           "Name": "Sleeping 60%",

@@ -4,6 +4,7 @@ using Adnd.Core.Diagnostics;
 using Adnd.Core.Monsters;
 using Adnd.Data.Monsters;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Text.Json;
 
 namespace Adnd.Data.Encounters.Factories;
@@ -373,6 +374,10 @@ public sealed class EncounterMonsterFactory
 
     private sealed record DragonAgeProfile(string AgeCategory, int HitPointsPerDie);
 
+    private static readonly Regex DragonAgeRelatedMagicUseRegex = new(
+        @"^(?<chance>\d{1,3})\s*%\s*Level\s*Age\s*related\s*Magic\s*Use$",
+        RegexOptions.IgnoreCase);
+
     private void ApplyDragonAgeHitPointProfile(Monster template, int? dungeonLevel, int? forcedHitPointsPerDie = null)
     {
         if (template == null)
@@ -394,10 +399,60 @@ public sealed class EncounterMonsterFactory
         template.HitDiceType = 1;
         template.ExtraHitPoints = Math.Max(0, template.ExtraHitPoints + fixedBonus);
 
+        ApplyDragonAgeRelatedMagicUse(template, profile);
+
         RuleApplicationInfo.PublishLinked(
             "DMG",
             "Dragon Subtable",
             $"{template.Name} age category {profile.AgeCategory} => {profile.HitPointsPerDie} HP per die.");
+    }
+
+    private static void ApplyDragonAgeRelatedMagicUse(Monster template, DragonAgeProfile profile)
+    {
+        if (template?.SpecialAbilities == null || template.SpecialAbilities.Count == 0)
+            return;
+
+        foreach (var ability in template.SpecialAbilities)
+        {
+            if (ability == null || string.IsNullOrWhiteSpace(ability.Name))
+                continue;
+
+            var match = DragonAgeRelatedMagicUseRegex.Match(ability.Name.Trim());
+            if (!match.Success)
+                continue;
+
+            if (!int.TryParse(match.Groups["chance"].Value, out var parsedChance))
+                parsedChance = 0;
+
+            var chance = Math.Clamp(parsedChance, 0, 100);
+            var spellLevel = Math.Clamp((profile.HitPointsPerDie + 1) / 2, 1, 4);
+            ability.Name = $"{chance}% Level {spellLevel} Magic Use";
+            ability.Description = $"{chance}% chance to use level {spellLevel} magic (dragon age-based).";
+
+            EnsureAgeRelatedDragonSpellTier(template, spellLevel);
+
+            RuleApplicationInfo.PublishLinked(
+                "DMG",
+                "Dragon Subtable",
+                $"{template.Name} age-based magic use resolved to level {spellLevel} ({chance}% chance).");
+        }
+    }
+
+    private static void EnsureAgeRelatedDragonSpellTier(Monster template, int spellLevel)
+    {
+        var spellAbilityName = $"Level {spellLevel} Magic-User spells";
+        var hasTier = template.SpecialAbilities.Any(a =>
+            string.Equals(a?.Name?.Trim(), spellAbilityName, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(a?.Name?.Trim(), $"Level {spellLevel} Mage spells", StringComparison.OrdinalIgnoreCase));
+
+        if (hasTier)
+            return;
+
+        template.SpecialAbilities.Add(new MonsterSpecialAbility
+        {
+            Name = spellAbilityName,
+            Description = spellAbilityName
+        });
     }
 
     private DragonAgeProfile? TryResolveDragonAgeProfile(string dragonName, int? dungeonLevel)
