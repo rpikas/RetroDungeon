@@ -2086,6 +2086,9 @@ public sealed class CombatCoordinator
 
         foreach (var monster in session.Monsters)
         {
+            if (!monster.IsInLair)
+                continue;
+
             var sleepChance = TryGetEncounterSleepingChance(monster);
             if (!sleepChance.HasValue || sleepChance.Value <= 0)
                 continue;

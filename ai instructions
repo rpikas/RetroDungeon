@@ -4378,4 +4378,6 @@ Implement SpecialAbilities
  This could for example be "Sleeping 20%", "Sleeping 30%", "Sleeping 45%", "Sleeping 50%", "Sleeping 60%" or any other percentage. 
  The percentage is the chance that the monster is asleep when encountered. the players can chose to attack the monster while it is asleep or leave it alone.
  If the monster is asleep then it will not attack in the first round.
-
+ ___
+ SpecialAbilities Sleeping xx% is only applicable when monsters are in their lair. 
+ If the monster is not in its lair then it will always be awake and attack the party when encountered.
