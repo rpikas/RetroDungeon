@@ -3245,6 +3245,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         else
         {
             var numberOfMonsters = ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride);
+            var dragonHitPointsPerDieProfile = ResolveDragonHitPointsPerDieProfile(monsterName, _currentDungeonLevel, numberOfMonsters);
             var askedLeaveOrAttack = false;
 
             if (AreAllEncounterGroupsNeutral(new[] { monsterName }) && _random.Next(1, 101) <= 50)
@@ -3277,7 +3278,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 _characterRepository.Save(member);
             }
 
-            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel, skipSurpriseRoll: askedLeaveOrAttack);
+            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel, skipSurpriseRoll: askedLeaveOrAttack, dragonHitPointsPerDieProfile: dragonHitPointsPerDieProfile);
         }
 
         if (outcome == CombatOutcome.Defeat)
@@ -3325,6 +3326,50 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             fallback.ToString(),
             $"{monsterName} count {fallback}.");
         return fallback;
+    }
+
+    private static List<int>? ResolveDragonHitPointsPerDieProfile(string monsterName, int dungeonLevel, int monsterCount)
+    {
+        if (string.IsNullOrWhiteSpace(monsterName))
+            return null;
+
+        if (!monsterName.Contains("Dragon", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        if (monsterCount <= 0)
+            return null;
+
+        if (dungeonLevel == 9 && monsterCount >= 2)
+        {
+            if (monsterName.Equals("Black Dragon", StringComparison.OrdinalIgnoreCase)
+                || monsterName.Equals("Brass Dragon", StringComparison.OrdinalIgnoreCase))
+            {
+                return new List<int> { 8, 6 };
+            }
+
+            if (monsterName.Equals("White Dragon", StringComparison.OrdinalIgnoreCase))
+                return new List<int> { 8, 7 };
+        }
+
+        if (dungeonLevel == 10 && monsterCount >= 2)
+        {
+            if (monsterName.Equals("Gold Dragon", StringComparison.OrdinalIgnoreCase)
+                || monsterName.Equals("Red Dragon", StringComparison.OrdinalIgnoreCase)
+                || monsterName.Equals("Silver Dragon", StringComparison.OrdinalIgnoreCase))
+            {
+                return new List<int> { 8, 6 };
+            }
+
+            if (monsterName.Equals("Blue Dragon", StringComparison.OrdinalIgnoreCase)
+                || monsterName.Equals("Bronze Dragon", StringComparison.OrdinalIgnoreCase)
+                || monsterName.Equals("Copper Dragon", StringComparison.OrdinalIgnoreCase)
+                || monsterName.Equals("Green Dragon", StringComparison.OrdinalIgnoreCase))
+            {
+                return new List<int> { 8, 7 };
+            }
+        }
+
+        return null;
     }
 
     private EncounterRoll? RollDungeonMonsterForLevelWithCountExcludingCharacter(int level)
@@ -3553,21 +3598,24 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return null;
 
         var name = selected.Name;
+        int? countOverride = null;
         if (selected.Type == MonsterType.Dragon)
         {
             if (rolledMonsterLevel == 3)
                 name = RollLevel3DragonBySubtable();
             else if (rolledMonsterLevel == 4)
                 name = RollLevel4DragonBySubtable();
+            else if (rolledMonsterLevel == 7)
+                name = RollLevel7DragonBySubtable();
             else if (rolledMonsterLevel == 8)
                 name = RollLevel8DragonBySubtable();
             else if (rolledMonsterLevel == 9)
-                name = RollLevel9DragonBySubtable();
+                name = RollLevel9DragonBySubtable(out countOverride);
             else if (rolledMonsterLevel == 10)
-                name = RollLevel10DragonBySubtable();
+                name = RollLevel10DragonBySubtable(out countOverride);
         }
 
-        return new EncounterRoll(name, null);
+        return new EncounterRoll(name, countOverride);
     }
 
     private int RollMonsterLevelFromEncounterTable(int dungeonLevel)
@@ -3722,7 +3770,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 "1",
                 "100",
                 roll.ToString(), creature);
-            var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel, dungeonLevel);
+            var resolved = ResolveDmgCreatureToMonsterName(creature, monsterLevel, dungeonLevel, out var dragonCountOverride);
             int? countOverride = null;
             int? countMin = null;
             int? countMax = null;
@@ -3784,6 +3832,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 }
             }
 
+            if (dragonCountOverride.HasValue && dragonCountOverride.Value > 0)
+                countOverride = dragonCountOverride;
+
             if (!string.IsNullOrWhiteSpace(resolved))
                 return new EncounterRoll(resolved, countOverride);
 
@@ -3794,8 +3845,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return null;
     }
 
-    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int monsterLevel, int dungeonLevel)
+    private string? ResolveDmgCreatureToMonsterName(string? dmgCreature, int monsterLevel, int dungeonLevel, out int? dragonCountOverride)
     {
+        dragonCountOverride = null;
+
         if (string.IsNullOrWhiteSpace(dmgCreature))
             return null;
 
@@ -3807,14 +3860,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (monsterLevel == 4)
                 return RollLevel4DragonBySubtable();
 
+            if (monsterLevel == 7)
+                return RollLevel7DragonBySubtable();
+
             if (monsterLevel == 8)
                 return RollLevel8DragonBySubtable();
 
             if (monsterLevel == 9)
-                return RollLevel9DragonBySubtable();
+                return RollLevel9DragonBySubtable(out dragonCountOverride);
 
             if (monsterLevel == 10)
-                return RollLevel10DragonBySubtable();
+                return RollLevel10DragonBySubtable(out dragonCountOverride);
         }
 
         if (string.Equals(dmgCreature.Trim(), "Human", StringComparison.OrdinalIgnoreCase)
@@ -3983,8 +4039,39 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return selected;
     }
 
-    private string RollLevel9DragonBySubtable()
+    private string RollLevel7DragonBySubtable()
     {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 10 => "Black Dragon",
+            <= 21 => "Blue Dragon",
+            <= 29 => "Brass Dragon",
+            <= 36 => "Bronze Dragon",
+            <= 48 => "Copper Dragon",
+            <= 52 => "Gold Dragon",
+            <= 66 => "Green Dragon",
+            <= 80 => "Red Dragon",
+            <= 87 => "Silver Dragon",
+            _ => "White Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 7 dragon encounter",
+            "If a level 7 dragon is encountered, roll 1d100: 01-10 Black, 11-21 Blue, 22-29 Brass, 30-36 Bronze, 37-48 Copper, 49-52 Gold, 53-66 Green, 67-80 Red, 81-87 Silver, 88-100 White.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
+    }
+
+    private string RollLevel9DragonBySubtable(out int? countOverride)
+    {
+        countOverride = null;
         var roll = _random.Next(1, 101);
         var selected = roll switch
         {
@@ -4000,6 +4087,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             _ => "White Dragon"
         };
 
+        if (roll <= 10 || (roll >= 23 && roll <= 31) || roll >= 83)
+            countOverride = 2;
+
         RuleApplicationInfo.Publish(
             "DMG",
             "Dragon Subtable",
@@ -4013,8 +4103,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return selected;
     }
 
-    private string RollLevel10DragonBySubtable()
+    private string RollLevel10DragonBySubtable(out int? countOverride)
     {
+        countOverride = null;
         var roll = _random.Next(1, 101);
         var selected = roll switch
         {
@@ -4028,6 +4119,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             <= 94 => "Red Dragon",
             _ => "Silver Dragon"
         };
+
+        if ((roll >= 1 && roll <= 33)
+            || (roll >= 36 && roll <= 60)
+            || (roll >= 64 && roll <= 100))
+        {
+            countOverride = 2;
+        }
 
         RuleApplicationInfo.Publish(
             "DMG",

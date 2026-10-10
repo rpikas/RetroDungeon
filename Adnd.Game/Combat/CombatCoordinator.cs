@@ -167,9 +167,11 @@ public sealed class CombatCoordinator
         _chestTrapTableProvider = new ChestTrapTableProvider(Path.Combine("Data", "Treasure", "chest-traps.json"));
     }
 
-    public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
+    public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false, List<int>? dragonHitPointsPerDieProfile = null)
     {
-        var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount, "default", dungeonLevel);
+        var monsters = dragonHitPointsPerDieProfile != null && dragonHitPointsPerDieProfile.Count > 0
+            ? _monsterFactory.CreateGroupWithDragonHitPointsPerDie(monsterName, dragonHitPointsPerDieProfile, "default", dungeonLevel)
+            : _monsterFactory.CreateGroup(monsterName, monsterCount, "default", dungeonLevel);
         var session = new CombatSession(party, monsters);
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);

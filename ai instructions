@@ -4429,8 +4429,63 @@ Dice Score	Dragon Type	Age Category (Hit Points/Die)
 81-88	Silver	Sub-adult / Young Adult (3/4)
 89-00	White	Young Adult / Adult (4/5)
 
-I will add information about later level dragons later.
+I will add information about later level dragons later. 35,8
+___
+Here comes the rest of the dragon age and hit points per die table for later level dragons.
+Level 7 Monster that are dragons
+Dice Score	Dragon Type	Age Category (Hit Points/Die)
+.01-10	Black	Old (6)
+.11-21	Blue	Old (6)
+22-29	Brass	Very Old (7)
+30-36	Bronze	Old (6)
+37-48	Copper	Old (6)
+49-52	Gold	Old (6)
+53-66	Green	Old (6)
+67-80	Red	Old (6)
+81-87	Silver	Old (6)
+88-00	White	Very Old (7)
 
+Level 8 Monster that are dragons
+Dice Score	Dragon Type	Age Category (Hit Points/Die)
+99-12-16	Black	Ancient (8)
+14-24	Blue	Very Old (7)
+25-31	Brass	Ancient (8)
+32-35	Bronze	Very Old (7)
+36-43	Copper	Very Old (7)
+44-47	Gold	Very Old (7)
+48-62	Green	Very Old (7)
+63-78	Red	Very Old (7)
+79-82	Silver	Very Old (7)
+83-00	White	Ancient (8)
+
+Level 9 and 10 Monster that are dragons in some cases 2 dragons are encountered, 
+for example 01-10 Black, 2 Ancient & Old (8 & 6) means that there is 
+1 Ancient Black Dragon with 8 hit points per die and 
+1 that it is an Old Black Dragon with 6 hit points per die.
+Dice Score	Dragon Type	Age Category (Hit Points/Die)
+01-10	Black, 2	Ancient & Old (8 & 6)
+11-22	Blue	Ancient (8)
+23-31	Brass, 2	Ancient & Old (8 & 6)
+32-34	Bronze	Ancient (8)
+35-42	Copper	Ancient (8)
+43-46	Gold	Ancient (8)
+47-62	Green	Ancient (8)
+63-78	Red	Ancient (8)
+79-82	Silver	Ancient (8)
+83-00	White, 2	Ancient & Very Old (8 & 7)
+
+Level 10 Monster that are dragons
+01-20	Blue, 2	Ancient & Very Old (8 & 7)
+21-26	Bronze, 2	Ancient & Very Old (8 & 7)
+27-33	Copper, 2	Ancient & Very Old (8 & 7)
+34-35	Chromatic (Tiamat)	Ancient
+36-40	Gold, 2	Ancient & Old (8 & 6)
+41-60	Green, 2	Ancient & Very Old (8 & 7)
+61-63	Platinum (Bahamut)	Ancient
+64-94	Red, 2	Ancient & Old (8 & 6)
+95-00	Silver, 2	Ancient & Old (8 & 6)
+36,2
+___
 
 
 

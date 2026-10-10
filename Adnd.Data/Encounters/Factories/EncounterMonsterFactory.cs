@@ -87,6 +87,51 @@ public sealed class EncounterMonsterFactory
         return CreateGroup(monsterName, count, groupId, forcedHumanAlignment: null, dungeonLevel: dungeonLevel);
     }
 
+    public List<MonsterInstance> CreateGroupWithDragonHitPointsPerDie(
+        string monsterName,
+        IReadOnlyList<int> hitPointsPerDiePerMonster,
+        string groupId,
+        int? dungeonLevel)
+    {
+        if (hitPointsPerDiePerMonster == null || hitPointsPerDiePerMonster.Count == 0)
+            return CreateGroup(monsterName, 1, groupId, forcedHumanAlignment: null, dungeonLevel: dungeonLevel);
+
+        var templatePool = _monsterRepository.GetAll().ToList();
+        var template = TryResolvePiercerVariant(templatePool, monsterName)
+            ?? FindMonsterByName(templatePool, monsterName)
+            ?? templatePool.FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase))
+            ?? BuildFallback(monsterName);
+
+        var lairTemplate = CloneMonster(template);
+        var inLairRoll = _random.Next(1, 101);
+        var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
+        var isInLair = inLairRoll <= inLairChance;
+
+        RuleApplicationInfo.Publish(
+            lairTemplate.Name,
+            "MM",
+            $"{lairTemplate.Name} %InLair={inLairChance}%. ",
+            "",
+            "1",
+            "100",
+            inLairRoll.ToString(),
+            $" {(isInLair ? "Group in lair" : "Group not in lair")}.");
+
+        var list = new List<MonsterInstance>(hitPointsPerDiePerMonster.Count);
+        for (int i = 0; i < hitPointsPerDiePerMonster.Count; i++)
+        {
+            var cloned = CloneMonster(template);
+            ApplyDragonAgeHitPointProfile(cloned, dungeonLevel, hitPointsPerDiePerMonster[i]);
+
+            list.Add(new MonsterInstance(cloned, i + 1, groupId)
+            {
+                IsInLair = isInLair
+            });
+        }
+
+        return list;
+    }
+
     private List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId, string? forcedHumanAlignment, int? dungeonLevel)
     {
         count = Math.Max(1, count);
@@ -143,7 +188,9 @@ public sealed class EncounterMonsterFactory
         }
 
         var encounterTemplate = CloneMonster(template);
-        ApplyDragonAgeHitPointProfile(encounterTemplate, dungeonLevel);
+        var forcedDragonPairHitPointsPerDie = TryGetForcedDragonPairHitPointsPerDie(encounterTemplate, count, dungeonLevel);
+        if (forcedDragonPairHitPointsPerDie == null)
+            ApplyDragonAgeHitPointProfile(encounterTemplate, dungeonLevel);
 
         var lairTemplate = CloneMonster(encounterTemplate);
         if (!string.IsNullOrWhiteSpace(encounterHumanAlignment))
@@ -170,6 +217,12 @@ public sealed class EncounterMonsterFactory
         for (int i = 1; i <= count; i++)
         {
             var cloned = CloneMonster(encounterTemplate);
+            if (forcedDragonPairHitPointsPerDie != null)
+            {
+                var index = Math.Clamp(i - 1, 0, forcedDragonPairHitPointsPerDie.Count - 1);
+                ApplyDragonAgeHitPointProfile(cloned, dungeonLevel, forcedDragonPairHitPointsPerDie[index]);
+            }
+
             if (!string.IsNullOrWhiteSpace(encounterHumanAlignment))
                 cloned.Alignment = encounterHumanAlignment;
 
@@ -314,10 +367,13 @@ public sealed class EncounterMonsterFactory
     private static readonly DragonAgeProfile SubAdult = new("Sub-adult", 3);
     private static readonly DragonAgeProfile YoungAdult = new("Young Adult", 4);
     private static readonly DragonAgeProfile Adult = new("Adult", 5);
+    private static readonly DragonAgeProfile Old = new("Old", 6);
+    private static readonly DragonAgeProfile VeryOld = new("Very Old", 7);
+    private static readonly DragonAgeProfile Ancient = new("Ancient", 8);
 
     private sealed record DragonAgeProfile(string AgeCategory, int HitPointsPerDie);
 
-    private void ApplyDragonAgeHitPointProfile(Monster template, int? dungeonLevel)
+    private void ApplyDragonAgeHitPointProfile(Monster template, int? dungeonLevel, int? forcedHitPointsPerDie = null)
     {
         if (template == null)
             return;
@@ -327,7 +383,9 @@ public sealed class EncounterMonsterFactory
         if (!isDragon)
             return;
 
-        var profile = TryResolveDragonAgeProfile(template.Name, dungeonLevel);
+        var profile = forcedHitPointsPerDie.HasValue
+            ? TryResolveDragonAgeProfileByHitPointsPerDie(forcedHitPointsPerDie.Value)
+            : TryResolveDragonAgeProfile(template.Name, dungeonLevel);
         if (profile == null)
             return;
 
@@ -380,6 +438,61 @@ public sealed class EncounterMonsterFactory
                 "White Dragon" => PickOne(YoungAdult, Adult),
                 _ => null
             },
+            7 => normalized switch
+            {
+                "Black Dragon" => Old,
+                "Blue Dragon" => Old,
+                "Brass Dragon" => VeryOld,
+                "Bronze Dragon" => Old,
+                "Copper Dragon" => Old,
+                "Gold Dragon" => Old,
+                "Green Dragon" => Old,
+                "Red Dragon" => Old,
+                "Silver Dragon" => Old,
+                "White Dragon" => VeryOld,
+                _ => null
+            },
+            8 => normalized switch
+            {
+                "Black Dragon" => Ancient,
+                "Blue Dragon" => VeryOld,
+                "Brass Dragon" => Ancient,
+                "Bronze Dragon" => VeryOld,
+                "Copper Dragon" => VeryOld,
+                "Gold Dragon" => VeryOld,
+                "Green Dragon" => VeryOld,
+                "Red Dragon" => VeryOld,
+                "Silver Dragon" => VeryOld,
+                "White Dragon" => Ancient,
+                _ => null
+            },
+            9 => normalized switch
+            {
+                "Black Dragon" => PickOne(Ancient, Old),
+                "Blue Dragon" => Ancient,
+                "Brass Dragon" => PickOne(Ancient, Old),
+                "Bronze Dragon" => Ancient,
+                "Copper Dragon" => Ancient,
+                "Gold Dragon" => Ancient,
+                "Green Dragon" => Ancient,
+                "Red Dragon" => Ancient,
+                "Silver Dragon" => Ancient,
+                "White Dragon" => PickOne(Ancient, VeryOld),
+                _ => null
+            },
+            10 => normalized switch
+            {
+                "Blue Dragon" => PickOne(Ancient, VeryOld),
+                "Bronze Dragon" => PickOne(Ancient, VeryOld),
+                "Copper Dragon" => PickOne(Ancient, VeryOld),
+                "Gold Dragon" => PickOne(Ancient, Old),
+                "Green Dragon" => PickOne(Ancient, VeryOld),
+                "Red Dragon" => PickOne(Ancient, Old),
+                "Silver Dragon" => PickOne(Ancient, Old),
+                "Dragon, Chromatic" => Ancient,
+                "Dragon, Platinum (Bahamut)" => Ancient,
+                _ => null
+            },
             _ => null
         };
     }
@@ -387,6 +500,63 @@ public sealed class EncounterMonsterFactory
     private DragonAgeProfile PickOne(DragonAgeProfile first, DragonAgeProfile second)
     {
         return _random.Next(0, 2) == 0 ? first : second;
+    }
+
+    private static List<int>? TryGetForcedDragonPairHitPointsPerDie(Monster template, int count, int? dungeonLevel)
+    {
+        if (template == null || count != 2 || !dungeonLevel.HasValue)
+            return null;
+
+        var isDragon = template.Type == MonsterType.Dragon
+            || template.Name.Contains("Dragon", StringComparison.OrdinalIgnoreCase);
+        if (!isDragon)
+            return null;
+
+        var name = template.Name?.Trim() ?? string.Empty;
+
+        if (dungeonLevel.Value == 9)
+        {
+            return name switch
+            {
+                "Black Dragon" => new List<int> { 8, 6 },
+                "Brass Dragon" => new List<int> { 8, 6 },
+                "White Dragon" => new List<int> { 8, 7 },
+                _ => null
+            };
+        }
+
+        if (dungeonLevel.Value == 10)
+        {
+            return name switch
+            {
+                "Blue Dragon" => new List<int> { 8, 7 },
+                "Bronze Dragon" => new List<int> { 8, 7 },
+                "Copper Dragon" => new List<int> { 8, 7 },
+                "Gold Dragon" => new List<int> { 8, 6 },
+                "Green Dragon" => new List<int> { 8, 7 },
+                "Red Dragon" => new List<int> { 8, 6 },
+                "Silver Dragon" => new List<int> { 8, 6 },
+                _ => null
+            };
+        }
+
+        return null;
+    }
+
+    private static DragonAgeProfile? TryResolveDragonAgeProfileByHitPointsPerDie(int hitPointsPerDie)
+    {
+        return hitPointsPerDie switch
+        {
+            1 => VeryYoung,
+            2 => Young,
+            3 => SubAdult,
+            4 => YoungAdult,
+            5 => Adult,
+            6 => Old,
+            7 => VeryOld,
+            8 => Ancient,
+            _ => null
+        };
     }
 
 
