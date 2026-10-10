@@ -4304,7 +4304,7 @@ AC	0	1-2	3-4	5-6	7-8	9-10	11-12	13-14	15-16	17 and up
 9	12	11	9	7	5	3	1	-1	-3	-5
 10	11	10	8	6	4	2	0	-2	-4	-6
 33,3
-
+___
 when writing "Weapon vs AC adj" then also write what what weapon. 33,8
 
 I saw this: "TO-HIT: UrStor THAC0 14, Badger #1 AC 9, needs 4 on 1d20," 
@@ -4369,3 +4369,13 @@ The rest is good, do not change that.
 in log for example -2(str adj) Strength 18/91 gives +2 to hit bonus according to PHB 8, 
 Ability Score Modifiers then link to Adnd.Game\Assets\Rules\PHB9StrengthModifyers.png. 34,3
 ___
+
+Implement SpecialAbilities
+        {
+          "Name": "Sleeping xx%",
+          "Description": "Has a xx% chance to be asleep when encountered."
+        }
+ This could for example be "Sleeping 20%", "Sleeping 30%", "Sleeping 45%", "Sleeping 50%", "Sleeping 60%" or any other percentage. 
+ The percentage is the chance that the monster is asleep when encountered. the players can chose to attack the monster while it is asleep or leave it alone.
+ If the monster is asleep then it will not attack in the first round.
+

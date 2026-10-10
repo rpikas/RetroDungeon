@@ -798,6 +798,12 @@ public sealed class CombatResolver
                 continue;
             }
 
+            if (session.RoundNumber == 1 && session.EncounterSleepingMonstersRound1.Contains(monster.DisplayName))
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} is asleep and cannot act in round 1."));
+                continue;
+            }
+
             var isFeebleminded = monster.HasStatus(MonsterStatus.Feebleminded);
             var isSilenced = monster.HasStatus(MonsterStatus.Silenced);
 

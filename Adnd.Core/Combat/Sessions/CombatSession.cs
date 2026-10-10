@@ -56,6 +56,7 @@ public sealed class CombatSession
     public bool PartySurprisedRound1 { get; set; }
     public bool MonstersSurprisedRound1 { get; set; }
     public string? SurpriseSummary { get; set; }
+    public HashSet<string> EncounterSleepingMonstersRound1 { get; } = new(StringComparer.OrdinalIgnoreCase);
     public string? ActiveChantCasterName { get; private set; }
     public string? ActivePrayerCasterName { get; private set; }
     public int ActivePrayerRounds { get; private set; }

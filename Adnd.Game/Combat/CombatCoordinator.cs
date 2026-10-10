@@ -23,6 +23,7 @@ using Adnd.Data.Party;
 using Adnd.Data.Spells;
 using Adnd.Data.Treasure;
 using Adnd.Game.Viewer;
+using System.Globalization;
 using System.Drawing;
 using System.Text;
 using System.Text.Json;
@@ -170,6 +171,7 @@ public sealed class CombatCoordinator
     {
         var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount);
         var session = new CombatSession(party, monsters);
+        ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
         if (skipSurpriseRoll)
         {
@@ -183,6 +185,9 @@ public sealed class CombatCoordinator
             ResolveEncounterSurprise(session);
         }
         EncounterStarted?.Invoke(session);
+
+        if (!ConfirmAttackEncounterSleepingMonsters(owner, session))
+            session.Outcome = CombatOutcome.Escaped;
 
         while (session.Outcome == CombatOutcome.InProgress)
         {
@@ -264,6 +269,7 @@ public sealed class CombatCoordinator
 
         var monsters = _monsterFactory.CreateMultipleGroups(normalized);
         var session = new CombatSession(party, monsters);
+        ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
         if (skipSurpriseRoll)
         {
@@ -277,6 +283,9 @@ public sealed class CombatCoordinator
             ResolveEncounterSurprise(session);
         }
         EncounterStarted?.Invoke(session);
+
+        if (!ConfirmAttackEncounterSleepingMonsters(owner, session))
+            session.Outcome = CombatOutcome.Escaped;
 
         
               while (session.Outcome == CombatOutcome.InProgress)
@@ -341,6 +350,7 @@ public sealed class CombatCoordinator
 
         var monsters = _monsterFactory.CreateMultipleGroups(groups);
         var session = new CombatSession(party, monsters);
+        ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
         if (skipSurpriseRoll)
         {
@@ -354,6 +364,9 @@ public sealed class CombatCoordinator
             ResolveEncounterSurprise(session);
         }
         EncounterStarted?.Invoke(session);
+
+        if (!ConfirmAttackEncounterSleepingMonsters(owner, session))
+            session.Outcome = CombatOutcome.Escaped;
 
         while (session.Outcome == CombatOutcome.InProgress)
         {
@@ -2064,6 +2077,89 @@ public sealed class CombatCoordinator
 
         var normalizedOriginal = NormalizeMatchKey(originalDescriptorPart);
         return allItems.FirstOrDefault(i => string.Equals(NormalizeMatchKey(i.Name), normalizedOriginal, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void ApplyEncounterSleepingMonsters(CombatSession session)
+    {
+        if (session?.Monsters == null || session.Monsters.Count == 0)
+            return;
+
+        foreach (var monster in session.Monsters)
+        {
+            var sleepChance = TryGetEncounterSleepingChance(monster);
+            if (!sleepChance.HasValue || sleepChance.Value <= 0)
+                continue;
+
+            var roll = _random.Next(1, 101);
+            var fallsAsleep = roll <= sleepChance.Value;
+            if (!fallsAsleep)
+                continue;
+
+            monster.SetStatus(MonsterStatus.Asleep, 2);
+            session.EncounterSleepingMonstersRound1.Add(monster.DisplayName);
+
+            RuleApplicationInfo.PublishLinked(
+                "MM",
+                monster.Template.Name ?? monster.Name,
+                $"{monster.DisplayName} has Sleeping {sleepChance.Value}% at encounter start. Rolled {roll} on 1d100 => asleep.");
+        }
+
+        if (session.EncounterSleepingMonstersRound1.Count > 0)
+        {
+            var sleepingList = string.Join(", ", session.EncounterSleepingMonstersRound1.OrderBy(x => x, StringComparer.OrdinalIgnoreCase));
+            session.SurpriseSummary = string.IsNullOrWhiteSpace(session.SurpriseSummary)
+                ? $"Sleeping monsters: {sleepingList}"
+                : $"{session.SurpriseSummary}; Sleeping monsters: {sleepingList}";
+        }
+    }
+
+    private static int? TryGetEncounterSleepingChance(MonsterInstance monster)
+    {
+        if (monster?.Template?.SpecialAbilities == null)
+            return null;
+
+        foreach (var ability in monster.Template.SpecialAbilities)
+        {
+            var name = ability?.Name?.Trim();
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
+
+            if (!name.StartsWith("Sleeping", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            var percentIndex = name.IndexOf('%');
+            if (percentIndex < 0)
+                continue;
+
+            var digits = new string(name
+                .Take(percentIndex)
+                .Where(char.IsDigit)
+                .ToArray());
+
+            if (!int.TryParse(digits, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+                continue;
+
+            return Math.Clamp(parsed, 0, 100);
+        }
+
+        return null;
+    }
+
+    private bool ConfirmAttackEncounterSleepingMonsters(IWin32Window owner, CombatSession session)
+    {
+        var sleepingAlive = session.AliveMonsters
+            .Where(m => session.EncounterSleepingMonstersRound1.Contains(m.DisplayName))
+            .Select(m => m.DisplayName)
+            .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (sleepingAlive.Count == 0)
+            return true;
+
+        var names = string.Join(", ", sleepingAlive);
+        var question = $"Sleeping monsters detected: {names}. Attack while they sleep?";
+        var result = AskYesNoOnBoth(owner, session, "Sleeping Monsters", question);
+        return result == DialogResult.Yes;
     }
 
     private string ResolveSwordLootForm(string descriptor)

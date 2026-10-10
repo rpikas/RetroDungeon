@@ -323,41 +323,7 @@
       "Source": "Adnd",
       "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
     },
-    {
-      "Name": "Black Dragon",
-      "Type": "Dragon",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 2,
-      "HitDice": 4,
-      "HitDiceType": 7,
-      "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Dragon breath",
-          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
-        }
-      ],
-      "BaseXPValue": 1900,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "D",
-      "Source": "Adnd"
-    },
+   
     {
       "Name": "Blue Dragon",
       "Type": "Dragon",
@@ -393,6 +359,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 60%",
+          "Description": "Has a 60% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1900,
@@ -400,48 +370,7 @@
       "TreasureType": "D",
       "Source": "Adnd"
     },
-    {
-      "Name": "Brass Dragon",
-      "Type": "Dragon",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 2,
-      "HitDice": 4,
-      "HitDiceType": 7,
-      "ExtraHitPoints": 0,
-      "Size": "Large",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 11,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 13,
-        "BreathWeapon": 14,
-        "Spell": 14
-      },
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Dragon breath",
-          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
-        }
-      ],
-      "BaseXPValue": 1950,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "D",
-      "Source": "Adnd"
-    },
+    
     {
       "Name": "Bronze Dragon",
       "Type": "Dragon",
@@ -470,6 +399,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 25%",
+          "Description": "Has a 25% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1900,
@@ -505,6 +438,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 40%",
+          "Description": "Has a 40% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1900,
@@ -540,6 +477,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 10%",
+          "Description": "Has a 10% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 2000,
@@ -570,7 +511,21 @@
           "NumberOfAttacks": 1,
           "Damage": "2d6"
         }
-      ]
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 40%",
+          "Description": "Has a 40% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "Source": "Adnd"
     },
     {
       "Name": "Red Dragon",
@@ -600,6 +555,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 20%",
+          "Description": "Has a 20% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1950,
@@ -635,44 +594,13 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 15%",
+          "Description": "Has a 15% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1950,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "D",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "White Dragon",
-      "Type": "Dragon",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 2,
-      "HitDice": 4,
-      "HitDiceType": 7,
-      "ExtraHitPoints": 0,
-      "Size": "Large",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Dragon breath",
-          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
-        }
-      ],
-      "BaseXPValue": 1900,
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "Source": "Adnd"

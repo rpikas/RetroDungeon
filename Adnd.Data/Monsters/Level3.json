@@ -497,13 +497,26 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale a corrosive breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Magic Use Level 1, 10%",
+          "Description": "Has a 10% chance to use magic when encountered."
+        },
+        {
+          "Name": "Sleeping 50%",
+          "Description": "Has a 50% chance to be asleep when encountered."
         }
       ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic Evil",
+      "Size": "Large",
       "BaseXPValue": 1300,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
+      "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 31-32, then Dragon table",
-      "Source": "Adnd"
+      "Other": "Spell usage"
     },
 
     {
@@ -533,6 +546,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale a scorching breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 50%",
+          "Description": "Has a 60% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1300,
@@ -570,6 +587,10 @@
         {
           "Name": "Dragon breath",
           "Description": "Can exhale a freezing breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 60%",
+          "Description": "Has a 60% chance to be asleep when encountered."
         }
       ],
       "BaseXPValue": 1300,
