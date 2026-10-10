@@ -294,7 +294,7 @@
       },
       {
         "DiceMin": 31,
-        "DiceMax": 32,
+        "DiceMax": 99,
         "Creature": "Dragon",
         "CountMin": 1,
         "CountMax": 1
@@ -429,7 +429,7 @@
       },
       {
         "DiceMin": 23,
-        "DiceMax": 24,
+        "DiceMax": 99,
         "Creature": "Dragon — see Dragon Subtable below",
         "CountMin": 1,
         "CountMax": 1
@@ -571,7 +571,7 @@
       },
       {
         "DiceMin": 23,
-        "DiceMax": 24,
+        "DiceMax": 99,
         "Creature": "Dragon — see Dragon Subtable",
         "CountMin": 1,
         "CountMax": 1

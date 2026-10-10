@@ -3245,7 +3245,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         else
         {
             var numberOfMonsters = ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride);
-            var dragonHitPointsPerDieProfile = ResolveDragonHitPointsPerDieProfile(monsterName, _currentDungeonLevel, numberOfMonsters);
+            var dragonHitPointsPerDieProfile = ResolveDragonHitPointsPerDieProfile(
+                monsterName,
+                firstGroupRoll?.EncounterMonsterLevel ?? _currentDungeonLevel,
+                numberOfMonsters);
             var askedLeaveOrAttack = false;
 
             if (AreAllEncounterGroupsNeutral(new[] { monsterName }) && _random.Next(1, 101) <= 50)
@@ -3287,7 +3290,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         PublishToViewer();
     }
 
-    private sealed record EncounterRoll(string MonsterName, int? CountOverride);
+    private sealed record EncounterRoll(string MonsterName, int? CountOverride, int? EncounterMonsterLevel);
 
     private int ResolveEncounterGroupCount(string monsterName, int? tableCount)
     {
@@ -3328,7 +3331,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return fallback;
     }
 
-    private static List<int>? ResolveDragonHitPointsPerDieProfile(string monsterName, int dungeonLevel, int monsterCount)
+    private static List<int>? ResolveDragonHitPointsPerDieProfile(string monsterName, int encounterMonsterLevel, int monsterCount)
     {
         if (string.IsNullOrWhiteSpace(monsterName))
             return null;
@@ -3339,7 +3342,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (monsterCount <= 0)
             return null;
 
-        if (dungeonLevel == 9 && monsterCount >= 2)
+        if (encounterMonsterLevel == 9 && monsterCount >= 2)
         {
             if (monsterName.Equals("Black Dragon", StringComparison.OrdinalIgnoreCase)
                 || monsterName.Equals("Brass Dragon", StringComparison.OrdinalIgnoreCase))
@@ -3351,7 +3354,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 return new List<int> { 8, 7 };
         }
 
-        if (dungeonLevel == 10 && monsterCount >= 2)
+        if (encounterMonsterLevel == 10 && monsterCount >= 2)
         {
             if (monsterName.Equals("Gold Dragon", StringComparison.OrdinalIgnoreCase)
                 || monsterName.Equals("Red Dragon", StringComparison.OrdinalIgnoreCase)
@@ -3615,7 +3618,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 name = RollLevel10DragonBySubtable(out countOverride);
         }
 
-        return new EncounterRoll(name, countOverride);
+        return new EncounterRoll(name, countOverride, rolledMonsterLevel);
     }
 
     private int RollMonsterLevelFromEncounterTable(int dungeonLevel)
@@ -3836,7 +3839,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 countOverride = dragonCountOverride;
 
             if (!string.IsNullOrWhiteSpace(resolved))
-                return new EncounterRoll(resolved, countOverride);
+                return new EncounterRoll(resolved, countOverride, monsterLevel);
 
             break;
         }

@@ -4434,8 +4434,8 @@ ___
 Here comes the rest of the dragon age and hit points per die table for later level dragons.
 Level 7 Monster that are dragons
 Dice Score	Dragon Type	Age Category (Hit Points/Die)
-.01-10	Black	Old (6)
-.11-21	Blue	Old (6)
+01-10	Black	Old (6)
+11-21	Blue	Old (6)
 22-29	Brass	Very Old (7)
 30-36	Bronze	Old (6)
 37-48	Copper	Old (6)
@@ -4486,6 +4486,26 @@ Level 10 Monster that are dragons
 95-00	Silver, 2	Ancient & Old (8 & 6)
 36,2
 ___
+
+Bugfix: I encountered a level 4 dragon and rolled on the Dragon Subtable to determine the 
+type and age category of the dragon. 
+The result was a White Dragon with an age category of Adult, which means it has 5 
+hit points per die, I expected 2 or 3 hit points per die for a level 4 dragon, 
+but the result was 5 hit points per die. I think you by mistake have added 2 and 3
+instead of randomizing between 2 and 3. 
+Please fix this so that the hit points per die for a level 4 dragon is either 2 or 3, 
+not always 5.
+This is what the log shows:
+[08:28:54] [[RULEIMG|DMG, 177_Level4, Encounter table level 4):1d100(79) ->
+Dragon — see Dragon Subtable below
+[08:28:54] DMG, Dragon Subtable, Resolve level 4 dragon encounter:If a level 4 dragon 
+is encountered, roll 1d100: 
+01-10 Black, 11-21 Blue, 22-29 Brass, 30-36 Bronze, 37-48 Copper, 49-52 Gold, 
+53-66 Green, 67-80 Red, 81-87 Silver, 88-100 White.1d100(93)  [[RULEIMG|DMG, 177_Level4|, 
+Number of 'Dragon — see Dragon Subtable belows':1d1(1) -> 1 Dragon — see Dragon Subtable belows
+[08:28:54] DMG, Dragon Subtable: White Dragon age category Adult => 5 HP per die.
+
+
 
 
 
