@@ -74,15 +74,20 @@ public sealed class EncounterMonsterFactory
 
     public List<MonsterInstance> CreateGroup(string monsterName, int count)
     {
-        return CreateGroup(monsterName, count, "default");
+        return CreateGroup(monsterName, count, "default", forcedHumanAlignment: null, dungeonLevel: null);
     }
 
     public List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId)
     {
-        return CreateGroup(monsterName, count, groupId, forcedHumanAlignment: null);
+        return CreateGroup(monsterName, count, groupId, forcedHumanAlignment: null, dungeonLevel: null);
     }
 
-    private List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId, string? forcedHumanAlignment)
+    public List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId, int? dungeonLevel)
+    {
+        return CreateGroup(monsterName, count, groupId, forcedHumanAlignment: null, dungeonLevel: dungeonLevel);
+    }
+
+    private List<MonsterInstance> CreateGroup(string monsterName, int count, string groupId, string? forcedHumanAlignment, int? dungeonLevel)
     {
         count = Math.Max(1, count);
         if (count > GameRulesProvider.Current.MaxSizeEncounter)
@@ -137,7 +142,10 @@ public sealed class EncounterMonsterFactory
             }
         }
 
-        var lairTemplate = CloneMonster(template);
+        var encounterTemplate = CloneMonster(template);
+        ApplyDragonAgeHitPointProfile(encounterTemplate, dungeonLevel);
+
+        var lairTemplate = CloneMonster(encounterTemplate);
         if (!string.IsNullOrWhiteSpace(encounterHumanAlignment))
             lairTemplate.Alignment = encounterHumanAlignment;
 
@@ -161,7 +169,7 @@ public sealed class EncounterMonsterFactory
         var list = new List<MonsterInstance>(count);
         for (int i = 1; i <= count; i++)
         {
-            var cloned = CloneMonster(template);
+            var cloned = CloneMonster(encounterTemplate);
             if (!string.IsNullOrWhiteSpace(encounterHumanAlignment))
                 cloned.Alignment = encounterHumanAlignment;
 
@@ -171,7 +179,7 @@ public sealed class EncounterMonsterFactory
             });
         }
 
-        if (isInLair && string.Equals(template.Name, "Giant Ant", StringComparison.OrdinalIgnoreCase))
+        if (isInLair && string.Equals(encounterTemplate.Name, "Giant Ant", StringComparison.OrdinalIgnoreCase))
         {
             var warriorTemplate = FindMonsterByName(allMonsters, "Giant Warrior Ant");
             if (warriorTemplate != null)
@@ -266,7 +274,7 @@ public sealed class EncounterMonsterFactory
         return string.Join(" ", parts);
     }
 
-    public List<MonsterInstance> CreateMultipleGroups(List<(string monsterName, int count)> groups)
+    public List<MonsterInstance> CreateMultipleGroups(List<(string monsterName, int count)> groups, int? dungeonLevel = null)
     {
         string? sharedHumanAlignment = null;
         var includesHumanCharacters = groups.Any(g => IsLikelyHumanCharacterName(g.monsterName));
@@ -296,9 +304,89 @@ public sealed class EncounterMonsterFactory
         {
             var (monsterName, count) = groups[groupIndex];
             var groupId = $"Group{groupIndex + 1}";
-            allMonsters.AddRange(CreateGroup(monsterName, count, groupId, sharedHumanAlignment));
+            allMonsters.AddRange(CreateGroup(monsterName, count, groupId, sharedHumanAlignment, dungeonLevel));
         }
         return allMonsters;
+    }
+
+    private static readonly DragonAgeProfile VeryYoung = new("Very Young", 1);
+    private static readonly DragonAgeProfile Young = new("Young", 2);
+    private static readonly DragonAgeProfile SubAdult = new("Sub-adult", 3);
+    private static readonly DragonAgeProfile YoungAdult = new("Young Adult", 4);
+    private static readonly DragonAgeProfile Adult = new("Adult", 5);
+
+    private sealed record DragonAgeProfile(string AgeCategory, int HitPointsPerDie);
+
+    private void ApplyDragonAgeHitPointProfile(Monster template, int? dungeonLevel)
+    {
+        if (template == null)
+            return;
+
+        var isDragon = template.Type == MonsterType.Dragon
+            || template.Name.Contains("Dragon", StringComparison.OrdinalIgnoreCase);
+        if (!isDragon)
+            return;
+
+        var profile = TryResolveDragonAgeProfile(template.Name, dungeonLevel);
+        if (profile == null)
+            return;
+
+        var hitDice = Math.Max(0, template.HitDice);
+        var fixedBonus = (profile.HitPointsPerDie - 1) * hitDice;
+        template.HitDiceType = 1;
+        template.ExtraHitPoints = Math.Max(0, template.ExtraHitPoints + fixedBonus);
+
+        RuleApplicationInfo.PublishLinked(
+            "DMG",
+            "Dragon Subtable",
+            $"{template.Name} age category {profile.AgeCategory} => {profile.HitPointsPerDie} HP per die.");
+    }
+
+    private DragonAgeProfile? TryResolveDragonAgeProfile(string dragonName, int? dungeonLevel)
+    {
+        if (string.IsNullOrWhiteSpace(dragonName) || !dungeonLevel.HasValue)
+            return null;
+
+        var normalized = dragonName.Trim();
+
+        return dungeonLevel.Value switch
+        {
+            3 => VeryYoung,
+            4 => normalized switch
+            {
+                "Black Dragon" => PickOne(Young, SubAdult),
+                "Blue Dragon" => PickOne(VeryYoung, Young),
+                "Brass Dragon" => PickOne(Young, SubAdult),
+                "Bronze Dragon" => PickOne(VeryYoung, Young),
+                "Copper Dragon" => PickOne(VeryYoung, Young),
+                "Gold Dragon" => PickOne(VeryYoung, Young),
+                "Green Dragon" => PickOne(VeryYoung, Young),
+                "Red Dragon" => PickOne(VeryYoung, Young),
+                "Silver Dragon" => PickOne(VeryYoung, Young),
+                "White Dragon" => PickOne(Young, SubAdult),
+                _ => null
+            },
+            5 => normalized switch
+            {
+                "Black Dragon" => PickOne(YoungAdult, Adult),
+                "Blue Dragon" => PickOne(SubAdult, YoungAdult),
+                "Brass Dragon" => PickOne(YoungAdult, Adult),
+                "Bronze Dragon" => PickOne(SubAdult, YoungAdult),
+                "Copper Dragon" => PickOne(SubAdult, YoungAdult),
+                "Gold Dragon" => PickOne(SubAdult, YoungAdult),
+                "Green Dragon" => PickOne(SubAdult, YoungAdult),
+                "Red Dragon" => PickOne(SubAdult, YoungAdult),
+                "Silver Dragon" => PickOne(SubAdult, YoungAdult),
+                "White Dragon" => PickOne(YoungAdult, Adult),
+                _ => null
+            },
+            _ => null
+        };
+    }
+
+    private DragonAgeProfile PickOne(DragonAgeProfile first, DragonAgeProfile second)
+    {
+        return _random.Next(0, 2) == 0 ? first : second;
     }
 
 

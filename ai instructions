@@ -4381,3 +4381,58 @@ Implement SpecialAbilities
  ___
  SpecialAbilities Sleeping xx% is only applicable when monsters are in their lair. 
  If the monster is not in its lair then it will always be awake and attack the party when encountered.
+ ___
+
+
+ Dragon hit points are based on age. The following table shows the hit points per die based on age category.
+ Dragon Age and Hit Points
+ 1. Very young — 1-5 years — 1 hit point per die 
+ 2. Young — 6-15 years — 2 hit point per die 
+ 3. Sub-odult — 16-25 years — Shit point per die 
+ 4. Young adult — 26-50 years — 4hit point per die 
+ 5. Adult — 51-100 years — Shit point per die 
+ 6. Old — 101-200 years 6 hit point per die 
+ 7. Very old — 201-400 years — 7 hit point per die 
+ B. Ancient — 401+ years — 8 hit point per
+
+ When encounetering level 3 monsters that are dragons they will be very young dragons with 1 hit point per die.
+ Dice ScoreDragon TypeAge Category (Hit Points/Die)
+ 01-28 Black Very Young (1)
+ 29-62 Brass Very Young (1)
+ 63-100 White Very Young (1)
+
+ when several options are available for the same level of monster, for example 01-09	Black	Young / Sub-adult (2/3)
+ then it is 50% it is Young and 50% it is Sub-adult. The same applies to all other options that have two age categories.
+ For level 4 monsters that are dragons they will have age and hit points per die based on the following table:
+ Dice Score	Dragon Type	Age Category (Hit Points/Die)
+.01-09	Black	Young / Sub-adult (2/3)
+.10-20	Blue	Very Young / Young (1/2)
+21-30	Brass	Young / Sub-adult (2/3)
+31-37	Bronze	Very Young / Young (1/2)
+38-50	Copper	Very Young / Young (1/2)
+51-54	Gold	Very Young / Young (1/2)
+55-70	Green	Very Young / Young (1/2)
+71-80	Red	Very Young / Young (1/2)
+81-88	Silver	Very Young / Young (1/2)
+89-00	White	Young / Sub-adult (2/3)
+
+ For level 5 monsters that are dragons they will have age and hit points per die based on the following table:
+Dice Score	Dragon Type	Age Category (Hit Points/Die)
+.01-08	Black	Young Adult / Adult (4/5)
+.09-20	Blue	Sub-adult / Young Adult (3/4)
+21-30	Brass	Young Adult / Adult (4/5)
+31-37	Bronze	Sub-adult / Young Adult (3/4)
+38-50	Copper	Sub-adult / Young Adult (3/4)
+51-54	Gold	Sub-adult / Young Adult (3/4)
+55-70	Green	Sub-adult / Young Adult (3/4)
+71-80	Red	Sub-adult / Young Adult (3/4)
+81-88	Silver	Sub-adult / Young Adult (3/4)
+89-00	White	Young Adult / Adult (4/5)
+
+I will add information about later level dragons later.
+
+
+
+
+
+

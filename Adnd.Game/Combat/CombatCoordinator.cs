@@ -169,7 +169,7 @@ public sealed class CombatCoordinator
 
     public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
     {
-        var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount);
+        var monsters = _monsterFactory.CreateGroup(monsterName, monsterCount, "default", dungeonLevel);
         var session = new CombatSession(party, monsters);
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
@@ -267,7 +267,7 @@ public sealed class CombatCoordinator
         if (normalized.Count == 0)
             return CombatOutcome.Escaped;
 
-        var monsters = _monsterFactory.CreateMultipleGroups(normalized);
+        var monsters = _monsterFactory.CreateMultipleGroups(normalized, dungeonLevel);
         var session = new CombatSession(party, monsters);
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
@@ -348,7 +348,7 @@ public sealed class CombatCoordinator
             groups.Add((monsterName, count));
         }
 
-        var monsters = _monsterFactory.CreateMultipleGroups(groups);
+        var monsters = _monsterFactory.CreateMultipleGroups(groups, dungeonLevel);
         var session = new CombatSession(party, monsters);
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
@@ -3061,7 +3061,7 @@ public sealed class CombatCoordinator
             var groupId = $"Group{nextGroupNumber}";
             if (TryRollReinforcementEncounter(depth, out var selectedName, out var selectedCount))
             {
-                var reinforcements = _monsterFactory.CreateGroup(selectedName, selectedCount, groupId);
+                var reinforcements = _monsterFactory.CreateGroup(selectedName, selectedCount, groupId, dungeonLevel);
                 session.Monsters.AddRange(reinforcements);
                 roundEvents.Add(new CombatEvent($"Shriek attracts reinforcements: {selectedCount} {selectedName}{(selectedCount > 1 ? "s" : string.Empty)} join the fight ({groupId})."));
             }
