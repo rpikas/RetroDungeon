@@ -856,6 +856,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (activeMembers.Count == 0)
             {
                 SayOnBoth("Camp", "No party members to camp with.");
+                RefreshMazeAfterCamp();
                 return;
             }
 
@@ -987,8 +988,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 continue;
             }
 
+            RefreshMazeAfterCamp();
             return;
         }
+    }
+
+    private void RefreshMazeAfterCamp()
+    {
+        Invalidate();
+        PublishToViewer();
     }
 
     private void ShowReorderCampDialog(Adnd.Data.Party.Party party, List<string> activeMembers, Dictionary<string, Character> roster)

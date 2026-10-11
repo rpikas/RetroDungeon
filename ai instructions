@@ -4548,6 +4548,11 @@ Here are the 8 age levels for dragons:
  the roll amd the outcome. Also write what level magic the dragon can use.
 
  I encountered a level 4 red dragon with "30% Level Age related Magic Use every 2 agelevels" and it was an YoungAdult red dragon.
- I expeted it to be either very young or young both witha 50% chanse. Write also that dice roll to the log.
+ I expeted it to be either very young or young both witha 50% chanse. Write also that dice roll to the log. 37,7
+ ___
+After leavning camp refresh the Maze screen with new order, hp, ac and status.
 
+According to MM30, when hitting a monster that is asleep either when encountered or when it is asleep because of a spell,
+the tohit bonus should be +3 to hit bonus. write that to the log when it happens. 
 
+in camp when a party member is paralyzed, he should not be able to cast spell, do monk healing or lay on hands. 38,1

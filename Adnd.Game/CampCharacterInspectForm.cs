@@ -568,6 +568,12 @@ public sealed class CampCharacterInspectForm : Form
         if (paladin == null)
             return;
 
+        if (paladin.HasStatus(CharacterStatus.Paralyzed))
+        {
+            SayOnBoth("Lay on Hands", $"{paladin.Name} is paralyzed and cannot use Lay on Hands.");
+            return;
+        }
+
         if (!paladin.IsPaladin())
         {
             SayOnBoth("Lay on Hands", $"{paladin.Name} is not a paladin.");
@@ -625,6 +631,12 @@ public sealed class CampCharacterInspectForm : Form
         var monk = GetCharacter();
         if (monk == null)
             return;
+
+        if (monk.HasStatus(CharacterStatus.Paralyzed))
+        {
+            SayOnBoth("Body Heal", $"{monk.Name} is paralyzed and cannot use Body Heal.");
+            return;
+        }
 
         if (!monk.IsMonk() || monk.GetMonkLevel() < 7)
         {
@@ -1077,6 +1089,12 @@ public sealed class CampCharacterInspectForm : Form
         var c = GetCharacter();
         if (c == null)
             return;
+
+        if (c.HasStatus(CharacterStatus.Paralyzed))
+        {
+            SayOnBoth("Cast Spell", $"{c.Name} is paralyzed and cannot cast spells.");
+            return;
+        }
 
         if (c.HasStatus(CharacterStatus.Petrified))
         {

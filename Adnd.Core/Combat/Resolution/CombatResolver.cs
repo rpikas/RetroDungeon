@@ -3245,13 +3245,18 @@ public sealed class CombatResolver
             var incapacitatedMonsterReason = GetIncapacitatedTargetReason(target);
             if (!string.IsNullOrWhiteSpace(incapacitatedMonsterReason))
             {
-                const int incapacitatedToHitAdjustment = 4;
+                var incapacitatedToHitAdjustment = string.Equals(incapacitatedMonsterReason, "asleep", StringComparison.OrdinalIgnoreCase)
+                    ? 3
+                    : 4;
                 thac0Modifier += incapacitatedToHitAdjustment;
                 var weaponType = !string.IsNullOrWhiteSpace(weaponVsAcKey) ? weaponVsAcKey : (mainHand?.Name ?? "fist or open hand");
                 RuleApplicationInfo.PublishLinked(
                     "PHB",
                     "38WeaponTypeToHitAdjustment",
                     $"Weapon type to-hit adjustment: {member.Name} attacks {target.DisplayName}. Weapon type: {weaponType}. Adjustment: +{incapacitatedToHitAdjustment} because target is {incapacitatedMonsterReason}.");
+
+                if (string.Equals(incapacitatedMonsterReason, "asleep", StringComparison.OrdinalIgnoreCase))
+                    events.Add(new CombatEvent($"{member.Name} gains +3 to hit because {target.DisplayName} is asleep."));
             }
 
             if (target.ArmorClass >= 2 && target.ArmorClass <= 10)
