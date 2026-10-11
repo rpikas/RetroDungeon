@@ -2,6 +2,95 @@
   "Level": 4,
   "Monsters": [
     {
+      "Name": "Carnivorous Ape",
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "Movement": 12,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1-4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1-4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1-8"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low (upper)",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 170,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 01-08",
+      "Other": "Due to keen senses, the ape is surprised only on a roll of 1. Very aggressive relative of the gorilla; cunning and hungers for human flesh."
+    },
+    {
+      "Name": "Blink Dog",
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 16,
+      "ArmorClass": 5,
+      "Movement": 12,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1-6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Rear Attack",
+          "Description": "Blink teleport attack: roll 1d12. On 7-12 teleport; location roll 1=in front, 2=left front flank, 3=right front flank, 4-12=behind (75% behind)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Blink",
+          "Description": "50% miss chance vs most physical attacks; many targeted spells fail 50%; often half damage from area effects; attacks as partial invisibility (+2 to hit, opponent loses Dexterity AC bonus); own attacks have 20% miss chance."
+        },
+        {
+          "Name": "Teleport Away",
+          "Description": "If seriously threatened or injured, the blink dog teleports away and does not return."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Lawful Good",
+      "Size": "Medium",
+      "BaseXPValue": 170,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Blink dogs use instinctive teleportation to reposition in combat and avoid danger."
+    },
+    {
       "Name": "Su-Monster",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
@@ -323,7 +412,7 @@
       "Source": "Adnd",
       "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
     },
-   
+
     {
       "Name": "Blue Dragon",
       "Type": "Dragon",
@@ -374,7 +463,7 @@
       "TreasureType": "D",
       "Source": "Adnd"
     },
-    
+
     {
       "Name": "Bronze Dragon",
       "Type": "Dragon",
@@ -666,48 +755,7 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
-    {
-      "Name": "Blink Dog",
-      "Type": "Animal",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 4,
-      "NumberOfAppearancesMax": 16,
-      "ArmorClass": 5,
-      "Movement": 12,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "20",
-      "TreasureType": "C",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1-6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Rear Attack",
-          "Description": "75% chance to blink behind an opponent and attack from the rear."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Teleport Away",
-          "Description": "If seriously threatened or injured, the blink dog teleports away and does not return."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
-      "Alignment": "Lawful Good",
-      "Size": "Medium",
-      "BaseXPValue": 170,
-      "XPValuePerHitPoint": 5,
-      "Source": "Adnd",
-      "Other": "Blink dogs use instinctive teleportation to reposition in combat and avoid danger."
-    },
+
     {
       "Name": "Yellow Mold",
       "Type": "Fungus",
@@ -750,48 +798,7 @@
       "Source": "Adnd",
       "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed."
     },
-    {
-      "Name": "Carnivorous Ape",
-      "Type": "Animal",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 6,
-      "Movement": 12,
-      "HitDice": 5,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "10",
-      "TreasureType": "C",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1-4"
-        },
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1-4"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1-8"
-        }
-      ],
-      "SpecialAttacks": [ ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low (upper)",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 170,
-      "XPValuePerHitPoint": 5,
-      "Source": "Adnd",
-      "Other": "Due to keen senses, the ape is surprised only on a roll of 1. Very aggressive relative of the gorilla; cunning and hungers for human flesh."
-    },
+
     {
       "Name": "Poisonous Toad",
       "Type": "Animal",

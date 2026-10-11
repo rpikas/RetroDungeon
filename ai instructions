@@ -4509,24 +4509,30 @@ ___
 Implement SpecialAbilities
           "Name": "XX% Level Y Magic Use ",
           "Description": "XX% chance to use Yst level magic."
-This could for example be "10% Level 1 Magic Use", "20% Level 1 Magic Use", "30% Level 4 Magic Use", "40% Level 2 Magic Use",  
+This could for example be "10% Level 1 Magic Use", "20% Level 1 Magic Use", 
+"30% Level 4 Magic Use", "40% Level 2 Magic Use",  
 or any other percentage and level.
 roll a d100 to determine if the monster will use magic or not. 
-If the roll is equal to or less than the percentage then the monster will use magic, otherwise it will not use magic. 
-write in the log if the monster will use magic or not.
-If it is for example level 2 Magic Use the magic use should randomly be selectect among "SpecialAbilities": 
-"Level 2 Cleric spells","Level 2 Druid spells","Level 2 Illustionist spells","Level 2 Magic User spells, 37,1
+If the roll is equal to or less than the percentage then the monster will use magic, 
+otherwise it will not use magic. write in the log if the monster will use magic or not.
+If it is for example level 2 Magic Use the magic use should randomly 
+be selectect among "SpecialAbilities": 
+"Level 2 Cleric spells","Level 2 Druid spells","Level 2 Illustionist spells",
+"Level 2 Magic User spells, 37,1
 ___
 
 Implement SpecialAbilities
           "Name": "XX% Level Age related Magic Use",
           "Description": "XX% chance to use magic with age level/2"
 This means with a XX% chanse the dragon will use magic with a level based on its age.
- At the first two ages the red dragon gains a Ist level spell, at the next two a 2nd level spell is gained, 
- at the fifth and sixth ages a 3rd level spell is gained, and at the lost two ages a 4th level spell is goined. 27,3
+ At the first two ages the red dragon gains a Ist level spell,
+ at the next two a 2nd level spell is gained, 
+ at the fifth and sixth ages a 3rd level spell is gained, and at the lost 
+ two ages a 4th level spell is goined. 27,3
  ___
 
-Update SpecialAbilities "XX% Level Age related Magic Use" to "XX% Level Age related Magic Use every y agelevel", 
+Update SpecialAbilities "XX% Level Age related Magic Use" to 
+"XX% Level Age related Magic Use every y agelevel", 
 Where XX% is the chance it will use magic and 
 Where y is the number of age levels that must pass before the dragon gains a new level of magic use.
 So for example if red dragon got "30% Level Age related Magic Use every 2 agelevels"
@@ -4547,15 +4553,40 @@ Here are the 8 age levels for dragons:
  When meeting a monster with "xx% Level Age related Magic" then write to the log the xx chanse, 
  the roll amd the outcome. Also write what level magic the dragon can use.
 
- I encountered a level 4 red dragon with "30% Level Age related Magic Use every 2 agelevels" and it was an YoungAdult red dragon.
- I expeted it to be either very young or young both witha 50% chanse. Write also that dice roll to the log. 37,7
+ I encountered a level 4 red dragon with "30% Level Age related Magic Use every 2 agelevels" 
+ and it was an YoungAdult red dragon.
+ I expeted it to be either very young or young both witha 50% chanse. 
+ Write also that dice roll to the log. 37,7
  ___
 After leavning camp refresh the Maze screen with new order, hp, ac and status.
 
-According to MM30, when hitting a monster that is asleep either when encountered or when it is asleep because of a spell,
+According to MM30, when hitting a monster that is asleep either when encountered or 
+when it is asleep because of a spell,
 the tohit bonus should be +3 to hit bonus. write that to the log when it happens. 
 
-in camp when a party member is paralyzed, he should not be able to cast spell, do monk healing or lay on hands. 38,1
+in camp when a party member is paralyzed, he should not be able to cast spell, 
+do monk healing or lay on hands. 38,1
 ___
 can you refomat MonsterLevels so 5 rows become 1 row?
+___
+
+Blink dogs teleporting individuals having a 75% chance of appearing 
+behind the opponent. An individual will teleport on a score of 7 or better on a 12-sided die. 
+Roll again to determine where the blink dog teleporting reappears: 1 = in front of opponent, 
+2 = shielded (or left) front flank, 3 = unshielded (or right) front flank, 4-12 = behind. 
+När en Blink Dog har Blink aktivt gäller bland annat:
+
+50% miss chance mot de flesta fysiska attacker. Även om du träffar AC måste du slå om attacken faktiskt träffar.
+Målinriktade besvärjelser har 50% risk att misslyckas mot den.
+Den tar endast halv skada från areaeffekter i många situationer.
+När den själv attackerar räknas den ofta som delvis osynlig, vilket ger +2 på attackslag och gör att motståndaren förlorar sin Dexterity-bonus till AC.
+Nackdelen är att Blink Dogens egna attacker också har 20% miss chance eftersom den ibland blir eterisk precis när den slår.
+
+If seriously threatened (or if 25% or greater loss hos been sustained) 
+the entire pack will blink out and not return.  
+
+If encountered in 
+their lair there is a 50% chance that there will be from 3-12 pups (1-2 hit dice, 1-2/1-3 
+hit points damage/attock). These young are worth from 1,000 to 2,000 gold pieces on the 
+market as they can be tamed and trained.
 ___

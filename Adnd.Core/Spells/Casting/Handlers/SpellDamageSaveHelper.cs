@@ -257,6 +257,9 @@ internal static class SpellDamageSaveHelper
         }
 
         var adjustedRolledDamage = rolledDamage;
+        if (HasSpecialDefense(monster, "Blink"))
+            adjustedRolledDamage = Math.Max(0, adjustedRolledDamage / 2);
+
         if (HasImmunityToSomeAttacks(monster) && IsColdSpell(spellName))
         {
             adjustedRolledDamage = Math.Max(0, rolledDamage / 2);

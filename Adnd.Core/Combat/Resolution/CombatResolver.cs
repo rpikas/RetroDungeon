@@ -1352,6 +1352,9 @@ public sealed class CombatResolver
                 int attackCount = Math.Max(1, attack.NumberOfAttacks);
                 for (int i = 0; i < attackCount; i++)
                 {
+                    if (TryResolveBlinkDogPackRetreat(session, monster, events))
+                        continue;
+
                     var target = SelectMonsterTarget(session);
                     if (target is null)
                     {
@@ -1367,11 +1370,28 @@ public sealed class CombatResolver
                     var defenderAcBonus = GetDefenderArmorClassBonus(target, attack);
                     if (defenderAcBonus > 0)
                         targetAc += defenderAcBonus;
+
+                    var blinkBehindAttack = TryResolveBlinkDogTeleportBehind(monster, target, events);
+                    if (blinkBehindAttack)
+                    {
+                        var dexAcBonus = Math.Min(0, AbilitiesTables.DexterityACModifier(target.Abilities.Dexterity));
+                        if (dexAcBonus < 0)
+                        {
+                            targetAc -= dexAcBonus;
+                            events.Add(new CombatEvent($"{target.Name} loses Dexterity AC bonus against {monster.DisplayName}'s rear blink attack."));
+                        }
+                    }
+
                     var thac0 = GetMonsterThac0(monster);
                     if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
                         thac0 += 1;
                     if (monsterBackstabInfo.Enabled)
                         thac0 -= 4;
+                    if (blinkBehindAttack)
+                    {
+                        thac0 -= 2;
+                        events.Add(new CombatEvent($"{monster.DisplayName} gains +2 to hit from partial invisibility while blinking."));
+                    }
                     var incapacitatedCharacterReason = GetIncapacitatedTargetReason(target, session);
                     if (!string.IsNullOrWhiteSpace(incapacitatedCharacterReason))
                     {
@@ -3211,6 +3231,19 @@ public sealed class CombatResolver
             var strengthToHitBonus = useRanged ? 0 : member.Thac0StrengthModifier;
             thac0Modifier += strengthToHitBonus;
 
+            var dexPenaltyApplied = 0;
+            if (useRanged
+                && member.Abilities.Dexterity < 13
+                && HasSpecialDefense(target, "Dexterity Penalty"))
+            {
+                dexPenaltyApplied = 3;
+                thac0Modifier -= dexPenaltyApplied;
+                RuleApplicationInfo.PublishLinked(
+                    "MM",
+                    "Giant Bat",
+                    $"Dexterity Penalty: {member.Name} has Dexterity {member.Abilities.Dexterity} (<13), so ranged attacks vs {target.DisplayName} are at -3 to hit.");
+            }
+
             var nonProficiencyPenalty = WeaponProficiencyRules.GetNonProficiencyPenalty(member, mainHand, useRanged);
             if (nonProficiencyPenalty > 0)
             {
@@ -3294,6 +3327,12 @@ public sealed class CombatResolver
             int roll = _dice.Roll(20);
             var wasNaturalTwenty = roll == 20;
 
+            if (TryResolveBlinkDefenseAgainstAttack(target, events))
+            {
+                events.Add(new CombatEvent($"{member.Name}'s attack misses {target.DisplayName} due to blink displacement."));
+                continue;
+            }
+
             if (GameRulesProvider.Current.ShowToHitRoll)
             {
                 var showReferences = GameRulesProvider.Current.ShowReferencesInRuleAndDiceInfo;
@@ -3301,6 +3340,9 @@ public sealed class CombatResolver
                 var weaponAdjText = neededAdjustmentFromWeaponVsAc == 0
                     ? string.Empty
                     : $" Weapon vs AC adj ({weaponNameForToHit}): {neededAdjustmentFromWeaponVsAc}.";
+                var dexPenaltyText = dexPenaltyApplied > 0
+                    ? $" Dex penalty ({target.DisplayName}): -{dexPenaltyApplied}."
+                    : string.Empty;
                 var nonProfText = nonProficiencyPenalty > 0
                     ? $" Non-proficiency penalty: {nonProficiencyPenalty}."
                     : string.Empty;
@@ -7693,6 +7735,103 @@ public sealed class CombatResolver
                    || (merged.Contains("can only be hit by silver", StringComparison.Ordinal)
                        && merged.Contains("+1", StringComparison.Ordinal));
         });
+    }
+
+    private static bool HasSpecialDefense(MonsterInstance target, string defenseName)
+    {
+        if (target?.Template?.SpecialDefenses == null)
+            return false;
+
+        return target.Template.SpecialDefenses.Any(d =>
+            string.Equals(d?.Name?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool TryResolveBlinkDefenseAgainstAttack(MonsterInstance target, List<CombatEvent> events)
+    {
+        if (!IsBlinkDog(target))
+            return false;
+
+        var blinkRoll = _dice.Roll(100);
+        if (blinkRoll > 50)
+            return false;
+
+        events.Add(new CombatEvent($"{target.DisplayName} blinks aside; 50% displacement causes the hit to miss (roll {blinkRoll} <= 50)."));
+        return true;
+    }
+
+    private bool TryResolveBlinkDogTeleportBehind(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!IsBlinkDog(monster))
+            return false;
+
+        var blinkTriggerRoll = _dice.Roll(12);
+        if (blinkTriggerRoll < 7)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} fails blink reposition check (1d12={blinkTriggerRoll}, needs 7+)."));
+            return false;
+        }
+
+        var locationRoll = _dice.Roll(12);
+        var location = locationRoll switch
+        {
+            1 => "in front of",
+            2 => "at the shielded (left) front flank of",
+            3 => "at the unshielded (right) front flank of",
+            _ => "behind"
+        };
+
+        var isBehind = locationRoll >= 4;
+        events.Add(new CombatEvent($"{monster.DisplayName} blinks and reappears {location} {target.Name} (location roll {locationRoll})."));
+
+        if (isBehind)
+            events.Add(new CombatEvent($"{monster.DisplayName} gains rear-attack benefits this strike (75% behind chance represented by 4-12 on d12)."));
+
+        return isBehind;
+    }
+
+    private bool TryResolveBlinkDogPackRetreat(CombatSession session, MonsterInstance actingMonster, List<CombatEvent> events)
+    {
+        if (!IsBlinkDog(actingMonster))
+            return false;
+
+        var allBlinkDogsInGroup = session.Monsters
+            .Where(m => string.Equals(m.GroupId, actingMonster.GroupId, StringComparison.OrdinalIgnoreCase) && IsBlinkDog(m))
+            .ToList();
+        if (allBlinkDogsInGroup.Count == 0)
+            return false;
+
+        var aliveBlinkDogsInGroup = allBlinkDogsInGroup.Where(m => m.IsAlive).ToList();
+        if (aliveBlinkDogsInGroup.Count == 0)
+            return false;
+
+        var losses = allBlinkDogsInGroup.Count(m => !m.IsAlive);
+        var lossesPercent = (losses * 100.0) / allBlinkDogsInGroup.Count;
+        var seriouslyThreatened = actingMonster.CurrentHitPoints <= Math.Max(1, actingMonster.MaxHitPoints / 2);
+        var sustainedQuarterLosses = lossesPercent >= 25.0;
+
+        if (!seriouslyThreatened && !sustainedQuarterLosses)
+            return false;
+
+        foreach (var dog in aliveBlinkDogsInGroup)
+            dog.CurrentHitPoints = 0;
+
+        var reason = seriouslyThreatened && sustainedQuarterLosses
+            ? "serious threat and 25%+ losses"
+            : seriouslyThreatened
+                ? "serious threat"
+                : "25%+ losses";
+
+        events.Add(new CombatEvent($"{actingMonster.Name} pack blinks out due to {reason} and does not return."));
+        return true;
+    }
+
+    private static bool IsBlinkDog(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        var name = monster.Template.Name?.Trim() ?? string.Empty;
+        return string.Equals(name, "Blink Dog", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsSilverWeapon(Item? weapon)

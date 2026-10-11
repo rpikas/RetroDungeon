@@ -1100,7 +1100,7 @@
       "SpecialDefenses": [
         {
           "Name": "Dexterity Penalty",
-          "Description": "If Dexterity < 13, missile attacks against giant bats are at -3."
+          "Description": "If Dexterity < 13, range attacks against giant bats are at -3."
         }
       ],
       "MagicResistance": "Standard",

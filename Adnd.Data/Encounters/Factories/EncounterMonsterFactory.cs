@@ -256,6 +256,51 @@ public sealed class EncounterMonsterFactory
             }
         }
 
+        if (isInLair && string.Equals(encounterTemplate.Name, "Blink Dog", StringComparison.OrdinalIgnoreCase))
+        {
+            var pupCount = _random.Next(1, 101) <= 50 ? _random.Next(3, 13) : 0;
+            if (pupCount > 0)
+            {
+                var blinkPupTemplate = CloneMonster(encounterTemplate);
+                blinkPupTemplate.Name = "Blink Dog Pup";
+                blinkPupTemplate.HitDice = _random.Next(1, 3);
+                blinkPupTemplate.HitDiceType = 8;
+                blinkPupTemplate.ExtraHitPoints = 0;
+                blinkPupTemplate.Attacks = new List<MonsterAttack>
+                {
+                    new MonsterAttack
+                    {
+                        Name = "Bite",
+                        NumberOfAttacks = 1,
+                        Damage = _random.Next(0, 2) == 0 ? "1-2" : "1-3"
+                    }
+                };
+                blinkPupTemplate.SpecialAbilities = new List<MonsterSpecialAbility>();
+                blinkPupTemplate.SpecialAttacks = new List<MonsterSpecialAbility>();
+                blinkPupTemplate.SpecialDefenses = new List<MonsterSpecialAbility>();
+
+                for (var p = 0; p < pupCount; p++)
+                {
+                    var pup = CloneMonster(blinkPupTemplate);
+                    list.Add(new MonsterInstance(pup, list.Count + 1, groupId)
+                    {
+                        IsInLair = true
+                    });
+                }
+
+                var marketValuePerPup = _random.Next(1000, 2001);
+                RuleApplicationInfo.Publish(
+                    "Blink Dog",
+                    "MM",
+                    "Blink dog lair pups",
+                    "In lair there is a 50% chance to have 3-12 pups (1-2 HD, 1-2/1-3 attack damage).",
+                    "1",
+                    "100",
+                    "<=50",
+                    $"Added {pupCount} pups to group {groupId}. Market value each: {marketValuePerPup} gp.");
+            }
+        }
+
         return list;
     }
 
