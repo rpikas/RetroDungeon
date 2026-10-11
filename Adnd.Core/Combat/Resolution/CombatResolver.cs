@@ -4696,7 +4696,7 @@ public sealed class CombatResolver
         Illusionist
     }
 
-    private sealed record MonsterLevelMagicUseChance(int ChancePercent, int SpellLevel);
+    private sealed record MonsterLevelMagicUseChance(int ChancePercent, int SpellLevel, bool IsAgeRelatedDragonMagic);
     private sealed record MonsterLevelMagicUseDecision(bool ShouldUseMagic, int Roll, int ChancePercent, MonsterSpellTradition? SelectedTradition);
 
     private bool CanMonsterAttemptLevelSpell(
@@ -4726,6 +4726,7 @@ public sealed class CombatResolver
             return true;
 
         var chancePercent = configuredChance?.ChancePercent ?? 50;
+        var isAgeRelatedDragonMagic = configuredChance?.IsAgeRelatedDragonMagic == true;
         var roll = _dice.Roll(100);
         var shouldUseMagic = roll <= chancePercent;
 
@@ -4739,8 +4740,12 @@ public sealed class CombatResolver
             ? $" Will use {FormatTraditionName(selectedTradition.Value)} level {spellLevel} spells."
             : string.Empty;
 
+        var sourceText = isAgeRelatedDragonMagic
+            ? " Age-related dragon magic"
+            : " Level magic use";
+
         events.Add(new CombatEvent(
-            $"{monster.DisplayName} level {spellLevel} magic use roll: d100={roll} vs {chancePercent}% => {(shouldUseMagic ? "will use magic." : "will not use magic.")}{traditionText}"));
+            $"{monster.DisplayName}{sourceText}: chance {chancePercent}%, roll {roll}, outcome {(shouldUseMagic ? "use magic" : "no magic")}. Dragon can use level {spellLevel} magic.{traditionText}"));
 
         if (!shouldUseMagic)
             return false;
@@ -4805,7 +4810,7 @@ public sealed class CombatResolver
             if (ability == null || string.IsNullOrWhiteSpace(ability.Name))
                 continue;
 
-            if (!TryParseMonsterLevelMagicUseAbility(ability.Name, out var parsed))
+            if (!TryParseMonsterLevelMagicUseAbility(ability.Name, ability.Description, out var parsed))
                 continue;
 
             if (parsed.SpellLevel == spellLevel)
@@ -4815,7 +4820,7 @@ public sealed class CombatResolver
         return null;
     }
 
-    private static bool TryParseMonsterLevelMagicUseAbility(string abilityName, out MonsterLevelMagicUseChance parsed)
+    private static bool TryParseMonsterLevelMagicUseAbility(string abilityName, string? abilityDescription, out MonsterLevelMagicUseChance parsed)
     {
         var trimmed = abilityName?.Trim() ?? string.Empty;
         var match = Regex.Match(
@@ -4828,7 +4833,9 @@ public sealed class CombatResolver
             && int.TryParse(match.Groups["level"].Value, out var level)
             && level > 0)
         {
-            parsed = new MonsterLevelMagicUseChance(Math.Clamp(chance, 0, 100), level);
+            var isAgeRelated = !string.IsNullOrWhiteSpace(abilityDescription)
+                && abilityDescription.Contains("dragon age-based", StringComparison.OrdinalIgnoreCase);
+            parsed = new MonsterLevelMagicUseChance(Math.Clamp(chance, 0, 100), level, isAgeRelated);
             return true;
         }
 

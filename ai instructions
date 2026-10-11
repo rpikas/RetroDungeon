@@ -4519,9 +4519,35 @@ If it is for example level 2 Magic Use the magic use should randomly be selectec
 ___
 
 Implement SpecialAbilities
-          "Name": "XX% Level Age related Magic Use ",
+          "Name": "XX% Level Age related Magic Use",
           "Description": "XX% chance to use magic with age level/2"
 This means with a XX% chanse the dragon will use magic with a level based on its age.
- At the first two ages the red dragon gains a Ist level spell, at the next two a 2nd level spell is gained, at the fifth and sixth ages a 3rd level spell is gained, and at the lost two ages a 4th level spell is goined.
+ At the first two ages the red dragon gains a Ist level spell, at the next two a 2nd level spell is gained, 
+ at the fifth and sixth ages a 3rd level spell is gained, and at the lost two ages a 4th level spell is goined. 27,3
+ ___
+
+Update SpecialAbilities "XX% Level Age related Magic Use" to "XX% Level Age related Magic Use every y agelevel", 
+Where XX% is the chance it will use magic and 
+Where y is the number of age levels that must pass before the dragon gains a new level of magic use.
+So for example if red dragon got "30% Level Age related Magic Use every 2 agelevels"
+and it is very young then it will have a 30% chance to use level 1 magic 
+but if the red dragon is Adult then it will have a 30% chance to use level 3 magic, 
+And for example if blue dragon got "30% Level Age related Magic Use every 3 agelevels"
+and it is Adult then it will have a 30% chance to use level 2 magic 
+
+Here are the 8 age levels for dragons:
+ 1. Very young 
+ 2. Young 
+ 3. Sub-adult 
+ 4. Young adult 
+ 5. Adult 
+ 6. Old 
+ 7. Very old 
+ B. Ancient 
+ When meeting a monster with "xx% Level Age related Magic" then write to the log the xx chanse, 
+ the roll amd the outcome. Also write what level magic the dragon can use.
+
+ I encountered a level 4 red dragon with "30% Level Age related Magic Use every 2 agelevels" and it was an YoungAdult red dragon.
+ I expeted it to be either very young or young both witha 50% chanse. Write also that dice roll to the log.
 
 

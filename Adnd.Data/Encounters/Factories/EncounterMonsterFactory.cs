@@ -375,6 +375,10 @@ public sealed class EncounterMonsterFactory
     private sealed record DragonAgeProfile(string AgeCategory, int HitPointsPerDie);
 
     private static readonly Regex DragonAgeRelatedMagicUseRegex = new(
+        @"^(?<chance>\d{1,3})\s*%\s*Level\s*Age\s*related\s*Magic\s*Use\s*every\s*(?<step>\d+)\s*agelevels?$",
+        RegexOptions.IgnoreCase);
+
+    private static readonly Regex DragonAgeRelatedMagicUseLegacyRegex = new(
         @"^(?<chance>\d{1,3})\s*%\s*Level\s*Age\s*related\s*Magic\s*Use$",
         RegexOptions.IgnoreCase);
 
@@ -412,29 +416,43 @@ public sealed class EncounterMonsterFactory
         if (template?.SpecialAbilities == null || template.SpecialAbilities.Count == 0)
             return;
 
-        foreach (var ability in template.SpecialAbilities)
+        foreach (var ability in template.SpecialAbilities.ToList())
         {
             if (ability == null || string.IsNullOrWhiteSpace(ability.Name))
                 continue;
 
-            var match = DragonAgeRelatedMagicUseRegex.Match(ability.Name.Trim());
+            var name = ability.Name.Trim();
+            var match = DragonAgeRelatedMagicUseRegex.Match(name);
+
+            var step = 2; // legacy behavior: every 2 age levels
             if (!match.Success)
-                continue;
+            {
+                var legacyMatch = DragonAgeRelatedMagicUseLegacyRegex.Match(name);
+                if (!legacyMatch.Success)
+                    continue;
+
+                match = legacyMatch;
+            }
+            else if (!int.TryParse(match.Groups["step"].Value, out step) || step <= 0)
+            {
+                step = 2;
+            }
 
             if (!int.TryParse(match.Groups["chance"].Value, out var parsedChance))
                 parsedChance = 0;
 
             var chance = Math.Clamp(parsedChance, 0, 100);
-            var spellLevel = Math.Clamp((profile.HitPointsPerDie + 1) / 2, 1, 4);
+            var ageLevel = Math.Clamp(profile.HitPointsPerDie, 1, 8);
+            var spellLevel = Math.Max(1, ((ageLevel - 1) / step) + 1);
             ability.Name = $"{chance}% Level {spellLevel} Magic Use";
-            ability.Description = $"{chance}% chance to use level {spellLevel} magic (dragon age-based).";
+            ability.Description = $"{chance}% chance to use level {spellLevel} magic (dragon age-based, every {step} agelevel(s)).";
 
             EnsureAgeRelatedDragonSpellTier(template, spellLevel);
 
             RuleApplicationInfo.PublishLinked(
                 "DMG",
                 "Dragon Subtable",
-                $"{template.Name} age-based magic use resolved to level {spellLevel} ({chance}% chance).");
+                $"{template.Name} age-based magic use resolved to level {spellLevel} ({chance}% chance, every {step} agelevel(s)).");
         }
     }
 
@@ -467,30 +485,30 @@ public sealed class EncounterMonsterFactory
             3 => VeryYoung,
             4 => normalized switch
             {
-                "Black Dragon" => PickOne(Young, SubAdult),
-                "Blue Dragon" => PickOne(VeryYoung, Young),
-                "Brass Dragon" => PickOne(Young, SubAdult),
-                "Bronze Dragon" => PickOne(VeryYoung, Young),
-                "Copper Dragon" => PickOne(VeryYoung, Young),
-                "Gold Dragon" => PickOne(VeryYoung, Young),
-                "Green Dragon" => PickOne(VeryYoung, Young),
-                "Red Dragon" => PickOne(VeryYoung, Young),
-                "Silver Dragon" => PickOne(VeryYoung, Young),
-                "White Dragon" => PickOne(Young, SubAdult),
+                "Black Dragon" => PickOne(normalized, dungeonLevel, Young, SubAdult),
+                "Blue Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "Brass Dragon" => PickOne(normalized, dungeonLevel, Young, SubAdult),
+                "Bronze Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "Copper Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "Gold Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "Green Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "Red Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "Silver Dragon" => PickOne(normalized, dungeonLevel, VeryYoung, Young),
+                "White Dragon" => PickOne(normalized, dungeonLevel, Young, SubAdult),
                 _ => null
             },
             5 => normalized switch
             {
-                "Black Dragon" => PickOne(YoungAdult, Adult),
-                "Blue Dragon" => PickOne(SubAdult, YoungAdult),
-                "Brass Dragon" => PickOne(YoungAdult, Adult),
-                "Bronze Dragon" => PickOne(SubAdult, YoungAdult),
-                "Copper Dragon" => PickOne(SubAdult, YoungAdult),
-                "Gold Dragon" => PickOne(SubAdult, YoungAdult),
-                "Green Dragon" => PickOne(SubAdult, YoungAdult),
-                "Red Dragon" => PickOne(SubAdult, YoungAdult),
-                "Silver Dragon" => PickOne(SubAdult, YoungAdult),
-                "White Dragon" => PickOne(YoungAdult, Adult),
+                "Black Dragon" => PickOne(normalized, dungeonLevel, YoungAdult, Adult),
+                "Blue Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "Brass Dragon" => PickOne(normalized, dungeonLevel, YoungAdult, Adult),
+                "Bronze Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "Copper Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "Gold Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "Green Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "Red Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "Silver Dragon" => PickOne(normalized, dungeonLevel, SubAdult, YoungAdult),
+                "White Dragon" => PickOne(normalized, dungeonLevel, YoungAdult, Adult),
                 _ => null
             },
             7 => normalized switch
@@ -523,27 +541,27 @@ public sealed class EncounterMonsterFactory
             },
             9 => normalized switch
             {
-                "Black Dragon" => PickOne(Ancient, Old),
+                "Black Dragon" => PickOne(normalized, dungeonLevel, Ancient, Old),
                 "Blue Dragon" => Ancient,
-                "Brass Dragon" => PickOne(Ancient, Old),
+                "Brass Dragon" => PickOne(normalized, dungeonLevel, Ancient, Old),
                 "Bronze Dragon" => Ancient,
                 "Copper Dragon" => Ancient,
                 "Gold Dragon" => Ancient,
                 "Green Dragon" => Ancient,
                 "Red Dragon" => Ancient,
                 "Silver Dragon" => Ancient,
-                "White Dragon" => PickOne(Ancient, VeryOld),
+                "White Dragon" => PickOne(normalized, dungeonLevel, Ancient, VeryOld),
                 _ => null
             },
             10 => normalized switch
             {
-                "Blue Dragon" => PickOne(Ancient, VeryOld),
-                "Bronze Dragon" => PickOne(Ancient, VeryOld),
-                "Copper Dragon" => PickOne(Ancient, VeryOld),
-                "Gold Dragon" => PickOne(Ancient, Old),
-                "Green Dragon" => PickOne(Ancient, VeryOld),
-                "Red Dragon" => PickOne(Ancient, Old),
-                "Silver Dragon" => PickOne(Ancient, Old),
+                "Blue Dragon" => PickOne(normalized, dungeonLevel, Ancient, VeryOld),
+                "Bronze Dragon" => PickOne(normalized, dungeonLevel, Ancient, VeryOld),
+                "Copper Dragon" => PickOne(normalized, dungeonLevel, Ancient, VeryOld),
+                "Gold Dragon" => PickOne(normalized, dungeonLevel, Ancient, Old),
+                "Green Dragon" => PickOne(normalized, dungeonLevel, Ancient, VeryOld),
+                "Red Dragon" => PickOne(normalized, dungeonLevel, Ancient, Old),
+                "Silver Dragon" => PickOne(normalized, dungeonLevel, Ancient, Old),
                 "Dragon, Chromatic" => Ancient,
                 "Dragon, Platinum (Bahamut)" => Ancient,
                 _ => null
@@ -552,9 +570,17 @@ public sealed class EncounterMonsterFactory
         };
     }
 
-    private DragonAgeProfile PickOne(DragonAgeProfile first, DragonAgeProfile second)
+    private DragonAgeProfile PickOne(string dragonName, int? encounterMonsterLevel, DragonAgeProfile first, DragonAgeProfile second)
     {
-        return _random.Next(0, 2) == 0 ? first : second;
+        var roll = _random.Next(1, 3);
+        var selected = roll == 1 ? first : second;
+
+        RuleApplicationInfo.PublishLinked(
+            "DMG",
+            "Dragon Subtable",
+            $"{dragonName} level {encounterMonsterLevel?.ToString() ?? "?"} age roll 1d2({roll}) => {selected.AgeCategory} ({selected.HitPointsPerDie} HP per die). 1=\"{first.AgeCategory}\", 2=\"{second.AgeCategory}\".");
+
+        return selected;
     }
 
     private static List<int>? TryGetForcedDragonPairHitPointsPerDie(Monster template, int count, int? dungeonLevel)

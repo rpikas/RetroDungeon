@@ -3245,9 +3245,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         else
         {
             var numberOfMonsters = ResolveEncounterGroupCount(monsterName, firstGroupRoll?.CountOverride);
+            var encounterMonsterLevelForDragonProfile = firstGroupRoll?.EncounterMonsterLevel ?? _currentDungeonLevel;
             var dragonHitPointsPerDieProfile = ResolveDragonHitPointsPerDieProfile(
                 monsterName,
-                firstGroupRoll?.EncounterMonsterLevel ?? _currentDungeonLevel,
+                encounterMonsterLevelForDragonProfile,
                 numberOfMonsters);
             var askedLeaveOrAttack = false;
 
@@ -3281,7 +3282,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 _characterRepository.Save(member);
             }
 
-            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, _currentDungeonLevel, skipSurpriseRoll: askedLeaveOrAttack, dragonHitPointsPerDieProfile: dragonHitPointsPerDieProfile);
+            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, encounterMonsterLevelForDragonProfile, skipSurpriseRoll: askedLeaveOrAttack, dragonHitPointsPerDieProfile: dragonHitPointsPerDieProfile);
         }
 
         if (outcome == CombatOutcome.Defeat)
