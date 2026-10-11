@@ -4556,3 +4556,6 @@ According to MM30, when hitting a monster that is asleep either when encountered
 the tohit bonus should be +3 to hit bonus. write that to the log when it happens. 
 
 in camp when a party member is paralyzed, he should not be able to cast spell, do monk healing or lay on hands. 38,1
+___
+can you refomat MonsterLevels so 5 rows become 1 row?
+___
