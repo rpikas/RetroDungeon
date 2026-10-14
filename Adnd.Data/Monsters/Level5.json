@@ -1165,54 +1165,7 @@
       "Source": "Adnd",
       "Other": "Approximately 2½ feet long; aggressive scavenger."
     },
-    {
-      "Name": "Gargoyle",
-      "Type": "Magical Creature",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 16,
-      "ArmorClass": 5,
-      "Movement": 9,
-      "MovementFlying": 15,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 4,
-      "%InLair": "20",
-      "TreasureType": "C",
-      "IndividualTreasure": "M (x10)",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d3"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Horn",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "+1 or better weapons to hit",
-          "Description": "Only hit by magic weapons."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Size": "Medium",
-      "BaseXPValue": 165,
-      "XPValuePerHitPoint": 5,
-      "Alignment": "Chaotic evil",
-      "Source": "Adnd",
-      "Other": "If flying: either 1 horn attack OR 2 claw attacks. 20% found with margoyles."
-    },
+   
 
 
     {

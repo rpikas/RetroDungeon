@@ -218,6 +218,22 @@ public sealed class EncounterMonsterFactory
         for (int i = 1; i <= count; i++)
         {
             var cloned = CloneMonster(encounterTemplate);
+
+            if (string.Equals(cloned.Name, "Hell Hound", StringComparison.OrdinalIgnoreCase))
+            {
+                var hdRoll = _random.Next(1, 5);
+                cloned.HitDice = 3 + hdRoll;
+                RuleApplicationInfo.Publish(
+                    "Hell Hound",
+                    "MM",
+                    "Hell Hound Hit Dice",
+                    "Hell hounds have variable hit dice: 3+1d4 (range 4-7 HD).",
+                    "1",
+                    "4",
+                    hdRoll.ToString(),
+                    $"{cloned.Name} #{i} uses {cloned.HitDice} HD.");
+            }
+
             if (forcedDragonPairHitPointsPerDie != null)
             {
                 var index = Math.Clamp(i - 1, 0, forcedDragonPairHitPointsPerDie.Count - 1);

@@ -1022,6 +1022,9 @@ public sealed class CombatResolver
                 && ResolveDragonBreathCurrentHp(monster, session, events))
                 continue;
 
+            if (TryResolveHellHoundBreatheFire(monster, session, events))
+                continue;
+
             if (TryGetHpDamageBreathDamage(monster, out var breathDamage)
                 && ResolveHpDamageBreath(monster, breathDamage, session, events))
                 continue;
@@ -1033,12 +1036,16 @@ public sealed class CombatResolver
             {
                 var rolledDamage = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
                 var beforeHp = monster.CurrentHitPoints;
-                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - rolledDamage);
+                var appliedDamage = HasSpecialDefense(monster, "Immunity to fire and heat") ? 0 : rolledDamage;
+                monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - appliedDamage);
                 var actualDamage = beforeHp - monster.CurrentHitPoints;
                 WakeMonsterIfAsleepAfterDamage(monster, actualDamage, events);
                 var remaining = monster.TickStatus(MonsterStatus.IncendiaryCloud);
 
-                events.Add(new CombatEvent($"Incendiary cloud burns {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
+                if (appliedDamage <= 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is immune to fire and heat and ignores incendiary cloud damage (rolled {rolledDamage})."));
+                else
+                    events.Add(new CombatEvent($"Incendiary cloud burns {monster.DisplayName} for {actualDamage} (rolled {rolledDamage}). HP {beforeHp}->{monster.CurrentHitPoints}."));
                 if (remaining > 0)
                     events.Add(new CombatEvent($"{monster.DisplayName} remains inside the incendiary cloud ({remaining} round(s) remaining)."));
                 else
@@ -1355,6 +1362,8 @@ public sealed class CombatResolver
                     if (TryResolveBlinkDogPackRetreat(session, monster, events))
                         continue;
 
+                    TryApplyNauseaFromCarrionStench(monster, session, events);
+
                     var target = SelectMonsterTarget(session);
                     if (target is null)
                     {
@@ -1362,6 +1371,9 @@ public sealed class CombatResolver
                         events.Add(new CombatEvent("The party is defeated."));
                         return FinalizeRound(session, events);
                     }
+
+                    if (!CanMonsterLocateTarget(monster, target, events))
+                        continue;
 
                     var invulnerabilityAcBonus = target.HasActivePotionInvulnerability
                         ? target.PotionInvulnerabilityArmorClassBonus
@@ -1594,6 +1606,8 @@ public sealed class CombatResolver
             if (afterTickPrayerRounds <= 0)
                 events.Add(new CombatEvent("Prayer fades."));
         }
+
+        session.TickPartyNauseaAll();
 
         return FinalizeRound(session, events);
     }
@@ -3231,6 +3245,13 @@ public sealed class CombatResolver
             var strengthToHitBonus = useRanged ? 0 : member.Thac0StrengthModifier;
             thac0Modifier += strengthToHitBonus;
 
+            var nauseaPenaltyApplied = 0;
+            if (session.GetPartyNauseaRounds(member.Name) > 0)
+            {
+                nauseaPenaltyApplied = 2;
+                thac0Modifier -= nauseaPenaltyApplied;
+            }
+
             var dexPenaltyApplied = 0;
             if (useRanged
                 && member.Abilities.Dexterity < 13
@@ -3342,6 +3363,9 @@ public sealed class CombatResolver
                     : $" Weapon vs AC adj ({weaponNameForToHit}): {neededAdjustmentFromWeaponVsAc}.";
                 var dexPenaltyText = dexPenaltyApplied > 0
                     ? $" Dex penalty ({target.DisplayName}): -{dexPenaltyApplied}."
+                    : string.Empty;
+                var nauseaPenaltyText = nauseaPenaltyApplied > 0
+                    ? " Nausea penalty: -2."
                     : string.Empty;
                 var nonProfText = nonProficiencyPenalty > 0
                     ? $" Non-proficiency penalty: {nonProficiencyPenalty}."
@@ -3516,6 +3540,15 @@ public sealed class CombatResolver
             var maceOfDisruptionMultiplier = GetMaceOfDisruptionDamageMultiplier(mainHand, target);
             if (maceOfDisruptionMultiplier > 1)
                 damage *= maceOfDisruptionMultiplier;
+
+            var coldIronVulnerabilityMultiplier = GetColdIronVulnerabilityDamageMultiplier(mainHand, target);
+            if (coldIronVulnerabilityMultiplier > 1)
+            {
+                var beforeColdIron = damage;
+                damage *= coldIronVulnerabilityMultiplier;
+                var coldIronWeaponName = mainHand?.Name ?? "attack";
+                events.Add(new CombatEvent($"{target.DisplayName} is vulnerable to cold iron: {coldIronWeaponName} damage doubled ({beforeColdIron}->{damage})."));
+            }
 
             if (useRanged && CanUseDwarvenThrowerFullPower(member, mainHand))
                 damage += 1;
@@ -5191,6 +5224,64 @@ public sealed class CombatResolver
 
         damage = 0;
         return false;
+    }
+
+    private bool TryResolveHellHoundBreatheFire(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var isHellHound = string.Equals(monster.Template.Name?.Trim(), "Hell Hound", StringComparison.OrdinalIgnoreCase);
+        if (!isHellHound)
+            return false;
+
+        if (!HasSpecialAbility(monster, "Hell Hound Breathe Fire")
+            && !HasSpecialAbility(monster, "Breathe Fire"))
+            return false;
+
+        var breathDamage = Math.Max(0, monster.Template.HitDice);
+        if (breathDamage <= 0)
+            return false;
+
+        var aliveParty = session.AliveParty.ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Hell Hound Breathe Fire for {breathDamage} damage (1 HP per HD)!"));
+
+        foreach (var target in aliveParty)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon));
+            var fireSaveBonus = GetFireResistanceSaveBonus(target);
+            if (fireSaveBonus > 0)
+                saveTarget = Math.Max(1, saveTarget - fireSaveBonus);
+
+            var saveRoll = _dice.Roll(20);
+            var preSaveDamage = ApplyFireProtectionDamageReduction(target, breathDamage, 0, isMagicalFire: true, isNormalFire: false);
+            if (preSaveDamage <= 0)
+            {
+                events.Add(new CombatEvent($"{target.Name} is protected from {monster.DisplayName}'s fire breath."));
+                continue;
+            }
+
+            var damage = saveRoll >= saveTarget ? preSaveDamage / 2 : preSaveDamage;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            if (saveRoll >= saveTarget)
+                events.Add(new CombatEvent($"{target.Name} succeeds save vs Dragon Breath ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
+            else
+                events.Add(new CombatEvent($"{target.Name} fails save vs Dragon Breath ({saveRoll} vs {saveTarget}) and takes {actual} damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain by Hell Hound fire breath!"));
+            }
+        }
+
+        return true;
     }
 
     private static bool HasSpecialAbility(MonsterInstance monster, string abilityName)
@@ -7746,6 +7837,29 @@ public sealed class CombatResolver
             string.Equals(d?.Name?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
     }
 
+    private bool CanMonsterLocateTarget(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (monster == null || target == null)
+            return false;
+
+        if (!target.HasStatus(CharacterStatus.Invisible))
+            return true;
+
+        if (!HasSpecialDefense(monster, "Exceptional Senses"))
+            return true;
+
+        var roll = _dice.Roll(100);
+        var located = roll <= 50;
+        if (located)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} uses Exceptional Senses and locates invisible {target.Name} (roll {roll} <= 50)."));
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Exceptional Senses but fails to locate invisible {target.Name} (roll {roll} > 50)."));
+        return false;
+    }
+
     private bool TryResolveBlinkDefenseAgainstAttack(MonsterInstance target, List<CombatEvent> events)
     {
         if (!IsBlinkDog(target))
@@ -7834,6 +7948,31 @@ public sealed class CombatResolver
         return string.Equals(name, "Blink Dog", StringComparison.OrdinalIgnoreCase);
     }
 
+    private void TryApplyNauseaFromCarrionStench(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Nausea"))
+            return;
+
+        foreach (var member in session.AliveParty)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                member,
+                _savingThrowService.GetSaveTarget(member, SaveThrowType.ParalyzationPoisonDeath));
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
+
+            var saveRoll = _dice.Roll(20);
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{member.Name} resists carrion stench nausea (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            session.SetPartyNausea(member.Name, 1);
+            events.Add(new CombatEvent($"{member.Name} is nauseated by carrion stench (save {saveRoll} vs {saveTarget}) and suffers -2 to hit."));
+        }
+    }
+
     private static bool IsSilverWeapon(Item? weapon)
     {
         if (weapon == null || weapon.Type != ItemType.Weapon)
@@ -7841,6 +7980,32 @@ public sealed class CombatResolver
 
         var text = $"{weapon.Name} {weapon.Description}";
         return text.Contains("silver", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsColdIronWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var text = $"{weapon.Name} {weapon.Description}";
+        return text.Contains("cold iron", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static int GetColdIronVulnerabilityDamageMultiplier(Item? weapon, MonsterInstance target)
+    {
+        if (target?.Template?.SpecialDefenses == null)
+            return 1;
+
+        var hasVulnerability = target.Template.SpecialDefenses.Any(d =>
+            string.Equals(d.Name?.Trim(), "Cold Iron Vulnerability", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(d.Description?.Trim(), "Cold Iron Vulnerability", StringComparison.OrdinalIgnoreCase)
+            || ((d.Name ?? string.Empty) + " " + (d.Description ?? string.Empty))
+                .Contains("cold iron", StringComparison.OrdinalIgnoreCase));
+
+        if (!hasVulnerability)
+            return 1;
+
+        return IsColdIronWeapon(weapon) ? 2 : 1;
     }
 
     private static int GetWeaponVsArmorClassAdjustment(Item? weapon, int targetArmorClass, bool isRanged)

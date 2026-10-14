@@ -75,13 +75,6 @@ internal static class SpellDamageSaveHelper
         return adjusted;
     }
 
-    private static bool HasSpecialDefense(MonsterInstance monster, string defenseName)
-    {
-        return monster.Template.SpecialDefenses.Any(d =>
-            string.Equals(d.Name?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase)
-            || string.Equals(d.Description?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
-    }
-
     internal static bool HasMindAffectingImmunity(MonsterInstance monster)
     {
         return monster.Template.SpecialDefenses.Any(d =>
@@ -172,6 +165,10 @@ internal static class SpellDamageSaveHelper
 
             return string.Equals(name, "Immunity to Some Attacks", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(description, "Immunity to Some Attacks", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(name, "Immunity to cold", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Immunity to cold", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(name, "Immunity to fire and heat", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Immunity to fire and heat", StringComparison.OrdinalIgnoreCase)
                    || (merged.Contains("immune to electricity", StringComparison.Ordinal)
                        && merged.Contains("fear", StringComparison.Ordinal)
                        && merged.Contains("hold", StringComparison.Ordinal)
@@ -206,6 +203,13 @@ internal static class SpellDamageSaveHelper
         var key = spellIdOrName.Trim().ToLowerInvariant();
         return key.Contains("cold", StringComparison.Ordinal)
                || key.Contains("ice", StringComparison.Ordinal);
+    }
+
+    private static bool HasSpecialDefense(MonsterInstance monster, string defenseName)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+            string.Equals(d.Name?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(d.Description?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
     }
 
     internal static string FormatSaveAndDamageLine(string targetDisplayName, int rolledDamage, Outcome outcome, string? rolledDamageText = null)
@@ -257,6 +261,12 @@ internal static class SpellDamageSaveHelper
         }
 
         var adjustedRolledDamage = rolledDamage;
+        if (HasSpecialDefense(monster, "Immunity to cold") && IsColdSpell(spellName))
+            adjustedRolledDamage = 0;
+
+        if (HasSpecialDefense(monster, "Immunity to fire and heat") && IsFireOrHeatSpell(spellName))
+            adjustedRolledDamage = 0;
+
         if (HasSpecialDefense(monster, "Blink"))
             adjustedRolledDamage = Math.Max(0, adjustedRolledDamage / 2);
 
@@ -312,5 +322,15 @@ internal static class SpellDamageSaveHelper
             resistance.Resisted,
             resistance.HasResistance ? resistance.Roll : null,
             resistance.HasResistance ? resistance.ChancePercent : null);
+    }
+
+    private static bool IsFireOrHeatSpell(string spellIdOrName)
+    {
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("fire", StringComparison.Ordinal)
+               || key.Contains("flame", StringComparison.Ordinal)
+               || key.Contains("heat", StringComparison.Ordinal)
+               || key.Contains("incendiary", StringComparison.Ordinal)
+               || key.Contains("burn", StringComparison.Ordinal);
     }
 }

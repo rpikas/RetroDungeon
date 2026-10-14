@@ -4579,7 +4579,8 @@ När en Blink Dog har Blink aktivt gäller bland annat:
 50% miss chance mot de flesta fysiska attacker. Även om du träffar AC måste du slå om attacken faktiskt träffar.
 Målinriktade besvärjelser har 50% risk att misslyckas mot den.
 Den tar endast halv skada från areaeffekter i många situationer.
-När den själv attackerar räknas den ofta som delvis osynlig, vilket ger +2 på attackslag och gör att motståndaren förlorar sin Dexterity-bonus till AC.
+När den själv attackerar räknas den ofta som delvis osynlig, vilket ger +2 på attackslag och gör att motståndaren förlorar 
+sin Dexterity-bonus till AC.
 Nackdelen är att Blink Dogens egna attacker också har 20% miss chance eftersom den ibland blir eterisk precis när den slår.
 
 If seriously threatened (or if 25% or greater loss hos been sustained) 
@@ -4590,3 +4591,15 @@ their lair there is a 50% chance that there will be from 3-12 pups (1-2 hit dice
 hit points damage/attock). These young are worth from 1,000 to 2,000 gold pieces on the 
 market as they can be tamed and trained.
 ___
+implement "SpecialAttacks": "Name": "Nausea",
+"Description": "Carrion stench in 10’ radius causes nausea unless save vs. poison is made; failure imposes -2 to hit."
+
+implement "SpecialDefenses":"Immunity to cold", and "Immunity to fire and heat"
+
+Hell Hounds does not have 5HD they have HD 4-7 (3+1d4) implement that logic
+and this special attack
+          "Name": "Hell Hound Breathe Fire",
+          "Description": "Breathes scorching fire that deals 1 HP per HD, half on save vs. Dragon Breath."
+          40,1
+Implement  "SpecialDefenses":  "Exceptional Senses",
+          "Description": "Locates hidden or invisible creatures 50% of the time."
