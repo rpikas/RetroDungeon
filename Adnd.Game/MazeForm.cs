@@ -3617,6 +3617,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 name = RollLevel3DragonBySubtable();
             else if (rolledMonsterLevel == 4)
                 name = RollLevel4DragonBySubtable();
+            else if (rolledMonsterLevel == 5)
+                name = RollLevel5DragonBySubtable();
             else if (rolledMonsterLevel == 7)
                 name = RollLevel7DragonBySubtable();
             else if (rolledMonsterLevel == 8)
@@ -3872,6 +3874,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (monsterLevel == 4)
                 return RollLevel4DragonBySubtable();
 
+            if (monsterLevel == 5)
+                return RollLevel5DragonBySubtable();
+
             if (monsterLevel == 7)
                 return RollLevel7DragonBySubtable();
 
@@ -4043,6 +4048,36 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             "Dragon Subtable",
             "Resolve level 8 dragon encounter",
             "If a level 8 dragon is encountered, roll 1d100: 01-13 Black, 14-24 Blue, 25-31 Brass, 32-35 Bronze, 36-43 Copper, 44-47 Gold, 48-62 Green, 63-78 Red, 79-82 Silver, 83-100 White.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Selected {selected}.");
+
+        return selected;
+    }
+
+    private string RollLevel5DragonBySubtable()
+    {
+        var roll = _random.Next(1, 101);
+        var selected = roll switch
+        {
+            <= 10 => "Black Dragon",
+            <= 21 => "Blue Dragon",
+            <= 29 => "Brass Dragon",
+            <= 36 => "Bronze Dragon",
+            <= 48 => "Copper Dragon",
+            <= 52 => "Gold Dragon",
+            <= 66 => "Green Dragon",
+            <= 80 => "Red Dragon",
+            <= 87 => "Silver Dragon",
+            _ => "White Dragon"
+        };
+
+        RuleApplicationInfo.Publish(
+            "DMG",
+            "Dragon Subtable",
+            "Resolve level 5 dragon encounter",
+            "If a level 5 dragon is encountered, roll 1d100: 01-10 Black, 11-21 Blue, 22-29 Brass, 30-36 Bronze, 37-48 Copper, 49-52 Gold, 53-66 Green, 67-80 Red, 81-87 Silver, 88-100 White.",
             "1",
             "100",
             roll.ToString(),
