@@ -53,7 +53,7 @@ public class CharacterRepository
                 if (!GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
                     proficiencyChanged = WeaponProficiencyRules.EnsureAutoProficiencies(c);
                 var abilityScoresChanged = NormalizeAbilityScoresByRaceGender(c);
-                HydrateWeaponDamageVsLarge(c, itemLookup);
+                HydrateWeaponProperties(c, itemLookup);
 
                 if (abilityScoresChanged || classLevelCapsChanged || proficiencyChanged)
                     Save(c);
@@ -211,7 +211,7 @@ public class CharacterRepository
         }
     }
 
-    private static void HydrateWeaponDamageVsLarge(Character character, IReadOnlyDictionary<string, Item> itemLookup)
+    private static void HydrateWeaponProperties(Character character, IReadOnlyDictionary<string, Item> itemLookup)
     {
         foreach (var item in character.Inventory)
             HydrateItem(item, itemLookup);
@@ -227,6 +227,8 @@ public class CharacterRepository
 
         if (!itemLookup.TryGetValue(item.Name, out var template))
             return;
+
+        item.IsTwoHanded |= template.IsTwoHanded;
 
         if (string.IsNullOrWhiteSpace(item.DamageVsLarge)
             && !string.IsNullOrWhiteSpace(template.DamageVsLarge))

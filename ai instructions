@@ -4603,3 +4603,19 @@ and this special attack
           40,1
 Implement  "SpecialDefenses":  "Exceptional Senses",
           "Description": "Locates hidden or invisible creatures 50% of the time."
+___
+Manuallty updated MeleeWeaponVsArmorAdjustments and RangedWeaponVsArmorAdjustments
+___
+Updated monsterEncounterTable and then can you update monsterEncounterTable to look more like a table? 40,6
+When the monster tirs to hit, in the log, link to DMG74ToHitTablesFightersAndMonsters.png 40,7
+
+Immedietly after a monster with "Destroy Metal" destroys some armor, make sure AC is recalculated and that 
+ac in combat dialog is refreshed. Also when SpecialDefenses  "Hit on Monster Destroys Metal" make the weapon 
+disapear, make sure that the charater will start hitting with bare hands until a new weapon is equiped. 40,9
+
+When encountering monsters that can cast healing spells, for exampel level 5 Clerics, only try to heal 
+if any of the monsters are damages, to avoid this: Lvl 5 Cleric #1 tries to cast Cure Serious Wounds but
+no ally needs healing. If healing do something else like cast another spell or hit
+
+It should not be possible to equip anything else in main hand or off hand when something with "IsTwoHanded": true. 41,3
+

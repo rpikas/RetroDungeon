@@ -1425,7 +1425,9 @@ public sealed class CombatResolver
 
                     if (GameRulesProvider.Current.ShowToHitRoll)
                     {
-                        events.Add(new CombatEvent($"TO-HIT: {monster.DisplayName} THAC0 {thac0}, {target.Name} AC {targetAc}, needs {needed} on 1d20, rolled {roll}."));
+                        var toHitMessage = $"TO-HIT: {monster.DisplayName} THAC0 {thac0}, {target.Name} AC {targetAc}, needs {needed} on 1d20, rolled {roll}.";
+                        events.Add(new CombatEvent(toHitMessage));
+                        RuleApplicationInfo.PublishLinked("DMG", "74ToHitTablesFightersAndMonsters", toHitMessage);
                     }
 
                     if (cloakDisplacementAutoMiss)
@@ -3200,6 +3202,14 @@ public sealed class CombatResolver
 
         for (int i = 0; i < attacks; i++)
         {
+            if (useRanged
+                && (!member.Equipment.TryGetValue(EquipmentSlot.Range, out var currentRangedWeapon)
+                    || !ReferenceEquals(currentRangedWeapon, rangedWeapon)))
+            {
+                useRanged = false;
+                rangedWeapon = null;
+            }
+
             var thac0Modifier = session.IsBlessed(member.Name) ? 1 : 0;
             thac0Modifier += chantOrPrayerBonus;
             if (isBackstab)
@@ -3793,19 +3803,10 @@ public sealed class CombatResolver
 
     private bool ResolveLevel3ClericSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
+        var damagedAllies = GetMonstersNeedingHealing(session);
         var spellRoll = _dice.Roll(100);
-        if (spellRoll <= 50)
+        if (spellRoll <= 50 && damagedAllies.Count > 0)
         {
-            var damagedAllies = session.AliveMonsters
-                .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
-                .ToList();
-
-            if (damagedAllies.Count == 0)
-            {
-                events.Add(new CombatEvent($"{monster.DisplayName} tries to cast Cure Serious Wounds but no ally needs healing."));
-                return true;
-            }
-
             var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
             var healRoll = _dice.Roll(8) + _dice.Roll(8) + 1;
             var before = target.CurrentHitPoints;
@@ -3855,19 +3856,10 @@ public sealed class CombatResolver
 
     private bool ResolveLevel5ClericSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
+        var damagedAllies = GetMonstersNeedingHealing(session);
         var spellRoll = _dice.Roll(100);
-        if (spellRoll <= 50)
+        if (spellRoll <= 50 && damagedAllies.Count > 0)
         {
-            var damagedAllies = session.AliveMonsters
-                .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
-                .ToList();
-
-            if (damagedAllies.Count == 0)
-            {
-                events.Add(new CombatEvent($"{monster.DisplayName} tries to cast Cure Critical Wounds but no ally needs healing."));
-                return true;
-            }
-
             var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
             var healRoll = _dice.Roll(8) + _dice.Roll(8) + _dice.Roll(8) + 3;
             var before = target.CurrentHitPoints;
@@ -3933,9 +3925,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel2DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var damagedAllies = session.AliveMonsters
-            .Where(m => m.CurrentHitPoints < m.MaxHitPoints)
-            .ToList();
+        var damagedAllies = GetMonstersNeedingHealing(session);
 
         var canCastCureLightWounds = damagedAllies.Count > 0;
         var spellRoll = _dice.Roll(100);
@@ -4038,19 +4028,10 @@ public sealed class CombatResolver
 
     private bool ResolveLevel4DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
+        var damagedAllies = GetMonstersNeedingHealing(session);
         var spellRoll = _dice.Roll(100);
-        if (spellRoll <= 50)
+        if (spellRoll <= 50 && damagedAllies.Count > 0)
         {
-            var damagedAllies = session.AliveMonsters
-                .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
-                .ToList();
-
-            if (damagedAllies.Count == 0)
-            {
-                events.Add(new CombatEvent($"{monster.DisplayName} tries to cast Cure Serious Wounds but no ally needs healing."));
-                return true;
-            }
-
             var target = damagedAllies[_dice.Roll(damagedAllies.Count) - 1];
             var healRoll = _dice.Roll(8) + _dice.Roll(8) + 1;
             var before = target.CurrentHitPoints;
@@ -4744,14 +4725,19 @@ public sealed class CombatResolver
         }
     }
 
+    private static List<MonsterInstance> GetMonstersNeedingHealing(CombatSession session)
+    {
+        return session.AliveMonsters
+            .Where(m => m.CurrentHitPoints < Math.Max(0, m.MaxHitPoints - session.GetMonsterWoundingUnhealableDamage(m)))
+            .ToList();
+    }
+
     private bool ResolveLevel1PriestSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
         if (session.Level1PriestSpellCastsUsed >= 3)
             return false;
 
-        var damagedAllies = session.AliveMonsters
-            .Where(m => !ReferenceEquals(m, monster) && m.CurrentHitPoints < m.MaxHitPoints)
-            .ToList();
+        var damagedAllies = GetMonstersNeedingHealing(session);
 
         if (damagedAllies.Count == 0)
             return false;
@@ -6143,7 +6129,7 @@ public sealed class CombatResolver
             }
         }
 
-        DestroyEquippedItem(target, item, events, $"{monster.DisplayName} corrodes");
+        DestroyEquippedItem(target, item, events, $"{monster.DisplayName} corrodes {target.Name}'s {item.Name}; it rusts away instantly!");
     }
 
     private void TryApplyHitOnMonsterDestroysMetal(Character attacker, MonsterInstance target, Item? strikingWeapon, List<CombatEvent> events)
@@ -6177,30 +6163,8 @@ public sealed class CombatResolver
             }
         }
 
-        var slots = attacker.Equipment
-            .Where(kv => kv.Value != null && ReferenceEquals(kv.Value, strikingWeapon))
-            .Select(kv => kv.Key)
-            .Distinct()
-            .ToList();
-
-        if (slots.Count == 0)
-        {
-            attacker.Inventory.RemoveAll(i => ReferenceEquals(i, strikingWeapon));
-            events.Add(new CombatEvent($"{attacker.Name}'s {strikingWeapon.Name} corrodes away after striking {target.DisplayName}!"));
-            return;
-        }
-
-        foreach (var slot in slots)
-            attacker.Equipment[slot] = null;
-
-        attacker.Inventory.RemoveAll(i => ReferenceEquals(i, strikingWeapon));
-        attacker.RefreshRingProtectionEffects();
-        attacker.RefreshRingWizardryEffects();
-        EquipmentManager.RecalculateDamageFromEquipment(attacker);
-        attacker.RefreshMoveFromArmorAndClass();
-        attacker.RefreshMonkProgressionStats();
-
-        events.Add(new CombatEvent($"{attacker.Name}'s {strikingWeapon.Name} corrodes away after striking {target.DisplayName}!"));
+        DestroyEquippedItem(attacker, strikingWeapon, events,
+            $"{attacker.Name}'s {strikingWeapon.Name} corrodes away after striking {target.DisplayName}!");
     }
 
     private static bool IsMagicalItem(Item item)
@@ -6237,24 +6201,19 @@ public sealed class CombatResolver
         return true;
     }
 
-    private static void DestroyEquippedItem(Character target, Item item, List<CombatEvent> events, string source)
+    private static void DestroyEquippedItem(Character target, Item item, List<CombatEvent> events, string message)
     {
         foreach (var slot in target.Equipment
                      .Where(kv => kv.Value != null && ReferenceEquals(kv.Value, item))
                      .Select(kv => kv.Key)
                      .ToList())
         {
-            target.Equipment[slot] = null;
+            EquipmentManager.Unequip(target, slot);
         }
 
         target.Inventory.RemoveAll(i => ReferenceEquals(i, item));
-        target.RefreshRingProtectionEffects();
-        target.RefreshRingWizardryEffects();
-        EquipmentManager.RecalculateDamageFromEquipment(target);
-        target.RefreshMoveFromArmorAndClass();
-        target.RefreshMonkProgressionStats();
 
-        events.Add(new CombatEvent($"{source} {target.Name}'s {item.Name}; it rusts away instantly!"));
+        events.Add(new CombatEvent(message));
     }
 
     private static void ApplyBasicWarriorAttackProgressionAfterLevelDrain(Character target, int effectiveLevel)

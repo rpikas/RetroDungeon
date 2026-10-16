@@ -844,6 +844,10 @@ public sealed class CampCharacterInspectForm : Form
             {
                 targetSlot = EquipmentSlot.Range;
             }
+            else if (item.IsTwoHanded)
+            {
+                targetSlot = EquipmentSlot.MainHand;
+            }
             else
             {
                 var slotChoice = PromptChoice("Equip Weapon To", new List<string> { "Main Hand", "Off Hand" });

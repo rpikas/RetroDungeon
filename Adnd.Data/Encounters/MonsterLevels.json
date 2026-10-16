@@ -52,7 +52,7 @@
       { "DiceMin": 41, "DiceMax": 45, "Creature": "Ghoul", "CountMin": 1, "CountMax": 4 },
       { "DiceMin": 46, "DiceMax": 50, "Creature": "Lizard, giant", "CountMin": 1, "CountMax": 3 },
       { "DiceMin": 51, "DiceMax": 54, "Creature": "Lycanthrope, wererat", "CountMin": 2, "CountMax": 5 },
-      { "DiceMin": 55, "DiceMax": 99, "Creature": "Ochre jelly", "CountMin": 1, "CountMax": 1 },
+      { "DiceMin": 55, "DiceMax": 60, "Creature": "Ochre jelly", "CountMin": 1, "CountMax": 1 },
       { "DiceMin": 61, "DiceMax": 72, "Creature": "Ogre", "CountMin": 1, "CountMax": 3 },
       { "DiceMin": 73, "DiceMax": 73, "Creature": "Piercer Medium", "CountMin": 2, "CountMax": 5 },
       { "DiceMin": 74, "DiceMax": 74, "Creature": "Piercer Large", "CountMin": 2, "CountMax": 5 },
@@ -63,147 +63,27 @@
       { "DiceMin": 94, "DiceMax": 95, "Creature": "Tick, giant", "CountMin": 2, "CountMax": 5 },
       { "DiceMin": 96, "DiceMax": 100, "Creature": "Weasel, giant", "CountMin": 1, "CountMax": 4 }
     ],
-    "Level4": [
-      {
-        "DiceMin": 1,
-        "DiceMax": 8,
-        "Creature": "Ape, carnivorous",
-        "CountMin": 1,
-        "CountMax": 3
-      },
-      {
-        "DiceMin": 9,
-        "DiceMax": 14,
-        "Creature": "Blink dog",
-        "CountMin": 2,
-        "CountMax": 5
-      },
-      {
-        "DiceMin": 15,
-        "DiceMax": 22,
-        "Creature": "Character — see Character Subtable",
-        "CountMin": 2,
-        "CountMax": 5
-      },
-      {
-        "DiceMin": 23,
-        "DiceMax": 24,
-        "Creature": "Dragon — see Dragon Subtable below",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 25,
-        "DiceMax": 30,
-        "Creature": "Gargoyle",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 31,
-        "DiceMax": 36,
-        "Creature": "Ghast",
-        "CountMin": 1,
-        "CountMax": 4
-      },
-      {
-        "DiceMin": 37,
-        "DiceMax": 40,
-        "Creature": "Gray ooze",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 41,
-        "DiceMax": 44,
-        "Creature": "Hell hound",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 45,
-        "DiceMax": 46,
-        "Creature": "Hydra, 5 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 47,
-        "DiceMax": 47,
-        "Creature": "Hydra, 6 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 48,
-        "DiceMax": 48,
-        "Creature": "Pyrohydra, 5 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 49,
-        "DiceMax": 62,
-        "Creature": "Lycanthrope, werewolf",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 63,
-        "DiceMax": 75,
-        "Creature": "Mold, yellow",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 76,
-        "DiceMax": 78,
-        "Creature": "Owlbear",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 79,
-        "DiceMax": 99,
-        "Creature": "Rust monster",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 81,
-        "DiceMax": 82,
-        "Creature": "Shadow",
-        "CountMin": 1,
-        "CountMax": 3
-      },
-      {
-        "DiceMin": 83,
-        "DiceMax": 90,
-        "Creature": "Snake, giant, constrictor",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 91,
-        "DiceMax": 94,
-        "Creature": "Su-monster",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 95,
-        "DiceMax": 96,
-        "Creature": "Toad, ice",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 97,
-        "DiceMax": 100,
-        "Creature": "Toad, poisonous",
-        "CountMin": 1,
-        "CountMax": 3
-      }
+   "Level4": [
+  { "DiceMin": 1, "DiceMax": 8, "Creature": "Ape, carnivorous", "CountMin": 1, "CountMax": 3 },
+  { "DiceMin": 9, "DiceMax": 14, "Creature": "Blink dog", "CountMin": 2, "CountMax": 5 },
+  { "DiceMin": 15, "DiceMax": 22, "Creature": "Character — see Character Subtable", "CountMin": 2, "CountMax": 5 },
+  { "DiceMin": 23, "DiceMax": 24, "Creature": "Dragon — see Dragon Subtable below", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 25, "DiceMax": 30, "Creature": "Gargoyle", "CountMin": 1, "CountMax": 2 },
+  { "DiceMin": 31, "DiceMax": 36, "Creature": "Ghast", "CountMin": 1, "CountMax": 4 },
+  { "DiceMin": 37, "DiceMax": 40, "Creature": "Gray ooze", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 41, "DiceMax": 44, "Creature": "Hell hound", "CountMin": 1, "CountMax": 2 },
+  { "DiceMin": 45, "DiceMax": 46, "Creature": "Hydra, 5 heads", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 47, "DiceMax": 47, "Creature": "Hydra, 6 heads", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 48, "DiceMax": 48, "Creature": "Pyrohydra, 5 heads", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 49, "DiceMax": 62, "Creature": "Lycanthrope, werewolf", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 63, "DiceMax": 75, "Creature": "Mold, yellow", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 76, "DiceMax": 78, "Creature": "Owlbear", "CountMin": 1, "CountMax": 2 },
+  { "DiceMin": 79, "DiceMax": 80, "Creature": "Rust monster", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 81, "DiceMax": 82, "Creature": "Shadow", "CountMin": 1, "CountMax": 3 },
+  { "DiceMin": 83, "DiceMax": 90, "Creature": "Snake, giant, constrictor", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 91, "DiceMax": 94, "Creature": "Su-monster", "CountMin": 1, "CountMax": 2 },
+  { "DiceMin": 95, "DiceMax": 96, "Creature": "Toad, ice", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 97, "DiceMax": 100, "Creature": "Toad, poisonous", "CountMin": 1, "CountMax": 3 }
     ],
     "Level5": [
       { "DiceMin": 1, "DiceMax": 8, "Creature": "Character — see Character Subtable", "CountMin": 2, "CountMax": 5 },

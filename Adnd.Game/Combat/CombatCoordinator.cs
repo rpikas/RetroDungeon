@@ -2739,6 +2739,7 @@ public sealed class CombatCoordinator
             ArmorClassBonus = source.ArmorClassBonus,
             Damage = source.Damage,
             DamageVsLarge = source.DamageVsLarge,
+            IsTwoHanded = source.IsTwoHanded,
             AllowedClasses = new List<CharacterClass>(source.AllowedClasses),
             SpecialAbilities = new List<string>(source.SpecialAbilities)
         };

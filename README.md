@@ -23,6 +23,21 @@ Depening on Abilities and race selected, different classes can be selected
 
 Happy Gaming!
 
+## Two-handed equipment
+
+A two-handed item requires both Main Hand and Off Hand to be empty before equipping
+it, and then occupies both hands. Unequip it before equipping another item in either
+hand; equipping a replacement does not remove existing hand equipment automatically.
+Shop purchases and treasure retain this property, and older saved weapons recover
+missing two-handed flags from the item catalogue when characters are loaded.
+
+## Monster healing in combat
+
+Monster casters only choose healing spells when a living monster (including the caster)
+can regain HP. Otherwise, they cast an available non-healing spell or attack normally.
+Damage that cannot be healed by spells, such as Sword of Wounding damage, does not
+make a monster an eligible healing target.
+
 ## The tabletop viewer (optional)
 
 `WizardryViewer/` is a Unity project that watches the game and lays it out as a miniatures

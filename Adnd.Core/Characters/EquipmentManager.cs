@@ -60,6 +60,17 @@ public static class EquipmentManager
         }
 
         var slot = item.Slot.Value;
+        var isHandSlot = slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand;
+
+        if (isHandSlot
+            && (c.Equipment[EquipmentSlot.MainHand]?.IsTwoHanded == true
+                || c.Equipment[EquipmentSlot.OffHand]?.IsTwoHanded == true
+                || (item.IsTwoHanded
+                    && (c.Equipment[EquipmentSlot.MainHand] != null
+                        || c.Equipment[EquipmentSlot.OffHand] != null))))
+        {
+            return false;
+        }
 
         if (slot == EquipmentSlot.OffHand
             && item.Type == ItemType.Weapon
@@ -69,31 +80,15 @@ public static class EquipmentManager
         }
 
         var movedItems = new System.Collections.Generic.HashSet<Item>();
-        var isHandSlot = slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand;
 
         if (isHandSlot && item.IsTwoHanded)
         {
             // Two-handed weapon occupies both hands.
-            UnequipSlotToInventory(c, EquipmentSlot.MainHand, movedItems);
-            UnequipSlotToInventory(c, EquipmentSlot.OffHand, movedItems);
             c.Equipment[EquipmentSlot.MainHand] = item;
             c.Equipment[EquipmentSlot.OffHand] = item;
         }
         else
         {
-            if (isHandSlot)
-            {
-                // If the opposite hand currently participates in a two-handed setup,
-                // clear both hands before equipping a one-handed item.
-                var otherHand = slot == EquipmentSlot.MainHand ? EquipmentSlot.OffHand : EquipmentSlot.MainHand;
-                var otherHandItem = c.Equipment[otherHand];
-                if (otherHandItem != null && otherHandItem.IsTwoHanded)
-                {
-                    UnequipSlotToInventory(c, EquipmentSlot.MainHand, movedItems);
-                    UnequipSlotToInventory(c, EquipmentSlot.OffHand, movedItems);
-                }
-            }
-
             UnequipSlotToInventory(c, slot, movedItems);
             c.Equipment[slot] = item;
         }

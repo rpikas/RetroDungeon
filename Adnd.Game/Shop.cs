@@ -162,6 +162,7 @@ public static class Shop
         ArmorClassBonus = it.ArmorClassBonus,
         Damage = it.Damage,
         DamageVsLarge = it.DamageVsLarge,
+        IsTwoHanded = it.IsTwoHanded,
         Range = it.Range,
         FireRate = it.FireRate,
         RequiresAmmo = it.RequiresAmmo,

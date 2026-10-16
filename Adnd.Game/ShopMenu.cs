@@ -310,6 +310,7 @@ public class ShopMenu
                     ArmorClassBonus = it.ArmorClassBonus,
                     Damage = it.Damage,
                     DamageVsLarge = it.DamageVsLarge,
+                    IsTwoHanded = it.IsTwoHanded,
                     AllowedClasses = new System.Collections.Generic.List<CharacterClass>(it.AllowedClasses),
                     SpecialAbilities = new System.Collections.Generic.List<string>(it.SpecialAbilities)
                 };
