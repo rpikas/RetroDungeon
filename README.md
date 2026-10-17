@@ -73,6 +73,9 @@ Thief Find Traps and Disarm Traps checks and results link to
 `PHB28TheifSpeicilaAbilitesChance.png` in the rule/dice log when references are enabled.
 Thief scroll-deciphering checks using Read Languages also reference this table.
 
+Treasure-type roll entries link to `MM105TreasureTypes.png`, and main magic-item
+category rolls link to `DMG121MagicItemsMainTable.png` when rule references are enabled.
+
 ## Carrion stench nausea
 
 Each monster group with Nausea causes one saving throw vs. poison per living party

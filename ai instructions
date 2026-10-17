@@ -4659,4 +4659,17 @@ Find Traps result: trap found by UrSnabb (Gas Bomb).
 Disarm Traps check (UrSnabb): 1d100=89 vs 60% => failed
 Failed disarm triggers trap immediately (Gas Bomb).
 ___
-DMG121MagicItemsMainTable
+When tresure is found, and writing somthing like this
+[10:03:08] Green Dragon #1: rolling Treasure Type D (D). then refer to MM105TreasureTypes
+
+When magic items are found in the log refer to DMG121MagicItemsMainTable when writing something like this
+[10:03:08]     Magic item #1: d100 80 => Swords (G).
+___
+Items Sword +1, +2 vs. magic-using & enchanted creatures should have a +2 bonus to hit and +2 damage against monsters that can cast spells.
+
+
+
+        ["Sword +1, +2 vs. magic-using & enchanted creatures"] = "sword long",
+        ["Sword +1, +3 vs. lycanthropes & shape changers"] = "sword long",
+        ["Sword +1, +3 vs. regenerating creatures"] = "sword long",
+        ["Sword +1, +4 vs. reptiles"] = "sword long",

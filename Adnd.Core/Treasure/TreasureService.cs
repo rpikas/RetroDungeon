@@ -43,7 +43,14 @@ public sealed class TreasureService
         {
             RuleApplicationInfo.Publish("Treasure roll details:");
             foreach (var line in result.LogLines)
-                RuleApplicationInfo.Publish(line);
+            {
+                if (line.Contains(": rolling Treasure Type ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("MM", "105TreasureTypes", line);
+                else if (Regex.IsMatch(line, @"^\s*Magic item #\d+: d100 \d+ => ", RegexOptions.IgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "121MagicItemsMainTable", line);
+                else
+                    RuleApplicationInfo.Publish(line);
+            }
         }
 
         foreach (var linked in linkedRuleMessages)

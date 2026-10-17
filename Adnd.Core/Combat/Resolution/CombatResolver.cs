@@ -149,7 +149,7 @@ public sealed class CombatResolver
         ["Short Sword +4"] = "sword short",
         ["Short Sword +5"] = "sword short",
         ["Short Sword -2"] = "sword short",
-        ["Sword +1 (No Special Abilities)"] = "sword long",
+        ["Sword +1"] = "sword long",
         ["Sword +1, +2 vs. magic-using & enchanted creatures"] = "sword long",
         ["Sword +1, +3 vs. lycanthropes & shape changers"] = "sword long",
         ["Sword +1, +3 vs. regenerating creatures"] = "sword long",
