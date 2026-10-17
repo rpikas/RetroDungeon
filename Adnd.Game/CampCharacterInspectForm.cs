@@ -159,6 +159,7 @@ public sealed class CampCharacterInspectForm : Form
         _buttonsPanel.Controls.Add(_layOnHandsButton);
         _monkBodyHealButton = MakeButton("H)eal Body", (_, _) => MonkBodyHealAction());
         _buttonsPanel.Controls.Add(_monkBodyHealButton);
+        _buttonsPanel.Controls.Add(MakeButton("N)Unequip", (_, _) => UnequipAction()));
         _buttonsPanel.Controls.Add(MakeButton("L↵eave", (_, _) => Close()));
 
         _oldStyleFooterLabel = new Label
@@ -171,7 +172,7 @@ public sealed class CampCharacterInspectForm : Form
             ForeColor = GameRulesProvider.Current.DefaultColor,
             BorderStyle = BorderStyle.FixedSingle,
             Font = new Font("Consolas", 24f, FontStyle.Bold),
-            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM C)HARACTER SHEET",
+            Text = "R)EAD  T)RADE  P)OOL GOLD  S)PELL  N)UNEQUIP  L↵EAVE\nE)QUIP  D)ROP  I)DENTIFY  U)SE ITEM C)HARACTER SHEET",
             TextAlign = ContentAlignment.MiddleLeft,
             Visible = false
         };
@@ -218,6 +219,7 @@ public sealed class CampCharacterInspectForm : Form
         if (c?.IsMonk() == true && c.GetMonkLevel() >= 7)
             actions.Add(("monkBodyHeal", c.MonkBodyHealUsedToday ? "Body Heal (used today)" : "Body Heal"));
 
+        actions.Add(("unequip", "N) Unequip an item"));
         actions.Add(("leave", "Leave"));
         return actions;
     }
@@ -234,6 +236,7 @@ public sealed class CampCharacterInspectForm : Form
             {
                 case "read": MemorizeSpellAction(); break;
                 case "equip": EquipAction(); break;
+                case "unequip": UnequipAction(); break;
                 case "trade": TradeAction(); break;
                 case "drop": DropAction(); break;
                 case "pool": PoolGoldAction(); break;
@@ -287,6 +290,9 @@ public sealed class CampCharacterInspectForm : Form
                 break;
             case Keys.E:
                 EquipAction();
+                break;
+            case Keys.N:
+                UnequipAction();
                 break;
             case Keys.D:
                 DropAction();
@@ -522,10 +528,10 @@ public sealed class CampCharacterInspectForm : Form
         _monkBodyHealButton.Visible = c.IsMonk() && c.GetMonkLevel() >= 7;
         _monkBodyHealButton.Text = c.MonkBodyHealUsedToday ? "H)eal Body (used)" : "H)eal Body";
         _oldStyleFooterLabel.Text = c.IsPaladin()
-            ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER L)AY ON HANDS"
+            ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  N)UNEQUIP  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER L)AY ON HANDS"
             : c.IsMonk() && c.GetMonkLevel() >= 7
-                ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER H)EAL BODY"
-                : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  C)HARACTER SHEET";
+                ? "R)EAD  T)RADE  P)OOL GOLD  S)PELL  N)UNEQUIP  L↵EAVE\nE)QUIP D)ROP I)DENTIFY U)SE C)HARACTER H)EAL BODY"
+                : "R)EAD  T)RADE  P)OOL GOLD  S)PELL  N)UNEQUIP  L↵EAVE\nE)QUIP  D)ROP   I)DENTIFY  U)SE ITEM  C)HARACTER SHEET";
 
         if (GameRulesProvider.Current.UIOldStyle)
         {
@@ -832,30 +838,10 @@ public sealed class CampCharacterInspectForm : Form
         if (c == null)
             return;
 
-        var equipped = c.Equipment.Where(kv => kv.Value != null).Select(kv => kv.Key).ToList();
-
         var equipable = c.Inventory
             .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue)
             .Where(it => it.AllowedClasses.Count == 0 || c.Classes.Any(cls => it.AllowedClasses.Contains(cls)))
             .ToList();
-
-        if (equipable.Count > 0 && equipped.Count > 0)
-        {
-            var actionIdx = PromptEquipAction();
-            if (!actionIdx.HasValue)
-                return;
-
-            if (actionIdx.Value == 1)
-            {
-                UnequipAction();
-                return;
-            }
-        }
-        else if (equipable.Count == 0 && equipped.Count > 0)
-        {
-            UnequipAction();
-            return;
-        }
 
         if (equipable.Count == 0)
         {
@@ -1829,98 +1815,6 @@ public sealed class CampCharacterInspectForm : Form
     private static void NotImplemented(string actionName)
     {
         ViewerMessage.Say(null, actionName, $"[{actionName} action not yet implemented]", null);
-    }
-
-    private int? PromptEquipAction()
-    {
-        if (!GameRulesProvider.Current.UIOldStyle)
-            return PromptChoice("Equip", new List<string> { "Equip item", "Unequip item" });
-
-        using var form = new Form
-        {
-            Text = "Equip",
-            FormBorderStyle = FormBorderStyle.None,
-            StartPosition = FormStartPosition.CenterParent,
-            MinimizeBox = false,
-            MaximizeBox = false,
-            ShowInTaskbar = false,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            KeyPreview = true,
-            ClientSize = new Size(820, 190)
-        };
-
-        var framePanel = new Panel
-        {
-            Left = 4,
-            Top = 4,
-            Width = form.ClientSize.Width - 8,
-            Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
-            BackColor = Color.Black
-        };
-
-        var titleLabel = new Label
-        {
-            Left = 0,
-            Top = 10,
-            Width = framePanel.ClientSize.Width,
-            Height = 36,
-            Text = "EQUIPMENT",
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 22f, FontStyle.Bold)
-        };
-
-        var questionLabel = new Label
-        {
-            Left = 0,
-            Top = 52,
-            Width = framePanel.ClientSize.Width,
-            Height = 80,
-            Text = "EQUIP OR UNEQUIP AN ITEM?",
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 18f, FontStyle.Bold)
-        };
-
-        var optionsLabel = new Label
-        {
-            Left = 0,
-            Top = 132,
-            Width = framePanel.ClientSize.Width,
-            Height = 34,
-            Text = "E)quip    U)nequip",
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = questionLabel.Font
-        };
-
-        int? picked = null;
-        form.KeyDown += (_, e) =>
-        {
-            if (e.KeyCode != Keys.E && e.KeyCode != Keys.U && e.KeyCode != Keys.Escape)
-                return;
-
-            e.Handled = true;
-            e.SuppressKeyPress = true;
-            picked = e.KeyCode == Keys.E ? 0 : e.KeyCode == Keys.U ? 1 : null;
-            form.DialogResult = picked.HasValue ? DialogResult.OK : DialogResult.Cancel;
-            form.Close();
-        };
-
-        framePanel.Controls.Add(titleLabel);
-        framePanel.Controls.Add(questionLabel);
-        framePanel.Controls.Add(optionsLabel);
-        form.Controls.Add(framePanel);
-
-        var outcome = ViewerDialog.RunPick(form, this, "Equip or unequip an item?",
-            ViewerIds.Character(_characterName), new[] { "E)quip", "U)nequip" }, _publish);
-
-        return outcome.Result == DialogResult.OK ? outcome.Picked ?? picked : null;
     }
 
     private int? PromptChoice(string title, List<string> options)

@@ -4728,6 +4728,14 @@ melee round there is a -2, on the third a -3, etc. The inner armor class of the 
 spacious area, it causes 2-8 hit points of damage and if the victim fails its poison saving
 throw, it is killed by the purple worm's poison.
 45,1
-
+___
 When enoutering Devil,arch.* that means that a random monster of "Type": "Devil, Arch1fefiend" 
 should be encountered. 45,1
+___
+When inspecting a charater, and selecting E)quip do not ask if you want to E)quip or U)nequip 
+instead just asume that you want to equip.
+In the inspect chatater, introduce N)Unequip just to thel left of the L)eave option. 
+When N is pressed ask what item you want to unequip.
+___
+Implement "SpecialAttacks":  "Pyro hydra breath", that should cause 8 damage per head and 4
+if the target makes a save vs. breath weapon. The hydra can use this special attack once per battle.
