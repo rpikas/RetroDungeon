@@ -1919,6 +1919,7 @@ public sealed class CampCharacterInspectForm : Form
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+        OldStyleDialog.Apply(form, list);
 
         // Nine callers come through here -- equip, unequip, drop, trade, which spell, which target -- so this is
         // the one place that has to know about the table, and all nine become answerable from it at once.
@@ -2282,8 +2283,9 @@ public sealed class CampCharacterInspectForm : Form
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+        OldStyleDialog.Apply(form, label, input);
 
-        input.Focus();
+        form.Shown += (_, _) => input.Focus();
 
         var result = form.ShowDialog(this);
         if (result != DialogResult.OK)

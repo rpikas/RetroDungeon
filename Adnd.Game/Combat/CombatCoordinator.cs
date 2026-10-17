@@ -2942,10 +2942,11 @@ public sealed class CombatCoordinator
 
     private DialogResult AskYesNoOnBoth(IWin32Window owner, CombatSession session, string title, string question)
     {
+        var oldStyle = GameRulesProvider.Current.UIOldStyle;
         using var form = new Form
         {
             Text = title,
-            FormBorderStyle = FormBorderStyle.FixedDialog,
+            FormBorderStyle = oldStyle ? FormBorderStyle.None : FormBorderStyle.FixedDialog,
             StartPosition = FormStartPosition.CenterParent,
             MinimizeBox = false,
             MaximizeBox = false,
@@ -2953,7 +2954,7 @@ public sealed class CombatCoordinator
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             KeyPreview = true,
-            ClientSize = new Size(620, 170),
+            ClientSize = oldStyle ? new Size(820, 190) : new Size(620, 170),
         };
 
         var framePanel = new Panel
@@ -2969,40 +2970,40 @@ public sealed class CombatCoordinator
         var titleLabel = new Label
         {
             Left = 0,
-            Top = 18,
+            Top = oldStyle ? 10 : 18,
             Width = framePanel.ClientSize.Width,
-            Height = 34,
+            Height = oldStyle ? 36 : 34,
             Text = title.ToUpperInvariant(),
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 18f, FontStyle.Bold)
+            Font = new Font("Consolas", oldStyle ? 22f : 18f, FontStyle.Bold)
         };
 
         var questionLabel = new Label
         {
             Left = 16,
-            Top = 66,
+            Top = oldStyle ? 52 : 66,
             Width = framePanel.ClientSize.Width - 32,
-            Height = 54,
+            Height = oldStyle ? 80 : 54,
             Text = question,
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 12f, FontStyle.Bold)
+            Font = new Font("Consolas", oldStyle ? 18f : 12f, FontStyle.Bold)
         };
 
         var hintLabel = new Label
         {
             Left = 0,
-            Top = 124,
+            Top = oldStyle ? 132 : 124,
             Width = framePanel.ClientSize.Width,
-            Height = 26,
-            Text = "(Y/N)",
+            Height = oldStyle ? 34 : 26,
+            Text = oldStyle ? "Y)ES    N)O" : "(Y/N)",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 12f, FontStyle.Bold)
+            Font = questionLabel.Font
         };
 
         form.KeyDown += (_, e) =>
@@ -4070,6 +4071,7 @@ public sealed class CombatCoordinator
         if (selectable.Count == 0)
             return (null, false);
 
+        var oldStyle = GameRulesProvider.Current.UIOldStyle;
         using var form = new Form
         {
             Text = title,
@@ -4081,7 +4083,7 @@ public sealed class CombatCoordinator
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             KeyPreview = true,
-            ClientSize = new Size(820, 360),
+            ClientSize = oldStyle ? new Size(1000, 440) : new Size(820, 360),
         };
 
         var framePanel = new Panel
@@ -4104,15 +4106,17 @@ public sealed class CombatCoordinator
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 16f, FontStyle.Bold)
+            Font = new Font("Consolas", oldStyle ? 22f : 16f, FontStyle.Bold)
         };
+        if (oldStyle)
+            titleLabel.Height = 36;
 
         var body = new Label
         {
             Left = 16,
             Top = 48,
             Width = framePanel.ClientSize.Width - 32,
-            Height = 250,
+            Height = oldStyle ? framePanel.ClientSize.Height - 64 : 250,
             Text = promptText + Environment.NewLine + string.Join(Environment.NewLine, selectable.Select((c, i) =>
             {
                 var classText = includeClassInList
@@ -4123,7 +4127,7 @@ public sealed class CombatCoordinator
             TextAlign = ContentAlignment.TopLeft,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 11f, FontStyle.Bold)
+            Font = new Font("Consolas", oldStyle ? 18f : 11f, FontStyle.Bold)
         };
 
         int selectedIndex = -1;

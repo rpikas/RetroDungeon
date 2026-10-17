@@ -1646,7 +1646,7 @@ public sealed class EncounterForm : Form
         form.MaximizeBox = false;
 
         Control promptControl;
-        if (isChooseSpellDialog)
+        if (isChooseSpellDialog || GameRulesProvider.Current.UIOldStyle)
         {
             promptControl = new TextBox
             {
@@ -1715,6 +1715,7 @@ public sealed class EncounterForm : Form
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+        OldStyleDialog.Apply(form, promptControl, input);
         form.Shown += (_, _) =>
         {
             input.Focus();

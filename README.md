@@ -27,10 +27,14 @@ Happy Gaming!
 
 With Old Style UI enabled, the character inspect equipment action uses a framed
 keyboard prompt: **E)quip**, **U)nequip**, or Escape to cancel. Answer alternatives
-in old-style dialogs match the main question or message font size. Modern UI keeps
-the list-and-buttons dialog.
+in old-style dialogs match the main question or message font size. Combat confirmations
+(including Disarm Trap), trap party selection, and inspect/combat choice prompts also
+use borderless black frames, 22-point titles, and 18-point questions and answers.
+Selection prompts accept Enter to select and Escape to go back. For numbered spell
+and target prompts, type the option number and press Enter. Modern UI keeps its
+existing dialogs.
 
-A two-handed item requires
+A two-handed item requires both Main Hand and Off Hand to be empty before equipping
 it, and then occupies both hands. Unequip it before equipping another item in either
 hand; equipping a replacement does not remove existing hand equipment automatically.
 Shop purchases and treasure retain this property, and older saved weapons recover
