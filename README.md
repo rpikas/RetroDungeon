@@ -38,6 +38,8 @@ screen also use the borderless old-style frame. The Inspect screen retains its l
 shortcuts and uses matching 18-point details and menu text beneath a 22-point title.
 Old-style target-group prompts show the question followed by each numbered group
 on its own line. Modern UI keeps its existing dialogs.
+The Trap Triggered message uses the same 22-point font for its heading, trap name,
+and outcome, with the dialog height expanding to fit wrapped text.
 
 A two-handed item requires
 it, and then occupies both hands. Unequip it before equipping another item in either

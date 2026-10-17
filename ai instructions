@@ -4700,3 +4700,5 @@ in same way when finding treasure, magic item refer to the following tables in t
 DMG122TreasureTableC_Rings
 DMG125TreasureTableD_RodsStavesAndWands
 And when finding scrolls refer to DMG121TreasureTableB_Scrolls
+
+when showing the message Trap triggered make sure that all text in the dialog is as big as the header

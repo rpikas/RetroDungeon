@@ -3909,8 +3909,12 @@ public sealed class CombatCoordinator
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 14f, FontStyle.Bold)
+            Font = titleLabel.Font
         };
+        detailsLabel.Height = Math.Max(detailsLabel.Height,
+            detailsLabel.GetPreferredSize(new Size(detailsLabel.Width, 0)).Height);
+        form.ClientSize = new Size(form.ClientSize.Width, detailsLabel.Bottom + 24);
+        framePanel.Height = form.ClientSize.Height - 8;
 
         form.KeyDown += (_, e) =>
         {
