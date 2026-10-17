@@ -36,7 +36,8 @@ this old-style frame, with a scrollable level list; type the dungeon level and p
 Enter, or Escape to cancel. The camp Inspect character chooser and character Inspect
 screen also use the borderless old-style frame. The Inspect screen retains its letter
 shortcuts and uses matching 18-point details and menu text beneath a 22-point title.
-Modern UI keeps its existing dialogs.
+Old-style target-group prompts show the question followed by each numbered group
+on its own line. Modern UI keeps its existing dialogs.
 
 A two-handed item requires
 it, and then occupies both hands. Unequip it before equipping another item in either
@@ -75,6 +76,16 @@ Thief scroll-deciphering checks using Read Languages also reference this table.
 
 Treasure-type roll entries link to `MM105TreasureTypes.png`, and main magic-item
 category rolls link to `DMG121MagicItemsMainTable.png` when rule references are enabled.
+
+## Conditional sword bonuses
+
+The +1 swords versus magic-using/enchanted creatures, lycanthropes/shape changers,
+regenerating creatures, and reptiles act as +2, +3, +3, and +4 respectively against
+qualifying monsters, for both to-hit and damage. These are total bonuses, replacing
+rather than stacking with the normal +1. Spellcasting includes cleric/druid spells
+and the monster catalogue's Spell Use, Magic Use, and Spellcasting abilities.
+Applicable totals are logged on each attack attempt, even on a miss; the enhanced
+bonus also counts toward the target's minimum magical-weapon requirement.
 
 ## Carrion stench nausea
 

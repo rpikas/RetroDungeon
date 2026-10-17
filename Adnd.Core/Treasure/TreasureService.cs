@@ -1196,6 +1196,43 @@ public sealed class TreasureService
     {
         return roll switch
         {
+            <= 8 => "Arrow +1, 2-24 in number (xp 20)",
+            <= 12 => "Arrow +2, 2-16 in number (xp 50)",
+            <= 14 => "Arrow +3, 2-12 in number (xp 75)",
+            <= 15 => "Arrow of Slaying (xp 250)",
+            <= 20 => "Axe +1 (xp 300)",
+            <= 22 => "Axe +2 (xp 600)",
+            <= 23 => "Axe +2, Throwing (xp 750)",
+            <= 24 => "Axe +3 (xp 1000)",
+            <= 27 => "Battle Axe +1 (xp 400)",
+            <= 32 => "Bolt +2, 2-20 in number (xp 50)",
+            <= 35 => "Bow +1 (xp 500)",
+            <= 36 => ResolveCrossbowOfAccuracyResult(),
+            <= 37 => ResolveCrossbowOfDistanceResult(),
+            <= 38 => ResolveCrossbowOfSpeedResult(),
+            <= 46 => "Dagger +1, +2 vs. creatures smaller than man-sized (xp 100)",
+            <= 50 => "Dagger +2, +3 vs. creatures larger than man-sized (xp 250)",
+            <= 51 => "Dagger of Venom (xp —)",
+            <= 56 => "Flail +1 (xp 450)",
+            <= 60 => "Hammer +1 (xp 300)",
+            <= 62 => "Hammer +2 (xp 600)",
+            <= 63 => "Hammer +3, Dwarven Thrower (xp 1500)",
+            <= 64 => "Hammer of Thunderbolts (xp 2500)",
+            <= 67 => "Javelin +2 (xp 750)",
+            <= 72 => "Mace +1 (xp 350)",
+            <= 75 => "Mace +2 (xp 700)",
+            <= 76 => "Mace of Disruption (xp 1750)",
+            <= 77 => "Mace +4 (xp 1500)",
+            <= 80 => "Military Pick +1 (xp 400)",
+            <= 83 => "Morning Star +1 (xp 400)",
+            <= 88 => "Scimitar +2 (xp 750)",
+            <= 89 => "Sling of Seeking +2 (xp 1000)",
+            <= 94 => "Spear +1 (xp 500)",
+            <= 96 => "Spear +2 (xp 1000)",
+            <= 97 => "Spear +3 (xp 1750)",
+            <= 99 => "Spear, Cursed Backbiter (xp —)",
+            _ => "Trident (Military Fork) +3 (xp 1500)"
+            /*
             <= 8 => "Arrow +1, 2-24 in number (xp 20, gp 120)",
             <= 12 => "Arrow +2, 2-16 in number (xp 50, gp 300)",
             <= 14 => "Arrow +3, 2-12 in number (xp 75, gp 450)",
@@ -1232,6 +1269,7 @@ public sealed class TreasureService
             <= 97 => "Spear +3 (xp 1,75, gp 15)",
             <= 99 => "Spear, Cursed Backbiter (xp —, gp —)",
             _ => "Trident (Military Fork) +3 (xp 1,5, gp 12,5)"
+            */
         };
     }
 

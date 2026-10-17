@@ -1495,7 +1495,8 @@ public sealed class EncounterForm : Form
         }
 
         var groupLines = string.Join(Environment.NewLine, groupDescriptions);
-        var selected = PromptForNumber("Select Target Group", $"Which group should {caster.Name} target?\n\n{groupLines}", 1, groups.Count);
+        var separator = GameRulesProvider.Current.UIOldStyle ? Environment.NewLine : Environment.NewLine + Environment.NewLine;
+        var selected = PromptForNumber("Select Target Group", $"Which group should {caster.Name} target?{separator}{groupLines}", 1, groups.Count);
 
         if (!selected.HasValue)
             return null;
@@ -1534,7 +1535,8 @@ public sealed class EncounterForm : Form
         }
 
         var groupLines = string.Join(Environment.NewLine, groupDescriptions);
-        var selected = PromptForNumber("Select Target Group", $"Which group should {character.Name} target?\n\n{groupLines}", 1, groups.Count);
+        var separator = GameRulesProvider.Current.UIOldStyle ? Environment.NewLine : Environment.NewLine + Environment.NewLine;
+        var selected = PromptForNumber("Select Target Group", $"Which group should {character.Name} target?{separator}{groupLines}", 1, groups.Count);
 
         if (selected.HasValue)
         {
@@ -1658,7 +1660,7 @@ public sealed class EncounterForm : Form
                 Multiline = true,
                 ScrollBars = ScrollBars.Vertical,
                 BorderStyle = BorderStyle.FixedSingle,
-                Text = prompt,
+                Text = GameRulesProvider.Current.UIOldStyle ? prompt.ReplaceLineEndings(Environment.NewLine) : prompt,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
             };
         }

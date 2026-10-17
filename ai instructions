@@ -4646,14 +4646,18 @@ if any of the party members 1,2 or 3 is paralyzed, asleep or can not fight for o
 not counted as one of the first 3 so then number 4 can be hit by the monsters and use normal fight, not ranged. 42,7
 ___
 
-"SpecialAttacks":  "Nausea" with "Description": "Carrion stench in 10’ radius causes nausea unless save vs. poison is made; failure imposes -2 to hit."
+"SpecialAttacks":  "Nausea" with "Description": "Carrion stench in 10’ radius causes nausea unless save vs. poison 
+is made; failure imposes -2 to hit."
 Should only affect characters once per group of monsters, not once per monster and not every round. It should also
 make it more difficult to hit the monster that has this special attack, so it should be a -2 to hit bonus for
-the monster that has this special attack, write that in the log when characters are affected by this special attack and tries to hit.
-after the battle is over the -2 to hit bonus should be removed from the character that was affected by this special attack.
+the monster that has this special attack, write that in the log when characters are affected by this special 
+attack and tries to hit.
+after the battle is over the -2 to hit bonus should be removed from the character that was affected by this 
+special attack.
 ___
 
-When a thief use thief abilities like Find Traps and Disarm Traps, refer to this PHB28TheifSpeicilaAbilitesChance in the log, for example when
+When a thief use thief abilities like Find Traps and Disarm Traps, refer to this PHB28TheifSpeicilaAbilitesChance 
+in the log, for example when
 Find Traps check (UrSnabb): 1d100=46 vs 60% => found
 Find Traps result: trap found by UrSnabb (Gas Bomb).
 Disarm Traps check (UrSnabb): 1d100=89 vs 60% => failed
@@ -4663,13 +4667,24 @@ When tresure is found, and writing somthing like this
 [10:03:08] Green Dragon #1: rolling Treasure Type D (D). then refer to MM105TreasureTypes
 
 When magic items are found in the log refer to DMG121MagicItemsMainTable when writing something like this
-[10:03:08]     Magic item #1: d100 80 => Swords (G).
+[10:03:08]     Magic item #1: d100 80 => Swords (G). 43,3
 ___
-Items Sword +1, +2 vs. magic-using & enchanted creatures should have a +2 bonus to hit and +2 damage against monsters that can cast spells.
+Items Sword +1, +2 vs. magic-using & enchanted creatures should have a +2 bonus to hit and +2 damage against 
+monsters that can cast spells.
+in the same way Sword +1, +3 vs. lycanthropes & shape changers should have a +3 bonus to hit and +3 damage 
+against monsters that are lycanthropes or shape changers.
+also Sword +1, +3 vs. regenerating creatures should have a +3 bonus to hit and +3 damage against monsters 
+that can regenerate.
+and Sword +1, +4 vs. reptiles should have a +4 bonus to hit and +4 damage against monsters that are reptiles.
+When applicable write the bonus to hit and damage in the log when the character tries to hit a monster that 
+is affected by the special bonus of the weapon.
 
+in the old style UI when slecting target group introduce line breaks before 1. 2. 3. and 4, so it will 
+look like for example this: 
+"Which group should UrStor target?
+1. Group1: 1 Lvl 6 Cleric
+2. Group2: 1 Lvl 6 Fighter
 
-
-        ["Sword +1, +2 vs. magic-using & enchanted creatures"] = "sword long",
-        ["Sword +1, +3 vs. lycanthropes & shape changers"] = "sword long",
-        ["Sword +1, +3 vs. regenerating creatures"] = "sword long",
-        ["Sword +1, +4 vs. reptiles"] = "sword long",
+___
+when finding treasure, magic item, after for example Magic item #1: d100 80 => Swords (G).
+Then in this line refer to DMG124TreasureTableG_Swords

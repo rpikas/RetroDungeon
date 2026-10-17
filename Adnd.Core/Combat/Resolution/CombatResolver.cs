@@ -3292,8 +3292,14 @@ public sealed class CombatResolver
             }
 
             var swordSituationalBonus = GetSituationalSwordBonusAgainstTarget(mainHand, target);
-            if (swordSituationalBonus > 0)
+            if (swordSituationalBonus > 0 && mainHand != null)
+            {
                 thac0Modifier += swordSituationalBonus;
+                var totalSwordBonus = weaponMagicToHitBonus + swordSituationalBonus;
+                var bonusMessage = $"{member.Name} attacks {target.DisplayName} with {mainHand.Name}: +{totalSwordBonus} to hit and +{totalSwordBonus} damage against this creature (replaces normal +{weaponMagicToHitBonus}).";
+                events.Add(new CombatEvent(bonusMessage));
+                RuleApplicationInfo.Publish(bonusMessage);
+            }
 
             var weaponVsAcKey = ResolveWeaponVsArmorTableKey(mainHand, useRanged);
             var weaponVsAcAdjustment = GetWeaponVsArmorClassAdjustment(mainHand, target.ArmorClass, useRanged);
@@ -7739,7 +7745,8 @@ public sealed class CombatResolver
         if (requiredBonus <= 0)
             return true;
 
-        var effectiveWeaponBonus = GetEffectiveWeaponBonusForHitRequirement(weapon);
+        var effectiveWeaponBonus = Math.Max(GetEffectiveWeaponBonusForHitRequirement(weapon),
+            Math.Max(0, weapon?.ToHitBonus ?? 0) + GetSituationalSwordBonusAgainstTarget(weapon, target));
         return effectiveWeaponBonus >= requiredBonus;
     }
 
@@ -8424,18 +8431,18 @@ public sealed class CombatResolver
         {
             var lower = ability.ToLowerInvariant();
             if (lower.Contains("casts ")
-                || lower.Contains("mage spells")
-                || lower.Contains("magic-user spells")
-                || lower.Contains("illusionist spells")
-                || lower.Contains("cleric spells")
-                || lower.Contains("priest spells")
-                || lower.Contains("druid spells"))
+                || lower.Contains("spellcasting")
+                || lower.Contains("spell casting")
+                || lower.Contains("spell use")
+                || lower.Contains("magic use")
+                || Regex.IsMatch(lower, @"\b(mage|magic-user|illusionist|cleric|priest|druid)\b.*\bspells?\b"))
             {
                 return true;
             }
         }
 
-        return false;
+        return target.Template.Attacks.Any(attack =>
+            string.Equals(attack.Name?.Trim(), "Spell", StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsConjuredCreatedGatedOrSummoned(MonsterInstance target)
@@ -8485,13 +8492,17 @@ public sealed class CombatResolver
         }
 
         var composite = string.Join(" ",
-            new[] { target.Template.Name }
+            new[] { target.Template.Name, target.Template.TypeName }
                 .Concat(GetMonsterAbilityNames(target)))
             .ToLowerInvariant();
 
         return composite.Contains("lycanthrope")
                || composite.Contains("shape changer")
                || composite.Contains("shapechanger")
+               || composite.Contains("shapechange")
+               || composite.Contains("shape change")
+               || composite.Contains("shape-shift")
+               || composite.Contains("shapeshift")
                || composite.Contains("polymorph");
     }
 
@@ -8516,21 +8527,16 @@ public sealed class CombatResolver
         if (target?.Template == null)
             return false;
 
+        if (target.InstanceMonsterType == MonsterType.Dragon)
+            return true;
+
         var composite = string.Join(" ",
             new[] { target.Template.Name, target.Template.TypeName }
                 .Concat(GetMonsterAbilityNames(target)))
             .ToLowerInvariant();
 
-        return composite.Contains("reptile")
-               || composite.Contains("lizard")
-               || composite.Contains("snake")
-               || composite.Contains("serpent")
-               || composite.Contains("dragon")
-               || composite.Contains("drake")
-               || composite.Contains("wyvern")
-               || composite.Contains("crocod")
-               || composite.Contains("alligator")
-               || composite.Contains("turtle");
+        return Regex.IsMatch(composite,
+            @"\b(reptil\w*|lizard\w*|snake\w*|serpent\w*|dragons?|drakes?|wyverns?|crocodil\w*|alligators?|turtles?|tortoises?|dinosaurs?|basilisks?|hydras?|tuataras?|cobras?|vipers?|pythons?)\b");
     }
 
     private static bool IsTargetGiantKinForGiantSlayer(MonsterInstance target)
