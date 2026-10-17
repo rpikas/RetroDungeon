@@ -3672,18 +3672,18 @@ public sealed class CombatCoordinator
         var chance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var roll = _dice.Roll(100);
         var found = roll <= chance && result.TrapType != ChestTrapType.None;
-        RuleApplicationInfo.Publish($"Find Traps check ({inspector.Name}): 1d100={roll} vs {chance}% => {(found ? "found" : "not found")}");
+        RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Find Traps check ({inspector.Name}): 1d100={roll} vs {chance}% => {(found ? "found" : "not found")}");
 
         if (!found)
         {
             failedTrapInspectors.Add(inspector.Name);
-            RuleApplicationInfo.Publish($"Find Traps result: trap not found by {inspector.Name}.");
+            RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Find Traps result: trap not found by {inspector.Name}.");
             Say(owner, "Treasure Chest", $"{inspector.Name} does not find any trap.", session);
             return false;
         }
 
         result.TrapFound = true;
-        RuleApplicationInfo.Publish($"Find Traps result: trap found by {inspector.Name} ({FormatTrapName(result.TrapType)}).");
+        RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Find Traps result: trap found by {inspector.Name} ({FormatTrapName(result.TrapType)}).");
         Say(owner, "Treasure Chest", $"{inspector.Name} finds trap: {FormatTrapName(result.TrapType)}.", session);
         var attempt = AskYesNoOnBoth(owner, session, "Disarm Trap", "Attempt to disarm the trap?");
         if (attempt != DialogResult.Yes)
@@ -3695,14 +3695,14 @@ public sealed class CombatCoordinator
         var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(thiefLevel, inspector.Race, inspector.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var disarmRoll = _dice.Roll(100);
         var disarmed = disarmRoll <= disarmChance;
-        RuleApplicationInfo.Publish($"Disarm Traps check ({inspector.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
+        RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Disarm Traps check ({inspector.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
         result.TrapDisarmed = disarmed;
         if (disarmed)
             Say(owner, "Treasure Chest", $"{inspector.Name} disarms the trap.", session);
         else
         {
             Say(owner, "Treasure Chest", $"{inspector.Name} fails to disarm the trap.", session);
-            RuleApplicationInfo.Publish($"Failed disarm triggers trap immediately ({FormatTrapName(result.TrapType)}).");
+            RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Failed disarm triggers trap immediately ({FormatTrapName(result.TrapType)}).");
             ApplyChestTrapEffect(owner, session, survivors, inspector, dungeonLevel, result.TrapType, result);
         }
 
@@ -3729,7 +3729,7 @@ public sealed class CombatCoordinator
         var disarmChance = Math.Clamp((int)Math.Round(AbilitiesTables.ThiefFindRemoveTraps(disarmerThiefLevel, disarmer.Race, disarmer.Abilities.Dexterity), MidpointRounding.AwayFromZero), 1, 99);
         var disarmRoll = _dice.Roll(100);
         var disarmed = disarmRoll <= disarmChance;
-        RuleApplicationInfo.Publish($"Disarm Traps check ({disarmer.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
+        RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Disarm Traps check ({disarmer.Name}): 1d100={disarmRoll} vs {disarmChance}% => {(disarmed ? "disarmed" : "failed")}");
 
         result.TrapDisarmed = disarmed;
         if (disarmed)
@@ -3737,7 +3737,7 @@ public sealed class CombatCoordinator
         else
         {
             Say(owner, "Treasure Chest", $"{disarmer.Name} fails to disarm the trap.", session);
-            RuleApplicationInfo.Publish($"Failed disarm triggers trap immediately ({FormatTrapName(result.TrapType)}).");
+            RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Failed disarm triggers trap immediately ({FormatTrapName(result.TrapType)}).");
             ApplyChestTrapEffect(owner, session, survivors, disarmer, dungeonLevel, result.TrapType, result);
         }
     }

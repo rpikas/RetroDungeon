@@ -67,6 +67,12 @@ petrification, confusion, and forced rest. Poison, blindness, nausea, and slow a
 do not remove a fighter from the front rank. If nobody can fight, monsters can still
 attack surviving party members. Recovery restores the normal marching-order priority.
 
+## Thief ability references
+
+Thief Find Traps and Disarm Traps checks and results link to
+`PHB28TheifSpeicilaAbilitesChance.png` in the rule/dice log when references are enabled.
+Thief scroll-deciphering checks using Read Languages also reference this table.
+
 ## Carrion stench nausea
 
 Each monster group with Nausea causes one saving throw vs. poison per living party

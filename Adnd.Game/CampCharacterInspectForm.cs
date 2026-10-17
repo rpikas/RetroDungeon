@@ -440,6 +440,7 @@ public sealed class CampCharacterInspectForm : Form
             attemptMessage = success
                 ? $"{c.Name} tries thief Read Magic {chancePercent:0.#}% and succeeds (roll {roll})."
                 : $"{c.Name} tries thief Read Magic {chancePercent:0.#}% and fails (roll {roll}).";
+            RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", attemptMessage);
             return success;
         }
 
