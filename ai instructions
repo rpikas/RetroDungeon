@@ -4683,8 +4683,19 @@ in the old style UI when slecting target group introduce line breaks before 1. 2
 look like for example this: 
 "Which group should UrStor target?
 1. Group1: 1 Lvl 6 Cleric
-2. Group2: 1 Lvl 6 Fighter
-
+2. Group2: 1 Lvl 6 Fighter 43,7
 ___
-when finding treasure, magic item, after for example Magic item #1: d100 80 => Swords (G).
+When finding treasure, magic item, after for example Magic item #1: d100 80 => Swords (G).
 Then in this line refer to DMG124TreasureTableG_Swords
+
+After for example Magic item #3: d100 08 => Potions (A).
+In for example this line: "Potions table (A) d100 74 => Philter of Persuasiveness (placeholder)."   
+DMG121TreasureTableA_Potions
+
+After for example Magic item #2: d100 91 => Miscellaneous Weapons (H).
+In for example this line: "Miscellaneous Weapons table (H) d100 90 => Spear +1 (xp 500, gp 3)." refer to
+DMG125TreasureTableHMiscellaneousWeapons - 43,9
+___
+in same way when finding treasure, magic item refer to the following tables in the log when applicable:
+DMG122TreasureTableC_Rings
+DMG125TreasureTableD_RodsStavesAndWands

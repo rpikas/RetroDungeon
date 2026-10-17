@@ -76,6 +76,11 @@ Thief scroll-deciphering checks using Read Languages also reference this table.
 
 Treasure-type roll entries link to `MM105TreasureTypes.png`, and main magic-item
 category rolls link to `DMG121MagicItemsMainTable.png` when rule references are enabled.
+The following subtable rolls link to their respective images, including treasure
+that rolls directly on a subtable:
+- Swords (G): `DMG124TreasureTableG_Swords.png`
+- Potions (A): `DMG121TreasureTableA_Potions.png`
+- Miscellaneous Weapons (H): `DMG125TreasureTableHMiscellaneousWeapons.png`
 
 ## Conditional sword bonuses
 

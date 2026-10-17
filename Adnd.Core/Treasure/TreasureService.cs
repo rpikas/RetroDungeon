@@ -48,6 +48,12 @@ public sealed class TreasureService
                     RuleApplicationInfo.PublishLinked("MM", "105TreasureTypes", line);
                 else if (Regex.IsMatch(line, @"^\s*Magic item #\d+: d100 \d+ => ", RegexOptions.IgnoreCase))
                     RuleApplicationInfo.PublishLinked("DMG", "121MagicItemsMainTable", line);
+                else if (line.TrimStart().StartsWith("Swords table (G) d100 ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "124TreasureTableG_Swords", line);
+                else if (line.TrimStart().StartsWith("Potions table (A) d100 ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "121TreasureTableA_Potions", line);
+                else if (line.TrimStart().StartsWith("Miscellaneous Weapons table (H) d100 ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "125TreasureTableHMiscellaneousWeapons", line);
                 else
                     RuleApplicationInfo.Publish(line);
             }
@@ -263,6 +269,8 @@ public sealed class TreasureService
         return line.Contains("Magic item #", StringComparison.OrdinalIgnoreCase)
                || line.Contains("Potions table (A)", StringComparison.OrdinalIgnoreCase)
                || line.Contains("Rings table (C)", StringComparison.OrdinalIgnoreCase)
+               || line.TrimStart().StartsWith("Swords table (G) d100 ", StringComparison.OrdinalIgnoreCase)
+               || line.TrimStart().StartsWith("Miscellaneous Weapons table (H) d100 ", StringComparison.OrdinalIgnoreCase)
                || line.Contains("not defined yet, skipped", StringComparison.OrdinalIgnoreCase)
                || line.Contains("table key", StringComparison.OrdinalIgnoreCase);
     }
