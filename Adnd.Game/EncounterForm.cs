@@ -2413,31 +2413,14 @@ public sealed class EncounterForm : Form
         return -1;
     }
 
-    private static bool IsActionable(Character c) =>
-        c.CurrentHitPoints > 0
-        && !c.HasStatus(CharacterStatus.Dead)
-        && !c.HasStatus(CharacterStatus.Paralyzed)
-        && !c.HasStatus(CharacterStatus.Petrified)
-        && !c.HasStatus(CharacterStatus.Asleep);
-
+    private bool IsActionable(Character c) => CombatFormation.CanFight(c, _session);
 
     private int GetActionableRank(int partyIndex)
     {
         if (partyIndex < 0 || partyIndex >= _party.Count)
             return -1;
 
-        int rank = 0;
-        for (int i = 0; i < _party.Count; i++)
-        {
-            if (!IsActionable(_party[i]))
-                continue;
-
-            rank++;
-            if (i == partyIndex)
-                return rank;
-        }
-
-        return -1;
+        return CombatFormation.GetFightingRank(_party, _party[partyIndex], _session);
     }
 
     private static string GetClassCode(Character c)

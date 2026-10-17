@@ -49,6 +49,24 @@ missing two-handed flags from the item catalogue when characters are loaded.
 Potions always affect the character using them, both in combat and outside combat.
 Using a potion does not ask for an ally target; other ally-targeted items still do.
 
+## Walking effect notifications
+
+The Effects dialog offers **D)on't show again** and **S)how only every 10 steps**.
+These choices only change notifications: effects still advance and are saved on each
+step. Suppression resets when the active effects change or wear off; expiration,
+recovery, and death messages are still shown. Enter or Escape continues without
+changing the current notification frequency. These choices are also available in
+the tabletop viewer.
+
+## Combat formation
+
+The front rank is the first three party members currently able to fight, in marching
+order. Incapacitated members do not occupy these positions: the next available member
+can fight in melee and can be targeted by monsters. This includes sleep, paralysis,
+petrification, confusion, and forced rest. Poison, blindness, nausea, and slow alone
+do not remove a fighter from the front rank. If nobody can fight, monsters can still
+attack surviving party members. Recovery restores the normal marching-order priority.
+
 ## Monster healing in combat
 
 Monster casters only choose healing spells when a living monster (including the caster)

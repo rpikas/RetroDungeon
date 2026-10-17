@@ -68,6 +68,9 @@ public sealed class MazeForm : Form
     private RuleApplicationInfoForm? _ruleApplicationInfoForm;
     private Action<string>? _ruleApplicationInfoHandler;
     private bool _fullMoonShownForThisDungeonTrip;
+    private readonly HashSet<(string Character, string Effect)> _stepEffects = new();
+    private DialogResult _effectsNotificationChoice = DialogResult.OK;
+    private int _stepsSinceEffectsNotification;
 
     // Lets the viewer send moves back. Null when no viewer is configured, and idle when none is
     // running; the keyboard is unaffected either way.
@@ -2733,6 +2736,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         var party = _partyRepository.Load();
         var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var members = party.Members.Where(roster.ContainsKey).Select(name => roster[name]).ToList();
+        var effectsBeforeStep = GetStepEffects(members);
+        if (!_stepEffects.SetEquals(effectsBeforeStep))
+        {
+            _effectsNotificationChoice = DialogResult.OK;
+            _stepsSinceEffectsNotification = 0;
+        }
+        _stepsSinceEffectsNotification++;
         var messages = new List<string>();
         var changed = false;
 
@@ -2830,13 +2841,161 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
         }
 
-        if (!changed)
+        var effectsAfterStep = GetStepEffects(members);
+        var effectsEnded = !effectsBeforeStep.SetEquals(effectsAfterStep);
+        _stepEffects.Clear();
+        _stepEffects.UnionWith(effectsAfterStep);
+
+        if (changed)
+        {
+            foreach (var c in roster.Values)
+                _characterRepository.Save(c);
+        }
+
+        if (effectsEnded)
+        {
+            _effectsNotificationChoice = DialogResult.OK;
+            _stepsSinceEffectsNotification = 0;
+        }
+
+        if (messages.Count == 0
+            || (!effectsEnded && (_effectsNotificationChoice == DialogResult.Ignore
+                || (_effectsNotificationChoice == DialogResult.Retry && _stepsSinceEffectsNotification < 10))))
             return;
 
-        foreach (var c in roster.Values)
-            _characterRepository.Save(c);
+        var choice = ShowEffectsOnBoth(string.Join(Environment.NewLine, messages));
+        if (effectsAfterStep.Count == 0)
+            _effectsNotificationChoice = DialogResult.OK;
+        else if (choice is DialogResult.Ignore or DialogResult.Retry)
+            _effectsNotificationChoice = choice;
+        _stepsSinceEffectsNotification = 0;
+    }
 
-        SayOnBoth("Effects", string.Join(Environment.NewLine, messages));
+    private static HashSet<(string Character, string Effect)> GetStepEffects(IEnumerable<Character> members)
+    {
+        var effects = new HashSet<(string Character, string Effect)>();
+        foreach (var c in members)
+        {
+            if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead)
+                || c.HasStatus(CharacterStatus.Ashes) || c.HasStatus(CharacterStatus.Lost))
+                continue;
+
+            if (c.RotGrubDeathRoundsRemaining > 0)
+                effects.Add((c.Name, "RotGrubs"));
+            if (c.HasStatus(CharacterStatus.Poisoned))
+                effects.Add((c.Name, "Poison"));
+            if (c.HasStatus(CharacterStatus.Paralyzed))
+                effects.Add((c.Name, "Paralysis"));
+            if (!c.HasStatus(CharacterStatus.Petrified) && c.CurrentHitPoints < c.MaxHitPoints && HasEquippedRegeneration(c))
+                effects.Add((c.Name, "Regeneration"));
+            if (c.LycanthropyTriggeredByDamage && c.HasStatus(CharacterStatus.LycanthropeTransformed))
+                effects.Add((c.Name, "Lycanthropy"));
+        }
+        return effects;
+    }
+
+    private DialogResult ShowEffectsOnBoth(string text)
+    {
+        var oldStyle = GameRulesProvider.Current.UIOldStyle;
+        using var form = new Form
+        {
+            Text = "Effects",
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = oldStyle ? FormBorderStyle.None : FormBorderStyle.FixedDialog,
+            ClientSize = new Size(820, 500),
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            KeyPreview = true,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Padding = new Padding(4)
+        };
+        var frame = new Panel
+        {
+            Dock = DockStyle.Fill,
+            BorderStyle = BorderStyle.FixedSingle,
+            Padding = new Padding(12)
+        };
+        var title = new Label
+        {
+            Text = "EFFECTS",
+            Dock = DockStyle.Top,
+            Height = 46,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+        var body = new TextBox
+        {
+            Text = text,
+            ReadOnly = true,
+            Multiline = true,
+            ScrollBars = ScrollBars.Vertical,
+            Dock = DockStyle.Fill,
+            BackColor = form.BackColor,
+            ForeColor = form.ForeColor,
+            Font = new Font("Consolas", oldStyle ? 18f : 14f, FontStyle.Bold)
+        };
+        var choices = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = oldStyle ? 108 : 80 };
+        foreach (var (label, result) in new[]
+        {
+            ("↵ Continue", DialogResult.OK),
+            ("D)on't show again", DialogResult.Ignore),
+            ("S)how only every 10 steps", DialogResult.Retry)
+        })
+        {
+            choices.Controls.Add(new Button
+            {
+                Text = label,
+                DialogResult = result,
+                AutoSize = true,
+                BackColor = Color.Black,
+                ForeColor = form.ForeColor,
+                FlatStyle = oldStyle ? FlatStyle.Flat : FlatStyle.Standard,
+                Font = body.Font
+            });
+        }
+        form.KeyDown += (_, e) =>
+        {
+            var result = e.KeyCode switch
+            {
+                Keys.D => DialogResult.Ignore,
+                Keys.S => DialogResult.Retry,
+                Keys.Enter or Keys.Escape => DialogResult.OK,
+                _ => DialogResult.None
+            };
+            if (result == DialogResult.None)
+                return;
+            e.SuppressKeyPress = true;
+            form.DialogResult = result;
+            form.Close();
+        };
+        body.PreviewKeyDown += (_, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+                e.IsInputKey = true;
+        };
+        frame.Controls.Add(body);
+        frame.Controls.Add(choices);
+        frame.Controls.Add(title);
+        form.Controls.Add(frame);
+        form.Shown += (_, _) => body.Focus();
+
+        var options = new[]
+        {
+            new ViewerPromptOption("continue", "Continue"),
+            new ViewerPromptOption("dontShowAgain", "Don't show again"),
+            new ViewerPromptOption("everyTenSteps", "Show only every 10 steps")
+        };
+        var answers = new Dictionary<string, DialogResult>
+        {
+            ["continue"] = DialogResult.OK,
+            ["dontShowAgain"] = DialogResult.Ignore,
+            ["everyTenSteps"] = DialogResult.Retry
+        };
+        var outcome = ViewerDialog.RunModal(form, this, new ViewerPrompt("choice", text, null, options), answers, PublishTable);
+        PublishToViewer();
+        return outcome;
     }
 
     private void ApplyDiseaseProgressForDungeonExitDay()

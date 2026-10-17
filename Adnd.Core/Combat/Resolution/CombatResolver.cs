@@ -3049,8 +3049,8 @@ public sealed class CombatResolver
 
         var rangedWeapon = member.Equipment.TryGetValue(EquipmentSlot.Range, out var rw) ? rw : null;
         var ammo = member.Equipment.TryGetValue(EquipmentSlot.Ammo, out var am) ? am : null;
-        var partyPosition = session.Party.IndexOf(member) + 1; // 1-based
-        var isFrontRankPosition = partyPosition is >= 1 and <= 3;
+        var fightingRank = CombatFormation.GetFightingRank(session.Party, member, session);
+        var isFrontRankPosition = fightingRank is >= 1 and <= 3;
         var useRanged = rangedWeapon != null
                         && !isFrontRankPosition
                         && (!string.IsNullOrWhiteSpace(rangedWeapon.Range)
@@ -4520,7 +4520,7 @@ public sealed class CombatResolver
 
     private Character? SelectMonsterTarget(CombatSession session)
     {
-        var frontline = session.Party.Take(3).Where(IsAlive).ToList();
+        var frontline = session.Party.Where(member => CombatFormation.CanFight(member, session)).Take(3).ToList();
         if (frontline.Count == 0)
             frontline = session.AliveParty.ToList();
 
