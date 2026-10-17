@@ -13,7 +13,20 @@ public sealed class CombatSession
     public List<Character> Party { get; }
     public List<MonsterInstance> Monsters { get; }
     public int RoundNumber { get; set; } = 1;
-    public CombatOutcome Outcome { get; set; } = CombatOutcome.InProgress;
+    private CombatOutcome _outcome = CombatOutcome.InProgress;
+    public CombatOutcome Outcome
+    {
+        get => _outcome;
+        set
+        {
+            _outcome = value;
+            if (value != CombatOutcome.InProgress)
+            {
+                NauseaExposedMonsterGroups.Clear();
+                NauseatedPartyByMonsterGroup.Clear();
+            }
+        }
+    }
 
     // Temporary round-combat effects only (not persisted).
     public HashSet<string> BlessedPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -43,7 +56,8 @@ public sealed class CombatSession
     public Dictionary<string, string> DrainBloodEffectNames { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
-    public Dictionary<string, int> PartyNauseaRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> NauseaExposedMonsterGroups { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, HashSet<string>> NauseatedPartyByMonsterGroup { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -506,37 +520,8 @@ public sealed class CombatSession
         PartySlowOriginalMove.Remove(characterName);
     }
 
-    public void SetPartyNausea(string characterName, int rounds)
-    {
-        if (rounds <= 0)
-        {
-            PartyNauseaRounds.Remove(characterName);
-            return;
-        }
-
-        if (PartyNauseaRounds.TryGetValue(characterName, out var existing))
-            PartyNauseaRounds[characterName] = Math.Max(existing, rounds);
-        else
-            PartyNauseaRounds[characterName] = rounds;
-    }
-
-    public int GetPartyNauseaRounds(string characterName)
-    {
-        return PartyNauseaRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
-    }
-
-    public void TickPartyNauseaAll()
-    {
-        var keys = PartyNauseaRounds.Keys.ToList();
-        foreach (var key in keys)
-        {
-            var rounds = PartyNauseaRounds[key] - 1;
-            if (rounds <= 0)
-                PartyNauseaRounds.Remove(key);
-            else
-                PartyNauseaRounds[key] = rounds;
-        }
-    }
+    public bool HasPartyNauseaAgainstGroup(string characterName, string groupId) =>
+        NauseatedPartyByMonsterGroup.TryGetValue(groupId, out var members) && members.Contains(characterName);
 
     public void SetMirrorImage(string characterName, int imageCount, int rounds)
     {

@@ -288,6 +288,9 @@ public sealed class CombatResolver
         if (session.Outcome != CombatOutcome.InProgress)
             return events;
 
+        foreach (var monster in session.AliveMonsters)
+            TryApplyNauseaFromCarrionStench(monster, session, events);
+
         var parrying = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         bool partyAttemptedRun = false;
 
@@ -1362,8 +1365,6 @@ public sealed class CombatResolver
                     if (TryResolveBlinkDogPackRetreat(session, monster, events))
                         continue;
 
-                    TryApplyNauseaFromCarrionStench(monster, session, events);
-
                     var target = SelectMonsterTarget(session);
                     if (target is null)
                     {
@@ -1608,8 +1609,6 @@ public sealed class CombatResolver
             if (afterTickPrayerRounds <= 0)
                 events.Add(new CombatEvent("Prayer fades."));
         }
-
-        session.TickPartyNauseaAll();
 
         return FinalizeRound(session, events);
     }
@@ -3258,10 +3257,11 @@ public sealed class CombatResolver
             thac0Modifier += strengthToHitBonus;
 
             var nauseaPenaltyApplied = 0;
-            if (session.GetPartyNauseaRounds(member.Name) > 0)
+            if (HasAnySpecialAbility(target, "Nausea") && session.HasPartyNauseaAgainstGroup(member.Name, target.GroupId))
             {
                 nauseaPenaltyApplied = 2;
                 thac0Modifier -= nauseaPenaltyApplied;
+                events.Add(new CombatEvent($"{member.Name} suffers -2 to hit {target.DisplayName} due to carrion stench nausea (group {target.GroupId}); the penalty lasts until battle ends."));
             }
 
             var dexPenaltyApplied = 0;
@@ -3377,7 +3377,7 @@ public sealed class CombatResolver
                     ? $" Dex penalty ({target.DisplayName}): -{dexPenaltyApplied}."
                     : string.Empty;
                 var nauseaPenaltyText = nauseaPenaltyApplied > 0
-                    ? " Nausea penalty: -2."
+                    ? $" Nausea penalty ({target.DisplayName}): -2."
                     : string.Empty;
                 var nonProfText = nonProficiencyPenalty > 0
                     ? $" Non-proficiency penalty: {nonProficiencyPenalty}."
@@ -3394,9 +3394,10 @@ public sealed class CombatResolver
                     $"{(strengthNeededAdjustment >= 0 ? "+" : string.Empty)}{strengthNeededAdjustment}(str adj)" +
                     $"{(weaponMagicNeededAdjustment >= 0 ? "+" : string.Empty)}{weaponMagicNeededAdjustment}(magic weapon)" +
                     $"{(swordSituationalNeededAdjustment >= 0 ? "+" : string.Empty)}{swordSituationalNeededAdjustment}(special weapon)" +
-                    $"{(nonProficiencyPenalty >= 0 ? "+" : string.Empty)}{nonProficiencyPenalty}(non-prof)={needed}";
+                    $"{(nonProficiencyPenalty >= 0 ? "+" : string.Empty)}{nonProficiencyPenalty}(non-prof)" +
+                    $"{(nauseaPenaltyApplied > 0 ? $"+{nauseaPenaltyApplied}(nausea)" : string.Empty)}={needed}";
 
-                var toHitMessage = $"TO-HIT: {member.Name} THAC0 {member.Thac0},{weaponAdjText}{nonProfText} {target.DisplayName} AC {target.ArmorClass}, needs {needed}{neededBreakdownText} on 1d20, rolled {roll}.";
+                var toHitMessage = $"TO-HIT: {member.Name} THAC0 {member.Thac0},{weaponAdjText}{nonProfText}{nauseaPenaltyText} {target.DisplayName} AC {target.ArmorClass}, needs {needed}{neededBreakdownText} on 1d20, rolled {roll}.";
                 events.Add(new CombatEvent(toHitMessage));
                 RuleApplicationInfo.Publish(toHitMessage);
 
@@ -7911,9 +7912,11 @@ public sealed class CombatResolver
 
     private void TryApplyNauseaFromCarrionStench(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        if (!HasAnySpecialAbility(monster, "Nausea"))
+        if (!HasAnySpecialAbility(monster, "Nausea") || !session.NauseaExposedMonsterGroups.Add(monster.GroupId))
             return;
 
+        var nauseated = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        session.NauseatedPartyByMonsterGroup[monster.GroupId] = nauseated;
         foreach (var member in session.AliveParty)
         {
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
@@ -7925,12 +7928,12 @@ public sealed class CombatResolver
             var saveRoll = _dice.Roll(20);
             if (saveRoll >= saveTarget)
             {
-                events.Add(new CombatEvent($"{member.Name} resists carrion stench nausea (save {saveRoll} vs {saveTarget})."));
+                events.Add(new CombatEvent($"{member.Name} resists {monster.Name} group {monster.GroupId}'s carrion stench nausea (save vs. poison {saveRoll} vs {saveTarget}); no further saves against this group this battle."));
                 continue;
             }
 
-            session.SetPartyNausea(member.Name, 1);
-            events.Add(new CombatEvent($"{member.Name} is nauseated by carrion stench (save {saveRoll} vs {saveTarget}) and suffers -2 to hit."));
+            nauseated.Add(member.Name);
+            events.Add(new CombatEvent($"{member.Name} is nauseated by {monster.Name} group {monster.GroupId}'s carrion stench (save vs. poison {saveRoll} vs {saveTarget}) and suffers -2 to hit its nausea-causing monsters until battle ends."));
         }
     }
 

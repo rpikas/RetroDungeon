@@ -67,6 +67,15 @@ petrification, confusion, and forced rest. Poison, blindness, nausea, and slow a
 do not remove a fighter from the front rank. If nobody can fight, monsters can still
 attack surviving party members. Recovery restores the normal marching-order priority.
 
+## Carrion stench nausea
+
+Each monster group with Nausea causes one saving throw vs. poison per living party
+member per battle, before attacks begin. A failed save gives -2 to hit that group's
+nausea-causing monsters for the rest of the battle, without stacking or rerolling for
+each monster or round. Exposure and affected attack rolls are logged. The penalty is
+encounter-only and is removed on victory, defeat, or escape; it does not change the
+character's saved THAC0 or attack bonuses.
+
 ## Monster healing in combat
 
 Monster casters only choose healing spells when a living monster (including the caster)

@@ -4643,11 +4643,18 @@ If D)on't show again is selected then the Effects dialog will not be shown again
 if S)how only every 10 steps is selected then the Effects dialog will be shown every 10 steps until it wears off.
 
 if any of the party members 1,2 or 3 is paralyzed, asleep or can not fight for other reason then it is 
-not counted as one of the first 3 so then number 4 can be hit by the monsters and use normal fight, not ranged.
+not counted as one of the first 3 so then number 4 can be hit by the monsters and use normal fight, not ranged. 42,7
 ___
 
 "SpecialAttacks":  "Nausea" with "Description": "Carrion stench in 10’ radius causes nausea unless save vs. poison is made; failure imposes -2 to hit."
 Should only affect characters once per group of monsters, not once per monster and not every round. It should also
 make it more difficult to hit the monster that has this special attack, so it should be a -2 to hit bonus for
 the monster that has this special attack, write that in the log when characters are affected by this special attack and tries to hit.
-after the battle is over the -2 to hit bonus should be removed from the character that was affected by this special attack. 
+after the battle is over the -2 to hit bonus should be removed from the character that was affected by this special attack.
+___
+
+When a thief use thief abilities like Find Traps and Disarm Traps, refer to this PHB28TheifSpeicilaAbilitesChance in the log, for example when
+Find Traps check (UrSnabb): 1d100=46 vs 60% => found
+Find Traps result: trap found by UrSnabb (Gas Bomb).
+Disarm Traps check (UrSnabb): 1d100=89 vs 60% => failed
+Failed disarm triggers trap immediately (Gas Bomb).
