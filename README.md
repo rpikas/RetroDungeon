@@ -81,6 +81,9 @@ that rolls directly on a subtable:
 - Swords (G): `DMG124TreasureTableG_Swords.png`
 - Potions (A): `DMG121TreasureTableA_Potions.png`
 - Miscellaneous Weapons (H): `DMG125TreasureTableHMiscellaneousWeapons.png`
+- Rings (C): `DMG122TreasureTableC_Rings.png`
+- Rods, Staves & Wands (D): `DMG125TreasureTableD_RodsStavesAndWands.png`
+- Scrolls (B): `DMG121TreasureTableB_Scrolls.png`
 
 ## Conditional sword bonuses
 

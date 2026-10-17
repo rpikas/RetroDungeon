@@ -63,6 +63,15 @@
     <Content Include="Assets\Rules\DMG125TreasureTableHMiscellaneousWeapons.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Rules\DMG122TreasureTableC_Rings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Rules\DMG125TreasureTableD_RodsStavesAndWands.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Rules\DMG121TreasureTableB_Scrolls.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <!--

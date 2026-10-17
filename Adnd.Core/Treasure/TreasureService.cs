@@ -54,6 +54,12 @@ public sealed class TreasureService
                     RuleApplicationInfo.PublishLinked("DMG", "121TreasureTableA_Potions", line);
                 else if (line.TrimStart().StartsWith("Miscellaneous Weapons table (H) d100 ", StringComparison.OrdinalIgnoreCase))
                     RuleApplicationInfo.PublishLinked("DMG", "125TreasureTableHMiscellaneousWeapons", line);
+                else if (line.TrimStart().StartsWith("Rings table (C) d100 ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "122TreasureTableC_Rings", line);
+                else if (line.TrimStart().StartsWith("Rods, Staves & Wands table (D) d100 ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "125TreasureTableD_RodsStavesAndWands", line);
+                else if (line.TrimStart().StartsWith("Scrolls table (B) d100 ", StringComparison.OrdinalIgnoreCase))
+                    RuleApplicationInfo.PublishLinked("DMG", "121TreasureTableB_Scrolls", line);
                 else
                     RuleApplicationInfo.Publish(line);
             }
@@ -271,6 +277,8 @@ public sealed class TreasureService
                || line.Contains("Rings table (C)", StringComparison.OrdinalIgnoreCase)
                || line.TrimStart().StartsWith("Swords table (G) d100 ", StringComparison.OrdinalIgnoreCase)
                || line.TrimStart().StartsWith("Miscellaneous Weapons table (H) d100 ", StringComparison.OrdinalIgnoreCase)
+               || line.TrimStart().StartsWith("Rods, Staves & Wands table (D) d100 ", StringComparison.OrdinalIgnoreCase)
+               || line.TrimStart().StartsWith("Scrolls table (B) d100 ", StringComparison.OrdinalIgnoreCase)
                || line.Contains("not defined yet, skipped", StringComparison.OrdinalIgnoreCase)
                || line.Contains("table key", StringComparison.OrdinalIgnoreCase);
     }
