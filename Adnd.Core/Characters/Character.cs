@@ -1532,6 +1532,7 @@ public class Character
         if (HasStatus(CharacterStatus.Ashes)) statuses.Add("Ashes");
         if (HasStatus(CharacterStatus.Lost)) statuses.Add("Lost");
         if (HasStatus(CharacterStatus.Invisible)) statuses.Add("Invisible");
+        if (HasStatus(CharacterStatus.Swallowed)) statuses.Add("Swallowed");
         return string.Join(", ", statuses);
     }
 

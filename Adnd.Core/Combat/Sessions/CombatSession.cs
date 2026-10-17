@@ -13,6 +13,13 @@ public sealed class CombatSession
     public List<Character> Party { get; }
     public List<MonsterInstance> Monsters { get; }
     public int RoundNumber { get; set; } = 1;
+    public bool IsSpaciousArea { get; set; }
+    public Dictionary<MonsterInstance, HashSet<Character>> RearAttackers { get; } = new();
+    public Dictionary<string, SwallowedCharacter> SwallowedCharacters { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public List<string> SwallowingOutcomeMessages { get; } = new();
+    public bool IsSwallowed(string characterName) => SwallowedCharacters.ContainsKey(characterName);
+    public IEnumerable<Character> ExposedParty => AliveParty.Where(p => !IsSwallowed(p.Name));
+
     private CombatOutcome _outcome = CombatOutcome.InProgress;
     public CombatOutcome Outcome
     {
@@ -24,6 +31,22 @@ public sealed class CombatSession
             {
                 NauseaExposedMonsterGroups.Clear();
                 NauseatedPartyByMonsterGroup.Clear();
+                foreach (var swallowed in SwallowedCharacters.Values)
+                {
+                    swallowed.Victim.RemoveStatus(CharacterStatus.Swallowed);
+                    if (swallowed.Worm.IsAlive || swallowed.Worm.HasFled)
+                    {
+                        swallowed.Victim.CurrentHitPoints = 0;
+                        swallowed.Victim.AddStatus(CharacterStatus.Dead | CharacterStatus.Lost);
+                        SwallowingOutcomeMessages.Add($"{swallowed.Victim.Name} is left inside {swallowed.Worm.DisplayName} and is permanently lost; the body cannot be recovered or raised.");
+                    }
+                    else
+                    {
+                        SwallowingOutcomeMessages.Add($"{swallowed.Victim.Name} is recovered from {swallowed.Worm.DisplayName}.");
+                    }
+                }
+                SwallowedCharacters.Clear();
+                RearAttackers.Clear();
             }
         }
     }

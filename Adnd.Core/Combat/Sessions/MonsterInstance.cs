@@ -49,6 +49,7 @@ public sealed class MonsterInstance
     public int Thac0Modifier { get; private set; }
     public bool IsInLair { get; set; }
     public bool HasRevealedLairTreasure { get; set; }
+    public bool HasFled { get; set; }
     public bool IsAlive => CurrentHitPoints > 0;
 
     public string DisplayName => $"{Name} #{Index}";

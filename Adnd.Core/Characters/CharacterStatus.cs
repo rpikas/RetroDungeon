@@ -24,6 +24,7 @@ public enum CharacterStatus
     DeadlyPoisoned = 1 << 13,  // Character is deadly poisoned
     Confused = 1 << 14,  // Character is confused
     LycanthropeTransformed = 1 << 15, // Character is currently transformed by lycanthropy
-    Out = 1 << 16 // Character is out in the dungeon and unavailable until found
+    Out = 1 << 16, // Character is out in the dungeon and unavailable until found
+    Swallowed = 1 << 17
 
 }

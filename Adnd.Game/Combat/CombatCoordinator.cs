@@ -604,6 +604,8 @@ public sealed class CombatCoordinator
 
     private static void RemoveTemporaryCombatEffects(CombatSession session)
     {
+        foreach (var message in session.SwallowingOutcomeMessages)
+            RuleApplicationInfo.PublishLinked("MM", "PurpleWorm", message);
         foreach (var c in session.Party)
         {
             if (c.HasStatus(CharacterStatus.Asleep))
@@ -3086,9 +3088,11 @@ public sealed class CombatCoordinator
             _ => "Combat ended."
         };
 
-    //    Say(owner, "Combat Result", text, session);
-        if (outcome != CombatOutcome.Victory)
+        if (session.SwallowingOutcomeMessages.Count > 0)
+            text += Environment.NewLine + string.Join(Environment.NewLine, session.SwallowingOutcomeMessages);
+        if (outcome != CombatOutcome.Victory || session.SwallowingOutcomeMessages.Count > 0)
             Say(owner, "Combat Result", text, session);
+        session.SwallowingOutcomeMessages.Clear();
     }
 
     /// <summary>

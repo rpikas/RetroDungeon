@@ -97,6 +97,27 @@ and the monster catalogue's Spell Use, Magic Use, and Spellcasting abilities.
 Applicable totals are logged on each attack attempt, even on a miss; the enhanced
 bonus also counts toward the target's minimum magical-weapon requirement.
 
+## Purple Worm
+
+A bite deals 2d12 damage. A real bite hit at least 4 above the required roll, or a
+natural 20, swallows the victim. All playable races fit the worm's swallowing limit.
+The victim has six full subsequent melee rounds before death; killing that exact
+worm releases its victims, even while other groups remain. Bodies recovered after
+death can still be raised until digestion completes at 12 turns (120 melee rounds).
+Swallowed characters fight only their swallowing worm from inside, using an equipped
+slashing or piercing weapon against AC 9. Each attack loses 1 damage in the first
+round inside, 2 in the second, and so on, down to zero damage. They do not occupy an
+outside front-rank slot and cannot be targeted by outside attacks or spells.
+The encounter UI and logs show the deadline and damage penalty. Fleeing or abandoning
+the encounter, or allowing the swallowing worm to flee, leaves any unrecovered victims
+permanently Lost; live worms and their victims are not persisted outside encounters.
+
+The sting deals 2d4 damage, followed on every hit by a save vs. poison or immediate
+death; level-11+ monk poison immunity still applies. It is available in rear defense
+against a backstab, or with at least four exposed opponents in a spacious area.
+For maze encounters, spacious means the party is surrounded by a clear 3-by-3 area
+of floor, not a narrow corridor. The current playable races are not large opponents.
+
 ## Carrion stench nausea
 
 Each monster group with Nausea causes one saving throw vs. poison per living party

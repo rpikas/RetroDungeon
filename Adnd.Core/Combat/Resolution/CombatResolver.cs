@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace Adnd.Core.Combat.Resolution;
 
-public sealed class CombatResolver
+public sealed partial class CombatResolver
 {
     private static readonly Dictionary<string, int[]> MeleeWeaponVsArmorAdjustments = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -259,7 +259,7 @@ public sealed class CombatResolver
             }
             else
             {
-                var ally = session.AliveParty.OrderBy(a => a.CurrentHitPoints).FirstOrDefault() ?? caster;
+                var ally = session.ExposedParty.OrderBy(a => a.CurrentHitPoints).FirstOrDefault() ?? caster;
                 target = SpellCastTarget.Ally(ally);
             }
 
@@ -288,6 +288,7 @@ public sealed class CombatResolver
         if (session.Outcome != CombatOutcome.InProgress)
             return events;
 
+        ResolveSwallowedCharacters(session, events, advanceTime: false);
         foreach (var monster in session.AliveMonsters)
             TryApplyNauseaFromCarrionStench(monster, session, events);
 
@@ -654,6 +655,17 @@ public sealed class CombatResolver
             if (!partyActions.TryGetValue(member.Name, out var action))
                 action = CombatAction.OfType(CombatActionType.Parry);
 
+            if (session.IsSwallowed(member.Name) && action.Type is not (CombatActionType.Fight or CombatActionType.Parry))
+            {
+                events.Add(new CombatEvent($"{member.Name} is swallowed and can only fight from inside or wait; outside actions and escape are unavailable."));
+                continue;
+            }
+            if (action.Target?.CharacterName is string allyName && session.IsSwallowed(allyName))
+            {
+                events.Add(new CombatEvent($"{member.Name} cannot reach {allyName} inside the Purple Worm."));
+                continue;
+            }
+
             switch (action.Type)
             {
                 case CombatActionType.Fight:
@@ -741,6 +753,7 @@ public sealed class CombatResolver
                     break;
             }
 
+            ResolveSwallowedCharacters(session, events, advanceTime: false);
             if (!session.AliveMonsters.Any())
             {
                 session.Outcome = CombatOutcome.Victory;
@@ -1280,6 +1293,7 @@ public sealed class CombatResolver
                 var fleeRoll = _dice.Roll(100);
                 if (fleeRoll <= 50)
                 {
+                    monster.HasFled = true;
                     monster.CurrentHitPoints = 0;
                     events.Add(new CombatEvent($"{monster.DisplayName} flees in panic!"));
                     continue;
@@ -1359,18 +1373,34 @@ public sealed class CombatResolver
 
             foreach (var attack in attacks)
             {
+                if (IsPurpleWorm(monster) && string.Equals(attack.Name, "Sting", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!CanPurpleWormSting(session, monster))
+                    {
+                        LogPurpleWormRule(events, $"{monster.DisplayName} cannot use its tail sting: it needs rear defense or a spacious area with at least four exposed opponents.");
+                        continue;
+                    }
+                    LogPurpleWormRule(events, $"{monster.DisplayName} uses its tail sting in {(GetPurpleWormRearAttackers(session, monster).Any() ? "rear defense" : "a spacious area against numerous opponents")}: 2d4 damage, save vs. poison or die.");
+                }
                 int attackCount = Math.Max(1, attack.NumberOfAttacks);
                 for (int i = 0; i < attackCount; i++)
                 {
                     if (TryResolveBlinkDogPackRetreat(session, monster, events))
                         continue;
 
-                    var target = SelectMonsterTarget(session);
+                    var rearAttackers = IsPurpleWorm(monster) && string.Equals(attack.Name, "Sting", StringComparison.OrdinalIgnoreCase)
+                        ? GetPurpleWormRearAttackers(session, monster).ToList()
+                        : new List<Character>();
+                    var target = rearAttackers.Count > 0 ? rearAttackers[_dice.Roll(rearAttackers.Count) - 1] : SelectMonsterTarget(session);
                     if (target is null)
                     {
-                        session.Outcome = CombatOutcome.Defeat;
-                        events.Add(new CombatEvent("The party is defeated."));
-                        return FinalizeRound(session, events);
+                        if (!session.AliveParty.Any())
+                        {
+                            session.Outcome = CombatOutcome.Defeat;
+                            events.Add(new CombatEvent("The party is defeated."));
+                            return FinalizeRound(session, events);
+                        }
+                        break;
                     }
 
                     if (!CanMonsterLocateTarget(monster, target, events))
@@ -1516,6 +1546,9 @@ public sealed class CombatResolver
                         }
                         else
                         {
+                            ApplyPurpleWormHit(session, monster, target, attack, roll, needed, events);
+                            if (!IsAlive(target) || session.IsSwallowed(target.Name))
+                                continue;
                             TryApplyLycanthropy(monster, target, attack.Name, damage, events);
                             TryApplyEarSeekerDisease(monster, target, events);
                             TryApplyInfestation(monster, target, events);
@@ -1583,6 +1616,7 @@ public sealed class CombatResolver
                 }
             }
 
+            session.RearAttackers.Remove(monster);
             if (isPiercer)
             {
                 session.SetPiercerClimbRounds(monster, 5);
@@ -1591,6 +1625,7 @@ public sealed class CombatResolver
         }
 
         ApplyPoisonDamageDuringCombat(session, events);
+        ResolveSwallowedCharacters(session, events, advanceTime: true);
 
         if (!session.AliveParty.Any())
         {
@@ -1656,7 +1691,7 @@ public sealed class CombatResolver
             Caster = caster,
             SpellId = action.SpellId,
             Context = SpellUseContext.Combat,
-            PartyTargets = session.Party,
+            PartyTargets = session.Party.Where(p => !session.IsSwallowed(p.Name)).ToList(),
             MonsterTargets = session.Monsters,
             Targets = targets,
             RoundNumber = session.RoundNumber,
@@ -2137,7 +2172,7 @@ public sealed class CombatResolver
             Caster = user,
             SpellId = spellId,
             Context = SpellUseContext.Combat,
-            PartyTargets = session.Party,
+            PartyTargets = session.Party.Where(p => !session.IsSwallowed(p.Name)).ToList(),
             MonsterTargets = session.Monsters,
             Targets = targets,
             RoundNumber = session.RoundNumber,
@@ -2911,6 +2946,9 @@ public sealed class CombatResolver
 
     private List<CombatEvent> FinalizeRound(CombatSession session, List<CombatEvent> events)
     {
+        foreach (var message in session.SwallowingOutcomeMessages)
+            LogPurpleWormRule(events, message);
+        session.SwallowingOutcomeMessages.Clear();
         if (session.Outcome == CombatOutcome.InProgress)
             session.RoundNumber++;
 
@@ -3038,19 +3076,32 @@ public sealed class CombatResolver
 
     private void ResolvePartyAttack(CombatSession session, Character member, CombatAction action, List<CombatEvent> events)
     {
+        session.SwallowedCharacters.TryGetValue(member.Name, out var swallowed);
+        if (swallowed != null)
+        {
+            if (!member.Equipment.TryGetValue(EquipmentSlot.MainHand, out var cuttingWeapon)
+                || cuttingWeapon?.Type != ItemType.Weapon
+                || !(string.Equals(cuttingWeapon.DamageType, "Slashing", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(cuttingWeapon.DamageType, "Piercing", StringComparison.OrdinalIgnoreCase)))
+            {
+                LogPurpleWormRule(events, $"{member.Name} is swallowed and needs an equipped slashing or piercing weapon to cut the worm from inside.");
+                return;
+            }
+            LogPurpleWormRule(events, $"{member.Name} cuts at {swallowed.Worm.DisplayName} from inside: AC 9; -{swallowed.RoundsInside(session.RoundNumber)} damage on each attack this round.");
+        }
         var chantOrPrayerBonus = (session.IsChantActive || session.IsPrayerActive) ? 1 : 0;
 
         if (member.BreakRingInvisibilityOnHostileAction())
             events.Add(new CombatEvent($"{member.Name}'s ring invisibility breaks on attack."));
 
-        if (member.HasStatus(CharacterStatus.LycanthropeTransformed) && TryResolveLycanthropeCharacterAttack(session, member, action, events))
+        if (swallowed == null && member.HasStatus(CharacterStatus.LycanthropeTransformed) && TryResolveLycanthropeCharacterAttack(session, member, action, events))
             return;
 
         var rangedWeapon = member.Equipment.TryGetValue(EquipmentSlot.Range, out var rw) ? rw : null;
         var ammo = member.Equipment.TryGetValue(EquipmentSlot.Ammo, out var am) ? am : null;
         var fightingRank = CombatFormation.GetFightingRank(session.Party, member, session);
         var isFrontRankPosition = fightingRank is >= 1 and <= 3;
-        var useRanged = rangedWeapon != null
+        var useRanged = swallowed == null && rangedWeapon != null
                         && !isFrontRankPosition
                         && (!string.IsNullOrWhiteSpace(rangedWeapon.Range)
                             || !string.IsNullOrWhiteSpace(rangedWeapon.FireRate)
@@ -3113,9 +3164,9 @@ public sealed class CombatResolver
             events.Add(new CombatEvent($"{member.Name} attacks and becomes visible."));
         }
 
-        MonsterInstance? target = null;
+        MonsterInstance? target = swallowed?.Worm;
 
-        if (!string.IsNullOrEmpty(action.TargetMonsterId))
+        if (swallowed == null && !string.IsNullOrEmpty(action.TargetMonsterId))
         {
             var named = session.FindMonster(action.TargetMonsterId);
             if (named != null && named.IsAlive) target = named;
@@ -3164,7 +3215,14 @@ public sealed class CombatResolver
         if (session.IsPartySlowed(member.Name))
             attacks = Math.Max(1, attacks / 2);
 
-        var isBackstab = IsThiefBackstabAttack(member, session);
+        var targetArmorClass = swallowed == null ? target.ArmorClass : 9;
+        var isBackstab = swallowed == null && IsThiefBackstabAttack(member, session);
+        if (isBackstab && IsPurpleWorm(target))
+        {
+            if (!session.RearAttackers.TryGetValue(target, out var rearAttackers))
+                session.RearAttackers[target] = rearAttackers = new HashSet<Character>();
+            rearAttackers.Add(member);
+        }
         var backstabMultiplier = isBackstab ? GetThiefBackstabMultiplierByLevel(member.GetClassLevel(CharacterClass.Thief)) : 1;
 
         if (isBackstab && _dualClassService.IsThiefBackstabFromOriginalClass(member))
@@ -3302,7 +3360,7 @@ public sealed class CombatResolver
             }
 
             var weaponVsAcKey = ResolveWeaponVsArmorTableKey(mainHand, useRanged);
-            var weaponVsAcAdjustment = GetWeaponVsArmorClassAdjustment(mainHand, target.ArmorClass, useRanged);
+            var weaponVsAcAdjustment = swallowed == null ? GetWeaponVsArmorClassAdjustment(mainHand, targetArmorClass, useRanged) : 0;
             if (!useRanged && mainHand == null && member.IsMonk())
             {
                 weaponVsAcKey = null;
@@ -3361,8 +3419,8 @@ public sealed class CombatResolver
                 }
             }
 
-            int needed = (member.Thac0 - thac0Modifier) - target.ArmorClass;
-            var neededFromThac0AndAcOnly = member.Thac0 - target.ArmorClass;
+            int needed = (member.Thac0 - thac0Modifier) - targetArmorClass;
+            var neededFromThac0AndAcOnly = member.Thac0 - targetArmorClass;
             int roll = _dice.Roll(20);
             var wasNaturalTwenty = roll == 20;
 
@@ -3403,7 +3461,7 @@ public sealed class CombatResolver
                     $"{(nonProficiencyPenalty >= 0 ? "+" : string.Empty)}{nonProficiencyPenalty}(non-prof)" +
                     $"{(nauseaPenaltyApplied > 0 ? $"+{nauseaPenaltyApplied}(nausea)" : string.Empty)}={needed}";
 
-                var toHitMessage = $"TO-HIT: {member.Name} THAC0 {member.Thac0},{weaponAdjText}{nonProfText}{nauseaPenaltyText} {target.DisplayName} AC {target.ArmorClass}, needs {needed}{neededBreakdownText} on 1d20, rolled {roll}.";
+                var toHitMessage = $"TO-HIT: {member.Name} THAC0 {member.Thac0},{weaponAdjText}{nonProfText}{nauseaPenaltyText} {target.DisplayName} AC {targetArmorClass}, needs {needed}{neededBreakdownText} on 1d20, rolled {roll}.";
                 events.Add(new CombatEvent(toHitMessage));
                 RuleApplicationInfo.Publish(toHitMessage);
 
@@ -3417,12 +3475,12 @@ public sealed class CombatResolver
                     RuleApplicationInfo.PublishLinked(
                         "MM",
                         target.Template.Name ?? target.DisplayName,
-                        $"{target.DisplayName} AC:{target.ArmorClass}.");
+                        $"{target.DisplayName} AC:{targetArmorClass}{(swallowed != null ? " (stomach interior)" : string.Empty)}.");
 
                     RuleApplicationInfo.PublishLinked(
                         "PHB",
                         "38WeaponTypeToHitAdjustment",
-                        $"Weapon vs AC adjustment: {weaponNameForToHit} vs AC {target.ArmorClass} => {neededAdjustmentFromWeaponVsAc:+#;-#;0}.");
+                        $"Weapon vs AC adjustment: {weaponNameForToHit} vs AC {targetArmorClass} => {neededAdjustmentFromWeaponVsAc:+#;-#;0}.");
 
                     var strengthLabel = member.Abilities.Strength == 18 && member.ExceptionalStrengthPercentile.HasValue
                         ? $"18/{member.ExceptionalStrengthPercentile.Value:00}"
@@ -3621,6 +3679,13 @@ public sealed class CombatResolver
                 events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
             }
 
+            if (swallowed != null)
+            {
+                var penalty = swallowed.RoundsInside(session.RoundNumber);
+                var beforePenalty = damage;
+                damage = Math.Max(0, damage - penalty);
+                LogPurpleWormRule(events, $"{member.Name}'s stomach attack damage: {beforePenalty} - {penalty} (round {penalty} inside) = {damage}.");
+            }
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
             var actualDamageToTarget = before - target.CurrentHitPoints;
@@ -3771,7 +3836,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel2MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -3827,7 +3892,7 @@ public sealed class CombatResolver
             return true;
         }
 
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -3880,7 +3945,7 @@ public sealed class CombatResolver
             return true;
         }
 
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -3981,7 +4046,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel3DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4052,7 +4117,7 @@ public sealed class CombatResolver
             return true;
         }
 
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4086,7 +4151,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel5DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4125,7 +4190,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel5MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4193,7 +4258,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel4MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4245,7 +4310,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel5IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4322,7 +4387,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel4IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4401,7 +4466,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel3MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4501,7 +4566,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel2IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4527,9 +4592,9 @@ public sealed class CombatResolver
 
     private Character? SelectMonsterTarget(CombatSession session)
     {
-        var frontline = session.Party.Where(member => CombatFormation.CanFight(member, session)).Take(3).ToList();
+        var frontline = session.ExposedParty.Where(member => CombatFormation.CanFight(member, session)).Take(3).ToList();
         if (frontline.Count == 0)
-            frontline = session.AliveParty.ToList();
+            frontline = session.ExposedParty.ToList();
 
         if (frontline.Count == 0)
             return null;
@@ -4682,7 +4747,7 @@ public sealed class CombatResolver
 
     private void ResolveLevel1MageSpells(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return;
 
@@ -4920,7 +4985,7 @@ public sealed class CombatResolver
 
     private bool ResolveLevel1DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -4987,7 +5052,7 @@ public sealed class CombatResolver
 
     private void ResolveIllusionistColorSpray(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return;
 
@@ -5047,7 +5112,7 @@ public sealed class CombatResolver
 
     private void ResolveIllusionistPhantasmalForce(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return;
 
@@ -5087,7 +5152,7 @@ public sealed class CombatResolver
         if (maxDamage <= 0)
             return false;
 
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -5138,7 +5203,7 @@ public sealed class CombatResolver
         if (breathDamage <= 0)
             return false;
 
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -5235,7 +5300,7 @@ public sealed class CombatResolver
         if (breathDamage <= 0)
             return false;
 
-        var aliveParty = session.AliveParty.ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -5314,7 +5379,7 @@ public sealed class CombatResolver
         if (!HasSpecialAbility(monster, "Pick pockets"))
             return false;
 
-        var aliveParty = session.Party.Where(IsAlive).ToList();
+        var aliveParty = session.ExposedParty.ToList();
         if (aliveParty.Count == 0)
             return false;
 
@@ -6301,7 +6366,7 @@ public sealed class CombatResolver
         monster.CurrentHitPoints = 0;
         events.Add(new CombatEvent($"{monster.DisplayName} explodes violently!"));
 
-        foreach (var member in session.AliveParty.ToList())
+        foreach (var member in session.ExposedParty.ToList())
         {
             var saveThrowType = isGasSpore ? SaveThrowType.RodStaffWand : SaveThrowType.Spell;
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
@@ -7924,7 +7989,7 @@ public sealed class CombatResolver
 
         var nauseated = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         session.NauseatedPartyByMonsterGroup[monster.GroupId] = nauseated;
-        foreach (var member in session.AliveParty)
+        foreach (var member in session.ExposedParty)
         {
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
                 member,

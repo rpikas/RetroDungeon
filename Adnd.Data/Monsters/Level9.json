@@ -555,13 +555,13 @@
         {
           "Name": "Sting",
           "NumberOfAttacks": 1,
-          "Damage": "1d6 + poison"
+          "Damage": "2d4"
         }
       ],
       "SpecialAbilities": [
         {
           "Name": "Swallow Whole",
-          "Description": "On a hit vs. small or man-sized targets, may swallow the victim whole."
+          "Description": "A bite hit by 4 or more above the required roll, or a natural 20, swallows a character. The victim dies after six full subsequent melee rounds unless the worm is killed. Cutting attacks from inside use AC 9 and lose 1 damage per round inside, cumulatively. Digestion takes 12 turns (120 melee rounds), after which the victim cannot be raised."
         },
         {
           "Name": "Burrowing",
@@ -569,7 +569,7 @@
         },
         {
           "Name": "Poison Sting",
-          "Description": "Tail sting delivers lethal venom unless a save is made."
+          "Description": "Used only in rear defense or against numerous opponents in a spacious area. A hit deals 2d4 damage and requires a save vs. poison; failure kills the victim."
         }
       ],
       "BaseXPValue": 5000,

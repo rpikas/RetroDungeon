@@ -637,6 +637,9 @@ public sealed class EncounterForm : Form
     internal void HandleViewerCommand(string command)
     {
         if (string.IsNullOrEmpty(command)) return;
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && _session?.IsSwallowed(_party[_currentIndex].Name) == true
+            && command != "info" && !command.StartsWith(FightAtPrefix, StringComparison.Ordinal))
+            return;
 
         if (string.Equals(command, "info", StringComparison.OrdinalIgnoreCase))
         {
@@ -671,6 +674,12 @@ public sealed class EncounterForm : Form
             return null;
 
         var character = _party[_currentIndex];
+        if (_session != null && _session.SwallowedCharacters.TryGetValue(character.Name, out var swallowed))
+            return new ViewerPrompt("combat",
+                $"{character.Name} is inside {swallowed.Worm.DisplayName}: {swallowed.RoundsUntilDeath(_session.RoundNumber)} round(s) until death; inner AC 9, -{swallowed.RoundsInside(_session.RoundNumber)} damage per attack.",
+                ViewerIds.Character(character.Name),
+                new[] { new ViewerPromptOption("fight", "Cut from inside"), new ViewerPromptOption("confirm", "Auto: cut from inside"),
+                    new ViewerPromptOption("parry", "Wait"), new ViewerPromptOption("info", "Info"), new ViewerPromptOption("undo", "Back one character") });
         var isLycanthropeTransformed = character.HasStatus(CharacterStatus.LycanthropeTransformed);
         var rank = GetActionableRank(_currentIndex);
         var options = new List<ViewerPromptOption>();
@@ -744,6 +753,22 @@ public sealed class EncounterForm : Form
 
     private void EncounterForm_KeyDown(object? sender, KeyEventArgs e)
     {
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && _session?.IsSwallowed(_party[_currentIndex].Name) == true)
+        {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+            if (e.KeyCode is Keys.Enter or Keys.F)
+                ChooseFight();
+            else if (e.KeyCode == Keys.P)
+                ChooseAction(CombatActionType.Parry);
+            else if (e.KeyCode == Keys.T)
+                StepBack();
+            else if (e.KeyCode == Keys.I)
+                ShowEncounterInfoWindow();
+            else
+                SayOnBoth("Swallowed", "Fight to cut the worm from inside, parry to wait, or rescue this character by killing the worm.");
+            return;
+        }
         switch (e.KeyCode)
         {
             case Keys.Escape:
@@ -838,6 +863,13 @@ public sealed class EncounterForm : Form
 
         var character = _party[_currentIndex];
         if (!IsActionable(character)) return;
+        if (_session != null && _session.SwallowedCharacters.TryGetValue(character.Name, out var swallowed))
+        {
+            _actions[character.Name] = new CombatAction { Type = CombatActionType.Fight,
+                TargetGroupId = swallowed.Worm.GroupId, TargetMonsterId = CombatAction.MonsterKey(swallowed.Worm.GroupId, swallowed.Worm.Index) };
+            AdvanceActor();
+            return;
+        }
 
         var rank = GetActionableRank(_currentIndex);
         if (rank is < 1 or > 3)
@@ -1196,6 +1228,19 @@ public sealed class EncounterForm : Form
         }
 
         var character = _party[_currentIndex];
+        if (_session?.IsSwallowed(character.Name) == true)
+        {
+            if (action == CombatActionType.Fight)
+                ChooseFight();
+            else if (action == CombatActionType.Parry)
+            {
+                _actions[character.Name] = CombatAction.OfType(action);
+                AdvanceActor();
+            }
+            else
+                SayOnBoth("Swallowed", "Only cutting attacks from inside or waiting are available.");
+            return;
+        }
         var combatAction = CombatAction.OfType(action);
 
         // If Fight action and multiple groups exist, prompt for target group
@@ -1351,6 +1396,9 @@ public sealed class EncounterForm : Form
         if (allies.Count == 0)
             return null;
 
+        allies = allies.Where(a => !a.HasStatus(CharacterStatus.Swallowed)).ToList();
+        if (allies.Count == 0)
+            return null;
         var allyLines = string.Join(Environment.NewLine, allies.Select((a, i) =>
             $"{i + 1}. {a.Name} (HP {a.CurrentHitPoints}/{a.MaxHitPoints}, Status: {FormatStatus(a)})"));
         var prompt = $"Casting: {spell.Name}{Environment.NewLine}{Environment.NewLine}{allyLines}";
@@ -1396,7 +1444,8 @@ public sealed class EncounterForm : Form
     {
         var allies = _party.Where(c => !c.HasStatus(CharacterStatus.Dead)
                                        && !c.HasStatus(CharacterStatus.Ashes)
-                                       && !c.HasStatus(CharacterStatus.Lost))
+                                       && !c.HasStatus(CharacterStatus.Lost)
+                                       && !c.HasStatus(CharacterStatus.Swallowed))
             .ToList();
 
         if (allies.Count == 0)
@@ -1461,6 +1510,7 @@ public sealed class EncounterForm : Form
         if (c.HasStatus(CharacterStatus.Diseased)) statuses.Add("Diseased");
         if (c.HasStatus(CharacterStatus.Feeblemind)) statuses.Add("Feeblemind");
         if (c.HasStatus(CharacterStatus.Slowed)) statuses.Add("Slowed");
+        if (c.HasStatus(CharacterStatus.Swallowed)) statuses.Add("Swallowed");
 
         return statuses.Count == 0 ? "-" : string.Join(", ", statuses);
     }
@@ -1876,6 +1926,13 @@ public sealed class EncounterForm : Form
 
     private void UpdateOptionsLegend()
     {
+        if (_currentIndex >= 0 && _currentIndex < _party.Count && _session != null
+            && _session.SwallowedCharacters.TryGetValue(_party[_currentIndex].Name, out var swallowed))
+        {
+            _optionsTitleLabel.Text = $"{swallowed.Victim.Name.ToUpperInvariant()} IS SWALLOWED";
+            _optionsLegendLabel.Text = $"F↵IGHT FROM INSIDE   P)ARRY/WAIT   T)AKE BACK   I)NFO\nINNER AC 9   DAMAGE -{swallowed.RoundsInside(_session.RoundNumber)}   {swallowed.RoundsUntilDeath(_session.RoundNumber)} ROUND(S) UNTIL DEATH";
+            return;
+        }
         var rank = GetActionableRank(_currentIndex);
         var showLayOnHands = _currentIndex >= 0
                              && _currentIndex < _party.Count

@@ -739,6 +739,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         // Follow the fight. These are observers: combat neither waits for them nor changes course.
         _combatCoordinator.EncounterStarted += session =>
         {
+            session.IsSpaciousArea = IsSpaciousEncounterArea();
             _viewer.ResetCombatMemory();   // or last fight's corpses read as fresh deaths
             PublishCombatToViewer(session);
         };
@@ -2408,6 +2409,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         return new ViewerPrompt("maze", "The party waits in the maze.", For: null, options);
+    }
+
+    private bool IsSpaciousEncounterArea()
+    {
+        if (_maze == null)
+            return false;
+
+        for (var y = _position.Y - 1; y <= _position.Y + 1; y++)
+        for (var x = _position.X - 1; x <= _position.X + 1; x++)
+        {
+            if (x < 0 || y < 0 || x >= _maze.GetLength(0) || y >= _maze.GetLength(1)
+                || _maze[x, y] != CellType.Floor)
+                return false;
+        }
+        return true;
     }
 
     /// <summary>

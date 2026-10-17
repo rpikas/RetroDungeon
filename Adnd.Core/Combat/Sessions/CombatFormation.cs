@@ -16,7 +16,7 @@ public static class CombatFormation
         var rank = 0;
         foreach (var candidate in party)
         {
-            if (!CanFight(candidate, session))
+            if (!CanFight(candidate, session) || candidate.HasStatus(CharacterStatus.Swallowed))
                 continue;
 
             rank++;
