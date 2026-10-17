@@ -1377,9 +1377,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.MinimizeBox = false;
         form.MaximizeBox = false;
 
-        var oldStyleElevator = GameRulesProvider.Current.UIOldStyle &&
-            string.Equals(title, "Elevator", StringComparison.OrdinalIgnoreCase);
-        Control label = oldStyleElevator
+        var oldStyleChoice = GameRulesProvider.Current.UIOldStyle && tableOptions != null;
+        Control label = oldStyleChoice
             ? new TextBox
             {
                 ReadOnly = true,
@@ -1429,7 +1428,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.AcceptButton = ok;
         form.CancelButton = cancel;
 
-        if (oldStyleElevator)
+        if (oldStyleChoice)
         {
             OldStyleDialog.Apply(form, label, input);
             form.Shown += (_, _) => input.Focus();

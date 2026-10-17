@@ -329,9 +329,42 @@ public sealed class CampCharacterInspectForm : Form
 
         _detailsBox.BorderStyle = useOldStyle ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
         _detailsBox.Font = useOldStyle
-            ? new Font("Consolas", 20f, FontStyle.Bold)
+            ? new Font("Consolas", 18f, FontStyle.Bold)
             : new Font("Consolas", 10f, FontStyle.Regular);
         _detailsBox.Height = useOldStyle ? 576 : 560;
+
+        if (useOldStyle)
+        {
+            FormBorderStyle = FormBorderStyle.None;
+            ShowInTaskbar = false;
+            Padding = new Padding(4);
+            BackColor = Color.Black;
+
+            var frame = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.Black,
+                Padding = new Padding(12)
+            };
+            var title = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 46,
+                Text = Text.ToUpperInvariant(),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 22f, FontStyle.Bold)
+            };
+            _detailsBox.Dock = DockStyle.Fill;
+            _oldStyleFooterLabel.Dock = DockStyle.Bottom;
+            _oldStyleFooterLabel.Font = _detailsBox.Font;
+            frame.Controls.Add(_detailsBox);
+            frame.Controls.Add(_oldStyleFooterLabel);
+            frame.Controls.Add(title);
+            Controls.Add(frame);
+            frame.BringToFront();
+        }
     }
 
     /// <summary>Says something on both surfaces, then puts this screen's menu back up.</summary>

@@ -4636,3 +4636,9 @@ ___
 When using a potion in battle or outside battle, dont ask ally target, It is always the person using 
 the potion that is affected by it. 42,2
 ___
+Ìf the old style setting is set can you also make the inspect dialog be old style.
+___
+In the Effects dialog shown every step you take in the maze introduce options D)on't show again and S)how only every 10 steps. 
+If D)on't show again is selected then the Effects dialog will not be shown again util it wears off.
+if S)how only every 10 steps is selected then the Effects dialog will be shown every 10 steps until it wears off.
+

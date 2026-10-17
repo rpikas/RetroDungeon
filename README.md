@@ -33,7 +33,10 @@ use borderless black frames, 22-point titles, and 18-point questions and answers
 Selection prompts accept Enter to select and Escape to go back. For numbered spell
 and target prompts, type the option number and press Enter. The elevator also uses
 this old-style frame, with a scrollable level list; type the dungeon level and press
-Enter, or Escape to cancel. Modern UI keeps its existing dialogs.
+Enter, or Escape to cancel. The camp Inspect character chooser and character Inspect
+screen also use the borderless old-style frame. The Inspect screen retains its letter
+shortcuts and uses matching 18-point details and menu text beneath a 22-point title.
+Modern UI keeps its existing dialogs.
 
 A two-handed item requires
 it, and then occupies both hands. Unequip it before equipping another item in either
