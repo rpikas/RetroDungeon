@@ -25,7 +25,12 @@ Happy Gaming!
 
 ## Two-handed equipment
 
-A two-handed item requires both Main Hand and Off Hand to be empty before equipping
+With Old Style UI enabled, the character inspect equipment action uses a framed
+keyboard prompt: **E)quip**, **U)nequip**, or Escape to cancel. Answer alternatives
+in old-style dialogs match the main question or message font size. Modern UI keeps
+the list-and-buttons dialog.
+
+A two-handed item requires
 it, and then occupies both hands. Unequip it before equipping another item in either
 hand; equipping a replacement does not remove existing hand equipment automatically.
 Shop purchases and treasure retain this property, and older saved weapons recover

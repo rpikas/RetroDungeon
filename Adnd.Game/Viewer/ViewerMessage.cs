@@ -200,7 +200,7 @@ public static class ViewerMessage
                 Left = 18,
                 Top = 54,
                 Width = framePanel.ClientSize.Width - 36,
-                Height = Math.Max(26, framePanel.ClientSize.Height - 98),
+                Height = Math.Max(26, framePanel.ClientSize.Height - 104),
                 AutoSize = false,
                 Text = message,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -212,15 +212,15 @@ public static class ViewerMessage
             var hint = new Label
             {
                 Left = 0,
-                Top = framePanel.ClientSize.Height - 30,
+                Top = framePanel.ClientSize.Height - 36,
                 Width = framePanel.ClientSize.Width,
-                Height = 20,
+                Height = 26,
                 AutoSize = false,
                 Text = "↵ CONTINUE   ESC CLOSE",
                 TextAlign = ContentAlignment.MiddleCenter,
                 BackColor = Color.Black,
                 ForeColor = GameRulesProvider.Current.DefaultColor,
-                Font = new Font("Consolas", 9f, FontStyle.Bold)
+                Font = body.Font
             };
 
             ok.Visible = false;

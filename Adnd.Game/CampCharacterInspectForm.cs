@@ -807,7 +807,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (equipable.Count > 0 && equipped.Count > 0)
         {
-            var actionIdx = PromptChoice("Equip", new List<string> { "Equip item", "Unequip item" });
+            var actionIdx = PromptEquipAction();
             if (!actionIdx.HasValue)
                 return;
 
@@ -1795,6 +1795,98 @@ public sealed class CampCharacterInspectForm : Form
     private static void NotImplemented(string actionName)
     {
         ViewerMessage.Say(null, actionName, $"[{actionName} action not yet implemented]", null);
+    }
+
+    private int? PromptEquipAction()
+    {
+        if (!GameRulesProvider.Current.UIOldStyle)
+            return PromptChoice("Equip", new List<string> { "Equip item", "Unequip item" });
+
+        using var form = new Form
+        {
+            Text = "Equip",
+            FormBorderStyle = FormBorderStyle.None,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            KeyPreview = true,
+            ClientSize = new Size(820, 190)
+        };
+
+        var framePanel = new Panel
+        {
+            Left = 4,
+            Top = 4,
+            Width = form.ClientSize.Width - 8,
+            Height = form.ClientSize.Height - 8,
+            BorderStyle = BorderStyle.FixedSingle,
+            BackColor = Color.Black
+        };
+
+        var titleLabel = new Label
+        {
+            Left = 0,
+            Top = 10,
+            Width = framePanel.ClientSize.Width,
+            Height = 36,
+            Text = "EQUIPMENT",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        };
+
+        var questionLabel = new Label
+        {
+            Left = 0,
+            Top = 52,
+            Width = framePanel.ClientSize.Width,
+            Height = 80,
+            Text = "EQUIP OR UNEQUIP AN ITEM?",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 18f, FontStyle.Bold)
+        };
+
+        var optionsLabel = new Label
+        {
+            Left = 0,
+            Top = 132,
+            Width = framePanel.ClientSize.Width,
+            Height = 34,
+            Text = "E)quip    U)nequip",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = questionLabel.Font
+        };
+
+        int? picked = null;
+        form.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode != Keys.E && e.KeyCode != Keys.U && e.KeyCode != Keys.Escape)
+                return;
+
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+            picked = e.KeyCode == Keys.E ? 0 : e.KeyCode == Keys.U ? 1 : null;
+            form.DialogResult = picked.HasValue ? DialogResult.OK : DialogResult.Cancel;
+            form.Close();
+        };
+
+        framePanel.Controls.Add(titleLabel);
+        framePanel.Controls.Add(questionLabel);
+        framePanel.Controls.Add(optionsLabel);
+        form.Controls.Add(framePanel);
+
+        var outcome = ViewerDialog.RunPick(form, this, "Equip or unequip an item?",
+            ViewerIds.Character(_characterName), new[] { "E)quip", "U)nequip" }, _publish);
+
+        return outcome.Result == DialogResult.OK ? outcome.Picked ?? picked : null;
     }
 
     private int? PromptChoice(string title, List<string> options)

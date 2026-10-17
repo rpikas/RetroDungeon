@@ -4618,4 +4618,10 @@ if any of the monsters are damages, to avoid this: Lvl 5 Cleric #1 tries to cast
 no ally needs healing. If healing do something else like cast another spell or hit
 
 It should not be possible to equip anything else in main hand or off hand when something with "IsTwoHanded": true. 41,3
+___
+if the setting old style ui is selected and equiping an itme i from the inspect charater, then let the dialog 
+where you select if you should equip or unequip follow the old style ui as used for exampel when asking 
+if you want to take the stairs up and let the alternatives be E)quip and U)nequip. 41,6
 
+can you update the font size of answer alterantives in the old style dialogs to he the same as the rest of 
+the dialog, for example Y)es and N)o 
