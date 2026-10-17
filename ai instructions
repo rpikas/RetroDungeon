@@ -4705,8 +4705,29 @@ when showing the message Trap triggered make sure that all text in the dialog is
 ___
 
 Can you implement the following special attack for purple worm:
-A purple worm attacks by biting (2-24 points of damage), and any hit 2096 over the required score (that is 4 or more over the required number) or o 100% (die roll of 20) score in any case indicates the creature has engulfed its victim. A mature purple worm can swallow, whole, a creature as large as 8' or so tall and up to 6’ wide, or vice versa. Any creature swallowed will be dead in 6 melee rounds. The worm will digest its meal in 12 turns, ond ot that time the creature is totally gone and cannot be raised from the dead. Note, however, that a creature swallowed can try to cut its way out of the purple worm's stomach. The inner armor class of the ‘worm is 9, but each round the creature is in the worm it subtracts 1 from the damage each of its attacks does. This subtraction is cumulative, so on the second melee round there is a -2, on the third a -3, etc.
-Additionally, the purple worm has a poisonous stinger in its tail. This weapon is only used in rear defense, however, or if the ‘worm is fighting large or numerous opponents in a very spacious area which will allow it freedom to use its stinger. The sting causes 2-8 hit points of damage when it hits, and if the victim fails its poison saving throw it is killed by the purple worm’s poison.
-I interpret this as if the purple worm swallows a charater, the party has six melee rounds to kill the purple worm before the swallowed character dies. The swallowed character can try to cut its way out of the purple worm's stomach, but each round it is in the worm it subtracts 1 from the damage each of its attacks does. This subtraction is cumulative, so on the second melee round there is a -2, on the third a -3, etc. The inner armor class of the worm is 9. Additionally, if the purple worm uses its poisonous stinger in rear defense or in a spacious area, it causes 2-8 hit points of damage and if the victim fails its poison saving throw, it is killed by the purple worm's poison.
+A purple worm attacks by biting (2-24 points of damage), and any hit 2096 over the required score 
+(that is 4 or more over the required number) or o 100% (die roll of 20) score in any case indicates 
+the creature has engulfed its victim. A mature purple worm can swallow, whole, a creature as large 
+as 8' or so tall and up to 6’ wide, or vice versa. Any creature swallowed will be dead in 6 melee 
+rounds. The worm will digest its meal in 12 turns, ond ot that time the creature is totally gone 
+and cannot be raised from the dead. Note, however, that a creature swallowed can try to cut its 
+way out of the purple worm's stomach. The inner armor class of the ‘worm is 9, but each round the 
+creature is in the worm it subtracts 1 from the damage each of its attacks does. This subtraction
+is cumulative, so on the second melee round there is a -2, on the third a -3, etc.
+Additionally, the purple worm has a poisonous stinger in its tail. This weapon is only used in
+rear defense, however, or if the ‘worm is fighting large or numerous opponents in a very 
+spacious area which will allow it freedom to use its stinger. The sting causes 2-8 hit points
+of damage when it hits, and if the victim fails its poison saving throw it is killed by the 
+purple worm’s poison.
+I interpret this as if the purple worm swallows a charater, the party has six melee rounds to 
+kill the purple worm before the swallowed character dies. The swallowed character can try to 
+cut its way out of the purple worm's stomach, but each round it is in the worm it subtracts 
+1 from the damage each of its attacks does. This subtraction is cumulative, so on the second 
+melee round there is a -2, on the third a -3, etc. The inner armor class of the worm is 
+9. Additionally, if the purple worm uses its poisonous stinger in rear defense or in a 
+spacious area, it causes 2-8 hit points of damage and if the victim fails its poison saving
+throw, it is killed by the purple worm's poison.
+45,1
 
-
+When enoutering Devil,arch.* that means that a random monster of "Type": "Devil, Arch1fefiend" 
+should be encountered. 45,1

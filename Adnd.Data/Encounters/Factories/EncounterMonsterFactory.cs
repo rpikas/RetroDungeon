@@ -142,22 +142,17 @@ public sealed class EncounterMonsterFactory
         }
 
         var allMonsters = _monsterRepository.GetAll().ToList();
-        var template = TryResolvePiercerVariant(allMonsters, monsterName)
-            ?? FindMonsterByName(allMonsters, monsterName)
-            ?? allMonsters.FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
+        var isArchfiendEncounter = IsArchfiendEncounterName(monsterName);
+        var template = isArchfiendEncounter
+            ? GetRandomMonsterByJsonType("Devil, Archfiend")
+            : TryResolvePiercerVariant(allMonsters, monsterName)
+                ?? FindMonsterByName(allMonsters, monsterName)
+                ?? allMonsters.FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
 
-        if (template == null)
+        if (template == null && monsterName.Contains("demon", StringComparison.OrdinalIgnoreCase)
+                             && monsterName.Contains("prince", StringComparison.OrdinalIgnoreCase))
         {
-            var lower = monsterName.ToLowerInvariant();
-
-            if (lower.Contains("demon") && lower.Contains("prince"))
-            {
-                template = GetRandomMonsterByJsonType("Demon Prince");
-            }
-            else if (lower.Contains("devil") && (lower.Contains("arch") || lower.Contains("archfiend")))
-            {
-                template = GetRandomMonsterByJsonType("Devil, Archfiend");
-            }
+            template = GetRandomMonsterByJsonType("Demon Prince");
         }
 
         template ??= BuildFallback(monsterName);
@@ -338,6 +333,13 @@ public sealed class EncounterMonsterFactory
         var selected = variants[_random.Next(variants.Count)];
         RuleApplicationInfo.Publish($"Encounter roll: '{requestedName}' resolved to variant '{selected.Name}'.");
         return selected;
+    }
+
+    private static bool IsArchfiendEncounterName(string requestedName)
+    {
+        var normalized = NormalizeMonsterName(requestedName);
+        return string.Equals(normalized, "devil arch", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(normalized, "devil archfiend", StringComparison.OrdinalIgnoreCase);
     }
 
     private static Monster? FindMonsterByName(IEnumerable<Monster> monsters, string requestedName)
