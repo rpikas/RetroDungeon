@@ -1427,10 +1427,10 @@ public sealed class CampCharacterInspectForm : Form
         var grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Haste") || string.Equals(selected.item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase);
         var grantsTreasureFindingPotion = string.Equals(selected.item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase);
         var isPotionOfHealing = string.Equals(selected.item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
-        var isPotionItem = (selected.item.Name ?? string.Empty).Contains("Potion", StringComparison.OrdinalIgnoreCase);
+        var isPotionItem = selected.item.Type == ItemType.Potion;
         var targets = new List<SpellCastTarget>();
 
-        if (spell != null && (spell.RangeType == SpellRangeType.Self || (isPotionItem && spell.RangeType == SpellRangeType.Ally)))
+        if (isPotionItem || (spell != null && spell.RangeType == SpellRangeType.Self))
         {
             targets.Add(SpellCastTarget.Ally(user));
         }

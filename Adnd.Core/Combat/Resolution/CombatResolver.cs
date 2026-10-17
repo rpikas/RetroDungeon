@@ -2130,7 +2130,9 @@ public sealed class CombatResolver
             return;
         }
 
-        var targets = action.Target != null ? new List<SpellCastTarget> { action.Target } : new List<SpellCastTarget>();
+        var targets = item.Type == ItemType.Potion
+            ? new List<SpellCastTarget> { SpellCastTarget.Ally(user) }
+            : action.Target != null ? new List<SpellCastTarget> { action.Target } : new List<SpellCastTarget>();
         var result = _spellCastingService.CastFromItem(new SpellCastRequest
         {
             Caster = user,

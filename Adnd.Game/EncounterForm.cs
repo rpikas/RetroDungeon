@@ -1047,7 +1047,7 @@ public sealed class EncounterForm : Form
         var spell = chosen.spell;
 
         SpellCastTarget? target;
-        if (spell != null && spell.RangeType == SpellRangeType.Self)
+        if (chosen.item.Type == ItemType.Potion || (spell != null && spell.RangeType == SpellRangeType.Self))
         {
             target = SpellCastTarget.Ally(user);
         }

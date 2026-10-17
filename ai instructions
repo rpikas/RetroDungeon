@@ -4631,3 +4631,8 @@ Can you also make other dialogs like Disarm trap to follow the same old style as
 you want to take the stairs up, with the same font sizes and no dialog header if the old style setting is set.
 Bugfix: When I chose spell, enter does not work as select. 42,0
 ___
+Ìf the old style setting is set can you also make the elevator dialog be old style. 42,1
+
+When using a potion in battle or outside battle, dont ask ally target, It is always the person using 
+the potion that is affected by it. 42,2
+___

@@ -1377,15 +1377,25 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.MinimizeBox = false;
         form.MaximizeBox = false;
 
-        var label = new Label
-        {
-            Left = 12,
-            Top = 12,
-            Width = 496,
-            Height = 220,
-            AutoSize = false,
-            Text = text
-        };
+        var oldStyleElevator = GameRulesProvider.Current.UIOldStyle &&
+            string.Equals(title, "Elevator", StringComparison.OrdinalIgnoreCase);
+        Control label = oldStyleElevator
+            ? new TextBox
+            {
+                ReadOnly = true,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Text = text
+            }
+            : new Label
+            {
+                Left = 12,
+                Top = 12,
+                Width = 496,
+                Height = 220,
+                AutoSize = false,
+                Text = text
+            };
 
         var input = new TextBox
         {
@@ -1418,6 +1428,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+
+        if (oldStyleElevator)
+        {
+            OldStyleDialog.Apply(form, label, input);
+            form.Shown += (_, _) => input.Focus();
+        }
 
         if (tableOptions is null)
         {

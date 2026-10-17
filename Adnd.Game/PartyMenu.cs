@@ -775,7 +775,7 @@ public class PartyMenu
         var grantsRegenerationUntilDungeonExit = ItemSpecialAbilityParser.HasCastsAbility(selected.item, "Regeneration");
         var targets = new List<SpellCastTarget>();
 
-        if (spell != null && spell.RangeType == SpellRangeType.Self)
+        if (selected.item.Type == ItemType.Potion || (spell != null && spell.RangeType == SpellRangeType.Self))
         {
             targets.Add(SpellCastTarget.Ally(user));
         }

@@ -31,14 +31,20 @@ in old-style dialogs match the main question or message font size. Combat confir
 (including Disarm Trap), trap party selection, and inspect/combat choice prompts also
 use borderless black frames, 22-point titles, and 18-point questions and answers.
 Selection prompts accept Enter to select and Escape to go back. For numbered spell
-and target prompts, type the option number and press Enter. Modern UI keeps its
-existing dialogs.
+and target prompts, type the option number and press Enter. The elevator also uses
+this old-style frame, with a scrollable level list; type the dungeon level and press
+Enter, or Escape to cancel. Modern UI keeps its existing dialogs.
 
-A two-handed item requires both Main Hand and Off Hand to be empty before equipping
+A two-handed item requires
 it, and then occupies both hands. Unequip it before equipping another item in either
 hand; equipping a replacement does not remove existing hand equipment automatically.
 Shop purchases and treasure retain this property, and older saved weapons recover
 missing two-handed flags from the item catalogue when characters are loaded.
+
+## Potions
+
+Potions always affect the character using them, both in combat and outside combat.
+Using a potion does not ask for an ally target; other ally-targeted items still do.
 
 ## Monster healing in combat
 
