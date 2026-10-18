@@ -137,6 +137,7 @@ public sealed partial class CombatResolver
         ["Sword, Broad"] = "sword broad",
         ["Two Handed Sword"] = "sword two handed",
         ["Long Sword"] = "sword long",
+        ["Cold Iron Long Sword"] = "sword long",
         ["Long Sword +1"] = "sword long",
         ["Long Sword +2"] = "sword long",
         ["Long Sword +3"] = "sword long",

@@ -4787,3 +4787,5 @@ Introduce a Cold Iron long sword that is like a normal long sword but it cost tw
 gives twice as much damage against monsters that are affected by cold iron with this special defense:
 "Name": "Cold Iron Vulnerability",
 "Description": "Cold iron weapons deal double damage."
+___
+C:\Users\rober\source\repos\RetroDungeon\Adnd.Data\Monsters\Level4.json
