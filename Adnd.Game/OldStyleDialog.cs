@@ -6,7 +6,7 @@ namespace Adnd.Game;
 
 internal static class OldStyleDialog
 {
-    public static void Apply(Form form, Control content, TextBox? input = null)
+    public static void Apply(Form form, Control content, TextBox? input = null, Action? onSelect = null, string selectLabel = "SELECT")
     {
         if (!GameRulesProvider.Current.UIOldStyle)
             return;
@@ -41,7 +41,7 @@ internal static class OldStyleDialog
         {
             Dock = DockStyle.Bottom,
             Height = 42,
-            Text = "↵ SELECT    ESC BACK",
+            Text = $"↵ {selectLabel}    ESC BACK",
             TextAlign = ContentAlignment.MiddleCenter,
             ForeColor = form.ForeColor,
             Font = new Font("Consolas", 18f, FontStyle.Bold)
@@ -92,6 +92,12 @@ internal static class OldStyleDialog
 
             e.Handled = true;
             e.SuppressKeyPress = true;
+            if (e.KeyCode == Keys.Enter && onSelect != null)
+            {
+                onSelect();
+                return;
+            }
+
             form.DialogResult = e.KeyCode == Keys.Enter ? DialogResult.OK : DialogResult.Cancel;
             form.Close();
         };

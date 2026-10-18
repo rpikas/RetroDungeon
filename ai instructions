@@ -4741,3 +4741,13 @@ Implement "SpecialAttacks":  "Pyro hydra breath", that should cause 8 damage per
 if the target makes a save vs. breath weapon. The hydra can use this special attack once per battle.
 
 In traning grouds when i try to delete a charater I dont see the number i am writing
+___
+When R)ead is selected in inspect charater and known spells are show, if old style ui setting 
+is true please shown the known spells in the old ui style
+when showing spell info let the text be left aligned
+
+when casting healing spells from camp show how many hp you heal in the dialog and also in the log
+
+Cleics and druids should always know all the spells applicable for their level and class, for 
+example level1 or level 2 cleric should know all level 1 cleric spells and a level 3 cleric should
+know all level 1 and 2 cleric spells

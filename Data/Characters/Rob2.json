@@ -111,7 +111,7 @@
   "Gender": 0,
   "Alignment": 0,
   "Age": 17,
-  "AgeDays": 1,
+  "AgeDays": 3,
   "MaximumNaturalAgeYears": null,
   "DiedOfOldAge": false,
   "HasLifeExtensionProtection": false,

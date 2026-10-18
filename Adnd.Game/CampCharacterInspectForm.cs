@@ -661,9 +661,11 @@ public sealed class CampCharacterInspectForm : Form
             _characterRepository.Save(paladin);
 
         RefreshView();
-        SayOnBoth("Lay on Hands", healed > 0
+        var layText = healed > 0
             ? $"{paladin.Name} heals {target.Name} for {healed} HP."
-            : $"{target.Name} is already at full health.");
+            : $"{target.Name} is already at full health.";
+        RuleApplicationInfo.Publish($"Lay on Hands: {layText}");
+        SayOnBoth("Lay on Hands", layText);
     }
 
     private void MonkBodyHealAction()
@@ -711,9 +713,11 @@ public sealed class CampCharacterInspectForm : Form
         _characterRepository.Save(monk);
 
         RefreshView();
-        SayOnBoth("Body Heal", healed > 0
+        var bodyText = healed > 0
             ? $"{monk.Name} heals for {healed} HP."
-            : $"{monk.Name} is already at full health.");
+            : $"{monk.Name} is already at full health.";
+        RuleApplicationInfo.Publish($"Body Heal: {bodyText}");
+        SayOnBoth("Body Heal", bodyText);
     }
 
     private static string BuildOldStyleInspectView(Character c)
@@ -1627,9 +1631,11 @@ public sealed class CampCharacterInspectForm : Form
             var before = user.CurrentHitPoints;
             user.CurrentHitPoints = Math.Min(user.MaxHitPoints, user.CurrentHitPoints + heal);
             var actual = Math.Max(0, user.CurrentHitPoints - before);
-            result.Events.Add(actual > 0
+            var potionHealLine = actual > 0
                 ? $"{user.Name} drinks Potion of Healing and recovers {actual} HP (rolled {heal} on 2d4+2)."
-                : $"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health.");
+                : $"{user.Name} drinks Potion of Healing (rolled {heal} on 2d4+2), but is already at full health.";
+            result.Events.Add(potionHealLine);
+            RuleApplicationInfo.Publish(potionHealLine);
         }
 
         if (grantsHeroismPotion)
@@ -1887,7 +1893,7 @@ public sealed class CampCharacterInspectForm : Form
         var moreInfo = new Button { Text = "More info", Left = 392, Top = 354, Width = 75 };
         var close = new Button { Text = "Close", Left = 473, Top = 354, Width = 75, DialogResult = DialogResult.Cancel };
 
-        moreInfo.Click += (_, _) =>
+        void ShowSelectedSpellInfo()
         {
             if (list.SelectedIndex < 0 || list.SelectedIndex >= knownSpells.Count)
                 return;
@@ -1909,13 +1915,15 @@ public sealed class CampCharacterInspectForm : Form
             if (!string.IsNullOrWhiteSpace(spell.EffectDescription))
                 details.Add($"Effect: {spell.EffectDescription}");
 
-            ViewerMessage.Show(form, $"Spell Info - {spell.Name}", string.Join(Environment.NewLine, details));
-        };
+            ViewerMessage.Show(form, $"Spell Info - {spell.Name}", string.Join(Environment.NewLine, details), textAlign: ContentAlignment.MiddleLeft);
+        }
 
+        moreInfo.Click += (_, _) => ShowSelectedSpellInfo();
         form.Controls.Add(list);
         form.Controls.Add(moreInfo);
         form.Controls.Add(close);
         form.CancelButton = close;
+        OldStyleDialog.Apply(form, list, onSelect: ShowSelectedSpellInfo, selectLabel: "MORE INFO");
 
         form.ShowDialog(this);
     }

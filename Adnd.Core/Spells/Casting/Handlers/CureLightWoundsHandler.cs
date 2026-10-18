@@ -46,9 +46,11 @@ public sealed class CureLightWoundsHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add(actual > 0
-            ? $"{target.Name} is healed for {actual} HP."
-            : $"{target.Name} is already at full health.");
+        var healLine = actual > 0
+            ? $"{target.Name} is healed for {actual} HP (rolled {heal} on 1d8)."
+            : $"{target.Name} is already at full health (rolled {heal} on 1d8).";
+        result.Events.Add(healLine);
+        Diagnostics.RuleApplicationInfo.Publish($"{spell.Name}: {healLine}");
         result.HpChanges[target.Name] = actual;
         return result;
     }

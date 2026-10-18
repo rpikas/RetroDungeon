@@ -1,9 +1,10 @@
 {
   "Members": [
-    "Rob2"
+    "Rob2",
+    "hel"
   ],
   "CurrentShopperIndex": -1,
-  "DungeonDaysElapsed": 1,
+  "DungeonDaysElapsed": 3,
   "TreasureFindingActive": false,
   "TreasureFindingStepsRemaining": 0,
   "TreasureFindingTargetLevel": 0,

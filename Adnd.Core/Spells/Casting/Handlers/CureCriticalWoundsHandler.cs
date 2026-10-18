@@ -49,9 +49,12 @@ public sealed class CureCriticalWoundsHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
-        result.Events.Add(actual > 0
-            ? $"{target.Name} is healed for {actual} HP."
-            : $"{target.Name} is already at full health.");
+        var dice = isDruidVersion ? "3d6+3" : "3d8+3";
+        var healLine = actual > 0
+            ? $"{target.Name} is healed for {actual} HP (rolled {heal} on {dice})."
+            : $"{target.Name} is already at full health (rolled {heal} on {dice}).";
+        result.Events.Add(healLine);
+        Diagnostics.RuleApplicationInfo.Publish($"{spell.Name}: {healLine}");
         result.HpChanges[target.Name] = actual;
         return result;
     }

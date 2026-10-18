@@ -64,7 +64,7 @@ public static class ViewerMessage
     /// Sized to the text rather than fixed: a round of a fight is a dozen lines and a result is two words,
     /// and a box with a scrollbar in it would be worse than the MessageBox this replaces.
     /// </summary>
-    public static void Show(IWin32Window? owner, string title, string text)
+    public static void Show(IWin32Window? owner, string title, string text, ContentAlignment textAlign = ContentAlignment.MiddleCenter)
     {
         var isCombatRewards = string.Equals(title?.Trim(), "Combat Rewards", StringComparison.OrdinalIgnoreCase);
         var isCombatRound = string.Equals(title?.Trim(), "Combat Round", StringComparison.OrdinalIgnoreCase);
@@ -203,7 +203,7 @@ public static class ViewerMessage
                 Height = Math.Max(26, framePanel.ClientSize.Height - 104),
                 AutoSize = false,
                 Text = message,
-                TextAlign = ContentAlignment.MiddleCenter,
+                TextAlign = textAlign,
                 BackColor = Color.Black,
                 ForeColor = GameRulesProvider.Current.DefaultColor,
                 Font = new Font("Consolas", 14f, FontStyle.Bold)

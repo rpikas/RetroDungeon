@@ -28,6 +28,7 @@ public class CharacterRepository
             .LoadAll()
             .GroupBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+        var spellRepo = new Adnd.Data.Spells.SpellRepository();
 
         foreach (var file in Directory.GetFiles(_folder, "*.json"))
         {
@@ -48,6 +49,7 @@ public class CharacterRepository
                 // Keep spell slots in sync with current class levels.
                 // Older saved characters may have stale/short slot lists (e.g. missing 7th-level cleric slots).
                 _ = new SpellProgressionService().RecalculateFromClassProgressions(c);
+                SyncDivineKnownSpells(c, spellRepo);
                 NormalizeAttackCadence(c);
                 var proficiencyChanged = false;
                 if (!GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
@@ -63,6 +65,38 @@ public class CharacterRepository
         }
 
         return list;
+    }
+
+    private static void SyncDivineKnownSpells(Character character, Adnd.Data.Spells.SpellRepository spellRepo)
+    {
+        foreach (var state in character.Spellcasting ?? new List<Adnd.Core.Spells.SpellcastingState>())
+        {
+            if (state.SpellClass is not (Adnd.Core.Spells.SpellClass.Cleric or Adnd.Core.Spells.SpellClass.Druid))
+                continue;
+
+            var maxLevel = 0;
+            for (var i = state.SlotsPerDay.Count - 1; i >= 0; i--)
+            {
+                if (state.SlotsPerDay[i] > 0)
+                {
+                    maxLevel = i + 1;
+                    break;
+                }
+            }
+
+            var classSpells = spellRepo.LoadByClass(state.SpellClass);
+            if (classSpells.Count == 0)
+                continue;
+
+            var shouldKnow = classSpells
+                .Where(s => s.Level <= maxLevel)
+                .Select(s => s.Id)
+                .Distinct()
+                .ToList();
+
+            if (state.KnownSpellIds.Count != shouldKnow.Count || state.KnownSpellIds.Except(shouldKnow).Any())
+                state.KnownSpellIds = shouldKnow;
+        }
     }
 
     private static bool NormalizeClassLevelCaps(Character character)

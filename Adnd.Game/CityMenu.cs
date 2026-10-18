@@ -1093,7 +1093,8 @@ public class CityMenu
     private void DeleteCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, all.Count, autoSubmitAfterCharacters: 2);
+        var sel = InputHelper.ReadNumber(1, all.Count, autoSubmitAfterCharacters: 2, echoTypedCharacters: true);
+        Console.WriteLine();
         if (sel.HasValue)
         {
             var ch = all[sel.Value - 1];
