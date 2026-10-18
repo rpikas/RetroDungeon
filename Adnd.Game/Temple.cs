@@ -21,7 +21,7 @@ public static class Temple
     public const int HealCostPerHp = 15;
     public const int CurePoisonCost = 1000;
     public const int CureParalysisCost = 200;
-    public const int CureDiseaseCost = 500;
+    public const int CureDiseaseCost = 700;
     public const int CureFeeblemindCost = 3000;
     public const int RestorePetrificationCost = 3000;
 

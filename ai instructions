@@ -4735,7 +4735,9 @@ ___
 When inspecting a charater, and selecting E)quip do not ask if you want to E)quip or U)nequip 
 instead just asume that you want to equip.
 In the inspect chatater, introduce N)Unequip just to thel left of the L)eave option. 
-When N is pressed ask what item you want to unequip.
+When N is pressed ask what item you want to unequip. 45,2
 ___
 Implement "SpecialAttacks":  "Pyro hydra breath", that should cause 8 damage per head and 4
 if the target makes a save vs. breath weapon. The hydra can use this special attack once per battle.
+
+In traning grouds when i try to delete a charater I dont see the number i am writing

@@ -1361,6 +1361,9 @@ public sealed partial class CombatResolver
                 }
             }
 
+            if (TryResolvePyroHydraBreath(monster, session, events))
+                continue;
+
             if (TryResolveMonsterLayOnHands(session, monster, events))
                 continue;
 
@@ -5286,6 +5289,28 @@ public sealed partial class CombatResolver
         return false;
     }
 
+    private bool TryResolvePyroHydraBreath(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Pyro hydra breath") || session.PyroHydraBreathUsed.Contains(monster))
+            return false;
+
+        var targets = session.ExposedParty.ToList();
+        if (targets.Count == 0)
+            return false;
+
+        // Hydra Hit Dice represent the number of heads, not the number of bite attacks.
+        var headCount = monster.Template.HitDice;
+        if (headCount <= 0)
+            throw new InvalidOperationException($"{monster.DisplayName} requires a positive head count for Pyro hydra breath.");
+
+        var breathDamage = 8 * headCount;
+        session.PyroHydraBreathUsed.Add(monster);
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Pyro hydra breath: {headCount} heads deal {breathDamage} fire damage (8 per head; save vs. breath weapon for {4 * headCount}, 4 per head). This attack can be used only once per battle."));
+        RuleApplicationInfo.PublishLinked("MM", "Hydra", $"{monster.DisplayName}: Pyro hydra breath deals 8 damage per head, or 4 per head on a successful save vs. breath weapon; once per battle.");
+        ResolveFireBreathDamage(monster, targets, breathDamage, "Pyro hydra breath", events);
+        return true;
+    }
+
     private bool TryResolveHellHoundBreatheFire(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
         var isHellHound = string.Equals(monster.Template.Name?.Trim(), "Hell Hound", StringComparison.OrdinalIgnoreCase);
@@ -5305,8 +5330,13 @@ public sealed partial class CombatResolver
             return false;
 
         events.Add(new CombatEvent($"{monster.DisplayName} uses Hell Hound Breathe Fire for {breathDamage} damage (1 HP per HD)!"));
+        ResolveFireBreathDamage(monster, aliveParty, breathDamage, "Hell Hound fire breath", events);
+        return true;
+    }
 
-        foreach (var target in aliveParty)
+    private void ResolveFireBreathDamage(MonsterInstance monster, IReadOnlyList<Character> targets, int breathDamage, string breathName, List<CombatEvent> events)
+    {
+        foreach (var target in targets)
         {
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
                 target,
@@ -5330,18 +5360,16 @@ public sealed partial class CombatResolver
             WakeCharacterIfAsleepAfterDamage(target, actual, events);
 
             if (saveRoll >= saveTarget)
-                events.Add(new CombatEvent($"{target.Name} succeeds save vs Dragon Breath ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
+                events.Add(new CombatEvent($"{target.Name} succeeds save vs. breath weapon ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
             else
-                events.Add(new CombatEvent($"{target.Name} fails save vs Dragon Breath ({saveRoll} vs {saveTarget}) and takes {actual} damage. HP {before}->{target.CurrentHitPoints}."));
+                events.Add(new CombatEvent($"{target.Name} fails save vs. breath weapon ({saveRoll} vs {saveTarget}) and takes {actual} damage. HP {before}->{target.CurrentHitPoints}."));
 
             if (target.CurrentHitPoints <= 0)
             {
                 target.AddStatus(CharacterStatus.Dead);
-                events.Add(new CombatEvent($"{target.Name} is slain by Hell Hound fire breath!"));
+                events.Add(new CombatEvent($"{target.Name} is slain by {breathName}!"));
             }
         }
-
-        return true;
     }
 
     private static bool HasSpecialAbility(MonsterInstance monster, string abilityName)

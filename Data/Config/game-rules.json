@@ -1,0 +1,23 @@
+{
+  "TreasureFindChance": 0.8,
+  "MonsterEncounterChance": 0.2,
+  "AbilityRollMethod": 0,
+  "XpMultiplier": 10,
+  "CharacterCreationMinGold": 31,
+  "CharacterCreationMaxGold": 210,
+  "AutoMemorizeArcaneSpellsDaily": true,
+  "NumberOfItemsThatCouldBeFound": 5,
+  "ProbabilityFindingEachItem": 0.05,
+  "ItemSourceOptions": 4,
+  "MonsterSourceOptions": 2,
+  "BoltacItemSourceFilter": 2,
+  "UIOldStyle": true,
+  "DelayInMsbetweenActions": 0,
+  "ShowDiceRollAndRuleApplicationInfo": true,
+  "ShowReferencesInRuleAndDiceInfo": true,
+  "ShowToHitRoll": false,
+  "PlayerSelectsWeaponProficiencies": false,
+  "PlayerSelectsLanguagesOnCreation": false,
+  "MaxSizeEncounter": 2,
+  "ForegroundColor": "White"
+}

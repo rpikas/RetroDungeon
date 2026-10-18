@@ -1561,8 +1561,8 @@
           "Description": "Up to 4 heads may attack the same opponent."
         },
         {
-          "Name": "Breath Weapon",
-          "Description": "Each head may breathe for 1–8 damage."
+          "Name": "Pyro hydra breath",
+          "Description": "Once per battle, breathes fire for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
         }
       ],
       "SpecialDefenses": [

@@ -1,0 +1,14 @@
+{
+  "Members": [
+    "Rob2"
+  ],
+  "CurrentShopperIndex": -1,
+  "DungeonDaysElapsed": 1,
+  "TreasureFindingActive": false,
+  "TreasureFindingStepsRemaining": 0,
+  "TreasureFindingTargetLevel": 0,
+  "TreasureFindingTargetX": -1,
+  "TreasureFindingTargetY": -1,
+  "TreasureFindingCopperPieces": 0,
+  "TreasureFindingGemCount": 0
+}

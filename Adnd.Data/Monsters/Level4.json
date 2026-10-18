@@ -1082,7 +1082,7 @@
       "SpecialAttacks": [
         {
           "Name": "Pyro hydra breath",
-          "Description": "Can exhale breath causing fire damage to all creatures in its path."
+          "Description": "Once per battle, breathes fire for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
         }
       ],
       "SpecialDefenses": [],
@@ -1114,6 +1114,12 @@
           "Name": "Bite",
           "NumberOfAttacks": 5,
           "Damage": "1d10"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Pyro hydra breath",
+          "Description": "Once per battle, breathes fire for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
         }
       ],
       "SpecialAbilities": [],
@@ -1614,21 +1620,18 @@
           "Name": "Bite",
           "NumberOfAttacks": 5,
           "Damage": "1d10"
-        },
+        }
+      ],
+      "SpecialAttacks": [
         {
-          "Name": "Fire Breath",
-          "NumberOfAttacks": 1,
-          "Damage": "5d6"
+          "Name": "Pyro hydra breath",
+          "Description": "Once per battle, breathes fire for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
         }
       ],
       "SpecialAbilities": [
         {
           "Name": "Multiple Heads",
           "Description": "Each head attacks independently; severed heads do not regrow."
-        },
-        {
-          "Name": "Fire Breath",
-          "Description": "Each head can exhale flame; damage scales with number of heads."
         },
         {
           "Name": "Fire Resistance",
