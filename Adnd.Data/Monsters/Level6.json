@@ -1,6 +1,1242 @@
 {
-    "Level": 6,
+  "Level": 6,
   "Monsters": [
+    {
+      "Name": "Basilisk",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "Movement": 6,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "40",
+      "TreasureType": "F",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Petrifying Gaze",
+          "Description": "Any creature meeting its gaze must save or turn to stone."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "If its gaze is reflected back at it in bright light, the basilisk can petrify itself; can see into astral and ethereal planes.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 01-03"
+    },
+    {
+      "Name": "Carrion Crawler",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 7,
+      "Movement": 12,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "50",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Tentacles",
+          "NumberOfAttacks": 8,
+          "Damage": "0"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Paralysis",
+          "Description": "Tentacles cause paralysis for 3–12 turns."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Non-",
+      "Size": "Large",
+      "BaseXPValue": 580,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Climbs walls and ceilings; multiple tentacle hits require multiple saving throws.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 04-10"
+    },
+    {
+      "Name": "Lvl 6 Magic-User",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 4 Magic-User spells",
+          "Description": "Access to 1st–4th level spells."
+        }
+      ],
+      "BaseXPValue": 650,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Cleric",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 4 Cleric spells",
+          "Description": "Access to 1st–4th level spells."
+        }
+      ],
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Fighter",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 11,
+        "PetrificationPolymorph": 10,
+        "BreathWeapon": 12,
+        "Spell": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Long sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Thief",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 11,
+        "Spell": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Pick Pockets",
+          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab multiplier is ×3 at this level."
+        }
+      ],
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 1,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Monk",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 5,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 11,
+        "Spell": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Unarmed Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 750,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Assassin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 11,
+        "Spell": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Assassination",
+          "Description": "Improved assassination chance; uses thief saving throws."
+        }
+      ],
+      "BaseXPValue": 750,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Bard",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 5,
+      "HitDice": 6,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 9,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 11,
+        "Spell": 10
+      },
+      "Attacks": [
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Bardic Music",
+          "Description": "Improved inspiration and charm abilities."
+        }
+      ],
+      "BaseXPValue": 850,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Druid",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 5,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 6,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 9,
+        "BreathWeapon": 12,
+        "Spell": 11
+      },
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 4 Druid spells",
+          "Description": "Access to 1st–4th level druid spells."
+        }
+      ],
+      "BaseXPValue": 750,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Ranger",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 5,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 10,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 11,
+        "BreathWeapon": 13,
+        "Spell": 13
+      },
+      "Attacks": [
+        {
+          "Name": "Long sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [],
+      "BaseXPValue": 850,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Illusionist",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 9,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 7,
+        "BreathWeapon": 11,
+        "Spell": 8
+      },
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 4 Illusionist spells",
+          "Description": "Access to 1st–4th level illusion spells."
+        }
+      ],
+      "BaseXPValue": 750,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Lvl 6 Paladin",
+      "Type": "Humanoid",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 3,
+      "HitDice": 6,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Size": "Medium",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 8,
+        "RodStaffWand": 10,
+        "PetrificationPolymorph": 9,
+        "BreathWeapon": 11,
+        "Spell": 11
+      },
+      "Attacks": [
+        {
+          "Name": "Longsword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lay on Hands",
+          "Description": "Heals 2 HP per level once per day."
+        }
+      ],
+      "BaseXPValue": 850,
+      "XPValuePerHitPoint": 2,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 11-16 then Character Subtable"
+    },
+    {
+      "Name": "Devil, Erinyes",
+      "Type": "Devil",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 0,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Fear",
+          "Description": "Victims must save or flee in terror."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "Can use various devil spell-like abilities."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Never Surprised",
+          "Description": "Always aware of surroundings; cannot be caught off guard."
+        }
+      ],
+      "MagicResistance": "35%",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1425,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 17",
+      "Other": "7' tall; covered in barbs; extremely aggressive; serves higher devils as shock troops."
+    },
+    {
+      "Name": "Djinni",
+      "Type": "Monster",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "Movement": 9,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Whirlwind",
+          "Description": "Forms a whirlwind that lasts 1 round and deals damage to non‑aerial creatures."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "Can create food, water, soft goods, wood, temporary metal, illusions, become invisible, gaseous, wind walk, or form a whirlwind once per day."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average-high",
+      "Alignment": "Chaotic good",
+      "Size": "Large",
+      "BaseXPValue": 725,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Can travel elemental and astral planes; rarely uses weapons (20% chance).",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 18-19"
+    },
+    {
+      "Name": "Blue Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 11,
+        "RodStaffWand": 12,
+        "PetrificationPolymorph": 13,
+        "BreathWeapon": 14,
+        "Spell": 14
+      },
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "30% Level Age related Magic Use every 3 agelevels",
+          "Description": "30% chance to use age-related level magic every 3 age levels."
+        },
+        {
+          "Name": "Sleeping 60%",
+          "Description": "Has a 60% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1900,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Bronze Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "25% Level Age related Magic Use every 4 agelevels",
+          "Description": "25% chance to use age-related level magic every 4 age levels."
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Sleeping 25%",
+          "Description": "Has a 25% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1900,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Copper Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "25% Level Age related Magic Use every 3 agelevels",
+          "Description": "25% chance to use age-related level magic every 3 age levels."
+        },
+        {
+          "Name": "Sleeping 40%",
+          "Description": "Has a 40% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1900,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Gold Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "100% Level Age related Magic Use every 1,3 agelevels",
+          "Description": "100% chance to use age-related level magic every 1,3 age levels."
+        },
+        {
+          "Name": "Sleeping 10%",
+          "Description": "Has a 10% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 2000,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Green Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "20% Level Age related Magic Use every 4 agelevels",
+          "Description": "20% chance to use age-related level magic every 4 age levels."
+        },
+        {
+          "Name": "Sleeping 40%",
+          "Description": "Has a 40% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Red Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "20% Level Age related Magic Use every 2 agelevels",
+          "Description": "20% chance to use age-related level magic every 2 age levels."
+        },
+        {
+          "Name": "Sleeping 20%",
+          "Description": "Has a 20% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1950,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Silver Dragon",
+      "Type": "Dragon",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale dragon breath causing damage to all creatures in its path."
+        },
+        {
+          "Name": "75% Level Age related Magic Use every 1,5 agelevels",
+          "Description": "75% chance to use age-related level magic every 1,5 age levels."
+        },
+        {
+          "Name": "Sleeping 15%",
+          "Description": "Has a 15% chance to be asleep when encountered."
+        }
+      ],
+      "BaseXPValue": 1950,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "D",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Green Slime",
+      "Type": "Fungus",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 0,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "None",
+          "NumberOfAttacks": 0,
+          "Damage": "Nil"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Flesh Conversion",
+          "Description": "Turns living flesh into green slime in 1–4 rounds; no resurrection possible."
+        },
+        {
+          "Name": "Corrosion",
+          "Description": "Consumes wood slowly and metal rapidly; plate armor destroyed in 3 rounds."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Immunity",
+          "Description": "Immune to most weapons and spells; only fire, cold, Cure Disease, or physical removal works."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Non-",
+      "Size": "Small",
+      "BaseXPValue": 610,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Larger patches gain +1 HD per additional 3 square feet.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 22-25"
+    },
+    {
+      "Name": "Hydra 8 Heads",
+      "Type": "Reptile",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 12,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Multi‑Headed Assault",
+          "Description": "Up to 4 heads may attack the same opponent simultaneously."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "All Heads Must Be Slain",
+          "Description": "The hydra dies only when every head is reduced to 0 HP."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Size": "Large",
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 10,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "https://1eonline.info/1mm/hydra.htm",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 26-28"
+    },
+    {
+      "Name": "Jackalwere",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "30",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Sleep Gaze",
+          "Description": "Gaze causes sleep on any unsuspecting creature that fails its save vs. magic."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Iron or Magic Weapons Required",
+          "Description": "Jackalwere can only be hit by iron or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Very",
+      "Alignment": "Chaotic evil",
+      "Size": "Small",
+      "BaseXPValue": 800,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Can assume human form; often uses human weapons; 20% chance to be accompanied by normal jackals.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 29-35"
+    },
+    {
+      "Name": "Lammasu",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 6,
+      "Movement": 12,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "%InLair": "30",
+      "TreasureType": "R,S,T",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Spell Use",
+          "Description": "Can use clerical spells up to 4th level at 6th‑level proficiency."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Protection From Evil",
+          "Description": "Radiates a 10' radius protection from evil of double strength."
+        }
+      ],
+      "MagicResistance": "30%",
+      "Intelligence": "Genius",
+      "Alignment": "Lawful good",
+      "Size": "Large",
+      "BaseXPValue": 1700,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "Other": "Can become invisible and dimension door at will; 10% can speak holy word; aerial combat class C.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 36"
+    },
+    {
+      "Name": "Lycanthrope, Werebear",
+      "Type": "Lycanthrope",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 7,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Lycanthropy",
+          "Description": "Can shift between human and bear‑hybrid form."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates damage except from silver or magic weapons."
+        },
+        {
+          "Name": "Great Strength",
+          "Description": "Exceptional physical power; gains bonuses to damage."
+        }
+      ],
+      "BaseXPValue": 650,
+      "XPValuePerHitPoint": 7,
+      "TreasureType": "C",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 37-38"
+    },
+    {
+      "Name": "Lycanthrope Weretiger",
+      "Type": "Lycanthrope",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "Movement": 12,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "15",
+      "TreasureType": "D,Q(x5)",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Rake",
+          "Description": "If both claws hit, weretiger rakes for 2–5/2–5 additional damage."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Weretigers can only be hit by silver or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 525,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Weretigers are solitary and territorial; can assume human, tiger, or hybrid form.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 39-45"
+    },
+    {
+      "Name": "Manticore",
+      "Type": "Monstrous Beast",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": {
+        "Value": 11
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Tail Spikes",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6 (up to 6 spikes)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Spike Volley",
+          "Description": "Can fire 1–6 tail spikes per round at range."
+        },
+        {
+          "Name": "Savage Nature",
+          "Description": "Highly aggressive; often attacks without provocation."
+        }
+      ],
+      "BaseXPValue": 500,
+      "XPValuePerHitPoint": 6,
+      "TreasureType": "C",
+      "Alignment": "Lawful evil",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 46-50"
+    },
+    {
+      "Name": "Medusa",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "P,Q(x10),X,Y",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Petrifying Gaze",
+          "Description": "Creatures within 3\" must save vs. petrification or turn to stone."
+        },
+        {
+          "Name": "Poisonous Hair Asps",
+          "Description": "If the victim averts eyes, the medusa bites with asp‑hair; save vs. poison or die."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 725,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "Other": "Gaze works on astral and ethereal creatures; reflected gaze turns the medusa to stone.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 51-55"
+    },
     {
       "Name": "Brown Mold",
       "Type": "Mold",
@@ -51,839 +1287,115 @@
       "BaseXPValue": 0,
       "XPValuePerHitPoint": 0,
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 56",
       "Other": "Brown mold feeds on radiant energy and body heat rather than light. It is not affected by light spells or faerie fire. White dragon breath or a wand of cold will kill it. Psionic Ability: Nil. Attack/Defense Modes: Nil."
     },
     {
-      "Name": "Lvl 6 Magic-User",
-      "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 6,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 2,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 10,
-        "BreathWeapon": 11,
-        "Spell": 11
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 4 Magic-User spells",
-          "Description": "Access to 1st–4th level spells."
-        }
-      ],
-      "BaseXPValue": 650,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Cleric",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
-      "ArmorClass": 4,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 10,
-        "BreathWeapon": 11,
-        "Spell": 11
-      },
-      "Attacks": [
-        {
-          "Name": "Mace",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 4 Cleric spells",
-          "Description": "Access to 1st–4th level spells."
-        }
-      ],
-      "BaseXPValue": 650,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Fighter",
-      "Type": "Humanoid",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
-      "HitDice": 6,
-      "HitDiceType": 10,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 11,
-        "PetrificationPolymorph": 10,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Attacks": [
-        {
-          "Name": "Long sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 650,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Thief",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 6,
-      "HitDice": 6,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 7,
-        "BreathWeapon": 11,
-        "Spell": 10
-      },
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Pick Pockets",
-          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
-        },
-        {
-          "Name": "Backstab",
-          "Description": "Backstab multiplier is ×3 at this level."
-        }
-      ],
-      "BaseXPValue": 650,
-      "XPValuePerHitPoint": 1,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Monk",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 5,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 7,
-        "BreathWeapon": 11,
-        "Spell": 10
-      },
-      "Attacks": [
-        {
-          "Name": "Unarmed Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "1d12"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 750,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Assassin",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 6,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 7,
-        "BreathWeapon": 11,
-        "Spell": 10
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Assassination",
-          "Description": "Improved assassination chance; uses thief saving throws."
-        }
-      ],
-      "BaseXPValue": 750,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Bard",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 5,
-      "HitDice": 6,
-      "HitDiceType": 6,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 7,
-        "BreathWeapon": 11,
-        "Spell": 10
-      },
-      "Attacks": [
-        {
-          "Name": "Short Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Bardic Music",
-          "Description": "Improved inspiration and charm abilities."
-        }
-      ],
-      "BaseXPValue": 850,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Druid",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
-      "ArmorClass": 5,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 6,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 12,
-        "Spell": 11
-      },
-      "Attacks": [
-        {
-          "Name": "Staff",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 4 Druid spells",
-          "Description": "Access to 1st–4th level druid spells."
-        }
-      ],
-      "BaseXPValue": 750,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Ranger",
-      "Type": "Humanoid",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 5,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 10,
-        "RodStaffWand": 12,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 13,
-        "Spell": 13
-      },
-      "Attacks": [
-        {
-          "Name": "Long sword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [],
-      "BaseXPValue": 850,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Illusionist",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 6,
-      "HitDiceType": 4,
-      "ExtraHitPoints": 2,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 7,
-        "BreathWeapon": 11,
-        "Spell": 8
-      },
-      "Attacks": [
-        {
-          "Name": "Dagger",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 4 Illusionist spells",
-          "Description": "Access to 1st–4th level illusion spells."
-        }
-      ],
-      "BaseXPValue": 750,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lvl 6 Paladin",
-      "Type": "Humanoid",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "HitDice": 6,
-      "HitDiceType": 10,
-      "ExtraHitPoints": 0,
-      "Size": "Medium",
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 9,
-        "BreathWeapon": 11,
-        "Spell": 11
-      },
-      "Attacks": [
-        {
-          "Name": "Longsword",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Lay on Hands",
-          "Description": "Heals 2 HP per level once per day."
-        }
-      ],
-      "BaseXPValue": 850,
-      "XPValuePerHitPoint": 2,
-      "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Green Slime",
+      "Name": "Yellow Mold",
       "Type": "Fungus",
-      "Frequency": "Rare",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 9,
       "Movement": 0,
-      "HitDice": 2,
+      "HitDice": 0,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "",
+      "%InLair": "0",
+      "TreasureType": "None",
+      "IndividualTreasure": "None",
       "Attacks": [
         {
-          "Name": "None",
-          "NumberOfAttacks": 0,
-          "Damage": "Nil"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Flesh Conversion",
-          "Description": "Turns living flesh into green slime in 1–4 rounds; no resurrection possible."
-        },
-        {
-          "Name": "Corrosion",
-          "Description": "Consumes wood slowly and metal rapidly; plate armor destroyed in 3 rounds."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Immunity",
-          "Description": "Immune to most weapons and spells; only fire, cold, Cure Disease, or physical removal works."
-        }
-      ],
-      "MagicResistance": "See below",
-      "Intelligence": "Non-",
-      "Size": "Small",
-      "BaseXPValue": 610,
-      "XPValuePerHitPoint": 2,
-      "Source": "Adnd",
-      "Other": "Larger patches gain +1 HD per additional 3 square feet."
-    },
-
-    {
-      "Name": "Carrion Crawler",
-      "Type": "Monster",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
-      "ArmorClass": 7,
-      "Movement": 12,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "50",
-      "TreasureType": "B",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Tentacles",
-          "NumberOfAttacks": 8,
-          "Damage": "0"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Paralysis",
-          "Description": "Tentacles cause paralysis for 3–12 turns."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Non-",
-      "Size": "Large",
-      "BaseXPValue": 580,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Climbs walls and ceilings; multiple tentacle hits require multiple saving throws."
-    },
-
-
-    {
-      "Name": "Hydra 8 Heads",
-      "Type": "Reptile",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 5,
-      "Movement": 9,
-      "HitDice": 8,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "20",
-      "TreasureType": "B",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 12,
+          "Name": "Spore Burst",
+          "NumberOfAttacks": 1,
           "Damage": "1d8"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Multi‑Headed Assault",
-          "Description": "Up to 4 heads may attack the same opponent simultaneously."
+          "Name": "Poison Spores",
+          "Description": "Disturbing the mold releases deadly spores; inhalation can be fatal."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "All Heads Must Be Slain",
-          "Description": "The hydra dies only when every head is reduced to 0 HP."
+          "Name": "See Below",
+          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
         }
       ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Semi-",
-      "Size": "Large",
-      "BaseXPValue": 650,
-      "XPValuePerHitPoint": 10,
+      "MagicResistance": "See Below",
+      "Intelligence": "Non-Intelligent",
       "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 0,
       "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/hydra.htm"
+      "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 57-58"
     },
-
     {
-      "Name": "Jackalwere",
-      "Type": "Monster",
-      "Frequency": "Rare",
+      "Name": "Ogre Magi",
+      "Type": "Giant",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 4,
-      "Movement": 12,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
       "HitDice": 4,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "30",
-      "TreasureType": "C",
-      "IndividualTreasure": "",
+      "ExtraHitPoints": 1,
+      "Movement": {
+        "Walk": 30,
+        "Fly": 0,
+        "Swim": 0,
+        "Burrow": 0,
+        "Climb": 0
+      },
+      "SavingThrows": {
+        "ParalyzationPoisonDeath": 12,
+        "RodStaffWand": 13,
+        "PetrificationPolymorph": 14,
+        "BreathWeapon": 15,
+        "Spell": 15
+      },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
-          "Name": "Bite",
+          "Name": "Club",
           "NumberOfAttacks": 1,
-          "Damage": "2-8"
+          "Damage": "2d6"
         }
       ],
-      "SpecialAttacks": [
+      "SpecialAbilities": [
         {
-          "Name": "Sleep Gaze",
-          "Description": "Gaze causes sleep on any unsuspecting creature that fails its save vs. magic."
-        }
-      ],
-      "SpecialDefenses": [
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        },
         {
-          "Name": "Iron or Magic Weapons Required",
-          "Description": "Jackalwere can only be hit by iron or magical weapons."
+          "Name": "Run",
+          "Description": "May flee from combat."
         }
       ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Very",
-      "Alignment": "Chaotic evil",
-      "Size": "Small",
-      "BaseXPValue": 800,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Can assume human form; often uses human weapons; 20% chance to be accompanied by normal jackals."
+      "BaseXPValue": 400,
+      "XPValuePerHitPoint": 5,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "Size": "Medium",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 59-60"
     },
-
     {
-      "Name": "Lammasu",
-      "Type": "Monster",
+      "Name": "Otyugh",
+      "Type": "Aberration",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 6,
-      "Movement": 12,
-      "HitDice": 7,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 7,
-      "%InLair": "30",
-      "TreasureType": "R,S,T",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Spell Use",
-          "Description": "Can use clerical spells up to 4th level at 6th‑level proficiency."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Protection From Evil",
-          "Description": "Radiates a 10' radius protection from evil of double strength."
-        }
-      ],
-      "MagicResistance": "30%",
-      "Intelligence": "Genius",
-      "Alignment": "Lawful good",
-      "Size": "Large",
-      "BaseXPValue": 1700,
-      "XPValuePerHitPoint": 12,
-      "Source": "Adnd",
-      "Other": "Can become invisible and dimension door at will; 10% can speak holy word; aerial combat class C."
-    },
-
-
-    {
-      "Name": "Djinni",
-      "Type": "Monster",
-      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 4,
-      "Movement": 9,
-      "HitDice": 7,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Whirlwind",
-          "Description": "Forms a whirlwind that lasts 1 round and deals damage to non‑aerial creatures."
-        },
-        {
-          "Name": "Magic Use",
-          "Description": "Can create food, water, soft goods, wood, temporary metal, illusions, become invisible, gaseous, wind walk, or form a whirlwind once per day."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average-high",
-      "Alignment": "Chaotic good",
-      "Size": "Large",
-      "BaseXPValue": 725,
-      "XPValuePerHitPoint": 5,
-      "Source": "Adnd",
-      "Other": "Can travel elemental and astral planes; rarely uses weapons (20% chance)."
-    },
-
-
-    {
-      "Name": "Medusa",
-      "Type": "Monster",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
-      "ArmorClass": 5,
-      "Movement": 9,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "P,Q(x10),X,Y",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Petrifying Gaze",
-          "Description": "Creatures within 3\" must save vs. petrification or turn to stone."
-        },
-        {
-          "Name": "Poisonous Hair Asps",
-          "Description": "If the victim averts eyes, the medusa bites with asp‑hair; save vs. poison or die."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Very",
-      "Alignment": "Lawful evil",
-      "Size": "Medium",
-      "BaseXPValue": 725,
-      "XPValuePerHitPoint": 6,
-      "Source": "Adnd",
-      "Other": "Gaze works on astral and ethereal creatures; reflected gaze turns the medusa to stone."
-    },
-
-
-    {
-      "Name": "Wraith",
-      "Type": "Undead",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 12,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 5,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "25",
-      "TreasureType": "E",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Energy Drain",
-          "Description": "Touch drains 1 life level from the victim."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Wraiths can only be hit by silver or magical weapons."
-        },
-        {
-          "Name": "Limited Spell Immunity",
-          "Description": "Partially immune to certain spells and magical effects."
-        },
-        {
-          "Name": "Poison & Paralysis Immunity",
-          "Description": "Immune to all poison and paralysis effects."
-        }
-      ],
-      "MagicResistance": "See below",
-      "Intelligence": "Very",
-      "Alignment": "Lawful evil",
-      "Size": "Medium",
-      "BaseXPValue": 575,
-      "XPValuePerHitPoint": 6,
-      "Source": "Adnd",
-      "Other": "Semi‑material undead; can drain levels even through armor; often found in catacombs or ruined cities."
-    },
-
-    {
-      "Name": "Minotaur",
-      "Type": "Monster",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 6,
-      "Movement": 12,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "20",
-      "TreasureType": "C",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Butt/Bite",
-          "NumberOfAttacks": 2,
-          "Damage": "2-8 or 1-4"
-        },
-        {
-          "Name": "Weapon",
-          "NumberOfAttacks": 1,
-          "Damage": "By weapon"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Surprise Resistance",
-          "Description": "Surprised only on a roll of 1."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic evil",
-      "Size": "Large",
-      "BaseXPValue": 400,
-      "XPValuePerHitPoint": 8,
-      "Source": "Adnd",
-      "Other": "Can butt opponents 6' or taller (2–8 dmg) or bite shorter ones (1–4 dmg); typically wields huge axe or flail; tracks prey by scent; very aggressive and relentless."
-    },
-
-    {
-      "Name": "Giant Poisonous Snake",
-      "Type": "Monster",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
-      "ArmorClass": 5,
-      "Movement": 15,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "0",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Poison",
-          "Description": "Victims take 3–18 damage even on a successful save."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 390,
-      "XPValuePerHitPoint": 5,
-      "Source": "Adnd",
-      "Other": "Attack range is 8 feet (half the snake’s length)."
-    },
-
-    {
-      "Name": "Giant Crocodile",
-      "Type": "Monster",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
-      "ArmorClass": 4,
+      "ArmorClass": 0,
       "Movement": 6,
-      "HitDice": 7,
+      "HitDice": 12,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "Nil",
-      "TreasureType": "Nil",
+      "TreasureType": "Special",
       "IndividualTreasure": "",
       "Attacks": [
         {
@@ -892,327 +1404,173 @@
           "Damage": "3d6"
         },
         {
-          "Name": "Tail",
-          "NumberOfAttacks": 1,
-          "Damage": "2d10"
+          "Name": "Tentacle",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
         }
       ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Disease",
+          "Description": "Tentacle wounds can transmit disease."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Never Surprised",
+          "Description": "Neo-otyugh are never surprised."
+        }
+      ],
       "MagicResistance": "Standard",
-      "Intelligence": "Animal",
+      "Intelligence": "Average",
       "Alignment": "Neutral",
       "Size": "Large",
-      "BaseXPValue": 400,
-      "XPValuePerHitPoint": 8,
+      "BaseXPValue": 1500,
+      "XPValuePerHitPoint": 15,
       "Source": "Adnd",
-      "Other": "Giant crocodiles are 21–30 feet long and extremely dangerous ambush predators."
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 61-68",
+      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh.",
+      "DM comment": "Derived from Neo-Otyugh template for Level 6 encounter table compatibility."
     },
-
     {
-      "Name": "Basilisk",
-      "Type": "Monster",
-      "Frequency": "Uncommon",
+      "Name": "Rakshasa",
+      "Type": "Humanoid",
+      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 4,
-      "Movement": 6,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "40",
-      "TreasureType": "F",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d10"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Petrifying Gaze",
-          "Description": "Any creature meeting its gaze must save or turn to stone."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Medium",
-      "BaseXPValue": 1000,
-      "XPValuePerHitPoint": 8,
-      "Source": "Adnd",
-      "Other": "If its gaze is reflected back at it in bright light, the basilisk can petrify itself; can see into astral and ethereal planes."
-    },
-
-    {
-      "Name": "Giant Weasel",
-      "Type": "Monster",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 6,
-      "Movement": 15,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "15",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "WeaselPelt",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Blood Drain",
-          "Description": "Drains 2–12 hit points per round once latched on."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Medium",
-      "BaseXPValue": 125,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Aggressive predator; often used by humanoids as guard animals."
-    },
-
-    {
-      "Name": "Giant Warrior Ant",
-      "Type": "Monster",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 100,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 3,
-      "Movement": 18,
-      "HitDice": 3,
+      "Movement": 24,
+      "HitDice": 9,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "10",
-      "TreasureType": "Nil",
+      "%InLair": "60",
+      "TreasureType": "D",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Mandibles",
+          "Name": "Touch",
           "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        },
-        {
-          "Name": "Poison Sting",
-          "NumberOfAttacks": 1,
-          "Damage": "3d12"
+          "Damage": "1d4"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Poison Sting",
-          "Description": "If the sting hits, victim must save vs. poison; success reduces damage to 1–4."
+          "Name": "Wisdom Drain",
+          "Description": "Touch drains 1 point of WIS per hit."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast charm person, suggestion, mirror image, and illusionary abilities depending on variant."
         }
       ],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Small",
-      "BaseXPValue": 40,
-      "XPValuePerHitPoint": 3,
-      "Source": "Adnd",
-      "Other": "Warrior ants accompany worker ants; one warrior per five workers in lair."
-    },
-
-
-    {
-      "Name": "Lycanthrope, Werebear",
-      "Type": "Lycanthrope",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 2,
-      "HitDice": 7,
-      "Size": "Large",
-      "Movement": 12,
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "2d4"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Lycanthropy",
-          "Description": "Can shift between human and bear‑hybrid form."
-        },
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates damage except from silver or magic weapons."
-        },
-        {
-          "Name": "Great Strength",
-          "Description": "Exceptional physical power; gains bonuses to damage."
-        }
-      ],
-      "BaseXPValue": 650,
-      "XPValuePerHitPoint": 7,
-      "TreasureType": "C",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Manticore",
-      "Type": "Monstrous Beast",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 4,
-      "HitDice": 6,
-      "Size": "Large",
-      "Movement": 12,
-      "Morale": { "Value": 11 },
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        },
-        {
-          "Name": "Tail Spikes",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6 (up to 6 spikes)"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spike Volley",
-          "Description": "Can fire 1–6 tail spikes per round at range."
-        },
-        {
-          "Name": "Savage Nature",
-          "Description": "Highly aggressive; often attacks without provocation."
-        }
-      ],
-      "BaseXPValue": 500,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "C",
-      "Alignment": "Lawful evil",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Lycanthrope Weretiger",
-      "Type": "Lycanthrope",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
-      "ArmorClass": 3,
-      "Movement": 12,
-      "HitDice": 6,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "15",
-      "TreasureType": "D,Q(x5)",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d12"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Rake",
-          "Description": "If both claws hit, weretiger rakes for 2–5/2–5 additional damage."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Weretigers can only be hit by silver or magical weapons."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 525,
-      "XPValuePerHitPoint": 8,
-      "Source": "Adnd",
-      "Other": "Weretigers are solitary and territorial; can assume human, tiger, or hybrid form."
-    },
-
-    {
-      "Name": "Lycanthrope Werewolf",
-      "Type": "Lycanthrope",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 3,
-      "NumberOfAppearancesMax": 18,
-      "ArmorClass": 5,
-      "Movement": 15,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "25",
-      "TreasureType": "B",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Surprise",
-          "Description": "Can surprise opponents on a roll of 1–3."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Werewolves can only be hit by silver or magical weapons."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
+      "Intelligence": "High",
       "Alignment": "Chaotic evil",
       "Size": "Medium",
-      "BaseXPValue": 205,
-      "XPValuePerHitPoint": 5,
+      "BaseXPValue": 1700,
+      "XPValuePerHitPoint": 12,
       "Source": "Adnd",
-      "Other": "Often found in swamps; wolfwere variant exists; highly territorial and predatory."
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 69-70",
+      "Other": "Found in tropical wilderness deserts; lion‑body with human female torso; highly deceptive and predatory."
     },
-
+    {
+      "Name": "Salamander",
+      "Type": "Monster",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "Movement": 9,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "50",
+      "TreasureType": "B,Q(x10),S,T",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d16"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Fire Puff",
+          "Description": "Breathes a short cone of flame (2–12 damage, or 1–6 on save)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Fire Immunity",
+          "Description": "Unaffected by all fire‑based attacks."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 14,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 71-73",
+      "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
+    },
+    {
+      "Name": "Phase Spider",
+      "Type": "Arachnid",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 7,
+      "Movement": 15,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 5,
+      "%InLair": "75",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save at -2 or die."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Phasing",
+          "Description": "Can shift in and out of the ethereal plane, avoiding attacks and repositioning."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 700,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "Other": "Ambush predator; phases to strike and retreat; extremely dangerous due to poison and ethereal movement.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 74-77"
+    },
     {
       "Name": "Troll",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 6,
@@ -1257,7 +1615,8 @@
       "BaseXPValue": 525,
       "XPValuePerHitPoint": 8,
       "Source": "Adnd",
-      "Other": "Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity."
+      "Other": "Voracious, cruel, and ugly-tempered; trolls are feared for their regenerative powers and ferocity.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 78-88"
     },
     {
       "Name": "Wight",
@@ -1279,7 +1638,6 @@
           "Name": "Energy Drain",
           "Description": "Target loses 1 level unless save vs death."
         }
-
       ],
       "SpecialDefenses": [
         {
@@ -1290,9 +1648,367 @@
       "BaseXPValue": 175,
       "XPValuePerHitPoint": 5,
       "TreasureType": "D",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Size": "Medium",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 89-93"
     },
-
+    {
+      "Name": "Wind Walker",
+      "Type": "Elemental",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "Size": "Medium",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 94-95"
+    },
+    {
+      "Name": "Wraith",
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "25",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Touch drains 1 life level from the victim."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Wraiths can only be hit by silver or magical weapons."
+        },
+        {
+          "Name": "Limited Spell Immunity",
+          "Description": "Partially immune to certain spells and magical effects."
+        },
+        {
+          "Name": "Poison & Paralysis Immunity",
+          "Description": "Immune to all poison and paralysis effects."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 575,
+      "XPValuePerHitPoint": 6,
+      "Source": "Adnd",
+      "Other": "Semi‑material undead; can drain levels even through armor; often found in catacombs or ruined cities.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 96-98"
+    },
+    {
+      "Name": "Wyvern",
+      "Type": "Dragonkin",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "Movement": 24,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "%InLair": "30",
+      "TreasureType": "E",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Deadly Poison",
+          "Description": "Victim must save or die; delivered by the tail stinger."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral evil",
+      "Size": "Large",
+      "BaseXPValue": 925,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "Other": "Aerial predator; clumsy flyer (MC E); extremely aggressive; tail can strike over its back to hit opponents.",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 99-100"
+    },
+    {
+      "Name": "Minotaur",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "Movement": 12,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "20",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Butt/Bite",
+          "NumberOfAttacks": 2,
+          "Damage": "2-8 or 1-4"
+        },
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "By weapon"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Surprise Resistance",
+          "Description": "Surprised only on a roll of 1."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 400,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Can butt opponents 6' or taller (2–8 dmg) or bite shorter ones (1–4 dmg); typically wields huge axe or flail; tracks prey by scent; very aggressive and relentless."
+    },
+    {
+      "Name": "Giant Poisonous Snake",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 5,
+      "Movement": 15,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victims take 3–18 damage even on a successful save."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 390,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Attack range is 8 feet (half the snake’s length)."
+    },
+    {
+      "Name": "Giant Crocodile",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 4,
+      "Movement": 6,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 400,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Giant crocodiles are 21–30 feet long and extremely dangerous ambush predators."
+    },
+    {
+      "Name": "Giant Weasel",
+      "Type": "Monster",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "Movement": 15,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "15",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "WeaselPelt",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Blood Drain",
+          "Description": "Drains 2–12 hit points per round once latched on."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 125,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Aggressive predator; often used by humanoids as guard animals."
+    },
+    {
+      "Name": "Giant Warrior Ant",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 100,
+      "ArmorClass": 3,
+      "Movement": 18,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Mandibles",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Poison Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison Sting",
+          "Description": "If the sting hits, victim must save vs. poison; success reduces damage to 1–4."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Small",
+      "BaseXPValue": 40,
+      "XPValuePerHitPoint": 3,
+      "Source": "Adnd",
+      "Other": "Warrior ants accompany worker ants; one warrior per five workers in lair."
+    },
+    {
+      "Name": "Lycanthrope Werewolf",
+      "Type": "Lycanthrope",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 18,
+      "ArmorClass": 5,
+      "Movement": 15,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "25",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Surprise",
+          "Description": "Can surprise opponents on a roll of 1–3."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Werewolves can only be hit by silver or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
+      "BaseXPValue": 205,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Often found in swamps; wolfwere variant exists; highly territorial and predatory."
+    },
     {
       "Name": "Level 4 Thief",
       "Type": "Humanoid",
@@ -1316,7 +2032,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 7 },
+      "Morale": {
+        "Value": 7
+      },
       "Attacks": [
         {
           "Name": "Dagger",
@@ -1333,9 +2051,9 @@
       "BaseXPValue": 300,
       "XPValuePerHitPoint": 5,
       "TreasureType": "A",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Medusalizard",
       "Type": "Monster",
@@ -1357,7 +2075,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -1374,9 +2094,9 @@
       "BaseXPValue": 700,
       "XPValuePerHitPoint": 6,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Level 10 Mage",
       "Type": "Humanoid",
@@ -1400,7 +2120,9 @@
         "BreathWeapon": 13,
         "Spell": 13
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Touch",
@@ -1417,9 +2139,9 @@
       "BaseXPValue": 1200,
       "XPValuePerHitPoint": 14,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Giant Spider",
       "Type": "Animal",
@@ -1443,7 +2165,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -1460,9 +2184,9 @@
       "BaseXPValue": 500,
       "XPValuePerHitPoint": 5,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Level 5 Priest",
       "Type": "Humanoid",
@@ -1486,7 +2210,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Mace",
@@ -1498,9 +2224,9 @@
       "BaseXPValue": 450,
       "XPValuePerHitPoint": 6,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Minor Daimyo",
       "Type": "Humanoid",
@@ -1524,7 +2250,9 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Katana",
@@ -1545,9 +2273,9 @@
       "BaseXPValue": 800,
       "XPValuePerHitPoint": 5,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Gargoyle",
       "Type": "Monster",
@@ -1571,7 +2299,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -1603,9 +2333,9 @@
       "BaseXPValue": 700,
       "XPValuePerHitPoint": 5,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Were Bear",
       "Type": "Lycanthrope",
@@ -1627,7 +2357,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -1656,9 +2388,9 @@
       "BaseXPValue": 850,
       "XPValuePerHitPoint": 6,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Boring Beetle",
       "Type": "Animal",
@@ -1674,7 +2406,9 @@
         "BreathWeapon": 17,
         "Spell": 17
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Mandibles",
@@ -1686,9 +2420,9 @@
       "BaseXPValue": 500,
       "XPValuePerHitPoint": 6,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Gas Dragon",
       "Type": "Dragon",
@@ -1710,7 +2444,9 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -1737,9 +2473,9 @@
       "BaseXPValue": 1200,
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Weretiger",
       "Type": "Lycanthrope",
@@ -1761,7 +2497,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -1796,9 +2534,9 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 6,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Master Ninja",
       "Type": "Humanoid",
@@ -1822,7 +2560,9 @@
         "BreathWeapon": 13,
         "Spell": 13
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Katana",
@@ -1849,7 +2589,8 @@
       "BaseXPValue": 1500,
       "XPValuePerHitPoint": 14,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Level 7 Mage",
@@ -1874,7 +2615,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Touch",
@@ -1891,9 +2634,9 @@
       "BaseXPValue": 450,
       "XPValuePerHitPoint": 10,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Shade",
       "Type": "Undead",
@@ -1917,7 +2660,9 @@
         "BreathWeapon": 17,
         "Spell": 17
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Shadow Touch",
@@ -1934,9 +2679,9 @@
       "BaseXPValue": 500,
       "XPValuePerHitPoint": 4,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Swordsman",
       "Type": "Humanoid",
@@ -1960,7 +2705,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Sword",
@@ -1977,9 +2724,9 @@
       "BaseXPValue": 350,
       "XPValuePerHitPoint": 4,
       "TreasureType": "A",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Gaze Hound",
       "Type": "Beast",
@@ -2003,7 +2750,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -2028,9 +2777,9 @@
       "BaseXPValue": 600,
       "XPValuePerHitPoint": 5,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Attack Dog",
       "Type": "Animal",
@@ -2052,7 +2801,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 7 },
+      "Morale": {
+        "Value": 7
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -2073,9 +2824,9 @@
       "BaseXPValue": 300,
       "XPValuePerHitPoint": 5,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Bishop",
       "Type": "Humanoid",
@@ -2097,7 +2848,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Staff",
@@ -2124,9 +2877,9 @@
       "BaseXPValue": 500,
       "XPValuePerHitPoint": 6,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Grave Mist",
       "Type": "Undead",
@@ -2148,7 +2901,9 @@
         "BreathWeapon": 17,
         "Spell": 17
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Mist Lash",
@@ -2175,9 +2930,9 @@
       "BaseXPValue": 550,
       "XPValuePerHitPoint": 5,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Level 8 Ninja",
       "Type": "Humanoid",
@@ -2199,7 +2954,9 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Katana",
@@ -2221,56 +2978,9 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 10,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
-    {
-      "Name": "Ogre",
-      "Type": "Giant",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 5,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "Movement": {
-        "Walk": 30,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 12,
-        "RodStaffWand": 13,
-        "PetrificationPolymorph": 14,
-        "BreathWeapon": 15,
-        "Spell": 15
-      },
-      "Morale": { "Value": 9 },
-      "Attacks": [
-        {
-          "Name": "Club",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Slept",
-          "Description": "Can be affected by sleep effects."
-        },
-        {
-          "Name": "Run",
-          "Description": "May flee from combat."
-        }
-      ],
-      "BaseXPValue": 400,
-      "XPValuePerHitPoint": 5,
-      "TreasureType": "A",
-      "Source": "Wizardry"
-    },
-
     {
       "Name": "Arch Mage",
       "Type": "Humanoid",
@@ -2294,7 +3004,9 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Touch",
@@ -2306,9 +3018,9 @@
       "BaseXPValue": 950,
       "XPValuePerHitPoint": 12,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Werewolf",
       "Type": "Lycanthrope",
@@ -2332,7 +3044,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -2354,9 +3068,9 @@
       "BaseXPValue": 600,
       "XPValuePerHitPoint": 5,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Level 4 Thief",
       "Type": "Humanoid",
@@ -2380,7 +3094,9 @@
         "BreathWeapon": 16,
         "Spell": 16
       },
-      "Morale": { "Value": 7 },
+      "Morale": {
+        "Value": 7
+      },
       "Attacks": [
         {
           "Name": "Dagger",
@@ -2397,9 +3113,9 @@
       "BaseXPValue": 300,
       "XPValuePerHitPoint": 5,
       "TreasureType": "A",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Medusalizard",
       "Type": "Monster",
@@ -2421,7 +3137,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -2438,7 +3156,8 @@
       "BaseXPValue": 700,
       "XPValuePerHitPoint": 6,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Arch Mage",
@@ -2463,7 +3182,9 @@
         "BreathWeapon": 14,
         "Spell": 14
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Touch",
@@ -2475,7 +3196,8 @@
       "BaseXPValue": 950,
       "XPValuePerHitPoint": 12,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Level 10 Mage",
@@ -2500,7 +3222,9 @@
         "BreathWeapon": 13,
         "Spell": 13
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Touch",
@@ -2512,7 +3236,8 @@
       "BaseXPValue": 1200,
       "XPValuePerHitPoint": 14,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     }
   ]
 }

@@ -1,12 +1,12 @@
 {
- "Level": 7,
+  "Level": 7,
   "Monsters": [
     {
       "Name": "Black Pudding",
       "Type": "Ooze",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 6,
       "Movement": 6,
       "HitDice": 10,
@@ -49,20 +49,19 @@
       "MagicResistance": "Standard",
       "Intelligence": "Non-",
       "Alignment": "Neutral",
-      "Size": "Small to Large",
+      "Size": "Medium",
       "BaseXPValue": 1350,
       "XPValuePerHitPoint": 14,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 7, Roll 01-05",
       "Other": "Flows through 1\" cracks; moves on walls and ceilings; fire deals normal damage; color variants include grey, brown, and white; size correlates with hit points."
     },
-
     {
       "Name": "Lvl 7 Magic-User",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 7,
       "HitDiceType": 4,
@@ -90,15 +89,14 @@
       ],
       "BaseXPValue": 900,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Cleric",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 7,
@@ -128,16 +126,15 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Fighter",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 7,
       "HitDiceType": 10,
@@ -161,14 +158,15 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable"
     },
     {
       "Name": "Lvl 7 Thief",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 7,
       "HitDiceType": 6,
@@ -201,16 +199,15 @@
       "BaseXPValue": 900,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Monk",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 7,
       "HitDiceType": 8,
@@ -234,16 +231,15 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Assassin",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 7,
       "HitDiceType": 6,
@@ -272,16 +268,15 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Bard",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 7,
       "HitDiceType": 6,
@@ -310,16 +305,15 @@
       "BaseXPValue": 1100,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Druid",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 7,
       "HitDiceType": 8,
@@ -348,16 +342,15 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 7 Ranger",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 7,
       "HitDiceType": 8,
@@ -381,15 +374,15 @@
       "BaseXPValue": 1100,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
     {
       "Name": "Lvl 7 Illusionist",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 7,
       "HitDiceType": 4,
@@ -418,15 +411,15 @@
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
     {
       "Name": "Lvl 7 Paladin",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 3,
       "HitDice": 7,
       "HitDiceType": 10,
@@ -455,16 +448,15 @@
       "BaseXPValue": 1100,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 06-10 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Chimera",
       "Type": "Monster",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 5,
       "Movement": 18,
       "HitDice": 9,
@@ -568,7 +560,7 @@
       "Type": "Demon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 0,
       "Movement": 18,
       "HitDice": 8,
@@ -616,13 +608,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 16",
       "Other": " (Vrock) 8.5' tall; vulture-like demon; vicious melee attacker with five natural attacks."
     },
-
     {
       "Name": "Demon, Type II ",
       "Type": "Demon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": -2,
       "Movement": 12,
       "HitDice": 9,
@@ -669,13 +660,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 17",
       "Other": "(Hezrou) 7'+ tall; hulking, toad-like demon; extremely strong and durable."
     },
-
     {
       "Name": "Demon, Type III",
       "Type": "Demon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": -4,
       "Movement": 9,
       "HitDice": 10,
@@ -731,13 +721,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 18",
       "Other": "(Glabrezu) 9.5' tall; goat‑horned dog‑like head; massive pincers; two small human arms on chest; extremely dangerous melee and spell‑using demon."
     },
-
     {
       "Name": "Devil, Barbed",
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 0,
       "Movement": 12,
       "HitDice": 8,
@@ -789,7 +778,7 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": -1,
       "Movement": 15,
       "HitDice": 9,
@@ -840,7 +829,7 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 5,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": -5,
       "Movement": 18,
       "HitDice": 5,
@@ -908,9 +897,11 @@
       "NumberOfAppearancesMax": 1,
       "ArmorClass": -1,
       "HitDice": 12,
-      "Size": "Huge",
+      "Size": "Medium",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -945,10 +936,9 @@
       "BaseXPValue": 6000,
       "XPValuePerHitPoint": 14,
       "TreasureType": "H",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23 then Dragon Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Dragon, Red",
       "Type": "Dragon",
@@ -957,9 +947,11 @@
       "NumberOfAppearancesMax": 1,
       "ArmorClass": -1,
       "HitDice": 12,
-      "Size": "Huge",
+      "Size": "Medium",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -998,10 +990,9 @@
       "BaseXPValue": 7000,
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23 then Dragon Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Dragon, Silver",
       "Type": "Dragon",
@@ -1010,9 +1001,11 @@
       "NumberOfAppearancesMax": 1,
       "ArmorClass": -1,
       "HitDice": 12,
-      "Size": "Huge",
+      "Size": "Medium",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -1051,7 +1044,7 @@
       "BaseXPValue": 7000,
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 22-23 then Dragon Subtable",
       "Source": "Adnd"
     },
     {
@@ -1097,7 +1090,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 24",
       "Other": "12' tall; native to the City of Brass; extremely strong and dangerous; can fly using fiery propulsion."
     },
-
     {
       "Name": "Elemental, Air",
       "Type": "Elemental",
@@ -1146,7 +1138,7 @@
       "Type": "Giant",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 3,
       "Movement": 12,
       "HitDice": 10,
@@ -1184,13 +1176,46 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 27-30",
       "Other": "Two-headed nocturnal giant; lairs underground; uses spiked clubs; one head always alert; strength 19 grants +6 damage bonus."
     },
-
+    {
+      "Name": "Giant, Hill",
+      "Type": "Giant",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "25",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Throw rock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d16"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": 22,
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1400,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 31-33",
+      "Other": "Adult hill giants can hurl rocks from 1” to 20” range ; lairs are caves or similar underground places ; often accompanied by dire wolves, giant lizards, or ogres as guards ."
+    },
     {
       "Name": "Giant, Stone",
       "Type": "Giant",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 0,
       "Movement": 12,
       "HitDice": 9,
@@ -1226,50 +1251,15 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 14,
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 31-35",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 34-35",
       "Other": "Fond of cave bears (75% chance of 1–4 in lair); can catch thrown boulders 90% of the time; females fight as hill giants; young vary by size."
     },
-    {
-      "Name": "Giant, Hill",
-      "Type": "Giant",
-      "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 10,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 8,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "25",
-      "TreasureType": "D",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Throw rock",
-          "NumberOfAttacks": 1,
-          "Damage": "2d16"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Strength": 22,
-      "Intelligence": "Low",
-      "Alignment": "Chaotic evil",
-      "Size": "Large",
-      "BaseXPValue": 1400,
-      "XPValuePerHitPoint": 12,
-      "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 31-35",
-      "Other": "Adult hill giants can hurl rocks from 1” to 20” range ; lairs are caves or similar underground places ; often accompanied by dire wolves, giant lizards, or ogres as guards ."
-    },
-
     {
       "Name": "Fire Giant",
       "Type": "Giant",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 3,
       "Movement": 12,
       "HitDice": 11,
@@ -1300,16 +1290,15 @@
       "BaseXPValue": 2700,
       "XPValuePerHitPoint": 16,
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 36-38",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 36-37",
       "Other": "Typically 12 feet tall; weighs about 1,510 lbs; chest size 80 inches; torso length 38 inches; often found in volcanic or mountainous regions."
     },
-
     {
       "Name": "Frost Giant",
       "Type": "Giant",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 10,
@@ -1340,7 +1329,7 @@
       "BaseXPValue": 2250,
       "XPValuePerHitPoint": 14,
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 7, Roll 36-38",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 38",
       "Other": "Typically 15 feet tall; often accompanied by 1–6 winter wolves; females fight as stone giants; young vary by size; can catch missiles 40% of the time."
     },
     {
@@ -1348,7 +1337,7 @@
       "Type": "Golem",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 9,
       "Movement": 8,
       "HitDice": 9,
@@ -1390,13 +1379,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 39",
       "Other": "7.5' tall; created by high-level magic-users; extremely strong; can smash through doors and wooden structures."
     },
-
     {
       "Name": "Gorgon",
       "Type": "Magical Beast",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 2,
       "Movement": 12,
       "HitDice": 8,
@@ -1489,7 +1477,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 42-43",
       "Other": "Spirit of an evil female elf; not subject to clerical turning; exorcism destroys them."
     },
-
     {
       "Name": "Hydra 11 Heads",
       "Type": "Reptile",
@@ -1533,7 +1520,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 44-46",
       "Other": "https://1eonline.info/1mm/hydra.htm"
     },
-
     {
       "Name": "Hydra, pyro-, 8 heads",
       "Type": "Hydra",
@@ -1586,7 +1572,7 @@
       "Type": "Lamia",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 4,
       "Movement": 15,
       "HitDice": 6,
@@ -1648,14 +1634,16 @@
           "NumberOfAttacks": 1,
           "Damage": "4d4"
         }
-      ]
+      ],
+      "Size": "Medium",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 50"
     },
     {
       "Name": "Lamia",
       "Type": "Humanoid",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 3,
       "Movement": 24,
       "HitDice": 9,
@@ -1692,13 +1680,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 51-52",
       "Other": "Found in tropical wilderness deserts; lion‑body with human female torso; highly deceptive and predatory."
     },
-
     {
       "Name": "Fire Lizard",
       "Type": "Monster",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 3,
       "Movement": 9,
       "HitDice": 10,
@@ -1741,13 +1728,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 53-56",
       "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
     },
-
     {
       "Name": "Lurker Above",
       "Type": "Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 6,
       "Movement": 9,
       "HitDice": 10,
@@ -1785,7 +1771,7 @@
       "Type": "Daemon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": -3,
       "Movement": 15,
       "HitDice": 10,
@@ -1798,7 +1784,7 @@
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "7-12"
+          "Damage": "1d6+6"
         },
         {
           "Name": "Weapon",
@@ -1844,7 +1830,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 60",
       "Other": "18(00) Strength; often uses magical weapons and shields; can use most magical items; sees infrared and ultraviolet; limited telepathy; keeps true names secret."
     },
-
     {
       "Name": "Mimic",
       "Type": "Shapechanging Creature",
@@ -1888,13 +1873,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 61-63",
       "Other": "Subterranean; cannot stand sunlight; intelligent mimics speak several languages; killer mimics are larger and carnivorous."
     },
-
     {
       "Name": "Mind Flayer",
       "Type": "Psionic Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 5,
       "Movement": 12,
       "HitDice": 8,
@@ -1940,13 +1924,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 64-65",
       "Other": "Detests sunlight; subterranean only; speaks its own arcane tongue and several deep-underdark languages."
     },
-
     {
       "Name": "Mummy",
       "Type": "Undead",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 3,
       "Movement": 6,
       "HitDice": 6,
@@ -1996,13 +1979,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 66-69",
       "Other": "Created as tomb guardians; negative energy animates them; victims killed by mummies rot and require both cure disease and raise dead within 6 turns."
     },
-
     {
       "Name": "Naga Spirit",
       "Type": "Naga",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 9,
@@ -2043,7 +2025,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 70",
       "Other": "Black-scaled with crimson bands; bulbous human-like head; prefers ruined or subterranean lairs."
     },
-
     {
       "Name": "Neo-Otyugh",
       "Type": "Aberration",
@@ -2092,13 +2073,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 71-73",
       "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh."
     },
-
     {
       "Name": "Night Hag",
       "Type": "Fiend",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 9,
       "Movement": 9,
       "HitDice": 8,
@@ -2161,13 +2141,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 74",
       "Other": "Requires a special periapt to astrally project; periapt grants disease immunity and +2 saves; decays in hands of good creatures."
     },
-
     {
       "Name": "Roper",
       "Type": "Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 0,
       "Movement": 3,
       "HitDice": 11,
@@ -2217,13 +2196,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 75-78",
       "Other": "Has a gizzard-like organ containing 3–18 platinum pieces and possibly 5–20 gems (35% chance); cigar-shaped, 9' long and 3' thick; drags victims 10' per round once ensnared."
     },
-
     {
       "Name": "Shambling Mound",
       "Type": "Plant Creature",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 0,
       "Movement": 6,
       "HitDice": 10,
@@ -2265,13 +2243,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 79-82",
       "Other": "Can move through dense vegetation; electrical attacks increase its size; extremely tough and difficult to kill; often found in swamps and jungles."
     },
-
     {
       "Name": "Shedu",
       "Type": "Outsider",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 8,
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 9,
@@ -2353,13 +2330,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 87",
       "Other": "Can squeeze through narrow openings; first acid spit has only 10% chance to hit; thick rubbery hide; spit range up to 6\" with variable accuracy."
     },
-
     {
       "Name": "Spectre",
       "Type": "Undead",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 6,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 2,
       "Movement": 15,
       "HitDice": 7,
@@ -2401,7 +2377,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 88-91",
       "Other": "Daylight renders spectres powerless; holy water deals 2–8 damage; raise dead destroys them unless they save; humans drained become half-strength spectres."
     },
-
     {
       "Name": "Trapper",
       "Type": "Monster",
@@ -2453,13 +2428,12 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 92-93",
       "Other": "Covers up to 400 sq ft (600 sq ft for giant specimens); mimics stone floors; creates chest‑like lure to attract prey."
     },
-
     {
       "Name": "Umber Hulk",
       "Type": "Aberration",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 1,
       "ArmorClass": 2,
       "Movement": 6,
       "HitDice": 8,
@@ -2498,11 +2472,55 @@
       "Other": "Burrows through solid stone at 1” per turn; through loam at 6× that rate; often mistaken for humanoids at 40’ distance; powerful claws and mandibles; subterranean predator."
     },
     {
+      "Name": "Will-o-Wisp",
+      "Type": "Aberration",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": -8,
+      "HitDice": 9,
+      "Size": "Small",
+      "Movement": 18,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Shock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Invisibility",
+          "Description": "Can become invisible at will."
+        },
+        {
+          "Name": "Immunity to Magic",
+          "Description": "Nearly all spells fail to affect it."
+        },
+        {
+          "Name": "Light Form",
+          "Description": "Appears as a floating sphere of eerie light."
+        },
+        {
+          "Name": "Energy Feeding",
+          "Description": "Feeds on fear and life energy from dying creatures."
+        }
+      ],
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 9,
+      "TreasureType": "I",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 7, Roll 96-97"
+    },
+    {
       "Name": "Xorn",
       "Type": "Elemental",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": -2,
       "Movement": 9,
       "HitDice": 7,
@@ -2523,7 +2541,7 @@
           "Damage": "6d4"
         }
       ],
-      "SpecialAttacks": [ ],
+      "SpecialAttacks": [],
       "SpecialDefenses": [
         {
           "Name": "Earth Glide",
@@ -2544,10 +2562,6 @@
       "DungeonRandomMonsterTableReference": "Level 7, Roll 98-100",
       "Other": "Xorn surprises opponents on a roll of 1–5 due to its ability to move through earth and stone. Xorn are attracted to precious metals and gems; often negotiate rather than fight."
     },
-
-
-
-
     {
       "Name": "Manticore",
       "Type": "Monstrous Beast",
@@ -2590,7 +2604,6 @@
       "Source": "Adnd",
       "Other": "Clumsy flyer (MC E); coloration: lion body, bat wings, human-like head; prefers warm climates; hunts humans as primary prey."
     },
-
     {
       "Name": "Giant Snake",
       "Type": "Animal",
@@ -2633,7 +2646,6 @@
       "Source": "Adnd",
       "Other": "Typically 15' long; aggressive when hungry; often found in warm climates, jungles, or underground caverns."
     },
-
     {
       "Name": "Giant Troll",
       "Type": "Giant",
@@ -2679,8 +2691,6 @@
       "Source": "Adnd",
       "Other": "Hill giant/troll crossbreed; red-brown skin; red-rimmed eyes; extremely strong; acute smell; 90' infravision; found in nearly every clime except extreme arctic/tropical."
     },
-
-
     {
       "Name": "Huge Spider",
       "Type": "Arachnid",
@@ -2722,7 +2732,6 @@
       "Source": "Adnd",
       "Other": "Fast-moving hunting spider; capable of jumping 3'; often found in dark ruins, forests, or caverns."
     },
-
     {
       "Name": "Giant Hyena",
       "Type": "Animal",
@@ -2755,8 +2764,6 @@
       "Source": "Adnd",
       "Other": "Found in tropical wilderness swamps and plains; aggressive scavenger and pack hunter."
     },
-
-
     {
       "Name": "Master Ninja",
       "Type": "Humanoid",
@@ -2780,7 +2787,9 @@
         "BreathWeapon": 13,
         "Spell": 13
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Katana",
@@ -2806,9 +2815,9 @@
       ],
       "BaseXPValue": 1500,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Lvl 7 Thief",
       "Type": "Humanoid",
@@ -2832,7 +2841,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 8 },
+      "Morale": {
+        "Value": 8
+      },
       "Attacks": [
         {
           "Name": "Dagger",
@@ -2853,9 +2864,9 @@
       ],
       "BaseXPValue": 600,
       "TreasureType": "A",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Lifestealer",
       "Type": "Undead",
@@ -2879,7 +2890,9 @@
         "BreathWeapon": 17,
         "Spell": 17
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Drain Touch",
@@ -2907,9 +2920,9 @@
       ],
       "BaseXPValue": 900,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Nightstalker",
       "Type": "Undead",
@@ -2933,7 +2946,9 @@
         "BreathWeapon": 17,
         "Spell": 17
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Shadow Claw",
@@ -2953,9 +2968,9 @@
       ],
       "BaseXPValue": 850,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "High Wizard",
       "Type": "Humanoid",
@@ -2979,7 +2994,9 @@
         "BreathWeapon": 13,
         "Spell": 13
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Touch",
@@ -2999,9 +3016,9 @@
       ],
       "BaseXPValue": 1400,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Killer Wolf",
       "Type": "Beast",
@@ -3023,7 +3040,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 9 },
+      "Morale": {
+        "Value": 9
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -3039,7 +3058,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 500,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     }
   ]
 }

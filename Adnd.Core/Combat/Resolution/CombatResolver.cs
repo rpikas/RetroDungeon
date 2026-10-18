@@ -138,6 +138,7 @@ public sealed partial class CombatResolver
         ["Two Handed Sword"] = "sword two handed",
         ["Long Sword"] = "sword long",
         ["Cold Iron Long Sword"] = "sword long",
+        ["Silver Long Sword"] = "sword long",
         ["Long Sword +1"] = "sword long",
         ["Long Sword +2"] = "sword long",
         ["Long Sword +3"] = "sword long",
@@ -8004,7 +8005,10 @@ public sealed partial class CombatResolver
                    || string.Equals(description, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(name, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(description, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(name, "Hit Only by Silver or Magic Weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Hit Only by Silver or Magic Weapons", StringComparison.OrdinalIgnoreCase)
                    || merged.Contains("hit only by magic weapon", StringComparison.Ordinal)
+                   || merged.Contains("hit only by silver or magic weapon", StringComparison.Ordinal)
                    || merged.Contains("only be harmed by magic weapon", StringComparison.Ordinal)
                    || (merged.Contains("can only be hit by silver", StringComparison.Ordinal)
                        && merged.Contains("+1", StringComparison.Ordinal));

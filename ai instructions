@@ -4693,15 +4693,16 @@ In for example this line: "Potions table (A) d100 74 => Philter of Persuasivenes
 DMG121TreasureTableA_Potions
 
 After for example Magic item #2: d100 91 => Miscellaneous Weapons (H).
-In for example this line: "Miscellaneous Weapons table (H) d100 90 => Spear +1 (xp 500, gp 3)." refer to
-DMG125TreasureTableHMiscellaneousWeapons - 43,9
+In for example this line: "Miscellaneous Weapons table (H) d100 90 => Spear +1 (xp 500, gp 3)." refer 
+to DMG125TreasureTableHMiscellaneousWeapons - 43,9
 ___
 in same way when finding treasure, magic item refer to the following tables in the log when applicable:
 DMG122TreasureTableC_Rings
 DMG125TreasureTableD_RodsStavesAndWands
 And when finding scrolls refer to DMG121TreasureTableB_Scrolls
 
-when showing the message Trap triggered make sure that all text in the dialog is as big as the header. 44,0
+when showing the message Trap triggered make sure that all text in the dialog is as big as the header.
+44,0
 ___
 
 Can you implement the following special attack for purple worm:
@@ -4759,7 +4760,8 @@ window a bit longer, but not longer then the enouter window?
 implement "SpecialAttacks": "Poison spit","Description": "Spit poison at an individual creature; 
 and if the victim fails to make its saving throw versus poison the spittle will kill."
 
-Make the old style verison of the elevator dialog long enough to fit 16 floors and info about current level.
+Make the old style verison of the elevator dialog long enough to fit 16 floors and info about 
+current level.
 Imlement Mummy defense and make sure mummys has it:"Mummies can be harmed only by magical weapons, 
 and even those do only one-half normal damage, dropping all fractions (5 becomes 2, 3 becomes 1, 
 and 1 becomes 0 hit points of damage). Sleep, charm, hold, and cold-based spells have no effect 
@@ -4786,6 +4788,41 @@ ___
 Introduce a Cold Iron long sword that is like a normal long sword but it cost twice as much and is 
 gives twice as much damage against monsters that are affected by cold iron with this special defense:
 "Name": "Cold Iron Vulnerability",
-"Description": "Cold iron weapons deal double damage."
+"Description": "Cold iron weapons deal double damage." 50,3
 ___
-C:\Users\rober\source\repos\RetroDungeon\Adnd.Data\Monsters\Level4.json
+The files in Adnd.Data\Monsters\LevelX.json should be based on the content in file in 
+Adnd.Data\Encounters\MonsterLevels.json from 00-100 then there are some wizardry monsters that 
+should not be changed. That has been done for Level1, Level2 and Level3. Partly for Level4 
+These remain to go through and update Level4, Level5, Level6, Level7, Level8, Level9 and Level10
+For level 4 this part remain to review and update: 
+  { "DiceMin": 49, "DiceMax": 62, "Creature": "Lycanthrope, werewolf", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 63, "DiceMax": 75, "Creature": "Mold, yellow", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 76, "DiceMax": 78, "Creature": "Owlbear", "CountMin": 1, "CountMax": 2 },
+  { "DiceMin": 79, "DiceMax": 80, "Creature": "Rust monster", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 81, "DiceMax": 82, "Creature": "Shadow", "CountMin": 1, "CountMax": 3 },
+  { "DiceMin": 83, "DiceMax": 90, "Creature": "Snake, giant, constrictor", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 91, "DiceMax": 94, "Creature": "Su-monster", "CountMin": 1, "CountMax": 2 },
+  { "DiceMin": 95, "DiceMax": 96, "Creature": "Toad, ice", "CountMin": 1, "CountMax": 1 },
+  { "DiceMin": 97, "DiceMax": 100, "Creature": "Toad, poisonous", "CountMin": 1, "CountMax": 3 }
+
+For level 5 go through all monsters here, make sure they are in order, add if missing, 
+move the ones not needed to after Spider, giant
+make sure they have for example "DungeonRandomMonsterTableReference": "Level 4, Roll 47" 
+and others fields used in Level1-3
+The character and dragon sections should follow the same format as in Level 1, Level 2 and Level 3.
+Here is the level 5 monster encounter table that needs to be updated and reviewed:
+"Creature": "Character — see Character Subtable", "CountMin": 2, "CountMax": 5 },
+...
+{ "DiceMin": 87, "DiceMax": 100, "Creature": "Spider, giant", "CountMin": 1, "CountMax": 2 }
+
+damage should be on this format "Damage": "3d4" instead of "Damage": "3-12"
+Can you normalize "Size": it shoud not be "for exmple "S" or "Small to Large". "Size": 
+"Small to Large" should be "Size": "Medium" 51,0
+can you complete level 6-10 like level 5, make sure all monsters are in order, add if missing, 
+move the ones not needed to after the one that is last in the list, 
+make sure they have for example "DungeonRandomMonsterTableReference": "Level 4, Roll 47" and 
+others fields used in Level1-3
+
+introducera silver long sword som ska kosta 10 ggr så mycket som vanligt long sword och 
+väga ca 20% mer, det ska var tillgänglig i affären.
+Implementera SpecialDefenses "Hit Only by Silver or Magic Weapons".

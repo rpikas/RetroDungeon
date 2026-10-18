@@ -1,12 +1,12 @@
 {
-    "Level": 9,
+  "Level": 9,
   "Monsters": [
     {
       "Name": "Lvl 9 Magic-User",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 9,
       "HitDiceType": 4,
@@ -34,14 +34,15 @@
       ],
       "BaseXPValue": 1600,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Cleric",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 9,
       "HitDiceType": 8,
@@ -70,14 +71,15 @@
       "BaseXPValue": 1600,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Fighter",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 9,
       "HitDiceType": 10,
@@ -101,14 +103,15 @@
       "BaseXPValue": 1600,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Thief",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 9,
       "HitDiceType": 6,
@@ -141,14 +144,15 @@
       "BaseXPValue": 1600,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Monk",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 2,
       "HitDice": 9,
       "HitDiceType": 8,
@@ -172,14 +176,15 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Assassin",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 9,
       "HitDiceType": 6,
@@ -208,14 +213,15 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Bard",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 9,
       "HitDiceType": 6,
@@ -244,14 +250,15 @@
       "BaseXPValue": 2000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Druid",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 9,
       "HitDiceType": 8,
@@ -280,14 +287,15 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Ranger",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 9,
       "HitDiceType": 8,
@@ -320,14 +328,15 @@
       "BaseXPValue": 2000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Illusionist",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 9,
       "HitDiceType": 4,
@@ -356,14 +365,15 @@
       "BaseXPValue": 1800,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
     {
       "Name": "Lvl 9 Paladin",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 3,
       "HitDice": 9,
       "HitDiceType": 10,
@@ -396,9 +406,9 @@
       "BaseXPValue": 2000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 01-09 then Character Subtable"
     },
-
     {
       "Name": "Devil, Pit Fiend",
       "Type": "Devil",
@@ -409,7 +419,9 @@
       "HitDice": 13,
       "Size": "Large",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -452,143 +464,22 @@
       "BaseXPValue": 7000,
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Titan, Lesser",
-      "Type": "Outer Planar Being",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -2,
-      "HitDice": 14,
-      "Size": "Huge",
-      "Movement": 15,
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Weapon or Fist",
-          "NumberOfAttacks": 2,
-          "Damage": "2d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast cleric and magic‑user spells up to 7th level."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "Strong resistance to magical effects."
-        },
-        {
-          "Name": "Flight",
-          "Description": "Can fly magically at will."
-        },
-        {
-          "Name": "Telepathy",
-          "Description": "Communicates mentally across great distances."
-        }
-      ],
-      "BaseXPValue": 7000,
-      "XPValuePerHitPoint": 14,
-      "TreasureType": "E,Q(x10),R",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 10-12"
     },
     {
-      "Name": "Titan, Minor",
-      "Type": "Outer Planar Being",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
-      "HitDice": 10,
-      "Size": "Large",
-      "Movement": 12,
-      "Morale": { "Value": 11 },
-      "Attacks": [
-        {
-          "Name": "Weapon or Fist",
-          "NumberOfAttacks": 2,
-          "Damage": "2d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Limited Spell Use",
-          "Description": "Can cast cleric and magic‑user spells up to 5th level."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "Moderate resistance to magical effects."
-        },
-        {
-          "Name": "Flight",
-          "Description": "Can fly magically at will."
-        }
-      ],
-      "BaseXPValue": 4500,
-      "XPValuePerHitPoint": 10,
-      "InLair": 10,
-      "TreasureType": "E,Q(x10),R",
-      "Source": "Adnd"
-    },
-
-    {
-      "Name": "Purple Worm",
-      "Type": "Monstrous Beast",
+      "Name": "Dragon, Green",
+      "Type": "Dragon",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 6,
-      "HitDice": 15,
-      "Size": "Huge",
-      "Movement": 9,
-      "Morale": { "Value": 12 },
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d12"
-        },
-        {
-          "Name": "Sting",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Swallow Whole",
-          "Description": "A bite hit by 4 or more above the required roll, or a natural 20, swallows a character. The victim dies after six full subsequent melee rounds unless the worm is killed. Cutting attacks from inside use AC 9 and lose 1 damage per round inside, cumulatively. Digestion takes 12 turns (120 melee rounds), after which the victim cannot be raised."
-        },
-        {
-          "Name": "Burrowing",
-          "Description": "Can tunnel rapidly through earth and stone."
-        },
-        {
-          "Name": "Poison Sting",
-          "Description": "Used only in rear defense or against numerous opponents in a spacious area. A hit deals 2d4 damage and requires a save vs. poison; failure kills the victim."
-        }
-      ],
-      "BaseXPValue": 5000,
-      "XPValuePerHitPoint": 15,
-      "InLair": 30,
-      "TreasureType": "B,Q(x5),X",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Nycadaemon",
-      "Type": "Daemon",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -4,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -1,
       "HitDice": 12,
-      "Size": "Large",
+      "Size": "Medium",
       "Movement": 12,
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -598,79 +489,223 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d6"
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (chlorine gas)"
         }
       ],
       "SpecialAbilities": [
         {
-          "Name": "Gate",
-          "Description": "Can summon other daemons or demons once per day."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "High resistance to magical effects."
-        },
-        {
-          "Name": "Teleportation",
-          "Description": "Can teleport without error."
-        },
-        {
-          "Name": "Poison Sting",
-          "Description": "Tail sting delivers lethal venom unless a save is made."
+          "Name": "Breath Weapon",
+          "Description": "Exhales a cone of poisonous chlorine gas."
         },
         {
           "Name": "Spell Use",
-          "Description": "Can use several spell‑like abilities such as fear, charm, and invisibility."
+          "Description": "Can cast spells as a magic‑user and cleric of moderate level."
+        },
+        {
+          "Name": "Speak and Charm",
+          "Description": "Can speak and use charm person at will."
         }
       ],
-      "BaseXPValue": 5000,
-      "XPValuePerHitPoint": 15,
+      "BaseXPValue": 6000,
+      "XPValuePerHitPoint": 14,
       "TreasureType": "H",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 13-15 then Dragon Subtable",
       "Source": "Adnd"
     },
-
     {
-      "Name": "Will-o-Wisp",
-      "Type": "Aberration",
+      "Name": "Dragon, Red",
+      "Type": "Dragon",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": -8,
-      "HitDice": 9,
-      "Size": "Small",
-      "Movement": 18,
-      "Morale": { "Value": 12 },
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
-          "Name": "Shock",
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d8"
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (fire cone)"
         }
       ],
       "SpecialAbilities": [
         {
-          "Name": "Invisibility",
-          "Description": "Can become invisible at will."
+          "Name": "Breath Weapon",
+          "Description": "Exhales a massive cone of fire."
         },
         {
-          "Name": "Immunity to Magic",
-          "Description": "Nearly all spells fail to affect it."
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level magic‑user and cleric."
         },
         {
-          "Name": "Light Form",
-          "Description": "Appears as a floating sphere of eerie light."
+          "Name": "Speak and Charm",
+          "Description": "Can speak and use charm person at will."
         },
         {
-          "Name": "Energy Feeding",
-          "Description": "Feeds on fear and life energy from dying creatures."
+          "Name": "Fire Immunity",
+          "Description": "Completely immune to fire and heat."
         }
       ],
-      "BaseXPValue": 1350,
-      "XPValuePerHitPoint": 9,
-      "TreasureType": "I",
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 13-15 then Dragon Subtable",
       "Source": "Adnd"
     },
-
+    {
+      "Name": "Dragon, Silver",
+      "Type": "Dragon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Size": "Medium",
+      "Movement": 12,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "12d6 (cold or paralyzing gas)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Weapon",
+          "Description": "Exhales either cold or paralyzing gas."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level magic‑user and cleric."
+        },
+        {
+          "Name": "Shapechange",
+          "Description": "Can assume human form at will."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 13-15 then Dragon Subtable",
+      "Source": "Adnd"
+    },
+    {
+      "Name": "Giant, Storm",
+      "Type": "Giant",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 4,
+      "Movement": 12,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "%InLair": "25",
+      "TreasureType": "D",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Throw rock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d16"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Strength": 22,
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1400,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 16-21",
+      "Other": "Adult hill giants can hurl rocks from 1” to 20” range ; lairs are caves or similar underground places ; often accompanied by dire wolves, giant lizards, or ogres as guards ."
+    },
+    {
+      "Name": "Stone Golem",
+      "Type": "Golem",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 8,
+      "HitDice": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Berserk",
+          "Description": "1% cumulative chance per melee round to go berserk and attack anything in sight."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Magic Weapon Immunity",
+          "Description": "Normal weapons do not harm flesh golems; magical weapons have normal effect."
+        },
+        {
+          "Name": "Spell Immunity",
+          "Description": "Most spells have no effect; fire or cold spells slow the golem by 50% for 2–12 rounds; electrical attacks heal damage equal to the number of dice rolled."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 2380,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 22-23",
+      "Other": "7.5' tall; created by high-level magic-users; extremely strong; can smash through doors and wooden structures."
+    },
     {
       "Name": "Hydra 17 Heads",
       "Type": "Reptile",
@@ -711,10 +746,568 @@
       "XPValuePerHitPoint": 12,
       "Alignment": "Neutral",
       "Source": "Adnd",
-      "Other": "https://1eonline.info/1mm/hydra.htm"
+      "Other": "https://1eonline.info/1mm/hydra.htm",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 24-30"
     },
-
-
+    {
+      "Name": "Hydra, pyro-, 12 heads",
+      "Type": "Hydra",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 9,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "20",
+      "TreasureType": "B",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 12,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Multi‑Attack",
+          "Description": "Up to 4 heads may attack the same opponent."
+        },
+        {
+          "Name": "Pyro hydra breath",
+          "Description": "Once per battle, breathes fire for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Multiple Heads",
+          "Description": "All heads must be killed to slay the hydra."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 1850,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 31-33",
+      "Other": "Damage per attack depends on head count; 8‑headed hydra deals 1–8 damage per bite."
+    },
+    {
+      "Name": "Brown Mold",
+      "Type": "Mold",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 0,
+      "HitDice": 0,
+      "HitDiceType": 0,
+      "ExtraHitPoints": 0,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Freezing Aura",
+          "Description": "Drains heat from creatures within 5 feet. Each melee round inflicts 1d8 cold damage for every 10 degrees of body heat above 55 degrees."
+        },
+        {
+          "Name": "Heat-Fed Growth",
+          "Description": "Exposure to heat causes rapid expansion. Torches, flaming oil, and fire-based spells can increase its area by 2, 4, or 8 times."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Immune to Normal Attacks",
+          "Description": "Unaffected by non-magical attacks."
+        },
+        {
+          "Name": "Affected Only by Magical Cold",
+          "Description": "Only magical cold has a significant effect on brown mold."
+        },
+        {
+          "Name": "Dormancy",
+          "Description": "Cold causes the mold to become dormant for 5-30 turns."
+        },
+        {
+          "Name": "Cold Creature Immunity",
+          "Description": "Its draining effect does not harm creatures that naturally use or embody cold."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Non-",
+      "Size": "Medium",
+      "Alignment": "Neutral",
+      "BaseXPValue": 0,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 34-40",
+      "Other": "Brown mold feeds on radiant energy and body heat rather than light. It is not affected by light spells or faerie fire. White dragon breath or a wand of cold will kill it. Psionic Ability: Nil. Attack/Defense Modes: Nil."
+    },
+    {
+      "Name": "Yellow Mold",
+      "Type": "Fungus",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 0,
+      "HitDice": 0,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "None",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Spore Burst",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison Spores",
+          "Description": "Disturbing the mold releases deadly spores; inhalation can be fatal."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "See Below",
+          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
+        }
+      ],
+      "MagicResistance": "See Below",
+      "Intelligence": "Non-Intelligent",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed.",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 41-50"
+    },
+    {
+      "Name": "Nycadaemon",
+      "Type": "Daemon",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -4,
+      "HitDice": 12,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Gate",
+          "Description": "Can summon other daemons or demons once per day."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "High resistance to magical effects."
+        },
+        {
+          "Name": "Teleportation",
+          "Description": "Can teleport without error."
+        },
+        {
+          "Name": "Poison Sting",
+          "Description": "Tail sting delivers lethal venom unless a save is made."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can use several spell‑like abilities such as fear, charm, and invisibility."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 15,
+      "TreasureType": "H",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 51-52"
+    },
+    {
+      "Name": "Purple Worm",
+      "Type": "Monstrous Beast",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "HitDice": 15,
+      "Size": "Medium",
+      "Movement": 9,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d12"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Swallow Whole",
+          "Description": "A bite hit by 4 or more above the required roll, or a natural 20, swallows a character. The victim dies after six full subsequent melee rounds unless the worm is killed. Cutting attacks from inside use AC 9 and lose 1 damage per round inside, cumulatively. Digestion takes 12 turns (120 melee rounds), after which the victim cannot be raised."
+        },
+        {
+          "Name": "Burrowing",
+          "Description": "Can tunnel rapidly through earth and stone."
+        },
+        {
+          "Name": "Poison Sting",
+          "Description": "Used only in rear defense or against numerous opponents in a spacious area. A hit deals 2d4 damage and requires a save vs. poison; failure kills the victim."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 15,
+      "InLair": 30,
+      "TreasureType": "B,Q(x5),X",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 53-64"
+    },
+    {
+      "Name": "Rust Monster",
+      "Type": "Aberration",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "Movement": 18,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "Q (x10)",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Antennae Touch",
+          "NumberOfAttacks": 2,
+          "Damage": "Nil"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Destroy Metal",
+          "Description": "Touch with antennae rusts or corrodes metal instantly; magical items gain a saving throw."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit on Monster Destroys Metal",
+          "Description": "Weapons striking the rust monster corrode as if touched by its antennae."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 185,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Rust monsters inhabit subterranean places and feed on ferrous metals.",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 65-67"
+    },
+    {
+      "Name": "Titan, Lesser",
+      "Type": "Outer Planar Being",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -2,
+      "HitDice": 14,
+      "Size": "Medium",
+      "Movement": 15,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon or Fist",
+          "NumberOfAttacks": 2,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast cleric and magic‑user spells up to 7th level."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Strong resistance to magical effects."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        },
+        {
+          "Name": "Telepathy",
+          "Description": "Communicates mentally across great distances."
+        }
+      ],
+      "BaseXPValue": 7000,
+      "XPValuePerHitPoint": 14,
+      "TreasureType": "E,Q(x10),R",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 68-69"
+    },
+    {
+      "Name": "Titan, Minor",
+      "Type": "Outer Planar Being",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 10,
+      "Size": "Large",
+      "Movement": 12,
+      "Morale": {
+        "Value": 11
+      },
+      "Attacks": [
+        {
+          "Name": "Weapon or Fist",
+          "NumberOfAttacks": 2,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Limited Spell Use",
+          "Description": "Can cast cleric and magic‑user spells up to 5th level."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Moderate resistance to magical effects."
+        },
+        {
+          "Name": "Flight",
+          "Description": "Can fly magically at will."
+        }
+      ],
+      "BaseXPValue": 4500,
+      "XPValuePerHitPoint": 10,
+      "InLair": 10,
+      "TreasureType": "E,Q(x10),R",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 70-73"
+    },
+    {
+      "Name": "Umber Hulk",
+      "Type": "Aberration",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 2,
+      "Movement": 6,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 8,
+      "%InLair": "30",
+      "TreasureType": "G",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "3d4"
+        },
+        {
+          "Name": "Mandibles",
+          "NumberOfAttacks": 1,
+          "Damage": "2d5"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Confusing Gaze",
+          "Description": "Creatures viewing all four eyes must save or be confused for 3–12 rounds."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic evil",
+      "Size": "Large",
+      "BaseXPValue": 1300,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 74-80",
+      "Other": "Burrows through solid stone at 1” per turn; through loam at 6× that rate; often mistaken for humanoids at 40’ distance; powerful claws and mandibles; subterranean predator."
+    },
+    {
+      "Name": "Vampire",
+      "Type": "Undead",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 1,
+      "HitDice": 8,
+      "Size": "Medium",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Energy Drain",
+          "NumberOfAttacks": 1,
+          "Damage": "2 Levels"
+        },
+        {
+          "Name": "Physical Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Spellcasting",
+          "Description": "Cast spells as a 12th-level magic-user."
+        },
+        {
+          "Name": "Charm Gaze",
+          "Description": "Victims must save vs charm or be controlled."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 3 hit points per round."
+        },
+        {
+          "Name": "Gaseous Form",
+          "Description": "Can transform into mist at will."
+        },
+        {
+          "Name": "Summon Creatures",
+          "Description": "Can summon 10d10 rats or 3d6 wolves."
+        },
+        {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold, poison, and cold."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "F",
+      "Information": "Former Magic-User (12th Level)",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 81-83"
+    },
+    {
+      "Name": "Will-o-Wisp",
+      "Type": "Aberration",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": -8,
+      "HitDice": 9,
+      "Size": "Small",
+      "Movement": 18,
+      "Morale": {
+        "Value": 12
+      },
+      "Attacks": [
+        {
+          "Name": "Shock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Invisibility",
+          "Description": "Can become invisible at will."
+        },
+        {
+          "Name": "Immunity to Magic",
+          "Description": "Nearly all spells fail to affect it."
+        },
+        {
+          "Name": "Light Form",
+          "Description": "Appears as a floating sphere of eerie light."
+        },
+        {
+          "Name": "Energy Feeding",
+          "Description": "Feeds on fear and life energy from dying creatures."
+        }
+      ],
+      "BaseXPValue": 1350,
+      "XPValuePerHitPoint": 9,
+      "TreasureType": "I",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 84-93"
+    },
+    {
+      "Name": "Xorn",
+      "Type": "Elemental",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 9,
+      "ArmorClass": -2,
+      "Movement": 9,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "%InLair": "40",
+      "TreasureType": "O, P, Q(x5), X",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 3,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "6d4"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Earth Glide",
+          "Description": "Can pass through earth and stone as easily as air."
+        },
+        {
+          "Name": "Partial Magic Immunity",
+          "Description": "Immune to fire; takes half damage from cold; lightning does normal damage."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 1275,
+      "XPValuePerHitPoint": 10,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 94-100",
+      "Other": "Xorn surprises opponents on a roll of 1–5 due to its ability to move through earth and stone. Xorn are attracted to precious metals and gems; often negotiate rather than fight."
+    },
     {
       "Name": "Fire Giant",
       "Type": "Giant",
@@ -735,7 +1328,9 @@
         "BreathWeapon": 10,
         "Spell": 10
       },
-      "Morale": { "Value": 13 },
+      "Morale": {
+        "Value": 13
+      },
       "Attacks": [
         {
           "Name": "Greatsword",
@@ -755,7 +1350,8 @@
         }
       ],
       "BaseXPValue": 3000,
-      "TreasureType": "L"
+      "TreasureType": "L",
+      "Size": "Medium"
     },
     {
       "Name": "Frost Giant",
@@ -777,7 +1373,9 @@
         "BreathWeapon": 10,
         "Spell": 10
       },
-      "Morale": { "Value": 13 },
+      "Morale": {
+        "Value": 13
+      },
       "Attacks": [
         {
           "Name": "Axe",
@@ -797,7 +1395,8 @@
         }
       ],
       "BaseXPValue": 2800,
-      "TreasureType": "L"
+      "TreasureType": "L",
+      "Size": "Medium"
     },
     {
       "Name": "Hill Giant Chief",
@@ -819,7 +1418,9 @@
         "BreathWeapon": 11,
         "Spell": 11
       },
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Club",
@@ -834,7 +1435,8 @@
         }
       ],
       "BaseXPValue": 2200,
-      "TreasureType": "K"
+      "TreasureType": "K",
+      "Size": "Medium"
     },
     {
       "Name": "Giant Spider (Demonic)",
@@ -856,7 +1458,9 @@
         "BreathWeapon": 11,
         "Spell": 11
       },
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -871,7 +1475,8 @@
         }
       ],
       "BaseXPValue": 2500,
-      "TreasureType": "None"
+      "TreasureType": "None",
+      "Size": "Medium"
     },
     {
       "Name": "Giant Scorpion (Huge)",
@@ -893,7 +1498,9 @@
         "BreathWeapon": 11,
         "Spell": 11
       },
-      "Morale": { "Value": 11 },
+      "Morale": {
+        "Value": 11
+      },
       "Attacks": [
         {
           "Name": "Claw",
@@ -913,7 +1520,8 @@
         }
       ],
       "BaseXPValue": 2300,
-      "TreasureType": "None"
+      "TreasureType": "None",
+      "Size": "Medium"
     },
     {
       "Name": "Giant Bat (Dire)",
@@ -935,7 +1543,9 @@
         "BreathWeapon": 12,
         "Spell": 12
       },
-      "Morale": { "Value": 10 },
+      "Morale": {
+        "Value": 10
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -950,7 +1560,8 @@
         }
       ],
       "BaseXPValue": 1600,
-      "TreasureType": "None"
+      "TreasureType": "None",
+      "Size": "Medium"
     },
     {
       "Name": "Giant Snake (Ancient Python)",
@@ -972,7 +1583,9 @@
         "BreathWeapon": 11,
         "Spell": 11
       },
-      "Morale": { "Value": 11 },
+      "Morale": {
+        "Value": 11
+      },
       "Attacks": [
         {
           "Name": "Bite",
@@ -992,9 +1605,9 @@
         }
       ],
       "BaseXPValue": 2200,
-      "TreasureType": "None"
+      "TreasureType": "None",
+      "Size": "Medium"
     },
-
     {
       "Name": "High Priest",
       "Type": "Humanoid",
@@ -1012,7 +1625,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 900,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Ogre Lord",
@@ -1031,7 +1645,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 700,
       "TreasureType": "A",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Gorgon",
@@ -1055,7 +1670,8 @@
       ],
       "BaseXPValue": 1200,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 8 Bishop",
@@ -1074,7 +1690,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 950,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "High Priest",
@@ -1093,7 +1710,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 1000,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Wyvern",
@@ -1122,7 +1740,8 @@
       ],
       "BaseXPValue": 1100,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 7 Fighter",
@@ -1146,7 +1765,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 850,
       "TreasureType": "A",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 10 Fighter",
@@ -1170,7 +1790,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 1200,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Master Thief",
@@ -1203,7 +1824,8 @@
       ],
       "BaseXPValue": 1400,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Arch Mage",
@@ -1222,7 +1844,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 2000,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Will O' Wisp",
@@ -1241,7 +1864,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 1500,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Bleeb",
@@ -1294,7 +1918,8 @@
       ],
       "BaseXPValue": 2000,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 8 Fighter",
@@ -1318,7 +1943,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 1300,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lesser Demon",
@@ -1366,7 +1992,8 @@
       ],
       "BaseXPValue": 1800,
       "TreasureType": "E",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     }
   ]
 }

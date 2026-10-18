@@ -25,14 +25,13 @@
       "MagicResistance": "Standard",
       "Intelligence": "Animal*",
       "Alignment": "Neutral",
-      "Size": "L",
+      "Size": "Medium",
       "BaseXPValue": 90,
       "XPValuePerHitPoint": 5,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 01-10",
       "Other": "Giant boring beetles inhabit rotting wood or unused tunnels, feeding on decaying organic matter."
     },
-
     {
       "Name": "Bugbear",
       "Type": "Humanoid",
@@ -67,7 +66,6 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 11-20",
       "Other": "Surprises on 1–3 due to stealth and natural cunning.Chain mail shirt improves AC to 3; bugbears are tall, stealthy ambushers often found in wooded hills."
     },
-
     {
       "Name": "Lvl 3 Magic-User",
       "Type": "Humanoid",
@@ -468,8 +466,6 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 21-30, then character table",
       "Source": "Adnd"
     },
-
-
     {
       "Name": "Black Dragon",
       "Type": "Dragon",
@@ -518,7 +514,6 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 31-32, then Dragon table",
       "Other": "Spell usage"
     },
-
     {
       "Name": "Brass Dragon",
       "Type": "Dragon",
@@ -560,7 +555,8 @@
       "XPValuePerHitPoint": 3,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 31-32, then Dragon table",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Size": "Medium"
     },
     {
       "Name": "White Dragon",
@@ -573,7 +569,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "25",
-      "TreasureType": "E,O,S",
+      "TreasureType": "D",
       "Movement": 12,
       "Attacks": [
         {
@@ -603,9 +599,9 @@
       ],
       "BaseXPValue": 1300,
       "XPValuePerHitPoint": 3,
-      "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 31-32, then Dragon table",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Size": "Medium"
     },
     {
       "Name": "Violet Fungi",
@@ -638,15 +634,13 @@
       "MagicResistance": "Standard",
       "Intelligence": "Non-",
       "Alignment": "Neutral",
-      "Size": "Small to Medium",
+      "Size": "Medium",
       "BaseXPValue": 135,
       "XPValuePerHitPoint": 4,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 33-34",
       "Other": "Often found with shriekers; branches lash out at close targets; stationary but dangerous."
     },
-
-
     {
       "Name": "Gelatinous Cube",
       "Type": "Ooze",
@@ -733,7 +727,6 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 41-45",
       "Other": "Ghouls are undead who feed on corpses and paralyze living victims.Ghouls cannot be affected by sleep or charm spells just like other undead. Originally from the AD&D Monster Manual they can be affected by cold spells, but not in this implemenation.."
     },
-
     {
       "Name": "Giant Lizard",
       "Type": "Animal",
@@ -772,8 +765,6 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 46-50",
       "Other": "Prefers marshes and swamps; capable of engulfing prey due to large jaws."
     },
-
-
     {
       "Name": "Lycanthrope, Wererat",
       "Type": "Lycanthrope",
@@ -832,7 +823,9 @@
         "BreathWeapon": 15,
         "Spell": 15
       },
-      "Morale": { "Value": 12 },
+      "Morale": {
+        "Value": 12
+      },
       "Attacks": [
         {
           "Name": "Disolve flesh",
@@ -849,7 +842,8 @@
       "BaseXPValue": 300,
       "TreasureType": "None",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 55-60",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Size": "Medium"
     },
     {
       "Name": "Ogre",
@@ -1003,7 +997,6 @@
       "DungeonRandomMonsterTableReference": "Level 3, Roll 94-95",
       "Other": "Must be killed, burned, or immersed in water to detach before satiation."
     },
-
     {
       "Name": "Giant Weasel",
       "Type": "Animal",
@@ -1074,7 +1067,6 @@
       "Source": "Adnd",
       "Other": "9 ft long; powerful mandibles; often found underground or in lairs with treasure."
     },
-
     {
       "Name": "Giant Bat",
       "Type": "Animal",
@@ -1112,9 +1104,6 @@
       "Source": "Adnd",
       "Other": "Flight maneuverability class C; often found in caves; neutral scavengers."
     },
-
-
-
     {
       "Name": "Vorpal Bunny",
       "Type": "Animal",
@@ -1142,7 +1131,8 @@
       "BaseXPValue": 735,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Capybara",
@@ -1171,7 +1161,8 @@
       "BaseXPValue": 520,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Rotting Corpse",
@@ -1203,9 +1194,9 @@
       "BaseXPValue": 680,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
     {
       "Name": "Dragon Fly",
       "Type": "Dragon",
@@ -1238,7 +1229,8 @@
       "BaseXPValue": 1275,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Highwayman",
@@ -1272,7 +1264,8 @@
       "BaseXPValue": 840,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 5 Mage",
@@ -1301,10 +1294,9 @@
       "BaseXPValue": 1400,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
-
-
     {
       "Name": "Spider, Huge",
       "Type": "Animal",
@@ -1332,7 +1324,8 @@
       "BaseXPValue": 600,
       "XPValuePerHitPoint": 8,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Champ Samurai",
@@ -1361,7 +1354,8 @@
       "BaseXPValue": 795,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Bushwacker",
@@ -1395,7 +1389,8 @@
       "BaseXPValue": 380,
       "XPValuePerHitPoint": 3,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     }
   ]
 }

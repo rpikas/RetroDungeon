@@ -19,17 +19,17 @@
         {
           "Name": "Claw",
           "NumberOfAttacks": 1,
-          "Damage": "1-4"
+          "Damage": "1d4"
         },
         {
           "Name": "Claw",
           "NumberOfAttacks": 1,
-          "Damage": "1-4"
+          "Damage": "1d4"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1-8"
+          "Damage": "1d8"
         }
       ],
       "SpecialAttacks": [],
@@ -62,7 +62,7 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1-6"
+          "Damage": "1d6"
         }
       ],
       "SpecialAttacks": [
@@ -503,7 +503,6 @@
       "DungeonRandomMonsterTableReference": "Level 4, Roll 15-22 then Character Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Blue Dragon",
       "Type": "Dragon",
@@ -555,7 +554,6 @@
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
       "Source": "Adnd"
     },
-
     {
       "Name": "Bronze Dragon",
       "Type": "Dragon",
@@ -925,10 +923,9 @@
       "DungeonRandomMonsterTableReference": "Level 4, Roll ¨31-36",
       "Other": "Often found with packs of ghouls; can be turned by clerics."
     },
-
     {
       "Name": "Gray Ooze",
-      "Type": "Ooze",
+      "Type": "Animal",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 3,
@@ -973,7 +970,6 @@
       ],
       "MagicResistance": "Standard",
       "Intelligence": "Average",
-      "Type": "Animal",
       "Size": "Medium",
       "BaseXPValue": 200,
       "XPValuePerHitPoint": 5,
@@ -1096,7 +1092,6 @@
       "DungeonRandomMonsterTableReference": "Level 4, Roll 47",
       "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
     },
-
     {
       "Name": "Hydra, Pyro 5 Heads",
       "Type": "Monstrous Beast",
@@ -1129,11 +1124,264 @@
       "DungeonRandomMonsterTableReference": "Level 4, Roll 48"
     },
     {
+      "Name": "Werewolf",
+      "Type": "Lycanthrope",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 5,
+      "Movement": 15,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "25",
+      "TreasureType": "B",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit Only by Silver or Magic Weapons",
+          "Description": "Can only be harmed by silver or magical weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Alignment": "Chaotic Evil",
+      "Size": "Medium",
+      "BaseXPValue": 205,
+      "XPValuePerHitPoint": 5,
+      "Source": "Adnd",
+      "Other": "Werewolves are swift predators; their alignment varies in folklore but is Chaotic Evil in AD&D.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 49-62"
+    },
+    {
+      "Name": "Yellow Mold",
+      "Type": "Fungus",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 9,
+      "Movement": 0,
+      "HitDice": 0,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "None",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Spore Burst",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison Spores",
+          "Description": "Disturbing the mold releases deadly spores; inhalation can be fatal."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "See Below",
+          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
+        }
+      ],
+      "MagicResistance": "See Below",
+      "Intelligence": "Non-Intelligent",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 65,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 63-75"
+    },
+    {
+      "Name": "Owlbear",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 5,
+      "Movement": 12,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "30",
+      "TreasureType": "C",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Hug",
+          "Description": "If both claws hit, owlbear hugs for 2d8 damage."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Neutral",
+      "Size": "Large",
+      "BaseXPValue": 225,
+      "XPValuePerHitPoint": 8,
+      "Source": "Adnd",
+      "Other": "Ferocious hybrid of bear and owl; notorious for aggression and territorial behavior.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 76-78"
+    },
+    {
+      "Name": "Rust Monster",
+      "Type": "Aberration",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "Movement": 18,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "Q (x10)",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Antennae Touch",
+          "NumberOfAttacks": 2,
+          "Damage": "Nil"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Destroy Metal",
+          "Description": "Touch with antennae rusts or corrodes metal instantly; magical items gain a saving throw."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit on Monster Destroys Metal",
+          "Description": "Weapons striking the rust monster corrode as if touched by its antennae."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 185,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Rust monsters inhabit subterranean places and feed on ferrous metals.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 79-80"
+    },
+    {
+      "Name": "Shadow",
+      "Type": "Undead",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 7,
+      "Movement": 12,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "40",
+      "TreasureType": "F",
+      "IndividualTreasure": "None",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Strength Drain",
+          "Description": "Victim loses 1–4 points of Strength; if reduced to 0, they die."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit only by magic weapons",
+          "Description": "Shadow can only be harmed by magic weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic Evil",
+      "Size": "Medium",
+      "BaseXPValue": 255,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Shadow creatures drain strength and are difficult to detect. Shadow is immune to sleep, charm, hold, and cold-based attacks like many undeads",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 81-82"
+    },
+    {
+      "Name": "Snake, Giant Constrictor",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 6,
+      "Movement": 9,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "%InLair": "Nil",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "Snake Stew ($5), Fried Snake ($3), Snake Eggs ($50)",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1"
+        },
+        {
+          "Name": "Coil",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Constriction",
+          "Description": "Snake coils around prey, dealing damage and restraining."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Alignment": "Neutral",
+      "Size": "Medium",
+      "BaseXPValue": 85,
+      "XPValuePerHitPoint": 4,
+      "Source": "Adnd",
+      "Other": "Subterranean serpent; valued for meat and eggs.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 83-90"
+    },
+    {
       "Name": "Su-Monster",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 12,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 6,
       "Movement": 9,
       "HitDice": 5,
@@ -1169,7 +1417,83 @@
       "BaseXPValue": 225,
       "XPValuePerHitPoint": 6,
       "Source": "Adnd",
-      "Other": "Subterranean predator; vicious simian creature with psionic powers."
+      "Other": "Subterranean predator; vicious simian creature with psionic powers.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 91-94"
+    },
+    {
+      "Name": "Toad, Ice",
+      "Type": "Animal",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "Movement": 9,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "40",
+      "TreasureType": "C",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d4"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Cold Radiation",
+          "Description": "Creatures within close proximity suffer cold damage; prolonged exposure can be lethal."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Average",
+      "Size": "Large",
+      "BaseXPValue": 205,
+      "XPValuePerHitPoint": 4,
+      "Alignment": "Neutral",
+      "Source": "Adnd",
+      "Other": "Ice toads inhabit frozen caverns and lairs; their bodies radiate intense cold.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 95-96"
+    },
+    {
+      "Name": "Toad, Poisonous",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 7,
+      "Movement": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "0",
+      "TreasureType": "Nil",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison",
+          "Description": "Victim must save vs. poison or die."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Animal",
+      "Size": "Medium",
+      "BaseXPValue": 155,
+      "XPValuePerHitPoint": 2,
+      "Source": "Adnd",
+      "Other": "Indistinguishable from non-poisonous giant toads.",
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 97-100"
     },
     {
       "Name": "Snake, Poisonous",
@@ -1202,179 +1526,11 @@
       "MagicResistance": "Standard",
       "Intelligence": "Animal",
       "Alignment": "Neutral",
-      "Size": "Small (5' long)",
+      "Size": "Medium",
       "BaseXPValue": 255,
       "XPValuePerHitPoint": 3,
       "Source": "Adnd",
       "Other": "Common serpent; sometimes harvested for stew, fried meat, or valuable eggs."
-    },
-    {
-      "Name": "Snake, Giant Constrictor",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 6,
-      "Movement": 9,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "Nil",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "Snake Stew ($5), Fried Snake ($3), Snake Eggs ($50)",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1"
-        },
-        {
-          "Name": "Coil",
-          "NumberOfAttacks": 1,
-          "Damage": "1d3"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Constriction",
-          "Description": "Snake coils around prey, dealing damage and restraining."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Medium",
-      "BaseXPValue": 85,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Subterranean serpent; valued for meat and eggs."
-    },
-    {
-      "Name": "Shadow",
-      "Type": "Undead",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 20,
-      "ArmorClass": 7,
-      "Movement": 12,
-      "HitDice": 3,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "40",
-      "TreasureType": "F",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "2-5"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Strength Drain",
-          "Description": "Victim loses 1–4 points of Strength; if reduced to 0, they die."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Hit only by magic weapons",
-          "Description": "Shadow can only be harmed by magic weapons."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Alignment": "Chaotic Evil",
-      "Size": "Medium",
-      "BaseXPValue": 255,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Shadow creatures drain strength and are difficult to detect. Shadow is immune to sleep, charm, hold, and cold-based attacks like many undeads"
-    },
-    {
-      "Name": "Rust Monster",
-      "Type": "Aberration",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 2,
-      "Movement": 18,
-      "HitDice": 5,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "10",
-      "TreasureType": "Q (x10)",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Antennae Touch",
-          "NumberOfAttacks": 2,
-          "Damage": "Nil"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Destroy Metal",
-          "Description": "Touch with antennae rusts or corrodes metal instantly; magical items gain a saving throw."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "Hit on Monster Destroys Metal",
-          "Description": "Weapons striking the rust monster corrode as if touched by its antennae."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Medium",
-      "BaseXPValue": 185,
-      "XPValuePerHitPoint": 4,
-      "Source": "Adnd",
-      "Other": "Rust monsters inhabit subterranean places and feed on ferrous metals."
-    },
-    {
-      "Name": "Owlbear",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 5,
-      "ArmorClass": 5,
-      "Movement": 12,
-      "HitDice": 5,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 2,
-      "%InLair": "30",
-      "TreasureType": "C",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Hug",
-          "Description": "If both claws hit, owlbear hugs for 2d8 damage."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Low",
-      "Alignment": "Neutral",
-      "Size": "Large",
-      "BaseXPValue": 225,
-      "XPValuePerHitPoint": 8,
-      "Source": "Adnd",
-      "Other": "Ferocious hybrid of bear and owl; notorious for aggression and territorial behavior."
     },
     {
       "Name": "Hydra 5 Heads",
@@ -1450,7 +1606,6 @@
       "Source": "Adnd",
       "Other": "Hydras vary in head count; attack numbers scale with remaining heads (13–19)."
     },
-
     {
       "Name": "Hydra 5 Heads",
       "Type": "Monstrous Beast",
@@ -1484,50 +1639,6 @@
       "TreasureType": "None",
       "Source": "Adnd"
     },
-
-    {
-      "Name": "Yellow Mold",
-      "Type": "Fungus",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 9,
-      "Movement": 0,
-      "HitDice": 0,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "0",
-      "TreasureType": "None",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Spore Burst",
-          "NumberOfAttacks": 1,
-          "Damage": "1-8"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Poison Spores",
-          "Description": "Disturbing the mold releases deadly spores; inhalation can be fatal."
-        }
-      ],
-      "SpecialDefenses": [
-        {
-          "Name": "See Below",
-          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
-        }
-      ],
-      "MagicResistance": "See Below",
-      "Intelligence": "Non-Intelligent",
-      "Alignment": "Neutral",
-      "Size": "Small to Large",
-      "BaseXPValue": 65,
-      "XPValuePerHitPoint": 0,
-      "Source": "Adnd",
-      "Other": "Yellow mold grows in patches and is extremely dangerous when disturbed."
-    },
-
     {
       "Name": "Poisonous Toad",
       "Type": "Animal",
@@ -1565,44 +1676,6 @@
       "Source": "Adnd",
       "Other": "Indistinguishable from non-poisonous giant toads."
     },
-    {
-      "Name": "Werewolf",
-      "Type": "Lycanthrope",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 5,
-      "Movement": 15,
-      "HitDice": 4,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 3,
-      "%InLair": "25",
-      "TreasureType": "B",
-      "IndividualTreasure": "None",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Hit Only by Silver or Magic Weapons",
-          "Description": "Werewolves can only be harmed by silver or magical weapons. Werewolves surprise opponents on a roll of 1–3."
-        }
-      ],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
-      "Alignment": "Chaotic Evil",
-      "Size": "Medium",
-      "BaseXPValue": 205,
-      "XPValuePerHitPoint": 5,
-      "Source": "Adnd",
-      "Other": "Werewolves are swift predators; their alignment varies in folklore but is Chaotic Evil in AD&D."
-    },
-
     {
       "Name": "Pyrohydra 5 Heads",
       "Type": "Monstrous Beast",
@@ -1688,7 +1761,6 @@
       "Source": "Adnd",
       "Other": "https://1eonline.info/1mm/hellhound.htm"
     },
-
     {
       "Name": "Scorpion, Giant",
       "Type": "Vermin",
@@ -1778,79 +1850,6 @@
       "Other": "Aerial combat class C; can plummet like an eagle."
     },
     {
-      "Name": "Toad, Ice",
-      "Type": "Animal",
-      "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": 4,
-      "Movement": 9,
-      "HitDice": 5,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "40",
-      "TreasureType": "C",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Cold Radiation",
-          "Description": "Creatures within close proximity suffer cold damage; prolonged exposure can be lethal."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Average",
-      "Size": "Large",
-      "BaseXPValue": 205,
-      "XPValuePerHitPoint": 4,
-      "Alignment": "Neutral",
-      "Source": "Adnd",
-      "Other": "Ice toads inhabit frozen caverns and lairs; their bodies radiate intense cold."
-    },
-    {
-      "Name": "Toad, Poisonous",
-      "Type": "Animal",
-      "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 8,
-      "ArmorClass": 7,
-      "Movement": 6,
-      "HitDice": 2,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "0",
-      "TreasureType": "Nil",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4+1"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Poison",
-          "Description": "Victim must save vs. poison or die."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Size": "Medium",
-      "BaseXPValue": 155,
-      "XPValuePerHitPoint": 2,
-      "Source": "Adnd",
-      "Other": "Indistinguishable from non-poisonous giant toads."
-    },
-    {
       "Name": "Toad, Giant",
       "Type": "Animal",
       "Frequency": "Uncommon",
@@ -1918,7 +1917,8 @@
       "BaseXPValue": 795,
       "XPValuePerHitPoint": 5,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Coyote",
@@ -1946,7 +1946,8 @@
       "BaseXPValue": 780,
       "XPValuePerHitPoint": 5,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 3 Ninja",
@@ -1974,7 +1975,8 @@
       "BaseXPValue": 1360,
       "XPValuePerHitPoint": 4,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Master Thief",
@@ -2007,7 +2009,8 @@
       "BaseXPValue": 1400,
       "XPValuePerHitPoint": 5,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Spirit",
@@ -2035,7 +2038,8 @@
       "BaseXPValue": 1245,
       "XPValuePerHitPoint": 10,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Priestess",
@@ -2063,7 +2067,8 @@
       "BaseXPValue": 870,
       "XPValuePerHitPoint": 5,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 3 Priest",
@@ -2091,7 +2096,8 @@
       "BaseXPValue": 1220,
       "XPValuePerHitPoint": 5,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 3 Samurai",
@@ -2119,7 +2125,8 @@
       "BaseXPValue": 1400,
       "XPValuePerHitPoint": 4,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Lvl 7 Mage",
@@ -2147,7 +2154,8 @@
       "BaseXPValue": 2300,
       "XPValuePerHitPoint": 10,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     }
   ]
 }

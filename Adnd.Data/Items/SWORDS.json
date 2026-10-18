@@ -282,6 +282,41 @@
         "ToHitBonus":  0
     },
     {
+        "Name":  "Silver Long Sword",
+        "Type":  "Weapon",
+        "Cost":  150,
+        "Weight":  72,
+        "Damage":  "1d8",
+        "DamageVsLarge":  "1d12",
+        "DamageType":  "Slashing",
+        "SpeedFactor":  5,
+        "WeaponLength":  "Medium",
+        "IsTwoHanded":  false,
+        "Range":  "",
+        "ArmorClassBonus":  0,
+        "MagicBonus":  0,
+        "SpecialAbilities":  [
+
+                              ],
+        "IsCursed":  false,
+        "IsShopBuyable":  true,
+        "AllowedClasses":  [
+                                "Fighter",
+                                "Paladin",
+                                "Ranger",
+                                "Thief",
+                                "Assassin",
+                                "Bard"
+                            ],
+        "Rarity":  "Common",
+        "Description":  "A long sword forged with a high-content silver alloy.",
+        "Source":  "Adnd",
+        "Version":  "1e",
+        "StockQuantity":  6,
+        "Slot":  "",
+        "ToHitBonus":  0
+    },
+    {
         "Name":  "Short Sword +2",
         "Type":  "Weapon",
         "Cost":  4000,

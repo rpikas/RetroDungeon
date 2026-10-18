@@ -1,5 +1,5 @@
 {
-    "Level": 10,
+  "Level": 10,
   "Monsters": [
     {
       "Name": "Beholder",
@@ -19,7 +19,7 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2-8"
+          "Damage": "2d4"
         }
       ],
       "SpecialAttacks": [
@@ -43,8 +43,8 @@
       "Name": "Lvl 10 Magic-User",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "ArmorClassNote": "Kept at 4 for explicit table alignment.",
       "HitDice": 10,
@@ -73,7 +73,8 @@
       ],
       "BaseXPValue": 2000,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Cleric",
@@ -109,14 +110,15 @@
       "BaseXPValue": 2000,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Fighter",
       "Type": "Humanoid",
       "Frequency": "Common",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
       "HitDice": 10,
       "HitDiceType": 10,
@@ -140,14 +142,15 @@
       "BaseXPValue": 2000,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Thief",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 10,
       "HitDiceType": 6,
@@ -180,14 +183,15 @@
       "BaseXPValue": 2000,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Monk",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 1,
       "HitDice": 10,
       "HitDiceType": 8,
@@ -211,14 +215,15 @@
       "BaseXPValue": 2300,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Assassin",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 10,
       "HitDiceType": 6,
@@ -247,14 +252,15 @@
       "BaseXPValue": 2300,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Bard",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 10,
       "HitDiceType": 6,
@@ -283,14 +289,15 @@
       "BaseXPValue": 2600,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Druid",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 10,
       "HitDiceType": 8,
@@ -319,14 +326,15 @@
       "BaseXPValue": 2300,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Ranger",
       "Type": "Humanoid",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
       "HitDice": 10,
       "HitDiceType": 8,
@@ -359,14 +367,15 @@
       "BaseXPValue": 2600,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Illusionist",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
       "HitDice": 10,
       "HitDiceType": 4,
@@ -395,14 +404,15 @@
       "BaseXPValue": 2300,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Lvl 10 Paladin",
       "Type": "Humanoid",
       "Frequency": "Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": 3,
       "HitDice": 10,
       "HitDiceType": 10,
@@ -435,484 +445,8 @@
       "BaseXPValue": 2600,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Dragon, Chromatic",
-      "Type": "Dragon",
-      "Frequency": "Unique",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -3,
-      "HitDice": 15,
-      "Size": "Gargantuan",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "2d10"
-        },
-        {
-          "Name": "Bite (Black Head)",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10 (acid breath)"
-        },
-        {
-          "Name": "Bite (Blue Head)",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10 (lightning breath)"
-        },
-        {
-          "Name": "Bite (Green Head)",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10 (chlorine gas breath)"
-        },
-        {
-          "Name": "Bite (Red Head)",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10 (fire breath)"
-        },
-        {
-          "Name": "Bite (White Head)",
-          "NumberOfAttacks": 1,
-          "Damage": "3d10 (cold breath)"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Five Breath Weapons",
-          "Description": "Each head breathes its own elemental attack."
-        },
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast spells as a high‑level cleric and magic‑user."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon chromatic dragons or fiends."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "Extremely high resistance to magic."
-        }
-      ],
-      "BaseXPValue": 15000,
-      "XPValuePerHitPoint": 20,
-      "TreasureType": "Special",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Dragon, Platinum (Bahamut)",
-      "Type": "Dragon",
-      "Frequency": "Unique",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -4,
-      "HitDice": 15,
-      "Size": "Gargantuan",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "2d10"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "4d10"
-        },
-        {
-          "Name": "Breath Weapon",
-          "NumberOfAttacks": 1,
-          "Damage": "15d6 (cold or radiant)"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Dual Breath Weapon",
-          "Description": "Can exhale either cold or radiant energy."
-        },
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast spells as a very high‑level cleric and magic‑user."
-        },
-        {
-          "Name": "Shapechange",
-          "Description": "Can assume human form at will."
-        },
-        {
-          "Name": "Aura of Protection",
-          "Description": "Allies gain bonuses to saves and morale."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "Extremely high resistance to magic."
-        }
-      ],
-      "BaseXPValue": 16000,
-      "XPValuePerHitPoint": 20,
-      "TreasureType": "Special",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Asmodeus",
-      "Type": "Devil, Arch",
-      "Frequency": "Unique",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -7,
-      "HitDice": 15,
-      "Size": "Large",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Staff",
-          "NumberOfAttacks": 1,
-          "Damage": "4d6"
-        },
-        {
-          "Name": "Tail Lash",
-          "NumberOfAttacks": 1,
-          "Damage": "1d12"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates 2 hit points per round."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "75% resistance to magic."
-        },
-        {
-          "Name": "Charm",
-          "Description": "Can charm any creature with a glance."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon powerful devils with 80% chance."
-        }
-      ],
-      "BaseXPValue": 11500,
-      "XPValuePerHitPoint": 25,
-      "TreasureType": "Z",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Baalzebul",
-      "Type": "Devil, Archfiend",
-      "Frequency": "Unique",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -6,
-      "HitDice": 13,
-      "Size": "Large",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Mace",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Magic Resistance",
-          "Description": "70% resistance to magic."
-        },
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates 2 hit points per round."
-        },
-        {
-          "Name": "Disease Aura",
-          "Description": "Creatures within 10 feet must save or contract supernatural disease."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon powerful devils with 70% chance."
-        }
-      ],
-      "BaseXPValue": 9500,
-      "XPValuePerHitPoint": 20,
-      "TreasureType": "Z",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Dispater",
-      "Type": "Devil, Archfiend",
-      "Frequency": "Unique",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -8,
-      "HitDice": 12,
-      "Size": "Medium",
-      "Movement": 15,
-      "Attacks": [
-        {
-          "Name": "Rod",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Magic Resistance",
-          "Description": "65% resistance to magic."
-        },
-        {
-          "Name": "Iron Body",
-          "Description": "Immune to non-magical weapons."
-        },
-        {
-          "Name": "Charm",
-          "Description": "Can charm humanoids with a gesture."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon devils with 60% chance."
-        }
-      ],
-      "BaseXPValue": 8500,
-      "XPValuePerHitPoint": 18,
-      "TreasureType": "Z",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Geryon",
-      "Type": "Devil, Archfiend",
-      "Frequency": "Unique",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -5,
-      "HitDice": 14,
-      "Size": "Large",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d6"
-        },
-        {
-          "Name": "Tail Sting",
-          "NumberOfAttacks": 1,
-          "Damage": "1d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Magic Resistance",
-          "Description": "70% resistance to magic."
-        },
-        {
-          "Name": "Poison Sting",
-          "Description": "Tail sting forces save vs poison or suffer severe damage."
-        },
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates 2 hit points per round."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon devils with 70% chance."
-        }
-      ],
-      "BaseXPValue": 10000,
-      "XPValuePerHitPoint": 22,
-      "TreasureType": "Z",
-      "Source": "Adnd"
-    },
-
-
-    {
-      "Name": "Iron Golem",
-      "Type": "Construct",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "HitDice": 18,
-      "Size": "Large",
-      "Movement": 6,
-      "Attacks": [
-        {
-          "Name": "Fist",
-          "NumberOfAttacks": 2,
-          "Damage": "4d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Poison Breath",
-          "Description": "Exhales a cloud of poisonous gas once every 7 rounds."
-        },
-        {
-          "Name": "Magic Immunity",
-          "Description": "Immune to most spells except those that specifically affect metal."
-        },
-        {
-          "Name": "Construct Body",
-          "Description": "Unaffected by mind-affecting magic, poison, and paralysis."
-        }
-      ],
-      "BaseXPValue": 8000,
-      "XPValuePerHitPoint": 20,
-      "TreasureType": "Nil",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Lich",
-      "Type": "Undead",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
-      "HitDice": 11,
-      "Size": "Medium",
-      "Movement": 6,
-      "Attacks": [
-        {
-          "Name": "Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Paralyzing Touch",
-          "Description": "Victims must save vs paralysis or be frozen."
-        },
-        {
-          "Name": "Spellcasting",
-          "Description": "Cast spells as a high-level magic-user."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "75% resistance to magic."
-        },
-        {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold, cold, and poison."
-        }
-      ],
-      "BaseXPValue": 5000,
-      "XPValuePerHitPoint": 10,
-      "TreasureType": "R",
-      "Source": "Adnd"
-    },
-    {
-      "Name": "Titan (Elder)",
-      "Type": "Titan",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": -2,
-      "Movement": 15,
-      "HitDice": 22,
-      "HitDiceType": 0,
-      "ExtraHitPoints": 0,
-      "%InLair": "10",
-      "TreasureType": "E, Q(x10), R",
-      "IndividualTreasure": "Nil",
-      "Attacks": [
-        {
-          "Name": "Sword",
-          "NumberOfAttacks": 1,
-          "Damage": "7d6"
-        },
-        {
-          "Name": "Punch",
-          "NumberOfAttacks": 1,
-          "Damage": "6d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Level 7 Magic-User spells",
-          "Description": "Access to 1st–7th level spells."
-        },
-        {
-          "Name": "Level 7 Cleric spells",
-          "Description": "Access to 1st–7th level spells."
-        }
-      ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
-      "MagicResistance": "60%",
-      "Intelligence": "Genius",
-      "Size": "Large",
-      "BaseXPValue": 11000,
-      "XPValuePerHitPoint": 35,
-      "Alignment": "Chaotic Good",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10+, Roll 61-70",
-      "Other": "Elder titans are the most powerful of their kind, often dwelling in cloud castles.",
-      "InfoUrl": "https://1eonline.info/1mm/titan.htm#table"
-    },
-
-
-    {
-      "Name": "Vampire",
-      "Type": "Undead",
-      "Frequency": "Very Rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 1,
-      "HitDice": 8,
-      "Size": "Medium",
-      "Movement": 12,
-      "Attacks": [
-        {
-          "Name": "Energy Drain",
-          "NumberOfAttacks": 1,
-          "Damage": "2 Levels"
-        },
-        {
-          "Name": "Physical Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spellcasting",
-          "Description": "Cast spells as a 12th-level magic-user."
-        },
-        {
-          "Name": "Charm Gaze",
-          "Description": "Victims must save vs charm or be controlled."
-        },
-        {
-          "Name": "Regeneration",
-          "Description": "Regenerates 3 hit points per round."
-        },
-        {
-          "Name": "Gaseous Form",
-          "Description": "Can transform into mist at will."
-        },
-        {
-          "Name": "Summon Creatures",
-          "Description": "Can summon 10d10 rats or 3d6 wolves."
-        },
-        {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold, poison, and cold."
-        }
-      ],
-      "BaseXPValue": 5000,
-      "XPValuePerHitPoint": 10,
-      "TreasureType": "F",
-      "Information": "Former Magic-User (12th Level)",
-      "Source": "Adnd"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 13-20 then Character Subtable"
     },
     {
       "Name": "Orcus",
@@ -975,12 +509,564 @@
       "BaseXPValue": 19500,
       "XPValuePerHitPoint": 30,
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": null,
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 21-28",
       "Other": null,
       "InfoUrl": null
     },
-
-
+    {
+      "Name": "Asmodeus",
+      "Type": "Devil, Arch",
+      "Frequency": "Unique",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -7,
+      "HitDice": 15,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "4d6"
+        },
+        {
+          "Name": "Tail Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 2 hit points per round."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "75% resistance to magic."
+        },
+        {
+          "Name": "Charm",
+          "Description": "Can charm any creature with a glance."
+        },
+        {
+          "Name": "Gate",
+          "Description": "Can summon powerful devils with 80% chance."
+        }
+      ],
+      "BaseXPValue": 11500,
+      "XPValuePerHitPoint": 25,
+      "TreasureType": "Z",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+    },
+    {
+      "Name": "Dragon, Chromatic",
+      "Type": "Dragon",
+      "Frequency": "Unique",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -3,
+      "HitDice": 15,
+      "Size": "Medium",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d10"
+        },
+        {
+          "Name": "Bite (Black Head)",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10 (acid breath)"
+        },
+        {
+          "Name": "Bite (Blue Head)",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10 (lightning breath)"
+        },
+        {
+          "Name": "Bite (Green Head)",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10 (chlorine gas breath)"
+        },
+        {
+          "Name": "Bite (Red Head)",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10 (fire breath)"
+        },
+        {
+          "Name": "Bite (White Head)",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10 (cold breath)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Five Breath Weapons",
+          "Description": "Each head breathes its own elemental attack."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a high‑level cleric and magic‑user."
+        },
+        {
+          "Name": "Gate",
+          "Description": "Can summon chromatic dragons or fiends."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Extremely high resistance to magic."
+        }
+      ],
+      "BaseXPValue": 15000,
+      "XPValuePerHitPoint": 20,
+      "TreasureType": "Special",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+    },
+    {
+      "Name": "Dragon, Platinum (Bahamut)",
+      "Type": "Dragon",
+      "Frequency": "Unique",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -4,
+      "HitDice": 15,
+      "Size": "Medium",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "2d10"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "4d10"
+        },
+        {
+          "Name": "Breath Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "15d6 (cold or radiant)"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dual Breath Weapon",
+          "Description": "Can exhale either cold or radiant energy."
+        },
+        {
+          "Name": "Spell Use",
+          "Description": "Can cast spells as a very high‑level cleric and magic‑user."
+        },
+        {
+          "Name": "Shapechange",
+          "Description": "Can assume human form at will."
+        },
+        {
+          "Name": "Aura of Protection",
+          "Description": "Allies gain bonuses to saves and morale."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Extremely high resistance to magic."
+        }
+      ],
+      "BaseXPValue": 16000,
+      "XPValuePerHitPoint": 20,
+      "TreasureType": "Special",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+    },
+    {
+      "Name": "Red Dragon (Young Adult)",
+      "Type": "Dragon",
+      "ArmorClass": -1,
+      "HitDice": 10,
+      "HitPoints": 60,
+      "Movement": 24,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "100 hp damage Breath",
+          "Description": "Cone of fire, damage equal to current hp (save for half)."
+        },
+        {
+          "Name": "Dragon Fear",
+          "Description": "Creatures of less than 5 HD must save vs spell or flee."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "TreasureType": "Hoard",
+      "Size": "Medium",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+    },
+    {
+      "Name": "Fire Dragon",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "100 hp damage breath",
+          "Description": "Fire breath attack."
+        }
+      ],
+      "BaseXPValue": 2500,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "Size": "Medium",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+    },
+    {
+      "Name": "Iron Golem",
+      "Type": "Construct",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 18,
+      "Size": "Large",
+      "Movement": 6,
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 2,
+          "Damage": "4d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison Breath",
+          "Description": "Exhales a cloud of poisonous gas once every 7 rounds."
+        },
+        {
+          "Name": "Magic Immunity",
+          "Description": "Immune to most spells except those that specifically affect metal."
+        },
+        {
+          "Name": "Construct Body",
+          "Description": "Unaffected by mind-affecting magic, poison, and paralysis."
+        }
+      ],
+      "BaseXPValue": 8000,
+      "XPValuePerHitPoint": 20,
+      "TreasureType": "Nil",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 41-50"
+    },
+    {
+      "Name": "Lich",
+      "Type": "Undead",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 11,
+      "Size": "Medium",
+      "Movement": 6,
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Paralyzing Touch",
+          "Description": "Victims must save vs paralysis or be frozen."
+        },
+        {
+          "Name": "Spellcasting",
+          "Description": "Cast spells as a high-level magic-user."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "75% resistance to magic."
+        },
+        {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold, cold, and poison."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "R",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 51-60"
+    },
+    {
+      "Name": "Titan (Elder)",
+      "Type": "Titan",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -2,
+      "Movement": 15,
+      "HitDice": 22,
+      "HitDiceType": 0,
+      "ExtraHitPoints": 0,
+      "%InLair": "10",
+      "TreasureType": "E, Q(x10), R",
+      "IndividualTreasure": "Nil",
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "7d6"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "6d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 7 Magic-User spells",
+          "Description": "Access to 1st–7th level spells."
+        },
+        {
+          "Name": "Level 7 Cleric spells",
+          "Description": "Access to 1st–7th level spells."
+        }
+      ],
+      "SpecialAttacks": [],
+      "SpecialDefenses": [],
+      "MagicResistance": "60%",
+      "Intelligence": "Genius",
+      "Size": "Large",
+      "BaseXPValue": 11000,
+      "XPValuePerHitPoint": 35,
+      "Alignment": "Chaotic Good",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 61-70",
+      "Other": "Elder titans are the most powerful of their kind, often dwelling in cloud castles.",
+      "InfoUrl": "https://1eonline.info/1mm/titan.htm#table"
+    },
+    {
+      "Name": "Vampire",
+      "Type": "Undead",
+      "Frequency": "Very Rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 1,
+      "HitDice": 8,
+      "Size": "Medium",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Energy Drain",
+          "NumberOfAttacks": 1,
+          "Damage": "2 Levels"
+        },
+        {
+          "Name": "Physical Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Spellcasting",
+          "Description": "Cast spells as a 12th-level magic-user."
+        },
+        {
+          "Name": "Charm Gaze",
+          "Description": "Victims must save vs charm or be controlled."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 3 hit points per round."
+        },
+        {
+          "Name": "Gaseous Form",
+          "Description": "Can transform into mist at will."
+        },
+        {
+          "Name": "Summon Creatures",
+          "Description": "Can summon 10d10 rats or 3d6 wolves."
+        },
+        {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold, poison, and cold."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 10,
+      "TreasureType": "F",
+      "Information": "Former Magic-User (12th Level)",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 71-80"
+    },
+    {
+      "Name": "Baalzebul",
+      "Type": "Devil, Archfiend",
+      "Frequency": "Unique",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -6,
+      "HitDice": 13,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "70% resistance to magic."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 2 hit points per round."
+        },
+        {
+          "Name": "Disease Aura",
+          "Description": "Creatures within 10 feet must save or contract supernatural disease."
+        },
+        {
+          "Name": "Gate",
+          "Description": "Can summon powerful devils with 70% chance."
+        }
+      ],
+      "BaseXPValue": 9500,
+      "XPValuePerHitPoint": 20,
+      "TreasureType": "Z",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+    },
+    {
+      "Name": "Dispater",
+      "Type": "Devil, Archfiend",
+      "Frequency": "Unique",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -8,
+      "HitDice": 12,
+      "Size": "Medium",
+      "Movement": 15,
+      "Attacks": [
+        {
+          "Name": "Rod",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "65% resistance to magic."
+        },
+        {
+          "Name": "Iron Body",
+          "Description": "Immune to non-magical weapons."
+        },
+        {
+          "Name": "Charm",
+          "Description": "Can charm humanoids with a gesture."
+        },
+        {
+          "Name": "Gate",
+          "Description": "Can summon devils with 60% chance."
+        }
+      ],
+      "BaseXPValue": 8500,
+      "XPValuePerHitPoint": 18,
+      "TreasureType": "Z",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+    },
+    {
+      "Name": "Geryon",
+      "Type": "Devil, Archfiend",
+      "Frequency": "Unique",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -5,
+      "HitDice": 14,
+      "Size": "Large",
+      "Movement": 12,
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Tail Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "70% resistance to magic."
+        },
+        {
+          "Name": "Poison Sting",
+          "Description": "Tail sting forces save vs poison or suffer severe damage."
+        },
+        {
+          "Name": "Regeneration",
+          "Description": "Regenerates 2 hit points per round."
+        },
+        {
+          "Name": "Gate",
+          "Description": "Can summon devils with 70% chance."
+        }
+      ],
+      "BaseXPValue": 10000,
+      "XPValuePerHitPoint": 22,
+      "TreasureType": "Z",
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+    },
     {
       "Name": "Demogorgon",
       "Type": "Demon Lord",
@@ -1050,43 +1136,9 @@
       "BaseXPValue": 74000,
       "XPValuePerHitPoint": 0,
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level X",
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 21-28",
       "Other": "Dual heads; hypnotic gaze; rotting tentacles; supreme demon lord of the Abyss.",
       "InfoUrl": "https://1eonline.info/1mm/demogorgon.htm"
-    },
-
-
-    {
-      "Name": "Red Dragon (Young Adult)",
-      "Type": "Dragon",
-      "ArmorClass": -1,
-      "HitDice": 10,
-      "HitPoints": 60,
-      "Movement": 24,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "100 hp damage Breath",
-          "Description": "Cone of fire, damage equal to current hp (save for half)."
-        },
-        {
-          "Name": "Dragon Fear",
-          "Description": "Creatures of less than 5 HD must save vs spell or flee."
-        }
-      ],
-      "BaseXPValue": 5000,
-      "TreasureType": "Hoard"
     },
     {
       "Name": "Stone Giant Elder",
@@ -1114,7 +1166,8 @@
         }
       ],
       "BaseXPValue": 3200,
-      "TreasureType": "L"
+      "TreasureType": "L",
+      "Size": "Medium"
     },
     {
       "Name": "Fire Giant Champion",
@@ -1137,7 +1190,8 @@
         }
       ],
       "BaseXPValue": 3800,
-      "TreasureType": "L"
+      "TreasureType": "L",
+      "Size": "Medium"
     },
     {
       "Name": "Hydra (7-Headed)",
@@ -1160,7 +1214,8 @@
         }
       ],
       "BaseXPValue": 3500,
-      "TreasureType": "None"
+      "TreasureType": "None",
+      "Size": "Medium"
     },
     {
       "Name": "Wyvern Matriarch",
@@ -1188,7 +1243,8 @@
         }
       ],
       "BaseXPValue": 2800,
-      "TreasureType": "J"
+      "TreasureType": "J",
+      "Size": "Medium"
     },
     {
       "Name": "Spectre Lord",
@@ -1215,7 +1271,8 @@
         }
       ],
       "BaseXPValue": 4000,
-      "TreasureType": "K"
+      "TreasureType": "K",
+      "Size": "Medium"
     },
     {
       "Name": "Minotaur Champion",
@@ -1243,7 +1300,8 @@
         }
       ],
       "BaseXPValue": 2600,
-      "TreasureType": "D"
+      "TreasureType": "D",
+      "Size": "Medium"
     },
     {
       "Name": "Earth Giant",
@@ -1267,7 +1325,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 1500,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Major Daimyo",
@@ -1296,7 +1355,8 @@
       ],
       "BaseXPValue": 1200,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "High Priest",
@@ -1320,7 +1380,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 1400,
       "TreasureType": "B",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Vampire",
@@ -1366,7 +1427,8 @@
       ],
       "BaseXPValue": 1600,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Greater Demon",
@@ -1422,41 +1484,8 @@
       ],
       "BaseXPValue": 2200,
       "TreasureType": "E",
-      "Source": "Wizardry"
-    },
-    {
-      "Name": "Fire Dragon",
-      "Type": "Dragon",
-      "NumberOfAppearancesMin": 2,
-      "NumberOfAppearancesMax": 4,
-      "ArmorClass": -1,
-      "HitDice": 12,
-      "Attacks": [
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "4d4"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "100 hp damage breath",
-          "Description": "Fire breath attack."
-        }
-      ],
-      "BaseXPValue": 2500,
-      "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Fire Giant",
@@ -1480,7 +1509,8 @@
       ],
       "BaseXPValue": 1800,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Dragon Zombie",
@@ -1509,7 +1539,8 @@
       "SpecialAbilities": [],
       "BaseXPValue": 2400,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Maelific",
@@ -1542,7 +1573,8 @@
       ],
       "BaseXPValue": 3000,
       "TreasureType": "E",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Frost Giant",
@@ -1566,7 +1598,8 @@
       ],
       "BaseXPValue": 2000,
       "TreasureType": "C",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Murphy's Ghost",
@@ -1614,7 +1647,8 @@
       ],
       "BaseXPValue": 3000,
       "TreasureType": "None",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Raver Lord",
@@ -1643,7 +1677,8 @@
       ],
       "BaseXPValue": 3500,
       "TreasureType": "E",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Vampire Lord",
@@ -1667,7 +1702,8 @@
       ],
       "BaseXPValue": 4000,
       "TreasureType": "E",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Poison Giant",
@@ -1691,7 +1727,8 @@
       ],
       "BaseXPValue": 3000,
       "TreasureType": "D",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "Flack",
@@ -1751,7 +1788,8 @@
       ],
       "BaseXPValue": 5000,
       "TreasureType": "E",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     },
     {
       "Name": "W E R D N A",
@@ -1808,7 +1846,8 @@
       ],
       "BaseXPValue": 10000,
       "TreasureType": "F",
-      "Source": "Wizardry"
+      "Source": "Wizardry",
+      "Size": "Medium"
     }
   ]
 }
