@@ -1,4 +1,7 @@
 using Adnd.Core.Characters;
+using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Diagnostics;
+using Adnd.Core.Monsters;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -12,6 +15,15 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         if (spell == null)
             return SpellCastResult.Failure("Missing spell definition.");
 
+        var enemyTarget = request.Targets.FirstOrDefault(t => t.Type == SpellCastTargetType.Enemy);
+        if (request.Context == SpellUseContext.Combat && enemyTarget != null)
+            return ResolveMummyTargetInCombat(request, spell, enemyTarget);
+
+        return ResolveAllyRaiseDead(request, spell);
+    }
+
+    private static SpellCastResult ResolveAllyRaiseDead(SpellCastRequest request, Spell spell)
+    {
         var targetRef = request.Targets.FirstOrDefault(t => t.Type == SpellCastTargetType.Ally);
         var target = targetRef == null
             ? request.Caster
@@ -72,6 +84,109 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         result.Events.Add($"Raise Dead fails. {target.Name} turns to ashes.");
 
         return result;
+    }
+
+    private static SpellCastResult ResolveMummyTargetInCombat(SpellCastRequest request, Spell spell, SpellCastTarget targetRef)
+    {
+        var target = ResolveEnemyTarget(request, targetRef);
+        if (target == null)
+            return SpellCastResult.Failure("No valid enemy target selected.");
+
+        if (!SpellDamageSaveHelper.IsMummy(target))
+            return SpellCastResult.Failure($"{spell.Name} can only target mummies in combat.");
+
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name} at {target.DisplayName}!");
+
+        var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
+        var rng = request.Rng ?? Random.Shared;
+        var saveRoll = rng.Next(1, 21);
+
+        RuleApplicationInfo.PublishLinked(
+            "MM",
+            "Mummy",
+            $"{target.DisplayName} saving throw vs magic against Raise Dead: 1d20={saveRoll} vs {saveTarget}.");
+
+        if (saveRoll >= saveTarget)
+        {
+            result.Events.Add($"{target.DisplayName} resists Raise Dead (save {saveRoll} vs {saveTarget}).");
+            return result;
+        }
+
+        var transformed = CreateRaisedManInstance(target);
+        var session = request.CombatSession;
+        if (session == null)
+            return SpellCastResult.Failure("Raise Dead transformation requires an active combat session.");
+
+        var indexInSession = session.Monsters.IndexOf(target);
+        if (indexInSession < 0)
+            return SpellCastResult.Failure("Target mummy is no longer present in combat.");
+
+        session.RearAttackers.Remove(target);
+        session.PyroHydraBreathUsed.Remove(target);
+        session.Monsters[indexInSession] = transformed;
+
+        result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) and becomes {transformed.DisplayName}!");
+        result.Events.Add($"{transformed.DisplayName} is now a normal human with 7th-level fighting ability.");
+        return result;
+    }
+
+    private static MonsterInstance? ResolveEnemyTarget(SpellCastRequest request, SpellCastTarget targetRef)
+    {
+        if (targetRef.MonsterIndex is int idx)
+            return request.MonsterTargets.FirstOrDefault(m => m.Index == idx && m.IsAlive);
+
+        if (!string.IsNullOrWhiteSpace(targetRef.TargetGroupId))
+            return request.MonsterTargets.FirstOrDefault(m => m.IsAlive
+                                                               && string.Equals(m.GroupId, targetRef.TargetGroupId, StringComparison.OrdinalIgnoreCase)
+                                                               && SpellDamageSaveHelper.IsMummy(m));
+
+        return null;
+    }
+
+    private static MonsterInstance CreateRaisedManInstance(MonsterInstance mummy)
+    {
+        var raisedManTemplate = new Monster
+        {
+            Name = "Normal Man",
+            Type = MonsterType.Humanoid,
+            TypeName = "Human",
+            Alignment = "Neutral",
+            NumberOfAppearancesMin = 1,
+            NumberOfAppearancesMax = 1,
+            ArmorClass = 4,
+            MovementRate = "12",
+            Movement = new MonsterMovement { Walk = 12 },
+            HitDice = 7,
+            HitDiceType = 10,
+            ExtraHitPoints = 0,
+            THAC0 = 14,
+            NumberOfAttacks = 1,
+            SavingThrows = new MonsterSavingThrows
+            {
+                ParalyzationPoisonDeath = 10,
+                RodStaffWand = 11,
+                PetrificationPolymorph = 12,
+                BreathWeapon = 13,
+                Spell = 13
+            },
+            Morale = new MonsterMorale { Value = 12 },
+            Attacks = new List<MonsterAttack>
+            {
+                new() { Name = "Weapon", NumberOfAttacks = 1, Damage = "1d8" }
+            },
+            BaseXPValue = 350,
+            XPValuePerHitPoint = 10,
+            TreasureType = "None",
+            IndividualTreasure = "None"
+        };
+
+        var transformed = new MonsterInstance(raisedManTemplate, mummy.Index, mummy.GroupId)
+        {
+            IsInLair = mummy.IsInLair
+        };
+
+        return transformed;
     }
 
     private static int SystemShockSurvivalChance(int constitution)

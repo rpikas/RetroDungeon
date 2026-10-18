@@ -1290,7 +1290,13 @@ public sealed class EncounterForm : Form
             return;
 
         SpellCastTarget? target;
-        if (spell.RangeType == SpellRangeType.Self)
+        if (string.Equals(spell.Id, "raise_dead", StringComparison.OrdinalIgnoreCase))
+        {
+            target = PromptRaiseDeadCombatTarget(spell);
+            if (target == null)
+                return;
+        }
+        else if (spell.RangeType == SpellRangeType.Self)
         {
             target = SpellCastTarget.Ally(caster);
         }
@@ -1380,6 +1386,52 @@ public sealed class EncounterForm : Form
             return null;
 
         return castable[selected.Value - 1];
+    }
+
+    private SpellCastTarget? PromptRaiseDeadCombatTarget(Spell spell)
+    {
+        var deadAllies = _party
+            .Where(c => c.HasStatus(CharacterStatus.Dead) || c.CurrentHitPoints <= 0)
+            .Where(a => !a.HasStatus(CharacterStatus.Swallowed))
+            .ToList();
+
+        var mummyTargets = _session == null
+            ? new List<MonsterInstance>()
+            : _session.AliveMonsters.Where(IsMummyForRaiseDead).ToList();
+
+        if (deadAllies.Count == 0 && mummyTargets.Count == 0)
+        {
+            SayOnBoth("Raise Dead", "No valid Raise Dead target (dead ally or living mummy).");
+            return null;
+        }
+
+        if (deadAllies.Count == 0 && mummyTargets.Count == 1)
+            return SpellCastTarget.Enemy(mummyTargets[0].Index);
+
+        if (mummyTargets.Count == 0 && deadAllies.Count == 1)
+            return SpellCastTarget.Ally(deadAllies[0]);
+
+        var options = new List<(string Label, SpellCastTarget Target)>();
+
+        options.AddRange(deadAllies.Select(ally =>
+            ($"ALLY  {ally.Name} (HP {ally.CurrentHitPoints}/{ally.MaxHitPoints}, Status: {FormatStatus(ally)})",
+                SpellCastTarget.Ally(ally))));
+
+        options.AddRange(mummyTargets.Select(monster =>
+            ($"ENEMY {monster.DisplayNameWithGroup} (HP {monster.CurrentHitPoints}/{monster.MaxHitPoints})",
+                SpellCastTarget.Enemy(monster.Index))));
+
+        var lines = string.Join(Environment.NewLine, options.Select((o, i) => $"{i + 1}. {o.Label}"));
+        var prompt = $"Casting: {spell.Name}{Environment.NewLine}{Environment.NewLine}{lines}";
+        var selected = PromptForNumber("Choose Raise Dead Target", prompt, 1, options.Count);
+        return selected.HasValue ? options[selected.Value - 1].Target : null;
+    }
+
+    private static bool IsMummyForRaiseDead(MonsterInstance monster)
+    {
+        var name = monster.Name?.Trim() ?? string.Empty;
+        return string.Equals(name, "Mummy", StringComparison.OrdinalIgnoreCase)
+               || name.Contains("mummy", StringComparison.OrdinalIgnoreCase);
     }
 
     private Character? PromptAllyTarget(Spell spell)

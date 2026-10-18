@@ -4774,7 +4774,16 @@ of damage for every vial-full which strikes.
 Any creature killed by a mummy rots and cannot be raised from death unless a cure disease and 
 raise dead spell are used within 6 turns."
 
-can you make the old style shoose spell  dialog longer when more than 11 spells but not longer then the enounter form?
+can you make the old style shoose spell  dialog longer when more than 11 spells but not longer 
+then the enounter form?
 ___
-Make the old style verison of the elevator dialog long enough to fit 16 floors and info about current level.
+Make the old style verison of the elevator dialog long enough to fit 16 floors and info about 
+current level.
 ___
+If fighting Mummys make it possible to cast raise dead during combat.  A raise dead spell will turn 
+a mummy into a normal man (of 7th level fighting ability, naturally) unless the mummy saves versus magic.
+___
+Introduce a Cold Iron long sword that is like a normal long sword but it cost twice as much and is 
+gives twice as much damage against monsters that are affected by cold iron with this special defense:
+"Name": "Cold Iron Vulnerability",
+"Description": "Cold iron weapons deal double damage."

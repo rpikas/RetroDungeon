@@ -1,4 +1,5 @@
 using Adnd.Core.Characters;
+using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Items;
 
 namespace Adnd.Core.Spells.Casting;
@@ -361,6 +362,9 @@ public sealed class SpellCastingService
                     break;
 
                 case SpellRangeType.Ally:
+                    if (IsRaiseDeadCombatEnemyTarget(spell, request, t))
+                        break;
+
                     if (t.Type != SpellCastTargetType.Ally)
                         return SpellCastResult.Failure("This spell must target allies.");
                     var allyTarget = request.PartyTargets.FirstOrDefault(p => string.Equals(p.Name, t.CharacterName, StringComparison.OrdinalIgnoreCase));
@@ -380,6 +384,46 @@ public sealed class SpellCastingService
         }
 
         return new SpellCastResult { Success = true };
+    }
+
+    private static bool IsRaiseDeadCombatEnemyTarget(Spell spell, SpellCastRequest request, SpellCastTarget target)
+    {
+        if (!string.Equals(spell.Id, "raise_dead", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (request.Context != SpellUseContext.Combat)
+            return false;
+
+        if (target.Type != SpellCastTargetType.Enemy)
+            return false;
+
+        if (!IsValidEnemyTarget(target, request, spell))
+            return false;
+
+        var monster = ResolveEnemyTarget(target, request);
+        return monster != null && IsMummy(monster);
+    }
+
+    private static MonsterInstance? ResolveEnemyTarget(SpellCastTarget target, SpellCastRequest request)
+    {
+        if (target.MonsterIndex is int monsterIndex)
+            return request.MonsterTargets.FirstOrDefault(m => m.Index == monsterIndex && m.IsAlive);
+
+        if (!string.IsNullOrWhiteSpace(target.TargetGroupId))
+            return request.MonsterTargets.FirstOrDefault(m => m.IsAlive
+                                                               && string.Equals(m.GroupId, target.TargetGroupId, StringComparison.OrdinalIgnoreCase));
+
+        return null;
+    }
+
+    private static bool IsMummy(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        var name = monster.Template.Name?.Trim() ?? string.Empty;
+        return string.Equals(name, "Mummy", StringComparison.OrdinalIgnoreCase)
+               || name.Contains("mummy", StringComparison.OrdinalIgnoreCase);
     }
 
     private static void NormalizeTargetsForCombat(SpellCastRequest request, Spell spell)
