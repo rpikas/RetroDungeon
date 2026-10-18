@@ -4868,7 +4868,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             KeyPreview = true,
-            ClientSize = new Size(520, 180)
+            ClientSize = new Size(520, 620)
         };
 
         var framePanel = new Panel
@@ -4900,8 +4900,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Top = 52,
             Width = framePanel.ClientSize.Width,
             Height = 28,
-            Text = $"CURRENT LEVEL {_currentDungeonLevel}  ↵  CHOOSE (1-10)",
+            Text = $"CURRENT LEVEL {_currentDungeonLevel}  ↵  CHOOSE ({MinDungeonLevel}-{MaxDungeonLevel})",
             TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            Font = new Font("Consolas", 13f, FontStyle.Bold)
+        };
+
+        var floorsLabel = new Label
+        {
+            Left = 0,
+            Top = 88,
+            Width = framePanel.ClientSize.Width,
+            Height = 380,
+            Text = string.Join(Environment.NewLine, Enumerable.Range(MinDungeonLevel, MaxDungeonLevel - MinDungeonLevel + 1).Select(n => $"{n}. Level {n}")),
+            TextAlign = ContentAlignment.TopCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             Font = new Font("Consolas", 13f, FontStyle.Bold)
@@ -4910,7 +4923,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var input = new TextBox
         {
             Left = (framePanel.ClientSize.Width - 90) / 2,
-            Top = 90,
+            Top = 486,
             Width = 90,
             MaxLength = 2,
             TextAlign = HorizontalAlignment.Center,
@@ -4920,7 +4933,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         var hintLabel = new Label
         {
             Left = 0,
-            Top = 126,
+            Top = 528,
             Width = framePanel.ClientSize.Width,
             Height = 24,
             Text = "ENTER=CONFIRM   ESC=CANCEL",
@@ -4945,7 +4958,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= 1 && parsed <= 10)
+                if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= MinDungeonLevel && parsed <= MaxDungeonLevel)
                 {
                     selected = parsed;
                     form.DialogResult = DialogResult.OK;
@@ -4954,34 +4967,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
                 return;
             }
-
-            if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
-            {
-                e.SuppressKeyPress = true;
-                input.Text = ((int)e.KeyCode - (int)Keys.D0).ToString();
-                input.SelectionStart = input.TextLength;
-            }
-            else if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
-            {
-                e.SuppressKeyPress = true;
-                input.Text = ((int)e.KeyCode - (int)Keys.NumPad0).ToString();
-                input.SelectionStart = input.TextLength;
-            }
-            else if (e.KeyCode == Keys.D0 || e.KeyCode == Keys.NumPad0)
-            {
-                e.SuppressKeyPress = true;
-                input.Text = "10";
-                input.SelectionStart = input.TextLength;
-            }
         };
 
         framePanel.Controls.Add(titleLabel);
         framePanel.Controls.Add(questionLabel);
+        framePanel.Controls.Add(floorsLabel);
         framePanel.Controls.Add(input);
         framePanel.Controls.Add(hintLabel);
         form.Controls.Add(framePanel);
 
-        var labels = Enumerable.Range(1, 10)
+        var labels = Enumerable.Range(MinDungeonLevel, MaxDungeonLevel - MinDungeonLevel + 1)
             .Select(n => $"Level {n}")
             .ToList();
 
@@ -4997,7 +4992,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 return selected.Value;
 
             // Viewer choice path defaults to the first option if no keyboard value was entered.
-            if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= 1 && parsed <= 10)
+            if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= MinDungeonLevel && parsed <= MaxDungeonLevel)
                 return parsed;
         }
 

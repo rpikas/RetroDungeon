@@ -25,6 +25,12 @@ internal static class OldStyleDialog
             var extraRows = Math.Max(0, listForSizing.Items.Count - 10);
             dialogHeight = Math.Min(900, baseHeight + (extraRows * 18));
         }
+        else if (content is TextBox textForSizing && textForSizing.Multiline)
+        {
+            var lineCount = textForSizing.Lines.Length;
+            var extraRows = Math.Max(0, lineCount - 10);
+            dialogHeight = Math.Min(900, baseHeight + (extraRows * 18));
+        }
 
         form.ClientSize = new Size(820, dialogHeight);
 
