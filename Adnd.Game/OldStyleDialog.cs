@@ -17,7 +17,16 @@ internal static class OldStyleDialog
         form.ForeColor = GameRulesProvider.Current.DefaultColor;
         form.KeyPreview = true;
         form.MinimumSize = Size.Empty;
-        form.ClientSize = new Size(820, input == null ? 500 : 540);
+
+        var baseHeight = input == null ? 500 : 540;
+        var dialogHeight = baseHeight;
+        if (content is ListBox listForSizing)
+        {
+            var extraRows = Math.Max(0, listForSizing.Items.Count - 10);
+            dialogHeight = Math.Min(900, baseHeight + (extraRows * 18));
+        }
+
+        form.ClientSize = new Size(820, dialogHeight);
 
         var frame = new Panel
         {

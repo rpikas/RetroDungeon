@@ -2,6 +2,49 @@
     "Level": 8,
   "Monsters": [
     {
+      "Name": "Guardian Naga",
+      "Type": "Naga",
+      "Frequency": "Very rare",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
+      "Movement": 15,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "%InLair": "75",
+      "TreasureType": "H",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Constrict/Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Poison spit",
+          "Description": "Spit poison at an individual creature; and if the victim fails to make its saving throw versus poison the spittle will kill."
+        }
+      ],
+      "SpecialDefenses": [],
+      "MagicResistance": "Standard",
+      "Intelligence": "Exceptional",
+      "Size": "Large",
+      "Alignment": "Lawful good",
+      "BaseXPValue": 0,
+      "XPValuePerHitPoint": 0,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "",
+      "Other": "Guardian naga; length approximately 20 feet. Hit Dice listed as 11-12. Special attacks described elsewhere in the source text."
+    },
+    {
       "Name": "Lvl 8 Magic-User",
       "Type": "Humanoid",
       "Frequency": "Common",

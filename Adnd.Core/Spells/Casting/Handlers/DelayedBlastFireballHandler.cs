@@ -31,7 +31,7 @@ public sealed class DelayedBlastFireballHandler : ISpellEffectHandler
             for (int i = 0; i < diceCount; i++)
                 rolledDamage += rng.Next(1, 7) + 1; // 1d6 + 1 per die
 
-            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name, fireDamageDiceCount: diceCount);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome));
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is consumed by the blast!");

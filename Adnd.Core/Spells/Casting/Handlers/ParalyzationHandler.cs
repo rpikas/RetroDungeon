@@ -70,6 +70,12 @@ public sealed class ParalyzationHandler : ISpellEffectHandler
 
         foreach (var target in selected)
         {
+            if (SpellDamageSaveHelper.HasPoisonOrParalysisImmunity(target))
+            {
+                result.Events.Add($"{target.DisplayName} is immune to paralysis effects. {spell.Name} has no effect.");
+                continue;
+            }
+
             if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, spell.Id))
             {
                 result.Events.Add($"{target.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");

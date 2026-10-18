@@ -284,6 +284,7 @@ public sealed partial class CombatResolver
         {
             new($"-- Round {session.RoundNumber} --")
         };
+        ApplyMummyRotRaiseWindowRoundProgress(session, events);
 
         if (session.Outcome != CombatOutcome.InProgress)
             return events;
@@ -809,6 +810,8 @@ public sealed partial class CombatResolver
                 continue;
 
             ApplyMonsterRegeneration(session, monster, events);
+            if (TryApplyMummyBurningOilSecondRoundDamage(session, monster, events))
+                continue;
 
             if (session.RoundNumber == 1 && session.MonstersSurprisedRound1)
             {
@@ -1545,6 +1548,7 @@ public sealed partial class CombatResolver
                         {
                             target.CurrentHitPoints = 0;
                             target.AddStatus(CharacterStatus.Dead);
+                            TryApplyMummyRotOnDeath(monster, target, events);
                             events.Add(new CombatEvent($"{target.Name} is slain!"));
                         }
                         else
@@ -1561,7 +1565,10 @@ public sealed partial class CombatResolver
                             TryApplyDrainBlood(monster, target, session, events);
                             TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
+                            TryApplyRottingDisease(monster, target, events);
                             TryApplyPetrificationFromSpecialAttacks(monster, target, events);
+                            if (TryApplyPoisonSpit(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
+                                continue;
 
                             if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison"))
                             {
@@ -3584,6 +3591,9 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (TryResolveMummyImprovisedWeaponDamage(session, member, target, mainHand, events))
+                break;
+
             var damageExpression = ResolveWeaponDamageExpression(member, mainHand, target);
             var strengthDamageBonus = mainHand != null && mainHand.Type == ItemType.Weapon
                 ? AbilitiesTables.StrengthDamageModifier(member.Abilities.Strength, member.ExceptionalStrengthPercentile)
@@ -3680,6 +3690,13 @@ public sealed partial class CombatResolver
                 var originalDamage = damage;
                 damage = Math.Max(1, damage / 2);
                 events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
+            }
+
+            if (HasMagicWeaponsOnlyHalfDamageDefense(target))
+            {
+                var originalDamage = damage;
+                damage = Math.Max(0, damage / 2);
+                events.Add(new CombatEvent($"{target.DisplayName}'s mummy defenses halve magical weapon damage ({originalDamage}->{damage}, fractions dropped)."));
             }
 
             if (swallowed != null)
@@ -5864,6 +5881,44 @@ public sealed partial class CombatResolver
         events.Add(new CombatEvent($"{target.Name} is petrified by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})"));
     }
 
+    private bool TryApplyPoisonSpit(MonsterInstance monster, Character target, List<CombatEvent> events, bool chantActiveAtRoundStart, bool prayerActiveAtRoundStart)
+    {
+        if (!HasSpecialAbility(monster, "Poison spit"))
+            return false;
+
+        if (!IsAlive(target))
+            return false;
+
+        if (target.IsMonkImmuneToPoison())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to poison spit."));
+            return false;
+        }
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
+            saveTarget = Math.Max(1, saveTarget - 1);
+
+        var saveRoll = _dice.Roll(20);
+        var failedSave = saveRoll < saveTarget;
+
+        var saveMessage = $"{monster.DisplayName} poison spit vs {target.Name}: save {saveRoll} vs {saveTarget} => {(failedSave ? "failed" : "succeeded")}.";
+        RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", saveMessage);
+
+        if (!failedSave)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s poison spit (save {saveRoll} vs {saveTarget})."));
+            return false;
+        }
+
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        events.Add(new CombatEvent($"{target.Name} is killed by {monster.DisplayName}'s poison spit! (save {saveRoll} vs {saveTarget})"));
+        return true;
+    }
+
     private void TryApplyGiantRatDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
     {
         var isGiantRat = string.Equals(monster.Template.Name, "Giant Rat", StringComparison.OrdinalIgnoreCase);
@@ -5989,6 +6044,68 @@ public sealed partial class CombatResolver
         var deathInDays = _dice.Roll(7) + 1;
         target.ApplyTickDisease(deathInDays);
         events.Add(new CombatEvent($"{target.Name} contracts Tick Disease from {monster.DisplayName}! Fatal disease will kill in {deathInDays} day(s) unless cured (infection roll: {diseaseRoll} on 1d100, needs 1-50)."));
+    }
+
+    private void TryApplyRottingDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Rotting Disease"))
+            return;
+
+        if (target.IsMonkImmuneToDiseaseSlowHaste())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to disease from {monster.DisplayName}."));
+            return;
+        }
+
+        if (target.RottingDiseaseMonthsRemaining > 0)
+        {
+            events.Add(new CombatEvent($"{target.Name} is hit by {monster.DisplayName}, but Rotting Disease is already active ({target.RottingDiseaseMonthsRemaining} month(s) until death unless cured)."));
+            return;
+        }
+
+        var deathInMonths = _dice.Roll(6);
+        target.ApplyRottingDisease(deathInMonths);
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Rotting Disease",
+            $"{monster.DisplayName} rotting disease check after hit on {target.Name}",
+            "On a successful hit, victim contracts rotting disease and dies in 1-6 months unless Cure Disease is applied.",
+            "1",
+            "6",
+            deathInMonths.ToString(),
+            $"Victim loses 2 CHA per month and dies in {deathInMonths} month(s) unless cured.");
+        events.Add(new CombatEvent($"{target.Name} contracts Rotting Disease from {monster.DisplayName}: loses 2 CHA per month and dies in {deathInMonths} month(s) unless cured."));
+    }
+
+    private static void TryApplyMummyRotOnDeath(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!SpellDamageSaveHelper.IsMummy(monster))
+            return;
+
+        target.ApplyMummyRotDeathCurse(roundsUntilRaiseImpossible: 60);
+        events.Add(new CombatEvent($"{target.Name}'s corpse begins to rot from mummy contagion. Cure Disease and Raise Dead must both be completed within 6 turns or raising becomes impossible."));
+    }
+
+    private static void ApplyMummyRotRaiseWindowRoundProgress(CombatSession session, List<CombatEvent> events)
+    {
+        foreach (var member in session.Party)
+        {
+            if (member.MummyRotRaiseWindowRoundsRemaining <= 0)
+                continue;
+
+            if (!member.HasStatus(CharacterStatus.Dead)
+                && !member.HasStatus(CharacterStatus.Ashes)
+                && member.CurrentHitPoints > 0)
+            {
+                continue;
+            }
+
+            var remaining = member.TickMummyRotRaiseWindowRound();
+            if (remaining == 0)
+            {
+                events.Add(new CombatEvent($"{member.Name}'s mummy-rot revival window closes. Raise Dead can no longer restore this character."));
+            }
+        }
     }
 
     private void TryApplyLycanthropy(MonsterInstance monster, Character target, string? attackName, int biteDamage, List<CombatEvent> events)
@@ -7827,6 +7944,9 @@ public sealed partial class CombatResolver
     {
         if (HasImmunityToNormalWeapons(target))
         {
+            if (IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(target, weapon))
+                return true;
+
             if (IsSilverWeapon(weapon))
                 return true;
 
@@ -7888,6 +8008,113 @@ public sealed partial class CombatResolver
                    || (merged.Contains("can only be hit by silver", StringComparison.Ordinal)
                        && merged.Contains("+1", StringComparison.Ordinal));
         });
+    }
+
+    private static bool HasMagicWeaponsOnlyHalfDamageDefense(MonsterInstance target)
+    {
+        if (target?.Template?.SpecialDefenses == null)
+            return false;
+
+        return target.Template.SpecialDefenses.Any(d =>
+        {
+            var merged = $"{d.Name} {d.Description}".ToLowerInvariant();
+            return merged.Contains("magic weapons only", StringComparison.Ordinal)
+                   && merged.Contains("half damage", StringComparison.Ordinal)
+                   && merged.Contains("magical weapon", StringComparison.Ordinal);
+        });
+    }
+
+    private bool TryResolveMummyImprovisedWeaponDamage(CombatSession session, Character attacker, MonsterInstance target, Item? weapon, List<CombatEvent> events)
+    {
+        if (!IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(target, weapon))
+            return false;
+
+        var before = target.CurrentHitPoints;
+        var damage = 0;
+
+        if (IsHolyWaterWeapon(weapon))
+        {
+            damage = _dice.Roll(4) + _dice.Roll(4);
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            events.Add(new CombatEvent($"{attacker.Name} splashes holy water on {target.DisplayName} for {damage} damage (2d4). HP {before}->{target.CurrentHitPoints}."));
+        }
+        else if (IsBurningOilWeapon(weapon))
+        {
+            var firstRoundDamage = _dice.Roll(8);
+            var secondRoundDamage = firstRoundDamage * 2;
+            damage = firstRoundDamage;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - firstRoundDamage);
+            session.SetMummyBurningOilSecondRoundDamage(target, secondRoundDamage);
+            events.Add(new CombatEvent($"{attacker.Name} splashes burning oil on {target.DisplayName} for {firstRoundDamage} damage this round and {secondRoundDamage} damage next round. HP {before}->{target.CurrentHitPoints}."));
+        }
+        else if (IsTorchWeapon(weapon))
+        {
+            damage = _dice.Roll(3);
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            events.Add(new CombatEvent($"{attacker.Name} strikes {target.DisplayName} with a torch for {damage} damage (1d3). HP {before}->{target.CurrentHitPoints}."));
+        }
+
+        var actual = Math.Max(0, before - target.CurrentHitPoints);
+        WakeMonsterIfAsleepAfterDamage(target, actual, events);
+
+        if (target.CurrentHitPoints <= 0)
+            events.Add(new CombatEvent($"{target.DisplayName} is destroyed."));
+
+        return true;
+    }
+
+    private static bool TryApplyMummyBurningOilSecondRoundDamage(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var pendingDamage = session.ConsumeMummyBurningOilSecondRoundDamage(monster);
+        if (pendingDamage <= 0)
+            return false;
+
+        var before = monster.CurrentHitPoints;
+        monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - pendingDamage);
+        var actual = Math.Max(0, before - monster.CurrentHitPoints);
+
+        if (actual > 0)
+            WakeMonsterIfAsleepAfterDamage(monster, actual, events);
+
+        events.Add(new CombatEvent($"Burning oil continues to burn {monster.DisplayName} for {actual} damage in the second round. HP {before}->{monster.CurrentHitPoints}."));
+        if (!monster.IsAlive)
+            events.Add(new CombatEvent($"{monster.DisplayName} is destroyed by burning oil."));
+
+        return !monster.IsAlive;
+    }
+
+    private static bool IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(MonsterInstance target, Item? weapon)
+    {
+        return SpellDamageSaveHelper.IsMummy(target)
+               && (IsTorchWeapon(weapon) || IsBurningOilWeapon(weapon) || IsHolyWaterWeapon(weapon));
+    }
+
+    private static bool IsTorchWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        return name.Contains("torch", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsBurningOilWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        return name.Contains("burning oil", StringComparison.OrdinalIgnoreCase)
+               || name.Contains("flask of oil", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsHolyWaterWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var name = weapon.Name?.Trim() ?? string.Empty;
+        return name.Contains("holy water", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool HasSpecialDefense(MonsterInstance target, string defenseName)
@@ -8351,6 +8578,12 @@ public sealed partial class CombatResolver
     {
         if (weapon == null || target?.Template == null || !target.IsAlive)
             return;
+
+        if (SpellDamageSaveHelper.HasPoisonOrParalysisImmunity(target))
+        {
+            events.Add(new CombatEvent($"{target.DisplayName} is immune to poison from {weapon.Name}."));
+            return;
+        }
 
         var doses = GetOrAssignDaggerOfVenomDoses(weapon);
         if (doses <= 0)

@@ -45,6 +45,12 @@ public sealed class PowerWordStunHandler : ISpellEffectHandler
             return result;
         }
 
+        if (SpellDamageSaveHelper.HasPoisonOrParalysisImmunity(target))
+        {
+            result.Events.Add($"{target.DisplayName} is immune to paralysis effects. {spell.Name} has no effect.");
+            return result;
+        }
+
         var rounds = rng.Next(1, 5);
         target.SetStatus(MonsterStatus.Paralyzed, rounds);
         result.Events.Add($"{target.DisplayName} is stunned and incapacitated for {rounds} round(s) (no save).");

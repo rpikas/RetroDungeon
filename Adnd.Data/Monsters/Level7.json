@@ -1964,12 +1964,8 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Fear",
-          "Description": "Creatures within 6\" must save vs magic or be paralyzed for 1–4 rounds."
-        },
-        {
-          "Name": "Paralyzation",
-          "Description": "Fear effect causes paralysis on failed save."
+          "Name": "Paralyzation from Fear",
+          "Description": "Creatures within must save vs magic or be paralyzed for 1–4 rounds."
         },
         {
           "Name": "Rotting Disease",

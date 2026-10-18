@@ -67,7 +67,8 @@ public static class Temple
     /// </summary>
     public static bool CanBeRaised(Character c) =>
         (c.HasStatus(CharacterStatus.Dead) || c.HasStatus(CharacterStatus.Ashes) || c.CurrentHitPoints <= 0)
-        && !c.HasStatus(CharacterStatus.Lost);
+        && !c.HasStatus(CharacterStatus.Lost)
+        && !c.MummyRotRaiseExpired;
 
     public static int CostToRaise(Character c) =>
         c.HasStatus(CharacterStatus.Ashes) ? RaiseFromAshesCost : RaiseDeadCost;
@@ -162,6 +163,18 @@ public static class Temple
             return events;
         }
 
+        if (target.MummyRotRaiseExpired)
+        {
+            events.Add($"{target.Name} cannot be raised: mummy rot passed the 6-turn revival window.");
+            return events;
+        }
+
+        if (target.MummyRotRaiseWindowRoundsRemaining > 0 && target.MummyRotRaiseRequiresCureDisease)
+        {
+            events.Add($"{target.Name} cannot be raised: Cure Disease must be performed first (within 6 turns of mummy-inflicted death).");
+            return events;
+        }
+
         var fromAshes = target.HasStatus(CharacterStatus.Ashes);
         payer.GoldPieces -= cost;
 
@@ -193,6 +206,7 @@ public static class Temple
                 target.CurrentHitPoints = 1;
 
             target.Abilities.Constitution = Math.Max(0, target.Abilities.Constitution - 1);
+            target.ClearMummyRotDeathCurse();
 
             events.Add($"{target.Name} has been raised.");
             events.Add($"{target.Name} loses 1 Constitution (now {target.Abilities.Constitution}).");
@@ -235,6 +249,18 @@ public static class Temple
         if (payers.Sum(p => p.GoldPieces) < cost)
         {
             events.Add($"The party does not have enough gold to cover {cost} gp.");
+            return events;
+        }
+
+        if (target.MummyRotRaiseExpired)
+        {
+            events.Add($"{target.Name} cannot be raised: mummy rot passed the 6-turn revival window.");
+            return events;
+        }
+
+        if (target.MummyRotRaiseWindowRoundsRemaining > 0 && target.MummyRotRaiseRequiresCureDisease)
+        {
+            events.Add($"{target.Name} cannot be raised: Cure Disease must be performed first (within 6 turns of mummy-inflicted death).");
             return events;
         }
 
@@ -283,6 +309,7 @@ public static class Temple
                 target.CurrentHitPoints = 1;
 
             target.Abilities.Constitution = Math.Max(0, target.Abilities.Constitution - 1);
+            target.ClearMummyRotDeathCurse();
 
             events.Add($"{target.Name} has been raised.");
             events.Add($"{target.Name} loses 1 Constitution (now {target.Abilities.Constitution}).");

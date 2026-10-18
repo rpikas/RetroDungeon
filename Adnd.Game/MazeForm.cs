@@ -2770,6 +2770,18 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             var wasLycanthropeDamageTriggered = c.LycanthropyTriggeredByDamage;
 
+            if (c.MummyRotRaiseWindowRoundsRemaining > 0
+                && (c.HasStatus(CharacterStatus.Dead) || c.HasStatus(CharacterStatus.Ashes) || c.CurrentHitPoints <= 0))
+            {
+                var remainingBefore = c.MummyRotRaiseWindowRoundsRemaining;
+                var remainingAfter = c.TickMummyRotRaiseWindowRound();
+                if (remainingAfter != remainingBefore)
+                    changed = true;
+
+                if (remainingAfter <= 0)
+                    messages.Add($"{c.Name}'s mummy-rot revival window expires. Raise Dead can no longer restore this character.");
+            }
+
             if (c.RotGrubDeathRoundsRemaining > 0
                 && !c.HasStatus(CharacterStatus.Dead)
                 && !c.HasStatus(CharacterStatus.Ashes)
@@ -3034,6 +3046,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 continue;
             }
 
+            if (c.RottingDiseaseMonthsRemaining > 0)
+                continue;
+
             var beforeCon = c.Abilities.Constitution;
             c.Abilities.Constitution = Math.Max(0, c.Abilities.Constitution - 1);
 
@@ -3138,6 +3153,60 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (messages.Count > 0)
             SayOnBoth("Tick Disease", string.Join(Environment.NewLine, messages));
+
+        ApplyRottingDiseaseProgressForDungeonExitDay();
+    }
+
+    private void ApplyRottingDiseaseProgressForDungeonExitDay()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (c.RottingDiseaseMonthsRemaining <= 0
+                || c.HasStatus(CharacterStatus.Dead)
+                || c.HasStatus(CharacterStatus.Ashes)
+                || c.HasStatus(CharacterStatus.Lost)
+                || c.CurrentHitPoints <= 0)
+            {
+                continue;
+            }
+
+            c.RottingDiseaseDaysIntoCurrentMonth = Math.Max(0, c.RottingDiseaseDaysIntoCurrentMonth + 1);
+            if (c.RottingDiseaseDaysIntoCurrentMonth < 30)
+            {
+                _characterRepository.Save(c);
+                continue;
+            }
+
+            c.RottingDiseaseDaysIntoCurrentMonth = 0;
+            c.RottingDiseaseMonthsRemaining = Math.Max(0, c.RottingDiseaseMonthsRemaining - 1);
+
+            var beforeCha = c.Abilities.Charisma;
+            c.Abilities.Charisma = Math.Max(0, c.Abilities.Charisma - 2);
+            messages.Add($"{c.Name} loses 2 Charisma from Rotting Disease ({beforeCha}->{c.Abilities.Charisma}).");
+
+            if (c.RottingDiseaseMonthsRemaining <= 0)
+            {
+                c.CurrentHitPoints = 0;
+                c.AddStatus(CharacterStatus.Dead);
+                messages.Add($"{c.Name} dies from untreated Rotting Disease.");
+            }
+            else
+            {
+                messages.Add($"{c.RottingDiseaseMonthsRemaining} month(s) remain until death unless cured.");
+            }
+
+            _characterRepository.Save(c);
+        }
+
+        if (messages.Count > 0)
+            SayOnBoth("Rotting Disease", string.Join(Environment.NewLine, messages));
     }
 
     private void ApplyPartyAgingForDungeonExitDay()

@@ -27,7 +27,7 @@ public sealed class FireStormHandler : ISpellEffectHandler
         foreach (var monster in targets)
         {
             var rolledDamage = rng.Next(1, 9) + rng.Next(1, 9) + casterLevel; // 2d8 + caster level
-            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name, fireDamageDiceCount: 2);
 
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome));
 

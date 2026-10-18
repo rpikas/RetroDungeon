@@ -40,7 +40,7 @@ public sealed class FlameStrikeHandler : ISpellEffectHandler
         for (int i = 0; i < 6; i++)
             rolled += rng.Next(1, 9);
 
-        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name);
+        var outcome = SpellDamageSaveHelper.ApplyToMonster(target, rolled, rng, spell.Name, fireDamageDiceCount: 6);
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");

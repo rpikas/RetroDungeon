@@ -243,7 +243,33 @@ internal static class SpellDamageSaveHelper
                || key.Contains("ice", StringComparison.Ordinal);
     }
 
-    internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName)
+    internal static bool IsMummy(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return false;
+
+        var name = monster.Template.Name?.Trim() ?? string.Empty;
+        return string.Equals(name, "Mummy", StringComparison.OrdinalIgnoreCase)
+               || name.Contains("mummy", StringComparison.OrdinalIgnoreCase);
+    }
+
+    internal static bool HasPoisonOrParalysisImmunity(MonsterInstance monster)
+    {
+        if (IsMummy(monster))
+            return true;
+
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d.Name?.Trim() ?? string.Empty;
+            var description = d.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}".ToLowerInvariant();
+            return (merged.Contains("poison", StringComparison.Ordinal) && merged.Contains("immune", StringComparison.Ordinal))
+                   || (merged.Contains("paraly", StringComparison.Ordinal) && merged.Contains("immune", StringComparison.Ordinal))
+                   || merged.Contains("poison or paralysis do not harm", StringComparison.Ordinal);
+        });
+    }
+
+    internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName, int fireDamageDiceCount = 0)
     {
         if (HasImmunityToSomeAttacks(monster) && IsElectricitySpell(spellName))
         {
@@ -266,6 +292,14 @@ internal static class SpellDamageSaveHelper
 
         if (HasSpecialDefense(monster, "Immunity to fire and heat") && IsFireOrHeatSpell(spellName))
             adjustedRolledDamage = 0;
+
+        if (adjustedRolledDamage > 0
+            && IsMummy(monster)
+            && IsFireOrHeatSpell(spellName)
+            && fireDamageDiceCount > 0)
+        {
+            adjustedRolledDamage += fireDamageDiceCount;
+        }
 
         if (HasSpecialDefense(monster, "Blink"))
             adjustedRolledDamage = Math.Max(0, adjustedRolledDamage / 2);

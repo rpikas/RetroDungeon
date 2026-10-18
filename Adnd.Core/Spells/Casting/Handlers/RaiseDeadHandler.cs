@@ -33,6 +33,12 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         if (target.HasStatus(CharacterStatus.Ashes))
             return SpellCastResult.Failure($"{spell.Name} cannot target ashes.");
 
+        if (target.MummyRotRaiseExpired)
+            return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; mummy rot has passed the 6-turn revival window.");
+
+        if (target.MummyRotRaiseWindowRoundsRemaining > 0 && target.MummyRotRaiseRequiresCureDisease)
+            return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; Cure Disease must be cast first (within 6 turns of mummy-inflicted death).");
+
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
 
@@ -52,6 +58,7 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
             target.RemoveStatus(CharacterStatus.Lost);
             target.CurrentHitPoints = 1;
             target.Abilities.Constitution = Math.Max(0, constitution - 1);
+            target.ClearMummyRotDeathCurse();
 
             result.HpChanges[target.Name] = Math.Max(0, target.CurrentHitPoints - beforeHp);
             result.Events.Add($"{target.Name} is restored to life with 1 HP.");

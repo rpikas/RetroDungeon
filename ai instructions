@@ -4751,3 +4751,26 @@ when casting healing spells from camp show how many hp you heal in the dialog an
 Cleics and druids should always know all the spells applicable for their level and class, for 
 example level1 or level 2 cleric should know all level 1 cleric spells and a level 3 cleric should
 know all level 1 and 2 cleric spells
+___
+
+When using the old style ui and when the caster got many spells to choose from, can you make the 
+window a bit longer, but not longer then the enouter window?
+
+implement "SpecialAttacks": "Poison spit","Description": "Spit poison at an individual creature; 
+and if the victim fails to make its saving throw versus poison the spittle will kill."
+
+Make the old style verison of the elevator dialog long enough to fit 16 floors and info about current level.
+Imlement Mummy defense and make sure mummys has it:"Mummies can be harmed only by magical weapons, 
+and even those do only one-half normal damage, dropping all fractions (5 becomes 2, 3 becomes 1, 
+and 1 becomes 0 hit points of damage). Sleep, charm, hold, and cold-based spells have no effect 
+upon them. Poison or paralysis do not harm them. A raise dead spell will turn the creature into 
+a normal man (of 7th level fighting ability, naturally) unless the mummy saves versus magic. 
+Mummies will suffer certain damage from fire, even flame of a normal sort. A blow with a torch 
+will cause 1-3 hit points of damage. A flask of burning oil will cause 1-8 hit points of damage 
+on the first round it covers the mummy and twice that amount on the second melee round. Magical 
+fires are of +1 per die of damage. If holy water is splashed upon them they suffer 2-8 hit points
+of damage for every vial-full which strikes.
+
+Any creature killed by a mummy rots and cannot be raised from death unless a cure disease and 
+raise dead spell are used within 6 turns."
+

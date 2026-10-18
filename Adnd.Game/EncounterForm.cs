@@ -1768,6 +1768,13 @@ public sealed class EncounterForm : Form
         form.AcceptButton = ok;
         form.CancelButton = cancel;
         OldStyleDialog.Apply(form, promptControl, input);
+        if (GameRulesProvider.Current.UIOldStyle && isChooseSpellDialog)
+        {
+            var extraSpellRows = Math.Max(0, max - min + 1 - 11);
+            var maximumHeight = Math.Min(Height, Screen.FromControl(this).WorkingArea.Height);
+            form.Height = Math.Min(maximumHeight, form.Height + extraSpellRows * promptControl.Font.Height);
+        }
+
         form.Shown += (_, _) =>
         {
             input.Focus();

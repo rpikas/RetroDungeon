@@ -62,7 +62,7 @@ public sealed class FireballHandler : ISpellEffectHandler
                 totalDamage += rng.Next(1, 7); // 1d6
             }
 
-            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, totalDamage, rng, spell.Name);
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, totalDamage, rng, spell.Name, fireDamageDiceCount: diceCount);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, totalDamage, outcome));
 
             if (outcome.ActualDamage > 0)

@@ -56,6 +56,11 @@ public class Character
     public bool EarSeekerDeathOnNextDungeonEntry { get; set; }
     public int InfestationDeathDaysRemaining { get; set; }
     public int TickDiseaseDeathDaysRemaining { get; set; }
+    public int RottingDiseaseMonthsRemaining { get; set; }
+    public int RottingDiseaseDaysIntoCurrentMonth { get; set; }
+    public bool MummyRotRaiseRequiresCureDisease { get; set; }
+    public int MummyRotRaiseWindowRoundsRemaining { get; set; }
+    public bool MummyRotRaiseExpired { get; set; }
     public bool LycanthropyInfected { get; set; }
     public bool LycanthropyPermanent { get; set; }
     public int LycanthropyDaysSinceInfection { get; set; }
@@ -1327,6 +1332,10 @@ public class Character
         EarSeekerDeathOnNextDungeonEntry = false;
         InfestationDeathDaysRemaining = 0;
         TickDiseaseDeathDaysRemaining = 0;
+        RottingDiseaseMonthsRemaining = 0;
+        RottingDiseaseDaysIntoCurrentMonth = 0;
+        if (MummyRotRaiseWindowRoundsRemaining > 0 || MummyRotRaiseExpired)
+            MummyRotRaiseRequiresCureDisease = false;
 
         if (ConstitutionBeforeDisease.HasValue)
         {
@@ -1497,6 +1506,40 @@ public class Character
     {
         ApplyDisease();
         TickDiseaseDeathDaysRemaining = Math.Max(1, deathInDays);
+    }
+
+    public void ApplyRottingDisease(int deathInMonths)
+    {
+        ApplyDisease();
+        RottingDiseaseMonthsRemaining = Math.Max(1, deathInMonths);
+        RottingDiseaseDaysIntoCurrentMonth = 0;
+    }
+
+    public void ApplyMummyRotDeathCurse(int roundsUntilRaiseImpossible)
+    {
+        ConstitutionBeforeDisease ??= Abilities.Constitution;
+        AddStatus(CharacterStatus.Diseased);
+        MummyRotRaiseRequiresCureDisease = true;
+        MummyRotRaiseExpired = false;
+        MummyRotRaiseWindowRoundsRemaining = Math.Max(MummyRotRaiseWindowRoundsRemaining, Math.Max(1, roundsUntilRaiseImpossible));
+    }
+
+    public int TickMummyRotRaiseWindowRound()
+    {
+        if (MummyRotRaiseWindowRoundsRemaining <= 0)
+            return 0;
+
+        MummyRotRaiseWindowRoundsRemaining = Math.Max(0, MummyRotRaiseWindowRoundsRemaining - 1);
+        if (MummyRotRaiseWindowRoundsRemaining <= 0)
+            MummyRotRaiseExpired = true;
+        return MummyRotRaiseWindowRoundsRemaining;
+    }
+
+    public void ClearMummyRotDeathCurse()
+    {
+        MummyRotRaiseRequiresCureDisease = false;
+        MummyRotRaiseWindowRoundsRemaining = 0;
+        MummyRotRaiseExpired = false;
     }
 
     public int ApplyStrengthDrainUntilDungeonExit(int amount)
@@ -1997,4 +2040,3 @@ public class Character
         };
     }
 }
-

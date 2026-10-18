@@ -33,7 +33,7 @@ public sealed class MeteorSwarmHandler : ISpellEffectHandler
                     rolledDamage += rng.Next(1, 7);
             }
 
-            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name);
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, rolledDamage, rng, spell.Name, fireDamageDiceCount: 40);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, rolledDamage, outcome));
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} is obliterated by meteor impacts!");

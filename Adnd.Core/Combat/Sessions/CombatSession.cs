@@ -85,6 +85,7 @@ public sealed class CombatSession
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<MonsterInstance> PyroHydraBreathUsed { get; } = new();
     public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MummyBurningOilSecondRoundDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, List<int>> MonsterWoundingRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterWoundingUnhealableDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -304,6 +305,28 @@ public sealed class CombatSession
 
         PiercerClimbRounds[key] = rounds;
         return rounds;
+    }
+
+    public void SetMummyBurningOilSecondRoundDamage(MonsterInstance monster, int damage)
+    {
+        var key = MonsterKey(monster);
+        if (damage <= 0)
+        {
+            MummyBurningOilSecondRoundDamage.Remove(key);
+            return;
+        }
+
+        MummyBurningOilSecondRoundDamage[key] = Math.Max(1, damage);
+    }
+
+    public int ConsumeMummyBurningOilSecondRoundDamage(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        if (!MummyBurningOilSecondRoundDamage.TryGetValue(key, out var damage) || damage <= 0)
+            return 0;
+
+        MummyBurningOilSecondRoundDamage.Remove(key);
+        return Math.Max(1, damage);
     }
 
     private static string MonsterKey(MonsterInstance monster)
