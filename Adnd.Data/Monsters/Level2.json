@@ -106,10 +106,6 @@
         {
           "Name": "Level 2 Cleric spells",
           "Description": "Access to 1st and 2nd-level divine spells."
-        },
-        {
-          "Name": "Turn Undead",
-          "Description": "Can repel undead creatures."
         }
       ],
       "BaseXPValue": 75,
@@ -256,7 +252,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Other": "Rangers are skilled wilderness fighters; they excel at tracking and hunting dangerous creatures."
     },
-
     {
       "Name": "Lvl 2 Magic-User",
       "Type": "Humanoid",
@@ -295,7 +290,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Other": "Magic-Users rely on spellcasting and knowledge; they are physically weak but dangerous when prepared."
     },
-
     {
       "Name": "Lvl 2 Illusionist",
       "Type": "Humanoid",
@@ -334,8 +328,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Other": "Illusionists rely on deception and trickery; their magic manipulates sight, sound, and perception."
     },
-
-
     {
       "Name": "Lvl 2 Thief",
       "Type": "Humanoid",
@@ -377,7 +369,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 2 Assassin",
       "Type": "Humanoid",
@@ -416,7 +407,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Other": "Assassins are stealthy killers trained in infiltration, disguise, and silent elimination."
     },
-
     {
       "Name": "Lvl 2 Monk",
       "Type": "Humanoid",
@@ -442,7 +432,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 2 Bard",
       "Type": "Humanoid",
@@ -476,8 +465,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 17-27, then roll charater table",
       "Other": "Bards are versatile performers and storytellers; they blend combat skill with lore and subtle magical talent."
     },
-
-
     {
       "Name": "Devil, Lemure",
       "Type": "Devil",
@@ -520,8 +507,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 28-29",
       "Other": "Can only be permanently destroyed by blessed items such as holy water or holy swords."
     },
-
-
     {
       "Name": "Gas Spore",
       "Type": "Fungus",
@@ -564,7 +549,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 30-31",
       "Other": "https://1eonline.info/1mm/gasspore.htm"
     },
-
     {
       "Name": "Gnoll",
       "Type": "Humanoid",
@@ -599,8 +583,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 31-32",
       "Other": "Hyena-like humanoids; aggressive and rapacious; often accompanied by flinds."
     },
-
-
     {
       "Name": "Stirge",
       "Type": "Animal",
@@ -639,7 +621,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 73-77",
       "Other": "Attacks as if it had 4 HD; only way to detach is to kill the stirge."
     },
-
     {
       "Name": "Giant Toad",
       "Type": "Animal",
@@ -673,7 +654,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 78-87",
       "Other": "Can hop its full movement distance; may attack mid-air or at landing."
     },
-
     {
       "Name": "Troglodyte",
       "Type": "Humanoid",
@@ -712,7 +692,6 @@
       "DungeonRandomMonsterTableReference": "Level 2, Roll 88-100",
       "Other": "Surprise opponents on 1–4 due to chameleon coloration unless emitting odor.50% use weapons; armed half carry javelins (25%), stone axes (10%), stone morning stars (10%), swords (5%). Infravision 9\"."
     },
-
     {
       "Name": "Wolf",
       "Type": "Animal",
@@ -751,7 +730,6 @@
       "DungeonRandomMonsterTableReference": "NA",
       "Other": "Wolves hunt in packs; found in forests from temperate to sub‑arctic regions."
     },
-
     {
       "Name": "Gas Cloud",
       "Type": "Enchant",
@@ -777,7 +755,6 @@
       "TreasureType": "None",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Creeping Crud",
       "Type": "Animal",
@@ -804,7 +781,6 @@
       "TreasureType": "None",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Rogue",
       "Type": "Humanoid",
@@ -838,7 +814,6 @@
       "TreasureType": "None",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Lvl 1 Ninja",
       "Type": "Animal",

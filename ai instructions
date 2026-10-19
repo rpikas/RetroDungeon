@@ -4855,5 +4855,6 @@ this table (same as for plyers that are bards) Charmed charaters will follow its
 party members. Wite it in the log when SpecialAbilities BardCharm is used or when a player does charm and refer to
 PHB118BardTable.png
 [Paste #1 - 24 lines]
-
+___
 Remove the SpecialAbilities Turn Undead from all monsters that have it
+___

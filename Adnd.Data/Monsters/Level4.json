@@ -156,10 +156,6 @@
         {
           "Name": "Level 4 Cleric spells",
           "Description": "Access to 1st–2nd level spells."
-        },
-        {
-          "Name": "Turn Undead",
-          "Description": "Can repel undead creatures."
         }
       ],
       "BaseXPValue": 300,
