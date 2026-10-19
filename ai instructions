@@ -4822,7 +4822,38 @@ can you complete level 6-10 like level 5, make sure all monsters are in order, a
 move the ones not needed to after the one that is last in the list, 
 make sure they have for example "DungeonRandomMonsterTableReference": "Level 4, Roll 47" and 
 others fields used in Level1-3
+___
 
 introducera silver long sword som ska kosta 10 ggr så mycket som vanligt long sword och 
 väga ca 20% mer, det ska var tillgänglig i affären.
 Implementera SpecialDefenses "Hit Only by Silver or Magic Weapons".
+___
+Can you remove SpecialAbility Protection from Evil from all monsters
+can you update the SpecialAbilities -> Pick Pockets description everywhere to "Attempts to steal from a random party
+member (25% + 5% per Hit Die). On success, steals coins and/or an item, then the group flees (no XP for that
+group)." 
+___
+Make sure all Thief NPC charaters got SpecialAbilities Backstab. and implement it like this both for NPC and players
+if not done allready:
+evel 1-4: ×2 damage
+Level 5-8: ×3 damage
+Level 9-12: ×4 damage
+Level 13-16: ×5 damageevel 1-4: ×2 damage
+Level 5-8: ×3 damage
+Level 9-12: ×4 damage
+Level 13-16: ×5 damage
+Note that striking by surprise from behind also increases the hit probability by +4 on the thief's 'to hit' dice
+roll." 52,2
+
+When backstab is used, write in the log that it is used and the damage multiplier. Refer to PHB27Backstab.png
+both for players and NPCs. 
+Update SpecialAbilities "Backstab", "Description": so the descption got correct muliplier for 
+the level of the character and remove the word remains
+
+Implement SpecialAbilities BardCharm that depening on the level of the bard has a chanse to charm a player based on
+this table (same as for plyers that are bards) Charmed charaters will follow its masters instructions and attack its
+party members. Wite it in the log when SpecialAbilities BardCharm is used or when a player does charm and refer to
+PHB118BardTable.png
+[Paste #1 - 24 lines]
+
+Remove the SpecialAbilities Turn Undead from all monsters that have it

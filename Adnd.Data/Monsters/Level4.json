@@ -231,7 +231,7 @@
         },
         {
           "Name": "Backstab",
-          "Description": "Backstab multiplier increases further."
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
         }
       ],
       "BaseXPValue": 300,
@@ -341,8 +341,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Bardic Music",
-          "Description": "Improved inspiration and charm abilities."
+          "Name": "BardCharm",
+          "Description": "Uses bard charm chance by level (PHB Bard Table)."
         }
       ],
       "BaseXPValue": 400,
@@ -491,10 +491,6 @@
         {
           "Name": "Lay on Hands",
           "Description": "Heals 2 HP per level once per day."
-        },
-        {
-          "Name": "Protection from Evil",
-          "Description": "Continuous aura."
         }
       ],
       "BaseXPValue": 400,
@@ -1939,8 +1935,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "None",
-          "Description": "None"
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
         }
       ],
       "BaseXPValue": 780,
@@ -2002,8 +1998,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "None",
-          "Description": "None"
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
         }
       ],
       "BaseXPValue": 1400,

@@ -439,6 +439,12 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (member.HasStatus(CharacterStatus.Charmed))
+            {
+                ResolveCharmedCharacterTurn(session, member, events);
+                continue;
+            }
+
             var regeneration = GetEquippedRegeneration(member);
             if (regeneration > 0 && member.CurrentHitPoints < member.MaxHitPoints)
             {
@@ -1053,6 +1059,9 @@ public sealed partial class CombatResolver
             if (TryResolveMonsterPickPockets(session, monster, events))
                 continue;
 
+            if (TryResolveMonsterBardCharm(session, monster, events))
+                continue;
+
             if (monster.HasStatus(MonsterStatus.IncendiaryCloud))
             {
                 var rolledDamage = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
@@ -1509,6 +1518,10 @@ public sealed partial class CombatResolver
                             var baseDamage = damage;
                             damage *= monsterBackstabInfo.Multiplier;
                             events.Add(new CombatEvent($"{monster.DisplayName} backstabs! +4 to hit, damage x{monsterBackstabInfo.Multiplier} ({baseDamage}->{damage})."));
+                            RuleApplicationInfo.PublishLinked(
+                                "PHB",
+                                "27Backstab",
+                                $"{monster.DisplayName} uses backstab from surprise/behind: +4 to hit, damage multiplier x{monsterBackstabInfo.Multiplier} ({baseDamage}->{damage}).");
                         }
 
                         if (hasDoubleDamageOnNaturalTwenty && roll == 20)
@@ -1742,6 +1755,12 @@ public sealed partial class CombatResolver
             return;
         }
 
+        events.Add(new CombatEvent($"{bard.Name} uses Bard Charm (chance {charmPercent}%)."));
+        RuleApplicationInfo.PublishLinked(
+            "PHB",
+            "118BardTable",
+            $"Bard charm used: {bard.Name} L{bardLevel} has {charmPercent}% base chance.");
+
         var candidates = string.IsNullOrWhiteSpace(action.TargetGroupId)
             ? session.AliveMonsters.ToList()
             : session.GetAliveMonstersByGroup(action.TargetGroupId).ToList();
@@ -1761,7 +1780,7 @@ public sealed partial class CombatResolver
         var roll = _dice.Roll(100);
         RuleApplicationInfo.PublishLinked(
             "PHB",
-            "118BardTabeII",
+            "118BardTable",
             $"Bard charm: {bard.Name} L{bardLevel} has {charmPercent}% chance (rolled {roll}) against {target.DisplayName}.");
 
         if (roll <= charmPercent)
@@ -1772,6 +1791,54 @@ public sealed partial class CombatResolver
         }
 
         events.Add(new CombatEvent($"{bard.Name} fails to charm {target.DisplayName} ({roll} > {charmPercent})."));
+    }
+
+    private bool TryResolveMonsterBardCharm(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "BardCharm", "Bardic Music"))
+            return false;
+
+        var aliveParty = session.ExposedParty
+            .Where(IsAlive)
+            .ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var bardLevel = Math.Max(1, monster.Template.HitDice);
+        var charmPercent = BardRules.GetCharmPercentage(bardLevel);
+        if (charmPercent <= 0)
+            return false;
+
+        var candidates = aliveParty
+            .Where(c => !c.HasStatus(CharacterStatus.Charmed))
+            .ToList();
+        if (candidates.Count == 0)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} uses Bard Charm, but all party members are already charmed."));
+            RuleApplicationInfo.PublishLinked(
+                "PHB",
+                "118BardTable",
+                $"Bard charm: {monster.DisplayName} L{bardLevel} has {charmPercent}% chance, but there are no uncharmed party targets.");
+            return true;
+        }
+
+        var target = candidates[_dice.Roll(candidates.Count) - 1];
+        var roll = _dice.Roll(100);
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Bard Charm on {target.Name} (chance {charmPercent}%)."));
+        RuleApplicationInfo.PublishLinked(
+            "PHB",
+            "118BardTable",
+            $"Bard charm: {monster.DisplayName} L{bardLevel} has {charmPercent}% chance (rolled {roll}) against {target.Name}.");
+
+        if (roll <= charmPercent)
+        {
+            target.AddStatus(CharacterStatus.Charmed);
+            events.Add(new CombatEvent($"{target.Name} is charmed by {monster.DisplayName} ({roll} <= {charmPercent}) and will attack party allies."));
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} fails to charm {target.Name} ({roll} > {charmPercent})."));
+        return true;
     }
 
     private void ResolvePartyUseItem(CombatSession session, Character user, CombatAction action, List<CombatEvent> events)
@@ -3674,6 +3741,10 @@ public sealed partial class CombatResolver
                 var beforeBackstab = damage;
                 damage *= backstabMultiplier;
                 events.Add(new CombatEvent($"{member.Name} backstabs! +4 to hit, damage x{backstabMultiplier} ({beforeBackstab}->{damage})."));
+                RuleApplicationInfo.PublishLinked(
+                    "PHB",
+                    "27Backstab",
+                    $"{member.Name} uses backstab from surprise/behind: +4 to hit, damage multiplier x{backstabMultiplier} ({beforeBackstab}->{damage}).");
             }
 
             if (monkWeaponDamageBonus > 0)
@@ -5728,6 +5799,63 @@ public sealed partial class CombatResolver
             missText: $"{charmedMonster.DisplayName} fights for the Bard and misses {target.DisplayName}.",
             hitText: $"{charmedMonster.DisplayName} fights for the Bard and hits {target.DisplayName}",
             slainText: $"{target.DisplayName} is slain by the charmed ally!");
+    }
+
+    private void ResolveCharmedCharacterTurn(CombatSession session, Character charmedCharacter, List<CombatEvent> events)
+    {
+        var partyTargets = session.ExposedParty
+            .Where(IsAlive)
+            .Where(c => !ReferenceEquals(c, charmedCharacter))
+            .ToList();
+
+        if (partyTargets.Count == 0)
+        {
+            events.Add(new CombatEvent($"{charmedCharacter.Name} is charmed and has no ally to attack."));
+            return;
+        }
+
+        var target = partyTargets[_dice.Roll(partyTargets.Count) - 1];
+        ResolveCharacterAttackAgainstCharacter(
+            attacker: charmedCharacter,
+            target: target,
+            events: events);
+    }
+
+    private void ResolveCharacterAttackAgainstCharacter(Character attacker, Character target, List<CombatEvent> events)
+    {
+        var mainHand = attacker.Equipment.TryGetValue(EquipmentSlot.MainHand, out var equipped) ? equipped : null;
+        var attackName = mainHand?.Name ?? "Unarmed strike";
+        var damageExpression = !string.IsNullOrWhiteSpace(mainHand?.Damage) ? mainHand!.Damage : "1d2";
+
+        var thac0Modifier = attacker.Thac0StrengthModifier;
+        if (mainHand != null)
+            thac0Modifier += Math.Max(0, mainHand.ToHitBonus);
+
+        var needed = Math.Clamp((attacker.Thac0 - thac0Modifier) - target.ArmorClass, 1, 20);
+        var roll = _dice.Roll(20);
+        if (roll < needed)
+        {
+            events.Add(new CombatEvent($"{attacker.Name} is charmed and attacks {target.Name} with {attackName}, but misses (rolled {roll} vs {needed})."));
+            return;
+        }
+
+        var damage = RollDamage(damageExpression)
+                     + attacker.DamageStrengthModifier
+                     + (mainHand == null ? 0 : attacker.MainHandItemDamageModifier);
+        damage = Math.Max(1, damage);
+
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        var actualDamage = before - target.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(target, actualDamage, events);
+
+        events.Add(new CombatEvent($"{attacker.Name} is charmed and attacks {target.Name} with {attackName} for {actualDamage} damage. HP {before}->{target.CurrentHitPoints}."));
+
+        if (target.CurrentHitPoints <= 0 && !target.HasStatus(CharacterStatus.Dead))
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain by the charmed attack!"));
+        }
     }
 
     private void ResolveMonsterAttackAgainstMonster(

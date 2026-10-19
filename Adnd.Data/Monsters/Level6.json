@@ -174,7 +174,12 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x3 damage at level 5-8."
+        }
+      ],
       "BaseXPValue": 650,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",
@@ -209,11 +214,11 @@
       "SpecialAbilities": [
         {
           "Name": "Pick Pockets",
-          "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
+          "Description": "Attempts to steal from a random party member (25% + 5% per Hit Die). On success, steals coins and/or an item, then the group flees (no XP for that group)."
         },
         {
           "Name": "Backstab",
-          "Description": "Backstab multiplier is ×3 at this level."
+          "Description": "Backstab on surprise from behind: +4 to hit; x3 damage at level 5-8."
         }
       ],
       "BaseXPValue": 650,
@@ -247,7 +252,12 @@
           "Damage": "1d12"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x3 damage at level 5-8."
+        }
+      ],
       "BaseXPValue": 750,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
@@ -318,8 +328,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Bardic Music",
-          "Description": "Improved inspiration and charm abilities."
+          "Name": "BardCharm",
+          "Description": "Uses bard charm chance by level (PHB Bard Table)."
         }
       ],
       "BaseXPValue": 850,
@@ -390,7 +400,12 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x3 damage at level 5-8."
+        }
+      ],
       "BaseXPValue": 850,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
@@ -2047,7 +2062,12 @@
           "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
+        }
+      ],
       "BaseXPValue": 300,
       "XPValuePerHitPoint": 5,
       "TreasureType": "A",
@@ -3109,7 +3129,12 @@
           "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
+        }
+      ],
       "BaseXPValue": 300,
       "XPValuePerHitPoint": 5,
       "TreasureType": "A",
