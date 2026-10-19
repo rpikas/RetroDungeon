@@ -211,7 +211,12 @@
           "Damage": "2d12"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "BodyHeal",
+          "Description": "Once per day, heal own wounds (1d4 + level-6) if level 7+."
+        }
+      ],
       "BaseXPValue": 2300,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",

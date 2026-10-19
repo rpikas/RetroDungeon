@@ -1,0 +1,1315 @@
+{
+  "total_unique_names": 95,
+  "unimplemented_count": 44,
+  "implemented_count": 51,
+  "unimplemented": [
+    {
+      "name": "100% Level Age related Magic Use every 1,3 agelevels",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Gold Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "20% Level Age related Magic Use every 2 agelevels",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Red Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "20% Level Age related Magic Use every 4 agelevels",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Green Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "25% Level Age related Magic Use every 3 agelevels",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Copper Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "30% Level Age related Magic Use every 3 agelevels",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Blue Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "75% Level Age related Magic Use every 1,5 agelevels",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Silver Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "All Heads Must Be Slain",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Hydra 7 Heads"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Autokill",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Level 8 Ninja"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Charm Touch",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Harpy"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Cold Immunity",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Snake, Giant Amphisbaena"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Detect Thoughts",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Doppelganger"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Head Loss Behavior",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Hydra 5 Heads"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Immune to Sleep & Charm",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Ghast"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Improved Thief Skills",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Thief"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 4 Cleric spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Cleric"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lvl 1 Mage Spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 3 Samurai"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lvl 2 Priest Spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Priestess"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lvl 3 Mage Spells, Poison",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Spirit"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lvl 3 Priest Spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 3 Priest"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lvl 4 Mage Spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 7 Mage"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lycanthrope Immunity",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Lycanthrope Wereboar"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Magic & Spell Use",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Ogre Mage"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Magic Immunities",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Imp"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Magic or Cold Iron Weapons",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Quasit"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Magic Weapons Required",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Imp"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Mind-affecting Immunity",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Gray Ooze"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Multi-Headed",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Hydra 5 Heads",
+        "Hydra 7 Heads"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Multiattack",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Troll"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Multiple Heads",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Hydra 5 Heads",
+        "Pyrohydra 5 Heads"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Multi‑Headed Assault",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Hydra 7 Heads"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Partial Spell Immunity",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Quasit"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Psionics",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Su-Monster"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Rear Attack",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Blink Dog"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Singing",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Harpy"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Sleeping 10%",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Gold Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Sleeping 15%",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Silver Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Sleeping 20%",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Red Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Sleeping 25%",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Bronze Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Sleeping 40%",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Copper Dragon",
+        "Green Dragon"
+      ],
+      "count": 4
+    },
+    {
+      "name": "Sleeping 60%",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Blue Dragon"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Slept",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Attack Dog",
+        "Bishop",
+        "Ogre",
+        "Swordsman"
+      ],
+      "count": 4
+    },
+    {
+      "name": "Surprise Resistance",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Minotaur"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Teleport Away",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Blink Dog"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Webs",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Giant Spider"
+      ],
+      "count": 1
+    }
+  ],
+  "implemented": [
+    {
+      "name": "+1 or better weapons to hit",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Gargoyle"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Affected only by fire based attacks",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Yellow Mold"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Assassination",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Assassin",
+        "Lvl 5 Assassin"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Backstab",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Coyote",
+        "Lvl 4 Thief",
+        "Lvl 5 Thief",
+        "Master Thief"
+      ],
+      "count": 4
+    },
+    {
+      "name": "BardCharm",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Bard",
+        "Lvl 5 Bard"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Blink",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Blink Dog"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Cold Iron Vulnerability",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Ghast"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Cold Radiation",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Toad, Ice"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Constriction",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities",
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Snake, Giant",
+        "Snake, Giant Constrictor"
+      ],
+      "count": 3
+    },
+    {
+      "name": "Deadly Poison",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Scorpion, Giant"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Decapitation",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 3 Ninja"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Destroy Metal",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Gray Ooze",
+        "Rust Monster"
+      ],
+      "count": 3
+    },
+    {
+      "name": "Displacement",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Displacer Beast"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Double Damage on Natural 20",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Subterranean Lizard"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Dragon breath",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Blue Dragon",
+        "Bronze Dragon",
+        "Copper Dragon",
+        "Gold Dragon",
+        "Green Dragon",
+        "Red Dragon",
+        "Silver Dragon"
+      ],
+      "count": 14
+    },
+    {
+      "name": "Exceptional Senses",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Hell Hound"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Fire Resistance",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Pyrohydra 5 Heads"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Hell Hound Breathe Fire",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Hell Hound"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Hit on Monster Destroys Metal",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Gray Ooze",
+        "Rust Monster"
+      ],
+      "count": 3
+    },
+    {
+      "name": "Hit only by magic weapons",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Shadow"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Hit Only by Silver or Magic Weapons",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Werewolf"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Hug",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Owlbear"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Immunity to cold",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Gray Ooze"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Immunity to fire and heat",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Gray Ooze"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Lay on Hands",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Paladin",
+        "Lvl 5 Paladin"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Level 2 Druid spells",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 5 Druid"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 2 Magic-User spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Magic-User"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 3 Cleric spells",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 5 Cleric"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 3 Illusionist spells",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 5 Illusionist"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 3 Magic-User spells",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 5 Magic-User"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 4 Druid spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Druid"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Level 4 Illusionist spells",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Illusionist"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Magic Resistance",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Gaze Hound",
+        "Leucrotta",
+        "Shade"
+      ],
+      "count": 3
+    },
+    {
+      "name": "Magic Use",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Imp"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Nausea",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Ghast"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Paralyzation",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Ghast",
+        "Slithering Tracker"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Paralyze",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Gaze Hound",
+        "Grave Mist",
+        "Leucrotta"
+      ],
+      "count": 3
+    },
+    {
+      "name": "Petrification Touch",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Cockatrice"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Pick Pockets",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 5 Thief"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Poison",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAbilities",
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Giant Spider",
+        "Giant Toad",
+        "Imp",
+        "Poisonous Toad",
+        "Quasit",
+        "Snake, Giant Amphisbaena",
+        "Snake, Giant Poisonous",
+        "Snake, Giant Spitting",
+        "Snake, Poisonous",
+        "Toad, Poisonous"
+      ],
+      "count": 10
+    },
+    {
+      "name": "Poison Spores",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Yellow Mold"
+      ],
+      "count": 2
+    },
+    {
+      "name": "Pyro hydra breath",
+      "levels": [
+        4,
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Hydra 6 Heads",
+        "Hydra, Pyro 5 Heads",
+        "Pyrohydra 5 Heads",
+        "Pyrohydra 6 Heads"
+      ],
+      "count": 4
+    },
+    {
+      "name": "Regeneration",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Imp",
+        "Ogre Mage",
+        "Quasit",
+        "Troll"
+      ],
+      "count": 4
+    },
+    {
+      "name": "Run",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Attack Dog",
+        "Gaze Hound",
+        "Leucrotta",
+        "Ogre"
+      ],
+      "count": 4
+    },
+    {
+      "name": "Shapechange",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Doppelganger"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Shriek",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Shrieker"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Spell Use",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Quasit"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Stealth",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Hell Hound"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Strength Drain",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAttacks"
+      ],
+      "monsters": [
+        "Shadow"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Tracking",
+      "levels": [
+        4
+      ],
+      "categories": [
+        "SpecialAbilities"
+      ],
+      "monsters": [
+        "Lvl 4 Ranger"
+      ],
+      "count": 1
+    },
+    {
+      "name": "Transparency",
+      "levels": [
+        5
+      ],
+      "categories": [
+        "SpecialDefenses"
+      ],
+      "monsters": [
+        "Slithering Tracker"
+      ],
+      "count": 1
+    }
+  ]
+}

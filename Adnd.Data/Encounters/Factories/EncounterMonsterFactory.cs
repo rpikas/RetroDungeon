@@ -3,6 +3,7 @@ using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
 using Adnd.Core.Monsters;
 using Adnd.Data.Monsters;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text.Json;
@@ -438,7 +439,7 @@ public sealed class EncounterMonsterFactory
     private sealed record DragonAgeProfile(string AgeCategory, int HitPointsPerDie);
 
     private static readonly Regex DragonAgeRelatedMagicUseRegex = new(
-        @"^(?<chance>\d{1,3})\s*%\s*Level\s*Age\s*related\s*Magic\s*Use\s*every\s*(?<step>\d+)\s*agelevels?$",
+        @"^(?<chance>\d{1,3})\s*%\s*Level\s*Age\s*related\s*Magic\s*Use\s*every\s*(?<step>\d+(?:[.,]\d+)?)\s*agelevels?$",
         RegexOptions.IgnoreCase);
 
     private static readonly Regex DragonAgeRelatedMagicUseLegacyRegex = new(
@@ -487,7 +488,7 @@ public sealed class EncounterMonsterFactory
             var name = ability.Name.Trim();
             var match = DragonAgeRelatedMagicUseRegex.Match(name);
 
-            var step = 2; // legacy behavior: every 2 age levels
+            var step = 2d; // legacy behavior: every 2 age levels
             if (!match.Success)
             {
                 var legacyMatch = DragonAgeRelatedMagicUseLegacyRegex.Match(name);
@@ -496,7 +497,7 @@ public sealed class EncounterMonsterFactory
 
                 match = legacyMatch;
             }
-            else if (!int.TryParse(match.Groups["step"].Value, out step) || step <= 0)
+            else if (!TryParseAgeRelatedMagicUseStep(match.Groups["step"].Value, out step))
             {
                 step = 2;
             }
@@ -506,7 +507,7 @@ public sealed class EncounterMonsterFactory
 
             var chance = Math.Clamp(parsedChance, 0, 100);
             var ageLevel = Math.Clamp(profile.HitPointsPerDie, 1, 8);
-            var spellLevel = Math.Max(1, ((ageLevel - 1) / step) + 1);
+            var spellLevel = Math.Max(1, (int)Math.Floor((ageLevel - 1d) / step) + 1);
             ability.Name = $"{chance}% Level {spellLevel} Magic Use";
             ability.Description = $"{chance}% chance to use level {spellLevel} magic (dragon age-based, every {step} agelevel(s)).";
 
@@ -517,6 +518,19 @@ public sealed class EncounterMonsterFactory
                 "Dragon Subtable",
                 $"{template.Name} age-based magic use resolved to level {spellLevel} ({chance}% chance, every {step} agelevel(s)).");
         }
+    }
+
+    private static bool TryParseAgeRelatedMagicUseStep(string raw, out double step)
+    {
+        step = 0;
+        if (string.IsNullOrWhiteSpace(raw))
+            return false;
+
+        var normalized = raw.Trim().Replace(',', '.');
+        if (!double.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out step))
+            return false;
+
+        return step > 0;
     }
 
     private static void EnsureAgeRelatedDragonSpellTier(Monster template, int spellLevel)

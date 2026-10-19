@@ -43,6 +43,12 @@ public sealed class SnareHandler : ISpellEffectHandler
         const int snareRounds = 5;
         foreach (var monster in targets)
         {
+            if (SpellDamageSaveHelper.IsAffectedOnlyByFireBasedAttacks(monster))
+            {
+                result.Events.Add($"{monster.DisplayName} is unaffected by Snare (affected only by fire-based attacks).");
+                continue;
+            }
+
             var damage = rng.Next(1, 7);
             var beforeHp = monster.CurrentHitPoints;
             monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - damage);

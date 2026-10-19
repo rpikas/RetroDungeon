@@ -307,7 +307,7 @@ namespace Adnd.Game.Windows
             DrawInBox(g, AbilitiesTables.StrengthBendBars(_character.Abilities.Strength).ToString() + "%", new Rectangle(30, 542, 95, 66));
 
             //INTELLIGENCE MODIFIER
-            if ((_character.Class != CharacterClass.MagicUser) && (_character.Class != CharacterClass.Illusionist) && (_character.Class != CharacterClass.Ranger))
+            if ((_character.Class != CharacterClass.MagicUser) && (_character.Class != CharacterClass.Illusionist) && !_character.IsRanger())
             {
                 DrawInBox(g, "NA", new Rectangle(190, 395, 95, 66));
             }
@@ -476,7 +476,7 @@ namespace Adnd.Game.Windows
 
 
             //spells
-            if ((_character.Class == CharacterClass.MagicUser) || (_character.Class == CharacterClass.Illusionist) || (_character.Class == CharacterClass.Ranger)
+            if ((_character.Class == CharacterClass.MagicUser) || (_character.Class == CharacterClass.Illusionist) || _character.IsRanger()
                 || (_character.Class == CharacterClass.Cleric) || (_character.Class == CharacterClass.Druid) || (_character.Class == CharacterClass.Paladin))
             {
                 var spellList = _knownSpellLines.Take(MaxSpellsOnSheet).ToList();

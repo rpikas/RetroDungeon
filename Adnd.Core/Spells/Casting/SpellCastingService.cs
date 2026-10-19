@@ -140,11 +140,7 @@ public sealed class SpellCastingService
 
     private static bool CanCastSpellClass(Character caster, SpellClass spellClass)
     {
-        var classes = caster.Classes != null && caster.Classes.Count > 0
-            ? caster.Classes
-            : new List<CharacterClass> { caster.Class };
-
-        foreach (var cls in classes)
+        foreach (var cls in GetEffectiveSpellcastingClasses(caster))
         {
             var classLevel = Math.Max(1, caster.GetClassLevel(cls));
             var tracks = SpellProgression.GetSpellcastingTracks(cls, classLevel);
@@ -157,12 +153,8 @@ public sealed class SpellCastingService
 
     private static int GetCasterLevelForSpellClass(Character caster, SpellClass spellClass)
     {
-        var classes = caster.Classes != null && caster.Classes.Count > 0
-            ? caster.Classes
-            : new List<CharacterClass> { caster.Class };
-
         var best = 0;
-        foreach (var cls in classes)
+        foreach (var cls in GetEffectiveSpellcastingClasses(caster))
         {
             var classLevel = Math.Max(1, caster.GetClassLevel(cls));
             var tracks = SpellProgression.GetSpellcastingTracks(cls, classLevel);
@@ -175,6 +167,17 @@ public sealed class SpellCastingService
 
         // Fallback for legacy/single-class edge cases.
         return Math.Max(1, caster.Level);
+    }
+
+    private static List<CharacterClass> GetEffectiveSpellcastingClasses(Character caster)
+    {
+        var classes = caster.Classes != null && caster.Classes.Count > 0
+            ? caster.Classes
+            : new List<CharacterClass> { caster.Class };
+
+        return caster.IsExRanger()
+            ? classes.Where(c => c != CharacterClass.Ranger).ToList()
+            : classes;
     }
 
     private static int GetRequiredClassLevelForSpell(SpellClass spellClass, int spellLevel)

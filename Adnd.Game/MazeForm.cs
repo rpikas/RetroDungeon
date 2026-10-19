@@ -2309,6 +2309,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         {
             var newAlignment = _random.Next(0, 2) == 0 ? Alignment.ChaoticNeutral : Alignment.NeutralEvil;
             member.Alignment = newAlignment;
+            member.ApplyAlignmentBasedClassConsequences();
             member.GoodEncounterAttackWarningCount = 3;
 
             member.RefreshMoveFromArmorAndClass();
@@ -3154,7 +3155,43 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (messages.Count > 0)
             SayOnBoth("Tick Disease", string.Join(Environment.NewLine, messages));
 
+        ApplyPoisonSporesRaiseWindowProgressForDungeonExitDay();
+
         ApplyRottingDiseaseProgressForDungeonExitDay();
+    }
+
+    private void ApplyPoisonSporesRaiseWindowProgressForDungeonExitDay()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string>();
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c))
+                continue;
+
+            if (c.PoisonSporesRaiseWindowDaysRemaining <= 0)
+                continue;
+
+            if (!c.HasStatus(CharacterStatus.Dead)
+                && !c.HasStatus(CharacterStatus.Ashes)
+                && c.CurrentHitPoints > 0)
+            {
+                continue;
+            }
+
+            var remaining = c.TickPoisonSporesRaiseWindowDay();
+            if (remaining <= 0)
+                messages.Add($"{c.Name}'s poison spores revival window closes. Resurrection/Raise Dead can no longer restore this character.");
+            else
+                messages.Add($"{c.Name}'s poison spores revival window: {remaining} day(s) remaining.");
+
+            _characterRepository.Save(c);
+        }
+
+        if (messages.Count > 0)
+            SayOnBoth("Poison Spores", string.Join(Environment.NewLine, messages));
     }
 
     private void ApplyRottingDiseaseProgressForDungeonExitDay()
@@ -3507,7 +3544,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 party,
                 _characterRepository,
                 _currentDungeonLevel,
-                skipSurpriseRoll: askedLeaveOrAttack);
+                skipSurpriseRoll: askedLeaveOrAttack,
+                dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
         }
         else
         {
@@ -3549,7 +3587,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 _characterRepository.Save(member);
             }
 
-            outcome = _combatCoordinator.StartEncounter(this, monsterName, numberOfMonsters, party, _characterRepository, encounterMonsterLevelForDragonProfile, skipSurpriseRoll: askedLeaveOrAttack, dragonHitPointsPerDieProfile: dragonHitPointsPerDieProfile);
+            outcome = _combatCoordinator.StartEncounter(
+                this,
+                monsterName,
+                numberOfMonsters,
+                party,
+                _characterRepository,
+                encounterMonsterLevelForDragonProfile,
+                skipSurpriseRoll: askedLeaveOrAttack,
+                dragonHitPointsPerDieProfile: dragonHitPointsPerDieProfile,
+                dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
         }
 
         if (outcome == CombatOutcome.Defeat)
@@ -3717,7 +3764,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             .Select(g => (name: g.Key, count: g.Count()))
             .ToList();
 
-        var outcome = _combatCoordinator.StartEncounterWithGroupCounts(this, grouped, party, _characterRepository, dungeonLevel);
+        var outcome = _combatCoordinator.StartEncounterWithGroupCounts(
+            this,
+            grouped,
+            party,
+            _characterRepository,
+            dungeonLevel,
+            dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
         if (outcome == CombatOutcome.Defeat)
             HandlePartyDefeatAtCurrentCell();
     }

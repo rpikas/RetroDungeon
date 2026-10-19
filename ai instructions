@@ -4858,3 +4858,194 @@ PHB118BardTable.png
 ___
 Remove the SpecialAbilities Turn Undead from all monsters that have it
 ___
+From all NPC monks, can you remove the SpecialAbility "Monk Abilites" All NPC monks should have SpecialAbility
+BodyHeal. Give it a descirption, not too long and implement it like it is implemented for player monks
+Remove all SpecialAbilities BodyHeal from monks level 1-6.
+
+Implement SpecialAttacks  "SpecialAttacks": "Poison Spores":
+"These deadly spores shoot out in an osphyxiating cloud, 1” by 1” by 1”, originating from the center of impact. 
+Any creature which is within this cloud will die, its lungs filled with yellow mold growth, unless it makes a 
+saving throw versus poison. A cure diseose and a resurrection are necessary within 24 hours to save such victims." 53,5
+
+When a charater with class Ranger change alignment to Neutral or Evil, then the character will be an Ex-Ranger and 
+will lose all ranger abilities and will not be able to use any ranger abilities or spells. 
+The character will also lose all ranger spells and will not be able to cast any ranger spells.
+
+Implement SpeialAttack Cold Radiation "All within 1” of the ice toad suffer 3-18 points of damage. The toad can do
+this but once every other melee round." within 1” menas that it will affect randomly 1d3 charaters. Consider that as
+genral rule
+
+Implement SpecialAttack Constriction: constrict causing 2-8 points of domage per melee round. If several strong
+creatures (such as 4 humans of 16 or greater strength) can grasp the creature at head and tail ends, they can uncoil
+it in 2-5 melee rounds.
+
+Remove SpecialDefense "See Below" from Yellow Mold and introduce SpecialDefense "Affected only by fire based attacks" 
+for Yellow Mold and implement that
+
+implement SpecialAbilities XX% Level Age related Magic Use every Y agelevels",
+meaning that there is a XX% chanse that the monster can use magic.
+the level of the spells depends of the age. For exampel if Magic Use every 3 agelevels and age is 8 then the 
+AgeLevel    Age Category
+1    Very young
+2    Young
+3    Sub-adult
+4    Young adult
+5    Adult
+6    Old
+7    Very old
+8    Ancient
+
+55,2
+
+When finding magical items, the charaters should also get xp, for example in this table it is stated how much xp potions should give, implement that
+Dice    Result    Experience Point Value    G.P. Sale Value
+01-03    Animal Control*    250    400
+04-06    Clairaudience    250    400
+07-09    Clairvoyance    300    500
+10-12    Climbing    300    500
+13-15    Delusion**    ---    150
+16-18    Diminution    300    500
+19-20    Dragon Control*    500-1,000    5,000-9,000
+21-23    ESP    500    850
+24-26    Extra-Healing    400    800
+27-29    Fire Resistance    250    400
+30-32    Flying    500    750
+33-34    Gaseous Form    300    400
+35-36    Giant Control*    400-900    1,000-6,000
+37-39    Giant Strength* (F)    500-750    900-1,400
+40-41    Growth    250    300
+42-47    Healing    200    400
+48-49    Heroism (F)    300    500
+50-51    Human Control*    500    900
+52-54    Invisibility    250    500
+55-57    Invulnerability (F)    350    500
+58-60    Levitation    250    400
+61-63    Longevity    500    1
+64-66    Oil of Etherealness    600    1,5
+67-69    Oil of Slipperiness    400    750
+70-72    Philter of Love    200    300
+73-75    Philter of Persuasiveness    400    850
+76-78    Plant Control    250    300
+79-81    Polymorph (self)    200    350
+82-84    Poison**    ---    ---
+85-87    Speed    200    450
+88-90    Super-Heroism (F)    450    750
+
+Can you also update the xp you get when finding Rod staff and wands if needed according to this table?
+Result    Experience Point Value*
+Rod of Absorption (C,M)    7500
+etc
+No updated needed. 55,4
+
+ALmost no update needed. 55,4
+
+Horn of Valhalla: There ore 4 varieties of this magical device. Each sum¬ mons a number of berserkers 
+from Valhalla to fight for the character who summoned them by blowing the horn. Each variety of horn 
+con be blown but once every 7 days. These horns ail appear to be normal instruments until their command 
+word is discovered. The type horn, us powers, and who rs able to employ it are shown below:
+Any character whose class is unable to employ o particular son of a horn of Valhalla will be attacked 
+by the berserk fighters summoned when the character winds the horn.
+Die RollType of HornBerserk Fighters SummonedUsable By
+1-8 Silver 4-10 2nd levelany class
+9-15 Brass 3-9 3rd levelC, F, T
+16-18 Bronze 2-8 4th levelC, F
+19-20 Iron 2-5 5th level
+
+Fighters summoned are armor class 4, have 6 hit points per die. armed with sword and spear (50%), or 
+battle axe and spear (50%). They gladly fight whomever the possessor of the horn commands, until they 
+or their opponent(s) ore slain, or 6 turns have elapsed, whichever occurs first.
+
+Fully 50% of these horns are aligned and will summon only fighters of the horn's alignment. A radical 
+alignment difference will cause the horn blower to be attacked by ihe fighters.
+
+when blowing the horn in the log refer to Other items/DMG147HordOfValhalla.png. if the fighters turn against the
+blower, explain if it is becuasue of alignement difference or class. When the fighters turn against the blower, make
+them appear as a separate group in the encounter view so they can be attacked by the party. 57,0
+
+Implemnet potion of Human Control: A potion of human conrrol allows the imbiber to control up to 32 
+levels/hit dice of humans/humanoids/demi-humans os If a charm person spell had been cast, ond the human 
+types to be controlled are en¬ titled to saving throws versus magic. Any pluses on hit dice are rounded 
+down to the lowest whole die, U. 1 + 2= 1,3 + 6= 2. The type of humon(s) which can be controlled Is 
+randomly determined on the table below:
+When finding a potion of human control decide and show what kind of human control it is
+Before selecting item to use or when identifying an item that is Potion of Human Control show then what kind it is, for example
+• 1–2 Dwarves  
+• 3–4 Elves/Half-Elves  
+• 5–6 Gnomes  
+• 7–8 Halflings  
+• 9–10 Half-Orcs  
+• 11–16 Humans  
+• 17–19 Humanoids (e.g., gnolls/orcs/goblins)  
+• 20 Elves, Half-Elves, and Humans
+This potion lasts for from 5-30 rounds
+57,7
+
+When drinking potion of control humans and it controlls Humans, then all Charaters (fighters, Magic-users etc),
+Bandits, Berserkers, Brigadds are Humans and can be controlled.
+
+Implement In AD&D 1st Edition, a Scroll of Protection from Magic is one of the most powerful protection scrolls.
+
+When read, it creates an invisible anti-magic sphere with a 5-foot radius centered on the reader. 
+No magic can pass into or out of the sphere, and the sphere moves with the reader.
+
+Effects
+
+Inside the sphere:
+
+Spells cannot affect anything within it.
+Magic cannot be cast out of it.
+Magical effects crossing the boundary are blocked.
+The protection moves with the character who invoked it.
+What happens to magic items?
+
+This is the part many groups miss.
+
+According to the AD&D 1e DMG discussion, active magical effects are suppressed, and there is also a chance 
+that permanent magic items within the area can lose their magic entirely. Contemporary analyses of the 1e 
+rule note a 50% chance that permanent magic items in the area are rendered nonmagical.
+
+Practical example
+
+If a fighter reads the scroll:
+
+Enemy fireballs, charms, lightning bolts, and similar spells cannot affect the fighter while the protection lasts.
+The fighter cannot benefit from friendly buffs either.
+A +2 sword entering the sphere may function only as a normal sword while inside, or potentially lose its 
+enchantment depending on the DM's interpretation of the 1e text.
+Physical attacks still work normally. An orc can simply walk up and hit the protected character with a mundane axe
+58,3
+in the log refer to DMG128ScrollOfProtectionFromMagic when reading scroll of protection from magic
+
+General Rule Lvl x Mage Spells means the same thing as Lvl x Magic-user Spells
+General Rule Lvl x Priest Spells means the same thing as Lvl x Cleric Spells
+Replace all SpecialAbilities "Improved Thief Skills" with "Pick Pockets"
+Remove all SpecialAbilities: Detect Thoughts ,  Head Loss Behavior  
+
+implement "SpecialAttacks": "¨Deadly Poison", requires save vs. poison or die."
+ Implement "SpecialDefenses": "Immune to Sleep & Charm", cannot be affected by sleep or charm spells." 59,2
+Implement "SpecialDefenses": "Cold Immunity", "Not harmed by cold-based attacks." 
+can you review Attacks in Levelx.json files to make them functional, for example update from
+      "Attacks": [
+        {
+          "Name": "Butt/Bite",
+          "NumberOfAttacks": 2,
+          "Damage": "2-8 or 1-4"
+        },
+        {
+          "Name": "Weapon",
+          "NumberOfAttacks": 1,
+          "Damage": "By weapon"
+        }
+      ],
+to       "Attacks": [
+        {
+          "Name": "Butt",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Battle Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],

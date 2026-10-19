@@ -31,7 +31,10 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
             var canTreatMummyRotCorpse = (target.HasStatus(CharacterStatus.Dead) || target.HasStatus(CharacterStatus.Ashes) || target.CurrentHitPoints <= 0)
                                          && target.MummyRotRaiseWindowRoundsRemaining > 0
                                          && target.MummyRotRaiseRequiresCureDisease;
-            if (!canTreatMummyRotCorpse)
+            var canTreatPoisonSporesCorpse = (target.HasStatus(CharacterStatus.Dead) || target.HasStatus(CharacterStatus.Ashes) || target.CurrentHitPoints <= 0)
+                                             && target.PoisonSporesRaiseWindowDaysRemaining > 0
+                                             && target.PoisonSporesRaiseRequiresCureDisease;
+            if (!canTreatMummyRotCorpse && !canTreatPoisonSporesCorpse)
                 return SpellCastResult.Failure($"{spell.Name} cannot affect {target.Name} in current condition.");
         }
 
@@ -51,6 +54,12 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
         {
             target.MummyRotRaiseRequiresCureDisease = false;
             result.Events.Add($"{target.Name}'s mummy rot is treated. Raise Dead must still be used before the 6-turn window expires.");
+        }
+
+        if (target.PoisonSporesRaiseWindowDaysRemaining > 0 && target.PoisonSporesRaiseRequiresCureDisease)
+        {
+            target.PoisonSporesRaiseRequiresCureDisease = false;
+            result.Events.Add($"{target.Name}'s poison spores condition is treated. Resurrection/Raise Dead must still be used within 24 hours.");
         }
 
         if (curedLycanthropy)

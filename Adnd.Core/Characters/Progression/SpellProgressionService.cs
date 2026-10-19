@@ -22,8 +22,11 @@ public sealed class SpellProgressionService
         var classes = character.Classes != null && character.Classes.Count > 0
             ? character.Classes
             : new List<CharacterClass> { character.Class };
+        var effectiveClasses = character.IsExRanger()
+            ? classes.Where(c => c != CharacterClass.Ranger).ToList()
+            : classes;
 
-        foreach (var cls in classes)
+        foreach (var cls in effectiveClasses)
         {
             var classLevel = character.GetClassLevel(cls);
             foreach (var track in SpellProgression.GetSpellcastingTracks(cls, classLevel))

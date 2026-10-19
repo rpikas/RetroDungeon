@@ -61,6 +61,9 @@ public class Character
     public bool MummyRotRaiseRequiresCureDisease { get; set; }
     public int MummyRotRaiseWindowRoundsRemaining { get; set; }
     public bool MummyRotRaiseExpired { get; set; }
+    public bool PoisonSporesRaiseRequiresCureDisease { get; set; }
+    public int PoisonSporesRaiseWindowDaysRemaining { get; set; }
+    public bool PoisonSporesRaiseExpired { get; set; }
     public bool LycanthropyInfected { get; set; }
     public bool LycanthropyPermanent { get; set; }
     public int LycanthropyDaysSinceInfection { get; set; }
@@ -834,6 +837,13 @@ public class Character
 
     public bool IsPaladin() => HasPaladinClass() && !IsFallenPaladin();
 
+    public bool HasRangerClass() => (Classes.Contains(CharacterClass.Ranger) || HasUnlockedOriginalClassFeature(CharacterClass.Ranger))
+                                    && !IsOriginalClassFeatureLocked(CharacterClass.Ranger);
+
+    public bool IsExRanger() => HasRangerClass() && !IsGoodAlignment();
+
+    public bool IsRanger() => HasRangerClass() && !IsExRanger();
+
     public bool HasMonkClass() => (Classes.Contains(CharacterClass.Monk) || HasUnlockedOriginalClassFeature(CharacterClass.Monk))
                                   && !IsOriginalClassFeatureLocked(CharacterClass.Monk);
 
@@ -866,6 +876,9 @@ public class Character
         if (cls == CharacterClass.Paladin && IsFallenPaladin())
             return "Fallen Paladin";
 
+        if (cls == CharacterClass.Ranger && IsExRanger())
+            return "Ex-Ranger";
+
         if (cls == CharacterClass.Monk && IsExMonk())
             return "Ex-Monk";
 
@@ -888,6 +901,14 @@ public class Character
     }
 
     public bool IsMonkImmuneToDiseaseSlowHaste() => IsMonk() && GetMonkLevel() >= 5;
+
+    public void ApplyAlignmentBasedClassConsequences()
+    {
+        if (!IsExRanger())
+            return;
+
+        _ = new Adnd.Core.Characters.Progression.SpellProgressionService().RecalculateFromClassProgressions(this);
+    }
 
     public string GetAgeCategoryDisplay()
     {
@@ -1336,6 +1357,8 @@ public class Character
         RottingDiseaseDaysIntoCurrentMonth = 0;
         if (MummyRotRaiseWindowRoundsRemaining > 0 || MummyRotRaiseExpired)
             MummyRotRaiseRequiresCureDisease = false;
+        if (PoisonSporesRaiseWindowDaysRemaining > 0 || PoisonSporesRaiseExpired)
+            PoisonSporesRaiseRequiresCureDisease = false;
 
         if (ConstitutionBeforeDisease.HasValue)
         {
@@ -1384,7 +1407,10 @@ public class Character
         LycanthropyTriggeredByDamage = true;
         LycanthropyTriggeredByFullMoon = false;
         if (LycanthropySourceAlignment.HasValue)
+        {
             Alignment = LycanthropySourceAlignment.Value;
+            ApplyAlignmentBasedClassConsequences();
+        }
 
         var bonus = RollLycanthropeHpBonus();
         LycanthropyBonusHitPointsRemaining = bonus;
@@ -1404,7 +1430,10 @@ public class Character
         LycanthropyTriggeredByDamage = false;
         LycanthropyTriggeredByFullMoon = true;
         if (LycanthropySourceAlignment.HasValue)
+        {
             Alignment = LycanthropySourceAlignment.Value;
+            ApplyAlignmentBasedClassConsequences();
+        }
 
         var bonus = RollLycanthropeHpBonus();
         LycanthropyBonusHitPointsRemaining = bonus;
@@ -1540,6 +1569,33 @@ public class Character
         MummyRotRaiseRequiresCureDisease = false;
         MummyRotRaiseWindowRoundsRemaining = 0;
         MummyRotRaiseExpired = false;
+    }
+
+    public void ApplyPoisonSporesDeathCurse(int daysUntilRaiseImpossible)
+    {
+        ConstitutionBeforeDisease ??= Abilities.Constitution;
+        AddStatus(CharacterStatus.Diseased);
+        PoisonSporesRaiseRequiresCureDisease = true;
+        PoisonSporesRaiseExpired = false;
+        PoisonSporesRaiseWindowDaysRemaining = Math.Max(PoisonSporesRaiseWindowDaysRemaining, Math.Max(1, daysUntilRaiseImpossible));
+    }
+
+    public int TickPoisonSporesRaiseWindowDay()
+    {
+        if (PoisonSporesRaiseWindowDaysRemaining <= 0)
+            return 0;
+
+        PoisonSporesRaiseWindowDaysRemaining = Math.Max(0, PoisonSporesRaiseWindowDaysRemaining - 1);
+        if (PoisonSporesRaiseWindowDaysRemaining <= 0)
+            PoisonSporesRaiseExpired = true;
+        return PoisonSporesRaiseWindowDaysRemaining;
+    }
+
+    public void ClearPoisonSporesDeathCurse()
+    {
+        PoisonSporesRaiseRequiresCureDisease = false;
+        PoisonSporesRaiseWindowDaysRemaining = 0;
+        PoisonSporesRaiseExpired = false;
     }
 
     public int ApplyStrengthDrainUntilDungeonExit(int amount)

@@ -51,6 +51,12 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         if (target.MummyRotRaiseWindowRoundsRemaining > 0 && target.MummyRotRaiseRequiresCureDisease)
             return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; Cure Disease must be cast first (within 6 turns of mummy-inflicted death).");
 
+        if (target.PoisonSporesRaiseExpired)
+            return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; poison spores has passed the 24-hour revival window.");
+
+        if (target.PoisonSporesRaiseWindowDaysRemaining > 0 && target.PoisonSporesRaiseRequiresCureDisease)
+            return SpellCastResult.Failure($"{spell.Name} cannot restore {target.Name}; Cure Disease must be cast first (within 24 hours of poison spores death).");
+
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
 
@@ -71,6 +77,7 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
             target.CurrentHitPoints = 1;
             target.Abilities.Constitution = Math.Max(0, constitution - 1);
             target.ClearMummyRotDeathCurse();
+            target.ClearPoisonSporesDeathCurse();
 
             result.HpChanges[target.Name] = Math.Max(0, target.CurrentHitPoints - beforeHp);
             result.Events.Add($"{target.Name} is restored to life with 1 HP.");

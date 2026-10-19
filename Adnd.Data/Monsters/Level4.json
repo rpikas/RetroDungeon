@@ -65,12 +65,7 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAttacks": [
-        {
-          "Name": "Rear Attack",
-          "Description": "Blink teleport attack: roll 1d12. On 7-12 teleport; location roll 1=in front, 2=left front flank, 3=right front flank, 4-12=behind (75% behind)."
-        }
-      ],
+      "SpecialAttacks": [],
       "SpecialDefenses": [
         {
           "Name": "Blink",
@@ -222,7 +217,7 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Improved Thief Skills",
+          "Name": "Pick Pockets",
           "Description": "Higher chance to Pick Pockets, Hide in Shadows, and Open Locks."
         },
         {
@@ -261,12 +256,7 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Monk Abilities",
-          "Description": "Improved AC, faster movement, Open Hand attack, thief-like saves."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 350,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
@@ -1182,8 +1172,8 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "See Below",
-          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
+          "Name": "Affected only by fire based attacks",
+          "Description": "Can only be harmed by fire-based attacks."
         }
       ],
       "MagicResistance": "See Below",
@@ -1546,12 +1536,7 @@
         }
       ],
       "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Multi-Headed",
-          "Description": "All heads must be killed to slay the hydra."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",
       "Alignment": "Neutral",
@@ -1583,12 +1568,7 @@
         }
       ],
       "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Multi-Headed",
-          "Description": "All heads must be killed to slay the hydra."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",
       "Alignment": "Neutral",
@@ -1621,10 +1601,6 @@
         {
           "Name": "Multiple Heads",
           "Description": "Each head attacks independently; all heads can attack the same target or different ones."
-        },
-        {
-          "Name": "Head Loss Behavior",
-          "Description": "Severed heads do not regrow unless the hydra is a special variant (not applicable to standard hydra)."
         }
       ],
       "BaseXPValue": 350,
@@ -1823,11 +1799,7 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Singing",
-          "Description": "Creatures hearing the harpy’s song must save vs. Magic or be irresistibly drawn toward her."
-        },
-        {
-          "Name": "Charm Touch",
+          "Name": "Charm",
           "Description": "A harpy’s touch charms creatures failing a save vs. Magic; charmed victims are tortured and devoured."
         }
       ],

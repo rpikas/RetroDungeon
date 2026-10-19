@@ -420,8 +420,8 @@ public class PartyMenu
     private static bool CanUseMemorizeAction(Character c)
     {
         return c.Classes.Any(cls => cls == CharacterClass.MagicUser
-                                    || cls == CharacterClass.Illusionist
-                                    || cls == CharacterClass.Ranger);
+                                    || cls == CharacterClass.Illusionist)
+               || c.IsRanger();
     }
 
     private void MemorizeSpellAction(Character c)

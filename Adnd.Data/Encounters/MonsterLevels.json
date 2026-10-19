@@ -12,7 +12,7 @@
       { "DiceMin": 22, "DiceMax": 26, "Creature": "Goblin", "CountMin": 6, "CountMax": 15 },
       { "DiceMin": 27, "DiceMax": 28, "Creature": "Halfling", "CountMin": 6, "CountMax": 19 },
       { "DiceMin": 29, "DiceMax": 33, "Creature": "Hobgoblin", "CountMin": 2, "CountMax": 8 },
-      { "DiceMin": 34, "DiceMax": 48, "Creature": "Human", "CountMin": 2, "CountMax": 5 },
+      { "DiceMin": 34, "DiceMax": 99, "Creature": "Human", "CountMin": 2, "CountMax": 5 },
       { "DiceMin": 49, "DiceMax": 54, "Creature": "Kobold", "CountMin": 6, "CountMax": 18 },
       { "DiceMin": 55, "DiceMax": 66, "Creature": "Orc", "CountMin": 7, "CountMax": 12 },
       { "DiceMin": 67, "DiceMax": 68, "Creature": "Piercer Small", "CountMin": 1, "CountMax": 3 },

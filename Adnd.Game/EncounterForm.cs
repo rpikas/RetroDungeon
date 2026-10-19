@@ -1012,10 +1012,12 @@ public sealed class EncounterForm : Form
                 index,
                 spell = ResolveItemSpell(item, allSpells),
                 grantsRegeneration = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Regeneration"),
+                grantsHumanControlPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Human Control"),
                 grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase),
-                grantsTalismanPureGood = Adnd.Core.Items.ItemSpecialAbilityParser.HasSpecialAbility(item, "Talisman of Pure Good")
+                grantsTalismanPureGood = Adnd.Core.Items.ItemSpecialAbilityParser.HasSpecialAbility(item, "Talisman of Pure Good"),
+                grantsHornOfValhalla = Adnd.Core.Items.HornOfValhalla.IsHornOfValhalla(item)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsMammalControlRing || x.grantsTalismanPureGood)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsHumanControlPotion || x.grantsMammalControlRing || x.grantsTalismanPureGood || x.grantsHornOfValhalla)
             .ToList();
 
         var hasEquippedMammalControlRing =
@@ -1033,12 +1035,21 @@ public sealed class EncounterForm : Form
             return;
         }
 
+        foreach (var entry in usable.Where(u => u.grantsHumanControlPotion))
+            Adnd.Core.Items.PotionOfHumanControl.EnsureAssignedControlRoll(
+                entry.item,
+                sides => Random.Shared.Next(1, Math.Max(1, sides) + 1));
+
         var options = usable.Select(x => new
         {
             label = x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
                 : x.grantsTalismanPureGood
                     ? $"{x.item.Name} (banish evil cleric)"
+                : x.grantsHumanControlPotion
+                    ? $"{x.item.Name} (controls {Adnd.Core.Items.PotionOfHumanControl.GetDisplayDescriptor(x.item)})"
+                : x.grantsHornOfValhalla
+                    ? $"{x.item.Name} (summon berserkers)"
                 : x.grantsMammalControlRing
                     ? $"{x.item.Name} (controls mammals)"
                     : $"{x.item.Name} (grants regeneration)",
@@ -1164,6 +1175,8 @@ public sealed class EncounterForm : Form
                 ? "__ring_mammal_control__"
                 : chosen.grantsTalismanPureGood
                     ? "__talisman_pure_good__"
+                    : chosen.grantsHornOfValhalla
+                        ? "__horn_of_valhalla__"
                     : spell?.Id,
             Target = target
         };

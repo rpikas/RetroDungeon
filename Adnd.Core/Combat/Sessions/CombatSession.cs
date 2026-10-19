@@ -12,6 +12,7 @@ public sealed class CombatSession
 
     public List<Character> Party { get; }
     public List<MonsterInstance> Monsters { get; }
+    public int DungeonDay { get; set; } = 0;
     public int RoundNumber { get; set; } = 1;
     public bool IsSpaciousArea { get; set; }
     public Dictionary<MonsterInstance, HashSet<Character>> RearAttackers { get; } = new();
@@ -47,6 +48,8 @@ public sealed class CombatSession
                 }
                 SwallowedCharacters.Clear();
                 RearAttackers.Clear();
+                ActiveHornOfValhallaSummons.Clear();
+                HostileHornOfValhallaGroups.Clear();
             }
         }
     }
@@ -83,6 +86,11 @@ public sealed class CombatSession
     public Dictionary<string, HashSet<string>> NauseatedPartyByMonsterGroup { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> FaerieFiredPartyMembers { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> MonsterLayOnHandsUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> MonsterBodyHealUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterColdRadiationLastRoundUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, ConstrictionEffect> ActiveConstrictions { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public List<HornOfValhallaSummon> ActiveHornOfValhallaSummons { get; } = new();
+    public Dictionary<string, int> HostileHornOfValhallaGroups { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<MonsterInstance> PyroHydraBreathUsed { get; } = new();
     public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MummyBurningOilSecondRoundDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -196,6 +204,58 @@ public sealed class CombatSession
     public void MarkMonsterLayOnHandsUsed(MonsterInstance monster)
     {
         MonsterLayOnHandsUsed.Add(MonsterKey(monster));
+    }
+
+    public bool HasMonsterUsedBodyHeal(MonsterInstance monster)
+    {
+        return MonsterBodyHealUsed.Contains(MonsterKey(monster));
+    }
+
+    public void MarkMonsterBodyHealUsed(MonsterInstance monster)
+    {
+        MonsterBodyHealUsed.Add(MonsterKey(monster));
+    }
+
+    public bool HasActiveConstriction(MonsterInstance monster, Character victim)
+    {
+        return ActiveConstrictions.ContainsKey(GetConstrictionKey(monster, victim));
+    }
+
+    public void StartConstriction(MonsterInstance monster, Character victim)
+    {
+        ActiveConstrictions[GetConstrictionKey(monster, victim)] = new ConstrictionEffect(victim, monster);
+    }
+
+    public IReadOnlyList<ConstrictionEffect> GetConstrictionsForVictim(string victimName)
+    {
+        return ActiveConstrictions
+            .Where(kv => string.Equals(kv.Value.Victim.Name, victimName, StringComparison.OrdinalIgnoreCase))
+            .Select(kv => kv.Value)
+            .ToList();
+    }
+
+    public void RemoveConstriction(MonsterInstance monster, Character victim)
+    {
+        ActiveConstrictions.Remove(GetConstrictionKey(monster, victim));
+    }
+
+    private string GetConstrictionKey(MonsterInstance monster, Character victim)
+    {
+        return $"{MonsterKey(monster)}->{victim.Name}";
+    }
+
+    public bool CanMonsterUseColdRadiation(MonsterInstance monster, int currentRound)
+    {
+        var key = MonsterKey(monster);
+        if (!MonsterColdRadiationLastRoundUsed.TryGetValue(key, out var lastRound))
+            return true;
+
+        return currentRound - lastRound >= 2;
+    }
+
+    public void MarkMonsterColdRadiationUsed(MonsterInstance monster, int currentRound)
+    {
+        MonsterColdRadiationLastRoundUsed[MonsterKey(monster)] = Math.Max(1, currentRound);
     }
 
     public int GetPiercerClimbRounds(MonsterInstance monster)

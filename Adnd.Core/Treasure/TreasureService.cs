@@ -717,7 +717,7 @@ public sealed class TreasureService
         return CreateMagicPlaceholder("Weapon", source, hResolved);
     }
 
-    private static TreasureMagicPlaceholderResult CreateMagicPlaceholder(string table, string source, string resolvedName)
+    private TreasureMagicPlaceholderResult CreateMagicPlaceholder(string table, string source, string resolvedName)
     {
         return new TreasureMagicPlaceholderResult
         {
@@ -725,7 +725,57 @@ public sealed class TreasureService
             Count = 1,
             SourceTable = source,
             ResolvedName = resolvedName,
-            ExperienceValue = ParseExperienceValueFromResolvedText(resolvedName)
+            ExperienceValue = ResolveMagicItemExperienceValue(table, resolvedName)
+        };
+    }
+
+    private int ResolveMagicItemExperienceValue(string table, string resolvedName)
+    {
+        if (string.Equals(table, "Potion", StringComparison.OrdinalIgnoreCase))
+            return ResolvePotionExperienceValue(resolvedName);
+
+        return ParseExperienceValueFromResolvedText(resolvedName);
+    }
+
+    private int ResolvePotionExperienceValue(string? resolvedName)
+    {
+        if (string.IsNullOrWhiteSpace(resolvedName))
+            return 0;
+
+        return resolvedName.Trim() switch
+        {
+            "Animal Control" => 250,
+            "Clairaudience" => 250,
+            "Clairvoyance" => 300,
+            "Climbing" => 300,
+            "Delusion" => 0,
+            "Diminution" => 300,
+            "Dragon Control" => _random.Next(500, 1001),
+            "ESP" => 500,
+            "Extra-Healing" => 400,
+            "Fire Resistance" => 250,
+            "Flying" => 500,
+            "Gaseous Form" => 300,
+            "Giant Control" => _random.Next(400, 901),
+            "Giant Strength" => _random.Next(500, 751),
+            "Growth" => 250,
+            "Healing" => 200,
+            "Heroism" => 300,
+            "Human Control" => 500,
+            "Invisibility" => 250,
+            "Invulnerability" => 350,
+            "Levitation" => 250,
+            "Longevity" => 500,
+            "Oil of Etherealness" => 600,
+            "Oil of Slipperiness" => 400,
+            "Philter of Love" => 200,
+            "Philter of Persuasiveness" => 400,
+            "Plant Control" => 250,
+            "Polymorph (self)" => 200,
+            "Poison" => 0,
+            "Speed" => 200,
+            "Super-Heroism" => 450,
+            _ => 0
         };
     }
 
@@ -998,22 +1048,22 @@ public sealed class TreasureService
             <= 55 => "Cloak of Protection (gp 10000*, xp 1000*)",
             <= 60 => "Crystal Ball (gp 5000**, xp 1000**)",
             <= 61 => "Crystal Hypnosis Ball (gp 3000, xp ---)",
-            <= 63 => "Cube of Force (xp 3, gp 20)",
-            <= 65 => "Cube of Frost Resistance (xp 2, gp 14)",
-            <= 67 => "Cubic Gate (xp 5, gp 17,5)",
-            <= 69 => "Daern's Instant Fortress (xp 7, gp 27,5)",
-            <= 72 => "Decanter of Endless Water (xp 1, gp 10)",
-            <= 76 => "Deck of Many Things (xp —, gp 10)",
+            <= 63 => "Cube of Force (gp 3000, xp 20000)",
+            <= 65 => "Cube of Frost Resistance (gp 2000, xp 14000)",
+            <= 67 => "Cubic Gate (gp 5000, xp 17500)",
+            <= 69 => "Daern's Instant Fortress (gp 7000, xp 27500)",
+            <= 72 => "Decanter of Endless Water (gp 1000, xp 10000)",
+            <= 76 => "Deck of Many Things (gp 10000, xp 10000)",
             <= 77 => "Drums of Deafening (xp —, gp —)",
-            <= 79 => "Drums of Panic (xp 6,5, gp 35)",
-            <= 85 => "Dust of Appearance (xp 1, gp —)",
-            <= 91 => "Dust of Disappearance (xp 2, gp 8)",
+            <= 79 => "Drums of Panic (gp 6500, xp 35000)",
+            <= 85 => "Dust of Appearance (gp 1000, xp ---)",
+            <= 91 => "Dust of Disappearance (gp 2000, xp 8000)",
             <= 92 => "Dust of Sneezing and Choking (xp —, gp —)",
-            <= 93 => "Efreeti Bottle (xp 9, gp 45)",
-            <= 94 => "Eversmoking Bottle (xp 500, gp 2,5)",
-            <= 95 => "Eyes of Charming (xp 4, gp 24)",
-            <= 97 => "Eyes of the Eagle (xp 3,5, gp 18)",
-            <= 99 => "Eyes of Minute Seeing (xp 2, gp 12,5)",
+            <= 93 => "Efreeti Bottle (gp 9000, xp 45000)",
+            <= 94 => "Eversmoking Bottle (gp 500, xp 2500)",
+            <= 95 => "Eyes of Charming (gp 4000, xp 24000)",
+            <= 97 => "Eyes of the Eagle (gp 3500, xp 18000)",
+            <= 99 => "Eyes of Minute Seeing (gp 2000, xp 12500)",
             _ => "Eyes of Petrification (xp —, gp —)"
         };
     }

@@ -34,7 +34,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 01-02",
       "Other": "Worker ant; 90% of all encounters are workers."
     },
-
     {
       "Name": "Badger",
       "Type": "Animal",
@@ -73,7 +72,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 03-04",
       "Other": "Pelt worth 10–30 gp"
     },
-
     {
       "Name": "Fire Beetle",
       "Type": "Insect",
@@ -150,7 +148,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 15",
       "Other": "https://1eonline.info/1mm/manes.htm"
     },
-
     {
       "Name": "Dwarf",
       "Type": "Humanoid",
@@ -184,7 +181,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 16-17",
       "Other": "https://1eonline.info/1mm/dwarf.htm"
     },
-
     {
       "Name": "Ear Seeker",
       "Type": "Vermin",
@@ -223,7 +219,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 18",
       "Other": "Burrows into ear; cure disease required to prevent death"
     },
-
     {
       "Name": "Elf",
       "Type": "Humanoid",
@@ -262,7 +257,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 19",
       "Other": "https://1eonline.info/1mm/elf.htm"
     },
-
     {
       "Name": "Gnome",
       "Type": "Humanoid",
@@ -296,7 +290,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 20-21",
       "Other": "Deity: Garl Glittergold; Morale 55%; Psionics Nil"
     },
-
     {
       "Name": "Goblin",
       "Type": "Humanoid",
@@ -369,7 +362,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 27-28",
       "Other": "Deity: Yondalla; Psionics Nil; Surprise on 1–4; Invisible in vegetation; Shun water"
     },
-
     {
       "Name": "Hobgoblin",
       "Type": "Humanoid",
@@ -402,7 +394,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 29-33",
       "Other": "https://1eonline.info/1mm/hobgoblin.htm"
     },
-
     {
       "Name": "Bandit",
       "Type": "Humanoid",
@@ -435,8 +426,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 01-25",
       "Other": "https://1eonline.info/1mm/bandit.htm"
     },
-
-
     {
       "Name": "Berserker",
       "Type": "Humanoid",
@@ -475,7 +464,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 34-48, Human subtable , Roll 26-30",
       "Other": "https://1eonline.info/1mm/berserker.htm"
     },
-
     {
       "Name": "Brigand",
       "Type": "Humanoid",
@@ -539,7 +527,6 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Adnd"
     },
-
     {
       "Name": "Lvl 1 Cleric",
       "Type": "Humanoid",
@@ -929,8 +916,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 49-54, Human subtable , Roll 46-00",
       "Other": "Hate bright sunlight (-1 to hit); infravision 60'; tribal society; often accompanied by boars or giant weasels."
     },
-
-
     {
       "Name": "Orc",
       "Type": "Humanoid",
@@ -964,7 +949,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 53-66",
       "Other": "https://1eonline.info/1mm/orc.htm"
     },
-
     {
       "Name": "Piercer Small",
       "Type": "Monster",
@@ -1117,7 +1101,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70",
       "Other": "Piercers drop from ceilings; no further attacks after landing."
     },
-
     {
       "Name": "Giant Rat",
       "Type": "Animal",
@@ -1156,7 +1139,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 71-83",
       "Other": "Fearful of fire; swim well; sacred to Gruumsh; often found in crypts and dungeons."
     },
-
     {
       "Name": "Rot Grub",
       "Type": "Vermin",
@@ -1195,7 +1177,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 84-85",
       "Other": "Rot grubs burrow into flesh; flame or cure disease required to survive"
     },
-
     {
       "Name": "Shrieker",
       "Type": "Fungus",
@@ -1227,7 +1208,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 86-96",
       "Other": "Shriekers are ambulatory fungus that react to light or movement by shrieking, potentially attracting monsters."
     },
-
     {
       "Name": "Skeleton",
       "Type": "Undead",
@@ -1266,7 +1246,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 97-98",
       "Other": "Holy water deals 2d4 damage; blunt weapons deal full damage; fire deals normal damage."
     },
-
     {
       "Name": "Zombie",
       "Type": "Undead",
@@ -1300,9 +1279,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 99-100",
       "Other": "Always strikes last; holy water deals 2d8 damage."
     },
-
-
-
     {
       "Name": "Piercer",
       "Type": "Monster",
@@ -1341,7 +1317,6 @@
       "DungeonRandomMonsterTableReference": "Level 1, Roll 67-70, should not be used, use the small, medium, large or Huge Piercer entries",
       "Other": " (Medium) Piercers drop from ceilings; no further attacks after landing."
     },
-
     {
       "Name": "Buccaneer",
       "Type": "Humanoid",
@@ -1375,7 +1350,6 @@
       "DungeonRandomMonsterTableReference": "Not Applicable",
       "Other": "https://1eonline.info/1mm/buccaneer.htm"
     },
-
     {
       "Name": "Nomad",
       "Type": "Humanoid",
@@ -1543,7 +1517,6 @@
       "DungeonRandomMonsterTableReference": "Not Applicable",
       "Source": "AI"
     },
-
     {
       "Name": "Orc",
       "Type": "Humanoid",
@@ -1572,8 +1545,6 @@
       "TreasureType": "D",
       "Source": "Wizardry"
     },
-
-
     {
       "Name": "Kobold",
       "Type": "Humanoid",
@@ -1606,7 +1577,6 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Bubbly Slime",
       "Type": "Other",
@@ -1637,7 +1607,6 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Lvl 1 Mage",
       "Type": "Humanoid",
@@ -1674,7 +1643,6 @@
       "TreasureType": "J,WornEquipment",
       "Source": "Wizardry"
     },
-
     {
       "Name": "Undead Kobold",
       "Type": "Undead",
@@ -1700,8 +1668,7 @@
           "Damage": "1d4"
         }
       ],
-      "SpecialAbilities": [
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 15,
       "XPValuePerHitPoint": 1,
       "TreasureType": "J,WornEquipment",

@@ -237,12 +237,7 @@
           "Damage": "1d6"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Monk Abilities",
-          "Description": "Improved AC, faster movement, Open Hand attack, thief-like saves."
-        }
-      ],
+      "SpecialAbilities": [],
       "BaseXPValue": 175,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",

@@ -12,6 +12,7 @@ using Adnd.Core.Characters.Progression;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -377,6 +378,9 @@ public sealed partial class CombatResolver
                     }
                 }
             }
+
+            if (TryApplyConstrictionDamage(session, member, events))
+                continue;
 
             var veryHotFireExposureRounds = session.GetPartyVeryHotFireExposureRounds(member.Name);
             if (veryHotFireExposureRounds > 0)
@@ -798,6 +802,7 @@ public sealed partial class CombatResolver
         }
 
         ResolveFigurineAnimalAllies(session, events);
+        ResolveHornOfValhallaSummons(session, events);
 
         if (!session.AliveMonsters.Any())
         {
@@ -855,28 +860,7 @@ public sealed partial class CombatResolver
             if (isSilenced)
             {
                 var remainingSilence = monster.TickStatus(MonsterStatus.Silenced);
-                if (HasAnySpecialAbility(monster,
-                        "Level 1 Mage spells",
-                        "Level 1 Magic-User spells",
-                        "Level 5 Mage spells",
-                        "Level 5 Magic-User spells",
-                        "Level 5 Illusionist spells",
-                        "Level 4 Mage spells",
-                        "Level 4 Magic-User spells",
-                        "Level 4 Illusionist spells",
-                        "Level 3 Mage spells",
-                        "Level 3 Magic-User spells",
-                        "Level 3 Illusionist spells",
-                        "Level 2 Illusionist spells",
-                        "Level 3 Priest spells",
-                        "Level 3 Cleric spells",
-                        "Level 5 Priest spells",
-                        "Level 5 Cleric spells",
-                        "Level 1 Priest spells",
-                        "Level 1 Cleric spells",
-                        "Level 1 Druid spells",
-                        "Level 5 Druid spells",
-                        "Level 1 Illusionist spells"))
+                if (HasAnyMonsterSpellcastingAbility(monster))
                 {
                     events.Add(new CombatEvent(remainingSilence > 0
                         ? $"{monster.DisplayName} is silenced and cannot cast spells ({remainingSilence} round(s) remaining)."
@@ -885,33 +869,7 @@ public sealed partial class CombatResolver
             }
 
             if (!isSilenced && isFeebleminded
-                && HasAnySpecialAbility(monster,
-                    "Level 1 Mage spells",
-                    "Level 1 Magic-User spells",
-                    "Level 5 Mage spells",
-                    "Level 5 Magic-User spells",
-                    "Level 5 Illusionist spells",
-                    "Level 4 Mage spells",
-                    "Level 4 Magic-User spells",
-                    "Level 4 Illusionist spells",
-                    "Level 3 Mage spells",
-                    "Level 3 Magic-User spells",
-                    "Level 3 Illusionist spells",
-                    "Level 2 Mage spells",
-                    "Level 2 Magic-User spells",
-                    "Level 2 Illusionist spells",
-                    "Level 3 Priest spells",
-                    "Level 3 Cleric spells",
-                    "Level 5 Priest spells",
-                    "Level 5 Cleric spells",
-                    "Level 1 Priest spells",
-                    "Level 1 Cleric spells",
-                    "Level 1 Druid spells",
-                    "Level 2 Druid spells",
-                    "Level 3 Druid spells",
-                    "Level 4 Druid spells",
-                    "Level 5 Druid spells",
-                    "Level 1 Illusionist spells"))
+                && HasAnyMonsterSpellcastingAbility(monster))
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
             }
@@ -919,84 +877,84 @@ public sealed partial class CombatResolver
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 5 Illusionist spells")
+                && HasSpellTierAbility(monster, 5, MonsterSpellTradition.Illusionist)
                 && ResolveLevel5IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasAnySpecialAbility(monster, "Level 5 Mage spells", "Level 5 Magic-User spells")
+                && HasSpellTierAbility(monster, 5, MonsterSpellTradition.MagicUser)
                 && ResolveLevel5MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 5 Druid spells")
+                && HasSpellTierAbility(monster, 5, MonsterSpellTradition.Druid)
                 && ResolveLevel5DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasAnySpecialAbility(monster, "Level 5 Priest spells", "Level 5 Cleric spells")
+                && HasSpellTierAbility(monster, 5, MonsterSpellTradition.Cleric)
                 && ResolveLevel5ClericSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 4 Illusionist spells")
+                && HasSpellTierAbility(monster, 4, MonsterSpellTradition.Illusionist)
                 && ResolveLevel4IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasAnySpecialAbility(monster, "Level 4 Mage spells", "Level 4 Magic-User spells")
+                && HasSpellTierAbility(monster, 4, MonsterSpellTradition.MagicUser)
                 && ResolveLevel4MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-                && HasAnySpecialAbility(monster, "Level 3 Mage spells", "Level 3 Magic-User spells")
+                && HasSpellTierAbility(monster, 3, MonsterSpellTradition.MagicUser)
                 && ResolveLevel3MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 3 Illusionist spells")
+                && HasSpellTierAbility(monster, 3, MonsterSpellTradition.Illusionist)
                 && ResolveLevel3IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasAnySpecialAbility(monster, "Level 3 Priest spells", "Level 3 Cleric spells")
+                && HasSpellTierAbility(monster, 3, MonsterSpellTradition.Cleric)
                 && ResolveLevel3ClericSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-                && HasSpecialAbility(monster, "Level 2 Illusionist spells")
+                && HasSpellTierAbility(monster, 2, MonsterSpellTradition.Illusionist)
                 && ResolveLevel2IllusionistSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-                && HasAnySpecialAbility(monster, "Level 2 Mage spells", "Level 2 Magic-User spells")
+                && HasSpellTierAbility(monster, 2, MonsterSpellTradition.MagicUser)
                 && ResolveLevel2MagicUserSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-                && HasAnySpecialAbility(monster, "Level 1 Mage spells", "Level 1 Magic-User spells")
+                && HasSpellTierAbility(monster, 1, MonsterSpellTradition.MagicUser)
                 )
             {
                 ResolveLevel1MageSpells(monster, session, events);
@@ -1006,42 +964,42 @@ public sealed partial class CombatResolver
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-                && HasAnySpecialAbility(monster, "Level 1 Priest spells", "Level 1 Cleric spells")
+                && HasSpellTierAbility(monster, 1, MonsterSpellTradition.Cleric)
                 && ResolveLevel1PriestSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 4 Druid spells")
+                && HasSpellTierAbility(monster, 4, MonsterSpellTradition.Druid)
                 && ResolveLevel4DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 3 Druid spells")
+                && HasSpellTierAbility(monster, 3, MonsterSpellTradition.Druid)
                 && ResolveLevel3DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 2 Druid spells")
+                && HasSpellTierAbility(monster, 2, MonsterSpellTradition.Druid)
                 && ResolveLevel2DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-                && HasSpecialAbility(monster, "Level 1 Druid spells")
+                && HasSpellTierAbility(monster, 1, MonsterSpellTradition.Druid)
                 && ResolveLevel1DruidSpell(monster, session, events))
                 continue;
 
             if (!isSilenced
                 && !isFeebleminded
                 && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-                && HasSpecialAbility(monster, "Level 1 Illusionist spells")
+                && HasSpellTierAbility(monster, 1, MonsterSpellTradition.Illusionist)
                 && ResolveLevel1IllusionistSpell(monster, session, events))
                 continue;
 
@@ -1381,6 +1339,12 @@ public sealed partial class CombatResolver
             if (TryResolveMonsterLayOnHands(session, monster, events))
                 continue;
 
+            if (TryResolveMonsterBodyHeal(session, monster, events))
+                continue;
+
+            if (TryResolveMonsterColdRadiation(session, monster, events))
+                continue;
+
             if (TryResolveMonsterAssassination(session, monster, events))
                 continue;
 
@@ -1584,8 +1548,10 @@ public sealed partial class CombatResolver
                             TryApplyPetrificationFromSpecialAttacks(monster, target, events);
                             if (TryApplyPoisonSpit(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
                                 continue;
+                            if (TryApplyPoisonSpores(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
+                                continue;
 
-                            if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison"))
+                            if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison", "Deadly Poison"))
                             {
                                 if (target.IsMonkImmuneToPoison())
                                 {
@@ -1593,8 +1559,9 @@ public sealed partial class CombatResolver
                                     continue;
                                 }
 
+                                var hasDeadlyPoison = HasSpecialAbility(monster, "Deadly Poison");
                                 var poisonRoll = _dice.Roll(100);
-                                if (poisonRoll <= 70)
+                                if (hasDeadlyPoison || poisonRoll <= 70)
                                 {
                                     var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
                                         target,
@@ -1609,11 +1576,23 @@ public sealed partial class CombatResolver
                                     var saveRoll = _dice.Roll(20);
                                     if (saveRoll >= saveTarget)
                                     {
-                                        var resistMessage = poisonSaveBonus > 0
-                                            ? $"{target.Name} resists {(isWeakPoison ? "weak poison" : "huge spider poison")} (save {saveRoll} vs {saveTarget}, +{poisonSaveBonus} save bonus)."
-                                            : $"{target.Name} resists poison (save {saveRoll} vs {saveTarget}).";
+                                        var resistMessage = hasDeadlyPoison
+                                            ? $"{target.Name} resists deadly poison (save {saveRoll} vs {saveTarget})."
+                                            : poisonSaveBonus > 0
+                                                ? $"{target.Name} resists {(isWeakPoison ? "weak poison" : "huge spider poison")} (save {saveRoll} vs {saveTarget}, +{poisonSaveBonus} save bonus)."
+                                                : $"{target.Name} resists poison (save {saveRoll} vs {saveTarget}).";
                                         events.Add(new CombatEvent(resistMessage));
                                         RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", resistMessage);
+                                    }
+                                    else if (hasDeadlyPoison)
+                                    {
+                                        var beforeHp = target.CurrentHitPoints;
+                                        target.CurrentHitPoints = 0;
+                                        target.RemoveStatus(CharacterStatus.Poisoned);
+                                        target.AddStatus(CharacterStatus.Dead);
+                                        var failedDeadlyPoisonSaveMessage = $"{target.Name} fails save ({saveRoll} vs {saveTarget}) against deadly poison from {monster.DisplayName} and dies instantly. HP {beforeHp}->0.";
+                                        events.Add(new CombatEvent(failedDeadlyPoisonSaveMessage));
+                                        RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", failedDeadlyPoisonSaveMessage);
                                     }
                                     else if (!target.HasStatus(CharacterStatus.Poisoned))
                                     {
@@ -1632,6 +1611,8 @@ public sealed partial class CombatResolver
                             {
                                 TryApplyMonsterParalyzation(monster, target, session, events);
                             }
+
+                            TryApplyConstrictionOnHit(monster, target, session, events);
                         }
                     }
                     else
@@ -1896,6 +1877,7 @@ public sealed partial class CombatResolver
         var grantsFireResistancePotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance");
         var grantsGiantStrengthPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength");
         var grantsAnimalControlPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Animal Control");
+        var grantsHumanControlPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Human Control");
         var grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase);
         var grantsHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism");
         var grantsSuperHeroismPotion = ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism");
@@ -1908,6 +1890,7 @@ public sealed partial class CombatResolver
         var grantsDustOfAppearance = ItemSpecialAbilityParser.HasCastsAbility(item, "Dust of Appearance")
                                      || string.Equals(item.Name, "Dust of Appearance", StringComparison.OrdinalIgnoreCase);
         var grantsTalismanOfPureGood = ItemSpecialAbilityParser.HasSpecialAbility(item, "Talisman of Pure Good");
+        var grantsHornOfValhalla = HornOfValhalla.IsHornOfValhalla(item);
         var isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase);
 
         bool IsDirectEffectConsumable()
@@ -1915,6 +1898,7 @@ public sealed partial class CombatResolver
                || grantsFireResistancePotion
                || grantsGiantStrengthPotion
                || grantsAnimalControlPotion
+               || grantsHumanControlPotion
                || grantsMammalControlRing
                || grantsHeroismPotion
                || grantsSuperHeroismPotion
@@ -1923,6 +1907,7 @@ public sealed partial class CombatResolver
                || grantsLevitationPotion
                || grantsSpeedPotion
                || grantsDustOfAppearance
+               || grantsHornOfValhalla
                || isPotionOfHealing;
 
         bool FailsFighterRestriction()
@@ -2114,6 +2099,78 @@ public sealed partial class CombatResolver
                 }
             }
 
+            if (grantsHumanControlPotion)
+            {
+                var typeRoll = PotionOfHumanControl.EnsureAssignedControlRoll(item, sides => _dice.Roll(Math.Max(1, sides)));
+                var category = PotionOfHumanControl.GetControlCategory(typeRoll);
+                var durationRounds = 0;
+                for (var i = 0; i < 5; i++)
+                    durationRounds += _dice.Roll(6);
+
+                var eligibleTargets = session.AliveMonsters
+                    .Where(m => IsHumanControlCategoryMatch(m, typeRoll))
+                    .OrderBy(_ => _rng.Next())
+                    .ToList();
+
+                events.Add(new CombatEvent($"{user.Name} drinks Potion of Human Control (d20 {typeRoll}: {category}, duration {durationRounds} rounds)."));
+
+                if (eligibleTargets.Count == 0)
+                {
+                    events.Add(new CombatEvent("No eligible humans, humanoids, or demi-humans match this potion's control type."));
+                }
+                else
+                {
+                    var hitDiceBudget = 32;
+                    var attempted = 0;
+                    var controlled = 0;
+
+                    foreach (var target in eligibleTargets)
+                    {
+                        if (hitDiceBudget <= 0)
+                            break;
+
+                        var hitDiceCost = Math.Max(1, GetHumanControlHitDiceCost(target));
+                        if (hitDiceCost > hitDiceBudget)
+                            continue;
+
+                        attempted += 1;
+                        hitDiceBudget -= hitDiceCost;
+
+                        if (target.HasStatus(MonsterStatus.Charmed))
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} is already charmed."));
+                            continue;
+                        }
+
+                        if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(target, "Human Control"))
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} is immune to mind-affecting control."));
+                            continue;
+                        }
+
+                        if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, _rng, "Human Control"))
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} negates human control with magic resistance."));
+                            continue;
+                        }
+
+                        var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
+                        var saveRoll = _dice.Roll(20);
+                        if (saveRoll >= saveTarget)
+                        {
+                            events.Add(new CombatEvent($"{target.DisplayName} resists human control (save {saveRoll} vs {saveTarget})."));
+                            continue;
+                        }
+
+                        target.SetStatus(MonsterStatus.Charmed, durationRounds);
+                        controlled += 1;
+                        events.Add(new CombatEvent($"{target.DisplayName} is charmed for {durationRounds} rounds and fights for {user.Name}."));
+                    }
+
+                    events.Add(new CombatEvent($"Human control budget: started at 32 HD, attempted {attempted}, controlled {controlled}, remaining {hitDiceBudget}."));
+                }
+            }
+
             if (grantsMammalControlRing)
             {
                 if (!TryResolveRingOfMammalControlUse(session, user, events))
@@ -2127,7 +2184,9 @@ public sealed partial class CombatResolver
                     rounds += _dice.Roll(6);
 
                 user.SetProtectionFromMagicScroll(rounds);
-                events.Add(new CombatEvent($"{user.Name} reads Scroll of Protection from Magic: anti-magic globe (5' radius) surrounds the reader for {rounds} round(s)."));
+                var protectionMessage = $"{user.Name} reads Scroll of Protection from Magic: anti-magic globe (5' radius) surrounds the reader for {rounds} round(s).";
+                events.Add(new CombatEvent(protectionMessage));
+                RuleApplicationInfo.PublishLinked("DMG", "128ScrollOfProtectionFromMagic", protectionMessage);
                 ResolveProtectionFromMagicItemContact(user, item, events);
             }
 
@@ -2221,6 +2280,13 @@ public sealed partial class CombatResolver
             || grantsTalismanOfPureGood)
         {
             ResolveTalismanOfPureGoodUse(session, user, action, item, events);
+            return;
+        }
+
+        if (string.Equals(action.SpellId, "__horn_of_valhalla__", StringComparison.OrdinalIgnoreCase)
+            || grantsHornOfValhalla)
+        {
+            ResolveHornOfValhallaUse(session, user, item, events);
             return;
         }
 
@@ -2773,6 +2839,82 @@ public sealed partial class CombatResolver
             return "fish";
 
         return "mammal";
+    }
+
+    private static int GetHumanControlHitDiceCost(MonsterInstance target)
+    {
+        return Math.Max(1, target.Template.HitDice);
+    }
+
+    private static bool IsHumanControlCategoryMatch(MonsterInstance target, int d20)
+    {
+        var category = PotionOfHumanControl.GetControlCategory(d20);
+        var name = target.Template.Name?.Trim() ?? string.Empty;
+        var lowered = name.ToLowerInvariant();
+        var isDwarf = lowered.Contains("dwarf");
+        var isElf = lowered.Contains("elf");
+        var isHalfElf = lowered.Contains("half-elf") || lowered.Contains("half elf");
+        var isGnome = lowered.Contains("gnome");
+        var isHalfling = lowered.Contains("halfling");
+        var isHalfOrc = lowered.Contains("half-orc") || lowered.Contains("half orc");
+        var isHuman = IsHumanControlHumanType(lowered);
+
+        return category switch
+        {
+            "Dwarves" => isDwarf,
+            "Elves/Half-Elves" => isElf || isHalfElf,
+            "Gnomes" => isGnome,
+            "Halflings" => isHalfling,
+            "Half-Orcs" => isHalfOrc,
+            "Humans" => isHuman,
+            "Humanoids" => target.InstanceMonsterType == MonsterType.Humanoid && !isHuman && !isDwarf && !isElf && !isHalfElf && !isGnome && !isHalfling && !isHalfOrc,
+            "Elves, Half-Elves, and Humans" => isElf || isHalfElf || isHuman,
+            _ => false
+        };
+    }
+
+    private static bool IsHumanControlHumanType(string loweredName)
+    {
+        if (string.IsNullOrWhiteSpace(loweredName))
+            return false;
+
+        if (loweredName.Contains("human")
+            || loweredName.Contains("bandit")
+            || loweredName.Contains("berserker")
+            || loweredName.Contains("brigand")
+            || loweredName.Contains("brigadd"))
+        {
+            return true;
+        }
+
+        if (loweredName.StartsWith("lvl ", StringComparison.OrdinalIgnoreCase))
+        {
+            return loweredName.Contains("fighter")
+                   || loweredName.Contains("magic-user")
+                   || loweredName.Contains("cleric")
+                   || loweredName.Contains("illusionist")
+                   || loweredName.Contains("thief")
+                   || loweredName.Contains("assassin")
+                   || loweredName.Contains("monk")
+                   || loweredName.Contains("ranger")
+                   || loweredName.Contains("paladin");
+        }
+
+        if (loweredName.Contains("master thief")
+            || loweredName.Equals("thief", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("fighter", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("magic-user", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("cleric", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("illusionist", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("assassin", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("monk", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("ranger", StringComparison.OrdinalIgnoreCase)
+            || loweredName.Equals("paladin", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static void ResolveLayOnHands(CombatSession session, Character paladin, CombatAction action, List<CombatEvent> events)
@@ -3587,6 +3729,22 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (HasOnlyAffectedByFireBasedAttacksDefense(target) && !IsFireBasedWeaponAttack(mainHand))
+            {
+                var blockedWeaponName = mainHand?.Name ?? "bare hands";
+                events.Add(new CombatEvent($"{member.Name} hits {target.DisplayName} with {blockedWeaponName}, but it is affected only by fire-based attacks."));
+                RuleApplicationInfo.Publish(
+                    "AD&D",
+                    "Affected only by fire based attacks",
+                    $"{target.DisplayName} ignores non-fire attack",
+                    "Creatures with this defense can only be harmed by fire-based attacks.",
+                    null,
+                    null,
+                    null,
+                    $"{member.Name}'s attack with {blockedWeaponName} deals no damage.");
+                continue;
+            }
+
             var mirrorImages = session.GetMonsterMirrorImageCount(target);
             if (mirrorImages > 0)
             {
@@ -3943,7 +4101,11 @@ public sealed partial class CombatResolver
             return true;
         }
 
-        var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var spellTargets = GetSpellAffectablePartyTargets(monster, session, events, "Melf's Acid Arrow");
+        if (spellTargets.Count == 0)
+            return true;
+
+        var target = spellTargets[_dice.Roll(spellTargets.Count) - 1];
         var roundsAcid = _dice.Roll(3);
         session.SetPartyAcidArrow(target.Name, roundsAcid);
         events.Add(new CombatEvent($"{monster.DisplayName} casts Melf's Acid Arrow! {target.Name} is hit by acid for {roundsAcid} round(s)."));
@@ -3985,9 +4147,9 @@ public sealed partial class CombatResolver
             return true;
         }
 
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Glyph of Warding");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = _dice.Roll(4) + _dice.Roll(4); // same glyph damage model used elsewhere
@@ -4038,9 +4200,9 @@ public sealed partial class CombatResolver
             return true;
         }
 
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Flame Strike");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = 0;
@@ -4139,9 +4301,9 @@ public sealed partial class CombatResolver
 
     private bool ResolveLevel3DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Call Lightning / Summon Insects");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -4210,9 +4372,9 @@ public sealed partial class CombatResolver
             return true;
         }
 
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Cause Serious Wounds");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var partyTarget = aliveParty[_dice.Roll(aliveParty.Count) - 1];
         var rolledDamage = _dice.Roll(8) + _dice.Roll(8) + 1;
@@ -4244,9 +4406,9 @@ public sealed partial class CombatResolver
 
     private bool ResolveLevel5DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Wall of Fire / Insect Plague");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -4283,9 +4445,9 @@ public sealed partial class CombatResolver
 
     private bool ResolveLevel5MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Cone of Cold / Feeblemind");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -4351,9 +4513,9 @@ public sealed partial class CombatResolver
 
     private bool ResolveLevel4MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Ice Storm / Wall of Fire");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -4403,9 +4565,9 @@ public sealed partial class CombatResolver
 
     private bool ResolveLevel5IllusionistSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Chaos / Maze");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -4488,12 +4650,15 @@ public sealed partial class CombatResolver
         if (spellRoll <= 50)
         {
             events.Add(new CombatEvent($"{monster.DisplayName} casts Confusion!"));
+            var spellTargets = GetSpellAffectablePartyTargets(monster, session, events, "Confusion");
+            if (spellTargets.Count == 0)
+                return true;
 
             var casterLevel = Math.Max(1, monster.Template.HitDice);
-            var affectedCount = Math.Min(aliveParty.Count, Math.Max(1, casterLevel));
+            var affectedCount = Math.Min(spellTargets.Count, Math.Max(1, casterLevel));
             var rounds = casterLevel;
 
-            var targets = aliveParty
+            var targets = spellTargets
                 .OrderBy(_ => _dice.Roll(100))
                 .Take(affectedCount)
                 .ToList();
@@ -4559,9 +4724,9 @@ public sealed partial class CombatResolver
 
     private bool ResolveLevel3MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Slow / Fireball");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -4696,6 +4861,24 @@ public sealed partial class CombatResolver
         return frontline[index];
     }
 
+    private List<Character> SelectRandomPartyMembersInOneInchRange(CombatSession session)
+    {
+        var candidates = session.ExposedParty.Where(IsAlive).ToList();
+        if (candidates.Count == 0)
+            return new List<Character>();
+
+        var affectedCount = Math.Min(candidates.Count, Math.Max(1, _dice.Roll(3)));
+        var selected = new List<Character>(affectedCount);
+        for (var i = 0; i < affectedCount; i++)
+        {
+            var index = _dice.Roll(candidates.Count) - 1;
+            selected.Add(candidates[index]);
+            candidates.RemoveAt(index);
+        }
+
+        return selected;
+    }
+
     private void ResolveFigurineAnimalAllies(CombatSession session, List<CombatEvent> events)
     {
         foreach (var summoner in session.Party)
@@ -4804,6 +4987,275 @@ public sealed partial class CombatResolver
         return aliveMonsters[index];
     }
 
+    private void ResolveHornOfValhallaUse(CombatSession session, Character user, Item horn, List<CombatEvent> events)
+    {
+        var existingType = HornOfValhalla.GetType(horn);
+        var typeRoll = _dice.Roll(20);
+        var hornType = HornOfValhalla.GetOrAssignType(horn, typeRoll);
+        var typeName = hornType.ToString();
+
+        if (existingType == HornOfValhallaType.Unknown)
+        {
+            var aligned = _dice.Roll(100) <= 50;
+            var assignedAlignment = aligned ? RollRandomAlignment() : (Alignment?)null;
+            HornOfValhalla.EnsureAlignmentProfile(horn, aligned, assignedAlignment);
+            if (aligned && assignedAlignment.HasValue)
+                events.Add(new CombatEvent($"{horn.Name} reveals itself as a {typeName} horn aligned to {assignedAlignment.Value.ToDisplayString()}."));
+            else
+                events.Add(new CombatEvent($"{horn.Name} reveals itself as a {typeName} horn with no alignment binding."));
+        }
+
+        if (HornOfValhalla.IsOnCooldown(horn, session.DungeonDay))
+        {
+            var remaining = HornOfValhalla.GetCooldownDaysRemaining(horn, session.DungeonDay);
+            events.Add(new CombatEvent($"{horn.Name} cannot be sounded yet. {remaining} day(s) remain before it can be used again."));
+            return;
+        }
+
+        var fighterLevel = HornOfValhalla.GetFighterLevel(hornType);
+        var berserkerCount = HornOfValhalla.RollBerserkerCount(hornType, _dice.Roll);
+        var classAllowed = CanCharacterUseHornType(user, hornType);
+        var hostileByClass = !classAllowed;
+        var hostileByAlignment = false;
+        if (HornOfValhalla.IsAligned(horn)
+            && HornOfValhalla.TryGetAlignment(horn, out var hornAlignment)
+            && IsRadicallyDifferentAlignment(user.Alignment, hornAlignment))
+            hostileByAlignment = true;
+
+        var hostile = hostileByClass || hostileByAlignment;
+
+        HornOfValhalla.MarkUsed(horn, session.DungeonDay);
+
+        var levelOrdinal = fighterLevel switch
+        {
+            1 => "1st",
+            2 => "2nd",
+            3 => "3rd",
+            _ => $"{fighterLevel}th"
+        };
+
+        RuleApplicationInfo.PublishLinked(
+            "DMG",
+            "Other items/DMG147HordOfValhalla",
+            $"{user.Name} blows {horn.Name}: type roll {typeRoll} -> {typeName}, summons {berserkerCount} berserkers ({levelOrdinal} level).");
+
+        if (hostile)
+        {
+            var hostileGroupId = SpawnHostileHornBerserkers(session, user, hornType, fighterLevel, berserkerCount);
+            var reasons = new List<string>();
+            if (hostileByClass)
+                reasons.Add("blower class cannot use this horn type");
+            if (hostileByAlignment)
+                reasons.Add("radical alignment difference with horn alignment");
+
+            events.Add(new CombatEvent(
+                $"{user.Name} sounds {horn.Name}: {berserkerCount} {levelOrdinal}-level berserker(s) answer from Valhalla and turn hostile ({string.Join("; ", reasons)})."));
+            events.Add(new CombatEvent(
+                $"Hostile berserkers appear as a separate enemy group ({hostileGroupId}) and can be attacked by the party."));
+            return;
+        }
+
+        session.ActiveHornOfValhallaSummons.Add(
+            new HornOfValhallaSummon(user.Name, typeName, hostileToParty: false, fighterLevel, berserkerCount, roundsRemaining: 60));
+
+        events.Add(new CombatEvent(
+            $"{user.Name} sounds {horn.Name}: {berserkerCount} {levelOrdinal}-level berserker(s) answer from Valhalla and await commands."));
+    }
+
+    private void ResolveHornOfValhallaSummons(CombatSession session, List<CombatEvent> events)
+    {
+        ResolveHostileHornOfValhallaGroupExpiry(session, events);
+
+        if (session.ActiveHornOfValhallaSummons.Count == 0)
+            return;
+
+        for (var i = session.ActiveHornOfValhallaSummons.Count - 1; i >= 0; i--)
+        {
+            var summon = session.ActiveHornOfValhallaSummons[i];
+            if (summon.RoundsRemaining <= 0 || summon.BerserkerCount <= 0)
+            {
+                session.ActiveHornOfValhallaSummons.RemoveAt(i);
+                continue;
+            }
+
+            for (var attacker = 0; attacker < summon.BerserkerCount; attacker++)
+            {
+                var target = SelectFigurineTargetMonster(session);
+                if (target == null)
+                    break;
+
+                ResolveHornAttackAgainstMonster(summon, target, events);
+            }
+
+            summon.RoundsRemaining -= 1;
+            if (summon.RoundsRemaining <= 0)
+            {
+                events.Add(new CombatEvent($"The berserkers summoned by {summon.SummonerName}'s {summon.HornTypeName} horn fade back to Valhalla."));
+                session.ActiveHornOfValhallaSummons.RemoveAt(i);
+            }
+        }
+    }
+
+    private void ResolveHornAttackAgainstMonster(HornOfValhallaSummon summon, MonsterInstance target, List<CombatEvent> events)
+    {
+        var thac0 = Thac0Calculator.GetThac0(CharacterClass.Fighter, summon.FighterLevel);
+        var needed = Math.Clamp(thac0 - target.ArmorClass, 2, 20);
+        var roll = _dice.Roll(20);
+
+        if (roll != 20 && (roll == 1 || roll < needed))
+        {
+            events.Add(new CombatEvent($"Valhalla berserker misses {target.DisplayName} (rolled {roll} vs {needed})."));
+            return;
+        }
+
+        var damage = RollHornBerserkerDamage();
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        var actual = before - target.CurrentHitPoints;
+
+        events.Add(new CombatEvent($"Valhalla berserker hits {target.DisplayName} for {actual} damage."));
+        if (target.CurrentHitPoints <= 0)
+            events.Add(new CombatEvent($"{target.DisplayName} is slain by a Valhalla berserker."));
+    }
+
+    private int RollHornBerserkerDamage()
+    {
+        var styleRoll = _dice.Roll(100);
+        var usingSwordOrAxe = styleRoll <= 50;
+        return usingSwordOrAxe ? RollDamage("1d8") : RollDamage("1d6");
+    }
+
+    private string SpawnHostileHornBerserkers(CombatSession session, Character blower, HornOfValhallaType hornType, int fighterLevel, int berserkerCount)
+    {
+        var groupId = $"horn-valhalla-{blower.Name}-{session.RoundNumber}-{_dice.Roll(10000)}"
+            .Replace(" ", string.Empty);
+
+        var template = BuildHostileHornBerserkerTemplate(hornType, fighterLevel);
+        var instances = new List<MonsterInstance>(berserkerCount);
+        for (var i = 1; i <= berserkerCount; i++)
+            instances.Add(new MonsterInstance(template, i, groupId));
+
+        session.Monsters.AddRange(instances);
+        session.HostileHornOfValhallaGroups[groupId] = 60;
+        session.NoXpMonsterGroupIds.Add(groupId);
+        return groupId;
+    }
+
+    private static Monster BuildHostileHornBerserkerTemplate(HornOfValhallaType hornType, int fighterLevel)
+    {
+        var styleName = Random.Shared.Next(1, 101) <= 50 ? "Sword+Spear" : "BattleAxe+Spear";
+        var damage = styleName.StartsWith("BattleAxe", StringComparison.OrdinalIgnoreCase) ? "1d8" : "1d8";
+
+        return new Monster
+        {
+            Name = $"Valhalla Berserker ({hornType})",
+            Type = MonsterType.Humanoid,
+            TypeName = "Humanoid",
+            Alignment = "Any",
+            NumberOfAppearancesMin = 1,
+            NumberOfAppearancesMax = 1,
+            ArmorClass = 4,
+            HitDice = Math.Max(1, fighterLevel),
+            HitDiceType = 1,
+            ExtraHitPoints = Math.Max(0, fighterLevel * 5),
+            THAC0 = Thac0Calculator.GetThac0(CharacterClass.Fighter, fighterLevel),
+            NumberOfAttacks = 1,
+            MovementRate = "12",
+            Movement = new MonsterMovement { Walk = 120 },
+            Morale = new MonsterMorale { Value = 12 },
+            SavingThrows = new MonsterSavingThrows(),
+            Attacks = new List<MonsterAttack>
+            {
+                new()
+                {
+                    Name = styleName,
+                    NumberOfAttacks = 1,
+                    Damage = damage
+                }
+            },
+            BaseXPValue = 0,
+            XPValuePerHitPoint = 0
+        };
+    }
+
+    private void ResolveHostileHornOfValhallaGroupExpiry(CombatSession session, List<CombatEvent> events)
+    {
+        if (session.HostileHornOfValhallaGroups.Count == 0)
+            return;
+
+        foreach (var groupId in session.HostileHornOfValhallaGroups.Keys.ToList())
+        {
+            var aliveInGroup = session.GetAliveMonstersByGroup(groupId).ToList();
+            if (aliveInGroup.Count == 0)
+            {
+                session.HostileHornOfValhallaGroups.Remove(groupId);
+                continue;
+            }
+
+            var roundsRemaining = session.HostileHornOfValhallaGroups[groupId] - 1;
+            if (roundsRemaining > 0)
+            {
+                session.HostileHornOfValhallaGroups[groupId] = roundsRemaining;
+                continue;
+            }
+
+            foreach (var spirit in aliveInGroup)
+                spirit.CurrentHitPoints = 0;
+
+            events.Add(new CombatEvent($"Hostile Valhalla berserkers of group {groupId} fade back to Valhalla after 6 turns."));
+            session.HostileHornOfValhallaGroups.Remove(groupId);
+        }
+    }
+
+    private static bool CanCharacterUseHornType(Character user, HornOfValhallaType type)
+    {
+        var hasCleric = user.Classes.Contains(CharacterClass.Cleric) || user.Class == CharacterClass.Cleric;
+        var hasThief = user.Classes.Contains(CharacterClass.Thief) || user.Class == CharacterClass.Thief;
+
+        return type switch
+        {
+            HornOfValhallaType.Silver => true,
+            HornOfValhallaType.Brass => hasCleric || user.IsFighterClassed() || hasThief,
+            HornOfValhallaType.Bronze => hasCleric || user.IsFighterClassed(),
+            HornOfValhallaType.Iron => user.IsFighterClassed(),
+            _ => false
+        };
+    }
+
+    private static bool IsRadicallyDifferentAlignment(Alignment blowerAlignment, Alignment hornAlignment)
+    {
+        var blowerAxis = GetMoralAxis(blowerAlignment);
+        var hornAxis = GetMoralAxis(hornAlignment);
+        return blowerAxis != hornAxis;
+    }
+
+    private static int GetMoralAxis(Alignment alignment)
+    {
+        return alignment switch
+        {
+            Alignment.LawfulGood or Alignment.NeutralGood or Alignment.ChaoticGood => 1,
+            Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil => -1,
+            _ => 0
+        };
+    }
+
+    private Alignment RollRandomAlignment()
+    {
+        var roll = _dice.Roll(9);
+        return roll switch
+        {
+            1 => Alignment.LawfulGood,
+            2 => Alignment.NeutralGood,
+            3 => Alignment.ChaoticGood,
+            4 => Alignment.LawfulNeutral,
+            5 => Alignment.TrueNeutral,
+            6 => Alignment.ChaoticNeutral,
+            7 => Alignment.LawfulEvil,
+            8 => Alignment.NeutralEvil,
+            _ => Alignment.ChaoticEvil
+        };
+    }
+
     private (bool Enabled, int Multiplier) TryGetMonsterThiefBackstabInfo(CombatSession session, MonsterInstance monster)
     {
         if (session.RoundNumber != 1 || !session.PartySurprisedRound1)
@@ -4821,26 +5273,85 @@ public sealed partial class CombatResolver
 
     private int RollDamage(string damageExpression)
     {
-        var normalized = damageExpression.Trim().ToLowerInvariant();
+        var normalized = (damageExpression ?? string.Empty).Trim().ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(normalized))
+            return 0;
 
-        if (normalized.Contains('/'))
-            normalized = normalized.Split('/')[0].Trim();
+        normalized = Regex.Replace(normalized, @"\([^)]*\)", string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(normalized))
+            return 0;
 
-        var m = Regex.Match(normalized, @"^(?<count>\d+)d(?<sides>\d+)(?<mod>[+-]\d+)?$");
-        if (!m.Success)
-            return 1;
+        if (normalized.Contains(" or ", StringComparison.Ordinal))
+        {
+            var options = normalized
+                .Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (options.Length > 0)
+                normalized = options[_dice.Roll(options.Length) - 1];
+        }
 
-        int count = int.Parse(m.Groups["count"].Value);
-        int sides = int.Parse(m.Groups["sides"].Value);
-        int mod = m.Groups["mod"].Success ? int.Parse(m.Groups["mod"].Value) : 0;
+        if (normalized.Contains('/', StringComparison.Ordinal))
+        {
+            var options = normalized
+                .Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (options.Length > 0)
+                normalized = options[_dice.Roll(options.Length) - 1];
+        }
 
-        int value = _dice.RollMany(sides, Math.Max(1, count)) + mod;
-        return Math.Max(1, value);
+        if (normalized.Contains("nil", StringComparison.Ordinal)
+            || normalized.Contains("none", StringComparison.Ordinal)
+            || normalized.Contains("special", StringComparison.Ordinal)
+            || normalized.Contains("instant death", StringComparison.Ordinal))
+            return 0;
+
+        if (normalized.Contains("level", StringComparison.Ordinal))
+            return 0;
+
+        if (normalized.Contains("by weapon", StringComparison.Ordinal))
+            return _dice.Roll(8);
+
+        var weaponBonusMatch = Regex.Match(normalized, @"^weapon\s*[+]\s*(?<bonus>\d+)$", RegexOptions.IgnoreCase);
+        if (weaponBonusMatch.Success
+            && int.TryParse(weaponBonusMatch.Groups["bonus"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var weaponBonus))
+        {
+            return _dice.Roll(8) + Math.Max(0, weaponBonus);
+        }
+
+        var diceMatch = Regex.Match(normalized, @"(?<count>\d+)\s*d\s*(?<sides>\d+)\s*(?<mod>[+-]\s*\d+)?", RegexOptions.IgnoreCase);
+        if (diceMatch.Success
+            && int.TryParse(diceMatch.Groups["count"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var count)
+            && int.TryParse(diceMatch.Groups["sides"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var sides))
+        {
+            var mod = 0;
+            if (diceMatch.Groups["mod"].Success)
+            {
+                var modRaw = diceMatch.Groups["mod"].Value.Replace(" ", string.Empty, StringComparison.Ordinal);
+                _ = int.TryParse(modRaw, NumberStyles.Integer, CultureInfo.InvariantCulture, out mod);
+            }
+
+            var value = _dice.RollMany(Math.Max(1, sides), Math.Max(1, count)) + mod;
+            return Math.Max(0, value);
+        }
+
+        var rangeMatch = Regex.Match(normalized, @"^(?<min>\d+)\s*-\s*(?<max>\d+)$");
+        if (rangeMatch.Success
+            && int.TryParse(rangeMatch.Groups["min"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var minRange)
+            && int.TryParse(rangeMatch.Groups["max"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var maxRange))
+        {
+            if (maxRange < minRange)
+                (minRange, maxRange) = (maxRange, minRange);
+
+            return _dice.Roll(maxRange - minRange + 1) + minRange - 1;
+        }
+
+        if (int.TryParse(normalized, NumberStyles.Integer, CultureInfo.InvariantCulture, out var constant))
+            return Math.Max(0, constant);
+
+        return 1;
     }
 
     private void ResolveLevel1MageSpells(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Magic Missile / Sleep");
         if (aliveParty.Count == 0)
             return;
 
@@ -4988,30 +5499,23 @@ public sealed partial class CombatResolver
 
     private static bool MonsterHasSpellTraditionAtLevel(MonsterInstance monster, int spellLevel, MonsterSpellTradition tradition)
     {
-        return tradition switch
-        {
-            MonsterSpellTradition.MagicUser => HasAnySpecialAbility(monster, $"Level {spellLevel} Mage spells", $"Level {spellLevel} Magic-User spells"),
-            MonsterSpellTradition.Cleric => HasAnySpecialAbility(monster, $"Level {spellLevel} Priest spells", $"Level {spellLevel} Cleric spells"),
-            MonsterSpellTradition.Druid => HasSpecialAbility(monster, $"Level {spellLevel} Druid spells"),
-            MonsterSpellTradition.Illusionist => HasSpecialAbility(monster, $"Level {spellLevel} Illusionist spells"),
-            _ => false
-        };
+        return HasSpellTierAbility(monster, spellLevel, tradition);
     }
 
     private MonsterSpellTradition? SelectSpellTraditionForLevel(MonsterInstance monster, int spellLevel)
     {
         var availableTraditions = new List<MonsterSpellTradition>();
 
-        if (HasAnySpecialAbility(monster, $"Level {spellLevel} Mage spells", $"Level {spellLevel} Magic-User spells"))
+        if (HasSpellTierAbility(monster, spellLevel, MonsterSpellTradition.MagicUser))
             availableTraditions.Add(MonsterSpellTradition.MagicUser);
 
-        if (HasAnySpecialAbility(monster, $"Level {spellLevel} Priest spells", $"Level {spellLevel} Cleric spells"))
+        if (HasSpellTierAbility(monster, spellLevel, MonsterSpellTradition.Cleric))
             availableTraditions.Add(MonsterSpellTradition.Cleric);
 
-        if (HasSpecialAbility(monster, $"Level {spellLevel} Druid spells"))
+        if (HasSpellTierAbility(monster, spellLevel, MonsterSpellTradition.Druid))
             availableTraditions.Add(MonsterSpellTradition.Druid);
 
-        if (HasSpecialAbility(monster, $"Level {spellLevel} Illusionist spells"))
+        if (HasSpellTierAbility(monster, spellLevel, MonsterSpellTradition.Illusionist))
             availableTraditions.Add(MonsterSpellTradition.Illusionist);
 
         if (availableTraditions.Count == 0)
@@ -5019,6 +5523,53 @@ public sealed partial class CombatResolver
 
         var picked = _dice.Roll(availableTraditions.Count) - 1;
         return availableTraditions[picked];
+    }
+
+    private static bool HasAnyMonsterSpellcastingAbility(MonsterInstance monster)
+    {
+        for (var level = 1; level <= 9; level++)
+        {
+            if (HasSpellTierAbility(monster, level, MonsterSpellTradition.MagicUser)
+                || HasSpellTierAbility(monster, level, MonsterSpellTradition.Cleric)
+                || HasSpellTierAbility(monster, level, MonsterSpellTradition.Druid)
+                || HasSpellTierAbility(monster, level, MonsterSpellTradition.Illusionist))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool HasSpellTierAbility(MonsterInstance monster, int spellLevel, MonsterSpellTradition tradition)
+    {
+        if (spellLevel <= 0)
+            return false;
+
+        return tradition switch
+        {
+            MonsterSpellTradition.MagicUser => HasAnySpecialAbility(
+                monster,
+                $"Level {spellLevel} Mage spells",
+                $"Level {spellLevel} Magic-User spells",
+                $"Lvl {spellLevel} Mage spells",
+                $"Lvl {spellLevel} Magic-User spells"),
+            MonsterSpellTradition.Cleric => HasAnySpecialAbility(
+                monster,
+                $"Level {spellLevel} Priest spells",
+                $"Level {spellLevel} Cleric spells",
+                $"Lvl {spellLevel} Priest spells",
+                $"Lvl {spellLevel} Cleric spells"),
+            MonsterSpellTradition.Druid => HasAnySpecialAbility(
+                monster,
+                $"Level {spellLevel} Druid spells",
+                $"Lvl {spellLevel} Druid spells"),
+            MonsterSpellTradition.Illusionist => HasAnySpecialAbility(
+                monster,
+                $"Level {spellLevel} Illusionist spells",
+                $"Lvl {spellLevel} Illusionist spells"),
+            _ => false
+        };
     }
 
     private static string FormatTraditionName(MonsterSpellTradition tradition)
@@ -5043,7 +5594,7 @@ public sealed partial class CombatResolver
             if (ability == null || string.IsNullOrWhiteSpace(ability.Name))
                 continue;
 
-            if (!TryParseMonsterLevelMagicUseAbility(ability.Name, ability.Description, out var parsed))
+            if (!TryParseMonsterLevelMagicUseAbility(monster, ability.Name, ability.Description, out var parsed))
                 continue;
 
             if (parsed.SpellLevel == spellLevel)
@@ -5053,7 +5604,7 @@ public sealed partial class CombatResolver
         return null;
     }
 
-    private static bool TryParseMonsterLevelMagicUseAbility(string abilityName, string? abilityDescription, out MonsterLevelMagicUseChance parsed)
+    private static bool TryParseMonsterLevelMagicUseAbility(MonsterInstance monster, string abilityName, string? abilityDescription, out MonsterLevelMagicUseChance parsed)
     {
         var trimmed = abilityName?.Trim() ?? string.Empty;
         var match = Regex.Match(
@@ -5072,15 +5623,81 @@ public sealed partial class CombatResolver
             return true;
         }
 
+        var ageRelatedMatch = Regex.Match(
+            trimmed,
+            @"^(?<chance>\d{1,3})\s*%\s*Level\s*Age\s*related\s*Magic\s*Use\s*every\s*(?<step>\d+(?:[.,]\d+)?)\s*agelevels?$",
+            RegexOptions.IgnoreCase);
+
+        if (ageRelatedMatch.Success
+            && int.TryParse(ageRelatedMatch.Groups["chance"].Value, out var ageChance)
+            && TryParseAgeRelatedMagicUseStep(ageRelatedMatch.Groups["step"].Value, out var step))
+        {
+            var ageLevel = ResolveMonsterAgeLevel(monster);
+            var spellLevel = Math.Max(1, (int)Math.Floor((ageLevel - 1d) / step) + 1);
+            parsed = new MonsterLevelMagicUseChance(Math.Clamp(ageChance, 0, 100), spellLevel, true);
+            return true;
+        }
+
         parsed = null!;
         return false;
     }
 
+    private static bool TryParseAgeRelatedMagicUseStep(string raw, out double step)
+    {
+        step = 0;
+        if (string.IsNullOrWhiteSpace(raw))
+            return false;
+
+        var normalized = raw.Trim().Replace(',', '.');
+        if (!double.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out step))
+            return false;
+
+        return step > 0;
+    }
+
+    private static int ResolveMonsterAgeLevel(MonsterInstance monster)
+    {
+        if (monster?.Template == null)
+            return 1;
+
+        var ageFromName = TryResolveAgeLevelFromText(monster.Template.Name);
+        if (ageFromName.HasValue)
+            return ageFromName.Value;
+
+        if (monster.Template.Type == MonsterType.Dragon
+            && monster.Template.HitDice > 0
+            && monster.MaxHitPoints > 0)
+        {
+            var hpPerDie = monster.MaxHitPoints / (double)monster.Template.HitDice;
+            return Math.Clamp((int)Math.Round(hpPerDie, MidpointRounding.AwayFromZero), 1, 8);
+        }
+
+        return 1;
+    }
+
+    private static int? TryResolveAgeLevelFromText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return null;
+
+        var normalized = text.Trim();
+        if (normalized.Contains("Very young", StringComparison.OrdinalIgnoreCase)) return 1;
+        if (normalized.Contains("Young adult", StringComparison.OrdinalIgnoreCase)) return 4;
+        if (normalized.Contains("Sub-adult", StringComparison.OrdinalIgnoreCase)) return 3;
+        if (normalized.Contains("Very old", StringComparison.OrdinalIgnoreCase)) return 7;
+        if (normalized.Contains("Ancient", StringComparison.OrdinalIgnoreCase)) return 8;
+        if (normalized.Contains("Young", StringComparison.OrdinalIgnoreCase)) return 2;
+        if (normalized.Contains("Adult", StringComparison.OrdinalIgnoreCase)) return 5;
+        if (normalized.Contains("Old", StringComparison.OrdinalIgnoreCase)) return 6;
+
+        return null;
+    }
+
     private bool ResolveLevel1DruidSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Entangle / Faerie Fire");
         if (aliveParty.Count == 0)
-            return false;
+            return true;
 
         var spellRoll = _dice.Roll(100);
         if (spellRoll <= 50)
@@ -5145,7 +5762,7 @@ public sealed partial class CombatResolver
 
     private void ResolveIllusionistColorSpray(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Color Spray");
         if (aliveParty.Count == 0)
             return;
 
@@ -5205,7 +5822,7 @@ public sealed partial class CombatResolver
 
     private void ResolveIllusionistPhantasmalForce(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        var aliveParty = session.ExposedParty.ToList();
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Phantasmal Force");
         if (aliveParty.Count == 0)
             return;
 
@@ -5238,6 +5855,33 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{target.Name} dies from terror and shock."));
             }
         }
+    }
+
+    private static List<Character> GetSpellAffectablePartyTargets(
+        MonsterInstance monster,
+        CombatSession session,
+        List<CombatEvent> events,
+        string spellName)
+    {
+        var aliveParty = session.ExposedParty.ToList();
+        if (aliveParty.Count == 0)
+            return aliveParty;
+
+        var blockedTargets = aliveParty
+            .Where(member => member.HasActiveProtectionFromMagicScroll)
+            .ToList();
+
+        foreach (var blocked in blockedTargets)
+            events.Add(new CombatEvent($"{blocked.Name} is inside an anti-magic globe; {spellName} cannot affect them."));
+
+        var affectable = aliveParty
+            .Where(member => !member.HasActiveProtectionFromMagicScroll)
+            .ToList();
+
+        if (affectable.Count == 0 && blockedTargets.Count > 0)
+            events.Add(new CombatEvent($"{monster.DisplayName}'s {spellName} is blocked: anti-magic protection prevents magic from entering the sphere."));
+
+        return affectable;
     }
 
     private bool ResolveHpDamageBreath(MonsterInstance monster, int maxDamage, CombatSession session, List<CombatEvent> events)
@@ -5557,6 +6201,55 @@ public sealed partial class CombatResolver
         return true;
     }
 
+    private bool TryResolveMonsterColdRadiation(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Cold Radiation"))
+            return false;
+
+        if (!session.CanMonsterUseColdRadiation(monster, session.RoundNumber))
+            return false;
+
+        var targets = SelectRandomPartyMembersInOneInchRange(session);
+        if (targets.Count == 0)
+            return false;
+
+        session.MarkMonsterColdRadiationUsed(monster, session.RoundNumber);
+        events.Add(new CombatEvent($"{monster.DisplayName} releases Cold Radiation! All within 1\" are affected ({targets.Count} random party member(s))."));
+
+        foreach (var target in targets)
+        {
+            var rolledDamage = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
+            var appliedDamage = ApplyColdResistanceDamageReduction(target, rolledDamage, isMagicalCold: false, isNormalCold: true);
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - appliedDamage);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            events.Add(new CombatEvent(
+                appliedDamage <= 0
+                    ? $"{target.Name} is unaffected by the cold radiation due to Resist Cold (rolled {rolledDamage})."
+                    : $"{target.Name} suffers {actual} cold radiation damage (rolled {rolledDamage}). HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0 && !target.HasStatus(CharacterStatus.Dead))
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain by {monster.DisplayName}'s cold radiation!"));
+            }
+        }
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Cold Radiation",
+            $"{monster.DisplayName} cold radiation burst",
+            "All within 1” suffer 3-18 damage; in this project 1” affects 1d3 random party members. The attack can be used once every other melee round.",
+            "3",
+            "18",
+            null,
+            $"Affected {targets.Count} target(s): {string.Join(", ", targets.Select(t => t.Name))}.");
+
+        return true;
+    }
+
     private bool TryStealCoins(Character victim, out string? summary)
     {
         summary = null;
@@ -5625,6 +6318,36 @@ public sealed partial class CombatResolver
 
         session.MarkMonsterLayOnHandsUsed(caster);
         events.Add(new CombatEvent($"{caster.DisplayName} uses Lay on Hands on {target.DisplayName} and heals {healed} HP. HP {before}->{target.CurrentHitPoints}."));
+        return true;
+    }
+
+    private bool TryResolveMonsterBodyHeal(CombatSession session, MonsterInstance monk, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monk, "BodyHeal"))
+            return false;
+
+        if (session.HasMonsterUsedBodyHeal(monk))
+            return false;
+
+        var monkLevel = Math.Max(0, monk.Template.HitDice);
+        if (monkLevel < 7)
+            return false;
+
+        if (!monk.IsAlive || monk.CurrentHitPoints >= monk.MaxHitPoints)
+            return false;
+
+        var bonus = Math.Max(1, monkLevel - 6);
+        var rolled = _dice.Roll(4);
+        var healAmount = rolled + bonus;
+        var before = monk.CurrentHitPoints;
+        monk.CurrentHitPoints = Math.Min(monk.MaxHitPoints, monk.CurrentHitPoints + healAmount);
+        var healed = monk.CurrentHitPoints - before;
+        if (healed <= 0)
+            return false;
+
+        session.MarkMonsterBodyHealUsed(monk);
+        events.Add(new CombatEvent(
+            $"{monk.DisplayName} uses Body Heal and restores {healed} HP (1d4+{bonus}, rolled {rolled}). HP {before}->{monk.CurrentHitPoints}."));
         return true;
     }
 
@@ -6046,6 +6769,130 @@ public sealed partial class CombatResolver
         target.CurrentHitPoints = 0;
         target.AddStatus(CharacterStatus.Dead);
         events.Add(new CombatEvent($"{target.Name} is killed by {monster.DisplayName}'s poison spit! (save {saveRoll} vs {saveTarget})"));
+        return true;
+    }
+
+    private bool TryApplyConstrictionDamage(CombatSession session, Character member, List<CombatEvent> events)
+    {
+        var effects = session.GetConstrictionsForVictim(member.Name);
+        if (effects.Count == 0)
+            return false;
+
+        var strongHelpers = session.ExposedParty
+            .Where(IsAlive)
+            .Where(c => !string.Equals(c.Name, member.Name, StringComparison.OrdinalIgnoreCase))
+            .Count(c => c.Abilities.Strength >= 16);
+
+        foreach (var effect in effects.ToList())
+        {
+            if (!effect.Constrictor.IsAlive || effect.Constrictor.HasFled)
+            {
+                session.RemoveConstriction(effect.Constrictor, effect.Victim);
+                events.Add(new CombatEvent($"{member.Name} is freed as {effect.Constrictor.DisplayName} can no longer maintain constriction."));
+                continue;
+            }
+
+            var rolledDamage = _dice.Roll(4) + _dice.Roll(4);
+            var before = member.CurrentHitPoints;
+            member.CurrentHitPoints = Math.Max(0, member.CurrentHitPoints - rolledDamage);
+            var actual = before - member.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(member, actual, events);
+            events.Add(new CombatEvent($"{effect.Constrictor.DisplayName} constricts {member.Name} for {actual} damage (2d4). HP {before}->{member.CurrentHitPoints}."));
+
+            if (member.CurrentHitPoints <= 0)
+            {
+                member.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{member.Name} is crushed to death by constriction!"));
+                return true;
+            }
+
+            if (strongHelpers >= 4)
+            {
+                effect.UncoilRoundsRemaining ??= _dice.Roll(4) + 1;
+                effect.UncoilRoundsRemaining = Math.Max(0, effect.UncoilRoundsRemaining.Value - 1);
+                var remaining = effect.UncoilRoundsRemaining.Value;
+                if (remaining <= 0)
+                {
+                    session.RemoveConstriction(effect.Constrictor, effect.Victim);
+                    events.Add(new CombatEvent($"{member.Name} is uncoiled by strong allies after sustained effort."));
+                }
+                else
+                {
+                    events.Add(new CombatEvent($"Strong allies are uncoiling {effect.Constrictor.DisplayName}; {remaining} round(s) remain."));
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void TryApplyConstrictionOnHit(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Constriction"))
+            return;
+
+        if (!IsAlive(target))
+            return;
+
+        if (session.HasActiveConstriction(monster, target))
+            return;
+
+        session.StartConstriction(monster, target);
+        events.Add(new CombatEvent($"{monster.DisplayName} wraps around {target.Name} and begins constriction (2-8 damage each melee round)."));
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Constriction",
+            $"{monster.DisplayName} constricts {target.Name}",
+            "Constriction inflicts 2-8 damage per melee round. If at least four strong creatures (e.g., Str 16+) grasp head and tail, they can uncoil it in 2-5 melee rounds.",
+            "2",
+            "8",
+            null,
+            $"{target.Name} is now constricted.");
+    }
+
+    private bool TryApplyPoisonSpores(MonsterInstance monster, Character target, List<CombatEvent> events, bool chantActiveAtRoundStart, bool prayerActiveAtRoundStart)
+    {
+        if (!HasSpecialAbility(monster, "Poison Spores"))
+            return false;
+
+        if (!IsAlive(target))
+            return false;
+
+        if (target.IsMonkImmuneToPoison())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to poison spores."));
+            return false;
+        }
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
+            saveTarget = Math.Max(1, saveTarget - 1);
+
+        var saveRoll = _dice.Roll(20);
+        var failedSave = saveRoll < saveTarget;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Poison Spores",
+            $"{monster.DisplayName} poison spores vs {target.Name}",
+            "Victim must save vs poison or die. Victims killed by poison spores require Cure Disease and Resurrection/Raise Dead within 24 hours.",
+            "1",
+            "20",
+            saveRoll.ToString(),
+            $"Save target {saveTarget}. {(failedSave ? "Failed save." : "Successful save.")}");
+
+        if (!failedSave)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s poison spores (save {saveRoll} vs {saveTarget})."));
+            return false;
+        }
+
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        target.ApplyPoisonSporesDeathCurse(daysUntilRaiseImpossible: 1);
+        events.Add(new CombatEvent($"{target.Name} is killed by {monster.DisplayName}'s poison spores! Cure Disease and Resurrection/Raise Dead must both be completed within 24 hours. (save {saveRoll} vs {saveTarget})"));
         return true;
     }
 
@@ -8257,6 +9104,37 @@ public sealed partial class CombatResolver
 
         return target.Template.SpecialDefenses.Any(d =>
             string.Equals(d?.Name?.Trim(), defenseName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool HasOnlyAffectedByFireBasedAttacksDefense(MonsterInstance target)
+    {
+        if (target?.Template?.SpecialDefenses == null)
+            return false;
+
+        return target.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d?.Name?.Trim() ?? string.Empty;
+            var description = d?.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}";
+            return string.Equals(name, "Affected only by fire based attacks", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Affected only by fire based attacks", StringComparison.OrdinalIgnoreCase)
+                   || (merged.Contains("affected only by fire", StringComparison.OrdinalIgnoreCase)
+                       && merged.Contains("attack", StringComparison.OrdinalIgnoreCase));
+        });
+    }
+
+    private static bool IsFireBasedWeaponAttack(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var text = $"{weapon.Name} {weapon.Description}";
+        return text.Contains("fire", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("flame", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("burn", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("torch", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("oil", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("incendiary", StringComparison.OrdinalIgnoreCase);
     }
 
     private bool CanMonsterLocateTarget(MonsterInstance monster, Character target, List<CombatEvent> events)

@@ -494,10 +494,6 @@
         {
           "Name": "Shapechange",
           "Description": "Can assume the appearance of any humanoid creature."
-        },
-        {
-          "Name": "Detect Thoughts",
-          "Description": "Can sense surface thoughts of nearby creatures."
         }
       ],
       "Size": "Medium",
@@ -849,12 +845,7 @@
           "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "SpecialDefenses": [
-        {
-          "Name": "All Heads Must Be Slain",
-          "Description": "The hydra dies only when every head is reduced to 0 HP."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",
       "Size": "Large",
@@ -1081,23 +1072,18 @@
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Butt/Bite",
-          "NumberOfAttacks": 2,
-          "Damage": "2-8 or 1-4"
+          "Name": "Butt",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
         },
         {
-          "Name": "Weapon",
+          "Name": "Battle Axe",
           "NumberOfAttacks": 1,
-          "Damage": "By weapon"
+          "Damage": "1d8"
         }
       ],
       "SpecialAttacks": [],
-      "SpecialDefenses": [
-        {
-          "Name": "Surprise Resistance",
-          "Description": "Surprised only on a roll of 1."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Low",
       "Alignment": "Chaotic evil",
@@ -1137,8 +1123,8 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "See Below",
-          "Description": "Immune to most physical attacks; fire destroys it, cold causes dormancy."
+          "Name": "Affected only by fire based attacks",
+          "Description": "Can only be harmed by fire-based attacks."
         }
       ],
       "MagicResistance": "See Below",

@@ -1275,6 +1275,7 @@ public sealed class CampCharacterInspectForm : Form
                 grantsFireResistancePotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Fire Resistance"),
                 grantsGiantStrengthPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Giant Strength"),
                 grantsAnimalControlPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Animal Control"),
+                grantsHumanControlPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Human Control"),
                 grantsHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Heroism"),
                 grantsSuperHeroismPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Super-Heroism"),
                 grantsInvulnerabilityPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Invulnerability"),
@@ -1284,8 +1285,21 @@ public sealed class CampCharacterInspectForm : Form
                 grantsTreasureFindingPotion = string.Equals(item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing)
             .ToList();
+
+        var updatedHumanControlMetadata = false;
+        foreach (var hc in usableItems.Where(x => x.grantsHumanControlPotion))
+        {
+            if (Adnd.Core.Items.PotionOfHumanControl.TryGetAssignedControlRoll(hc.item, out _))
+                continue;
+
+            Adnd.Core.Items.PotionOfHumanControl.EnsureAssignedControlRoll(hc.item, sides => Random.Shared.Next(1, Math.Max(1, sides) + 1));
+            updatedHumanControlMetadata = true;
+        }
+
+        if (updatedHumanControlMetadata)
+            _characterRepository.Save(user);
 
         var hasEquippedRingInvisibility = user.TryGetEquippedRingOfInvisibility(out var equippedRingOfInvisibility)
             && equippedRingOfInvisibility != null;
@@ -1334,6 +1348,8 @@ public sealed class CampCharacterInspectForm : Form
                             ? $"{x.item.Name} (grants giant strength)"
                             : x.grantsAnimalControlPotion
                                 ? $"{x.item.Name} (grants animal control)"
+                            : x.grantsHumanControlPotion
+                                ? $"{x.item.Name} (controls {Adnd.Core.Items.PotionOfHumanControl.GetDisplayDescriptor(x.item)})"
                             : x.grantsHeroismPotion
                                 ? $"{x.item.Name} (grants heroism)"
                                 : x.grantsSuperHeroismPotion
@@ -1814,8 +1830,8 @@ public sealed class CampCharacterInspectForm : Form
         return c.Classes.Any(cls => cls == CharacterClass.MagicUser
                                     || cls == CharacterClass.Illusionist
                                     || cls == CharacterClass.Cleric
-                                    || cls == CharacterClass.Druid
-                                    || cls == CharacterClass.Ranger);
+                                    || cls == CharacterClass.Druid)
+               || c.IsRanger();
     }
 
     private static void NotImplemented(string actionName)
@@ -1935,15 +1951,45 @@ public sealed class CampCharacterInspectForm : Form
             return;
 
         var entries = new List<(string Label, Item Item)>();
+        var updatedHumanControlMetadata = false;
 
         foreach (var kv in c.Equipment)
         {
             if (kv.Value != null)
-                entries.Add(($"Equipped [{kv.Key}] {kv.Value.Name}", kv.Value));
+            {
+                if (Adnd.Core.Items.PotionOfHumanControl.IsPotionOfHumanControl(kv.Value)
+                    && !Adnd.Core.Items.PotionOfHumanControl.TryGetAssignedControlRoll(kv.Value, out _))
+                {
+                    Adnd.Core.Items.PotionOfHumanControl.EnsureAssignedControlRoll(kv.Value, sides => Random.Shared.Next(1, Math.Max(1, sides) + 1));
+                    updatedHumanControlMetadata = true;
+                }
+
+                var label = kv.Value.Name;
+                if (Adnd.Core.Items.PotionOfHumanControl.IsPotionOfHumanControl(kv.Value))
+                    label = $"{label} [{Adnd.Core.Items.PotionOfHumanControl.GetDisplayDescriptor(kv.Value)}]";
+
+                entries.Add(($"Equipped [{kv.Key}] {label}", kv.Value));
+            }
         }
 
         foreach (var item in c.Inventory)
-            entries.Add(($"Inventory {item.Name}", item));
+        {
+            if (Adnd.Core.Items.PotionOfHumanControl.IsPotionOfHumanControl(item)
+                && !Adnd.Core.Items.PotionOfHumanControl.TryGetAssignedControlRoll(item, out _))
+            {
+                Adnd.Core.Items.PotionOfHumanControl.EnsureAssignedControlRoll(item, sides => Random.Shared.Next(1, Math.Max(1, sides) + 1));
+                updatedHumanControlMetadata = true;
+            }
+
+            var label = item.Name;
+            if (Adnd.Core.Items.PotionOfHumanControl.IsPotionOfHumanControl(item))
+                label = $"{label} [{Adnd.Core.Items.PotionOfHumanControl.GetDisplayDescriptor(item)}]";
+
+            entries.Add(($"Inventory {label}", item));
+        }
+
+        if (updatedHumanControlMetadata)
+            _characterRepository.Save(c);
 
         if (entries.Count == 0)
         {
@@ -1976,7 +2022,7 @@ public sealed class CampCharacterInspectForm : Form
         var moreInfo = new Button { Text = "More info", Left = 392, Top = 354, Width = 75 };
         var cancel = new Button { Text = "Cancel", Left = 473, Top = 354, Width = 75, DialogResult = DialogResult.Cancel };
 
-        moreInfo.Click += (_, _) =>
+        void ShowSelectedItemInfo()
         {
             if (list.SelectedIndex < 0 || list.SelectedIndex >= entries.Count)
                 return;
@@ -2032,7 +2078,9 @@ public sealed class CampCharacterInspectForm : Form
 
             var fromJson = allItems.FirstOrDefault(i => string.Equals(i.Name, selected.Name, StringComparison.OrdinalIgnoreCase));
             var item = fromJson ?? selected;
-            var specialAbilities = fromJson?.SpecialAbilities ?? item.SpecialAbilities;
+            var specialAbilities = selected.SpecialAbilities.Count > 0
+                ? selected.SpecialAbilities
+                : fromJson?.SpecialAbilities ?? item.SpecialAbilities;
 
             var details = new List<string>
             {
@@ -2061,16 +2109,22 @@ public sealed class CampCharacterInspectForm : Form
                 details.Add($"Ring wizardry profile: {wizardryProfile}");
             }
 
+            if (Adnd.Core.Items.PotionOfHumanControl.IsPotionOfHumanControl(selected))
+                details.Add($"Human control type: {Adnd.Core.Items.PotionOfHumanControl.GetDisplayDescriptor(selected)}");
+
             if (item.AllowedClasses.Count > 0)
                 details.Add("Allowed classes: " + string.Join(", ", item.AllowedClasses));
 
             ViewerMessage.Show(form, $"Item Info - {item.Name}", string.Join(Environment.NewLine, details));
-        };
+        }
+
+        moreInfo.Click += (_, _) => ShowSelectedItemInfo();
 
         form.Controls.Add(list);
         form.Controls.Add(moreInfo);
         form.Controls.Add(cancel);
         form.CancelButton = cancel;
+        OldStyleDialog.Apply(form, list, onSelect: ShowSelectedItemInfo, selectLabel: "MORE INFO");
 
         form.ShowDialog(this);
     }

@@ -167,12 +167,15 @@ public sealed class CombatCoordinator
         _chestTrapTableProvider = new ChestTrapTableProvider(Path.Combine("Data", "Treasure", "chest-traps.json"));
     }
 
-    public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false, List<int>? dragonHitPointsPerDieProfile = null)
+    public CombatOutcome StartEncounter(IWin32Window owner, string monsterName, int monsterCount, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false, List<int>? dragonHitPointsPerDieProfile = null, int? dungeonDay = null)
     {
         var monsters = dragonHitPointsPerDieProfile != null && dragonHitPointsPerDieProfile.Count > 0
             ? _monsterFactory.CreateGroupWithDragonHitPointsPerDie(monsterName, dragonHitPointsPerDieProfile, "default", dungeonLevel)
             : _monsterFactory.CreateGroup(monsterName, monsterCount, "default", dungeonLevel);
-        var session = new CombatSession(party, monsters);
+        var session = new CombatSession(party, monsters)
+        {
+            DungeonDay = Math.Max(0, dungeonDay ?? 0)
+        };
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
         if (skipSurpriseRoll)
@@ -259,7 +262,7 @@ public sealed class CombatCoordinator
         return session.Outcome;
     }
 
-    public CombatOutcome StartEncounterWithGroupCounts(IWin32Window owner, List<(string name, int count)> groups, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
+    public CombatOutcome StartEncounterWithGroupCounts(IWin32Window owner, List<(string name, int count)> groups, List<Character> party, CharacterRepository characterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false, int? dungeonDay = null)
     {
         var normalized = groups
             .Where(g => !string.IsNullOrWhiteSpace(g.name))
@@ -270,7 +273,10 @@ public sealed class CombatCoordinator
             return CombatOutcome.Escaped;
 
         var monsters = _monsterFactory.CreateMultipleGroups(normalized, dungeonLevel);
-        var session = new CombatSession(party, monsters);
+        var session = new CombatSession(party, monsters)
+        {
+            DungeonDay = Math.Max(0, dungeonDay ?? 0)
+        };
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
         if (skipSurpriseRoll)
@@ -332,7 +338,7 @@ public sealed class CombatCoordinator
         return session.Outcome;
     }
 
-    public CombatOutcome StartEncounterWithMultipleGroups(IWin32Window owner, string[] monsterNames, List<Character> party, CharacterRepository characterRepository, MonsterRepository monsterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false)
+    public CombatOutcome StartEncounterWithMultipleGroups(IWin32Window owner, string[] monsterNames, List<Character> party, CharacterRepository characterRepository, MonsterRepository monsterRepository, int? dungeonLevel = null, bool skipSurpriseRoll = false, int? dungeonDay = null)
     {
         var groups = new List<(string name, int count)>();
         foreach (var monsterName in monsterNames)
@@ -351,7 +357,10 @@ public sealed class CombatCoordinator
         }
 
         var monsters = _monsterFactory.CreateMultipleGroups(groups, dungeonLevel);
-        var session = new CombatSession(party, monsters);
+        var session = new CombatSession(party, monsters)
+        {
+            DungeonDay = Math.Max(0, dungeonDay ?? 0)
+        };
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
         if (skipSurpriseRoll)
@@ -1521,7 +1530,7 @@ public sealed class CombatCoordinator
                     if (!receiver.CanCarry(item))
                         continue;
 
-                PrepareDelusionDisguiseIfNeeded(item, receiver.Inventory);
+                PreparePotionMetadataIfNeeded(item, receiver.Inventory);
                     receiver.Inventory.Add(item);
                     result.AssignedItems.Add(new AssignedMagicItem
                     {
@@ -2323,7 +2332,7 @@ public sealed class CombatCoordinator
                 if (!receiver.CanCarry(item))
                     continue;
 
-                    PrepareDelusionDisguiseIfNeeded(item, receiver.Inventory);
+                    PreparePotionMetadataIfNeeded(item, receiver.Inventory);
                 receiver.Inventory.Add(item);
                 result.AssignedItems.Add(new AssignedMagicItem
                 {
@@ -2709,7 +2718,7 @@ public sealed class CombatCoordinator
             if (!receiver.CanCarry(item))
                 continue;
 
-            PrepareDelusionDisguiseIfNeeded(item, receiver.Inventory);
+            PreparePotionMetadataIfNeeded(item, receiver.Inventory);
 
             receiver.Inventory.Add(item);
             result.AssignedItems.Add(new AssignedMagicItem
@@ -2745,6 +2754,15 @@ public sealed class CombatCoordinator
             AllowedClasses = new List<CharacterClass>(source.AllowedClasses),
             SpecialAbilities = new List<string>(source.SpecialAbilities)
         };
+    }
+
+    private static void PreparePotionMetadataIfNeeded(Item item, List<Item> existingInventory)
+    {
+        if (PotionOfHumanControl.IsPotionOfHumanControl(item))
+            PotionOfHumanControl.EnsureAssignedControlRoll(item, sides => Random.Shared.Next(1, Math.Max(1, sides) + 1));
+
+        if (ItemSpecialAbilityParser.IsPotionOfDelusion(item))
+            PrepareDelusionDisguiseIfNeeded(item, existingInventory);
     }
 
     private static void PrepareDelusionDisguiseIfNeeded(Item item, List<Item> existingInventory)
@@ -2787,6 +2805,9 @@ public sealed class CombatCoordinator
     {
         if (ItemSpecialAbilityParser.IsPotionOfDelusion(item))
             return "Potion of Delusion";
+
+        if (PotionOfHumanControl.IsPotionOfHumanControl(item))
+            return $"{item.Name} [{PotionOfHumanControl.GetDisplayDescriptor(item)}]";
 
         return item.Name;
     }

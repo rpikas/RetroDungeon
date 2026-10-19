@@ -227,7 +227,12 @@
           "Damage": "2d6"
         }
       ],
-      "SpecialAbilities": [],
+      "SpecialAbilities": [
+        {
+          "Name": "BodyHeal",
+          "Description": "Once per day, heal own wounds (1d4 + level-6) if level 7+."
+        }
+      ],
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 2,
       "TreasureType": "J,WornEquipment",
@@ -1504,12 +1509,7 @@
           "Description": "Up to 4 heads may attack the same opponent simultaneously."
         }
       ],
-      "SpecialDefenses": [
-        {
-          "Name": "All Heads Must Be Slain",
-          "Description": "The hydra dies only when every head is reduced to 0 HP."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",
       "Size": "Large",
