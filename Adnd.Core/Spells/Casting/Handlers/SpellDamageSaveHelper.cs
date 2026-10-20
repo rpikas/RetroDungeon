@@ -72,6 +72,12 @@ internal static class SpellDamageSaveHelper
             adjusted = Math.Max(1, adjusted - 4);
         }
 
+        if ((isMagicSave || isPoisonSave)
+            && HasColdFireLightningImmunityAndSevenHdSaves(monster))
+        {
+            adjusted = Math.Min(adjusted, 12);
+        }
+
         return adjusted;
     }
 
@@ -259,6 +265,28 @@ internal static class SpellDamageSaveHelper
         });
     }
 
+    private static bool HasColdFireLightningImmunityAndSevenHdSaves(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d.Name?.Trim() ?? string.Empty;
+            var description = d.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}".ToLowerInvariant();
+
+            var hasElements = (merged.Contains("cold", StringComparison.Ordinal)
+                               || merged.Contains("ice", StringComparison.Ordinal))
+                              && (merged.Contains("fire", StringComparison.Ordinal)
+                                  || merged.Contains("heat", StringComparison.Ordinal))
+                              && (merged.Contains("lightning", StringComparison.Ordinal)
+                                  || merged.Contains("electric", StringComparison.Ordinal));
+
+            var hasSevenHdSaves = merged.Contains("save", StringComparison.Ordinal)
+                                  && merged.Contains("7 hd", StringComparison.Ordinal);
+
+            return hasElements && hasSevenHdSaves;
+        });
+    }
+
     internal static string FormatSaveAndDamageLine(string targetDisplayName, int rolledDamage, Outcome outcome, string? rolledDamageText = null)
     {
         if (outcome.MagicResisted)
@@ -333,7 +361,8 @@ internal static class SpellDamageSaveHelper
                 MagicResistancePercent: null);
         }
 
-        if (HasImmunityToSomeAttacks(monster) && IsElectricitySpell(spellName))
+        if ((HasImmunityToSomeAttacks(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster))
+            && IsElectricitySpell(spellName))
         {
             return new Outcome(
                 SaveTarget: 0,
@@ -349,10 +378,13 @@ internal static class SpellDamageSaveHelper
         }
 
         var adjustedRolledDamage = rolledDamage;
-        if (HasColdImmunity(monster) && IsColdSpell(spellName))
+        if ((HasColdImmunity(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster))
+            && IsColdSpell(spellName))
             adjustedRolledDamage = 0;
 
-        if (HasSpecialDefense(monster, "Immunity to fire and heat") && IsFireOrHeatSpell(spellName))
+        if ((HasSpecialDefense(monster, "Immunity to fire and heat")
+             || HasColdFireLightningImmunityAndSevenHdSaves(monster))
+            && IsFireOrHeatSpell(spellName))
             adjustedRolledDamage = 0;
 
         if (adjustedRolledDamage > 0

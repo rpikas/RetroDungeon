@@ -51,6 +51,7 @@ public class PartyMenu
             new ChromaticOrbHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),
+            new WebHandler(),
             new HoldPersonHandler(),
             new HoldMonsterHandler(),
             new BlessHandler(),

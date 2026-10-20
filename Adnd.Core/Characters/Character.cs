@@ -1626,6 +1626,7 @@ public class Character
         if (HasStatus(CharacterStatus.Dead)) statuses.Add("Dead");
         if (HasStatus(CharacterStatus.Poisoned)) statuses.Add("Poisoned");
         if (HasStatus(CharacterStatus.Paralyzed)) statuses.Add("Paralyzed");
+        if (HasStatus(CharacterStatus.Webbed)) statuses.Add("Webbed");
         if (HasStatus(CharacterStatus.Petrified)) statuses.Add("Petrified");
         if (HasStatus(CharacterStatus.Asleep)) statuses.Add("Asleep");
         if (HasStatus(CharacterStatus.Ashes)) statuses.Add("Ashes");

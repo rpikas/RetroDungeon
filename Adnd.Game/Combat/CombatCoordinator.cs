@@ -120,6 +120,7 @@ public sealed class CombatCoordinator
             new ChromaticOrbHandler(),
             new ShockingGraspHandler(),
             new MelfsAcidArrowHandler(),
+            new WebHandler(),
             // Handles both cleric and magic-user Hold Person spell IDs.
             new HoldPersonHandler(),
             new HoldMonsterHandler(),
@@ -205,7 +206,7 @@ public sealed class CombatCoordinator
             var aliveMonsters = session.AliveMonsters.ToList();
             var hasMultipleGroups = session.GetDistinctGroupIds().Take(2).Count() > 1;
             var asleepMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Asleep));
-            var heldMonstersLegacy = 0;
+            var heldMonstersLegacy = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Webbed));
             var entangledMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Entangled));
             var panickedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Panicked));
             var fearedMonsters = aliveMonsters.Count(m => m.HasStatus(MonsterStatus.Feared));

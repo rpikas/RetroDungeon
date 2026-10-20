@@ -5008,11 +5008,13 @@ Practical example
 
 If a fighter reads the scroll:
 
-Enemy fireballs, charms, lightning bolts, and similar spells cannot affect the fighter while the protection lasts.
+Enemy fireballs, charms, lightning bolts, and similar spells cannot affect the fighter while the
+protection lasts.
 The fighter cannot benefit from friendly buffs either.
-A +2 sword entering the sphere may function only as a normal sword while inside, or potentially lose its 
-enchantment depending on the DM's interpretation of the 1e text.
-Physical attacks still work normally. An orc can simply walk up and hit the protected character with a mundane axe
+A +2 sword entering the sphere may function only as a normal sword while inside, or potentially 
+lose its enchantment depending on the DM's interpretation of the 1e text.
+Physical attacks still work normally. An orc can simply walk up and hit the protected character with 
+a mundane axe
 58,3
 in the log refer to DMG128ScrollOfProtectionFromMagic when reading scroll of protection from magic
 
@@ -5022,7 +5024,8 @@ Replace all SpecialAbilities "Improved Thief Skills" with "Pick Pockets"
 Remove all SpecialAbilities: Detect Thoughts ,  Head Loss Behavior  
 
 implement "SpecialAttacks": "¨Deadly Poison", requires save vs. poison or die."
- Implement "SpecialDefenses": "Immune to Sleep & Charm", cannot be affected by sleep or charm spells." 59,2
+ Implement "SpecialDefenses": "Immune to Sleep & Charm", cannot be affected by sleep or charm spells." 
+ 59,2
 Implement "SpecialDefenses": "Cold Immunity", "Not harmed by cold-based attacks." 
 can you review Attacks in Levelx.json files to make them functional, for example update from
       "Attacks": [
@@ -5049,3 +5052,14 @@ to       "Attacks": [
           "Damage": "1d8"
         }
       ],
+      59,6
+___
+Implement SpecialDefenses: Unaffected by cold, fire, lightning; saves as 7 HD monster.
+
+Implement 2nd level magic user spell Web, that will hold one group of monsters. save vs. spell. 
+If fail, held for 2
+turns=20 rounds per level of the caster. For every full turn trapped, there is a cumulative 
+5% chance of suffocation.
+
+Implement SpecialAttacks "Webs", "Constructs sticky horizontal or vertical webs functioning like 
+a web spell; STR 18 breaks free in 1 round, STR 17 in 2 rounds, etc. Webs are highly flammable."

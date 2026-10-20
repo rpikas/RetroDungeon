@@ -1,0 +1,13 @@
+{
+  "Id": "web",
+  "Name": "Web",
+  "Class": "MagicUser",
+  "Level": 2,
+  "Description": "Sheets of webbing trap creatures.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "One enemy group saves vs. spell. Failed targets are held 20 rounds per caster level; every full turn trapped adds cumulative +5% suffocation chance."
+}

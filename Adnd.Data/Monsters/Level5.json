@@ -1042,7 +1042,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Lycanthrope Immunity",
+          "Name": "Hit Only by Silver or Magic Weapons",
           "Description": "Hit only by silver or magic weapons"
         }
       ],
@@ -1179,7 +1179,7 @@
           "Description": "Regenerates 1 HP per melee round."
         },
         {
-          "Name": "Partial Spell Immunity",
+          "Name": "Unaffected by cold, fire, lightning; saves as 7 HD monster.",
           "Description": "Unaffected by cold, fire, lightning; saves as 7 HD monster."
         },
         {

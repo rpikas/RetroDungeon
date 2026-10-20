@@ -81,6 +81,7 @@ public sealed class CombatSession
     public Dictionary<string, int> DrainBloodDieSides { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, string> DrainBloodEffectNames { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> WebbedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NauseaExposedMonsterGroups { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, HashSet<string>> NauseatedPartyByMonsterGroup { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -94,6 +95,7 @@ public sealed class CombatSession
     public HashSet<MonsterInstance> PyroHydraBreathUsed { get; } = new();
     public Dictionary<string, int> PiercerClimbRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MummyBurningOilSecondRoundDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, int> MonsterWebTrappedRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, List<int>> MonsterWoundingRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterWoundingUnhealableDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -387,6 +389,20 @@ public sealed class CombatSession
 
         MummyBurningOilSecondRoundDamage.Remove(key);
         return Math.Max(1, damage);
+    }
+
+    public void ResetMonsterWebTrappedRounds(MonsterInstance monster)
+    {
+        MonsterWebTrappedRounds.Remove(MonsterKey(monster));
+    }
+
+    public int IncrementMonsterWebTrappedRounds(MonsterInstance monster)
+    {
+        var key = MonsterKey(monster);
+        var rounds = MonsterWebTrappedRounds.TryGetValue(key, out var existing) ? Math.Max(0, existing) : 0;
+        rounds += 1;
+        MonsterWebTrappedRounds[key] = rounds;
+        return rounds;
     }
 
     private static string MonsterKey(MonsterInstance monster)
@@ -917,6 +933,38 @@ public sealed class CombatSession
     public int GetPartyAsleepRounds(string characterName)
     {
         return AsleepPartyRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public void SetPartyWebbed(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+        {
+            WebbedPartyRounds.Remove(characterName);
+            return;
+        }
+
+        WebbedPartyRounds[characterName] = rounds;
+    }
+
+    public int GetPartyWebbedRounds(string characterName)
+    {
+        return WebbedPartyRounds.TryGetValue(characterName, out var rounds) ? Math.Max(0, rounds) : 0;
+    }
+
+    public int TickPartyWebbed(string characterName)
+    {
+        if (!WebbedPartyRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            WebbedPartyRounds.Remove(characterName);
+            return 0;
+        }
+
+        WebbedPartyRounds[characterName] = rounds;
+        return rounds;
     }
 
     public void SetPartyConfused(string characterName, int rounds)

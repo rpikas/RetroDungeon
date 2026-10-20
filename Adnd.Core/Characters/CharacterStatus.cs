@@ -26,6 +26,7 @@ public enum CharacterStatus
     LycanthropeTransformed = 1 << 15, // Character is currently transformed by lycanthropy
     Out = 1 << 16, // Character is out in the dungeon and unavailable until found
     Swallowed = 1 << 17,
-    Charmed = 1 << 18
+    Charmed = 1 << 18,
+    Webbed = 1 << 19
 
 }

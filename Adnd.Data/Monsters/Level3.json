@@ -789,7 +789,7 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Immunity to Normal Weapons",
+          "Name": "Hit only by magic weapon",
           "Description": "Can only be hit by silver or +1 or better magic weapons."
         }
       ],

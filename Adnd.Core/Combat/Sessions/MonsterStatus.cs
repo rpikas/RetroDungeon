@@ -6,6 +6,7 @@ public enum MonsterStatus
     Asleep,
     FaerieFire,
     Entangled,
+    Webbed,
     Snared,
     TurnedUndead,
     Poisoned,

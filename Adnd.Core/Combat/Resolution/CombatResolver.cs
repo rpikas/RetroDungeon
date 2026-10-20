@@ -410,6 +410,7 @@ public sealed partial class CombatResolver
                     WakeCharacterIfAsleepAfterDamage(member, actualFireDamage, events);
 
                     events.Add(new CombatEvent($"{member.Name} is engulfed in very hot fire for {actualFireDamage} damage. HP {beforeFireHp}->{member.CurrentHitPoints}."));
+                    TryBurnAwayWebsFromFireDamage(member, "very hot fire", session, events);
 
                     if (member.CurrentHitPoints <= 0)
                     {
@@ -633,6 +634,23 @@ public sealed partial class CombatResolver
                 {
                     member.RemoveStatus(CharacterStatus.Asleep);
                     events.Add(new CombatEvent($"{member.Name} wakes up."));
+                }
+
+                continue;
+            }
+
+            if (member.HasStatus(CharacterStatus.Webbed))
+            {
+                var roundsRemaining = session.GetPartyWebbedRounds(member.Name);
+                events.Add(new CombatEvent(roundsRemaining > 0
+                    ? $"{member.Name} is webbed and cannot act ({roundsRemaining} round(s) remaining)."
+                    : $"{member.Name} is webbed and cannot act."));
+
+                var afterTick = session.TickPartyWebbed(member.Name);
+                if (afterTick <= 0)
+                {
+                    member.RemoveStatus(CharacterStatus.Webbed);
+                    events.Add(new CombatEvent($"{member.Name} breaks free of the webs."));
                 }
 
                 continue;
@@ -1184,6 +1202,38 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (monster.HasStatus(MonsterStatus.Webbed))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Webbed);
+                var trappedRounds = session.IncrementMonsterWebTrappedRounds(monster);
+                var fullTurnsTrapped = trappedRounds / 10;
+
+                if (remaining > 0)
+                    events.Add(new CombatEvent($"{monster.DisplayName} is held in webs ({remaining} round(s) remaining)."));
+                else
+                    events.Add(new CombatEvent($"{monster.DisplayName} breaks free of the webs."));
+
+                if (fullTurnsTrapped > 0 && monster.IsAlive)
+                {
+                    var suffocationChance = Math.Min(100, fullTurnsTrapped * 5);
+                    var suffocationRoll = _dice.Roll(100);
+                    events.Add(new CombatEvent($"{monster.DisplayName} makes a suffocation check at {suffocationChance}% (rolled {suffocationRoll})."));
+                    if (suffocationRoll <= suffocationChance)
+                    {
+                        monster.CurrentHitPoints = 0;
+                        monster.SetStatus(MonsterStatus.Webbed, 0);
+                        session.ResetMonsterWebTrappedRounds(monster);
+                        events.Add(new CombatEvent($"{monster.DisplayName} suffocates in the webs."));
+                        continue;
+                    }
+                }
+
+                if (remaining <= 0)
+                    session.ResetMonsterWebTrappedRounds(monster);
+
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.Entangled))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Entangled);
@@ -1546,6 +1596,7 @@ public sealed partial class CombatResolver
                             TryApplyGiantRatDisease(monster, target, events);
                             TryApplyRottingDisease(monster, target, events);
                             TryApplyPetrificationFromSpecialAttacks(monster, target, events);
+                            TryApplyWebsSpecialAttack(monster, target, session, events);
                             if (TryApplyPoisonSpit(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
                                 continue;
                             if (TryApplyPoisonSpores(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
@@ -4169,6 +4220,7 @@ public sealed partial class CombatResolver
         partyTarget.CurrentHitPoints = Math.Max(0, partyTarget.CurrentHitPoints - applied);
         var actualDamage = beforeHp - partyTarget.CurrentHitPoints;
         WakeCharacterIfAsleepAfterDamage(partyTarget, actualDamage, events);
+        TryBurnAwayWebsFromFireDamage(partyTarget, "flame strike", session, events);
 
         events.Add(new CombatEvent(saveRoll >= saveTarget
             ? $"{monster.DisplayName} casts Glyph of Warding! {partyTarget.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half damage: {actualDamage}. HP {beforeHp}->{partyTarget.CurrentHitPoints}."
@@ -4332,6 +4384,7 @@ public sealed partial class CombatResolver
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
             var actual = before - target.CurrentHitPoints;
             WakeCharacterIfAsleepAfterDamage(target, actual, events);
+            TryBurnAwayWebsFromFireDamage(target, "fireball", session, events);
 
             events.Add(new CombatEvent(saveRoll >= saveTarget
                 ? $"{target.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half lightning damage: {actual}. HP {before}->{target.CurrentHitPoints}."
@@ -5918,6 +5971,7 @@ public sealed partial class CombatResolver
             target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
             var actual = before - target.CurrentHitPoints;
             WakeCharacterIfAsleepAfterDamage(target, actual, events);
+            TryBurnAwayWebsFromFireDamage(target, "fire breath", session, events);
 
             if (saveRoll >= saveTarget)
                 events.Add(new CombatEvent($"{target.Name} succeeds breath save ({saveRoll} vs {saveTarget}) and takes half damage: {actual}. HP {before}->{target.CurrentHitPoints}."));
@@ -6698,6 +6752,37 @@ public sealed partial class CombatResolver
             "Character is paralyzed until duration expires or they leave the dungeon.");
 
         events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName} for {rounds} round(s)! (save {saveRoll} vs {saveTarget})"));
+    }
+
+    private static int GetWebEscapeRoundsFromStrength(Character target)
+    {
+        var strength = Math.Clamp(target.Abilities.Strength, 1, 18);
+        return Math.Clamp(19 - strength, 1, 18);
+    }
+
+    private static void TryBurnAwayWebsFromFireDamage(Character target, string source, CombatSession session, List<CombatEvent> events)
+    {
+        if (!target.HasStatus(CharacterStatus.Webbed))
+            return;
+
+        target.RemoveStatus(CharacterStatus.Webbed);
+        session.SetPartyWebbed(target.Name, 0);
+        events.Add(new CombatEvent($"{target.Name}'s webs burn away from {source}."));
+    }
+
+    private static void TryApplyWebsSpecialAttack(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Webs"))
+            return;
+
+        if (target.HasStatus(CharacterStatus.Webbed))
+            return;
+
+        var rounds = GetWebEscapeRoundsFromStrength(target);
+        target.AddStatus(CharacterStatus.Webbed);
+        session.SetPartyWebbed(target.Name, rounds);
+
+        events.Add(new CombatEvent($"{monster.DisplayName} entangles {target.Name} in sticky webs. STR {Math.Clamp(target.Abilities.Strength, 1, 18)} breaks free in {rounds} round(s)."));
     }
 
     private void TryApplyPetrificationFromSpecialAttacks(MonsterInstance monster, Character target, List<CombatEvent> events)
@@ -8919,6 +9004,18 @@ public sealed partial class CombatResolver
 
     private static bool CanWeaponHarmTargetByMagicRequirement(Item? weapon, MonsterInstance target)
     {
+        if (HasMagicOrColdIronWeaponsRequirement(target))
+        {
+            if (IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(target, weapon))
+                return true;
+
+            if (IsColdIronWeapon(weapon))
+                return true;
+
+            var effectiveBonusForColdIronOrMagicRequirement = GetEffectiveWeaponBonusForHitRequirement(weapon);
+            return effectiveBonusForColdIronOrMagicRequirement >= 1;
+        }
+
         if (HasImmunityToNormalWeapons(target))
         {
             if (IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(target, weapon))
@@ -8938,6 +9035,25 @@ public sealed partial class CombatResolver
         var effectiveWeaponBonus = Math.Max(GetEffectiveWeaponBonusForHitRequirement(weapon),
             Math.Max(0, weapon?.ToHitBonus ?? 0) + GetSituationalSwordBonusAgainstTarget(weapon, target));
         return effectiveWeaponBonus >= requiredBonus;
+    }
+
+    private static bool HasMagicOrColdIronWeaponsRequirement(MonsterInstance target)
+    {
+        if (target?.Template?.SpecialDefenses == null)
+            return false;
+
+        return target.Template.SpecialDefenses.Any(d =>
+        {
+            var name = d.Name?.Trim() ?? string.Empty;
+            var description = d.Description?.Trim() ?? string.Empty;
+            var merged = $"{name} {description}".ToLowerInvariant();
+
+            return string.Equals(name, "Magic or Cold Iron Weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Magic or Cold Iron Weapons", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(description, "Only harmed by magic or cold iron weapons.", StringComparison.OrdinalIgnoreCase)
+                   || (merged.Contains("only harmed by magic", StringComparison.Ordinal)
+                       && merged.Contains("cold iron", StringComparison.Ordinal));
+        });
     }
 
     private static bool CanMonsterHarmLycanthropeForm(MonsterInstance monster)
@@ -8976,9 +9092,7 @@ public sealed partial class CombatResolver
             var description = d.Description?.Trim() ?? string.Empty;
             var merged = $"{name} {description}".ToLowerInvariant();
 
-            return string.Equals(name, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
-                   || string.Equals(description, "Immunity to Normal Weapons", StringComparison.OrdinalIgnoreCase)
-                   || string.Equals(name, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
+            return string.Equals(name, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(description, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(name, "Hit Only by Silver or Magic Weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(description, "Hit Only by Silver or Magic Weapons", StringComparison.OrdinalIgnoreCase)
