@@ -5063,3 +5063,8 @@ turns=20 rounds per level of the caster. For every full turn trapped, there is a
 
 Implement SpecialAttacks "Webs", "Constructs sticky horizontal or vertical webs functioning like 
 a web spell; STR 18 breaks free in 1 round, STR 17 in 2 rounds, etc. Webs are highly flammable."
+___
+
+implement SpecialAttacks "Dissolve Wood", it will destory everything makd of wood or with a wood shaft, Staff, Bo
+stick, club, spear, pole arms such as halebard
+

@@ -28,7 +28,7 @@
           "Description": "Can dissolve 2 inches of wood equal to its diameter in 1 round."
         },
         {
-          "Name": "Dissolve Metal",
+          "Name": "Destroy Metal",
           "Description": "Chainmail in 1 round; plate mail in 2; magical armor requires +1 round per plus."
         }
       ],

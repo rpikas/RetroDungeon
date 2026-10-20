@@ -1565,6 +1565,7 @@ public sealed partial class CombatResolver
                         }
 
                         TryApplyDestroyMetalOnMonsterHit(monster, target, events);
+                        TryApplyDissolveWoodOnMonsterHit(monster, target, events);
 
                         if (chantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, target.Name, StringComparison.OrdinalIgnoreCase) && damage > 0)
                         {
@@ -7411,6 +7412,77 @@ public sealed partial class CombatResolver
         }
 
         DestroyEquippedItem(target, item, events, $"{monster.DisplayName} corrodes {target.Name}'s {item.Name}; it rusts away instantly!");
+    }
+
+    private void TryApplyDissolveWoodOnMonsterHit(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasAnySpecialAbility(monster, "Dissolve Wood"))
+            return;
+
+        var woodenItems = new[] { EquipmentSlot.MainHand, EquipmentSlot.OffHand, EquipmentSlot.Range }
+            .Select(slot => target.Equipment.TryGetValue(slot, out var i) ? i : null)
+            .Where(i => i != null && IsWoodenItem(i))
+            .Distinct()
+            .ToList();
+
+        if (woodenItems.Count == 0)
+            return;
+
+        var item = woodenItems[_dice.Roll(woodenItems.Count) - 1]!;
+
+        if (IsMagicalItem(item))
+        {
+            var saveRoll = _dice.Roll(20);
+            const int saveTarget = 11;
+            RuleApplicationInfo.Publish(
+                "DMG",
+                "Item Save",
+                $"{item.Name} saving throw vs dissolving",
+                "Magical wooden item touched by a wood-dissolving creature gets a saving throw; success resists.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                saveRoll >= saveTarget
+                    ? $"Save succeeded ({saveRoll} vs {saveTarget}); item resists dissolving."
+                    : $"Save failed ({saveRoll} vs {saveTarget}); item dissolves.");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name}'s {item.Name} resists dissolving (save {saveRoll} vs {saveTarget})."));
+                return;
+            }
+        }
+
+        DestroyEquippedItem(target, item, events, $"{monster.DisplayName} dissolves {target.Name}'s {item.Name}!");
+    }
+
+    private static readonly string[] WoodenItemKeywords =
+    {
+        "wood", "staff", "stick", "club", "spear", "javelin", "lance", "pike", "trident",
+        "halberd", "bardiche", "bec de corbin", "guisarme", "fauchard", "fork", "glaive",
+        "voulge", "partisan", "ranseur", "spetum", "lucern", "pole",
+        "bow", "crossbow", "sling", "axe", "hammer", "flail", "morning star", "pick", "quarterstaff"
+    };
+
+    private static bool IsWoodenItem(Item? item)
+    {
+        if (item == null)
+            return false;
+
+        if (item.Type == ItemType.Shield)
+            return $"{item.Name} {item.Description}".Contains("wood", StringComparison.OrdinalIgnoreCase);
+
+        if (item.Type != ItemType.Weapon)
+            return false;
+
+        var name = item.Name.ToLowerInvariant();
+        if (name.Contains("sword", StringComparison.Ordinal) || name.Contains("dagger", StringComparison.Ordinal))
+            return false;
+
+        if (item.Description.Contains("wood", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return WoodenItemKeywords.Any(k => name.Contains(k, StringComparison.Ordinal));
     }
 
     private void TryApplyHitOnMonsterDestroysMetal(Character attacker, MonsterInstance target, Item? strikingWeapon, List<CombatEvent> events)
