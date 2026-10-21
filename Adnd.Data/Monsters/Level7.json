@@ -802,16 +802,20 @@
       "SpecialAttacks": [
         {
           "Name": "Bone Hook",
-          "Description": "Hooks and tears flesh; extremely painful."
+        "Description": "Bane hook; any creature hit by it has a 50% chance of being stuck fast."
         },
         {
           "Name": "Tail",
-          "Description": "Tail strike deals 2d8 damage and drains 1–4 strength points."
+        "Description": "Against stuck victims: tail strike deals 2-8 damage and drains 1-4 Strength for 10 melee rounds unless a save vs. poison is made."
         },
         {
-          "Name": "Magic Use",
-          "Description": "Can use various devil spell-like abilities."
-        }
+        "Name": "Summon Bone Devil",
+        "Description": "Can summon another bone devil (40% chance of success)."
+      },
+      {
+        "Name": "Magic Use",
+        "Description": "At will: fear (5' radius), create illusion, fly, become invisible, detect invisible, fear spell. Once per day: wall of ice."
+      }
       ],
       "SpecialDefenses": [
         {

@@ -215,6 +215,9 @@ public sealed partial class CombatResolver
     private readonly IDice _dice;
     private readonly SpellCastingService? _spellCastingService;
     private readonly CharacterSavingThrowService _savingThrowService = new();
+    private readonly Dictionary<MonsterInstance, int> _acidSpitRangeInches = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<(MonsterInstance Monster, Character Victim)> _boneHooks = new();
+    private readonly Dictionary<Character, (int Amount, int RoundsRemaining)> _boneDevilStrengthLoss = new(ReferenceEqualityComparer.Instance as IEqualityComparer<Character>);
     private readonly DualClassService _dualClassService = new();
 
     public CombatResolver(IDice? dice = null, SpellCastingService? spellCastingService = null)
@@ -461,6 +464,7 @@ public sealed partial class CombatResolver
             }
 
             var mirrorRounds = session.GetMirrorImageRounds(member.Name);
+            TickBoneDevilStrengthLoss(member, events);
             if (mirrorRounds > 0)
             {
                 var imageCount = session.GetMirrorImageCount(member.Name);
@@ -1032,6 +1036,15 @@ public sealed partial class CombatResolver
                 && ResolveHpDamageBreath(monster, breathDamage, session, events))
                 continue;
 
+            if (TryResolveMonsterAcidSpit(session, monster, events))
+                continue;
+
+            if (TryResolveBoneDevilTail(session, monster, events))
+                continue;
+
+            if (TryResolveBoneDevilSummon(session, monster, events))
+                continue;
+
             if (TryResolveMonsterPickPockets(session, monster, events))
                 continue;
 
@@ -1597,6 +1610,7 @@ public sealed partial class CombatResolver
                             TryApplyGiantRatDisease(monster, target, events);
                             TryApplyRottingDisease(monster, target, events);
                             TryApplyPetrificationFromSpecialAttacks(monster, target, events);
+                            TryApplyBoneHook(monster, target, events);
                             TryApplyWebsSpecialAttack(monster, target, session, events);
                             if (TryApplyPoisonSpit(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
                                 continue;
@@ -3222,6 +3236,8 @@ public sealed partial class CombatResolver
         foreach (var message in session.SwallowingOutcomeMessages)
             LogPurpleWormRule(events, message);
         session.SwallowingOutcomeMessages.Clear();
+        if (session.Outcome != CombatOutcome.InProgress)
+            ClearBoneDevilEffects();
         if (session.Outcome == CombatOutcome.InProgress)
             session.RoundNumber++;
 
@@ -6191,6 +6207,227 @@ public sealed partial class CombatResolver
         }
     }
 
+    private void TryApplyBoneHook(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Bone Hook") || !IsAlive(target))
+            return;
+
+        if (_boneHooks.Contains((monster, target)))
+            return;
+
+        var roll = _dice.Roll(100);
+        var stuck = roll <= 50;
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Bone Hook",
+            $"{monster.DisplayName} bane hook on {target.Name}",
+            "Any creature caught (hit) by the hook has a 50% chance of being stuck fast.",
+            "1",
+            "100",
+            roll.ToString(),
+            stuck ? "Stuck fast." : "Not stuck.");
+
+        if (!stuck)
+            return;
+
+        _boneHooks.Add((monster, target));
+        events.Add(new CombatEvent($"{monster.DisplayName}'s bone hook snares {target.Name}, who is stuck fast!"));
+    }
+
+    private bool TryResolveBoneDevilTail(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Bone Hook"))
+            return false;
+
+        var victims = _boneHooks
+            .Where(h => ReferenceEquals(h.Monster, monster) && IsAlive(h.Victim) && h.Victim.CurrentHitPoints > 0)
+            .Select(h => h.Victim)
+            .ToList();
+        _boneHooks.RemoveWhere(h => ReferenceEquals(h.Monster, monster) && !victims.Contains(h.Victim));
+
+        if (victims.Count == 0)
+            return false;
+
+        var target = victims[_dice.Roll(victims.Count) - 1];
+        var damage = _dice.Roll(4) + _dice.Roll(4);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        var actual = before - target.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(target, actual, events);
+        events.Add(new CombatEvent($"{monster.DisplayName} strikes the hooked {target.Name} with its tail for {actual} damage (2d4). HP {before}->{target.CurrentHitPoints}."));
+
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+            return true;
+        }
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists the tail's strength drain (save vs poison {saveRoll} vs {saveTarget})."));
+            return true;
+        }
+
+        var loss = _dice.Roll(4);
+        var beforeStrength = Math.Max(0, target.Abilities.Strength);
+        var actualLoss = Math.Min(loss, Math.Max(0, beforeStrength - 1));
+        target.Abilities.Strength = beforeStrength - actualLoss;
+
+        var existing = _boneDevilStrengthLoss.TryGetValue(target, out var current) ? current.Amount : 0;
+        _boneDevilStrengthLoss[target] = (existing + actualLoss, 10);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Bone Devil Tail",
+            $"{monster.DisplayName} tail strikes {target.Name}",
+            "Tail does 2-8 damage and causes a loss of 1-4 Strength unless a save vs. poison is made; strength loss lasts 10 melee rounds.",
+            "1",
+            "4",
+            loss.ToString(),
+            $"Save {saveRoll} vs {saveTarget} failed; STR {beforeStrength}->{target.Abilities.Strength} for 10 rounds.");
+
+        events.Add(new CombatEvent($"{target.Name} fails the save vs poison ({saveRoll} vs {saveTarget}) and loses {actualLoss} Strength for 10 rounds: STR {beforeStrength}->{target.Abilities.Strength}."));
+        return true;
+    }
+
+    private void TickBoneDevilStrengthLoss(Character member, List<CombatEvent> events)
+    {
+        if (!_boneDevilStrengthLoss.TryGetValue(member, out var loss))
+            return;
+
+        var remaining = loss.RoundsRemaining - 1;
+        if (remaining > 0)
+        {
+            _boneDevilStrengthLoss[member] = (loss.Amount, remaining);
+            return;
+        }
+
+        member.Abilities.Strength += loss.Amount;
+        _boneDevilStrengthLoss.Remove(member);
+        events.Add(new CombatEvent($"{member.Name}'s Strength returns (+{loss.Amount})."));
+    }
+
+    private void ClearBoneDevilEffects()
+    {
+        foreach (var (character, loss) in _boneDevilStrengthLoss.ToList())
+            character.Abilities.Strength += loss.Amount;
+
+        _boneDevilStrengthLoss.Clear();
+        _boneHooks.Clear();
+    }
+
+    private bool TryResolveBoneDevilSummon(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Summon Bone Devil"))
+            return false;
+
+        // One summoning attempt in roughly four rounds; total devils of this kind are capped to keep encounters bounded.
+        if (_dice.Roll(4) != 1)
+            return false;
+
+        const int maxDevils = 4;
+        if (session.AliveMonsters.Count(m => string.Equals(m.Template.Name, monster.Template.Name, StringComparison.OrdinalIgnoreCase)) >= maxDevils)
+            return false;
+
+        var roll = _dice.Roll(100);
+        var success = roll <= 40;
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Devil Summoning",
+            $"{monster.DisplayName} attempts to summon another {monster.Template.Name}",
+            "A bone devil can summon another bone devil (40% chance of success), once per round.",
+            "1",
+            "100",
+            roll.ToString(),
+            success ? "Success." : "Failure.");
+
+        if (!success)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} tries to summon another {monster.Template.Name} but fails (roll {roll} vs 40%)."));
+            return true;
+        }
+
+        var nextIndex = session.Monsters
+            .Where(m => string.Equals(m.GroupId, monster.GroupId, StringComparison.OrdinalIgnoreCase))
+            .Select(m => m.Index)
+            .DefaultIfEmpty(0)
+            .Max() + 1;
+        var summoned = new MonsterInstance(monster.Template, nextIndex, monster.GroupId) { IsInLair = monster.IsInLair };
+        session.Monsters.Add(summoned);
+        events.Add(new CombatEvent($"{monster.DisplayName} summons another devil: {summoned.DisplayName} appears!"));
+        return true;
+    }
+
+    private bool TryResolveMonsterAcidSpit(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Acid Spit"))
+            return false;
+
+        var aliveParty = session.ExposedParty.Where(IsAlive).ToList();
+        if (aliveParty.Count == 0)
+            return false;
+
+        var isFirstSpit = !_acidSpitRangeInches.ContainsKey(monster);
+        if (!isFirstSpit && _dice.Roll(3) != 1)
+            return false;
+
+        // Range is determined on the first spit and kept for later spits.
+        if (isFirstSpit)
+            _acidSpitRangeInches[monster] = _dice.Roll(8);
+        var rangeInches = _acidSpitRangeInches[monster];
+
+        var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+
+        // Base 50% at 6"; +10% per inch closer, -10% per inch beyond 6". First spit is always inaccurate (10%).
+        var hitChance = isFirstSpit ? 10 : Math.Clamp(50 + (6 - rangeInches) * 10, 5, 100);
+        var hitRoll = _dice.Roll(100);
+        if (hitRoll > hitChance)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} spits acid at {target.Name} from {rangeInches}\" but misses (roll {hitRoll} vs {hitChance}%{(isFirstSpit ? ", first spit" : string.Empty)})."));
+            return true;
+        }
+
+        var damage = _dice.Roll(8) + _dice.Roll(8) + _dice.Roll(8) + _dice.Roll(8);
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.BreathWeapon));
+        var saveRoll = _dice.Roll(20);
+        var saved = saveRoll >= saveTarget;
+        var applied = saved ? damage / 2 : damage;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Acid Spit",
+            $"{monster.DisplayName} spits acid at {target.Name}",
+            "Acid spit deals 4d8 damage; save vs. breath weapon for half damage. The first spit has only a 10% chance to hit.",
+            "4",
+            "8",
+            damage.ToString(),
+            $"Save {saveRoll} vs {saveTarget} => {(saved ? "half damage" : "full damage")}: {applied}.");
+
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - applied);
+        var actual = before - target.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+        events.Add(new CombatEvent(saved
+            ? $"{monster.DisplayName} spits acid at {target.Name}; save {saveRoll} vs {saveTarget} succeeds, half damage: {actual}. HP {before}->{target.CurrentHitPoints}."
+            : $"{monster.DisplayName} spits acid at {target.Name}; save {saveRoll} vs {saveTarget} fails, {actual} damage. HP {before}->{target.CurrentHitPoints}."));
+
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+        }
+
+        return true;
+    }
+
     private bool TryResolveMonsterPickPockets(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
         if (!HasSpecialAbility(monster, "Pick pockets"))
@@ -9074,8 +9311,25 @@ public sealed partial class CombatResolver
                || composite.Contains("golem");
     }
 
+    private static bool IsBluntWeapon(Item weapon)
+    {
+        if (!string.IsNullOrWhiteSpace(weapon.DamageType))
+            return weapon.DamageType.Contains("blunt", StringComparison.OrdinalIgnoreCase);
+
+        var name = weapon.Name.ToLowerInvariant();
+        return new[] { "mace", "staff", "club", "hammer", "flail", "morning star", "bo stick", "jo stick" }
+            .Any(k => name.Contains(k, StringComparison.Ordinal));
+    }
+
     private static bool CanWeaponHarmTargetByMagicRequirement(Item? weapon, MonsterInstance target)
     {
+        if (HasSpecialDefense(target, "Blunt Weapon Immunity")
+            && (weapon == null || IsBluntWeapon(weapon))
+            && GetEffectiveWeaponBonusForHitRequirement(weapon) < 1)
+        {
+            return false;
+        }
+
         if (HasMagicOrColdIronWeaponsRequirement(target))
         {
             if (IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(target, weapon))

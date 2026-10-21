@@ -5066,5 +5066,28 @@ a web spell; STR 18 breaks free in 1 round, STR 17 in 2 rounds, etc. Webs are hi
 ___
 
 implement SpecialAttacks "Dissolve Wood", it will destory everything makd of wood or with a wood shaft, Staff, Bo
-stick, club, spear, pole arms such as halebard
+stick, club, spear, pole arms such as halebard. 61,7
+___
+implement       "SpecialAttacks": [
+        {
+          "Name": "Acid Spit",
+          "Description": "Spits acid for 4d8 damage; save vs. breath weapon for half damage."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Blunt Weapon Immunity",
+          "Description": "Unaffected by blunt weapons; must be harmed by edged or magical weapons."
+acid spit and blunt weapon immunity shoul be compabtible with this
+Although oble to bite with effect, the major weapon of these creatures isa highly corrosive acid saliva which they
+are able to spit with considerable accuracy at great distances. Normal range is 6”, with a basic 50% chance of
+striking their target. For every 1” the range is lessened the base chance of hitting is increased 10%; ranges over
+6’ decrease the probability of hitting by 1096. Fortunately, the giant slug is always inaccurate on its first
+attack, and there is only a 1096 chance of its hitting its target on the first spitting of acid; once the range is
+then determined, second and following attacks are at normal probabilities. As they are of great size, these
+creatures can sometimes be caught in a narrow corridor where they ore unable to turn, and if they are then attacked
+from behind they can often be slain without loss to the attackers. Because of their size and structure, these beasts
+are not affected by blunt weapons, so they must be attacked by sharp-edged ones or magically. 
+___
 
+implement bone devil as specified in C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\Monsters\MM1\text from MM.txt"
