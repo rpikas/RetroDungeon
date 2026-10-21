@@ -216,6 +216,7 @@ public sealed partial class CombatResolver
     private readonly SpellCastingService? _spellCastingService;
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly Dictionary<MonsterInstance, int> _acidSpitRangeInches = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<(MonsterInstance Monster, Character Victim)> _confusingGazeResolved = new();
     private readonly HashSet<(MonsterInstance Monster, Character Victim)> _boneHooks = new();
     private readonly Dictionary<Character, (int Amount, int RoundsRemaining)> _boneDevilStrengthLoss = new(ReferenceEqualityComparer.Instance as IEqualityComparer<Character>);
     private readonly DualClassService _dualClassService = new();
@@ -1035,6 +1036,8 @@ public sealed partial class CombatResolver
             if (TryGetHpDamageBreathDamage(monster, out var breathDamage)
                 && ResolveHpDamageBreath(monster, breathDamage, session, events))
                 continue;
+
+            ApplyConfusingGaze(session, monster, events);
 
             if (TryResolveMonsterAcidSpit(session, monster, events))
                 continue;
@@ -6319,6 +6322,49 @@ public sealed partial class CombatResolver
 
         _boneDevilStrengthLoss.Clear();
         _boneHooks.Clear();
+        _confusingGazeResolved.Clear();
+    }
+
+    private void ApplyConfusingGaze(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Confusing Gaze"))
+            return;
+
+        foreach (var target in session.ExposedParty.Where(IsAlive).ToList())
+        {
+            if (!_confusingGazeResolved.Add((monster, target)))
+                continue;
+
+            if (target.HasStatus(CharacterStatus.Confused))
+                continue;
+
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            var saveRoll = _dice.Roll(20);
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} meets {monster.DisplayName}'s gaze but resists confusion (save vs magic {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            var rounds = _dice.Roll(4) + _dice.Roll(4) + _dice.Roll(4);
+            target.AddStatus(CharacterStatus.Confused);
+            session.SetPartyConfused(target.Name, rounds);
+
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "Confusing Gaze",
+                $"{monster.DisplayName} confusing gaze on {target.Name}",
+                "Any intelligent creature viewing the four eyes must save vs. magic or be confused for 3-12 melee rounds.",
+                "3",
+                "4",
+                rounds.ToString(),
+                $"Save {saveRoll} vs {saveTarget} failed; confused for {rounds} round(s).");
+
+            events.Add(new CombatEvent($"{target.Name} fails the save vs magic ({saveRoll} vs {saveTarget}) and is confused by {monster.DisplayName}'s gaze for {rounds} round(s)!"));
+        }
     }
 
     private bool TryResolveBoneDevilSummon(CombatSession session, MonsterInstance monster, List<CombatEvent> events)

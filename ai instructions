@@ -5091,3 +5091,8 @@ are not affected by blunt weapons, so they must be attacked by sharp-edged ones 
 ___
 
 implement bone devil as specified in C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\Monsters\MM1\text from MM.txt"
+___
+ implement     "SpecialAttacks": [
+        {
+          "Name": "Confusing Gaze",
+          "Description": "Creatures viewing all four eyes must save or be confused for 3–12 rounds."
