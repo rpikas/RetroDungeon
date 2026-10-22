@@ -35,6 +35,7 @@ namespace Adnd.Game.Combat;
 
 public sealed class CombatCoordinator
 {
+    private List<Monster>? _gateTemplates;
     private readonly Random _rng = new Random();//inte säker på att detta är rätt... egge ai sa åt mig att lägga till det för att fixa AssassinationService,
                                                 //men jag är osäker på om det är korrekt. Det verkar som om AssassinationService redan har en Random-parameter i
                                                 //TryAssassinate-metoden. Jag ska kolla upp det.
@@ -162,6 +163,9 @@ public sealed class CombatCoordinator
 
         _spellCastingService = new SpellCastingService(resolver, spellRepo.LoadAll());
         _combatResolver = new CombatResolver(spellCastingService: _spellCastingService);
+        _combatResolver.MonsterTemplateLookup = name =>
+            (_gateTemplates ??= new MonsterRepository().GetAll().ToList())
+                .FirstOrDefault(m => string.Equals(m.Name?.Trim(), name, StringComparison.OrdinalIgnoreCase));
 
         var treasureRepo = new TreasureTableRepository("Data/Treasure");
         _treasureService = new TreasureService(treasureRepo, _random);

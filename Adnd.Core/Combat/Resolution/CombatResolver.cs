@@ -217,9 +217,19 @@ public sealed partial class CombatResolver
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly Dictionary<MonsterInstance, int> _acidSpitRangeInches = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<(MonsterInstance Monster, Character Victim)> _confusingGazeResolved = new();
+    private readonly HashSet<(MonsterInstance Monster, Character Victim)> _fearAuraResolved = new();
+    private readonly HashSet<MonsterInstance> _deathGroanUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _nightHagSleepUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<MonsterInstance, int> _nightHagEnfeeblementUses = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<MonsterInstance, int> _nightHagMagicMissileUses = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<(MonsterInstance Monster, Character Victim)> _boneHooks = new();
     private readonly Dictionary<Character, (int Amount, int RoundsRemaining)> _boneDevilStrengthLoss = new(ReferenceEqualityComparer.Instance as IEqualityComparer<Character>);
     private readonly DualClassService _dualClassService = new();
+
+    // Lets Core resolve monster templates by name (e.g. for gating/summoning) without referencing the data layer.
+    public Func<string, Monster?>? MonsterTemplateLookup { get; set; }
+    private readonly HashSet<MonsterInstance> _nightHagGateAttempted = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<(MonsterInstance Hag, Character Victim)> _dreamRidingVictims = new();
 
     public CombatResolver(IDice? dice = null, SpellCastingService? spellCastingService = null)
     {
@@ -1038,6 +1048,25 @@ public sealed partial class CombatResolver
                 continue;
 
             ApplyConfusingGaze(session, monster, events);
+            ApplyFearAura(session, monster, events);
+
+            if (TryResolveDeathGroan(session, monster, events))
+                continue;
+
+            if (TryResolveNightHagGate(session, monster, events))
+                continue;
+
+            if (TryResolveNightHagStrangulation(session, monster, events))
+                continue;
+
+            if (TryResolveNightHagSleep(session, monster, events))
+                continue;
+
+            if (TryResolveNightHagMagicMissile(session, monster, events))
+                continue;
+
+            if (TryResolveNightHagEnfeeblement(session, monster, events))
+                continue;
 
             if (TryResolveMonsterAcidSpit(session, monster, events))
                 continue;
@@ -3240,7 +3269,10 @@ public sealed partial class CombatResolver
             LogPurpleWormRule(events, message);
         session.SwallowingOutcomeMessages.Clear();
         if (session.Outcome != CombatOutcome.InProgress)
+        {
+            ApplyDreamRidingDrain(session, events);
             ClearBoneDevilEffects();
+        }
         if (session.Outcome == CombatOutcome.InProgress)
             session.RoundNumber++;
 
@@ -6323,6 +6355,327 @@ public sealed partial class CombatResolver
         _boneDevilStrengthLoss.Clear();
         _boneHooks.Clear();
         _confusingGazeResolved.Clear();
+        _fearAuraResolved.Clear();
+        _deathGroanUsed.Clear();
+        _nightHagMagicMissileUses.Clear();
+        _nightHagSleepUsed.Clear();
+        _nightHagEnfeeblementUses.Clear();
+        _nightHagGateAttempted.Clear();
+        _dreamRidingVictims.Clear();
+    }
+
+    private void ApplyDreamRidingDrain(CombatSession session, List<CombatEvent> events)
+    {
+        // The hag rides the victims that resisted her sleep spell that night, so she must have survived the encounter.
+        foreach (var (hag, victim) in _dreamRidingVictims.ToList())
+        {
+            if (!hag.IsAlive || !IsAlive(victim))
+                continue;
+
+            var before = victim.Abilities.Constitution;
+            victim.Abilities.Constitution = Math.Max(0, before - 1);
+            events.Add(new CombatEvent($"That night {hag.DisplayName} rides {victim.Name} in the dream realm: CON {before}->{victim.Abilities.Constitution} (permanent)."));
+
+            if (victim.Abilities.Constitution <= 0)
+            {
+                victim.CurrentHitPoints = 0;
+                victim.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{victim.Name} reaches 0 Constitution and dies; {hag.DisplayName} carries off the larval soul."));
+            }
+        }
+    }
+
+    private bool TryResolveNightHagGate(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Night Hag Gate") || _nightHagGateAttempted.Contains(monster))
+            return false;
+
+        if (MonsterTemplateLookup == null || _dice.Roll(3) != 1)
+            return false;
+
+        _nightHagGateAttempted.Add(monster);
+
+        var roll = _dice.Roll(100);
+        var success = roll <= 50;
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Night Hag Gate",
+            $"{monster.DisplayName} attempts to gate in an ally",
+            "A night hag may attempt to gate in a Type I demon or a barbed devil (50% chance); one attempt per encounter.",
+            "1",
+            "100",
+            roll.ToString(),
+            success ? "Success." : "Failure.");
+
+        if (!success)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} tries to gate in an ally but fails (roll {roll} vs 50%)."));
+            return true;
+        }
+
+        var templateName = _dice.Roll(2) == 1 ? "Demon, Type I" : "Devil, Barbed";
+        var template = MonsterTemplateLookup(templateName);
+        if (template == null)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} opens a gate, but nothing answers."));
+            return true;
+        }
+
+        var groupId = $"gate-{monster.GroupId}-{_dice.Roll(10000)}";
+        var summoned = new MonsterInstance(template, 1, groupId);
+        session.Monsters.Add(summoned);
+        events.Add(new CombatEvent($"{monster.DisplayName} gates in {summoned.DisplayName}!"));
+        return true;
+    }
+
+    private bool TryResolveNightHagStrangulation(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Strangulation"))
+            return false;
+
+        var sleepers = session.ExposedParty
+            .Where(c => IsAlive(c) && c.HasStatus(CharacterStatus.Asleep))
+            .ToList();
+        if (sleepers.Count == 0)
+            return false;
+
+        var target = sleepers[_dice.Roll(sleepers.Count) - 1];
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Night Hag Strangulation",
+            $"{monster.DisplayName} on {target.Name}",
+            "The night hag strangles a sleeping victim; no save is allowed.",
+            "0",
+            "0",
+            "-",
+            "Sleeping victim is strangled.");
+
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        events.Add(new CombatEvent($"{monster.DisplayName} strangles the sleeping {target.Name}, who dies!"));
+        return true;
+    }
+
+    private bool TryResolveNightHagEnfeeblement(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Night Hag Ray of Enfeeblement"))
+            return false;
+
+        _nightHagEnfeeblementUses.TryGetValue(monster, out var used);
+        if (used >= 3 || _dice.Roll(100) > 50)
+            return false;
+
+        var targets = GetSpellAffectablePartyTargets(monster, session, events, "Ray of Enfeeblement");
+        if (targets.Count == 0)
+            return false;
+
+        _nightHagEnfeeblementUses[monster] = used + 1;
+        var target = targets[_dice.Roll(targets.Count) - 1];
+
+        var casterLevel = Math.Max(1, monster.Template.HitDice);
+        var percent = 25 + 2 * casterLevel;
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Ray of Enfeeblement ({used + 1}/3) at {target.Name}, who resists (save {saveRoll} vs {saveTarget})."));
+            return true;
+        }
+
+        var beforeStrength = Math.Max(0, target.Abilities.Strength);
+        var loss = Math.Max(1, beforeStrength * percent / 100);
+        var actualLoss = Math.Min(loss, Math.Max(0, beforeStrength - 1));
+        target.Abilities.Strength = beforeStrength - actualLoss;
+
+        var existing = _boneDevilStrengthLoss.TryGetValue(target, out var current) ? current.Amount : 0;
+        _boneDevilStrengthLoss[target] = (existing + actualLoss, casterLevel);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Night Hag Ray of Enfeeblement",
+            $"{monster.DisplayName} on {target.Name}",
+            "Ray of enfeeblement reduces Strength by 25% + 2% per caster level (hag counts as level 8 = 41%); save vs. spell negates. Lasts 1 round per level.",
+            "1",
+            "20",
+            saveRoll.ToString(),
+            $"Save target {saveTarget} failed; {percent}% reduction, STR {beforeStrength}->{target.Abilities.Strength} for {casterLevel} rounds.");
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Ray of Enfeeblement ({used + 1}/3)! {target.Name} fails the save ({saveRoll} vs {saveTarget}) and Strength drops {percent}%: STR {beforeStrength}->{target.Abilities.Strength} for {casterLevel} round(s)."));
+        return true;
+    }
+
+    private bool TryResolveNightHagSleep(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Night Hag Sleep Magic") || _nightHagSleepUsed.Contains(monster))
+            return false;
+
+        var targets = GetSpellAffectablePartyTargets(monster, session, events, "Sleep")
+            .Where(t => !t.HasStatus(CharacterStatus.Asleep))
+            .ToList();
+        if (targets.Count == 0)
+            return false;
+
+        _nightHagSleepUsed.Add(monster);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts a powerful Sleep spell that affects even high-level characters!"));
+
+        foreach (var target in targets)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
+            var saveRoll = _dice.Roll(20);
+
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "Night Hag Sleep Magic",
+                $"{monster.DisplayName} on {target.Name}",
+                "Sleep affects even 12th-level humans (no hit-dice limit) unless a save vs. magic is made.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                $"Save target {saveTarget}. {(saveRoll >= saveTarget ? "Saved." : "Failed; falls asleep.")}");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists Sleep (save {saveRoll} vs {saveTarget})."));
+                if (HasSpecialAbility(monster, "Dream Riding") && _dreamRidingVictims.Add((monster, target)))
+                    events.Add(new CombatEvent($"{monster.DisplayName} marks {target.Name} to be ridden in dreams."));
+                continue;
+            }
+
+            var rounds = _dice.Roll(4) + _dice.Roll(4);
+            target.AddStatus(CharacterStatus.Asleep);
+            session.SetPartyAsleep(target.Name, rounds);
+            events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and falls asleep for {rounds} round(s)."));
+        }
+
+        return true;
+    }
+
+    private bool TryResolveNightHagMagicMissile(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Night Hag Magic missile"))
+            return false;
+
+        _nightHagMagicMissileUses.TryGetValue(monster, out var used);
+        if (used >= 3 || _dice.Roll(100) > 50)
+            return false;
+
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Magic Missile");
+        if (aliveParty.Count == 0)
+            return false;
+
+        _nightHagMagicMissileUses[monster] = used + 1;
+        var target = aliveParty[_dice.Roll(aliveParty.Count) - 1];
+        var rolled = _dice.Roll(8) + _dice.Roll(8);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Night Hag Magic Missile",
+            $"{monster.DisplayName} on {target.Name}",
+            "Magic missile, 3 times per day, 2-16 damage, never misses.",
+            "2",
+            "8",
+            rolled.ToString(),
+            $"Cast {used + 1}/3");
+
+        var damage = ApplyBroochOfShieldingAgainstMagicMissile(target, rolled, events);
+        if (damage <= 0)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName}'s magic missile is fully absorbed by {target.Name}'s Brooch of Shielding."));
+            return true;
+        }
+
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        var actual = before - target.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(target, actual, events);
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Magic Missile ({used + 1}/3)! {target.Name} takes {actual} damage (rolled {rolled}). HP {before}->{target.CurrentHitPoints}."));
+
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+        }
+
+        return true;
+    }
+
+    private void ApplyFearAura(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Fear Aura"))
+            return;
+
+        foreach (var target in session.ExposedParty.Where(IsAlive).ToList())
+        {
+            if (!_fearAuraResolved.Add((monster, target)))
+                continue;
+
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            var saveRoll = _dice.Roll(20);
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} sees {monster.DisplayName} but resists fear (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            var rounds = _dice.Roll(4);
+            target.AddStatus(CharacterStatus.Confused);
+            session.SetPartyConfused(target.Name, rounds);
+            events.Add(new CombatEvent($"{target.Name} fails the save ({saveRoll} vs {saveTarget}) and is paralyzed with fear at the sight of {monster.DisplayName} for {rounds} round(s)!"));
+        }
+    }
+
+    private bool TryResolveDeathGroan(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Death Groan") || _deathGroanUsed.Contains(monster))
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        // Combat takes place underground, so it is always treated as darkness; usable once per day.
+        _deathGroanUsed.Add(monster);
+        events.Add(new CombatEvent($"{monster.DisplayName} lets out a terrible keening wail!"));
+
+        foreach (var target in party)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            var saveRoll = _dice.Roll(20);
+
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "Death Groan",
+                $"{monster.DisplayName} wail on {target.Name}",
+                "Hearers within 3\" must save vs. magic or die on the spot. Usable once per day, only during darkness.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                $"Save target {saveTarget}. {(saveRoll >= saveTarget ? "Saved." : "Failed; dies.")}");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists the wail (save vs magic {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            target.CurrentHitPoints = 0;
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} fails the save ({saveRoll} vs {saveTarget}) and dies from the wail!"));
+        }
+
+        return true;
     }
 
     private void ApplyConfusingGaze(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
@@ -9376,6 +9729,15 @@ public sealed partial class CombatResolver
             return false;
         }
 
+        if (HasSpecialDefense(target, "Weapon Immunity")
+            && target.Template.SpecialDefenses.Any(d => $"{d.Name} {d.Description}".Contains("silver, iron", StringComparison.OrdinalIgnoreCase)))
+        {
+            if (IsSilverWeapon(weapon) || IsIronWeapon(weapon))
+                return true;
+
+            return GetEffectiveWeaponBonusForHitRequirement(weapon) >= 3;
+        }
+
         if (HasMagicOrColdIronWeaponsRequirement(target))
         {
             if (IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(target, weapon))
@@ -9768,6 +10130,19 @@ public sealed partial class CombatResolver
 
         var text = $"{weapon.Name} {weapon.Description}";
         return text.Contains("silver", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsIronWeapon(Item? weapon)
+    {
+        if (weapon == null || weapon.Type != ItemType.Weapon)
+            return false;
+
+        var text = $"{weapon.Name} {weapon.Description}";
+        if (text.Contains("iron", StringComparison.OrdinalIgnoreCase) || text.Contains("steel", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        // Ordinary weapons are iron/steel unless made of wood or only a blunt improvised item.
+        return !IsWoodenItem(weapon) && !IsBluntWeapon(weapon);
     }
 
     private static bool IsColdIronWeapon(Item? weapon)

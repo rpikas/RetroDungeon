@@ -5090,9 +5090,58 @@ from behind they can often be slain without loss to the attackers. Because of th
 are not affected by blunt weapons, so they must be attacked by sharp-edged ones or magically. 
 ___
 
-implement bone devil as specified in C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\Monsters\MM1\text from MM.txt"
+implement bone devil as specified in 
+C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\Monsters\MM1\text from MM.txt"
 ___
  implement     "SpecialAttacks": [
         {
           "Name": "Confusing Gaze",
-          "Description": "Creatures viewing all four eyes must save or be confused for 3–12 rounds."
+          "Description": "Creatures viewing all four eyes must save or be confused for 3–12 rounds." 63,0
+___
+implement       SpecialAttacks    "Name": "Night Hag Magic missile",
+          "Description": "Magic missile (3/day, 2–16 damage)"
+
+implement "SpecialAttacks": [
+          "Name": "Night Hag Sleep Magic",
+          "Description": "Powerful sleep spell affecting even 12th‑level humans unless they save vs. magic." 63,5
+
+          implement Ray of Enfeeblement reduces the victim's Strength by 25% + 2% per caster level.
+A Night Hag is roughly equivalent to an 8 HD monster, so:
+Plain Text
+25% + (2% × 8)
+= 41% Strength reduction
+
+          implement     SpecialAttacks     "Name": "Strangulation",
+         "Description": "If victim is asleep, hag strangles them immediately." 
+
+         implement      SpecialAttacks   {
+          "Name": "Night Hag Gate",
+          "Description": "May attempt to gate in a Type I demon or barbed devil (50% chance)."
+
+          implement      SpecialAttacks     "Name": "Dream Riding",
+          "Description": "If sleep fails, hag becomes ethereal, invades dreams, forces victim to become ethereal,
+then rides them nightly draining 1 CON permanently."
+
+implement
+Night Hag
+65% Magic Resistance
+
+Special Defenses
+Completely immune to:
+Sleep
+Charm
+Fear
+Fire-based spells
+Cold-based spells
+Can only be harmed by:
+Silver weapons
+Iron weapons
+Magic weapons of +3 or better
+
+implement   "SpecialAttacks": [
+    {
+      "Name": "Death Groan",
+    "Description": "Once per day, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
+    },
+
+

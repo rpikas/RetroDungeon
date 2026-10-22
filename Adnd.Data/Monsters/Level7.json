@@ -1411,7 +1411,7 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Petrifying Breath",
+          "Name": "Petrifying Gaze",
           "Description": "Breath weapon turns creatures to stone; truncated cone ½\" at mouth, 6\" long, 2\" wide at end; usable 4 times per day."
         }
       ],
@@ -1455,11 +1455,11 @@
       "SpecialAttacks": [
         {
           "Name": "Death Groan",
-          "Description": "Once per night, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
+        "Description": "Once per day, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
         },
         {
-          "Name": "Fear",
-          "Description": "The sight of a groaning spirit causes fear unless a save is made."
+        "Name": "Fear Aura",
+        "Description": "The sight of a groaning spirit causes fear unless a save vs. magic is made."
         }
       ],
       "SpecialDefenses": [
@@ -2100,12 +2100,16 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Sleep Magic",
+          "Name": "Night Hag Sleep Magic",
           "Description": "Powerful sleep spell affecting even 12th‑level humans unless they save vs. magic."
         },
         {
-          "Name": "Spell Use",
-          "Description": "Magic missile (3/day, 2–16 damage), ray of enfeeblement (3/day)."
+          "Name": "Night Hag Magic missile",
+          "Description": "Magic missile (3/day, 2–16 damage)."
+        },
+        {
+          "Name": "Ray of Enfeeblement",
+          "Description": "Ray of enfeeblement (3/day). 41% Strength reduction when HD 8"
         },
         {
           "Name": "Dream Riding",
@@ -2116,7 +2120,7 @@
           "Description": "If victim is asleep, hag strangles them immediately."
         },
         {
-          "Name": "Gate",
+          "Name": "Night Hag Gate",
           "Description": "May attempt to gate in a Type I demon or barbed devil (50% chance)."
         }
       ],

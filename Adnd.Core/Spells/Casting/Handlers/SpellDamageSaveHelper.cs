@@ -122,9 +122,43 @@ internal static class SpellDamageSaveHelper
     internal static bool IsNegatedByMindAffectingImmunity(MonsterInstance monster, string? spellIdOrName)
     {
         return (HasSleepAndCharmImmunity(monster) && IsSleepOrCharmSpell(spellIdOrName))
+               || (HasCharmSleepHoldSpellImmunity(monster) && IsCharmSleepHoldSpell(spellIdOrName))
+               || (HasNightHagSpellImmunities(monster) && IsNightHagBlockedSpell(spellIdOrName))
                || (HasMindAffectingImmunity(monster) && IsMindAffectingSpell(spellIdOrName))
                || (HasUndeadTraitsCharmSleepHoldImmunity(monster) && IsCharmSleepHoldSpell(spellIdOrName))
                || (HasImmunityToSomeAttacks(monster) && IsSomeAttackImmunitySpell(spellIdOrName));
+    }
+
+    private static bool HasCharmSleepHoldSpellImmunity(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var merged = $"{d.Name} {d.Description}".ToLowerInvariant();
+            return merged.Contains("immune", StringComparison.Ordinal)
+                   && merged.Contains("charm", StringComparison.Ordinal)
+                   && merged.Contains("sleep", StringComparison.Ordinal)
+                   && merged.Contains("hold", StringComparison.Ordinal);
+        });
+    }
+
+    private static bool HasNightHagSpellImmunities(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var merged = $"{d.Name} {d.Description}".ToLowerInvariant();
+            return merged.Contains("invulnerable to sleep, charm, fear, fire, and cold", StringComparison.Ordinal);
+        });
+    }
+
+    private static bool HasElectricityImmunity(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+        {
+            var merged = $"{d.Name} {d.Description}".ToLowerInvariant();
+            return (merged.Contains("electric", StringComparison.Ordinal) || merged.Contains("lightning", StringComparison.Ordinal))
+                   && (merged.Contains("immun", StringComparison.Ordinal) || merged.Contains("impervious", StringComparison.Ordinal))
+                   && !merged.Contains("fire", StringComparison.Ordinal);
+        });
     }
 
     private static bool HasSleepAndCharmImmunity(MonsterInstance monster)
@@ -176,6 +210,19 @@ internal static class SpellDamageSaveHelper
         return key.Contains("charm", StringComparison.Ordinal)
                || key.Contains("sleep", StringComparison.Ordinal)
                || key.Contains("hold", StringComparison.Ordinal);
+    }
+
+    private static bool IsNightHagBlockedSpell(string? spellIdOrName)
+    {
+        if (string.IsNullOrWhiteSpace(spellIdOrName))
+            return false;
+
+        var key = spellIdOrName.Trim().ToLowerInvariant();
+        return key.Contains("sleep", StringComparison.Ordinal)
+               || key.Contains("charm", StringComparison.Ordinal)
+               || key.Contains("fear", StringComparison.Ordinal)
+               || IsFireOrHeatSpell(key)
+               || IsColdSpell(key);
     }
 
     private static bool IsSleepOrCharmSpell(string? spellIdOrName)
@@ -260,6 +307,8 @@ internal static class SpellDamageSaveHelper
             var merged = $"{name} {description}".ToLowerInvariant();
             return merged.Contains("cold", StringComparison.Ordinal)
                    && (merged.Contains("immune", StringComparison.Ordinal)
+                       || merged.Contains("immunity", StringComparison.Ordinal)
+                       || merged.Contains("impervious", StringComparison.Ordinal)
                        || merged.Contains("not harmed by cold", StringComparison.Ordinal)
                        || merged.Contains("not harmed by cold-based attacks", StringComparison.Ordinal));
         });
@@ -361,7 +410,7 @@ internal static class SpellDamageSaveHelper
                 MagicResistancePercent: null);
         }
 
-        if ((HasImmunityToSomeAttacks(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster))
+        if ((HasImmunityToSomeAttacks(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster) || HasElectricityImmunity(monster))
             && IsElectricitySpell(spellName))
         {
             return new Outcome(
@@ -378,11 +427,12 @@ internal static class SpellDamageSaveHelper
         }
 
         var adjustedRolledDamage = rolledDamage;
-        if ((HasColdImmunity(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster))
+        if ((HasColdImmunity(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster) || HasNightHagSpellImmunities(monster))
             && IsColdSpell(spellName))
             adjustedRolledDamage = 0;
 
         if ((HasSpecialDefense(monster, "Immunity to fire and heat")
+             || HasNightHagSpellImmunities(monster)
              || HasColdFireLightningImmunityAndSevenHdSaves(monster))
             && IsFireOrHeatSpell(spellName))
             adjustedRolledDamage = 0;
