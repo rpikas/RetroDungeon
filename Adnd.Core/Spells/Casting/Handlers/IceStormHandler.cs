@@ -35,7 +35,7 @@ public sealed class IceStormHandler : ISpellEffectHandler
             for (int i = 0; i < 3; i++)
                 damage += rng.Next(1, 11);
 
-            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, damage, rng, spell.Name);
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, damage, rng, spell.Name, coldDamageDiceCount: 3);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, damage, outcome));
             if (SpellDamageSaveHelper.HasImmunityToSomeAttacks(monster))
                 result.Events.Add($"{monster.DisplayName} is slowed by cold and suffers reduced damage.");

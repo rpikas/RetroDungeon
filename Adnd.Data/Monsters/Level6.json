@@ -491,45 +491,48 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 0,
-      "Movement": 12,
-      "HitDice": 8,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 2,
+      "Movement": 6,
+      "HitDice": 6,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "Nil",
+      "ExtraHitPoints": 6,
+      "%InLair": "20",
+      "TreasureType": "R",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "2d8"
-        },
-        {
-          "Name": "Bite",
+          "Name": "Dagger",
           "NumberOfAttacks": 1,
-          "Damage": "3d12"
+          "Damage": "2d4"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Fear",
-          "Description": "Victims must save or flee in terror."
+          "Name": "Venomous Dagger",
+          "Description": "Magical venomous dagger causes painful wounds; victims must save vs. poison or faint for 1-6 rounds."
         },
         {
-          "Name": "Magic Use",
-          "Description": "Can use various devil spell-like abilities."
+          "Name": "Rope of Entanglement",
+          "Description": "Carries a rope of entanglement to restrain fallen victims."
+        },
+        {
+          "Name": "Erinyes Fear",
+          "Description": "Anyone who sees an erinyes must save vs. wand or be affected by fear."
+        },
+        {
+          "Name": "Summon Erinyes",
+          "Description": "Once per round may use one power: detect invisible, invisibility, or summon another erinyes (25% success)."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Never Surprised",
-          "Description": "Always aware of surroundings; cannot be caught off guard."
+          "Name": "Devil Traits",
+          "Description": "Can be harmed by ordinary weapons."
         }
       ],
-      "MagicResistance": "35%",
-      "Intelligence": "Very",
+      "MagicResistance": "30%",
+      "Intelligence": "Average",
       "Alignment": "Lawful evil",
       "Size": "Medium",
       "BaseXPValue": 1425,
@@ -559,16 +562,7 @@
           "Damage": "2d8"
         }
       ],
-      "SpecialAttacks": [
-        {
-          "Name": "Whirlwind",
-          "Description": "Forms a whirlwind that lasts 1 round and deals damage to non‑aerial creatures."
-        },
-        {
-          "Name": "Magic Use",
-          "Description": "Can create food, water, soft goods, wood, temporary metal, illusions, become invisible, gaseous, wind walk, or form a whirlwind once per day."
-        }
-      ],
+      "SpecialAttacks": [ ],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Average-high",
@@ -932,7 +926,7 @@
           "Description": "Immune to most weapons and spells; only fire, cold, Cure Disease, or physical removal works."
         }
       ],
-      "MagicResistance": "See below",
+      "MagicResistance": "Standard",
       "Intelligence": "Non-",
       "Size": "Small",
       "BaseXPValue": 610,
@@ -958,16 +952,11 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 12,
+          "NumberOfAttacks": 8,
           "Damage": "1d8"
         }
       ],
-      "SpecialAttacks": [
-        {
-          "Name": "Multi‑Headed Assault",
-          "Description": "Up to 4 heads may attack the same opponent simultaneously."
-        }
-      ],
+      "SpecialAttacks": [ ],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",
@@ -1045,16 +1034,11 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Spell Use",
+          "Name": "Level 4 Cleric spells",
           "Description": "Can use clerical spells up to 4th level at 6th‑level proficiency."
         }
       ],
-      "SpecialDefenses": [
-        {
-          "Name": "Protection From Evil",
-          "Description": "Radiates a 10' radius protection from evil of double strength."
-        }
-      ],
+      "SpecialDefenses": [],
       "MagicResistance": "30%",
       "Intelligence": "Genius",
       "Alignment": "Lawful good",
@@ -1094,14 +1078,12 @@
         {
           "Name": "Lycanthropy",
           "Description": "Can shift between human and bear‑hybrid form."
-        },
+        }
+      ],
+      "SpecialDefenses": [
         {
-          "Name": "Regeneration",
-          "Description": "Regenerates damage except from silver or magic weapons."
-        },
-        {
-          "Name": "Great Strength",
-          "Description": "Exceptional physical power; gains bonuses to damage."
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Can only be hit by silver or magical weapons."
         }
       ],
       "BaseXPValue": 650,
@@ -1166,6 +1148,9 @@
       "NumberOfAppearancesMax": 2,
       "ArmorClass": 4,
       "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "%InLair": "20",
       "Size": "Large",
       "Movement": 12,
       "Morale": {
@@ -1175,32 +1160,23 @@
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "Damage": "1d3"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d4"
-        },
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAttacks": [
         {
           "Name": "Tail Spikes",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6 (up to 6 spikes)"
+          "Description": "Fires volleys of 6 iron spikes (18\" range, 1–6 damage each). Can fire 4 volleys."
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spike Volley",
-          "Description": "Can fire 1–6 tail spikes per round at range."
-        },
-        {
-          "Name": "Savage Nature",
-          "Description": "Highly aggressive; often attacks without provocation."
-        }
-      ],
-      "BaseXPValue": 500,
-      "XPValuePerHitPoint": 6,
-      "TreasureType": "C",
+      "BaseXPValue": 525,
+      "XPValuePerHitPoint": 8,
+      "TreasureType": "E",
       "Alignment": "Lawful evil",
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 46-50"
@@ -1210,7 +1186,7 @@
       "Type": "Monster",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": 5,
       "Movement": 9,
       "HitDice": 6,
@@ -1228,8 +1204,8 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Petrifying Gaze",
-          "Description": "Creatures within 3\" must save vs. petrification or turn to stone."
+          "Name": "Medusa Gaze",
+          "Description": "Creatures within 3\" who meet the gaze must save vs. petrification or turn to stone."
         },
         {
           "Name": "Poisonous Hair Asps",
@@ -1389,19 +1365,19 @@
       "BaseXPValue": 400,
       "XPValuePerHitPoint": 5,
       "TreasureType": "A",
-      "Source": "Wizardry",
+      "Source": "Adnd",
       "Size": "Medium",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 59-60"
     },
     {
       "Name": "Otyugh",
       "Type": "Aberration",
-      "Frequency": "Rare",
+      "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 3,
       "Movement": 6,
-      "HitDice": 12,
+      "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "Nil",
@@ -1409,137 +1385,166 @@
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
-        {
           "Name": "Tentacle",
           "NumberOfAttacks": 2,
           "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
         }
       ],
       "SpecialAttacks": [
         {
           "Name": "Disease",
-          "Description": "Tentacle wounds can transmit disease."
+          "Description": "A creature bitten has a 90% chance of being infected with disease (typhus)."
         }
       ],
       "SpecialDefenses": [
         {
           "Name": "Never Surprised",
-          "Description": "Neo-otyugh are never surprised."
+          "Description": "The eyestalk thrust above the offal prevents the otyugh from being surprised."
         }
       ],
       "MagicResistance": "Standard",
-      "Intelligence": "Average",
+      "Intelligence": "Low to average",
       "Alignment": "Neutral",
-      "Size": "Large",
+      "Size": "Medium to Large",
       "BaseXPValue": 1500,
       "XPValuePerHitPoint": 15,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 61-68",
-      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh.",
-      "DM comment": "Derived from Neo-Otyugh template for Level 6 encounter table compatibility."
+      "Other": "Omnivorous scavenger living in dung and rubbish; semi-telepathic; 90% of encounters are a single individual; no interest in treasure."
     },
     {
       "Name": "Rakshasa",
       "Type": "Humanoid",
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 3,
-      "Movement": 24,
-      "HitDice": 9,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -4,
+      "Movement": 15,
+      "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "60",
-      "TreasureType": "D",
-      "IndividualTreasure": "",
-      "Attacks": [
-        {
-          "Name": "Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d4"
-        }
-      ],
-      "SpecialAttacks": [
-        {
-          "Name": "Wisdom Drain",
-          "Description": "Touch drains 1 point of WIS per hit."
-        },
-        {
-          "Name": "Spell Use",
-          "Description": "Can cast charm person, suggestion, mirror image, and illusionary abilities depending on variant."
-        }
-      ],
-      "SpecialDefenses": [],
-      "MagicResistance": "Standard",
-      "Intelligence": "High",
-      "Alignment": "Chaotic evil",
-      "Size": "Medium",
-      "BaseXPValue": 1700,
-      "XPValuePerHitPoint": 12,
-      "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 69-70",
-      "Other": "Found in tropical wilderness deserts; lion‑body with human female torso; highly deceptive and predatory."
-    },
-    {
-      "Name": "Salamander",
-      "Type": "Monster",
-      "Frequency": "Very rare",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 3,
-      "Movement": 9,
-      "HitDice": 10,
-      "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "50",
-      "TreasureType": "B,Q(x10),S,T",
+      "%InLair": "25",
+      "TreasureType": "F",
       "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d8"
+          "Damage": "1d3"
         },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d16"
+          "Damage": "1d4+1"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Fire Puff",
-          "Description": "Breathes a short cone of flame (2–12 damage, or 1–6 on save)."
+          "Name": "Illusion and ESP",
+          "Description": "Uses ESP and creates the illusion of what its prey deems friendly, withholding attack until prey is off-guard."
+        },
+        {
+          "Name": "Level 3 Magic-User spells",
+          "Description": "Casts magic-user spells up to 3rd level"
+        },
+        {
+          "Name": "Level 1 Cleric spells",
+          "Description": "Casts cleric spells of 1st level"
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Fire Immunity",
-          "Description": "Unaffected by all fire‑based attacks."
+          "Name": "Immune to Spells Below 8th Level",
+          "Description": "Not affected by spells under the 8th level."
+        },
+        {
+          "Name": "Rakshasa Weapon Defense",
+          "Description": "Cannot be harmed by non-magical weapons; magical weapons below +3 do half damage; crossbow bolts blessed by a cleric kill it."
+        }
+      ],
+      "MagicResistance": "See below",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "Size": "Medium",
+      "BaseXPValue": 1700,
+      "XPValuePerHitPoint": 12,
+      "Source": "Adnd",
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 69-70",
+      "Other": "Evil spirits encased in flesh, fond of human meat. If more than one is found in its lair, the group is a male and one or more females."
+    },
+    {
+      "Name": "Salamander",
+      "Type": "Monster",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 3,
+      "Movement": 9,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "%InLair": "75",
+      "TreasureType": "F",
+      "IndividualTreasure": "",
+      "Attacks": [
+        {
+          "Name": "Metal Spear",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Tail Constriction",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Heat",
+          "Description": "Each hit adds 1-6 points of heat damage; fire resistant creatures suffer no heat damage."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+1 or better weapons to hit",
+          "Description": "Affected only by magical weaponry, magical creatures, or creatures of great strength."
+        },
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Impervious to all fire-based attacks."
+        },
+        {
+          "Name": "Immune to Sleep, Charm, and Hold",
+          "Description": "Sleep, charm, and hold spells are ineffective."
+        },
+        {
+          "Name": "Cold Vulnerability",
+          "Description": "Cold based attacks cause an additional 1 point of damage per die."
         }
       ],
       "MagicResistance": "Standard",
-      "Intelligence": "Animal",
-      "Alignment": "Neutral",
-      "Size": "Large",
+      "Intelligence": "High",
+      "Alignment": "Chaotic evil",
+      "Size": "Medium",
       "BaseXPValue": 1350,
       "XPValuePerHitPoint": 14,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 71-73",
-      "Other": "Often called 'false dragons'; resemble red dragons; sleep 50% of the time; collect metals and gems; lair may contain 1–4 eggs worth 5,000 gp each."
+      "Other": "Creatures of the elemental plane of fire; upper body AC 5, lower body AC 3. They hate cold and prefer temperatures of 300 degrees or more."
     },
     {
       "Name": "Phase Spider",
       "Type": "Arachnid",
-      "Frequency": "Very rare",
+      "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
-      "ArmorClass": 7,
-      "Movement": 15,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "Movement": 6,
       "HitDice": 5,
       "HitDiceType": 8,
       "ExtraHitPoints": 5,
@@ -1555,14 +1560,18 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Poison",
-          "Description": "Victim must save at -2 or die."
+          "Name": "Phase Spider Poison",
+          "Description": "Victim must save vs. poison at -2."
+        },
+        {
+          "Name": "Webs",
+          "Description": "Webs are equal to those of giant spiders."
         }
       ],
       "SpecialDefenses": [
         {
           "Name": "Phasing",
-          "Description": "Can shift in and out of the ethereal plane, avoiding attacks and repositioning."
+          "Description": "Shifts out of phase when attacking or attacked, returning only to deliver its bite; impervious to nearly all attacks while out of phase. A phase door spell holds it in phase for 7 melee rounds."
         }
       ],
       "MagicResistance": "Standard",
@@ -1847,7 +1856,7 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Poison",
+          "Name": "Giant Poisonous Snake Poison",
           "Description": "Victims take 3–18 damage even on a successful save."
         }
       ],
@@ -2400,6 +2409,12 @@
           "Description": "May flee from combat."
         }
       ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Werebears can only be hit by silver or magical weapons."
+        }
+      ],
       "BaseXPValue": 850,
       "XPValuePerHitPoint": 6,
       "TreasureType": "None",
@@ -2544,6 +2559,12 @@
         {
           "Name": "Slept",
           "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Weretigers can only be hit by silver or magical weapons."
         }
       ],
       "BaseXPValue": 900,
@@ -3078,6 +3099,12 @@
         {
           "Name": "Magic Resistance",
           "Description": "Resistant to magic."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Werewolves can only be hit by silver or magical weapons."
         }
       ],
       "BaseXPValue": 600,

@@ -5142,6 +5142,331 @@ implement   "SpecialAttacks": [
     {
       "Name": "Death Groan",
     "Description": "Once per day, during darkness, emits a wail; creatures within 3\" must save vs magic or die."
-    },
+    64
+ ___
+ Erinyes (Lesser devil) 
+FREQUENCY: Uncommon 
+NO. APPEARING: 1-3 or 4- I6 
+ARMOR CLASS: 2 
+MOVE: 6"/21" 
+HIT DICE: 6 + 6 
+% IN LAIR: 20% 
+TREASURE TYPE: R 
+NO. OF ATTACKS: I 
+DAMAGE/ATTACK: 2-8 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: See below 
+MAGIC RESISTANCE: 30% 
+INTELLIGENCE: Average 
+ALIGNMENT: Lawful evil 
+SIZE: M (6'tall) 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil
+ Erinyes abilities (summary):
 
+Wield a magical venomous dagger that causes extremely painful wounds.
+Victims must save vs. poison or faint for 1-6 rounds.
 
+Carry a Rope of Entanglement to restrain captured victims.
+Can be harmed by ordinary (non-magical) weapons.
+
+Can instill fear in anyone who sees them.
+Targets may save vs. wand to resist.
+
+Once per round/turn, may use one of these powers:
+Detect Invisible
+Invisibility
+Summon another Erinyes (25% success chance)
+
+implement   "SpecialAttacks": [
+    {
+      "Name": "Sleep Gaze",
+      "Description": "Gaze causes sleep on any unsuspecting creature that fails its save vs. magic."
+
+implement "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+and make sure all LYCANTHROPE got that
+
+implement
+MANTICORE 
+FREQUENCY: Uncommon 
+NO. APPEARING: 1-4 
+ARMOR CLASS: 4 
+MOVE: 12"/18" 
+HIT DICE: 6 
++ 3 
+% IN LAIR: 20% 
+TREASURE TYPE: E 
+NO. OF ATTACKS: 3 
+DAMAGE/ATTACK: 1-3/1-3/1-8 
+SPECIAL ATTACKS: Tail spikes 
+SPECIAL DEFENSES: Nil 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Low 
+ALIGNMENT: Lawful evil 
+SIZE: L 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Manticores prefer dismal lairs, so they are typically found in caves or 
+underground. They range in all climes, although they enjoy warm places 
+more than cold. The favorite prey of manticores is man, and they are 
+usually encountered outside their lairs hunting for human victims. 
+A manticore attacks first by loosing a volley of 6 of its iron toil spikes (18' 
+range as a light cros 65,0
+___
+Implement
+FREQUENCY: Rare 
+NO, APPEARING: 1-3 
+ARMOR CLASS: 5 
+MOVE: 9" 
+HIT DICE: 6 
+Yo IN LAIR: 50% 
+TREASURE TYPE: P, Q (X IO), X, 
+NO. OF ATTACKS: 1 
+DAMAGE/ATTACK: 1-4 
+SPECIAL ATTACKS: Gaze turns to 
+stone + poison 
+SPECIAL DEFENSES: Nil 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Very 
+ALIGNMENT: Lawful evil 
+SIZE: M 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Medusae are hateful humanoid creatures which dwell in dark caves or 
+caverns, venturing forth on occasion to seek prey. They try to beguile 
+humans to look into their eyes. 
+The gaze of a medusa's eyes will turn creatures within 3" to stone unless 
+they make their saving throw versus petrifaction. If an opponent averts his 
+eyes, the medusa rushes up so that its asp-like head growth can bite at the 
+victim. The range of such attacks is but 1'. and the victim bitten must save 
+versus poison or die. If the medusa's gaze is reflected back, the creature 
+will turn itself to stone! Medusae speak both their tongue and the common 
+one. Medusae are able to see astral and ethereal creatures, and their 
+petrifying gaze is as effective on those planes as it is on the material. 
+Description: The body of a medusa appears quite shapely and human. 
+They typically wear human clothing. However, the face is of horrid visage, 
+and its snakey hair writhes, so at a close distance (20') this gives the 
+creature away. The glaring red-rimmed eyes of a medusa are visible 
+clearly at 30'. 
+
+MOLD 
+FREQUENCY: 
+NO. APPEARING: 
+ARMOR CLASS: 
+MOVE: 
+HIT DICE: 
+% IN LAIR: 
+TREASURE TYPE: 
+NO. OF ATTACKS: 
+DAMAGE/ATTACK: 
+SPECIAL ATTACKS: 
+SPECIAL DEFENSES: 
+MAGIC RESISTANCE: 
+INTELLIGENCE: 
+ALIGNMENT: 
+SIZE: 
+PSlONlC ABILITY: 
+AttocklDefense Modes: 
+Brown mold grows anywhere beneath the surface of the ground. It is light 
+tan to golden brown in color. It cannot stand high concentrations of 
+ultraviolet light, but it feeds on radiant energy of mast other sorts. Where a 
+patch of brown mold grows, the temperature will be below average. If a 
+creature walks within 5' of the patch, the mold will begin absorbing its 
+body heat - even from a basically cold blooded creature. Each melee 
+round that a creature is within 5' of brown mold, the mold will drain heat 
+equal to 1-8 hit points frost damage for every 10 degrees of body heat over 
+55 degrees the creature has. Worse still, this mold grows instantaneously 
+from heat, sa if a torch, flaming oil, or a fire ball is near the patch, it will be 
+able to grow 2,4, or 8 times its area from the heat fed to it. This growth will 
+be so rapid that on the next melee round it will have spread and be 
+draining any further heat in its new area of growth. 
+Brown mold is not fed by light spells or faerie fire. It is affected only by 
+magical cold, and no other magical or non-magical attacks. Ice storms or 
+walls of ice cause it to go dormant for 5-30 turns. A cold wand or white 
+dragon breath will kill it. The growth does not harm creatures which use 
+cold (white dragons, ice toads, or winter wolves.) 
+MORKOTH 
+Yellow Mold: A more common underground fungus is yellow mold, which 
+is pale yellow to a golden orange in color. Any creature which touches this 
+mold is attacked by its enzymes. It also affects wood, albeit more 
+slowly. It does no harm to metals or stone. If the substance is contacted 
+roughly, there is a 50% chance per contact that the colony will release 
+spores. These deadly spores shoot out in an asphyxiating cloud, 1" by 1" 
+by l", originating from the center of impact. Any creature which is within 
+this cloud will die, its lungs filled with yellow mold growth, unless it makes 
+a saving throw versus poison. A cure disease and a resurrection are 
+necessary within 24 hours to save such victims. 
+Yellow mold is affected only by fire based attacks - flaming oil, a fire 
+elemental, etc. Continual light will cause it to become dormant for 2-12 
+turns, but thereafter the mold will grow over the light and obliterate it. 
+When formed into great colonies of at least 300 square feet in area this 
+growth will form a collective intelligence about 1 time in 6. If this should 
+happen the yellow mold will be aware mentally and psionically. It will 
+attack by spore cloud if it senses the presence of other life forms (range of 
+sensing will vary from 10' to 60') or psionically if such abilities are used 
+within from 20' to 120' (random determination of sensing range). If it 
+attacks psionically, it will await the approach of the life form and then 
+loose an attack which is equal to the most powerful form of id insinuation. 
+It cannot be counter-attacked psionically unless a cleric who has the power 
+to telepathically communicate with plants is on hand, for he will be 
+form of weapon - usually 
+a huge 
+and are 25% likely to speak 
+Brown 
+Very rare 
+I patch 
+9 
+0" - 
+Nil 
+Nil 
+0 
+0 
+Freezing 
+See below 
+See below 
+Non- 
+Neutral 
+s to L 
+Nil 
+Nil
+
+OGRE MAGe (Japanese ( 
+FREQUENCY: Very rare 
+NO. APPEARING: 1-6 
+ARMOR CLASS: 4 
+MOVE: 9"/15" 
+HIT DICE 5 + 2 
+% IN LAIR: 35% 
+TREASURE TYPE: G (magic), R, S 
+NO. OF ATTACKS: I 
+DAMAGE/ATTACK: I- 12 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: Nil 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Average to 
+exceptional 
+ALIGNMENT: Lawful evil 
+SIZE: L( 10%' tall) 
+PSlONlC ABILITY: Nil 
+AttacWDefense Modes: Nil 
+Japanese ogres, ogre magi, are not as rore elsewhere as they are in this 
+part of the world. They normally seek uninhabited places in which to lair - typically in a fortified dwelling or some secure cavern complex below 
+ground. From this location, the ogre magi will foray to capture treasure 
+and humans for slaves and food. 
+If encountered in their lair, the ogre magi will always have a chief of great 
+strength (f2 on each hit die, attacking and saving as a 9 hit dice monster) 
+in addition to the others of his kind indicated by the die roll. There will be 
+2-12 slaves/prisoners in the lair. 
+Ogre magi are able to perform the following feats of magic: fly (for 12 
+turns), become invisible, cause darkness in a 1" radius, polymorph to 
+human (or similar bipedal humanoid form from 4' to 12' size) form, and 
+regenerate 1 hit point per melee round (lost members must be reattached 
+to regenerate). Once per day they can also do any of the following: charm 
+person, sleep, assume gaseous form, and create a ray of cold the same 
+dimensions as that of a cold wand which does 8 - 8-sided dice of damage 
+(unless the appropriate saving throw is made). 
+Japanese ogres speak their own language, that of normal ogres, the 
+common tongue, and their alignment tongue. 
+Description: Ogre magi have light blue, light green, or pale brown skins. 
+Their hair is typically of an opposite and darker color (blue-green, green- 
+blue), except that brown skinned ogre magi have dark yellow hair. Their 
+nails are black, and their teeth and tusks are very white. Horns are ivory 
+colored. Their eyes are dark pupiled with white centers. Their apparel is 
+typically colored in patterns familiar to their homeland.
+65,5
+___
+Implement RAKSHASA 
+FREQUENCY: Very rare to rare 
+NO. APPEARING: 1-4 
+ARMOR CLASS: -4 
+MOVE: 15" 
+HIT DICE: 7 
+% IN LAIR: 25% 
+TREASURE TYPE: F 
+NO. OF ATTACKS: 3 
+DAMAGE/ATTACK: 1 -3/ 1 -3/2-5 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: See below 
+MAGIC RESISTANCE: See below 
+INTELLIGENCE: Very 
+ALIGNMENT: Lawful evil 
+SIZE: M 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Known first in India, these evil spirits encased in flesh are spreading. They 
+are fond of a diet of human meat, and as masters of illusion they can 
+easily gain this end. Rakshasas are able to employ ESP and then create the 
+illusion of what those who have encountered them deem friendly. They 
+con then withhold attack until their prey can be taken off-guard. Although 
+capable of using both magic user's spells (up to 3rd level) and cleric's 
+spells (1st level), they are not affected by spells under the 8th level. 
+Rokshasas cannot be harmed by non-magical weapons, magical weapons 
+below + 3 do one-half damage, but hits by crossbow bolts blessed by a 
+cleric kill them. If more than 1 rakshasa is encountered in its lair, the group 
+will be a male and 1 or more females.
+
+Implement SALAMANDER 
+FREQUENCY: Rare 
+NO. APPEARING: 2-5 
+ARMOR CLASS: 5/3 
+MOVE: 9" 
+HIT DICE: 7 + 7 
+% IN LAIR: 75% 
+TREASURE TYPE: F 
+NO. OF ATTACKS: 2 
+DAMAGE/ATTACK: By weapon 
+type/2- 12 
+SPECIAL ATtACKS: Heat 
+SPECIAL DEFENSES: + J or better 
+weapon to hit 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: High 
+ALIGNMENT: Chaotic evil 
+SIZE: M 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Salamanders are creatures of the elemental plane of fire. They come to 
+the material plane occasionally for purposes known only to them. 
+Salamanders hate cold, preferring temperatures of 300 degrees upwards, 
+and they can abide lower temperatures only for a few hours. Their lair is 
+typically at least 500 degrees temperature, and such treasure os is found 
+there will be the sort to survive such heat. 
+The human-like upper body of a salamander has an armor class of 5, while 
+the lower body is armor class 3. 
+A salamander typically attacks with a metal spear which inflicts damage of 
+1-6 hit points plus a like amount for its heat. At the same time it can lash 
+out and coil around an opponent with its snake-like tail, constricting for 2- 
+12 hit points damage plus causing an additional 1-6 points of damage from 
+the heat of its body. While fire resistant creatures will not suffer heat 
+damage, they will be subject to normal attack damage. 
+Salamanders can be affected only by magical weaponry or by creatures of 
+a magical nature or with great strength. They are impervious to all fire- 
+based attacks. Sleep, charm, and hold spells are ineffective against them. 
+Cold based attacks cause an additional 1 point of damage per die of attack 
+value. 
+
+Phase-Spider: Although these monsters appear to be nothing more than 
+very great spiders, they are something quite beyond this. When attacking 
+or being attacked the phase spider is able to shift out of phase with its 
+surroundings, bringing itself back only when it is ready to deliver its 
+poisonous bite. Victims must save at -2 on their poison saving throw. When 
+out of phase they are impervious to nearly all forms of attack, although a 
+phase door spell will cause one to remain in phase for 7 melee rounds. Oil 
+of etherealness and armor of etherealness also put their wearers into the 
+same phase as this monster when it shifts out of phase. Their webs are 
+equal to those of giant spiders. 
+
+  "SpecialDefenses": [
+        {
+          "Name": "Regenerates 3 hit points per round",
+          "Description": "Regenerates 3 hit points per round; only fire or acid prevents regeneration."
+        },
+
+              "SpecialAttacks": [
+        {
+          "Name": "Giant Poisonous Snake Poison",
+          "Description": "Victims take 3–18 damage even on a successful save."
+        }
+      ],

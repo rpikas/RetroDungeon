@@ -789,7 +789,7 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Hit only by magic weapon",
+          "Name": "Silver or Magic Weapons Required",
           "Description": "Can only be hit by silver or +1 or better magic weapons."
         }
       ],

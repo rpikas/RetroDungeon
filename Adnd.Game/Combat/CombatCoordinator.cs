@@ -480,6 +480,11 @@ public sealed class CombatCoordinator
             }
         }
 
+        // Monsters that are never surprised (e.g. otyugh) cannot be surprised by the party.
+        if (session.Monsters.Any(m => m.Template.SpecialDefenses.Any(d =>
+                string.Equals(d?.Name?.Trim(), "Never Surprised", StringComparison.OrdinalIgnoreCase))))
+            partySurprisesMonsters = false;
+
         // Original rule: if both surprise each other, cancel surprise
         if (partySurprisesMonsters && monstersSurpriseParty)
         {

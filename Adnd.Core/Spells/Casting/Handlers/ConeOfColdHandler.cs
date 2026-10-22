@@ -46,7 +46,7 @@ public sealed class ConeOfColdHandler : ISpellEffectHandler
 
         foreach (var monster in targetMonsters)
         {
-            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, damagePerTarget, rng, spell.Name);
+            var outcome = SpellDamageSaveHelper.ApplyToMonster(monster, damagePerTarget, rng, spell.Name, coldDamageDiceCount: casterLevel);
             result.Events.Add(SpellDamageSaveHelper.FormatSaveAndDamageLine(monster.DisplayName, damagePerTarget, outcome));
 
             if (!monster.IsAlive)

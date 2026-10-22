@@ -1042,7 +1042,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Hit Only by Silver or Magic Weapons",
+          "Name": "Silver or Magic Weapons Required",
           "Description": "Hit only by silver or magic weapons"
         }
       ],
@@ -1380,7 +1380,7 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Poison",
+          "Name": "Giant Poisonous Snake Poison",
           "Description": "Victim takes 3–18 damage even on a successful save vs. poison."
         }
       ],
@@ -1578,8 +1578,20 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic & Spell Use",
-          "Description": "Can fly, become invisible, create darkness, polymorph, regenerate, charm person, sleep, gaseous form, and cast cold ray (8d8 damage)."
+          "Name": "Ogre Mage Sleep",
+          "Description": "Once per day, sleep spell."
+        },
+        {
+          "Name": "Ogre Mage Charm Person",
+          "Description": "Once per day, charm person; save vs. spell negates."
+        },
+        {
+          "Name": "Ogre Mage Cold Ray",
+          "Description": "Once per day, ray of cold like a wand of cold, 8d8 damage; save for half."
+        },
+        {
+          "Name": "Innate Magic",
+          "Description": "Can fly (12 turns), become invisible, create darkness (1\" radius), polymorph to humanoid form, and assume gaseous form."
         }
       ],
       "SpecialDefenses": [

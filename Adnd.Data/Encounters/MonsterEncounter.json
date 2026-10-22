@@ -159,7 +159,7 @@
       { "roll": "3",     "monsterLevel":  3 },
       { "roll": "4",     "monsterLevel":  4 },
       { "roll": "5",     "monsterLevel":  5 },
-      { "roll": "6",     "monsterLevel":  6 },
+      { "roll": "6-20",     "monsterLevel":  6 },
       { "roll": "7",     "monsterLevel":  7 },
       { "roll": "8-10",  "monsterLevel":  8 },
       { "roll": "11-16", "monsterLevel":  9 },

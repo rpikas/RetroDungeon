@@ -1129,7 +1129,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Hit Only by Silver or Magic Weapons",
+          "Name": "Silver or Magic Weapons Required",
           "Description": "Can only be harmed by silver or magical weapons."
         }
       ],

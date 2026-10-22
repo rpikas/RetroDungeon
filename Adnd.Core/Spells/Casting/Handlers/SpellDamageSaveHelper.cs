@@ -20,8 +20,30 @@ internal static class SpellDamageSaveHelper
 
     internal readonly record struct MagicResistanceCheck(bool HasResistance, int ChancePercent, int Roll, bool Resisted);
 
+    [ThreadStatic]
+    internal static int? CurrentSpellLevel;
+
+    internal static bool IsImmuneToSpellsBelowLevel8(MonsterInstance monster)
+    {
+        return CurrentSpellLevel is < 8
+               && monster.Template.SpecialDefenses.Any(d =>
+                   string.Equals(d?.Name?.Trim(), "Immune to Spells Below 8th Level", StringComparison.OrdinalIgnoreCase));
+    }
+
     internal static MagicResistanceCheck CheckMagicResistance(MonsterInstance monster, Random rng, string spellName)
     {
+        if (IsImmuneToSpellsBelowLevel8(monster))
+        {
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "Spell Immunity",
+                $"{monster.DisplayName} vs {spellName}",
+                "Rakshasas are not affected by spells below the 8th level.",
+                "-", "-", "-",
+                "Spell has no effect.");
+            return new MagicResistanceCheck(true, 100, 0, true);
+        }
+
         var chancePercent = monster.Template.MagicResistancePercent;
         if (!chancePercent.HasValue || chancePercent.Value <= 0)
             return new MagicResistanceCheck(false, 0, 0, false);
@@ -393,8 +415,31 @@ internal static class SpellDamageSaveHelper
         });
     }
 
-    internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName, int fireDamageDiceCount = 0)
+    internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName, int fireDamageDiceCount = 0, int coldDamageDiceCount = 0)
     {
+        if (IsAffectedOnlyByMagicalCold(monster))
+        {
+            if (IsColdSpell(spellName))
+            {
+                // A cold wand or white dragon breath kills brown mold outright.
+                var hpBefore = monster.CurrentHitPoints;
+                monster.CurrentHitPoints = 0;
+                return new Outcome(0, 0, false, hpBefore, hpBefore, 0, hpBefore, false, null, null);
+            }
+
+            return new Outcome(
+                SaveTarget: 0,
+                SaveRoll: 0,
+                Saved: true,
+                AppliedDamage: 0,
+                BeforeHp: monster.CurrentHitPoints,
+                AfterHp: monster.CurrentHitPoints,
+                ActualDamage: 0,
+                MagicResisted: false,
+                MagicResistanceRoll: null,
+                MagicResistancePercent: null);
+        }
+
         if (IsAffectedOnlyByFireBasedAttacks(monster) && !IsFireOrHeatSpell(spellName))
         {
             return new Outcome(
@@ -430,6 +475,15 @@ internal static class SpellDamageSaveHelper
         if ((HasColdImmunity(monster) || HasColdFireLightningImmunityAndSevenHdSaves(monster) || HasNightHagSpellImmunities(monster))
             && IsColdSpell(spellName))
             adjustedRolledDamage = 0;
+
+        if (adjustedRolledDamage > 0
+            && coldDamageDiceCount > 0
+            && IsColdSpell(spellName)
+            && monster.Template.SpecialDefenses.Any(d =>
+                string.Equals(d?.Name?.Trim(), "Cold Vulnerability", StringComparison.OrdinalIgnoreCase)))
+        {
+            adjustedRolledDamage += coldDamageDiceCount;
+        }
 
         if ((HasSpecialDefense(monster, "Immunity to fire and heat")
              || HasNightHagSpellImmunities(monster)
@@ -510,6 +564,12 @@ internal static class SpellDamageSaveHelper
                || key.Contains("heat", StringComparison.Ordinal)
                || key.Contains("incendiary", StringComparison.Ordinal)
                || key.Contains("burn", StringComparison.Ordinal);
+    }
+
+    internal static bool IsAffectedOnlyByMagicalCold(MonsterInstance monster)
+    {
+        return monster.Template.SpecialDefenses.Any(d =>
+            string.Equals(d?.Name?.Trim(), "Affected Only by Magical Cold", StringComparison.OrdinalIgnoreCase));
     }
 
     internal static bool IsAffectedOnlyByFireBasedAttacks(MonsterInstance monster)

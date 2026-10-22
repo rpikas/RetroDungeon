@@ -217,10 +217,14 @@ public sealed partial class CombatResolver
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly Dictionary<MonsterInstance, int> _acidSpitRangeInches = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<(MonsterInstance Monster, Character Victim)> _confusingGazeResolved = new();
+    private readonly Dictionary<MonsterInstance, int> _manticoreVolleys = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<(MonsterInstance Monster, Character Victim)> _sleepGazeResolved = new();
     private readonly HashSet<(MonsterInstance Monster, Character Victim)> _fearAuraResolved = new();
     private readonly HashSet<MonsterInstance> _deathGroanUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<MonsterInstance> _nightHagSleepUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly Dictionary<MonsterInstance, int> _nightHagEnfeeblementUses = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _phaseSpidersInPhase = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<(MonsterInstance, string)> _ogreMageSpellsUsed = new();
     private readonly Dictionary<MonsterInstance, int> _nightHagMagicMissileUses = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<(MonsterInstance Monster, Character Victim)> _boneHooks = new();
     private readonly Dictionary<Character, (int Amount, int RoundsRemaining)> _boneDevilStrengthLoss = new(ReferenceEqualityComparer.Instance as IEqualityComparer<Character>);
@@ -1047,10 +1051,25 @@ public sealed partial class CombatResolver
                 && ResolveHpDamageBreath(monster, breathDamage, session, events))
                 continue;
 
+            // A phase spider shifts into phase to bite, so the first attack against it next round can land.
+            if (HasSpecialDefense(monster, "Phasing"))
+                _phaseSpidersInPhase.Add(monster);
+
             ApplyConfusingGaze(session, monster, events);
             ApplyFearAura(session, monster, events);
+            ApplySleepGaze(session, monster, events);
+            ApplyMedusaGaze(session, monster, events);
+
+            if (TryResolveBrownMoldFreezing(session, monster, events))
+                continue;
+
+            if (TryResolveManticoreTailSpikes(session, monster, events))
+                continue;
 
             if (TryResolveDeathGroan(session, monster, events))
+                continue;
+
+            if (TryResolveOgreMageSpell(session, monster, events))
                 continue;
 
             if (TryResolveNightHagGate(session, monster, events))
@@ -1640,16 +1659,26 @@ public sealed partial class CombatResolver
                             TryApplyDrainBlood(monster, target, session, events);
                             TryApplyRotGrubExposure(monster, target, events);
                             TryApplyGiantRatDisease(monster, target, events);
+                            TryApplyOtyughDisease(monster, target, attack.Name, events);
+                            TryApplySalamanderHeat(monster, target, events);
+                            if (!IsAlive(target))
+                                continue;
                             TryApplyRottingDisease(monster, target, events);
                             TryApplyPetrificationFromSpecialAttacks(monster, target, events);
                             TryApplyBoneHook(monster, target, events);
+                            TryApplyErinyesDagger(monster, target, session, events);
+                            TryApplyMedusaAspBite(monster, target, events);
+                            if (!IsAlive(target))
+                                continue;
                             TryApplyWebsSpecialAttack(monster, target, session, events);
+                            if (TryApplyGiantSnakePoison(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
+                                continue;
                             if (TryApplyPoisonSpit(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
                                 continue;
                             if (TryApplyPoisonSpores(monster, target, events, chantActiveAtRoundStart, prayerActiveAtRoundStart))
                                 continue;
 
-                            if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison", "Deadly Poison"))
+                            if (HasAnySpecialAbility(monster, "Poison", "Weak Poison", "Huge Spider Poison", "Deadly Poison", "Phase Spider Poison"))
                             {
                                 if (target.IsMonkImmuneToPoison())
                                 {
@@ -1666,18 +1695,20 @@ public sealed partial class CombatResolver
                                         _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
                                     var isWeakPoison = HasSpecialAbility(monster, "Weak Poison");
                                     var isHugeSpiderPoison = HasSpecialAbility(monster, "Huge Spider Poison");
-                                    var poisonSaveBonus = isWeakPoison ? 2 : isHugeSpiderPoison ? 1 : 0;
-                                    if (poisonSaveBonus > 0)
+                                    var isPhaseSpiderPoison = HasSpecialAbility(monster, "Phase Spider Poison");
+                                    var poisonSaveBonus = isWeakPoison ? 2 : isHugeSpiderPoison ? 1 : isPhaseSpiderPoison ? -2 : 0;
+                                    if (poisonSaveBonus != 0)
                                         saveTarget = Math.Max(1, saveTarget - poisonSaveBonus);
                                     if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
                                         saveTarget = Math.Max(1, saveTarget - 1);
                                     var saveRoll = _dice.Roll(20);
                                     if (saveRoll >= saveTarget)
                                     {
+                                        var poisonLabel = isWeakPoison ? "weak poison" : isPhaseSpiderPoison ? "phase spider poison" : "huge spider poison";
                                         var resistMessage = hasDeadlyPoison
                                             ? $"{target.Name} resists deadly poison (save {saveRoll} vs {saveTarget})."
-                                            : poisonSaveBonus > 0
-                                                ? $"{target.Name} resists {(isWeakPoison ? "weak poison" : "huge spider poison")} (save {saveRoll} vs {saveTarget}, +{poisonSaveBonus} save bonus)."
+                                            : poisonSaveBonus != 0
+                                                ? $"{target.Name} resists {poisonLabel} (save {saveRoll} vs {saveTarget}, {poisonSaveBonus:+#;-#} save modifier)."
                                                 : $"{target.Name} resists poison (save {saveRoll} vs {saveTarget}).";
                                         events.Add(new CombatEvent(resistMessage));
                                         RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", resistMessage);
@@ -1695,8 +1726,8 @@ public sealed partial class CombatResolver
                                     else if (!target.HasStatus(CharacterStatus.Poisoned))
                                     {
                                         target.AddStatus(CharacterStatus.Poisoned);
-                                        var failedPoisonSaveMessage = poisonSaveBonus > 0
-                                            ? $"{target.Name} is poisoned by {(isWeakPoison ? "weak poison" : "huge spider poison")} from {monster.DisplayName}! (save {saveRoll} vs {saveTarget}, +{poisonSaveBonus} save bonus)"
+                                        var failedPoisonSaveMessage = poisonSaveBonus != 0
+                                            ? $"{target.Name} is poisoned by {(isWeakPoison ? "weak poison" : isPhaseSpiderPoison ? "phase spider poison" : "huge spider poison")} from {monster.DisplayName}! (save {saveRoll} vs {saveTarget}, {poisonSaveBonus:+#;-#} save modifier)"
                                             : $"{target.Name} is poisoned by {monster.DisplayName}! (save {saveRoll} vs {saveTarget})";
                                         events.Add(new CombatEvent(failedPoisonSaveMessage));
                                         RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", failedPoisonSaveMessage);
@@ -3832,6 +3863,12 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (HasSpecialDefense(target, "Phasing") && !_phaseSpidersInPhase.Remove(target))
+            {
+                events.Add(new CombatEvent($"{member.Name}'s attack passes through {target.DisplayName}, which is out of phase."));
+                continue;
+            }
+
             if (HasOnlyAffectedByFireBasedAttacksDefense(target) && !IsFireBasedWeaponAttack(mainHand))
             {
                 var blockedWeaponName = mainHand?.Name ?? "bare hands";
@@ -4026,6 +4063,14 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{target.DisplayName} has Half Damage from Sharp Weapons. Damage reduced from {originalDamage} to {damage}."));
             }
 
+            if (HasSpecialDefense(target, "Rakshasa Weapon Defense")
+                && GetEffectiveWeaponBonusForHitRequirement(mainHand) < 3)
+            {
+                var originalDamage = damage;
+                damage = Math.Max(1, damage / 2);
+                events.Add(new CombatEvent($"{target.DisplayName} takes half damage from magical weapons below +3 ({originalDamage}->{damage})."));
+            }
+
             if (HasMagicWeaponsOnlyHalfDamageDefense(target))
             {
                 var originalDamage = damage;
@@ -4045,6 +4090,9 @@ public sealed partial class CombatResolver
             var actualDamageToTarget = before - target.CurrentHitPoints;
 
             TryRevealWillOWispLairTreasureOnLowHp(target, events);
+
+            if (actualDamageToTarget > 0 && IsFireBasedWeaponAttack(mainHand) && HasSpecialAbility(target, "Regeneration"))
+                session.AddMonsterWoundingUnhealableDamage(target, actualDamageToTarget);
 
             if (actualDamageToTarget > 0 && IsSwordOfWounding(mainHand))
             {
@@ -6242,6 +6290,52 @@ public sealed partial class CombatResolver
         }
     }
 
+    private void TryApplyErinyesDagger(MonsterInstance monster, Character target, CombatSession session, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Venomous Dagger") || !IsAlive(target) || target.HasStatus(CharacterStatus.Asleep))
+            return;
+
+        if (target.IsMonkImmuneToPoison())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to the dagger's venom."));
+            return;
+        }
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists the venomous dagger (save vs poison {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        var rounds = _dice.Roll(6);
+        target.AddStatus(CharacterStatus.Asleep);
+        session.SetPartyAsleep(target.Name, rounds);
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Erinyes Venomous Dagger",
+            $"{monster.DisplayName} wounds {target.Name}",
+            "The venomous dagger causes painful wounds; victims must save vs. poison or faint for 1-6 rounds.",
+            "1",
+            "6",
+            rounds.ToString(),
+            $"Save {saveRoll} vs {saveTarget} failed; faints for {rounds} round(s).");
+
+        events.Add(new CombatEvent($"{target.Name} fails the save vs poison ({saveRoll} vs {saveTarget}) and faints for {rounds} round(s) from the venomous dagger!"));
+
+        if (HasSpecialAbility(monster, "Rope of Entanglement") && !target.HasStatus(CharacterStatus.Webbed))
+        {
+            var ropeRounds = GetWebEscapeRoundsFromStrength(target);
+            target.AddStatus(CharacterStatus.Webbed);
+            session.SetPartyWebbed(target.Name, ropeRounds);
+            events.Add(new CombatEvent($"{monster.DisplayName} binds the fallen {target.Name} with a Rope of Entanglement (breaks free in {ropeRounds} round(s) once conscious)."));
+        }
+    }
+
     private void TryApplyBoneHook(MonsterInstance monster, Character target, List<CombatEvent> events)
     {
         if (!HasSpecialAbility(monster, "Bone Hook") || !IsAlive(target))
@@ -6356,8 +6450,12 @@ public sealed partial class CombatResolver
         _boneHooks.Clear();
         _confusingGazeResolved.Clear();
         _fearAuraResolved.Clear();
+        _sleepGazeResolved.Clear();
+        _manticoreVolleys.Clear();
         _deathGroanUsed.Clear();
         _nightHagMagicMissileUses.Clear();
+        _ogreMageSpellsUsed.Clear();
+        _phaseSpidersInPhase.Clear();
         _nightHagSleepUsed.Clear();
         _nightHagEnfeeblementUses.Clear();
         _nightHagGateAttempted.Clear();
@@ -6507,6 +6605,90 @@ public sealed partial class CombatResolver
         return true;
     }
 
+    private bool TryResolveOgreMageSpell(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        // Each of these may be used once per day; at most one per turn, 1 in 3 chance each turn.
+        foreach (var spell in new[] { "Ogre Mage Sleep", "Ogre Mage Charm Person", "Ogre Mage Cold Ray" })
+        {
+            if (!HasSpecialAbility(monster, spell) || _ogreMageSpellsUsed.Contains((monster, spell)))
+                continue;
+            if (_dice.Roll(3) != 1)
+                continue;
+
+            var targets = GetSpellAffectablePartyTargets(monster, session, events, spell)
+                .Where(t => !t.HasStatus(CharacterStatus.Asleep) && !t.HasStatus(CharacterStatus.Charmed))
+                .ToList();
+            if (targets.Count == 0)
+                continue;
+
+            _ogreMageSpellsUsed.Add((monster, spell));
+
+            if (spell == "Ogre Mage Sleep")
+            {
+                var count = _dice.Roll(4) + _dice.Roll(4);
+                var rounds = _dice.RollMany(4, 4);
+                var affected = targets.Where(t => t.Level <= 4).OrderBy(_ => _dice.Roll(1000)).Take(count).ToList();
+                events.Add(new CombatEvent($"{monster.DisplayName} casts Sleep (2d4 = {count} creatures, up to 4+1 HD)."));
+                RuleApplicationInfo.Publish("AD&D", "Ogre Mage Sleep", monster.DisplayName,
+                    "Sleep (once per day) affects 2d4 creatures of up to 4+1 hit dice or levels; no saving throw.",
+                    "2", "4", count.ToString(), $"{affected.Count} eligible target(s).");
+                foreach (var t in affected)
+                {
+                    t.AddStatus(CharacterStatus.Asleep);
+                    session.SetPartyAsleep(t.Name, rounds);
+                    events.Add(new CombatEvent($"{t.Name} falls asleep for {rounds} round(s)."));
+                }
+
+                if (affected.Count == 0)
+                    events.Add(new CombatEvent("The spell has no effect on the party."));
+                return true;
+            }
+
+            var target = targets[_dice.Roll(targets.Count) - 1];
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, spell == "Ogre Mage Charm Person" ? SaveThrowType.Spell : SaveThrowType.RodStaffWand));
+            var saveRoll = _dice.Roll(20);
+            var saved = saveRoll >= saveTarget;
+
+            if (spell == "Ogre Mage Charm Person")
+            {
+                RuleApplicationInfo.Publish("AD&D", "Ogre Mage Charm Person", $"{monster.DisplayName} on {target.Name}",
+                    "Charm person (once per day); save vs. spell negates.", "1", "20", saveRoll.ToString(),
+                    $"Save target {saveTarget}. {(saved ? "Saved." : "Failed; charmed.")}");
+                if (saved)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists Charm Person (save {saveRoll} vs {saveTarget})."));
+                    return true;
+                }
+
+                target.AddStatus(CharacterStatus.Charmed);
+                events.Add(new CombatEvent($"{target.Name} is charmed by {monster.DisplayName} and will attack party allies."));
+                return true;
+            }
+
+            var rolled = _dice.RollMany(8, 8);
+            var damage = ApplyColdResistanceDamageReduction(target, saved ? rolled / 2 : rolled, isMagicalCold: true, isNormalCold: false);
+            RuleApplicationInfo.Publish("AD&D", "Ogre Mage Cold Ray", $"{monster.DisplayName} on {target.Name}",
+                "Ray of cold (once per day) like a wand of cold: 8d8 damage, half if save vs. wand is made.", "8", "8",
+                rolled.ToString(), $"Save target {saveTarget}. {(saved ? "Saved; half damage." : "Failed; full damage.")}");
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+            events.Add(new CombatEvent($"{monster.DisplayName} fires a ray of cold at {target.Name} for {actual} damage (8d8 = {rolled}{(saved ? ", saved for half" : string.Empty)}). HP {before}->{target.CurrentHitPoints}."));
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private bool TryResolveNightHagSleep(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
         if (!HasSpecialAbility(monster, "Night Hag Sleep Magic") || _nightHagSleepUsed.Contains(monster))
@@ -6606,9 +6788,225 @@ public sealed partial class CombatResolver
         return true;
     }
 
+    private void ApplySleepGaze(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Sleep Gaze"))
+            return;
+
+        // A hostile creature is not unsuspecting: only a party caught by surprise on round 1 is affected.
+        if (session.RoundNumber != 1 || !session.PartySurprisedRound1)
+            return;
+
+        foreach (var target in session.ExposedParty.Where(c => IsAlive(c) && !c.HasStatus(CharacterStatus.Asleep)).ToList())
+        {
+            if (!_sleepGazeResolved.Add((monster, target)))
+                continue;
+
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            var saveRoll = _dice.Roll(20);
+
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "Sleep Gaze",
+                $"{monster.DisplayName} gazes at {target.Name}",
+                "The gaze has the effect of a sleep spell on any unsuspecting creature that fails a save vs. magic. A hostile creature is not unsuspecting.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                $"Save target {saveTarget}. {(saveRoll >= saveTarget ? "Saved." : "Failed; falls asleep.")}");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s sleep gaze (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            var rounds = _dice.RollMany(4, 4);
+            target.AddStatus(CharacterStatus.Asleep);
+            session.SetPartyAsleep(target.Name, rounds);
+            events.Add(new CombatEvent($"{target.Name} fails the save ({saveRoll} vs {saveTarget}) and falls asleep from {monster.DisplayName}'s gaze for {rounds} round(s)."));
+        }
+    }
+
+    private bool TryResolveBrownMoldFreezing(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Freezing Aura"))
+            return false;
+
+        foreach (var target in session.ExposedParty.Where(IsAlive).ToList())
+        {
+            // Body heat of about 98 degrees is 43 above 55, i.e. four 10-degree steps of 1d8 frost damage each.
+            var rolled = 0;
+            for (var i = 0; i < 4; i++)
+                rolled += _dice.Roll(8);
+
+            var damage = ApplyColdResistanceDamageReduction(target, rolled, isMagicalCold: false, isNormalCold: true);
+            if (damage <= 0)
+            {
+                events.Add(new CombatEvent($"{target.Name} is protected from {monster.DisplayName}'s heat drain."));
+                continue;
+            }
+
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+            events.Add(new CombatEvent($"{monster.DisplayName} drains {target.Name}'s body heat for {actual} frost damage (4d8 = {rolled}). HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} freezes to death!"));
+            }
+        }
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Brown Mold Freezing Aura",
+            $"{monster.DisplayName} drains heat",
+            "Each melee round within 5', the mold drains 1-8 hp frost damage per 10 degrees of body heat above 55 degrees (about 4d8 for a human).",
+            "4",
+            "8",
+            "-",
+            "Applies to every living party member each round.");
+
+        return true;
+    }
+
+    private bool TryResolveManticoreTailSpikes(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Tail Spikes"))
+            return false;
+
+        _manticoreVolleys.TryGetValue(monster, out var volleys);
+        if (volleys >= 4)
+            return false;
+
+        // A manticore opens with a volley; afterwards it mixes volleys with melee.
+        if (volleys > 0 && _dice.Roll(2) != 1)
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        _manticoreVolleys[monster] = volleys + 1;
+        events.Add(new CombatEvent($"{monster.DisplayName} looses a volley of 6 tail spikes ({volleys + 1}/4)!"));
+
+        var thac0 = GetMonsterThac0(monster);
+        for (var i = 0; i < 6; i++)
+        {
+            var target = party[_dice.Roll(party.Count) - 1];
+            if (!IsAlive(target))
+                continue;
+
+            var needed = Math.Clamp(thac0 - target.ArmorClass, 1, 20);
+            var roll = _dice.Roll(20);
+            if (roll < needed)
+            {
+                events.Add(new CombatEvent($"A spike misses {target.Name} (rolled {roll}, needed {needed})."));
+                continue;
+            }
+
+            var damage = _dice.Roll(6);
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+            events.Add(new CombatEvent($"A spike hits {target.Name} for {actual} damage (rolled {roll}, needed {needed}). HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+        }
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Manticore Tail Spikes",
+            $"{monster.DisplayName} volley {volleys + 1}/4",
+            "A manticore looses a volley of 6 iron tail spikes (18' range, as a light crossbow), 1-6 damage per hit; up to four volleys.",
+            "6",
+            "6",
+            "-",
+            "Each spike makes its own attack roll against a random target.");
+
+        return true;
+    }
+
+    private void ApplyMedusaGaze(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Medusa Gaze"))
+            return;
+
+        foreach (var target in session.ExposedParty.Where(c => IsAlive(c) && !c.HasStatus(CharacterStatus.Petrified)).ToList())
+        {
+            // Each round a character either meets the gaze or averts their eyes (and is then bitten by the asps instead).
+            if (_dice.Roll(2) == 1)
+            {
+                events.Add(new CombatEvent($"{target.Name} averts their eyes from {monster.DisplayName}'s gaze."));
+                continue;
+            }
+
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.PetrificationPolymorph));
+            var saveRoll = _dice.Roll(20);
+
+            RuleApplicationInfo.Publish(
+                "AD&D",
+                "Medusa Gaze",
+                $"{monster.DisplayName} gazes at {target.Name}",
+                "Creatures within 3\" who meet the gaze turn to stone unless they save vs. petrification.",
+                "1",
+                "20",
+                saveRoll.ToString(),
+                $"Save target {saveTarget}. {(saveRoll >= saveTarget ? "Saved." : "Failed; turned to stone.")}");
+
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} meets {monster.DisplayName}'s gaze but resists petrification (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            target.AddStatus(CharacterStatus.Petrified);
+            events.Add(new CombatEvent($"{target.Name} meets {monster.DisplayName}'s gaze and is turned to stone! (save {saveRoll} vs {saveTarget})"));
+        }
+    }
+
+    private void TryApplyMedusaAspBite(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Poisonous Hair Asps") || !IsAlive(target))
+            return;
+
+        if (target.IsMonkImmuneToPoison())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to the asps' poison."));
+            return;
+        }
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists the asps' poison (save vs poison {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        events.Add(new CombatEvent($"{target.Name} is bitten by {monster.DisplayName}'s hair asps and dies from the poison! (save {saveRoll} vs {saveTarget})"));
+    }
+
     private void ApplyFearAura(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
-        if (!HasSpecialAbility(monster, "Fear Aura"))
+        var usesWandSave = HasSpecialAbility(monster, "Erinyes Fear");
+        if (!usesWandSave && !HasSpecialAbility(monster, "Fear Aura"))
             return;
 
         foreach (var target in session.ExposedParty.Where(IsAlive).ToList())
@@ -6618,7 +7016,7 @@ public sealed partial class CombatResolver
 
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
                 target,
-                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+                _savingThrowService.GetSaveTarget(target, usesWandSave ? SaveThrowType.RodStaffWand : SaveThrowType.Spell));
             var saveRoll = _dice.Roll(20);
 
             if (saveRoll >= saveTarget)
@@ -6722,7 +7120,8 @@ public sealed partial class CombatResolver
 
     private bool TryResolveBoneDevilSummon(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
-        if (!HasSpecialAbility(monster, "Summon Bone Devil"))
+        var isErinyesSummon = HasSpecialAbility(monster, "Summon Erinyes");
+        if (!isErinyesSummon && !HasSpecialAbility(monster, "Summon Bone Devil"))
             return false;
 
         // One summoning attempt in roughly four rounds; total devils of this kind are capped to keep encounters bounded.
@@ -6733,13 +7132,14 @@ public sealed partial class CombatResolver
         if (session.AliveMonsters.Count(m => string.Equals(m.Template.Name, monster.Template.Name, StringComparison.OrdinalIgnoreCase)) >= maxDevils)
             return false;
 
+        var successChance = isErinyesSummon ? 25 : 40;
         var roll = _dice.Roll(100);
-        var success = roll <= 40;
+        var success = roll <= successChance;
         RuleApplicationInfo.Publish(
             "AD&D",
             "Devil Summoning",
             $"{monster.DisplayName} attempts to summon another {monster.Template.Name}",
-            "A bone devil can summon another bone devil (40% chance of success), once per round.",
+            $"A devil of this kind can summon another of its kind ({successChance}% chance of success), once per round.",
             "1",
             "100",
             roll.ToString(),
@@ -6747,7 +7147,7 @@ public sealed partial class CombatResolver
 
         if (!success)
         {
-            events.Add(new CombatEvent($"{monster.DisplayName} tries to summon another {monster.Template.Name} but fails (roll {roll} vs 40%)."));
+            events.Add(new CombatEvent($"{monster.DisplayName} tries to summon another {monster.Template.Name} but fails (roll {roll} vs {successChance}%)."));
             return true;
         }
 
@@ -7056,7 +7456,8 @@ public sealed partial class CombatResolver
         if (session != null && session.GetMonsterWoundingActiveCount(monster) > 0)
             return;
 
-        if (!monster.IsAlive || monster.CurrentHitPoints >= monster.MaxHitPoints)
+        var regenCap = Math.Max(0, monster.MaxHitPoints - (session?.GetMonsterWoundingUnhealableDamage(monster) ?? 0));
+        if (!monster.IsAlive || monster.CurrentHitPoints >= regenCap)
             return;
 
         var perRound = GetMonsterRegenerationPerRound(monster);
@@ -7064,7 +7465,7 @@ public sealed partial class CombatResolver
             perRound = 1;
 
         var before = monster.CurrentHitPoints;
-        monster.CurrentHitPoints = Math.Min(monster.MaxHitPoints, monster.CurrentHitPoints + perRound);
+        monster.CurrentHitPoints = Math.Min(regenCap, monster.CurrentHitPoints + perRound);
         var healed = monster.CurrentHitPoints - before;
 
         if (healed > 0)
@@ -7616,6 +8017,118 @@ public sealed partial class CombatResolver
         target.ApplyPoisonSporesDeathCurse(daysUntilRaiseImpossible: 1);
         events.Add(new CombatEvent($"{target.Name} is killed by {monster.DisplayName}'s poison spores! Cure Disease and Resurrection/Raise Dead must both be completed within 24 hours. (save {saveRoll} vs {saveTarget})"));
         return true;
+    }
+
+    private void TryApplySalamanderHeat(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Heat"))
+            return;
+
+        var rolled = _dice.Roll(6);
+        var damage = ApplyFireProtectionDamageReduction(target, rolled, 1, isMagicalFire: false, isNormalFire: true);
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Salamander Heat",
+            $"{monster.DisplayName} heat on {target.Name}",
+            "Each hit adds 1-6 points of heat damage. Fire resistant creatures suffer no heat damage.",
+            "1", "6", rolled.ToString(),
+            damage > 0 ? $"{damage} heat damage." : "Protected from heat.");
+
+        if (damage <= 0)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s heat."));
+            return;
+        }
+
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        events.Add(new CombatEvent($"{monster.DisplayName}'s heat scorches {target.Name} for {before - target.CurrentHitPoints} additional damage. HP {before}->{target.CurrentHitPoints}."));
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+        }
+    }
+
+    private bool TryApplyGiantSnakePoison(MonsterInstance monster, Character target, List<CombatEvent> events, bool chantActiveAtRoundStart, bool prayerActiveAtRoundStart)
+    {
+        if (!HasSpecialAbility(monster, "Giant Poisonous Snake Poison"))
+            return false;
+
+        if (target.IsMonkImmuneToPoison())
+        {
+            events.Add(new CombatEvent($"{target.Name} is immune to poison."));
+            return false;
+        }
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        if (chantActiveAtRoundStart || prayerActiveAtRoundStart)
+            saveTarget = Math.Max(1, saveTarget - 1);
+        var saveRoll = _dice.Roll(20);
+        var saved = saveRoll >= saveTarget;
+
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Giant Poisonous Snake Poison",
+            $"{monster.DisplayName} bite on {target.Name}",
+            "Victim must save vs. poison or die; even on a successful save the venom does 3-18 points of damage.",
+            "1", "20", saveRoll.ToString(),
+            $"Save target {saveTarget}. {(saved ? "Saved; takes 3d6 damage." : "Failed save; dies.")}");
+
+        if (!saved)
+        {
+            target.CurrentHitPoints = 0;
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and dies from {monster.DisplayName}'s venom!"));
+            return true;
+        }
+
+        var rolled = _dice.Roll(6) + _dice.Roll(6) + _dice.Roll(6);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - rolled);
+        WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+        events.Add(new CombatEvent($"{target.Name} saves ({saveRoll} vs {saveTarget}) but takes {before - target.CurrentHitPoints} venom damage (3d6 = {rolled}). HP {before}->{target.CurrentHitPoints}."));
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+        }
+
+        return true;
+    }
+
+    private void TryApplyOtyughDisease(MonsterInstance monster, Character target, string attackName, List<CombatEvent> events)
+    {
+        var isNeo = string.Equals(monster.Template.Name, "Neo-Otyugh", StringComparison.OrdinalIgnoreCase);
+        var isOtyugh = string.Equals(monster.Template.Name, "Otyugh", StringComparison.OrdinalIgnoreCase);
+        if (!(isOtyugh && string.Equals(attackName, "Bite", StringComparison.OrdinalIgnoreCase))
+            && !(isNeo && string.Equals(attackName, "Tentacle", StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        var roll = _dice.Roll(100);
+        RuleApplicationInfo.Publish(
+            "AD&D",
+            "Otyugh Disease",
+            $"{monster.DisplayName} bite on {target.Name}",
+            "A creature bitten by an otyugh has a 90% chance of being infected with disease (typhus).",
+            "1",
+            "100",
+            roll.ToString(),
+            roll <= 90 ? "Infected." : "No infection.");
+
+        if (roll > 90)
+            return;
+
+        if (target.HasStatus(CharacterStatus.Diseased))
+        {
+            events.Add(new CombatEvent($"{target.Name} is already diseased (otyugh bite, roll {roll})."));
+            return;
+        }
+
+        target.ApplyDisease();
+        events.Add(new CombatEvent($"{target.Name} is infected with typhus by {monster.DisplayName}'s bite! (roll {roll}, needs 1-90)"));
     }
 
     private void TryApplyGiantRatDisease(MonsterInstance monster, Character target, List<CombatEvent> events)
@@ -9722,6 +10235,12 @@ public sealed partial class CombatResolver
 
     private static bool CanWeaponHarmTargetByMagicRequirement(Item? weapon, MonsterInstance target)
     {
+        if (SpellDamageSaveHelper.IsAffectedOnlyByMagicalCold(target))
+            return false;
+
+        if (HasSpecialDefense(target, "Rakshasa Weapon Defense"))
+            return GetEffectiveWeaponBonusForHitRequirement(weapon) >= 1;
+
         if (HasSpecialDefense(target, "Blunt Weapon Immunity")
             && (weapon == null || IsBluntWeapon(weapon))
             && GetEffectiveWeaponBonusForHitRequirement(weapon) < 1)
@@ -9737,6 +10256,9 @@ public sealed partial class CombatResolver
 
             return GetEffectiveWeaponBonusForHitRequirement(weapon) >= 3;
         }
+
+        if (HasSpecialDefense(target, "Iron or Magic Weapons Required"))
+            return IsIronWeapon(weapon) || GetEffectiveWeaponBonusForHitRequirement(weapon) >= 1;
 
         if (HasMagicOrColdIronWeaponsRequirement(target))
         {
@@ -9827,6 +10349,8 @@ public sealed partial class CombatResolver
             var merged = $"{name} {description}".ToLowerInvariant();
 
             return string.Equals(name, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
+                   || merged.Contains("silver or magic weapons required", StringComparison.Ordinal)
+                   || merged.Contains("silver or magical weapons", StringComparison.Ordinal)
                    || string.Equals(description, "Hit only by magic weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(name, "Hit Only by Silver or Magic Weapons", StringComparison.OrdinalIgnoreCase)
                    || string.Equals(description, "Hit Only by Silver or Magic Weapons", StringComparison.OrdinalIgnoreCase)
