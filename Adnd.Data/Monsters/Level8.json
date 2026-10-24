@@ -8,8 +8,8 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 3,
-      "Movement": 12,
-      "HitDice": 8,
+      "Movement": 24,
+      "HitDice": 16,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "Nil",
@@ -17,13 +17,28 @@
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Strike",
+          "Name": "Grasp",
           "NumberOfAttacks": 1,
-          "Damage": "4d4"
+          "Damage": "8d4"
         }
       ],
       "Size": "Medium",
-      "DungeonRandomMonsterTableReference": "Level 8, Roll 01"
+      "DungeonRandomMonsterTableReference": "Level 8, Roll 01",
+      "SpecialAttacks": [
+        {
+          "Name": "Invisible Grasp",
+          "Description": "Normally invisible; surprises on 1-4. A grasped victim breaks free only by a percentile strength roll (18/xx%). If frustrated it goes insane and attacks as a double-strength invisible stalker."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit only by magic weapons",
+          "Description": "Can be struck only by magic weapons."
+        }
+      ],
+      "MagicResistance": "Standard",
+      "Intelligence": "Semi-",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Lvl 8 Magic-User",
@@ -446,7 +461,7 @@
       "Type": "Demon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 3,
       "ArmorClass": -1,
       "Movement": 12,
       "HitDice": 11,
@@ -470,21 +485,29 @@
       "SpecialAttacks": [
         {
           "Name": "Cause Fear",
-          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+          "Description": "Cause fear (as a fear wand)"
         },
         {
           "Name": "Telekinesis",
-          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
+          "Description": "Weapon is thrown 20 feet away (5,000 gp weight)."
+        },
+        {
+          "Name": "Nalfeshnee Gate",
+          "Description": "Gate in a type I-IV demon; 60% chance of success."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "At will: darkness 10' radius, create illusion, levitate, dispel magic, polymorph self, project image, symbol of fear or discord."
         },
         {
           "Name": "Psionics",
-          "Description": "Psionic ability 150; Attack/Defense modes: A, C, E/F, G, H."
+          "Description": "Psionic ability 150; attack/defense modes B, D/F, G, H."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "+2 or Better Weapon Required",
-          "Description": "Can only be hit by magical weapons of +2 or better."
+          "Name": "+1 or better weapons to hit",
+          "Description": "Can only be hit by magical weapons of +1 or better."
         }
       ],
       "MagicResistance": "65%",
@@ -503,110 +526,112 @@
       "Type": "Demon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
-      "Movement": 18,
-      "HitDice": 8,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": -7,
+      "Movement": 12,
+      "HitDice": 7,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "5",
-      "TreasureType": "B",
+      "ExtraHitPoints": 7,
+      "%InLair": "10",
+      "TreasureType": "G",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d4"
+          "Name": "Weapon",
+          "NumberOfAttacks": 6,
+          "Damage": "2d4"
         },
         {
-          "Name": "Claw (Rear)",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
+          "Name": "Tail",
           "NumberOfAttacks": 1,
           "Damage": "1d6"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Cause Fear",
-          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
-        },
-        {
-          "Name": "Telekinesis",
-          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
-        },
-        {
           "Name": "Charm Person",
           "Description": "Charm person at will; save vs. spell negates."
+        },
+        {
+          "Name": "Marilith Gate",
+          "Description": "Gate in another demon (type I 30%, II 25%, III 15%, IV 15%, VI 10%, lord 5%); 50% chance of success."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "At will: darkness 5' radius, levitate, read languages, detect invisible, polymorph self, project image."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 130."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Magic Weapon Immunity",
-          "Description": "Can only be hit by magic weapons."
+          "Name": "+1 or better weapons to hit",
+          "Description": "Can only be hit by magical weapons of +1 or better."
         }
       ],
-      "MagicResistance": "50%",
-      "Intelligence": "Low",
+      "MagicResistance": "80%",
+      "Intelligence": "High",
       "Alignment": "Chaotic evil",
       "Size": "Large",
       "BaseXPValue": 1275,
       "XPValuePerHitPoint": 10,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 08",
-      "Other": " (Vrock) 8.5' tall; vulture-like demon; vicious melee attacker with five natural attacks."
+      "Other": "Marilith; serpent-bodied demon with six arms, each wielding a weapon, and a constricting tail.",
+      "PsionicAbility": 130
     },
     {
       "Name": "Demon, Type VI",
       "Type": "Demon",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": 0,
-      "Movement": 18,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": -2,
+      "Movement": 15,
       "HitDice": 8,
       "HitDiceType": 8,
-      "ExtraHitPoints": 0,
-      "%InLair": "5",
-      "TreasureType": "B",
+      "ExtraHitPoints": 8,
+      "%InLair": "20",
+      "TreasureType": "F",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Claw",
-          "NumberOfAttacks": 2,
-          "Damage": "1d4"
-        },
-        {
-          "Name": "Claw (Rear)",
-          "NumberOfAttacks": 2,
-          "Damage": "1d8"
-        },
-        {
-          "Name": "Bite",
+          "Name": "Sword",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1d12+1"
         }
       ],
       "SpecialAttacks": [
         {
+          "Name": "Flame Whip",
+          "Description": "4 in 6 chance each round to immolate and lash with a flame whip for 2-12, 3-18 or 4-24 damage."
+        },
+        {
           "Name": "Cause Fear",
-          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+          "Description": "Cause fear (as a fear wand)"
         },
         {
           "Name": "Telekinesis",
-          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
+          "Description": "Weapon is thrown 20 feet away (6,000 gp weight)."
+        },
+        {
+          "Name": "Balor Gate",
+          "Description": "Gate in a type III (80%) or type IV (20%) demon; 70% chance of success."
+        },
+        {
+          "Name": "Magic Use",
+          "Description": "At will: darkness 10' radius, dispel magic, suggestion, symbols."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Magic Weapon Immunity",
-          "Description": "Can only be hit by magic weapons."
+          "Name": "+1 or better weapons to hit",
+          "Description": "Can only be hit by magical weapons of +1 or better."
         }
       ],
-      "MagicResistance": "50%",
+      "MagicResistance": "75%",
       "Intelligence": "Low",
       "Alignment": "Chaotic evil",
       "Size": "Large",
@@ -614,7 +639,7 @@
       "XPValuePerHitPoint": 10,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 09",
-      "Other": " (Vrock) 8.5' tall; vulture-like demon; vicious melee attacker with five natural attacks."
+      "Other": "Balor; huge winged demon with a flaming whip and sword."
     },
     {
       "Name": "Devil, Ice",
@@ -649,11 +674,11 @@
       ],
       "SpecialAttacks": [
         {
-         "Name": "Cause Fear",
-         "Description": "Cause fear (as a fear wand)"
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand)"
         },
         {
-         "Name": "Great Spear",
+          "Name": "Great Spear",
           "Description": "25% carry a great spear (2d6 extra damage) whose cold numbs the victim: slowed unless a save vs. paralyzation is made."
         },
         {
@@ -861,79 +886,86 @@
       "Type": "Undead",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": -3,
+      "ArmorClass": 0,
       "HitDice": 10,
       "Attacks": [
         {
           "Name": "Touch",
           "NumberOfAttacks": 1,
-          "Damage": "1d1+1"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Fire Resistance",
-          "Description": "Resistant to fire."
-        },
-        {
-          "Name": "Cold Resistance",
-          "Description": "Resistant to cold."
-        },
-        {
-          "Name": "Poison Resistance",
-          "Description": "Resistant to poison."
-        },
-        {
-          "Name": "LvlDrain",
-          "Description": "May drain levels."
-        },
-        {
-          "Name": "Stoning",
-          "Description": "May petrify."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "Resistant to magic."
-        },
-        {
-          "Name": "Slept",
-          "Description": "Can be affected by sleep effects."
+          "Damage": "Nil"
         }
       ],
       "BaseXPValue": 3000,
-      "TreasureType": "None",
-      "Source": "Wizardry",
+      "TreasureType": "E, S",
+      "Source": "Adnd",
       "Size": "Medium",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 13-17",
-      "DM comment": "Derived from Murphy's Ghost template for Level 8 encounter table compatibility."
+      "Movement": 9,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "Standard",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil",
+      "%InLair": "25",
+      "SpecialAttacks": [
+        {
+          "Name": "Ghost Touch",
+          "Description": "Touch ages the victim 10-40 years."
+        },
+        {
+          "Name": "Ghost Fear",
+          "Description": "Sight ages 10 years and the viewer flees for 2-12 turns unless a save vs. magic is made; clerics above level 6 are immune, other classes above level 8 save at +2."
+        },
+        {
+          "Name": "Magic Jar",
+          "Description": "Attempts a magic jar within 6\"; a failed attempt leaves the ghost semi-materialised."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hit Only by Silver or Magic Weapons",
+          "Description": "Semi-material ghosts are harmed only by silver (half damage) or magic weapons."
+        }
+      ],
+      "Other": "A human killed by a ghost is permanently dead; spells work only from the ethereal state."
     },
     {
       "Name": "Giant, Cloud",
       "Type": "Giant",
       "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
-      "ArmorClass": 4,
-      "Movement": 12,
-      "HitDice": 8,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "Movement": 15,
+      "HitDice": 12,
       "HitDiceType": 8,
-      "ExtraHitPoints": 1,
-      "%InLair": "25",
-      "TreasureType": "D",
+      "ExtraHitPoints": 4,
+      "%InLair": "40",
+      "TreasureType": "E, Q (x5)",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Throw rock",
+          "Name": "Weapon",
           "NumberOfAttacks": 1,
-          "Damage": "2d16"
+          "Damage": "6d6"
         }
       ],
-      "SpecialAttacks": [],
-      "SpecialDefenses": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Hurl Rocks (2d12)",
+          "Description": "Hurls rocks from 1\" to 24\" for 2-24 damage; catches missiles 60% of the time."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Hard to Surprise",
+          "Description": "Surprised only on a roll of 1."
+        }
+      ],
       "MagicResistance": "Standard",
       "Strength": 22,
-      "Intelligence": "Low",
-      "Alignment": "Chaotic evil",
+      "Intelligence": "Average to exceptional",
+      "Alignment": "Neutral (good or evil)",
       "Size": "Large",
       "BaseXPValue": 1400,
       "XPValuePerHitPoint": 12,
@@ -947,9 +979,9 @@
       "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 9,
-      "Movement": 8,
-      "HitDice": 9,
+      "ArmorClass": 7,
+      "Movement": 7,
+      "HitDice": 11,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "0",
@@ -957,25 +989,29 @@
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Slam",
-          "NumberOfAttacks": 2,
-          "Damage": "2d8"
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
         }
       ],
       "SpecialAttacks": [
         {
           "Name": "Berserk",
-          "Description": "1% cumulative chance per melee round to go berserk and attack anything in sight."
+          "Description": "1% cumulative chance per melee round that a chaotic evil spirit takes over; it then attacks any living thing and control is never regained."
+        },
+        {
+          "Name": "Golem Haste",
+          "Description": "Once per day, after at least one round of combat, hastes for 3 rounds (two attacks per round)."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Magic Weapon Immunity",
-          "Description": "Normal weapons do not harm flesh golems; magical weapons have normal effect."
+          "Name": "Hit only by magic weapons",
+          "Description": "Struck only by blunt magical weapons."
         },
         {
-          "Name": "Spell Immunity",
-          "Description": "Most spells have no effect; fire or cold spells slow the golem by 50% for 2–12 rounds; electrical attacks heal damage equal to the number of dice rolled."
+          "Name": "Clay Golem Spell Reaction",
+          "Description": "Move earth drives it back and deals 3-36; disintegrate slows it and deals 1-12; earthquake deals 5-50; all other spells have no effect."
         }
       ],
       "MagicResistance": "See below",
@@ -986,7 +1022,7 @@
       "XPValuePerHitPoint": 0,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 22-23",
-      "Other": "7.5' tall; created by high-level magic-users; extremely strong; can smash through doors and wooden structures."
+      "Other": "7' tall; sculpted clay animated by a high-level cleric."
     },
     {
       "Name": "Hydra 13 Heads",
@@ -1054,7 +1090,7 @@
         },
         {
           "Name": "Pyro hydra breath",
-          "Description": "Once per battle, breathes fire for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
+          "Description": "Each head breathes fire twice per day (modelled as two volleys per battle) for 8 damage per head; a successful save vs. breath weapon reduces damage to 4 per head."
         }
       ],
       "SpecialDefenses": [
@@ -1071,7 +1107,7 @@
       "XPValuePerHitPoint": 10,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 27",
-      "Other": "Damage per attack depends on head count; 8‑headed hydra deals 1–8 damage per bite."
+      "Other": "12 heads; each head breathes fire twice per day."
     },
     {
       "Name": "Intellect Devourer",
@@ -1097,7 +1133,7 @@
       "SpecialAttacks": [
         {
           "Name": "Hide in Shadows",
-          "Description": "Can conceal itself exceptionally well, surprising opponents."
+          "Description": "Hides in shadows as a level-10 thief."
         },
         {
           "Name": "Psionics",
@@ -1106,8 +1142,8 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Weapon & Magic Immunity",
-          "Description": "Immune to most weapons and magical effects."
+          "Name": "+3 or better weapons to hit",
+          "Description": "Normal weapons and weapons below +3 cannot harm it; most spells have no effect (fireball is merely bright light; bright light and protection from evil drive it off)."
         }
       ],
       "MagicResistance": "See below",
@@ -1132,7 +1168,7 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "50",
-      "TreasureType": "C,Y",
+      "TreasureType": "C, Y",
       "IndividualTreasure": "",
       "Attacks": [
         {
@@ -1143,8 +1179,8 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Smother Prey",
-          "Description": "Surprises on a roll of 1–4 due to camouflage. Drops onto victims and smothers them in 2–5 rounds."
+          "Name": "Smother",
+          "Description": "Drops from the ceiling onto 1-3 victims; 1-6 damage per round, and victims cannot act and suffocate in 2-5 rounds unless the lurker is killed."
         }
       ],
       "SpecialDefenses": [],
@@ -1266,35 +1302,30 @@
       "HitDiceType": 8,
       "ExtraHitPoints": 4,
       "%InLair": "50",
-      "TreasureType": "B, S, T, X",
+      "TreasureType": "G, S, T, X",
       "IndividualTreasure": "",
       "Attacks": [
         {
           "Name": "Tentacle",
           "NumberOfAttacks": 4,
-          "Damage": "2"
+          "Damage": "1d1+1"
         }
       ],
       "SpecialAttacks": [
         {
           "Name": "Mind Blast",
-          "Description": "Psionic blast in a 6\" cone; identical to psionic attack mode A; usable once per round."
-        },
-        {
-          "Name": "Psionics",
-          "Description": "Psionic ability 241–340; attack/defense modes A/F, G, H."
+          "Description": "Psionic cone 6\" long; victims save vs. spell or are stunned for 3-12 rounds."
         },
         {
           "Name": "Brain Extraction",
-          "Description": "Tentacle hit reaches the victim’s brain in 1–4 rounds, killing instantly."
-        }
-      ],
-      "SpecialDefenses": [
+          "Description": "A tentacle hit reaches the brain in 1-4 rounds and kills unless the mind flayer is slain first."
+        },
         {
-          "Name": "None",
-          "Description": "No special defensive abilities."
+          "Name": "Psionics",
+          "Description": "Psionic ability 241-340."
         }
       ],
+      "SpecialDefenses": [],
       "MagicResistance": "90%",
       "Intelligence": "Genius",
       "Alignment": "Lawful evil",
@@ -1335,6 +1366,10 @@
         {
           "Name": "Poison spit",
           "Description": "Spit poison at an individual creature; and if the victim fails to make its saving throw versus poison the spittle will kill."
+        },
+        {
+          "Name": "Poisonous Bite",
+          "Description": "Bite is poisonous; save vs. poison or die."
         }
       ],
       "SpecialDefenses": [],
@@ -1364,20 +1399,20 @@
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
-        {
           "Name": "Tentacle",
           "NumberOfAttacks": 2,
-          "Damage": "1d8"
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
         }
       ],
       "SpecialAttacks": [
         {
           "Name": "Disease",
-          "Description": "Tentacle wounds can transmit disease."
+          "Description": "Tentacle hits can transmit disease (typhus)."
         }
       ],
       "SpecialDefenses": [
@@ -1394,14 +1429,20 @@
       "XPValuePerHitPoint": 15,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 51-56",
-      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh."
+      "Other": "More intelligent and aggressive than standard otyughs; slightly better telepathic communication; specimens reach 8' diameter and 3'+ height; hide is tougher than otyugh.",
+      "HitDiceOptions": [
+        9,
+        10,
+        11,
+        12
+      ]
     },
     {
       "Name": "Purple Worm",
       "Type": "Monstrous Beast",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 2,
       "ArmorClass": 6,
       "HitDice": 15,
       "Size": "Medium",
@@ -1546,7 +1587,7 @@
         {
           "Name": "Crush",
           "NumberOfAttacks": 1,
-          "Damage": "3d4"
+          "Damage": "1d4"
         }
       ],
       "SpecialAttacks": [
@@ -1556,7 +1597,7 @@
         },
         {
           "Name": "Smother",
-          "Description": "Victims are smothered in 6 rounds regardless of damage."
+          "Description": "Closes on prey and crushes for 4 plus the victim's AC per round; the victim cannot act and is smothered in 6 rounds unless the trapper is killed."
         },
         {
           "Name": "Weapon Prevention",
@@ -1584,55 +1625,63 @@
       "Type": "Undead",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 1,
       "HitDice": 8,
       "Size": "Medium",
       "Movement": 12,
       "Attacks": [
         {
-          "Name": "Energy Drain",
+          "Name": "Touch",
           "NumberOfAttacks": 1,
-          "Damage": "2 Levels"
-        },
-        {
-          "Name": "Physical Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spellcasting",
-          "Description": "Cast spells as a 12th-level magic-user."
-        },
-        {
-          "Name": "Charm Gaze",
-          "Description": "Victims must save vs charm or be controlled."
-        },
-        {
-          "Name": "Regeneration (3 HP/round)",
-          "Description": "Regenerates 3 hit points per round."
-        },
-        {
-          "Name": "Gaseous Form",
-          "Description": "Can transform into mist at will."
-        },
-        {
-          "Name": "Summon Creatures",
-          "Description": "Can summon 10d10 rats or 3d6 wolves."
-        },
-        {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold, poison, and cold."
+          "Damage": "1d6+4"
         }
       ],
       "BaseXPValue": 5000,
       "XPValuePerHitPoint": 10,
       "TreasureType": "F",
-      "Information": "Former Magic-User (12th Level)",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 8, Roll 79-86"
+      "DungeonRandomMonsterTableReference": "Level 8, Roll 79-86",
+      "ExtraHitPoints": 3,
+      "HitDiceType": 8,
+      "%InLair": "25",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
+      "MagicResistance": "Standard",
+      "Strength": 18,
+      "SpecialAttacks": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Each hit drains two levels."
+        },
+        {
+          "Name": "Charm Gaze",
+          "Description": "Gaze charms unless a save vs. spell at -2 is made."
+        },
+        {
+          "Name": "Summon Creatures",
+          "Description": "Calls 10-100 rats or 3-18 wolves, which arrive in 2-12 rounds."
+        },
+        {
+          "Name": "Gaseous Form",
+          "Description": "Becomes gaseous at 0 hp and must reach its coffin within 12 turns (not yet modelled)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+1 or better weapons to hit",
+          "Description": "Affected only by magic weapons."
+        },
+        {
+          "Name": "Regeneration (3 HP/round)",
+          "Description": "Regenerates 3 hit points per melee round."
+        },
+        {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold, poison and paralysis; cold and electricity do half damage."
+        }
+      ],
+      "Other": "Garlic, mirrors and holy symbols cause hesitation; sunlight and running water destroy it."
     },
     {
       "Name": "Will-o-Wisp",

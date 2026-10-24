@@ -429,6 +429,43 @@ internal static class SpellDamageSaveHelper
 
     internal static Outcome ApplyToMonster(MonsterInstance monster, int rolledDamage, Random rng, string spellName, int fireDamageDiceCount = 0, int coldDamageDiceCount = 0)
     {
+        if (HasSpecialDefense(monster, "Clay Golem Spell Reaction"))
+        {
+            var clayBefore = monster.CurrentHitPoints;
+            var clayDamage = 0;
+            var name = spellName ?? string.Empty;
+            if (name.Contains("move earth", StringComparison.OrdinalIgnoreCase))
+                clayDamage = rng.Next(1, 13) + rng.Next(1, 13) + rng.Next(1, 13);
+            else if (name.Contains("disintegrate", StringComparison.OrdinalIgnoreCase))
+            {
+                clayDamage = rng.Next(1, 13);
+                monster.SetStatus(MonsterStatus.Slowed, 6);
+            }
+            else if (name.Contains("earthquake", StringComparison.OrdinalIgnoreCase))
+                clayDamage = Enumerable.Range(0, 5).Sum(_ => rng.Next(1, 11));
+
+            monster.CurrentHitPoints = Math.Max(0, clayBefore - clayDamage);
+            return new Outcome(0, 0, clayDamage == 0, clayDamage, clayBefore, monster.CurrentHitPoints, clayBefore - monster.CurrentHitPoints, false, null, null);
+        }
+
+        if (HasSpecialDefense(monster, "Flesh Golem Spell Reaction")
+            && (IsFireOrHeatSpell(spellName) || IsColdSpell(spellName) || IsElectricitySpell(spellName)))
+        {
+            var golemBefore = monster.CurrentHitPoints;
+            if (IsElectricitySpell(spellName))
+            {
+                // Heals 1 hp per die of the attack; dice are estimated from the rolled total (avg 3.5 per d6).
+                var healed = Math.Max(1, (int)Math.Round(rolledDamage / 3.5));
+                monster.CurrentHitPoints = Math.Min(monster.MaxHitPoints, golemBefore + healed);
+            }
+            else
+            {
+                monster.SetStatus(MonsterStatus.Slowed, rng.Next(1, 7) + rng.Next(1, 7));
+            }
+
+            return new Outcome(0, 0, true, 0, golemBefore, monster.CurrentHitPoints, 0, false, null, null);
+        }
+
         if (IsAffectedOnlyByMagicalCold(monster))
         {
             if (IsColdSpell(spellName))

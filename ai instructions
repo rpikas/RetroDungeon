@@ -6003,5 +6003,72 @@ Ranger
 Thief
 12
 
+Frost Giant 
+FREQUENCY: Rare 
+NO. APPEARING: 1-8 
+ARMOR CLASS: 4 
+MOVE: 12" 
+HIT DICE: 10 + 1-4 
+% IN LAIR: 30% 
+TREASURE TYPE: E 
+NO. OF ATTACKS: 1 
+DAMAGE/ATTACK: 4-24 
+SPECIAL ATTACKS: Hurling rocks 
+for 2-20 hit points 
+SPECIAL DEFENSES: Impervious to 
+cold 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Average to low 
+ALIGNMENT Chaotic evil 
+SIZE: L (15' toll) 
+PSIONIC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Frost giants more commonly inhabit castles, although they often lair in 
+44 
+GIANT, FROST 
+large frigid caverns. There is a 50% probability that they will have from 1-6 
+winter wolves in their lair as watchdogs. If more than 4 frost giants are 
+encountered in their lair numbers 5 and 6 will be females (treat as stone 
+giants with respect to hit dice and damage/attack), and 7 and 8 will be 
+young giants (roll percentile dice to determine size). 
+Adult frost giants are able to hurl rocks from 1” to 20” distances, inflicting 
+2-20 hit points of damage. They can catch like missiles 40% of the time. 
+Frost giants are impervious to cold, even white dragon breath. 
+Description: Frost giants have dead white or ivory skin color, blue-white or 
+yellow hair, and pale blue or yellow eyes. Their build is basically similar to 
+a muscular human, with appropriate size differences. Frost giants wear 
+armor and bear arms similar to those of humans of the northern barbarian 
+sort. 
 
+[file: AD&D Monster Manual.pdf] can you update Flesh Golem, Gorgon, 
+Groaning Spirit, Hydra 11 Heads until Xorn and all other monsters in Level7.json 
+that need to be udated accoding to Monster Manual if needed
 
+implement level8.json including speial attacks and special defenses for all monsters in level8.json according to Monster Manual
+"Aerial servant",
+  "Character — see Character Subtable",
+  "Demon, type IV",
+  "Demon, type V",
+  "Demon, type VI",
+  "Devil, ice",
+  "Dragon — see Dragon Subtable below",
+  "Ghost",
+  "Giant, cloud",
+  "Golem, clay",
+  "Hydra, 13 heads",
+  "Hydra, pyro-, 12 heads",
+  "Intellect devourer",
+  "Lurker above",
+  "Mold, brown",
+  "Mold, yellow",
+  "Mind flayer",
+  "Naga, guardian",
+  "Neo-otyugh",
+  "Purple worm",
+  "Rust monster",
+  "Slug, giant",
+  "Trapper",
+  76,6
+Implement these spells in the same way, they teleport the caster to the town.
+Cleric Spells Word of Recall (6th) - instantly returns the cleric to a previously designated sanctuary
+Magic-User Spells Teleport (5th) - transports the caster and carried weight to a known location.

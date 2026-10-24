@@ -182,190 +182,34 @@
       { "DiceMin": 96, "DiceMax": 97, "Creature": "Will-o-wisp", "CountMin": 1, "CountMax": 3 },
       { "DiceMin": 98, "DiceMax": 100, "Creature": "Xorn", "CountMin": 1, "CountMax": 3 }
     ],
-    "Level8": [
-      {
-        "DiceMin": 1,
-        "DiceMax": 1,
-        "Creature": "Aerial servant",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 2,
-        "DiceMax": 6,
-        "Creature": "Character — see Character Subtable",
-        "CountMin": 2,
-        "CountMax": 5
-      },
-      {
-        "DiceMin": 7,
-        "DiceMax": 7,
-        "Creature": "Demon, type IV",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 8,
-        "DiceMax": 8,
-        "Creature": "Demon, type V",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 9,
-        "DiceMax": 9,
-        "Creature": "Demon, type VI",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 10,
-        "DiceMax": 10,
-        "Creature": "Devil, ice",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 11,
-        "DiceMax": 12,
-        "Creature": "Dragon — see Dragon Subtable below",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 13,
-        "DiceMax": 17,
-        "Creature": "Ghost",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 18,
-        "DiceMax": 21,
-        "Creature": "Giant, cloud",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 22,
-        "DiceMax": 23,
-        "Creature": "Golem, clay",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 24,
-        "DiceMax": 26,
-        "Creature": "Hydra, 13 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 27,
-        "DiceMax": 27,
-        "Creature": "Hydra, pyro-, 12 heads",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 28,
-        "DiceMax": 29,
-        "Creature": "Intellect devourer",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 30,
-        "DiceMax": 35,
-        "Creature": "Lurker above",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 36,
-        "DiceMax": 41,
-        "Creature": "Mold, brown",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 42,
-        "DiceMax": 43,
-        "Creature": "Mold, yellow",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 44,
-        "DiceMax": 47,
-        "Creature": "Mind flayer",
-        "CountMin": 1,
-        "CountMax": 4
-      },
-      {
-        "DiceMin": 48,
-        "DiceMax": 50,
-        "Creature": "Naga, guardian",
-        "CountMin": 1,
-        "CountMax": 2
-      },
-      {
-        "DiceMin": 51,
-        "DiceMax": 56,
-        "Creature": "Neo-otyugh",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 57,
-        "DiceMax": 64,
-        "Creature": "Purple worm",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 65,
-        "DiceMax": 69,
-        "Creature": "Rust monster",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 70,
-        "DiceMax": 73,
-        "Creature": "Slug, giant",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 74,
-        "DiceMax": 78,
-        "Creature": "Trapper",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 79,
-        "DiceMax": 86,
-        "Creature": "Vampire",
-        "CountMin": 1,
-        "CountMax": 1
-      },
-      {
-        "DiceMin": 87,
-        "DiceMax": 92,
-        "Creature": "Will-o-wisp",
-        "CountMin": 2,
-        "CountMax": 5
-      },
-      {
-        "DiceMin": 93,
-        "DiceMax": 100,
-        "Creature": "Xorn",
-        "CountMin": 2,
-        "CountMax": 5
-      }
-    ],
+  "Level8": [
+  {"DiceMin":1,"DiceMax":1,"Creature":"Aerial servant","CountMin":1,"CountMax":1},
+  {"DiceMin":2,"DiceMax":6,"Creature":"Character — see Character Subtable","CountMin":2,"CountMax":5},
+  {"DiceMin":7,"DiceMax":7,"Creature":"Demon, type IV","CountMin":1,"CountMax":1},
+  {"DiceMin":8,"DiceMax":8,"Creature":"Demon, type V","CountMin":1,"CountMax":1},
+  {"DiceMin":9,"DiceMax":9,"Creature":"Demon, type VI","CountMin":1,"CountMax":1},
+  {"DiceMin":10,"DiceMax":10,"Creature":"Devil, ice","CountMin":1,"CountMax":1},
+  {"DiceMin":11,"DiceMax":12,"Creature":"Dragon — see Dragon Subtable below","CountMin":1,"CountMax":1},
+  {"DiceMin":13,"DiceMax":17,"Creature":"Ghost","CountMin":1,"CountMax":1},
+  {"DiceMin":18,"DiceMax":21,"Creature":"Giant, cloud","CountMin":1,"CountMax":2},
+  {"DiceMin":22,"DiceMax":23,"Creature":"Golem, clay","CountMin":1,"CountMax":1},
+  {"DiceMin":24,"DiceMax":26,"Creature":"Hydra, 13 heads","CountMin":1,"CountMax":1},
+  {"DiceMin":27,"DiceMax":27,"Creature":"Hydra, pyro-, 12 heads","CountMin":1,"CountMax":1},
+  {"DiceMin":28,"DiceMax":29,"Creature":"Intellect devourer","CountMin":1,"CountMax":2},
+  {"DiceMin":30,"DiceMax":35,"Creature":"Lurker above","CountMin":1,"CountMax":1},
+  {"DiceMin":36,"DiceMax":41,"Creature":"Mold, brown","CountMin":1,"CountMax":1},
+  {"DiceMin":42,"DiceMax":43,"Creature":"Mold, yellow","CountMin":1,"CountMax":1},
+  {"DiceMin":44,"DiceMax":47,"Creature":"Mind flayer","CountMin":1,"CountMax":4},
+  {"DiceMin":48,"DiceMax":50,"Creature":"Naga, guardian","CountMin":1,"CountMax":2},
+  {"DiceMin":51,"DiceMax":56,"Creature":"Neo-otyugh","CountMin":1,"CountMax":1},
+  {"DiceMin":57,"DiceMax":64,"Creature":"Purple worm","CountMin":1,"CountMax":1},
+  {"DiceMin":65,"DiceMax":69,"Creature":"Rust monster","CountMin":1,"CountMax":1},
+  {"DiceMin":70,"DiceMax":73,"Creature":"Slug, giant","CountMin":1,"CountMax":1},
+  {"DiceMin":74,"DiceMax":78,"Creature":"Trapper","CountMin":1,"CountMax":1},
+  {"DiceMin":79,"DiceMax":86,"Creature":"Vampire","CountMin":1,"CountMax":1},
+  {"DiceMin":87,"DiceMax":92,"Creature":"Will-o-wisp","CountMin":2,"CountMax":5},
+  {"DiceMin":93,"DiceMax":100,"Creature":"Xorn","CountMin":2,"CountMax":5}
+],
     "Level9": [
       {
         "DiceMin": 1,

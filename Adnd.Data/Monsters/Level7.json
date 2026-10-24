@@ -1364,12 +1364,12 @@
       "Type": "Giant",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 10,
       "HitDiceType": 8,
-      "ExtraHitPoints": 1,
+      "ExtraHitPoints": 3,
       "%InLair": "30",
       "TreasureType": "E",
       "IndividualTreasure": "",
@@ -1380,10 +1380,15 @@
           "Damage": "4d6"
         }
       ],
-      "SpecialAttacks": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Hurl Rocks (2d10)",
+          "Description": "Hurls rocks from 1\" to 20\" for 2-20 damage; opens a fight by throwing a rock, then occasionally throws instead of striking."
+        }
+      ],
       "SpecialDefenses": [
         {
-          "Name": "Cold Immunity",
+          "Name": "Immunity to cold",
           "Description": "Impervious to cold, including white dragon breath."
         }
       ],
@@ -1431,7 +1436,7 @@
           "Description": "Normal weapons do not harm flesh golems; magical weapons have normal effect."
         },
         {
-          "Name": "Spell Immunity",
+          "Name": "Flesh Golem Spell Reaction",
           "Description": "Most spells have no effect; fire or cold spells slow the golem by 50% for 2–12 rounds; electrical attacks heal damage equal to the number of dice rolled."
         }
       ],
@@ -1468,7 +1473,7 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Petrifying Gaze",
+          "Name": "Petrifying Breath",
           "Description": "Breath weapon turns creatures to stone; truncated cone ½\" at mouth, 6\" long, 2\" wide at end; usable 4 times per day."
         }
       ],
@@ -1529,7 +1534,7 @@
           "Description": "Immune to charm, sleep, and hold spells."
         },
         {
-          "Name": "Cold & Electricity Immunity",
+          "Name": "Immunity to cold",
           "Description": "Impervious to cold and electricity."
         }
       ],
@@ -2613,8 +2618,12 @@
           "Description": "Can pass through earth and stone as easily as air."
         },
         {
-          "Name": "Partial Magic Immunity",
-          "Description": "Immune to fire; takes half damage from cold; lightning does normal damage."
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
+      },
+      {
+          "Name": "Immunity to cold",
+          "Description": "Immune to cold; lightning does half or no damage."
         }
       ],
       "MagicResistance": "Standard",

@@ -238,6 +238,9 @@ public sealed partial class CombatResolver
     private readonly HashSet<MonsterInstance> _whirlwindUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<MonsterInstance> _rockHurlOpened = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly Dictionary<MonsterInstance, int> _whirlwindPhase = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<MonsterInstance, int> _petrifyingBreathUses = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<MonsterInstance, int> _golemBerserkChance = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _golemBerserk = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<string> _bleedingCharacters = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<MonsterInstance> _iceStormUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly Dictionary<string, int> _frightenedRounds = new(StringComparer.OrdinalIgnoreCase);
@@ -746,6 +749,9 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (IsHeldByMonster(session, member, events))
+                continue;
+
             if (member.HasStatus(CharacterStatus.Webbed))
             {
                 var roundsRemaining = session.GetPartyWebbedRounds(member.Name);
@@ -1188,6 +1194,15 @@ public sealed partial class CombatResolver
             if (TryResolveHurlRocks(session, monster, events))
                 continue;
 
+            if (TryResolvePetrifyingBreath(session, monster, events))
+                continue;
+
+            if (TryResolveFleshGolemBerserk(session, monster, events))
+                continue;
+
+            if (TryResolveLevel8Powers(session, monster, events))
+                continue;
+
             if (TryResolveVrockGate(session, monster, events))
                 continue;
 
@@ -1607,6 +1622,8 @@ public sealed partial class CombatResolver
                     LogPurpleWormRule(events, $"{monster.DisplayName} uses its tail sting in {(GetPurpleWormRearAttackers(session, monster).Any() ? "rear defense" : "a spacious area against numerous opponents")}: 2d4 damage, save vs. poison or die.");
                 }
                 int attackCount = Math.Max(1, attack.NumberOfAttacks);
+                if (_golemHasteRounds.GetValueOrDefault(monster) > 0)
+                    attackCount *= 2;
                 for (int i = 0; i < attackCount; i++)
                 {
                     if (TryResolveBlinkDogPackRetreat(session, monster, events))
@@ -1784,6 +1801,9 @@ public sealed partial class CombatResolver
                             TryApplyInfestation(monster, target, events);
                             TryApplyTickDisease(monster, target, events);
                             TryApplyEnergyDrain(monster, target, session, events);
+                            TryApplyLevel8OnHit(session, monster, target, attack.Name, events);
+                            if (!IsAlive(target))
+                                continue;
                             TryApplyStrengthDrain(monster, target, events);
                             TryApplyDrainBlood(monster, target, session, events);
                             TryApplyRotGrubExposure(monster, target, events);
@@ -6371,7 +6391,7 @@ public sealed partial class CombatResolver
 
     private bool TryResolvePyroHydraBreath(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
-        if (!HasSpecialAbility(monster, "Pyro hydra breath") || session.PyroHydraBreathUsed.Contains(monster))
+        if (!HasSpecialAbility(monster, "Pyro hydra breath") || _pyroBreathCount.GetValueOrDefault(monster) >= 2)
             return false;
 
         var targets = session.ExposedParty.ToList();
@@ -6384,9 +6404,9 @@ public sealed partial class CombatResolver
             throw new InvalidOperationException($"{monster.DisplayName} requires a positive head count for Pyro hydra breath.");
 
         var breathDamage = 8 * headCount;
-        session.PyroHydraBreathUsed.Add(monster);
-        events.Add(new CombatEvent($"{monster.DisplayName} uses Pyro hydra breath: {headCount} heads deal {breathDamage} fire damage (8 per head; save vs. breath weapon for {4 * headCount}, 4 per head). This attack can be used only once per battle."));
-        RuleApplicationInfo.PublishLinked("MM", "Hydra", $"{monster.DisplayName}: Pyro hydra breath deals 8 damage per head, or 4 per head on a successful save vs. breath weapon; once per battle.");
+        _pyroBreathCount[monster] = _pyroBreathCount.GetValueOrDefault(monster) + 1;
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Pyro hydra breath: {headCount} heads deal {breathDamage} fire damage (8 per head; save vs. breath weapon for {4 * headCount}, 4 per head). Each head can breathe twice per battle ({_pyroBreathCount[monster]}/2 used)."));
+        RuleApplicationInfo.PublishLinked("MM", "Hydra", $"{monster.DisplayName}: Pyro hydra breath deals 8 damage per head, or 4 per head on a successful save vs. breath weapon; twice per day per head.");
         ResolveFireBreathDamage(monster, targets, breathDamage, "Pyro hydra breath", events);
         return true;
     }
@@ -6659,6 +6679,10 @@ public sealed partial class CombatResolver
         _whirlwindUsed.Clear();
         _rockHurlOpened.Clear();
         _whirlwindPhase.Clear();
+        _petrifyingBreathUses.Clear();
+        _golemBerserkChance.Clear();
+        _golemBerserk.Clear();
+        ResetLevel8State();
         _bleedingCharacters.Clear();
         foreach (var (owner, weapon) in _thrownWeapons.Values)
             owner.Inventory.Add(weapon);
@@ -7156,6 +7180,82 @@ public sealed partial class CombatResolver
             events.Add(new CombatEvent($"{target.Name} is slain!"));
         }
 
+        return true;
+    }
+
+    private bool TryResolvePetrifyingBreath(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Petrifying Breath"))
+            return false;
+
+        _petrifyingBreathUses.TryGetValue(monster, out var used);
+        if (used >= 4)
+            return false;
+
+        var party = session.ExposedParty.Where(c => IsAlive(c) && !c.HasStatus(CharacterStatus.Petrified)).ToList();
+        if (party.Count == 0)
+            return false;
+
+        _petrifyingBreathUses[monster] = used + 1;
+        var affected = party.OrderBy(_ => _dice.Roll(1000)).Take(Math.Min(party.Count, _dice.Roll(3))).ToList();
+        events.Add(new CombatEvent($"{monster.DisplayName} exhales a cone of petrifying breath ({used + 1}/4 uses today)!"));
+        RuleApplicationInfo.PublishLinked("MM", "Gorgon", $"{monster.DisplayName}: breath turns creatures to stone (save vs. petrification); 4 uses per day, hits 1d3 characters.");
+
+        foreach (var target in affected)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.PetrificationPolymorph));
+            var saveRoll = _dice.Roll(20);
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists the petrifying breath (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            target.AddStatus(CharacterStatus.Petrified);
+            events.Add(new CombatEvent($"{target.Name} is turned to stone by {monster.DisplayName}'s breath! (save {saveRoll} vs {saveTarget})"));
+        }
+
+        return true;
+    }
+
+    private bool TryResolveFleshGolemBerserk(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Berserk"))
+            return false;
+
+        if (!_golemBerserk.Contains(monster))
+        {
+            // 1% cumulative chance per melee round.
+            var chance = _golemBerserkChance.GetValueOrDefault(monster) + 1;
+            _golemBerserkChance[monster] = chance;
+            if (_dice.Roll(100) > chance)
+                return false;
+
+            _golemBerserk.Add(monster);
+            events.Add(new CombatEvent($"{monster.DisplayName} goes berserk and attacks anything in sight!"));
+        }
+        else if (!IsTemplate(monster, "Clay") && _dice.Roll(10) == 1)
+        {
+            _golemBerserk.Remove(monster);
+            _golemBerserkChance[monster] = 0;
+            events.Add(new CombatEvent($"{monster.DisplayName} regains control of itself."));
+            return false;
+        }
+
+        var allies = session.Monsters.Where(m => m.IsAlive && !ReferenceEquals(m, monster)).ToList();
+        var targetCount = allies.Count + session.ExposedParty.Count(IsAlive);
+        if (allies.Count == 0 || _dice.Roll(targetCount) > allies.Count)
+            return false;
+
+        var victim = allies[_dice.Roll(allies.Count) - 1];
+        var damage = IsTemplate(monster, "Clay") ? _dice.RollMany(10, 3) : _dice.RollMany(8, 2) + _dice.RollMany(8, 2);
+        var before = victim.CurrentHitPoints;
+        victim.CurrentHitPoints = Math.Max(0, before - damage);
+        events.Add(new CombatEvent($"{monster.DisplayName}, berserk, pounds {victim.DisplayName} for {before - victim.CurrentHitPoints} damage. HP {before}->{victim.CurrentHitPoints}."));
+        if (!victim.IsAlive)
+            events.Add(new CombatEvent($"{victim.DisplayName} is destroyed by the raging golem."));
         return true;
     }
 
@@ -9317,6 +9417,17 @@ public sealed partial class CombatResolver
     {
         if (!HasAnySpecialAbility(monster, "Energy Drain"))
             return;
+
+        if (IsTemplate(monster, "Vampire"))
+        {
+            var drained = 0;
+            for (var i = 0; i < 2 && TryDrainOneLevel(target, out _, out _); i++)
+                drained++;
+            events.Add(new CombatEvent(drained > 0
+                ? $"{target.Name} loses {drained} level(s) to {monster.DisplayName}'s vampiric touch!"
+                : $"{target.Name} cannot lose further levels."));
+            return;
+        }
 
         var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
             target,

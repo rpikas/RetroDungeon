@@ -549,6 +549,7 @@ public sealed class CombatCoordinator
             if (name.Equals("Minotaur", StringComparison.OrdinalIgnoreCase)
                 || name.Equals("Ettin", StringComparison.OrdinalIgnoreCase)
                 || name.Equals("Troll", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Giant, Cloud", StringComparison.OrdinalIgnoreCase)
                 || name.Equals("Carnivorous Ape", StringComparison.OrdinalIgnoreCase))
             {
                 threshold = Math.Max(threshold, 1);
