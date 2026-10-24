@@ -1,4 +1,4 @@
-using Adnd.Core.Assassination;
+﻿using Adnd.Core.Assassination;
 using Adnd.Core.Characters;
 using Adnd.Core.Characters.Progression;
 using Adnd.Core.Combat.Actions;
@@ -126,6 +126,11 @@ public sealed class CombatCoordinator
             // Handles both cleric and magic-user Hold Person spell IDs.
             new HoldPersonHandler(),
             new HoldMonsterHandler(),
+            new BlinkHandler(),
+            new WallOfStoneHandler(),
+            new DispelMagicHandler(),
+            new AnimalFriendshipHandler(),
+            new TimeStopHandler(),
             new BlessHandler(),
             new SleepHandler(),
             new StrengthHandler(),

@@ -1,4 +1,4 @@
-using Adnd.Core.Combat.Sessions;
+﻿using Adnd.Core.Combat.Sessions;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
 
@@ -41,6 +41,7 @@ public sealed class SnareHandler : ISpellEffectHandler
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}!");
 
         const int snareRounds = 5;
+        var snaredCount = 0;
         foreach (var monster in targets)
         {
             if (SpellDamageSaveHelper.IsAffectedOnlyByFireBasedAttacks(monster))
@@ -54,13 +55,14 @@ public sealed class SnareHandler : ISpellEffectHandler
             monster.CurrentHitPoints = Math.Max(0, monster.CurrentHitPoints - damage);
             var actualDamage = beforeHp - monster.CurrentHitPoints;
             monster.SetStatus(MonsterStatus.Snared, snareRounds);
+            snaredCount++;
 
             result.Events.Add($"{monster.DisplayName} is snared and takes {actualDamage} damage (1d6). HP {beforeHp}->{monster.CurrentHitPoints}.");
             if (!monster.IsAlive)
                 result.Events.Add($"{monster.DisplayName} collapses in the snare.");
         }
 
-        result.Events.Add($"Snare affected group '{targetGroupId}' with no save." );
+        result.Events.Add($"Snare affected group {targets[0].Name} with no save: {snaredCount} of {targets.Count} snared.");
         return result;
     }
 }

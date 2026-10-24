@@ -940,8 +940,11 @@ public sealed partial class CombatResolver
             }
         }
 
-        ResolveFigurineAnimalAllies(session, events);
-        ResolveHornOfValhallaSummons(session, events);
+        if (!timeStopExtraRound)
+        {
+            ResolveFigurineAnimalAllies(session, events);
+            ResolveHornOfValhallaSummons(session, events);
+        }
 
         if (!session.AliveMonsters.Any())
         {

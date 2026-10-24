@@ -673,6 +673,11 @@ public sealed class CombatSession
         TimeStopCastRound = RoundNumber;
     }
 
+    public bool IsTimeStopExtraRound => TimeStopRounds > 0 && RoundNumber > TimeStopCastRound;
+
+    public bool IsFrozenByTimeStop(Character c) =>
+        IsTimeStopExtraRound && !string.Equals(c.Name, TimeStopCaster, StringComparison.OrdinalIgnoreCase);
+
     public void EndTimeStop()
     {
         TimeStopCaster = null;

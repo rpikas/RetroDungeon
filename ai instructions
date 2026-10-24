@@ -6141,9 +6141,10 @@ Implement Level 1 Druid spell Animal Friendship that works like a charm on anima
 
 implement level 9 magic user spell time stop. after casting the spell the magic user can attack or spell 1-3 times
 before time continues again.
-
-
-
-
+79
+when monsters are snared I would like to see how many are snared just like hold or sleep
+Update message Snare affected group 'default' with no save. to Snare affected group <Monster name> with no save.
+___
+During time stop Serpentine Owl or other pets can not attack. Do not ask for actions of the other players that did not cast time stop. Just write status time stopped
 
 

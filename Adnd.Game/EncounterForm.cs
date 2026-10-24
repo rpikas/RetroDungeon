@@ -2473,6 +2473,8 @@ public sealed class EncounterForm : Form
             statuses.Add(rounds > 0 ? $"ASLEEP ({rounds} rounds)" : "ASLEEP");
         }
 
+        if (_session?.IsFrozenByTimeStop(c) == true && statuses.Count == 0) statuses.Add("TIME STOPPED");
+
         return statuses.Count == 0 ? null : string.Join(", ", statuses);
     }
 
@@ -2549,7 +2551,7 @@ public sealed class EncounterForm : Form
         return -1;
     }
 
-    private bool IsActionable(Character c) => CombatFormation.CanFight(c, _session);
+    private bool IsActionable(Character c) => CombatFormation.CanFight(c, _session) && _session?.IsFrozenByTimeStop(c) != true;
 
     private int GetActionableRank(int partyIndex)
     {
