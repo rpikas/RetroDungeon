@@ -13,7 +13,30 @@ public class SpellRepository
         Directory.CreateDirectory(_folder);
     }
 
+    private static readonly object CacheLock = new();
+    private static readonly Dictionary<string, ((int Count, long LatestTicks) Signature, List<Spell> Spells)> Cache =
+        new(StringComparer.OrdinalIgnoreCase);
+
     public List<Spell> LoadAll()
+    {
+        var key = Path.GetFullPath(_folder);
+        var signature = FolderSignature.Compute(_folder);
+
+        lock (CacheLock)
+        {
+            if (Cache.TryGetValue(key, out var cached) && cached.Signature == signature)
+                return new List<Spell>(cached.Spells);
+        }
+
+        var loaded = LoadFromDisk();
+
+        lock (CacheLock)
+            Cache[key] = (signature, loaded);
+
+        return new List<Spell>(loaded);
+    }
+
+    private List<Spell> LoadFromDisk()
     {
         var list = new List<Spell>();
 

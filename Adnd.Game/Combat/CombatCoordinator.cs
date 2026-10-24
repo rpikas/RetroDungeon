@@ -154,6 +154,7 @@ public sealed class CombatCoordinator
             new MeteorSwarmHandler(),
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
+            new WishHandler(WishPrompter.Instance),
             new ColorSprayHandler(),
             new FearHandler(),
             new TelekinesisHandler(),
@@ -237,9 +238,9 @@ public sealed class CombatCoordinator
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)
             {
-                // If player closes dialog, treat as escape to avoid dead-end.
-                session.Outcome = CombatOutcome.Escaped;
-                break;
+                // Closing the dialog is a run attempt, resolved by the normal run rules.
+                ResolveCloseAsRun(owner, session, characterRepository, dungeonLevel);
+                continue;
             }
 
             ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
@@ -317,8 +318,8 @@ public sealed class CombatCoordinator
                    var dialogResult = encounterForm.ShowDialog(owner);
                    if (dialogResult != DialogResult.OK)
                    {
-                       session.Outcome = CombatOutcome.Escaped;
-                       break;
+                       ResolveCloseAsRun(owner, session, characterRepository, dungeonLevel);
+                       continue;
                    }
 
                    ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
@@ -401,8 +402,8 @@ public sealed class CombatCoordinator
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)
             {
-                session.Outcome = CombatOutcome.Escaped;
-                break;
+                ResolveCloseAsRun(owner, session, characterRepository, dungeonLevel);
+                continue;
             }
 
             ActionsChosen?.Invoke(session, encounterForm.SelectedActions);
@@ -2174,6 +2175,25 @@ public sealed class CombatCoordinator
         }
 
         return null;
+    }
+
+    private void ResolveCloseAsRun(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel)
+    {
+        var runActions = session.AliveParty.ToDictionary(
+            m => m.Name,
+            _ => CombatAction.OfType(CombatActionType.Run),
+            StringComparer.OrdinalIgnoreCase);
+
+        ActionsChosen?.Invoke(session, runActions);
+
+        var roundEvents = _combatResolver.ResolveRound(session, runActions);
+        HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+        HandleTelekinesisPrompts(owner, session, roundEvents);
+        ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
+        RoundResolved?.Invoke(session);
+        ShowRoundEvents(owner, roundEvents, session);
+
+        MoveDeadPartyMembersToEnd(session.Party);
     }
 
     private bool ConfirmAttackEncounterSleepingMonsters(IWin32Window owner, CombatSession session)

@@ -769,14 +769,6 @@
           "Description": "Generates fear upon striking an opponent; save vs. wand or flee in terror."
         },
         {
-          "Name": "Pyrotechnics",
-          "Description": "One at a time, per round: pyrotechnics dazzles the party (save vs. spell)."
-        },
-        {
-          "Name": "Produce Flame",
-          "Description": "Hurls flame at one target for 1d4 + 8 damage."
-        },
-        {
           "Name": "Hold Person",
           "Description": "Holds 1d3 party members unless they save vs. spell."
         },
@@ -806,7 +798,7 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": -1,
       "Movement": 15,
       "HitDice": 9,
@@ -819,35 +811,43 @@
         {
           "Name": "Strike",
           "NumberOfAttacks": 1,
-          "Damage": "3d12"
+          "Damage": "3d4"
         }
       ],
       "SpecialAttacks": [
         {
           "Name": "Cause Fear",
-          "Description": "Cause fear (as a fear wand)"
+          "Description": "Generates fear in a 5' radius sphere (as a fear wand)"
         },
         {
           "Name": "Bone Hook",
-        "Description": "Bane hook; any creature hit by it has a 50% chance of being stuck fast."
+          "Description": "Bane hook; any creature hit by it has a 50% chance of being stuck fast."
         },
         {
           "Name": "Tail",
-        "Description": "Against stuck victims: tail strike deals 2-8 damage and drains 1-4 Strength for 10 melee rounds unless a save vs. poison is made."
+          "Description": "Against stuck victims: tail strike deals 2-8 damage and drains 1-4 Strength for 10 melee rounds unless a save vs. poison is made."
         },
         {
-        "Name": "Summon Bone Devil",
-        "Description": "Can summon another bone devil (40% chance of success)."
-      },
-      {
-        "Name": "Magic Use",
-        "Description": "At will: fear (5' radius), create illusion, fly, become invisible, detect invisible, fear spell. Once per day: wall of ice."
-      }
+          "Name": "Summon Bone Devil",
+          "Description": "Can summon another bone devil (40% chance of success)."
+        },
+        {
+          "Name": "Create Illusion",
+          "Description": "At will, once per turn or melee round: create illusion."
+        },
+        {
+          "Name": "Wall of Ice",
+          "Description": "Once per day it is able to create a wall of ice."
+        }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Devil Traits",
-          "Description": "Includes immunities and resistances typical of greater devils."
+          "Name": "Ultravision (60')",
+          "Description": "Sees light in the ultra-violet spectrum at 60' range."
+        },
+        {
+          "Name": "Invisibility",
+          "Description": "At will, once per turn or melee round: become invisible, detect invisible, fly."
         }
       ],
       "MagicResistance": "40%",
@@ -865,7 +865,7 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 5,
       "ArmorClass": -5,
       "Movement": 18,
       "HitDice": 5,
@@ -881,9 +881,9 @@
           "Damage": "1d4"
         },
         {
-          "Name": "Gore",
+          "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "2d5"
+          "Damage": "1d4+1"
         },
         {
           "Name": "Tail",
@@ -894,29 +894,25 @@
       "SpecialAttacks": [
         {
           "Name": "Cause Fear",
-          "Description": "Cause fear (as a fear wand)"
+          "Description": "Exudes fear in a 5' radius (saving throw versus wand applies)."
         },
         {
-          "Name": "Tail Strike",
-          "Description": "Deals 2d8 damage and drains 1–4 strength points."
+          "Name": "Horned Weapon",
+          "Description": "If armed (fork 75%: 2-12 damage; barbed whip 25%: 1-4 damage plus stun for the same number of rounds unless save vs. magic). Tail strike (1-3) causes a wound that bleeds 1 HP until bound or cured."
         },
         {
-          "Name": "Spell Use",
-          "Description": "Can use various devil spell-like abilities."
+          "Name": "Summon Horned Devil",
+          "Description": "Can summon another horned devil (50% chance of success)."
         },
         {
-          "Name": "Psionics",
-          "Description": "Psionic ability score 113; attack/defense modes B, C / F, G, H."
-        },
-        {
-          "Name": "Special Weapons",
-          "Description": "Fork (2d12 damage) or whip (1d4 damage + stun)."
+          "Name": "Wall of Fire",
+          "Description": "Once per day: wall of fire of triple normal strength (3-24 hit points)."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Magic Weapon Immunity",
-          "Description": "Can only be hit by magic weapons."
+          "Name": "+1 or better weapon to hit",
+          "Description": "Can only be hit by +1 or better magic weapons."
         }
       ],
       "MagicResistance": "50%",

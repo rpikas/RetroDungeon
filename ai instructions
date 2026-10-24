@@ -5667,3 +5667,153 @@ if pyrotechnics is cast and the party try to run the esacpe will always succeed.
 
 if old stype ui is true, can you show av old style version of the reorder party ui. 70,6
 make the old style version of the reorder party ui a bit higher so the new order is visible
+___
+The party members should not always hit first/cast spells first, make the order random so monsters sometimes attack
+first
+can you increase the performance so when walking in the maze there is shorter delay inbetween the steps?
+
+If pressing Esc when enountering monsters and selecting to run then the method for escaping that is used when runing 
+should be applied. It only succeds if slowest paryt member is faster then enocounter
+
+Bone (Lesser devil) 
+FREQUENCY: Uncommon 
+NO. APPEARING: 1-2 or 2-8 
+ARMOR CLASS: - I 
+MOVE: 15" 
+HIT DICE: 9 
+% IN LAIR: 55% 
+TREASURE TYPE: Nil 
+NO. OF ATTACKS: I 
+DAMAGE/ATTACK: 3- 12 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: See below 
+MAGIC RESISTANCE: 40% 
+INTELLIGENCE: Very 
+ALIGNMENT: Lawful evil 
+SIZE: L (9!4'taIl) 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Bone devils populate the lower planes of Hell, particularly the fifth. They 
+are particularly malicious and delight in making less powerful treatures 
+suffer. As they prefer cold to heat, these monsters also have ultravision, 
+seeing light in the ultra-violet spectrum at 60' range. 
+Bone devils have a great bane hook they employ to snare and wound 
+opponents. Any creature caught (hit) by it has a 50% chance of being stuck 
+fast. The bone devil will then strike such victims with its tail doing 2-8 hit 
+points of damage, plus causing a loss of strength (1-4 points) unless a save 
+versus poison is made; strength loss lasts for 10 melee rounds. 
+At will, once per turn or melee round, as applicable, bone devils can: 
+generate fear in a 5' radius sphere, create illusion, fly, become invisible, 
+detect invisible, fear (spell), or summon another bone devil (40% chance 
+of success). Once per day it is able to create a wall of ice. 
+
+Horned (Malebranche) (Greater devil) 
+FREQUENCY: Uncommon 
+NO. APPEARING: 1-2 or 2-5 
+ARMOR CLASS: -5 
+MOVE: 9"/I8" 
+HIT DICE: 5 + 5 
+% IN LAIR: 55% 
+TREASURE TYPE: I 
+NO. OF ATTACKS: 4 or I + 
+weapon 
+DAMAGE/ATTACK: I -4/ I -4/2-5/ I- 
+3 or 1-3 and weapon 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: + I or better 
+weapon to hit 
+MAGIC RESISTANCE: 50% 
+INTELLIGENCE: High 
+ALIGNMENT: Lowful evil 
+SIZE: L (9'tall) 
+PSIONICABILITY: I13 
+Attack/Defense Modes: B, C/F, G. H 
+The "evil horns" (mole branche are primarily from Hell's sixth and 
+seventh planes. These are the least of the greoter devils, and have such 
+names as "Dogretch," "Evil Tail," and "Bent Wing." They hate anything 
+stronger than themselves and fear stronger devils accordingly. 
+If armed, they will carry a two-tined fork (75%) which causes 2-12 points of 
+damage, or a barbed whip (25%) which will cause 1-4 points of damage 
+plus a stunning effect for the same number of melee rounds unless a 
+saving throw versus magic is made. An unarmed horned devil attacks with 
+a claw/claw/bite. Armed or unarmed these devils are also able to attack 
+with their tails, causing 1-3 hit points of damage and a wound which will 
+bleed thereafter unless bound up (lose 1 hit point/turn until bound or 
+cured). They exude feor in a 5' radius (saving throw versus wand applies). 
+Horned devils can do any one of the following, at will, once per turn or 
+melee round, as applicable: pyrotechnics, produce flame, ESP, detect 
+magic, illusion, or summon another horned devil (50% chance of success). 
+Once per day they can create a wall of fire of triple normal strength with 
+regard to the damage it causes (3-24 hit points).
+
+remove all SpecialAttacks Pyrotechnics and Produce Flame and ESP, Detect Magic from jsons dont add them again
+
+implement 9 level magic user spell Wish. implement it by giving options H)eal/cure or I)tem or S)pell or C)harater improvement.
+
+the charater that uses wish becomes 3 years older every time the spell is cast
+
+Death Due To Age: 
+This is a serious matter, for unless the lifespan can otherwise be pro- 
+longed, the character brought back from such death faces the prospect of 
+soon dying again. Beyond the maximum age determined for the character 
+in question, no form of magic which does not prolong life span will work. 
+(Thus, some characters may become liches . . . .) Of course, multiple 
+potions of longevity, wishes, and possibly magical devices will allow a 
+greatly extended life span, but once a character dies due to old 
+(venerable) age, then it is all over. If you make this clear, many partici- 
+pants will see the continuity of the family line as the way to achieve a sort 
+of immortality. 
+Determination Of Maximum Age: 
+Unless the character dies of some other cause, he or she will live to old 
+age. Use the following table to find the exact age at which a character will 
+die of "natural" causes: 
+MAXIMUM CHARACTER AGE TABLE 
+Dice 
+Score 
+01-10 
+11-25 
+26-60 
+61-90 
+91-00 
+Character Age Category 
+old, lowest age 
+old, highest age 
+venerable, lowest age 
+venerable, highest age 
+venerable, highest age 
+Variable* 
++ d8 - d4 
++ d6 - d10** 
++d20*** 
+Use the die to determine the addition or subtraction according to the 
+span of years in the category: 
+UNDER 100 1 year intervals 
+l00to250 10 year intervals (+d10**) 
+OVER 250 
+20 year intervals (?d20***) 
+**Treat a roll of 0 as naught rather than as 10, so in effect a random 
+number between 0 and 9 is being generated. 
+***Treat a die result of 20 as naught, so numbers between 0 and 19 are 
+being generated. 
+Examples Of Maximum Age Determination: 
+The dice rolled indicate the dwarf character will live to old age, lowest 
+figure, +d8. As the span considered is 100 years, d8 stands for decades, so 
+the character will live for 251 years 
++ 10 to 80 years +O to 9 years. 
+The same dwarf considered above is to live to old age, highest figure, -4. 
+The variable is -1 0 to -40 years, -0 to 9 years. 
+The dice rolled far a half-orc character indicate that he will live to 
+venerable age, highest figure, +d20. As the span considered is under 100 
+years, the character will live for 80 years +O to 19 years, or 80 to 99 years, 
+as a result of 20 equals 0 years added to maximum venerable age shown 
+far the character race. 
+The dice show that a high elf character will live to venerable age, lowest 
+figure, +d6. As the span of years for this character race is 400 years, the 
+character will live to be 1201 +20 to 120 years, +O to 19 years, or to an 
+age of 1221 to 1340 years. Assume that the d6 shows 4, so 80 years are 
+added (4 X 20 = 80) to bring life span to 1281 (1201 
++ 80), and then d20 
+is rolled and a 0 comes up, so total life span is 1281 years (1201 
++ 80 
++ 0 
+= 1281).

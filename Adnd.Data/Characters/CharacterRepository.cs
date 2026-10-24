@@ -24,10 +24,7 @@ public class CharacterRepository
     public IEnumerable<Character> GetAll()
     {
         var list = new List<Character>();
-        var itemLookup = new ItemRepository("Data/Items")
-            .LoadAll()
-            .GroupBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+        var itemLookup = GetItemLookup();
         var spellRepo = new Adnd.Data.Spells.SpellRepository();
 
         foreach (var file in Directory.GetFiles(_folder, "*.json"))
@@ -65,6 +62,38 @@ public class CharacterRepository
         }
 
         return list;
+    }
+
+    private static readonly object ItemLookupLock = new();
+    private static (int Count, long LatestTicks) _itemLookupSignature;
+    private static Dictionary<string, Item>? _itemLookup;
+
+    // Item templates are only read when hydrating, so one parsed copy is shared until the item files change.
+    private static Dictionary<string, Item> GetItemLookup()
+    {
+        const string itemsFolder = "Data/Items";
+        var signature = FolderSignature.Compute(itemsFolder);
+
+        lock (ItemLookupLock)
+        {
+            if (_itemLookup != null && _itemLookupSignature == signature)
+                return _itemLookup;
+        }
+
+        var lookup = new ItemRepository(itemsFolder)
+            .LoadAll()
+            .GroupBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+        // LoadAll may regenerate scrolls.json, so take the signature after loading.
+        var after = FolderSignature.Compute(itemsFolder);
+        lock (ItemLookupLock)
+        {
+            _itemLookup = lookup;
+            _itemLookupSignature = after;
+        }
+
+        return lookup;
     }
 
     private static void SyncDivineKnownSpells(Character character, Adnd.Data.Spells.SpellRepository spellRepo)

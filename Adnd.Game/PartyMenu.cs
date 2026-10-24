@@ -81,6 +81,7 @@ public class PartyMenu
             new MeteorSwarmHandler(),
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
+            new WishHandler(WishPrompter.Instance),
             new FearHandler(),
             new TelekinesisHandler(),
             new ParalyzationHandler(),

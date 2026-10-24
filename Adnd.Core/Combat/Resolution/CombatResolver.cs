@@ -233,6 +233,9 @@ public sealed partial class CombatResolver
     // Lets Core resolve monster templates by name (e.g. for gating/summoning) without referencing the data layer.
     public Func<string, Monster?>? MonsterTemplateLookup { get; set; }
     private readonly Dictionary<MonsterInstance, bool> _iceDevilSpears = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<MonsterInstance, int> _hornedWeapons = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _wallOfFireUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<string> _bleedingCharacters = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<MonsterInstance> _iceStormUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly Dictionary<string, int> _frightenedRounds = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, (Character Owner, Item Weapon)> _thrownWeapons = new(StringComparer.OrdinalIgnoreCase);
@@ -346,6 +349,32 @@ public sealed partial class CombatResolver
             events.Add(new CombatEvent($"{prayerCaster}'s Prayer remains in effect ({remainingPrayerRounds} round(s) remaining)."));
         }
 
+        bool monstersActFirst;
+        if (session.RoundNumber == 1 && session.PartySurprisedRound1)
+        {
+            monstersActFirst = true;
+            events.Add(new CombatEvent("Initiative: the surprised party cannot act in round 1, so the monsters act first."));
+        }
+        else if (session.RoundNumber == 1 && session.MonstersSurprisedRound1)
+        {
+            monstersActFirst = false;
+            events.Add(new CombatEvent("Initiative: the surprised monsters cannot act in round 1, so the party acts first."));
+        }
+        else
+        {
+            var partyInitiative = _dice.Roll(6);
+            var monsterInitiative = _dice.Roll(6);
+            var tieBroken = partyInitiative == monsterInitiative;
+            monstersActFirst = tieBroken ? _dice.Roll(2) == 1 : monsterInitiative > partyInitiative;
+            events.Add(new CombatEvent($"Initiative: party {partyInitiative} vs monsters {monsterInitiative}"
+                + (tieBroken ? " (tie, decided by chance)" : string.Empty)
+                + (monstersActFirst ? " - the monsters act first." : " - the party acts first.")));
+        }
+
+        if (monstersActFirst)
+            goto MonsterPhase;
+
+    PartyPhase:
         foreach (var member in session.Party)
         {
             if (!IsAlive(member))
@@ -901,6 +930,10 @@ public sealed partial class CombatResolver
             return FinalizeRound(session, events);
         }
 
+        if (monstersActFirst)
+            goto RoundEnd;
+
+    MonsterPhase:
         foreach (var monster in session.AliveMonsters.ToList())
         {
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
@@ -1138,6 +1171,9 @@ public sealed partial class CombatResolver
                 continue;
 
             if (TryResolveBarbedDevilPower(session, monster, events))
+                continue;
+
+            if (TryResolveHornedWallOfFire(session, monster, events))
                 continue;
 
             if (TryResolveVrockGate(session, monster, events))
@@ -1749,6 +1785,7 @@ public sealed partial class CombatResolver
                             TryApplyBoneHook(monster, target, events);
                             TryApplyIceDevilSpear(monster, target, attack.Name, events);
                             TryApplyBarbedFear(monster, target, events);
+                            TryApplyHornedDevilAttack(monster, target, attack.Name, events);
                             if (!IsAlive(target))
                                 continue;
                             TryApplyErinyesDagger(monster, target, session, events);
@@ -1844,8 +1881,12 @@ public sealed partial class CombatResolver
             }
         }
 
+        if (monstersActFirst)
+            goto PartyPhase;
+
+    RoundEnd:
         ApplyPoisonDamageDuringCombat(session, events);
-        ResolveSwallowedCharacters(session, events, advanceTime: true);
+        ApplyBleedingDamage(session, events);
 
         if (!session.AliveParty.Any())
         {
@@ -6601,6 +6642,9 @@ public sealed partial class CombatResolver
         _frightenedRounds.Clear();
         _iceDevilSpears.Clear();
         _iceStormUsed.Clear();
+        _hornedWeapons.Clear();
+        _wallOfFireUsed.Clear();
+        _bleedingCharacters.Clear();
         foreach (var (owner, weapon) in _thrownWeapons.Values)
             owner.Inventory.Add(weapon);
 
@@ -6942,6 +6986,113 @@ public sealed partial class CombatResolver
 
         target.AddStatus(CharacterStatus.Slowed);
         events.Add(new CombatEvent($"{target.Name} is numbed by the spear's cold and slowed (save {saveRoll} vs {saveTarget})!"));
+    }
+
+    private void TryApplyHornedDevilAttack(MonsterInstance monster, Character target, string attackName, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Horned Weapon") || !IsAlive(target))
+            return;
+
+        if (string.Equals(attackName, "Tail", StringComparison.OrdinalIgnoreCase))
+        {
+            if (_bleedingCharacters.Add(target.Name))
+                events.Add(new CombatEvent($"{target.Name} is gashed by {monster.DisplayName}'s tail and begins to bleed (1 HP/round until combat ends and the wound is bound)."));
+            return;
+        }
+
+        if (!string.Equals(attackName, "Claw", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        // 0 = unarmed, 1 = two-tined fork (75% of armed), 2 = barbed whip (25% of armed). Armed is a coin flip.
+        if (!_hornedWeapons.TryGetValue(monster, out var weapon))
+        {
+            weapon = _dice.Roll(2) == 1 ? 0 : _dice.Roll(100) <= 75 ? 1 : 2;
+            _hornedWeapons[monster] = weapon;
+        }
+
+        if (weapon == 0)
+            return;
+
+        var damage = weapon == 1 ? _dice.Roll(6) + _dice.Roll(6) : _dice.Roll(4);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+        events.Add(new CombatEvent($"{monster.DisplayName}'s {(weapon == 1 ? "two-tined fork (2d6)" : "barbed whip (1d4)")} also strikes {target.Name} for {before - target.CurrentHitPoints}. HP {before}->{target.CurrentHitPoints}."));
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+            return;
+        }
+
+        if (weapon != 2 || target.HasStatus(CharacterStatus.Paralyzed))
+            return;
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.Name} shrugs off the whip's stunning effect (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        target.ApplyParalysis(damage);
+        events.Add(new CombatEvent($"{target.Name} is stunned by the barbed whip for {damage} round(s) (save {saveRoll} vs {saveTarget})."));
+    }
+
+    private void ApplyBleedingDamage(CombatSession session, List<CombatEvent> events)
+    {
+        foreach (var name in _bleedingCharacters.ToList())
+        {
+            var member = session.Party.FirstOrDefault(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (member == null || !IsAlive(member))
+            {
+                _bleedingCharacters.Remove(name);
+                continue;
+            }
+
+            var before = member.CurrentHitPoints;
+            member.CurrentHitPoints = Math.Max(0, before - 1);
+            events.Add(new CombatEvent($"{member.Name} bleeds for 1 damage. HP {before}->{member.CurrentHitPoints}."));
+            if (member.CurrentHitPoints <= 0)
+            {
+                member.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{member.Name} bleeds to death!"));
+                _bleedingCharacters.Remove(name);
+            }
+        }
+    }
+
+    private bool TryResolveHornedWallOfFire(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Wall of Fire") || _wallOfFireUsed.Contains(monster) || _dice.Roll(3) != 1)
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        _wallOfFireUsed.Add(monster);
+        events.Add(new CombatEvent($"{monster.DisplayName} raises a wall of fire of triple strength!"));
+        foreach (var target in party)
+        {
+            var damage = _dice.RollMany(8, 3);
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            var saveRoll = _dice.Roll(20);
+            var saved = saveRoll >= saveTarget;
+            var applied = saved ? damage / 2 : damage;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, before - applied);
+            WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+            events.Add(new CombatEvent($"{target.Name} is scorched for {before - target.CurrentHitPoints} damage (3d8, {(saved ? "saved for half" : "no save")}: {saveRoll} vs {saveTarget}). HP {before}->{target.CurrentHitPoints}."));
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+        }
+
+        return true;
     }
 
     private bool TryResolveIceDevilPower(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
@@ -7703,7 +7854,8 @@ public sealed partial class CombatResolver
     {
         var isErinyesSummon = HasSpecialAbility(monster, "Summon Erinyes");
         var isBarbedSummon = HasSpecialAbility(monster, "Summon Barbed Devil");
-        if (!isErinyesSummon && !isBarbedSummon && !HasSpecialAbility(monster, "Summon Bone Devil"))
+        var isHornedSummon = HasSpecialAbility(monster, "Summon Horned Devil");
+        if (!isErinyesSummon && !isBarbedSummon && !isHornedSummon && !HasSpecialAbility(monster, "Summon Bone Devil"))
             return false;
 
         // One summoning attempt in roughly four rounds; total devils of this kind are capped to keep encounters bounded.
@@ -7714,7 +7866,7 @@ public sealed partial class CombatResolver
         if (session.AliveMonsters.Count(m => string.Equals(m.Template.Name, monster.Template.Name, StringComparison.OrdinalIgnoreCase)) >= maxDevils)
             return false;
 
-        var successChance = isBarbedSummon ? 30 : isErinyesSummon ? 25 : 40;
+        var successChance = isHornedSummon ? 50 : isBarbedSummon ? 30 : isErinyesSummon ? 25 : 40;
         var roll = _dice.Roll(100);
         var success = roll <= successChance;
         RuleApplicationInfo.Publish(

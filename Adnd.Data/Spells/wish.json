@@ -1,0 +1,13 @@
+{
+  "Id": "wish",
+  "Name": "Wish",
+  "Class": "MagicUser",
+  "Level": 9,
+  "Description": "The most powerful magic-user spell: the caster speaks a wish and one ally benefits. Choose H)eal/cure, I)tem, S)pell or C)haracter improvement.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "H) Fully heals and cures one ally. I) Conjures any item. S) Conjures a scroll of any spell up to 8th level. C) Permanently raises one ability score by 1."
+}
