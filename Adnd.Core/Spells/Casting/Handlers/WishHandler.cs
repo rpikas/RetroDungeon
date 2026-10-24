@@ -6,6 +6,8 @@ public sealed class WishHandler : ISpellEffectHandler
 {
     private const int MaxAbilityScore = 25;
     private const int AgingYears = 3;
+    private const string RingName = "Ring of Three Wishes";
+    private const string RingWishesPrefix = "Wishes:";
 
     private readonly IWishPrompter? _prompter;
 
@@ -33,6 +35,10 @@ public sealed class WishHandler : ISpellEffectHandler
         if (target == null)
             return SpellCastResult.Failure("No valid ally target selected.");
 
+        var ring = FindWishRing(request);
+        if (ring != null && GetRingWishes(ring) <= 0)
+            return SpellCastResult.Failure($"{ring.Name} has no wishes remaining.");
+
         var kind = _prompter.ChooseKind();
         if (kind == null)
             return SpellCastResult.Failure("The wish is left unspoken.");
@@ -41,15 +47,45 @@ public sealed class WishHandler : ISpellEffectHandler
         result.Events.Add($"{request.Caster.Name} speaks a {spell.Name}.");
 
         var outcome = ResolveWish(kind.Value, result, target);
-        if (outcome.Success)
+        if (!outcome.Success)
+            return outcome;
+
+        if (ring != null)
         {
-            request.Caster.AdvanceAgeByDays(AgingYears * 365);
-            outcome.Events.Add($"{request.Caster.Name} ages {AgingYears} years from the strain of the wish (now {request.Caster.Age}).");
-            if (request.Caster.DiedOfOldAge)
-                outcome.Events.Add($"{request.Caster.Name} has reached the maximum age and dies of old age. Death is final.");
+            var remaining = GetRingWishes(ring) - 1;
+            ring.SpecialAbilities.RemoveAll(a => a.StartsWith(RingWishesPrefix, StringComparison.OrdinalIgnoreCase));
+            if (remaining <= 0)
+            {
+                request.Caster.Inventory.Remove(ring);
+                outcome.Events.Add($"{ring.Name} crumbles to dust after the last wish.");
+            }
+            else
+            {
+                ring.SpecialAbilities.Add($"{RingWishesPrefix}{remaining}");
+                outcome.Events.Add($"{ring.Name} has {remaining} wish(es) remaining.");
+            }
+
+            return outcome;
         }
 
+        request.Caster.AdvanceAgeByDays(AgingYears * 365);
+        outcome.Events.Add($"{request.Caster.Name} ages {AgingYears} years from the strain of the wish (now {request.Caster.Age}).");
+        if (request.Caster.DiedOfOldAge)
+            outcome.Events.Add($"{request.Caster.Name} has reached the maximum age and dies of old age. Death is final.");
+
         return outcome;
+    }
+
+    private static Items.Item? FindWishRing(SpellCastRequest request)
+        => string.Equals(request.SourceItemName, RingName, StringComparison.OrdinalIgnoreCase)
+            ? request.Caster.Inventory.FirstOrDefault(i => string.Equals(i.Name, RingName, StringComparison.OrdinalIgnoreCase))
+            : null;
+
+    private static int GetRingWishes(Items.Item ring)
+    {
+        ring.SpecialAbilities ??= new List<string>();
+        var existing = ring.SpecialAbilities.FirstOrDefault(a => a.StartsWith(RingWishesPrefix, StringComparison.OrdinalIgnoreCase));
+        return existing != null && int.TryParse(existing[RingWishesPrefix.Length..], out var n) ? Math.Max(0, n) : 3;
     }
 
     private SpellCastResult ResolveWish(WishKind kind, SpellCastResult result, Character target)

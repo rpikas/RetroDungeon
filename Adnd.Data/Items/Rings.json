@@ -262,8 +262,8 @@
         "ArmorClassBonus": 0,
         "AllowedClasses": [ "All" ],
         "Rarity": "Legendary",
-        "Description": "A ring with limited charges that grants three wishes.",
-        "SpecialAbilities": [ "Limited charges" ],
+        "Description": "A ring that grants three wishes, then crumbles. Use it from inventory (Use Item). Ring wishes cause no aging.",
+        "SpecialAbilities": [ "Casts Wish", "Wishes:3" ],
         "Source": "Adnd",
         "StockQuantity": 0
       },
