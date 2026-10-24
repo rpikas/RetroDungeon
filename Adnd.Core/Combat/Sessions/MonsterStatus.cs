@@ -30,5 +30,6 @@ public enum MonsterStatus
     Stunned,
     Unconscious,
     Mazed,
-    Disarmed
+    Disarmed,
+    WalledOff
 }

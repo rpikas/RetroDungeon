@@ -1,0 +1,371 @@
+AD&D 1E Spell Lists by Class
+Cleric
+1
+Command
+Create Water
+Cure Light Wounds
+Detect Evil
+Detect Magic
+Light
+Protection From Evil
+Purify Food & Drink
+Remove Fear
+Resist Cold
+Sanctuary
+2
+Augury
+Chant
+Find Traps
+Hold Person
+Know Alignment
+Resist Fire
+Silence 15' Radius
+Snake Charm
+Speak With Animals
+Spiritual Hammer
+3
+Animate Dead
+Continual Light
+Create Food & Water
+Cure Blindness
+Cure Disease
+Dispel Magic
+Glyph of Warding
+Locate Object
+Prayer
+Remove Curse
+Speak With Dead
+4
+Cure Serious Wounds
+Detect Lie
+Divination
+Exorcise
+Lower Water
+Neutralize Poison
+Protection From Evil 10' Radius
+Speak With Plants
+Sticks to Snakes
+Tongues
+5
+Atonement
+Commune
+Cure Critical Wounds
+Dispel Evil
+Flame Strike
+Insect Plague
+Plane Shift
+Quest
+Raise Dead
+True Seeing
+6
+Aerial Servant
+Animate Object
+Blade Barrier
+Conjure Animals
+Find the Path
+Heal
+Word of Recall
+7
+Astral Spell
+Control Weather
+Earthquake
+Gate
+Holy Word
+Regenerate
+Resurrection
+Symbol
+Wind Walk
+
+Druid
+1 
+Animal Friendship
+Detect Magic
+Detect Snares & Pits
+Entangle
+Faerie Fire
+Invisibility to Animals
+Locate Animals
+Pass Without Trace
+Predict Weather
+Purify Water
+Shillelagh
+Speak With Animals
+2
+Charm Person or Mammal
+Create Water
+Fire Trap
+Heat Metal
+Locate Plants
+Obscurement
+Produce Flame
+Trip
+Warp Wood
+3
+Call Lightning
+Cure Disease
+Hold Animal
+Plant Growth
+Protection From Fire
+Pyrotechnics
+Snare
+Summon Insects
+Tree
+Water Breathing
+4
+Animal Summoning I
+Control Temperature 10' Radius
+Cure Serious Wounds
+Dispel Magic
+Hallucinatory Forest
+Hold Plant
+Plant Door
+Produce Fire
+Protection From Lightning
+Repel Insects
+Speak With Plants
+5
+Animal Growth
+Animal Summoning II
+Anti-Plant Shell
+Commune With Nature
+Cure Critical Wounds
+Insect Plague
+Pass Plant
+Sticks to Snakes
+Transmute Rock to Mud
+Wall of Fire
+6
+Anti-Animal Shell
+Conjure Fire Elemental
+Control Winds
+Feeblemind
+Transport Via Plants
+Turn Wood
+Wall of Thorns
+Weather Summoning
+7
+Animate Rock
+Chariot of Sustarre
+Confusion
+Conjure Earth Elemental
+Finger of Death
+Reincarnate
+Transmute Metal to Wood
+
+Magic-User
+1
+Enlarge
+Erase
+Feather Fall
+Find Familiar
+Identify
+Magic Missile
+Sleep
+Spider Climb
+Tenser's Floating Disc
+Unseen Servant
+Write
+2
+ESP
+Invisibility
+Knock
+Levitate
+Mirror Image
+Rope Trick
+Web
+Wizard Lock
+3
+Blink
+Clairaudience
+Clairvoyance
+Dispel Magic
+Fireball
+Fly
+Haste
+Hold Person
+Lightning Bolt
+Monster Summoning I
+Protection From Normal Missiles
+4
+Charm Monster
+Confusion
+Dimension Door
+Fire Trap
+Ice Storm
+Minor Globe of Invulnerability
+Polymorph Self
+Polymorph Other
+Wall of Fire
+Wall of Ice
+Wizard Eye
+5
+Cloudkill
+Cone of Cold
+Conjure Elemental
+Hold Monster
+Magic Jar
+Passwall
+Telekinesis
+Teleport
+Wall of Force
+Wall of Iron
+Wall of Stone
+6
+Anti-Magic Shell
+Death Spell
+Disintegrate
+Enchant an Item
+Geas
+Guards and Wards
+Invisible Stalker
+Move Earth
+Project Image
+Reincarnation
+Tenser's Transformation
+7
+Cacodemon
+Delayed Blast Fireball
+Limited Wish
+Mass Invisibility
+Mordenkainen's Sword
+Power Word Stun
+Simulacrum
+Statue
+Vanish
+Reverse Gravity
+8
+Clone
+Incendiary Cloud
+Mass Charm
+Maze
+Mind Blank
+Monster Summoning VI
+Otto's Irresistible Dance
+Permanency
+Polymorph Any Object
+Symbol
+Trap the Soul
+9
+Astral Spell
+Gate
+Imprisonment
+Meteor Swarm
+Monster Summoning VII
+Power Word Kill
+Prismatic Sphere
+Shape Change
+Time Stop
+Wish
+
+Illusionist
+1
+Audible Glamer
+Change Self
+Color Spray
+Dancing Lights
+Darkness
+Detect Illusion
+Detect Invisibility
+Gaze Reflection
+Hypnotism
+Light
+Phantasmal Force
+Wall of Fog
+2
+Blindness
+Blur
+Deafness
+Detect Magic
+Fog Cloud
+Hypnotic Pattern
+Improved Phantasmal Force
+Invisibility
+Magic Mouth
+Mirror Image
+Misdirection
+Ventriloquism
+3
+Continual Darkness
+Continual Light
+Dispel Illusion
+Fear
+Hallucinatory Terrain
+Illusionary Script
+Invisibility 10' Radius
+Non-Detection
+Paralyzation
+Rope Trick
+Spectral Force
+Suggestion
+4
+Confusion
+Dispel Exhaustion
+Emotion
+Improved Invisibility
+Massmorph
+Minor Creation
+Phantasmal Killer
+Shadow Monsters
+5
+Demi-Shadow Monsters
+Maze
+Projected Image
+Shadow Door
+Shadow Magic
+Summon Shadow
+6
+Conjure Animals
+Demi-Shadow Magic
+Mass Suggestion
+Permanent Illusion
+Programmed Illusion
+Shades
+True Sight
+Veil
+7
+Alter Reality
+Astral Spell
+Prismatic Spray
+Prismatic Wall
+Vision
+
+Implemented
+Cleric
+
+• L1: Bless, Cause Light Wounds, Cure Light Wounds, Protection From Evil, Resist Cold
+• L2: Chant, Find Traps, Hold Person, Silence 15' Radius, Spiritual Hammer
+• L3: Cause Blindness, Cure Blindness, Cure Disease, Glyph of Warding, Prayer, Remove Paralysis
+• L4: Cause Serious Wounds, Cure Serious Wounds, Neutralize Poison
+• L5: Cause Critical Wounds, Cure Critical Wounds, Flame Strike, Insect Plague, Raise Dead
+• L6: Blade Barrier, Harm, Heal, Word of Recall
+• L7: Earthquake, Resurrection, Unholy Word
+
+Druid
+
+• L1: Entangle, Faerie Fire, Animal Friendship
+• L2: Barkskin, Cause Light Wounds, Charm Person or Mammal, Cure Light Wounds, Produce Flame
+• L3: Call Lightning, Cure Disease, Neutralize Poison, Protection From Fire, Pyrotechnics, Snare, Summon Insects
+• L4: Cause Serious Wounds, Cure Serious Wounds, Protection From Lightning
+• L5: Insect Plague, Wall of Fire
+• L6: Cause Critical Wounds, Cure Critical Wounds, Feeblemind, Wall of Thorns
+• L7: Confusion, Finger of Death, Fire Storm
+Illusionist
+
+• L1: Chromatic Orb, Color Spray, Phantasmal Force
+• L2: Blur, Improved Phantasmal Force, Invisibility, Mirror Image
+• L3: Fear, Paralyzation, Spectral Force
+• L4: Confusion, Improved Invisibility, Phantasmal Killer
+• L5: Chaos, Maze
+• L6: Permanent Illusion
+• L7: Charm Person, Magic Missile, Shield, Shocking Grasp, Sleep (these look like Magic-User level 1 spells filed under the wrong class and level)
+Magic-User
+
+• L1: Charm Person, Magic Missile, Protection From Evil, Read Magic, Shield, Shocking Grasp, Sleep
+• L2: Invisibility, Melf's Acid Arrow, Mirror Image, Strength, Web
+• L3: Blink, Fireball, Haste, Hold Person, Lightning Bolt, Phantasmal Force, Slow, 
+• L4: Fear, Ice Storm, Wall of Fire
+• L5: Cloudkill, Cone of Cold, Feeblemind, Hold Monster, Telekinesis, Teleport, Wall of stone,
+• L6: Death Fog, Disintegrate, Stone to Flesh
+• L7: Delayed Blast Fireball, Mass Invisibility, Power Word: Stun
+• L8: Incendiary Cloud, Maze
+• L9: Meteor Swarm, Power Word Kill, Time Stop, Wish

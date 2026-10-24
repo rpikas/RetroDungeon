@@ -1,0 +1,12 @@
+{
+  "Id": "blink",
+  "Name": "Blink",
+  "Class": "MagicUser",
+  "Level": 3,
+  "Description": "The caster randomly blinks out and reappears nearby, like a blink dog.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "For 1 round per level, attacks against the caster have a 50% chance to miss, and the caster may reappear behind an opponent (d8 direction) for a rear attack."
+}

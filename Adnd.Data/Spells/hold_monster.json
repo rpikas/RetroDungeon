@@ -3,7 +3,7 @@
   "Name": "Hold Monster",
   "Class": "MagicUser",
   "Level": 5,
-  "Description": "Paralyzes one monster target if it fails a saving throw.",
+  "Description": "Immobilizes 1-4 creatures of any type. Saves are normal vs 3-4 targets, -1 vs 2, -3 vs 1. Partially negated effects equal slow.",
   "RangeType": "Enemy",
   "Targeting": "Single",
   "TargetingScope": "SingleGroup",

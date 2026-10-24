@@ -662,6 +662,51 @@ public sealed class CombatSession
         MirrorImageRounds[characterName] = rounds;
     }
 
+    public string? TimeStopCaster { get; private set; }
+    public int TimeStopRounds { get; set; }
+    public int TimeStopCastRound { get; private set; }
+
+    public void StartTimeStop(string casterName, int extraRounds)
+    {
+        TimeStopCaster = casterName;
+        TimeStopRounds = Math.Max(0, extraRounds);
+        TimeStopCastRound = RoundNumber;
+    }
+
+    public void EndTimeStop()
+    {
+        TimeStopCaster = null;
+        TimeStopRounds = 0;
+    }
+
+    public Dictionary<string, int> BlinkRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    public void SetBlink(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+            BlinkRounds.Remove(characterName);
+        else
+            BlinkRounds[characterName] = rounds;
+    }
+
+    public bool IsBlinking(string characterName) => BlinkRounds.TryGetValue(characterName, out var r) && r > 0;
+
+    public int TickBlink(string characterName)
+    {
+        if (!BlinkRounds.TryGetValue(characterName, out var rounds) || rounds <= 0)
+            return 0;
+
+        rounds -= 1;
+        if (rounds <= 0)
+        {
+            BlinkRounds.Remove(characterName);
+            return 0;
+        }
+
+        BlinkRounds[characterName] = rounds;
+        return rounds;
+    }
+
     public int GetMirrorImageCount(string characterName)
     {
         return MirrorImageCounts.TryGetValue(characterName, out var count) ? Math.Max(0, count) : 0;

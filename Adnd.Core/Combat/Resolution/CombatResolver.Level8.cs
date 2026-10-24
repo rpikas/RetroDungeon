@@ -28,6 +28,9 @@ public sealed partial class CombatResolver
         _level8OnceUsed.Clear();
         _golemHasteRounds.Clear();
         _pyroBreathCount.Clear();
+        _ironGolemBreathRound.Clear();
+        _prince12dUsed.Clear();
+        _archDevilSymbolUsed.Clear();
     }
 
     private static bool IsTemplate(MonsterInstance monster, string fragment) =>
@@ -49,6 +52,12 @@ public sealed partial class CombatResolver
 
         if (hold.Kind == "Brain")
             return false;
+
+        if (hold.Kind == "Constrict")
+        {
+            events.Add(new CombatEvent($"{member.Name} is held fast by {hold.Monster.DisplayName} and cannot act."));
+            return true;
+        }
 
         events.Add(new CombatEvent($"{member.Name} is smothered by {hold.Monster.DisplayName} and cannot act ({hold.RoundsLeft} round(s) until death unless it is killed)."));
         return true;

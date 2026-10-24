@@ -7,11 +7,11 @@
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": 7,
+      "ArmorClass": 0,
       "Movement": 3,
-      "HitDice": 4,
+      "HitDice": 13,
       "HitDiceType": 8,
-      "ExtraHitPoints": 40,
+      "ExtraHitPoints": 0,
       "%InLair": "80",
       "TreasureType": "I, S, T",
       "IndividualTreasure": "None",
@@ -24,8 +24,8 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Petrifying Gaze",
-          "Description": "Any creature meeting its gaze must save or turn to stone."
+          "Name": "Beholder Eye Rays",
+          "Description": "1-4 eyes (central eye plus eyestalks) fire each round: charm person, charm monster, sleep, telekinesis, flesh to stone, disintegrate, fear, slow, cause serious wounds, death ray."
         }
       ],
       "MagicResistance": "Special",
@@ -33,11 +33,17 @@
       "Size": "Large",
       "BaseXPValue": 12900,
       "XPValuePerHitPoint": 20,
-      "Alignment": "Lawful Evil",
+      "Alignment": "Lawful evil",
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 10, Roll 01-12",
       "Other": "Hateful, aggressive, avaricious; floats by natural levitation.",
-      "InfoUrl": "https://1eonline.info/1mm/beholder.htm"
+      "InfoUrl": "https://1eonline.info/1mm/beholder.htm",
+      "SpecialDefenses": [
+        {
+          "Name": "Anti-magic Ray",
+          "Description": "Central eye's anti-magic ray nullifies spells cast at it."
+        }
+      ]
     },
     {
       "Name": "Lvl 10 Magic-User",
@@ -470,52 +476,51 @@
       "Frequency": "Unique",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": -3,
+      "ArmorClass": -6,
       "Movement": 9,
-      "HitDice": 120,
-      "HitDiceType": 0,
+      "HitDice": 27,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "50",
       "TreasureType": "P, S, T, U",
       "Attacks": [
         {
-          "Name": "Wand of Orcus",
+          "Name": "Fist",
           "NumberOfAttacks": 1,
-          "Damage": "Instant Death"
-        },
-        {
-          "Name": "Claw",
-          "NumberOfAttacks": 1,
-          "Damage": "1d10"
+          "Damage": "1d11+2"
         },
         {
           "Name": "Tail",
           "NumberOfAttacks": 1,
-          "Damage": "1d6"
+          "Damage": "1d7+1"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Poison",
-          "Description": "-4 penalty on saving throw vs poison."
+          "Name": "Poison Attack (-4)",
+          "Description": "Tail sting is poisonous; save vs. poison at -4 or die."
         },
         {
-          "Name": "Death Wand",
-          "Description": "The Wand of Orcus can slay instantly on hit."
+          "Name": "Wand of Orcus",
+          "Description": "Death touch; a save vs. death at -4 is allowed (house rule)."
         },
         {
-          "Name": "Magic Use",
-          "Description": "Orcus casts spells as a high-level cleric and magic-user."
+          "Name": "Orcus Lightning",
+          "Description": "12-die lightning bolt, once per day."
         },
         {
-          "Name": "Psionics",
-          "Description": "Orcus possesses psionic attack and defense capabilities."
+          "Name": "Orcus Gate",
+          "Description": "80% chance to gate in a demon of type I-V."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "+3 or Better Weapon to Hit",
-          "Description": "Only magical weapons of +3 or greater can harm Orcus."
+          "Name": "+3 or better weapons to hit",
+          "Description": "Hit only by +3 or better weapons."
+        },
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
         }
       ],
       "MagicResistance": "85%",
@@ -536,48 +541,52 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": -7,
-      "HitDice": 15,
+      "HitDice": 44,
       "Size": "Large",
       "Movement": 12,
       "Attacks": [
         {
-          "Name": "Staff",
+          "Name": "Weapon",
           "NumberOfAttacks": 1,
-          "Damage": "4d6"
-        },
-        {
-          "Name": "Tail Lash",
-          "NumberOfAttacks": 1,
-          "Damage": "1d12"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Cause Fear",
-          "Description": "Gaze causes fear."
-        },
-        {
-          "Name": "Regeneration (2 HP/round)",
-          "Description": "Regenerates 2 hit points per round."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "75% resistance to magic."
-        },
-        {
-          "Name": "Charm",
-          "Description": "Can charm any creature with a glance."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon powerful devils with 80% chance."
+          "Damage": "1d11+3"
         }
       ],
       "BaseXPValue": 11500,
       "XPValuePerHitPoint": 25,
-      "TreasureType": "Z",
+      "TreasureType": "I, R, U, V",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30",
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "90%",
+      "SpecialAttacks": [
+        {
+          "Name": "Arch-devil Fear Gaze",
+          "Description": "Gaze causes fear (save vs. magic)."
+        },
+        {
+          "Name": "Arch-devil Chill Gaze",
+          "Description": "Gaze chills: slows 50% (save vs. magic)."
+        },
+        {
+          "Name": "Arch-devil Symbols",
+          "Description": "Once per day: symbol of pain, insanity or hopelessness."
+        },
+        {
+          "Name": "Arch-devil Summon",
+          "Description": "Summons 2 lesser or 1 greater devil."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+3 or better weapons to hit",
+          "Description": "Hit only by +3 or better weapons."
+        },
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
+        }
+      ]
     },
     {
       "Name": "Dragon, Chromatic",
@@ -785,29 +794,36 @@
       "Attacks": [
         {
           "Name": "Fist",
-          "NumberOfAttacks": 2,
+          "NumberOfAttacks": 1,
           "Damage": "4d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Poison Breath",
-          "Description": "Exhales a cloud of poisonous gas once every 7 rounds."
-        },
-        {
-          "Name": "Magic Immunity",
-          "Description": "Immune to most spells except those that specifically affect metal."
-        },
-        {
-          "Name": "Construct Body",
-          "Description": "Unaffected by mind-affecting magic, poison, and paralysis."
         }
       ],
       "BaseXPValue": 8000,
       "XPValuePerHitPoint": 20,
       "TreasureType": "Nil",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 41-50"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 41-50",
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "See below",
+      "Alignment": "Neutral",
+      "Intelligence": "Non-",
+      "SpecialAttacks": [
+        {
+          "Name": "Iron Golem Poison Breath",
+          "Description": "Poison gas cloud every 7th round; save vs. poison or die."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+3 or better weapons to hit",
+          "Description": "Hit only by +3 or better weapons."
+        },
+        {
+          "Name": "Iron Golem Spell Reaction",
+          "Description": "Electricity slows it 50% for 3 rounds; magical fire heals it 1 hp per hp of damage; other spells have no effect."
+        }
+      ]
     },
     {
       "Name": "Lich",
@@ -826,29 +842,44 @@
           "Damage": "1d10"
         }
       ],
-      "SpecialAbilities": [
-        {
-          "Name": "Paralyzing Touch",
-          "Description": "Victims must save vs paralysis or be frozen."
-        },
-        {
-          "Name": "Spellcasting",
-          "Description": "Cast spells as a high-level magic-user."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "75% resistance to magic."
-        },
-        {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold, cold, and poison."
-        }
-      ],
       "BaseXPValue": 5000,
       "XPValuePerHitPoint": 10,
-      "TreasureType": "R",
+      "TreasureType": "A",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 51-60"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 51-60",
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "Standard",
+      "Intelligence": "Supra-genius",
+      "Alignment": "Neutral (evil)",
+      "SpecialAttacks": [
+        {
+          "Name": "Lich Paralyzing Touch",
+          "Description": "Touch paralyzes unless a save is made."
+        },
+        {
+          "Name": "Lich Fear",
+          "Description": "Creatures below 5th level flee in panic at the sight of a lich."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+1 or better weapons to hit",
+          "Description": "Hit only by +1 or better weapons."
+        },
+        {
+          "Name": "Immune to Sleep & Charm",
+          "Description": "Immune to charm and sleep."
+        },
+        {
+          "Name": "Immunity to cold",
+          "Description": "Immune to cold."
+        },
+        {
+          "Name": "Immunity to electricity",
+          "Description": "Immune to electricity."
+        }
+      ]
     },
     {
       "Name": "Titan (Elder)",
@@ -856,7 +887,7 @@
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": -2,
+      "ArmorClass": -3,
       "Movement": 15,
       "HitDice": 22,
       "HitDiceType": 0,
@@ -866,14 +897,9 @@
       "IndividualTreasure": "Nil",
       "Attacks": [
         {
-          "Name": "Sword",
+          "Name": "Weapon",
           "NumberOfAttacks": 1,
-          "Damage": "7d6"
-        },
-        {
-          "Name": "Punch",
-          "NumberOfAttacks": 1,
-          "Damage": "6d8"
+          "Damage": "8d6"
         }
       ],
       "SpecialAbilities": [
@@ -889,11 +915,11 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "60%",
-      "Intelligence": "Genius",
+      "Intelligence": "Supra-genius",
       "Size": "Large",
       "BaseXPValue": 11000,
       "XPValuePerHitPoint": 35,
-      "Alignment": "Chaotic Good",
+      "Alignment": "Chaotic good",
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 10, Roll 61-70",
       "Other": "Elder titans are the most powerful of their kind, often dwelling in cloud castles.",
@@ -904,55 +930,63 @@
       "Type": "Undead",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 4,
       "ArmorClass": 1,
       "HitDice": 8,
       "Size": "Medium",
       "Movement": 12,
       "Attacks": [
         {
-          "Name": "Energy Drain",
+          "Name": "Touch",
           "NumberOfAttacks": 1,
-          "Damage": "2 Levels"
-        },
-        {
-          "Name": "Physical Strike",
-          "NumberOfAttacks": 1,
-          "Damage": "1d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Spellcasting",
-          "Description": "Cast spells as a 12th-level magic-user."
-        },
-        {
-          "Name": "Charm Gaze",
-          "Description": "Victims must save vs charm or be controlled."
-        },
-        {
-          "Name": "Regeneration (3 HP/round)",
-          "Description": "Regenerates 3 hit points per round."
-        },
-        {
-          "Name": "Gaseous Form",
-          "Description": "Can transform into mist at will."
-        },
-        {
-          "Name": "Summon Creatures",
-          "Description": "Can summon 10d10 rats or 3d6 wolves."
-        },
-        {
-          "Name": "Undead Traits",
-          "Description": "Immune to charm, sleep, hold, poison, and cold."
+          "Damage": "1d6+4"
         }
       ],
       "BaseXPValue": 5000,
       "XPValuePerHitPoint": 10,
       "TreasureType": "F",
-      "Information": "Former Magic-User (12th Level)",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 71-80"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 71-80",
+      "ExtraHitPoints": 3,
+      "HitDiceType": 8,
+      "%InLair": "25",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
+      "MagicResistance": "Standard",
+      "Strength": 18,
+      "SpecialAttacks": [
+        {
+          "Name": "Energy Drain",
+          "Description": "Each hit drains two levels."
+        },
+        {
+          "Name": "Charm Gaze",
+          "Description": "Gaze charms unless a save vs. spell at -2 is made."
+        },
+        {
+          "Name": "Summon Creatures",
+          "Description": "Calls 10-100 rats or 3-18 wolves, which arrive in 2-12 rounds."
+        },
+        {
+          "Name": "Gaseous Form",
+          "Description": "Becomes gaseous at 0 hp and must reach its coffin within 12 turns (not yet modelled)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+1 or better weapons to hit",
+          "Description": "Affected only by magic weapons."
+        },
+        {
+          "Name": "Regeneration (3 HP/round)",
+          "Description": "Regenerates 3 hit points per melee round."
+        },
+        {
+          "Name": "Undead Traits",
+          "Description": "Immune to charm, sleep, hold, poison and paralysis; cold and electricity do half damage."
+        }
+      ],
+      "Other": "Garlic, mirrors and holy symbols cause hesitation; sunlight and running water destroy it."
     },
     {
       "Name": "Baalzebul",
@@ -960,49 +994,53 @@
       "Frequency": "Unique",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": -6,
-      "HitDice": 13,
+      "ArmorClass": -5,
+      "HitDice": 37,
       "Size": "Large",
-      "Movement": 12,
+      "Movement": 9,
       "Attacks": [
-        {
-          "Name": "Mace",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Cause Fear",
-          "Description": "Glance causes fear and weakness."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "70% resistance to magic."
-        },
-        {
-          "Name": "Regeneration (2 HP/round)",
-          "Description": "Regenerates 2 hit points per round."
-        },
-        {
-          "Name": "Disease Aura",
-          "Description": "Creatures within 10 feet must save or contract supernatural disease."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon powerful devils with 70% chance."
+          "Damage": "2d6"
         }
       ],
       "BaseXPValue": 9500,
       "XPValuePerHitPoint": 20,
-      "TreasureType": "Z",
+      "TreasureType": "E, R, V",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30",
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "85%",
+      "SpecialAttacks": [
+        {
+          "Name": "Poison Attack (-4)",
+          "Description": "Bite is poisonous; save at -4 or die."
+        },
+        {
+          "Name": "Arch-devil Fear Gaze",
+          "Description": "Gaze causes fear and weakness."
+        },
+        {
+          "Name": "Arch-devil Symbols",
+          "Description": "Once per day: symbol of pain or insanity."
+        },
+        {
+          "Name": "Arch-devil Summon",
+          "Description": "Summons 1-4 horned devils."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+3 or better weapons to hit",
+          "Description": "Hit only by +3 or better weapons."
+        },
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
+        }
+      ]
     },
     {
       "Name": "Dispater",
@@ -1010,44 +1048,53 @@
       "Frequency": "Unique",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": -8,
-      "HitDice": 12,
+      "ArmorClass": -2,
+      "HitDice": 32,
       "Size": "Medium",
       "Movement": 15,
       "Attacks": [
         {
-          "Name": "Rod",
+          "Name": "Staff of striking",
           "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Cause Fear",
-          "Description": "Stare causes fear."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "65% resistance to magic."
-        },
-        {
-          "Name": "Iron Body",
-          "Description": "Immune to non-magical weapons."
-        },
-        {
-          "Name": "Charm",
-          "Description": "Can charm humanoids with a gesture."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon devils with 60% chance."
+          "Damage": "4d6"
         }
       ],
       "BaseXPValue": 8500,
       "XPValuePerHitPoint": 18,
-      "TreasureType": "Z",
+      "TreasureType": "Q (x10), S",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30",
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "80%",
+      "SpecialAttacks": [
+        {
+          "Name": "Arch-devil Fear Gaze",
+          "Description": "Stare causes fear."
+        },
+        {
+          "Name": "Arch-devil Chill Gaze",
+          "Description": "Stare causes chill."
+        },
+        {
+          "Name": "Arch-devil Symbols",
+          "Description": "Once per day: symbol of pain."
+        },
+        {
+          "Name": "Arch-devil Summon",
+          "Description": "Summons 1-3 erinyes (75%) or a pit fiend (25%, 90% success)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+2 or better weapons to hit",
+          "Description": "Hit only by +2 or better weapons."
+        },
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
+        }
+      ]
     },
     {
       "Name": "Geryon",
@@ -1055,49 +1102,50 @@
       "Frequency": "Unique",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
-      "ArmorClass": -5,
-      "HitDice": 14,
+      "ArmorClass": -3,
+      "HitDice": 30,
       "Size": "Large",
-      "Movement": 12,
+      "Movement": 3,
       "Attacks": [
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "1d6"
+          "Damage": "3d6"
         },
         {
-          "Name": "Tail Sting",
+          "Name": "Tail",
           "NumberOfAttacks": 1,
-          "Damage": "1d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Cause Fear",
-          "Description": "Glare causes fear."
-        },
-        {
-          "Name": "Magic Resistance",
-          "Description": "70% resistance to magic."
-        },
-        {
-          "Name": "Poison Sting",
-          "Description": "Tail sting forces save vs poison or suffer severe damage."
-        },
-        {
-          "Name": "Regeneration (2 HP/round)",
-          "Description": "Regenerates 2 hit points per round."
-        },
-        {
-          "Name": "Gate",
-          "Description": "Can summon devils with 70% chance."
+          "Damage": "2d4"
         }
       ],
       "BaseXPValue": 10000,
       "XPValuePerHitPoint": 22,
-      "TreasureType": "Z",
+      "TreasureType": "H, R",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 29-30",
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "MagicResistance": "75%",
+      "SpecialAttacks": [
+        {
+          "Name": "Poison Attack (-4)",
+          "Description": "Tail sting is poisonous; save at -4 or die."
+        },
+        {
+          "Name": "Arch-devil Symbols",
+          "Description": "Once per day: symbol of pain."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "+2 or better weapons to hit",
+          "Description": "Hit only by +2 or better weapons."
+        },
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
+        }
+      ]
     },
     {
       "Name": "Demogorgon",
@@ -1107,58 +1155,46 @@
       "NumberOfAppearancesMax": 1,
       "ArmorClass": -8,
       "Movement": 15,
-      "HitDice": 200,
-      "HitDiceType": 0,
+      "HitDice": 44,
+      "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "50",
       "TreasureType": "R, S, J, V",
       "TreasureNotes": "5% chance the heart of Demogorgon is a Nanorion stone.",
       "Attacks": [
         {
-          "Name": "Tentacle Lash",
-          "NumberOfAttacks": 2,
-          "Damage": "1d2"
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1"
         },
         {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
+          "Name": "Tentacle",
+          "NumberOfAttacks": 2,
+          "Damage": "1d6"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Energy Drain",
-          "Description": "Tentacle or gaze drains life energy."
+          "Name": "Tail Level Drain",
+          "Description": "Forked tail drains 1-4 levels."
         },
         {
-          "Name": "Rotting",
-          "Description": "Tentacles cause rapid tissue decay."
+          "Name": "Tentacle Rot",
+          "Description": "Tentacle hits rot flesh: permanent loss of 25% of hit points."
         },
         {
-          "Name": "Hypnosis",
-          "Description": "One head can hypnotize targets."
+          "Name": "Demogorgon Gaze",
+          "Description": "Both heads hypnotize many victims, or the right head causes insanity."
         },
         {
-          "Name": "Beguiling",
-          "Description": "Charm-like effects from gaze."
-        },
-        {
-          "Name": "Insanity",
-          "Description": "Gaze or presence can induce madness."
-        },
-        {
-          "Name": "Magic Use",
-          "Description": "Demogorgon casts powerful spells."
-        },
-        {
-          "Name": "Psionics",
-          "Description": "Full psionic attack and defense modes."
+          "Name": "Demogorgon Gate",
+          "Description": "85% chance to gate in a demon of type I-VI."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "+2 or Better Weapon to Hit",
-          "Description": "Only magical weapons of +2 or greater can harm Demogorgon."
+          "Name": "+2 or better weapons to hit",
+          "Description": "Hit only by +2 or better weapons."
         }
       ],
       "MagicResistance": "95%",

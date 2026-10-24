@@ -1,0 +1,12 @@
+{
+  "Id": "wall_of_stone",
+  "Name": "Wall of Stone",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "Conjures a wall of solid stone between the party and its enemies.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "Ordinary foes cannot pass and the battle ends without experience or treasure. Burrowers (purple worm, umber hulk, earth elemental, xorn) are delayed only 1-2 rounds; powerful casters and fiends may breach it."
+}

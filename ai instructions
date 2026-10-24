@@ -6069,6 +6069,81 @@ implement level8.json including speial attacks and special defenses for all mons
   "Slug, giant",
   "Trapper",
   76,6
+  ___
 Implement these spells in the same way, they teleport the caster to the town.
 Cleric Spells Word of Recall (6th) - instantly returns the cleric to a previously designated sanctuary
 Magic-User Spells Teleport (5th) - transports the caster and carried weight to a known location.
+
+implement level 3 magic user spell blink that will work like the blink dog blink. (Direction is determined by roll
+of d8: 1 = right ahead, 2 = right, 3 = right behind, 4 = behind, 5 = left behind, 6 = left, 7 = left ahead, 8 = 
+ahead.) it could save the caster from beeing hit and give the chanse to attack from behind just like for blink dogs
+
+implement level 5 magic user spell wall of stone that will terminate battle without treasure or xp.
+For these monsters, the battle will only be paused 1 or 2 rounds
+Purple Worm
+Umber Hulk
+Earth Elemental
+Xorn
+the wall may only slow them down because they can burrow through rock.
+Combat Continues
+
+Against creatures with magic:
+
+Lich
+Beholder
+Demon Prince
+Arch Devil
+High-level NPC casters
+
+the wall may be:
+
+Disintegrated
+Teleported through
+Passed around
+Destroyed by repeated attack
+
+Implement level 5 magic user spell Hold monster
+Explanation/Description: This spell immobilizes from one to four creatures 
+of any type within spell range and in sight of the spell caster. He or she can 
+opt to hold one, two, three or four monsters. If three or four are attacked, 
+each saving throw is at normal; if two are attacked, each saving throw is at -1 on the die; and if but one is
+attacked, the saving throw is at -3 on the 
+die. (Partially-negated hold monster spell effects equal those of a slow 
+spell.) 
+
+Cleric Spells
+Dispel Magic (Abjuration) 
+Level: 3 
+Range: 6“ 
+Duration: Permanent 
+Area of Effect: 3”cube 
+Components: V, S 
+Casting Time: 6 segments 
+Saving Throw: None 
+Explanation/Description: When a cleric casts this spell, it neutralizes or 
+negates the magic it comes in contact with as follows: A dispel magic will 
+not affect a specially enchanted item such as a scroll, magic ring, wand, 
+rod, staff, miscellaneous magic item, magic weapon, magic shield, or 
+magic armor. It will destroy magic potions (they are treated as 12th level 
+for purposes of this spell), remove spells cast upon persons or obiects, or 
+counter the casting of spells in the area of effect. The base chance for 
+success of a dispel magic spell is 50%. For every level of experience of the 
+character casting the dispel magic above that of the creature whose magic 
+is to be dispelled (or above the efficiency level of the object from, which 
+the magic is issuing), the base chance increases by 5%, so that if there are 
+10 levels of difference, there is a 100% chance. For every level below the 
+experience/efficiency level of the creature/object, the base chance is 
+reduced by 2%. Note that this spell can be very effective when used upon 
+charmed and similarly beguiled creatures. It is automatic in negating the 
+spell caster’s own magic. 
+
+Implement Level 1 Druid spell Animal Friendship that works like a charm on animals
+
+implement level 9 magic user spell time stop. after casting the spell the magic user can attack or spell 1-3 times
+before time continues again.
+
+
+
+
+
+

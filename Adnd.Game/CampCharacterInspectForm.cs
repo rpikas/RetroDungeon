@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
@@ -40,6 +40,8 @@ public sealed class CampCharacterInspectForm : Form
 
     /// <summary>Live while this screen is open, so the table's clicks reach these buttons.</summary>
     private ViewerControlPump? _tableMenu;
+
+    public bool ReturnToTownRequested { get; private set; }
 
     public CampCharacterInspectForm(string characterName, List<string> partyMembers,
                                     Action<ViewerPrompt?>? publish = null)
@@ -89,6 +91,11 @@ public sealed class CampCharacterInspectForm : Form
             new HasteHandler(),
             new SlowHandler(),
             new MirrorImageHandler(),
+            new BlinkHandler(),
+            new WallOfStoneHandler(),
+            new DispelMagicHandler(),
+            new AnimalFriendshipHandler(),
+            new TimeStopHandler(),
             new InvisibilityHandler(),
             new ShieldSpellHandler(),
             new FireballHandler(),
@@ -110,6 +117,7 @@ public sealed class CampCharacterInspectForm : Form
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
             new WishHandler(WishPrompter.Instance),
+            new ReturnToTownHandler(),
             new FearHandler(),
             new TelekinesisHandler(),
             new ParalyzationHandler(),
@@ -1229,6 +1237,12 @@ public sealed class CampCharacterInspectForm : Form
             foreach (var member in partyMembers)
                 _characterRepository.Save(member);
             _characterRepository.Save(caster);
+            if (result.ReturnToTown)
+            {
+                ReturnToTownRequested = true;
+                Close();
+                return;
+            }
             RefreshView();
         }
     }

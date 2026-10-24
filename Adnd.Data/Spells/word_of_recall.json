@@ -1,0 +1,13 @@
+{
+  "Id": "word_of_recall",
+  "Name": "Word of Recall",
+  "Class": "Cleric",
+  "Level": 6,
+  "Description": "Instantly returns the cleric to a previously designated sanctuary.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Utility",
+  "EffectDescription": "The caster and the party are instantly transported back to town."
+}

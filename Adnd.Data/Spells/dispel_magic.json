@@ -1,0 +1,13 @@
+{
+  "Id": "dispel_magic",
+  "Name": "Dispel Magic",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "Neutralizes magic in a 3\" cube: base 50% success, +5% per caster level above the target's level, -2% per level below.",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Removes magical protections (invisibility, mirror image, barkskin, illusions) from the targeted monster group and harmful magic (charm, confusion, slow, web, sleep) from the party. Does not affect enchanted items."
+}

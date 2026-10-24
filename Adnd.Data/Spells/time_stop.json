@@ -1,0 +1,12 @@
+{
+  "Id": "time_stop",
+  "Name": "Time Stop",
+  "Class": "MagicUser",
+  "Level": 9,
+  "Description": "Time stops for all but the caster, who may act 1-3 more times before time resumes.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "CastContext": "Combat",
+  "EffectType": "Heal",
+  "EffectDescription": "Monsters are frozen. The caster gets 1-3 extra actions (attacks or spells) while the rest of the party and the monsters cannot act."
+}

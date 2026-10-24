@@ -1,0 +1,13 @@
+{
+  "Id": "teleport",
+  "Name": "Teleport",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "Transports the caster and carried weight to a known location.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Utility",
+  "EffectDescription": "The caster and the party are instantly transported back to town."
+}

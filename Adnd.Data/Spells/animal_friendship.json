@@ -1,0 +1,13 @@
+{
+  "Id": "animal_friendship",
+  "Name": "Animal Friendship",
+  "Class": "Druid",
+  "Level": 1,
+  "Description": "Befriends one animal of low intelligence, working like a charm.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Debuff",
+  "EffectDescription": "One animal (INT 4 or less, up to 2 HD per caster level) saves vs spell or becomes charmed and aids the druid's side in combat."
+}

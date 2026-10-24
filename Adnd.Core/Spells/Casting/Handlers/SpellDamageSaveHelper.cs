@@ -448,6 +448,32 @@ internal static class SpellDamageSaveHelper
             return new Outcome(0, 0, clayDamage == 0, clayDamage, clayBefore, monster.CurrentHitPoints, clayBefore - monster.CurrentHitPoints, false, null, null);
         }
 
+        if (HasSpecialDefense(monster, "Anti-magic Ray"))
+            return new Outcome(0, 0, true, 0, monster.CurrentHitPoints, monster.CurrentHitPoints, 0, false, null, null);
+
+        if (HasSpecialDefense(monster, "Iron Golem Spell Reaction"))
+        {
+            var ironBefore = monster.CurrentHitPoints;
+            if (IsElectricitySpell(spellName))
+                monster.SetStatus(MonsterStatus.Slowed, 3);
+            else if (IsFireOrHeatSpell(spellName))
+                monster.CurrentHitPoints = Math.Min(monster.MaxHitPoints, ironBefore + Math.Max(0, rolledDamage));
+
+            return new Outcome(0, 0, true, 0, ironBefore, monster.CurrentHitPoints, 0, false, null, null);
+        }
+
+        if (HasSpecialDefense(monster, "Stone Golem Spell Reaction"))
+        {
+            var stoneBefore = monster.CurrentHitPoints;
+            var sname = spellName ?? string.Empty;
+            if (sname.Contains("mud to rock", StringComparison.OrdinalIgnoreCase))
+                monster.CurrentHitPoints = monster.MaxHitPoints;
+            else if (sname.Contains("rock to mud", StringComparison.OrdinalIgnoreCase))
+                monster.SetStatus(MonsterStatus.Slowed, rng.Next(1, 13) + rng.Next(1, 13) - 1);
+
+            return new Outcome(0, 0, true, 0, stoneBefore, monster.CurrentHitPoints, 0, false, null, null);
+        }
+
         if (HasSpecialDefense(monster, "Flesh Golem Spell Reaction")
             && (IsFireOrHeatSpell(spellName) || IsColdSpell(spellName) || IsElectricitySpell(spellName)))
         {

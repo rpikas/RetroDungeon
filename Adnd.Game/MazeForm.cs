@@ -1353,6 +1353,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         // the table too.
         using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable);
         inspect.ShowDialog(this);
+        if (inspect.ReturnToTownRequested)
+        {
+            LeaveDungeonForTown();
+            return;
+        }
         PublishToViewer();   // back to the maze's own question
 //        MessageBox.Show(this, selectedCharacter.ToString(), $"Inspect - {selectedCharacter.Name}", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
@@ -2573,6 +2578,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return ordered;
     }
 
+    private void LeaveDungeonForTown()
+    {
+        RestoreStrengthDrainedOnDungeonExit();
+        RevertLycanthropeTransformationsOnDungeonExit();
+        ApplyPartyAgingForDungeonExitDay();
+        ApplyDiseaseProgressForDungeonExitDay();
+        Close();
+    }
+
     private void TryMoveForward()
     {
         var v = GetForwardVector(_direction);
@@ -2597,11 +2611,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
             if (result == DialogResult.Yes)
             {
-                RestoreStrengthDrainedOnDungeonExit();
-                RevertLycanthropeTransformationsOnDungeonExit();
-                ApplyPartyAgingForDungeonExitDay();
-                ApplyDiseaseProgressForDungeonExitDay();
-                Close();
+                LeaveDungeonForTown();
                 return;
             }
         }

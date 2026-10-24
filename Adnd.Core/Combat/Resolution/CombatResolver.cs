@@ -377,6 +377,11 @@ public sealed partial class CombatResolver
                 + (monstersActFirst ? " - the monsters act first." : " - the party acts first.")));
         }
 
+        var timeStopCaster = session.Party.FirstOrDefault(p => string.Equals(p.Name, session.TimeStopCaster, StringComparison.OrdinalIgnoreCase));
+        if (session.TimeStopRounds > 0 && (timeStopCaster == null || !IsAlive(timeStopCaster)))
+            session.EndTimeStop();
+        var timeStopExtraRound = session.TimeStopRounds > 0 && session.RoundNumber > session.TimeStopCastRound;
+
         if (monstersActFirst)
             goto MonsterPhase;
 
@@ -384,6 +389,9 @@ public sealed partial class CombatResolver
         foreach (var member in session.Party)
         {
             if (!IsAlive(member))
+                continue;
+
+            if (timeStopExtraRound && !ReferenceEquals(member, timeStopCaster))
                 continue;
 
             TryApplyMaceOfDisruptionEvilBacklash(session, member, events);
@@ -578,6 +586,9 @@ public sealed partial class CombatResolver
                 if (remaining <= 0 && imageCount > 0)
                     events.Add(new CombatEvent($"{member.Name}'s mirror image fades."));
             }
+
+            if (session.IsBlinking(member.Name) && session.TickBlink(member.Name) <= 0)
+                events.Add(new CombatEvent($"{member.Name} stops blinking and stays put."));
 
             var barkskinRounds = session.GetBarkskinRounds(member.Name);
             if (barkskinRounds > 0)
@@ -943,6 +954,25 @@ public sealed partial class CombatResolver
             goto RoundEnd;
 
     MonsterPhase:
+        if (session.TimeStopRounds > 0)
+        {
+            if (session.RoundNumber > session.TimeStopCastRound)
+            {
+                session.TimeStopRounds--;
+                events.Add(new CombatEvent(session.TimeStopRounds > 0
+                    ? "Time is stopped - the monsters stand frozen."
+                    : "Time resumes!"));
+            }
+            else
+            {
+                events.Add(new CombatEvent("Time is stopped - the monsters stand frozen."));
+            }
+
+            if (monstersActFirst)
+                goto PartyPhase;
+            goto RoundEnd;
+        }
+
         foreach (var monster in session.AliveMonsters.ToList())
         {
             if (!monster.IsAlive || !session.Monsters.Contains(monster))
@@ -1201,6 +1231,12 @@ public sealed partial class CombatResolver
                 continue;
 
             if (TryResolveLevel8Powers(session, monster, events))
+                continue;
+
+            if (TryResolveLevel9Powers(session, monster, events))
+                continue;
+
+            if (TryResolveLevel10Powers(session, monster, events))
                 continue;
 
             if (TryResolveVrockGate(session, monster, events))
@@ -1503,6 +1539,35 @@ public sealed partial class CombatResolver
                 continue;
             }
 
+            if (monster.HasStatus(MonsterStatus.WalledOff))
+            {
+                if (WallOfStoneRules.IsBurrower(monster))
+                {
+                    if (monster.TickStatus(MonsterStatus.WalledOff) > 0)
+                        events.Add(new CombatEvent($"{monster.DisplayName} tunnels through the wall of stone."));
+                    else
+                        events.Add(new CombatEvent($"{monster.DisplayName} bursts through the wall of stone!"));
+                }
+                else if (WallOfStoneRules.IsBreacher(monster) && _dice.Roll(3) == 1)
+                {
+                    var how = _dice.Roll(4) switch
+                    {
+                        1 => "disintegrates the wall of stone",
+                        2 => "teleports through the wall of stone",
+                        3 => "passes around the wall of stone",
+                        _ => "finally batters down the wall of stone"
+                    };
+                    monster.SetStatus(MonsterStatus.WalledOff, 0);
+                    events.Add(new CombatEvent($"{monster.DisplayName} {how}!"));
+                }
+                else
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is held back by the wall of stone."));
+                }
+
+                continue;
+            }
+
             if (monster.HasStatus(MonsterStatus.Mazed))
             {
                 var remaining = monster.TickStatus(MonsterStatus.Mazed);
@@ -1708,6 +1773,12 @@ public sealed partial class CombatResolver
                         continue;
                     }
 
+                    if (roll >= needed && session.IsBlinking(target.Name) && _dice.Roll(100) <= 50)
+                    {
+                        events.Add(new CombatEvent($"{target.Name} blinks out as {monster.DisplayName} strikes; the attack misses."));
+                        continue;
+                    }
+
                     if (roll >= needed)
                     {
                         var imageCount = session.GetMirrorImageCount(target.Name);
@@ -1802,6 +1873,8 @@ public sealed partial class CombatResolver
                             TryApplyTickDisease(monster, target, events);
                             TryApplyEnergyDrain(monster, target, session, events);
                             TryApplyLevel8OnHit(session, monster, target, attack.Name, events);
+        TryApplyPitFiendTail(monster, target, attack.Name, events);
+        TryApplyLevel10OnHit(monster, target, attack.Name, events);
                             if (!IsAlive(target))
                                 continue;
                             TryApplyStrengthDrain(monster, target, events);
@@ -3974,6 +4047,18 @@ public sealed partial class CombatResolver
                         "38WeaponTypeToHitAdjustment",
                         $"Weapon vs AC adjustment ({mode}): {member.Name} uses {weaponNameForAdjustment}. Weapon type: unknown (no table row matched). Adjustment vs AC {target.ArmorClass}: 0.");
                     }
+                }
+            }
+
+            if (session.IsBlinking(member.Name) && _dice.Roll(12) >= 7)
+            {
+                var directionRoll = _dice.Roll(8);
+                var direction = new[] { "right ahead of", "to the right of", "right behind", "behind", "left behind", "to the left of", "left ahead of", "ahead of" }[directionRoll - 1];
+                events.Add(new CombatEvent($"{member.Name} blinks and reappears {direction} {target.DisplayName} (direction roll {directionRoll})."));
+                if (directionRoll is >= 3 and <= 5)
+                {
+                    thac0Modifier += 2;
+                    events.Add(new CombatEvent($"{member.Name} strikes from behind and gains +2 to hit."));
                 }
             }
 
