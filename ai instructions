@@ -5819,3 +5819,5 @@ is rolled and a 0 comes up, so total life span is 1281 years (1201
 = 1281).
 
 Implement Ring of Three Wishes
+
+if old ui setting is true make the wish dialog look similar to other old ui style dialogs

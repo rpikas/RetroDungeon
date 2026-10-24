@@ -123,7 +123,7 @@ internal sealed class WishPrompter : IWishPrompter
 
     private static char? AskKey(string title, string prompt, string validKeys)
     {
-        using var form = CreateForm(title, prompt, out _);
+        using var form = CreateForm(title, prompt, out var promptBox);
         char? chosen = null;
         form.KeyPreview = true;
         form.KeyDown += (_, e) =>
@@ -141,6 +141,7 @@ internal sealed class WishPrompter : IWishPrompter
             }
         };
 
+        OldStyleDialog.Apply(form, promptBox, selectLabel: "CLOSE");
         form.ShowDialog();
         return chosen;
     }
@@ -155,6 +156,7 @@ internal sealed class WishPrompter : IWishPrompter
         form.Controls.Add(ok);
         form.AcceptButton = ok;
         form.Shown += (_, _) => input.Focus();
+        OldStyleDialog.Apply(form, promptBox, input, selectLabel: "OK");
 
         return form.ShowDialog() == DialogResult.OK ? input.Text : null;
     }
