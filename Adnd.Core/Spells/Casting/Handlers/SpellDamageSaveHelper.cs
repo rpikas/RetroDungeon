@@ -78,6 +78,12 @@ internal static class SpellDamageSaveHelper
         return AdjustMonsterSaveTargetForSpecialDefenses(monster, baseTarget, isMagicSave: true, isPoisonSave: false);
     }
 
+    internal static int GetMonsterWandSaveTarget(MonsterInstance monster, int fallbackTarget = 20)
+    {
+        var baseTarget = monster.Template.SavingThrows?.RodStaffWand ?? fallbackTarget;
+        return AdjustMonsterSaveTargetForSpecialDefenses(monster, baseTarget, isMagicSave: true, isPoisonSave: false);
+    }
+
     internal static int GetMonsterPoisonSaveTarget(MonsterInstance monster, int fallbackTarget = 20)
     {
         var baseTarget = monster.Template.SavingThrows?.ParalyzationPoisonDeath ?? fallbackTarget;
@@ -397,6 +403,12 @@ internal static class SpellDamageSaveHelper
         var name = monster.Template.Name?.Trim() ?? string.Empty;
         return string.Equals(name, "Mummy", StringComparison.OrdinalIgnoreCase)
                || name.Contains("mummy", StringComparison.OrdinalIgnoreCase);
+    }
+
+    internal static bool IsWraith(MonsterInstance monster)
+    {
+        var name = monster?.Template?.Name?.Trim() ?? string.Empty;
+        return string.Equals(name, "Wraith", StringComparison.OrdinalIgnoreCase);
     }
 
     internal static bool HasPoisonOrParalysisImmunity(MonsterInstance monster)

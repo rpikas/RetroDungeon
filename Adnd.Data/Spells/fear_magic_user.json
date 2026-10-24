@@ -9,5 +9,5 @@
   "TargetingScope": "SingleGroup",
   "CastContext": "Combat",
   "EffectType": "Damage",
-  "EffectDescription": "Targeted monster group saves vs. spell. Fail = flee from combat."
+  "EffectDescription": "Cone of fear: targeted monster group saves vs. spell. Fail = flee in panic for rounds equal to caster level."
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 9,
   "Monsters": [
     {
@@ -446,6 +446,10 @@
       ],
       "SpecialAbilities": [
         {
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand)"
+        },
+        {
           "Name": "Fire Immunity",
           "Description": "Immune to fire and heat‑based attacks."
         },
@@ -728,7 +732,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 16,
+          "NumberOfAttacks": 17,
           "Damage": "2d6"
         }
       ],
@@ -757,7 +761,7 @@
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
       "Movement": 9,
-      "HitDice": 8,
+      "HitDice": 12,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "20",
@@ -1194,7 +1198,7 @@
           "Description": "Victims must save vs charm or be controlled."
         },
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (3 HP/round)",
           "Description": "Regenerates 3 hit points per round."
         },
         {

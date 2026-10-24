@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 7,
   "Monsters": [
     {
@@ -536,8 +536,12 @@
           "Description": "Drains life energy; see DMG 54.22."
         },
         {
-          "Name": "Magic Use",
-          "Description": "Charm person, ESP, suggestion, shapechange, and other demon spell-like abilities."
+          "Name": "Charm Person",
+          "Description": "May cast charm person at will; save vs. spell negates."
+        },
+        {
+          "Name": "Succubus Gate",
+          "Description": "May gate in a type IV demon (70%), type VI (25%), or a demon lord or prince (5%); only a 40% chance that the gate opens."
         },
         {
           "Name": "Psionics",
@@ -546,8 +550,8 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Magic Weapon Immunity",
-          "Description": "Can only be hit by magic weapons."
+          "Name": "Hit only by magic weapons",
+          "Description": "Cannot be harmed by any sort of normal weaponry."
         }
       ],
       "MagicResistance": "70%",
@@ -593,16 +597,15 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Can use demon spell-like abilities such as darkness, telekinesis, and others."
-        }
-      ],
-      "SpecialDefenses": [
+          "Name": "Vrock Gate",
+          "Description": "May gate in another type I demon (10% chance of success)."
+        },
         {
-          "Name": "Magic Weapon Immunity",
-          "Description": "Can only be hit by magic weapons."
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
         }
       ],
+      "SpecialDefenses": [],
       "MagicResistance": "50%",
       "Intelligence": "Low",
       "Alignment": "Chaotic evil",
@@ -636,23 +639,27 @@
         {
           "Name": "Bite",
           "NumberOfAttacks": 1,
-          "Damage": "4d16"
+          "Damage": "4d4"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Can use demon spell-like abilities such as darkness, fear, telekinesis, and others."
+          "Name": "Hezrou Gate",
+          "Description": "May gate in another type II demon (20% chance of success)."
         },
         {
-          "Name": "Psionics",
-          "Description": "Psionic ability 100; attack/defense modes E/F, G."
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+        },
+        {
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
         }
       ],
       "SpecialDefenses": [
         {
           "Name": "Demon Traits",
-          "Description": "Includes immunities and resistances typical of Type II demons; can only be hit by magic weapons."
+          "Description": "Includes immunities and resistances typical of Type II demons."
         }
       ],
       "MagicResistance": "55%",
@@ -698,8 +705,12 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Fear, darkness 10' radius, levitate, pyrotechnics, polymorph self, telekinesis (4000 gp weight), gate (Type I–III)."
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+        },
+        {
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
         },
         {
           "Name": "Psionics",
@@ -731,7 +742,7 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 0,
       "Movement": 12,
       "HitDice": 8,
@@ -744,22 +755,34 @@
         {
           "Name": "Claw",
           "NumberOfAttacks": 2,
-          "Damage": "2d8"
+          "Damage": "2d4"
         },
         {
-          "Name": "Bite",
+          "Name": "Tail",
           "NumberOfAttacks": 1,
-          "Damage": "3d12"
+          "Damage": "3d4"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Fear",
-          "Description": "Victims must save or flee in terror."
+          "Name": "Barbed Fear",
+          "Description": "Generates fear upon striking an opponent; save vs. wand or flee in terror."
         },
         {
-          "Name": "Magic Use",
-          "Description": "Can use various devil spell-like abilities."
+          "Name": "Pyrotechnics",
+          "Description": "One at a time, per round: pyrotechnics dazzles the party (save vs. spell)."
+        },
+        {
+          "Name": "Produce Flame",
+          "Description": "Hurls flame at one target for 1d4 + 8 damage."
+        },
+        {
+          "Name": "Hold Person",
+          "Description": "Holds 1d3 party members unless they save vs. spell."
+        },
+        {
+          "Name": "Summon Barbed Devil",
+          "Description": "May summon another barbed devil (30% chance of success)."
         }
       ],
       "SpecialDefenses": [
@@ -800,6 +823,10 @@
         }
       ],
       "SpecialAttacks": [
+        {
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand)"
+        },
         {
           "Name": "Bone Hook",
         "Description": "Bane hook; any creature hit by it has a 50% chance of being stuck fast."
@@ -865,6 +892,10 @@
         }
       ],
       "SpecialAttacks": [
+        {
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand)"
+        },
         {
           "Name": "Tail Strike",
           "Description": "Deals 2d8 damage and drains 1–4 strength points."
@@ -1503,7 +1534,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 10,
+          "NumberOfAttacks": 11,
           "Damage": "1d10"
         }
       ],
@@ -1541,7 +1572,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 12,
+          "NumberOfAttacks": 8,
           "Damage": "1d8"
         }
       ],
@@ -2678,7 +2709,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (2 HP/round)",
           "Description": "Regenerates 2 HP per melee round; cannot re-bond severed limbs."
         },
         {

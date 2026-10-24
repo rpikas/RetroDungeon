@@ -102,6 +102,9 @@ public sealed class CombatSession
     public HashSet<string> MaceOfDisruptionBacklashApplied { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> CloakOfDisplacementFirstMissUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
+    public Dictionary<string, int> ProducedFlameExpiresRound { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public bool PyrotechnicsCast { get; set; }
+    public bool HasProducedFlame => ProducedFlameExpiresRound.Values.Any(r => r >= RoundNumber);
     public bool SurpriseResolved { get; set; }
     public bool PartySurprisedRound1 { get; set; }
     public bool MonstersSurprisedRound1 { get; set; }

@@ -5470,3 +5470,200 @@ equal to those of giant spiders.
           "Description": "Victims take 3–18 damage even on a successful save."
         }
       ],
+      66,7
+    WRAITH 
+FREQUENCY: Uncommon 
+NO. APPEARING: 2-12 
+ARMOR CLASS: 4 
+MOVE: 12"/24" 
+HIT DICE: 5 
++ 3 
+% IN LAIR: 25% 
+TREASURE TYPE: E 
+NO. OF ATTACKS: I 
+DAMAGE/ATTACK: 1-6 
+SPECIAL ATTACKS: Energy drain 
+SPECIAL DEFENSES: Silver or magic 
+weapons to hit 
+MAGIC RESISTANCE: See below 
+INTELLIGENCE: Very 
+ALIGNMENT: lawful evil 
+SIZE: M 
+psionic ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Wraiths are undead, similar in nature to wights, but they exist more 
+strongly on the negative material plane. They are found only in dark and 
+gloomy places, for they have no power in full sunlight. 
+In addition to the chilling effect of its touch (1-6 hit points damage), a 
+wraith drains on life energy at the rate of 1 per hit, just as a wight does. 
+Similarly, the wraith can be struck only with silver weapons (which cause 
+only one-half domage) or weapons which are magically enchanted 
+(which score full damage)
+Wraiths are unaffected by sleep, charm, hold, or cold-bosed spells. Poison 
+or paralysis are likewise ineffective, but holy water splashed upon a 
+wraith will cause 2-8 hit points of damage for each vial full which hits. A 
+raise dead spell will slay a wraith. If a wraith drains all life energy levels 
+from a human (including dwarves, elves, gnomes, half-elves, or even 
+halflings) the victim becomes a half-strength wraith under the control of 
+the wraith which drained the victim. 
+
+"Hydra xx Heads", should have xx HitDice and NumberOfAttacks: xx
+
+Succubi cannot be harmed by any sort 
+of normal weaponry. Succubus can cause darkness in a 5' radius. The kiss 
+of the succubus drains the victim of one energy level, and all succubi are 
+able to perform any one of the following feats at will: Become ethereal 
+(as if using the oil of that name), charm person, ESP, clairaudience, 
+suggestion (as the spell), shape change (to any humanoid form of 
+approximately their own height and weight only), or gate in a type IV 
+(70% chance), type VI (25%), or one of the lords or princes (5% chance) - 
+there is only a 40% chance of such a gate opening, however. 
+
+Demon Type I (Vrock) They may be struck with normal missiles and by normal weapons. 
+Darkness caused by them is the typical 5' radius sort. In addition these 
+demons have the ability to do any one of the following, one at a time, at 
+DEMON (TYPE 111) 
+will: Detect invisible objects, telekinese 2,000 gold piece weight, gate in 
+another type I demon (10% chance of success). 
+
+Demon Type II These demons can be struck by normal weapons 
+or missiles. The darkness they cause at will is of the variety which covers a 
+15' radius. These sorts of additional abilities can be performed by these 
+demons, one ot a time, at will: Cause fear (as a fear wand), levitate (as an 
+8th level magic-user), detect invisible obiects, telekinese 3,000 gold piece 
+weight, gate in another type II demon (20% chance of success). 
+
+update fear spell if needed: Fear (illusion/Phantasm) 
+Level: 4 
+Range: 0 
+Duration: Special 
+Area of Effect: 6” long cone, 3” 
+diameter at end, %’ at base 
+Components: V, S, M 
+Casting Time: 4 segments 
+Saving Throw: Neg. 
+Explanation/Description: When a feor spell is cast, the magic-user sends 
+forth an invisible ray which causes creatures within its area of effect to turn 
+away from the spell caster and flee in panic. Affected creatures are likely 
+to drop whatever they are holding when struck by the spell; the base 
+chance of this is60% at 1st level (or at 1 hit die), and each level (or hit die) 
+above this reduces the probability by 5%, 1.e. at 10th level there is only a 
+15% chance, and at 13th level 0% chance. Creatures affected by fear flee 
+at their fastest rate for the number of melee rounds equal to the level of 
+experience of the spell caster. The panic takes effect on the melee round 
+following the spell casting, but dropping of items in hand will take place 
+immediately. Of course, creatures which make their saving throws versus 
+the spell are not affected. The material component of this spell is either the 
+heart of a hen or a white feather.
+
+Implement Wand of Fear. I think code from fear spell can be reused.
+When the fear wand is activated a pale amber ray springs 
+from the tip of the wand, a cone 6" long by 2" in base diameter, which 
+flashes on in 1 segment and instantly disappears. Each creature touched by 
+the ray must save versus a wand or react as per the fear spell (first level 
+cleric spell, remove fear reversal), i.e. turn and move at fastest possible 
+speed away from the wand user for 6 rounds. Each usage costs 1 charge. It 
+can operate but once per round. The wand can be recharged. 
+
+"SpecialAttacks":
+        {
+          "Name": "Cause fear",
+          "Description": "Cause fear (as a fear wand)"
+        },
+
+implement level 5 magic user spell telekinesis, if used on an encounter using weapon, one monster will be disarmed
+and will spend two rounds 20 runing after the weapon
+
+"SpecialAttacks":
+        {
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Wictim can R)un and get the weapon for 2 rounds E)quip
+weapon from inventory F)ight with bare hands"
+        }, in the implementation present these 3 options to the victim
+
+        68,5
+    All demons of Type I, II, III, IV, V and V! should have SpecialAttacks Telekinesis
+    demons of Type II, III, IV, V and V! should have SpecialAttacks Cause fear
+    remove the SpecialAttacks Magic Use from all demons
+
+    Ice (Greater devil) 
+FREQUENCY: Uncommon 
+NO. APPEARING: I or 1-4 
+ARMOR CLASS: -4 
+MOVE: 6" 
+HITDICE: I I 
+% IN LAIR: 60% 
+TREASURETYPE: Q, R 
+NO. OF ATTACKS: 4 
+DAMAGE/ATTACK: 1-4/1-4/2-8/3- 12 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: +2 or better 
+weapon to hit 
+MAGIC RESISTANCE: 55% 
+INTELLIGENCE: High 
+ALIGNMENT: Lawful evil 
+SIZE: L (10%' toll) 
+PSlONlC ABILITY: I66 
+Attack/Defense Modes: C, D/F, G, H 
+22 
+DEVIL (ICE) 
+The frigid eighth plane of Hell is populated in the main with ice devils. 
+They are greater devils in every sense of the word, preferring to attack and 
+torment victims by means of their claws, mandibles, and tails. Afew (25%) 
+carry great spears which inflict 2-12 hit points damage and numb with cold 
+the creature thus struck (slow 50% unless save versus paralyzation is 
+made). Being greater devils, they have personal names. 
+Ice devils can do any one of the following at will, once per turn or melee 
+round, as applicable: fly, wall of ice, detect magic, detect invisible, 
+polymorph self, or gote in two bone devils (70%) or another ice devil 
+(30%) (60% chance of success). Once per day an ice devil can cause an ice 
+storm (os per that spell). 
+These creatures have ultravision (60'), are able to regenerate 1 hit point 
+per melee round, and a grasping strength of 18/76. They radiate fear in a 
+10'radius (saving throw vs. wand applies). 
+
+Update the SpecialDefenses Regeneration, so it is visible in the name and implementation that for example trolls
+regenerat 3 hp per round and ice devil 1 hp per round
+
+Barbed (Lesser devil) 
+FREQUENCY: Uncommon 
+NO. APPEARING: 1-2 or 3- 12 
+ARMOR CLASS: 0 
+MOVE: 12" 
+HIT DICE: 8 
+% IN LAIR: 50% 
+TREASURE TYPE: Nil 
+NO. OF ATTACKS: 3 
+DAMAGE/ATTACK: 2-8/2-8/3- 12 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: See below 
+MAGIC RESISTANCE: 35% 
+INTELLIGENCE: Very 
+ALIGNMENT: Lawful evil 
+SIZE: M (7'toll) 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+DEVIL (DISPA TER) 
+Barbed devils populate the third and fourth planes of Hell. They are 
+excellent guards and alert at all times (never surprised). Unauthorized 
+creatures are immediately cast into one of the many cells to be tormented. 
+While these monsters carry no weapons, they have sufficient weaponry 
+with their horny, barbed hands and horrid tails. They are able to generate 
+fear (saving throw versus wand is applicable) upon striking an opponent. 
+Barbed devils can perform any of the following, one at a time, per turn or 
+melee round, as applicable: pyrotechnics, produce flame, hold person, or 
+summon another barbed devil (30% chance of success). 
+
+I changed my mind Imp and Lemure should not have fear, only these devils should have cause fear
+[Paste #1 - 39 lines]
+
+when trying to run the run will fail if the monsters are faster then slowest member of the group, it will succed if
+the slowest in the party is faster then the monsters. if they are equaly fast, it is a 50% chanse of escaping. Write
+the run speeds to the log and explain the reson for succeeding to escape or not
+70,2
+Implment level 2 druid spell produce flame (will not cause any damage)
+Implment level 3 druid spell Pyrotechnlcs (requires a fire source for example produce flame, will not cause any damage)
+if pyrotechnics is cast and the party try to run the esacpe will always succeed.
+
+if old stype ui is true, can you show av old style version of the reorder party ui. 70,6
+make the old style version of the reorder party ui a bit higher so the new order is visible

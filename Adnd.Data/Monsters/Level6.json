@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 6,
   "Monsters": [
     {
@@ -515,6 +515,10 @@
         {
           "Name": "Rope of Entanglement",
           "Description": "Carries a rope of entanglement to restrain fallen victims."
+        },
+        {
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand)"
         },
         {
           "Name": "Erinyes Fear",
@@ -1618,7 +1622,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (3 HP/round)",
           "Description": "Regenerates 3 hit points per round; only fire or acid prevents regeneration."
         },
         {
@@ -1701,8 +1705,8 @@
       "Name": "Wraith",
       "Type": "Undead",
       "Frequency": "Uncommon",
-      "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 12,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 5,
@@ -1730,12 +1734,20 @@
           "Description": "Wraiths can only be hit by silver or magical weapons."
         },
         {
+          "Name": "Silver Weapons Half Damage",
+          "Description": "Silver weapons cause only half damage; magically enchanted weapons score full damage."
+        },
+        {
           "Name": "Limited Spell Immunity",
-          "Description": "Partially immune to certain spells and magical effects."
+          "Description": "Unaffected by sleep, charm, hold, or cold-based spells."
         },
         {
           "Name": "Poison & Paralysis Immunity",
           "Description": "Immune to all poison and paralysis effects."
+        },
+        {
+          "Name": "Holy Water and Raise Dead Vulnerability",
+          "Description": "Holy water causes 2-8 hit points of damage per vial that hits; a raise dead spell slays a wraith."
         }
       ],
       "MagicResistance": "See below",

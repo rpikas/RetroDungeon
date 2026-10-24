@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 5,
   "Monsters": [
     {
@@ -835,7 +835,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 13,
+          "NumberOfAttacks": 7,
           "Damage": "1d8"
         }
       ],
@@ -863,7 +863,7 @@
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
-      "HitDice": 5,
+      "HitDice": 6,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "Size": "Large",
@@ -871,7 +871,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 5,
+          "NumberOfAttacks": 6,
           "Damage": "1d10"
         }
       ],
@@ -925,7 +925,7 @@
           "Description": "Only silver or magical weapons can harm an imp."
         },
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (1 HP/round)",
           "Description": "Regenerates 1 HP per melee round."
         },
         {
@@ -1175,7 +1175,7 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (1 HP/round)",
           "Description": "Regenerates 1 HP per melee round."
         },
         {
@@ -1509,7 +1509,7 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (3 HP/round)",
           "Description": "Regenerates 3 hit points per round; only fire or acid prevents regeneration."
         }
       ],
@@ -1596,7 +1596,7 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (1 HP/round)",
           "Description": "Regenerates 1 HP per melee round; severed limbs must be reattached."
         }
       ],

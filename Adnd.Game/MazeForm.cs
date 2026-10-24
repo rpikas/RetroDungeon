@@ -1003,11 +1003,104 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         PublishToViewer();
     }
 
+    private List<string>? RunOldStyleReorderDialog(List<string> activeMembers, Dictionary<string, Character> roster)
+    {
+        var picked = new List<int>();
+        List<string>? result = null;
+
+        using var form = new Form { Text = "Reorder Party", StartPosition = FormStartPosition.CenterParent };
+        var text = new TextBox
+        {
+            Multiline = true,
+            ReadOnly = true,
+            BorderStyle = BorderStyle.None,
+            TabStop = false,
+            WordWrap = false,
+            ScrollBars = ScrollBars.Vertical
+        };
+        form.Controls.Add(text);
+
+        string Row(int number, Character c) => $"{number}. {c.Name,-12} HP {c.CurrentHitPoints + "/" + c.MaxHitPoints,-7} AC {c.ArmorClass,2}";
+
+        void Refresh()
+        {
+            var lines = new List<string> { "TYPE MEMBER NUMBERS IN NEW ORDER", "", "OLD ORDER" };
+            for (var i = 0; i < activeMembers.Count; i++)
+                lines.Add((picked.Contains(i) ? "*" : " ") + Row(i + 1, roster[activeMembers[i]]));
+
+            lines.Add("");
+            lines.Add("NEW ORDER");
+            if (picked.Count == 0)
+                lines.Add(" (EMPTY)");
+            for (var i = 0; i < picked.Count; i++)
+                lines.Add(" " + Row(i + 1, roster[activeMembers[picked[i]]]));
+
+            text.Lines = lines.ToArray();
+        }
+
+        Refresh();
+        OldStyleDialog.Apply(form, text, selectLabel: "CONFIRM    1-9 PICK    BKSP UNDO");
+        form.PerformLayout();
+        var completeOrderHeight = (6 + 2 * activeMembers.Count) * text.Font.Height;
+        var extraHeight = Math.Max(0, completeOrderHeight - text.ClientSize.Height);
+        form.Height = Math.Min(Screen.FromControl(this).WorkingArea.Height, form.Height + extraHeight);
+
+        form.KeyDown += (_, e) =>
+        {
+            var digit = e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9 ? e.KeyCode - Keys.D1
+                : e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9 ? e.KeyCode - Keys.NumPad1
+                : -1;
+            if (digit >= 0 && digit < activeMembers.Count && !picked.Contains(digit))
+            {
+                picked.Add(digit);
+                Refresh();
+                e.Handled = e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Back && picked.Count > 0)
+            {
+                picked.RemoveAt(picked.Count - 1);
+                Refresh();
+                e.Handled = e.SuppressKeyPress = true;
+            }
+        };
+
+        form.FormClosing += (_, e) =>
+        {
+            if (form.DialogResult != DialogResult.OK)
+                return;
+
+            if (picked.Count != activeMembers.Count)
+            {
+                e.Cancel = true;
+                form.DialogResult = DialogResult.None;
+                return;
+            }
+
+            result = picked.Select(i => activeMembers[i]).ToList();
+        };
+
+        return ViewerDialog.RunBlocked(form, this, "Reordering the party", PublishTable) == DialogResult.OK ? result : null;
+    }
+
     private void ShowReorderCampDialog(Adnd.Data.Party.Party party, List<string> activeMembers, Dictionary<string, Character> roster)
     {
         if (activeMembers.Count < 2)
         {
             SayOnBoth("Camp", "Need at least two party members to reorder.");
+            return;
+        }
+
+        if (GameRulesProvider.Current.UIOldStyle)
+        {
+            var oldStyleResult = RunOldStyleReorderDialog(activeMembers, roster);
+            PublishToViewer();
+            if (oldStyleResult == null || oldStyleResult.SequenceEqual(activeMembers, StringComparer.OrdinalIgnoreCase))
+                return;
+
+            party.Members = oldStyleResult;
+            _partyRepository.Save(party);
+            SayOnBoth("Camp", "Party order updated.");
+            Invalidate();
             return;
         }
 

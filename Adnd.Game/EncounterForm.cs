@@ -1015,9 +1015,10 @@ public sealed class EncounterForm : Form
                 grantsHumanControlPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Human Control"),
                 grantsMammalControlRing = string.Equals(item.Name, "Ring of Mammal Control", StringComparison.OrdinalIgnoreCase),
                 grantsTalismanPureGood = Adnd.Core.Items.ItemSpecialAbilityParser.HasSpecialAbility(item, "Talisman of Pure Good"),
-                grantsHornOfValhalla = Adnd.Core.Items.HornOfValhalla.IsHornOfValhalla(item)
+                grantsHornOfValhalla = Adnd.Core.Items.HornOfValhalla.IsHornOfValhalla(item),
+                grantsWandOfFear = string.Equals(item.Name, "Wand of Fear", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsHumanControlPotion || x.grantsMammalControlRing || x.grantsTalismanPureGood || x.grantsHornOfValhalla)
+            .Where(x => x.spell != null || x.grantsRegeneration || x.grantsHumanControlPotion || x.grantsMammalControlRing || x.grantsTalismanPureGood || x.grantsHornOfValhalla || x.grantsWandOfFear)
             .ToList();
 
         var hasEquippedMammalControlRing =
@@ -1044,6 +1045,8 @@ public sealed class EncounterForm : Form
         {
             label = x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
+                : x.grantsWandOfFear
+                    ? $"{x.item.Name} (panics monsters)"
                 : x.grantsTalismanPureGood
                     ? $"{x.item.Name} (banish evil cleric)"
                 : x.grantsHumanControlPotion
@@ -1101,7 +1104,7 @@ public sealed class EncounterForm : Form
                 return;
             target = SpellCastTarget.Ally(ally);
         }
-        else if (chosen.grantsTalismanPureGood)
+        else if (chosen.grantsTalismanPureGood || chosen.grantsWandOfFear)
         {
             if (_multipleGroups && _session != null)
             {
@@ -1173,6 +1176,8 @@ public sealed class EncounterForm : Form
             ItemInventoryIndex = chosen.index,
             SpellId = chosen.grantsMammalControlRing
                 ? "__ring_mammal_control__"
+                : chosen.grantsWandOfFear
+                    ? "__wand_of_fear__"
                 : chosen.grantsTalismanPureGood
                     ? "__talisman_pure_good__"
                     : chosen.grantsHornOfValhalla

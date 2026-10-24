@@ -19,6 +19,13 @@ public sealed class PyrotechnicsHandler : ISpellEffectHandler
         if (session == null)
             return SpellCastResult.Failure("Pyrotechnics requires combat session context.");
 
+        var hasFireSource = session.HasProducedFlame
+            || request.PartyTargets.Any(p => p.Equipment.Values.Any(i => i != null
+                && (i.Name.Contains("torch", StringComparison.OrdinalIgnoreCase)
+                    || i.Name.Contains("lantern", StringComparison.OrdinalIgnoreCase))));
+        if (!hasFireSource)
+            return SpellCastResult.Failure("Pyrotechnics requires a fire source (for example Produce Flame or a torch).");
+
         string targetGroupId = "default";
         var firstTarget = request.Targets.FirstOrDefault();
         if (!string.IsNullOrWhiteSpace(firstTarget?.TargetGroupId))
@@ -35,6 +42,7 @@ public sealed class PyrotechnicsHandler : ISpellEffectHandler
         if (targets.Count == 0)
             return SpellCastResult.Failure("No valid monsters in target group.");
 
+        session.PyrotechnicsCast = true;
         var rounds = Math.Max(1, request.Caster.Level);
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}! Blinding sparks engulf group '{targetGroupId}'.");

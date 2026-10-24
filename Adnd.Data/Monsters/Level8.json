@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 8,
   "Monsters": [
     {
@@ -458,8 +458,12 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Can use magical abilities, one per melee round."
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+        },
+        {
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
         },
         {
           "Name": "Psionics",
@@ -516,8 +520,16 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Can use demon spell-like abilities such as darkness, telekinesis, and others."
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+        },
+        {
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
+        },
+        {
+          "Name": "Charm Person",
+          "Description": "Charm person at will; save vs. spell negates."
         }
       ],
       "SpecialDefenses": [
@@ -569,8 +581,12 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Can use demon spell-like abilities such as darkness, telekinesis, and others."
+          "Name": "Cause Fear",
+          "Description": "Cause fear (as a fear wand): save vs. wand or flee in terror for 6 rounds."
+        },
+        {
+          "Name": "Telekinesis",
+          "Description": "Weapon is thrown 20 feet away. Victim can R)un and get the weapon for 2 rounds, E)quip weapon from inventory, or F)ight with bare hands."
         }
       ],
       "SpecialDefenses": [
@@ -594,51 +610,82 @@
       "Type": "Devil",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
-      "ArmorClass": -1,
-      "Movement": 15,
-      "HitDice": 9,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -4,
+      "Movement": 6,
+      "HitDice": 11,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
-      "%InLair": "55",
-      "TreasureType": "Nil",
+      "%InLair": "60",
+      "TreasureType": "Q, R",
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Strike",
+          "Name": "Claw",
+          "NumberOfAttacks": 2,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Mandibles",
           "NumberOfAttacks": 1,
-          "Damage": "3d12"
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "3d4"
         }
       ],
       "SpecialAttacks": [
         {
-          "Name": "Bone Hook",
-          "Description": "Hooks and tears flesh; extremely painful."
+         "Name": "Cause Fear",
+         "Description": "Cause fear (as a fear wand)"
         },
         {
-          "Name": "Tail",
-          "Description": "Tail strike deals 2d8 damage and drains 1–4 strength points."
+         "Name": "Great Spear",
+          "Description": "25% carry a great spear (2d6 extra damage) whose cold numbs the victim: slowed unless a save vs. paralyzation is made."
+        },
+        {
+          "Name": "Radiate Fear",
+          "Description": "Radiates fear in a 10' radius; save vs. wand or flee in terror."
+        },
+        {
+          "Name": "Ice Devil Gate",
+          "Description": "May gate in two bone devils (70%) or another ice devil (30%); 60% chance of success."
+        },
+        {
+          "Name": "Ice Storm",
+          "Description": "Once per day can cause an ice storm (3d10 damage to the party)."
         },
         {
           "Name": "Magic Use",
-          "Description": "Can use various devil spell-like abilities."
+          "Description": "At will: fly, wall of ice, detect magic, detect invisible, polymorph self. Ultravision 60'; grasping strength 18/76."
+        },
+        {
+          "Name": "Psionics",
+          "Description": "Psionic ability 166; attack/defense modes C, D/F, G, H."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Devil Traits",
-          "Description": "Includes immunities and resistances typical of greater devils."
+          "Name": "+2 or better weapons to hit",
+          "Description": "Can only be hit by magical weapons of +2 or better."
+        },
+        {
+          "Name": "Regeneration (1 HP/round)",
+          "Description": "Regenerates 1 hit point per melee round."
         }
       ],
-      "MagicResistance": "40%",
-      "Intelligence": "Very",
+      "MagicResistance": "55%",
+      "Intelligence": "High",
+      "PsionicAbility": 166,
       "Alignment": "Lawful evil",
       "Size": "Large",
       "BaseXPValue": 2800,
       "XPValuePerHitPoint": 12,
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 10",
-      "Other": "9½' tall; extremely cruel; powerful enforcer among devils."
+      "Other": "10½' tall; greater devil from the frigid eighth plane of Hell; has a personal name."
     },
     {
       "Name": "Dragon, Green",
@@ -947,7 +994,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 9,
+          "NumberOfAttacks": 13,
           "Damage": "1d10"
         }
       ],
@@ -976,7 +1023,7 @@
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 5,
       "Movement": 9,
-      "HitDice": 8,
+      "HitDice": 12,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "20",
@@ -1553,7 +1600,7 @@
           "Description": "Victims must save vs charm or be controlled."
         },
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (3 HP/round)",
           "Description": "Regenerates 3 hit points per round."
         },
         {
@@ -1684,7 +1731,7 @@
       "Attacks": [
         {
           "Name": "Bite",
-          "NumberOfAttacks": 8,
+          "NumberOfAttacks": 14,
           "Damage": "1d12"
         }
       ],

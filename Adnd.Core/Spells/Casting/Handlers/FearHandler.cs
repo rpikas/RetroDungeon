@@ -1,3 +1,4 @@
+using Adnd.Core.Characters;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Diagnostics;
 
@@ -39,47 +40,71 @@ public sealed class FearHandler : ISpellEffectHandler
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}!");
 
-        foreach (var monster in targetMonsters)
+        ApplyFear(targetMonsters, ResolveCasterLevel(request, spell), spell.Name, spell.Id, saveVsWand: false, rng, result.Events);
+
+        result.Events.Add($"Fear affected group '{targetGroupId}'.");
+        return result;
+    }
+
+    // Shared by the Fear spell and the Wand of Fear: failed save sends the monster fleeing in panic.
+    internal static void ApplyFear(IEnumerable<MonsterInstance> targets, int rounds, string sourceName, string immunityKey, bool saveVsWand, Random rng, List<string> events)
+    {
+        foreach (var monster in targets)
         {
-            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(monster, spell.Id))
+            if (SpellDamageSaveHelper.IsNegatedByMindAffectingImmunity(monster, immunityKey))
             {
-                result.Events.Add($"{monster.DisplayName} is immune to mind-affecting spells. {spell.Name} has no effect.");
+                events.Add($"{monster.DisplayName} is immune to mind-affecting effects. {sourceName} has no effect.");
                 continue;
             }
 
-            var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 0);
+            var saveTarget = saveVsWand
+                ? SpellDamageSaveHelper.GetMonsterWandSaveTarget(monster, 0)
+                : SpellDamageSaveHelper.GetMonsterMagicSaveTarget(monster, 0);
             var saveRoll = rng.Next(1, 21);
             var saved = saveTarget > 0 && saveRoll >= saveTarget;
 
             RuleApplicationInfo.Publish(
                 "DMG",
                 "79 Savethrow Monster",
-                $"{monster.DisplayName} saving throw vs spell ({spell.Name})",
-                $"Roll d20, need {saveTarget}+ to save. Failed save means creature flees combat.",
+                $"{monster.DisplayName} saving throw vs {(saveVsWand ? "wand" : "spell")} ({sourceName})",
+                $"Roll d20, need {saveTarget}+ to save. Failed save means creature flees in panic.",
                 "1",
                 "20",
                 saveRoll.ToString(),
                 saved
                     ? "Save made. Monster resists fear."
-                    : "Save failed. Monster flees and is removed from combat.");
+                    : $"Save failed. Monster flees in panic for {rounds} round(s).");
 
             if (saved)
             {
-                result.Events.Add($"{monster.DisplayName} resists fear (save {saveRoll} vs {saveTarget}).");
+                events.Add($"{monster.DisplayName} resists fear (save {saveRoll} vs {saveTarget}).");
                 continue;
             }
 
-            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, spell.Name))
+            if (SpellDamageSaveHelper.IsNegatedByMagicResistance(monster, rng, sourceName))
             {
-                result.Events.Add($"{monster.DisplayName} negates fear with magic resistance.");
+                events.Add($"{monster.DisplayName} negates fear with magic resistance.");
                 continue;
             }
 
-            monster.CurrentHitPoints = 0;
-            result.Events.Add($"{monster.DisplayName} fails save ({saveRoll} vs {saveTarget}), flees in terror, and is gone from the battle!");
+            monster.SetStatus(MonsterStatus.Panicked, rounds);
+            events.Add($"{monster.DisplayName} fails save ({saveRoll} vs {saveTarget}) and flees in terror for {rounds} round(s)!");
         }
+    }
 
-        result.Events.Add($"Fear affected group '{targetGroupId}'.");
-        return result;
+    private static int ResolveCasterLevel(SpellCastRequest request, Spell spell)
+    {
+        if (request.EffectiveCasterLevel is int effective && effective > 0)
+            return effective;
+
+        var caster = request.Caster;
+        var classLevel = spell.SpellClass switch
+        {
+            SpellClass.MagicUser when caster.Classes.Contains(CharacterClass.MagicUser) => caster.GetClassLevel(CharacterClass.MagicUser),
+            SpellClass.Illusionist when caster.Classes.Contains(CharacterClass.Illusionist) => caster.GetClassLevel(CharacterClass.Illusionist),
+            _ => caster.Level
+        };
+
+        return Math.Max(1, classLevel);
     }
 }

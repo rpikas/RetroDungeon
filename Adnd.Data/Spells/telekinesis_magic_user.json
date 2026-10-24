@@ -1,0 +1,13 @@
+{
+  "Id": "telekinesis_magic_user",
+  "Name": "Telekinesis",
+  "Class": "MagicUser",
+  "Level": 5,
+  "Description": "Moves objects by mental force. In combat it can wrench a weapon from one monster's grasp.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Utility",
+  "EffectDescription": "One weapon-wielding monster in the targeted group saves vs. spell. Fail = disarmed; it spends 2 rounds running after its weapon."
+}

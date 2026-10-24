@@ -1,0 +1,12 @@
+{
+  "Id": "produce_flame",
+  "Name": "Produce Flame",
+  "Class": "Druid",
+  "Level": 2,
+  "Description": "A small flame appears in the druid's palm. It causes no damage but is a fire source for other spells.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "CastContext": "Combat",
+  "EffectType": "Utility",
+  "EffectDescription": "A flame burns in the caster's hand for 2 rounds per caster level. It causes no damage but satisfies the fire-source requirement of Pyrotechnics."
+}

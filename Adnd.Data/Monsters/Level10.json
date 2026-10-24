@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 10,
   "Monsters": [
     {
@@ -542,7 +542,11 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Regeneration",
+          "Name": "Cause Fear",
+          "Description": "Gaze causes fear."
+        },
+        {
+          "Name": "Regeneration (2 HP/round)",
           "Description": "Regenerates 2 hit points per round."
         },
         {
@@ -916,7 +920,7 @@
           "Description": "Victims must save vs charm or be controlled."
         },
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (3 HP/round)",
           "Description": "Regenerates 3 hit points per round."
         },
         {
@@ -963,11 +967,15 @@
       ],
       "SpecialAbilities": [
         {
+          "Name": "Cause Fear",
+          "Description": "Glance causes fear and weakness."
+        },
+        {
           "Name": "Magic Resistance",
           "Description": "70% resistance to magic."
         },
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (2 HP/round)",
           "Description": "Regenerates 2 hit points per round."
         },
         {
@@ -1003,6 +1011,10 @@
         }
       ],
       "SpecialAbilities": [
+        {
+          "Name": "Cause Fear",
+          "Description": "Stare causes fear."
+        },
         {
           "Name": "Magic Resistance",
           "Description": "65% resistance to magic."
@@ -1050,6 +1062,10 @@
       ],
       "SpecialAbilities": [
         {
+          "Name": "Cause Fear",
+          "Description": "Glare causes fear."
+        },
+        {
           "Name": "Magic Resistance",
           "Description": "70% resistance to magic."
         },
@@ -1058,7 +1074,7 @@
           "Description": "Tail sting forces save vs poison or suffer severe damage."
         },
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (2 HP/round)",
           "Description": "Regenerates 2 hit points per round."
         },
         {

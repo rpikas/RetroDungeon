@@ -41,6 +41,7 @@ public class PartyMenu
             new SummonInsectsHandler(),
             new SnareHandler(),
             new PyrotechnicsHandler(),
+            new ProduceFlameHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
             new Silence15RadiusHandler(),
@@ -81,6 +82,7 @@ public class PartyMenu
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
             new FearHandler(),
+            new TelekinesisHandler(),
             new ParalyzationHandler(),
             new PhantasmalForceHandler()
         });

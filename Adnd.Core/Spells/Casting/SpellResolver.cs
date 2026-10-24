@@ -46,7 +46,7 @@ public sealed class SpellResolver
                 {
                     var lost = before - monster.CurrentHitPoints;
                     if (lost > 0 && monster.Template.SpecialDefenses.Concat(monster.Template.SpecialAbilities.Select(a => a))
-                            .Any(d => string.Equals(d?.Name?.Trim(), "Regeneration", StringComparison.OrdinalIgnoreCase)))
+                            .Any(d => d?.Name != null && d.Name.TrimStart().StartsWith("Regeneration", StringComparison.OrdinalIgnoreCase)))
                         session!.AddMonsterWoundingUnhealableDamage(monster, lost);
                 }
             }

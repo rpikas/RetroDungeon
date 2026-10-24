@@ -1531,7 +1531,7 @@
       "Attacks": [
         {
           "Name": "Head Attacks",
-          "NumberOfAttacks": 15,
+          "NumberOfAttacks": 5,
           "Damage": "1d6"
         }
       ],
@@ -1563,7 +1563,7 @@
       "Attacks": [
         {
           "Name": "Head Attacks",
-          "NumberOfAttacks": 13,
+          "NumberOfAttacks": 7,
           "Damage": "1d8"
         }
       ],

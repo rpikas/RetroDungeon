@@ -1,4 +1,4 @@
-{
+﻿{
   "Level": 2,
   "Monsters": [
     {
@@ -489,7 +489,7 @@
       "SpecialAttacks": [],
       "SpecialDefenses": [
         {
-          "Name": "Regeneration",
+          "Name": "Regeneration (1 HP/round)",
           "Description": "Regenerates 1 hp per melee round"
         },
         {

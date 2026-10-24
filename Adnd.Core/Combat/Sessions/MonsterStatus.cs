@@ -29,6 +29,6 @@ public enum MonsterStatus
     Petrified,
     Stunned,
     Unconscious,
-    Mazed
-
+    Mazed,
+    Disarmed
 }

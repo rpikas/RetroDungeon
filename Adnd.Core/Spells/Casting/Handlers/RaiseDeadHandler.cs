@@ -99,8 +99,19 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         if (target == null)
             return SpellCastResult.Failure("No valid enemy target selected.");
 
+        if (SpellDamageSaveHelper.IsWraith(target))
+        {
+            var slain = new SpellCastResult { Success = true };
+            slain.Events.Add($"{request.Caster.Name} casts {spell.Name} at {target.DisplayName}!");
+            var hpBefore = target.CurrentHitPoints;
+            target.CurrentHitPoints = 0;
+            slain.Events.Add($"{target.DisplayName} is slain by Raise Dead! HP {hpBefore}->0.");
+            RuleApplicationInfo.PublishLinked("MM", "Wraith", "A raise dead spell slays a wraith (no save).");
+            return slain;
+        }
+
         if (!SpellDamageSaveHelper.IsMummy(target))
-            return SpellCastResult.Failure($"{spell.Name} can only target mummies in combat.");
+            return SpellCastResult.Failure($"{spell.Name} can only target mummies or wraiths in combat.");
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name} at {target.DisplayName}!");
@@ -146,7 +157,7 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         if (!string.IsNullOrWhiteSpace(targetRef.TargetGroupId))
             return request.MonsterTargets.FirstOrDefault(m => m.IsAlive
                                                                && string.Equals(m.GroupId, targetRef.TargetGroupId, StringComparison.OrdinalIgnoreCase)
-                                                               && SpellDamageSaveHelper.IsMummy(m));
+                                                               && (SpellDamageSaveHelper.IsMummy(m) || SpellDamageSaveHelper.IsWraith(m)));
 
         return null;
     }

@@ -232,6 +232,12 @@ public sealed partial class CombatResolver
 
     // Lets Core resolve monster templates by name (e.g. for gating/summoning) without referencing the data layer.
     public Func<string, Monster?>? MonsterTemplateLookup { get; set; }
+    private readonly Dictionary<MonsterInstance, bool> _iceDevilSpears = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _iceStormUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<string, int> _frightenedRounds = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, (Character Owner, Item Weapon)> _thrownWeapons = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _retrievingWeaponRounds = new(StringComparer.OrdinalIgnoreCase);
+    public const string TelekinesisPromptPrefix = "TELEKINESIS_PROMPT::";
     private readonly HashSet<MonsterInstance> _nightHagGateAttempted = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<(MonsterInstance Hag, Character Victim)> _dreamRidingVictims = new();
 
@@ -443,6 +449,56 @@ public sealed partial class CombatResolver
                     events.Add(new CombatEvent($"{member.Name} remains within very hot fire ({exposureRemaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{member.Name} is no longer directly within very hot fire."));
+            }
+
+            if (_retrievingWeaponRounds.TryGetValue(member.Name, out var retrievingLeft))
+            {
+                if (retrievingLeft <= 0 || !IsAlive(member) || !_thrownWeapons.ContainsKey(member.Name))
+                {
+                    _retrievingWeaponRounds.Remove(member.Name);
+                }
+                else
+                {
+                    var remainingToFetch = retrievingLeft - 1;
+                    if (remainingToFetch <= 0)
+                    {
+                        _retrievingWeaponRounds.Remove(member.Name);
+                        var thrown = _thrownWeapons[member.Name].Weapon;
+                        _thrownWeapons.Remove(member.Name);
+                        member.Equipment[EquipmentSlot.MainHand] = thrown;
+                        events.Add(new CombatEvent($"{member.Name} runs after the weapon, retrieves {thrown.Name} and re-equips it."));
+                    }
+                    else
+                    {
+                        _retrievingWeaponRounds[member.Name] = remainingToFetch;
+                        events.Add(new CombatEvent($"{member.Name} is running after the weapon thrown by telekinesis ({remainingToFetch} round(s) remaining)."));
+                    }
+
+                    continue;
+                }
+            }
+
+            if (_frightenedRounds.TryGetValue(member.Name, out var frightenedLeft))
+            {
+                if (frightenedLeft <= 0 || !IsAlive(member))
+                {
+                    _frightenedRounds.Remove(member.Name);
+                }
+                else
+                {
+                    events.Add(new CombatEvent($"{member.Name} is gripped by fear and flees from the fight ({frightenedLeft} round(s) remaining)."));
+                    if (frightenedLeft - 1 <= 0)
+                    {
+                        _frightenedRounds.Remove(member.Name);
+                        events.Add(new CombatEvent($"{member.Name} regains courage."));
+                    }
+                    else
+                    {
+                        _frightenedRounds[member.Name] = frightenedLeft - 1;
+                    }
+
+                    continue;
+                }
             }
 
             if (member.HasStatus(CharacterStatus.Confused))
@@ -827,15 +883,12 @@ public sealed partial class CombatResolver
                 return FinalizeRound(session, events);
             }
 
-            var runRoll = _dice.Roll(100);
-            if (runRoll <= 50)
+            events.Add(new CombatEvent(ResolveRunAttempt(session, out var escaped)));
+            if (escaped)
             {
                 session.Outcome = CombatOutcome.Escaped;
-                events.Add(new CombatEvent("The party escapes!"));
                 return FinalizeRound(session, events);
             }
-
-            events.Add(new CombatEvent("The party fails to escape!"));
         }
 
         ResolveFigurineAnimalAllies(session, events);
@@ -1073,6 +1126,24 @@ public sealed partial class CombatResolver
                 continue;
 
             if (TryResolveNightHagGate(session, monster, events))
+                continue;
+
+            if (TryResolveTelekinesisThrow(session, monster, events))
+                continue;
+
+            if (TryResolveCauseFear(session, monster, events))
+                continue;
+
+            if (TryResolveIceDevilPower(session, monster, events))
+                continue;
+
+            if (TryResolveBarbedDevilPower(session, monster, events))
+                continue;
+
+            if (TryResolveVrockGate(session, monster, events))
+                continue;
+
+            if (TryResolveSuccubusPower(session, monster, events))
                 continue;
 
             if (TryResolveNightHagStrangulation(session, monster, events))
@@ -1349,6 +1420,16 @@ public sealed partial class CombatResolver
                     events.Add(new CombatEvent($"{monster.DisplayName} is stunned ({remaining} round(s) remaining)."));
                 else
                     events.Add(new CombatEvent($"{monster.DisplayName} is no longer stunned."));
+
+                continue;
+            }
+
+            if (monster.HasStatus(MonsterStatus.Disarmed))
+            {
+                var remaining = monster.TickStatus(MonsterStatus.Disarmed);
+                events.Add(new CombatEvent(remaining > 0
+                    ? $"{monster.DisplayName} is running after its weapon ({remaining} round(s) remaining)."
+                    : $"{monster.DisplayName} retrieves its weapon."));
 
                 continue;
             }
@@ -1666,6 +1747,10 @@ public sealed partial class CombatResolver
                             TryApplyRottingDisease(monster, target, events);
                             TryApplyPetrificationFromSpecialAttacks(monster, target, events);
                             TryApplyBoneHook(monster, target, events);
+                            TryApplyIceDevilSpear(monster, target, attack.Name, events);
+                            TryApplyBarbedFear(monster, target, events);
+                            if (!IsAlive(target))
+                                continue;
                             TryApplyErinyesDagger(monster, target, session, events);
                             TryApplyMedusaAspBite(monster, target, events);
                             if (!IsAlive(target))
@@ -2405,6 +2490,13 @@ public sealed partial class CombatResolver
             spellId = spell?.Id;
         }
 
+        if (string.Equals(action.SpellId, "__wand_of_fear__", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(item.Name, "Wand of Fear", StringComparison.OrdinalIgnoreCase))
+        {
+            ResolveWandOfFearUse(session, user, action, item, events);
+            return;
+        }
+
         if (string.Equals(action.SpellId, "__talisman_pure_good__", StringComparison.OrdinalIgnoreCase)
             || grantsTalismanOfPureGood)
         {
@@ -2480,6 +2572,44 @@ public sealed partial class CombatResolver
 
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
+            events.Add(new CombatEvent(message));
+    }
+
+    private void ResolveWandOfFearUse(CombatSession session, Character user, CombatAction action, Item wand, List<CombatEvent> events)
+    {
+        const string chargePrefix = "WandCharges:";
+        wand.SpecialAbilities ??= new List<string>();
+        var existing = wand.SpecialAbilities.FirstOrDefault(a => a.StartsWith(chargePrefix, StringComparison.OrdinalIgnoreCase));
+        var charges = existing != null && int.TryParse(existing.Split(':', 2)[1], out var parsed)
+            ? Math.Max(0, parsed)
+            : _dice.Roll(20) + 80;
+
+        if (charges <= 0)
+        {
+            events.Add(new CombatEvent($"{user.Name} points {wand.Name}, but it has no charges remaining."));
+            return;
+        }
+
+        charges--;
+        wand.SpecialAbilities.RemoveAll(a => a.StartsWith(chargePrefix, StringComparison.OrdinalIgnoreCase));
+        wand.SpecialAbilities.Add($"{chargePrefix}{charges}");
+
+        var targetGroup = action.Target?.TargetGroupId;
+        var targets = session.Monsters.Where(m => m.IsAlive);
+        if (!string.IsNullOrWhiteSpace(targetGroup) && !string.Equals(targetGroup, "default", StringComparison.OrdinalIgnoreCase))
+            targets = targets.Where(m => string.Equals(m.GroupId, targetGroup, StringComparison.OrdinalIgnoreCase));
+
+        var targetList = targets.ToList();
+        events.Add(new CombatEvent($"{user.Name} points {wand.Name}: a pale amber cone of fear flashes out. Charges remaining: {charges}."));
+        if (targetList.Count == 0)
+        {
+            events.Add(new CombatEvent("The ray touches no creature."));
+            return;
+        }
+
+        var messages = new List<string>();
+        FearHandler.ApplyFear(targetList, 6, wand.Name, "fear", saveVsWand: true, new Random(_dice.Roll(1_000_000)), messages);
+        foreach (var message in messages)
             events.Add(new CombatEvent(message));
     }
 
@@ -4071,6 +4201,15 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{target.DisplayName} takes half damage from magical weapons below +3 ({originalDamage}->{damage})."));
             }
 
+            if (HasSpecialDefense(target, "Silver Weapons Half Damage")
+                && IsSilverWeapon(mainHand)
+                && GetEffectiveWeaponBonusForHitRequirement(mainHand) < 1)
+            {
+                var originalDamage = damage;
+                damage = Math.Max(1, damage / 2);
+                events.Add(new CombatEvent($"{target.DisplayName} takes only half damage from non-magical silver weapons ({originalDamage}->{damage})."));
+            }
+
             if (HasMagicWeaponsOnlyHalfDamageDefense(target))
             {
                 var originalDamage = damage;
@@ -4091,7 +4230,7 @@ public sealed partial class CombatResolver
 
             TryRevealWillOWispLairTreasureOnLowHp(target, events);
 
-            if (actualDamageToTarget > 0 && IsFireBasedWeaponAttack(mainHand) && HasSpecialAbility(target, "Regeneration"))
+            if (actualDamageToTarget > 0 && IsFireBasedWeaponAttack(mainHand) && HasMonsterRegeneration(target))
                 session.AddMonsterWoundingUnhealableDamage(target, actualDamageToTarget);
 
             if (actualDamageToTarget > 0 && IsSwordOfWounding(mainHand))
@@ -6459,6 +6598,14 @@ public sealed partial class CombatResolver
         _nightHagSleepUsed.Clear();
         _nightHagEnfeeblementUses.Clear();
         _nightHagGateAttempted.Clear();
+        _frightenedRounds.Clear();
+        _iceDevilSpears.Clear();
+        _iceStormUsed.Clear();
+        foreach (var (owner, weapon) in _thrownWeapons.Values)
+            owner.Inventory.Add(weapon);
+
+        _thrownWeapons.Clear();
+        _retrievingWeaponRounds.Clear();
         _dreamRidingVictims.Clear();
     }
 
@@ -6523,6 +6670,440 @@ public sealed partial class CombatResolver
         var summoned = new MonsterInstance(template, 1, groupId);
         session.Monsters.Add(summoned);
         events.Add(new CombatEvent($"{monster.DisplayName} gates in {summoned.DisplayName}!"));
+        return true;
+    }
+
+    private bool TryResolveTelekinesisThrow(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Telekinesis") || _dice.Roll(4) != 1)
+            return false;
+
+        var targets = session.ExposedParty
+            .Where(c => IsAlive(c) && !_thrownWeapons.ContainsKey(c.Name)
+                        && c.Equipment.TryGetValue(EquipmentSlot.MainHand, out var w) && w != null)
+            .ToList();
+        if (targets.Count == 0)
+            return false;
+
+        var target = targets[_dice.Roll(targets.Count) - 1];
+        var weapon = target.Equipment[EquipmentSlot.MainHand]!;
+        target.Equipment[EquipmentSlot.MainHand] = null;
+        _thrownWeapons[target.Name] = (target, weapon);
+        RuleApplicationInfo.Publish("AD&D", "Telekinesis", $"{monster.DisplayName} on {target.Name}",
+            "Weapon is thrown 20 feet away; the victim may run to get it (2 rounds), equip another weapon, or fight bare-handed.",
+            "1", "1", "1", $"{weapon.Name} is torn from {target.Name}'s grasp.");
+        events.Add(new CombatEvent($"{monster.DisplayName} uses telekinesis: {target.Name}'s {weapon.Name} is hurled 20 feet away!"));
+        events.Add(new CombatEvent(TelekinesisPromptPrefix + target.Name));
+        return true;
+    }
+
+    public bool HasThrownWeapon(Character character) => _thrownWeapons.ContainsKey(character.Name);
+
+    // choice: 'R' run for the weapon (2 rounds), 'E' equip replacementWeapon from inventory, 'F' fight bare-handed.
+    public void ApplyTelekinesisChoice(Character character, char choice, Item? replacementWeapon, List<CombatEvent> events)
+    {
+        if (!_thrownWeapons.TryGetValue(character.Name, out var thrown))
+            return;
+
+        switch (char.ToUpperInvariant(choice))
+        {
+            case 'R':
+                _retrievingWeaponRounds[character.Name] = 2;
+                events.Add(new CombatEvent($"{character.Name} runs after {thrown.Weapon.Name} (2 rounds)."));
+                break;
+            case 'E' when replacementWeapon != null && character.Inventory.Remove(replacementWeapon):
+                character.Equipment[EquipmentSlot.MainHand] = replacementWeapon;
+                events.Add(new CombatEvent($"{character.Name} draws {replacementWeapon.Name} from inventory."));
+                break;
+            default:
+                events.Add(new CombatEvent($"{character.Name} fights with bare hands."));
+                break;
+        }
+    }
+
+    private string ResolveRunAttempt(CombatSession session, out bool escaped)
+    {
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        var slowest = party
+            .Select(c => (Name: c.Name, Speed: GetPartyRunSpeed(session, c)))
+            .OrderBy(p => p.Speed)
+            .FirstOrDefault();
+
+        var pursuers = session.AliveMonsters
+            .Where(m => !m.HasStatus(MonsterStatus.Snared) && !m.HasStatus(MonsterStatus.Asleep)
+                && !m.HasStatus(MonsterStatus.Paralyzed) && !m.HasStatus(MonsterStatus.Petrified)
+                && !m.HasStatus(MonsterStatus.Unconscious) && !m.HasStatus(MonsterStatus.Entangled)
+                && !m.HasStatus(MonsterStatus.Webbed))
+            .Select(m => (Name: m.DisplayName, Speed: GetMonsterRunSpeed(m)))
+            .OrderByDescending(p => p.Speed)
+            .ToList();
+
+        if (pursuers.Count == 0 || slowest.Name == null)
+        {
+            escaped = true;
+            return "The party escapes! No enemy is able to pursue.";
+        }
+
+        var fastest = pursuers[0];
+        var summary = $"Run speeds: slowest party member {slowest.Name} {slowest.Speed}\", fastest pursuer {fastest.Name} {fastest.Speed}\".";
+        if (session.PyrotechnicsCast)
+        {
+            escaped = true;
+            return $"{summary} The party escapes under cover of the pyrotechnics' blinding smoke and sparks.";
+        }
+        if (slowest.Speed > fastest.Speed)
+        {
+            escaped = true;
+            return $"{summary} The party escapes because even its slowest member outpaces every pursuer.";
+        }
+
+        if (slowest.Speed < fastest.Speed)
+        {
+            escaped = false;
+            return $"{summary} The party fails to escape because {fastest.Name} is faster than {slowest.Name}.";
+        }
+
+        var roll = _dice.Roll(100);
+        escaped = roll <= 50;
+        return escaped
+            ? $"{summary} Equal speed: 50% chance to escape (rolled {roll}). The party escapes!"
+            : $"{summary} Equal speed: 50% chance to escape (rolled {roll}). The party fails to escape!";
+    }
+
+    private static int GetPartyRunSpeed(CombatSession session, Character member)
+    {
+        var speed = Math.Max(1, member.Move);
+        if (member.HasStatus(CharacterStatus.Slowed))
+            speed /= 2;
+        if (session.IsHasted(member.Name))
+            speed *= 2;
+        return speed;
+    }
+
+    private static int GetMonsterRunSpeed(MonsterInstance monster)
+    {
+        var movement = monster.Template.Movement;
+        var speed = movement == null ? 0 : Math.Max(movement.Walk, movement.Fly);
+        return monster.HasStatus(MonsterStatus.Slowed) ? speed / 2 : speed;
+    }
+
+    private bool TryResolveCauseFear(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Cause Fear") || _dice.Roll(4) != 1)
+            return false;
+
+        var targets = session.ExposedParty.Where(c => IsAlive(c) && !_frightenedRounds.ContainsKey(c.Name)).ToList();
+        if (targets.Count == 0)
+            return false;
+
+        events.Add(new CombatEvent($"{monster.DisplayName} causes fear (as a wand of fear)!"));
+        foreach (var target in targets)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.RodStaffWand));
+            var saveRoll = _dice.Roll(20);
+            var saved = saveRoll >= saveTarget;
+            RuleApplicationInfo.Publish("AD&D", "Cause Fear", $"{monster.DisplayName} on {target.Name}",
+                "Fear as a wand of fear; save vs. wand negates, otherwise flee for 6 rounds.", "1", "20", saveRoll.ToString(),
+                $"Save target {saveTarget}. {(saved ? "Saved." : "Failed; flees in terror.")}");
+            if (saved)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists the fear (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            _frightenedRounds[target.Name] = 6;
+            events.Add(new CombatEvent($"{target.Name} is terrified and flees for 6 rounds (save {saveRoll} vs {saveTarget})."));
+        }
+
+        return true;
+    }
+
+    private void TryApplyBarbedFear(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Barbed Fear") || _frightenedRounds.ContainsKey(target.Name))
+            return;
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.RodStaffWand));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists the terror of {monster.DisplayName}'s strike (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        _frightenedRounds[target.Name] = 6;
+        events.Add(new CombatEvent($"{target.Name} is struck with fear by {monster.DisplayName} and flees for 6 rounds (save {saveRoll} vs {saveTarget})."));
+    }
+
+    private bool TryResolveBarbedDevilPower(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var powers = new List<string>();
+        foreach (var name in new[] { "Pyrotechnics", "Produce Flame", "Hold Person" })
+        {
+            if (HasSpecialAbility(monster, name))
+                powers.Add(name);
+        }
+
+        if (powers.Count == 0 || _dice.Roll(3) != 1)
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        var power = powers[_dice.Roll(powers.Count) - 1];
+        if (power == "Produce Flame")
+        {
+            var target = party[_dice.Roll(party.Count) - 1];
+            var damage = _dice.Roll(4) + monster.Template.HitDice;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+            WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+            events.Add(new CombatEvent($"{monster.DisplayName} hurls produced flame at {target.Name} for {before - target.CurrentHitPoints} damage (1d4+{monster.Template.HitDice}). HP {before}->{target.CurrentHitPoints}."));
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+
+            return true;
+        }
+
+        var isHold = power == "Hold Person";
+        var affected = isHold ? party.OrderBy(_ => _dice.Roll(1000)).Take(_dice.Roll(3)).ToList() : party;
+        events.Add(new CombatEvent(isHold
+            ? $"{monster.DisplayName} casts hold person!"
+            : $"{monster.DisplayName} fills the air with dazzling pyrotechnics!"));
+        foreach (var target in affected)
+        {
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            var saveRoll = _dice.Roll(20);
+            if (saveRoll >= saveTarget)
+            {
+                events.Add(new CombatEvent($"{target.Name} resists (save {saveRoll} vs {saveTarget})."));
+                continue;
+            }
+
+            var rounds = _dice.Roll(4);
+            if (isHold)
+            {
+                target.ApplyParalysis(rounds + 4);
+                events.Add(new CombatEvent($"{target.Name} fails the save ({saveRoll} vs {saveTarget}) and is held for {rounds + 4} round(s)."));
+            }
+            else
+            {
+                target.AddStatus(CharacterStatus.Confused);
+                session.SetPartyConfused(target.Name, rounds);
+                events.Add(new CombatEvent($"{target.Name} fails the save ({saveRoll} vs {saveTarget}) and is dazzled for {rounds} round(s)."));
+            }
+        }
+
+        return true;
+    }
+
+    private void TryApplyIceDevilSpear(MonsterInstance monster, Character target, string attackName, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Great Spear")
+            || !string.Equals(attackName, "Claw", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (!_iceDevilSpears.TryGetValue(monster, out var carriesSpear))
+        {
+            carriesSpear = _dice.Roll(100) <= 25;
+            _iceDevilSpears[monster] = carriesSpear;
+        }
+
+        if (!carriesSpear)
+            return;
+
+        var damage = _dice.Roll(6) + _dice.Roll(6);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+        events.Add(new CombatEvent($"{monster.DisplayName}'s great spear also pierces {target.Name} for {before - target.CurrentHitPoints} damage (2d6). HP {before}->{target.CurrentHitPoints}."));
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+            return;
+        }
+
+        if (target.HasStatus(CharacterStatus.Slowed) || target.IsMonkImmuneToDiseaseSlowHaste())
+            return;
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        var saveRoll = _dice.Roll(20);
+        if (saveRoll >= saveTarget)
+        {
+            events.Add(new CombatEvent($"{target.Name} shrugs off the numbing cold (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        target.AddStatus(CharacterStatus.Slowed);
+        events.Add(new CombatEvent($"{target.Name} is numbed by the spear's cold and slowed (save {saveRoll} vs {saveTarget})!"));
+    }
+
+    private bool TryResolveIceDevilPower(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var canGate = HasSpecialAbility(monster, "Ice Devil Gate") && !_nightHagGateAttempted.Contains(monster) && MonsterTemplateLookup != null;
+        var canStorm = HasSpecialAbility(monster, "Ice Storm") && !_iceStormUsed.Contains(monster);
+        if ((!canGate && !canStorm) || _dice.Roll(3) != 1)
+            return false;
+
+        if (canStorm && (!canGate || _dice.Roll(2) == 1))
+        {
+            var party = session.ExposedParty.Where(IsAlive).ToList();
+            if (party.Count == 0)
+                return false;
+
+            _iceStormUsed.Add(monster);
+            events.Add(new CombatEvent($"{monster.DisplayName} calls down an ice storm!"));
+            foreach (var target in party)
+            {
+                var damage = _dice.Roll(10) + _dice.Roll(10) + _dice.Roll(10);
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - damage);
+                WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+                events.Add(new CombatEvent($"{target.Name} is battered by hail for {before - target.CurrentHitPoints} damage (3d10). HP {before}->{target.CurrentHitPoints}."));
+                if (target.CurrentHitPoints <= 0)
+                {
+                    target.AddStatus(CharacterStatus.Dead);
+                    events.Add(new CombatEvent($"{target.Name} is slain!"));
+                }
+            }
+
+            return true;
+        }
+
+        _nightHagGateAttempted.Add(monster);
+        var roll = _dice.Roll(100);
+        RuleApplicationInfo.Publish("AD&D", "Ice Devil Gate", $"{monster.DisplayName} attempts to gate in devils",
+            "Gates in two bone devils (70%) or another ice devil (30%); 60% chance of success.",
+            "1", "100", roll.ToString(), roll <= 60 ? "Gate opens." : "Gate fails.");
+        if (roll > 60)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} tries to gate in devils but fails (roll {roll} vs 60%)."));
+            return true;
+        }
+
+        var boneDevils = _dice.Roll(100) <= 70;
+        var template = MonsterTemplateLookup!(boneDevils ? "Devil, Bone" : "Devil, Ice");
+        if (template == null)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} opens a gate, but nothing answers."));
+            return true;
+        }
+
+        var gateGroup = $"gate-{monster.GroupId}-{_dice.Roll(10000)}";
+        var count = boneDevils ? 2 : 1;
+        for (var i = 1; i <= count; i++)
+        {
+            var summoned = new MonsterInstance(template, i, gateGroup);
+            session.Monsters.Add(summoned);
+            events.Add(new CombatEvent($"{monster.DisplayName} gates in {summoned.DisplayName}!"));
+        }
+
+        return true;
+    }
+
+    private bool TryResolveVrockGate(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var (ability, templateName, percent) = HasSpecialAbility(monster, "Vrock Gate")
+            ? ("Vrock Gate", "Demon, Type I", 10)
+            : HasSpecialAbility(monster, "Hezrou Gate")
+                ? ("Hezrou Gate", "Demon, Type II ", 20)
+                : (string.Empty, string.Empty, 0);
+        if (ability.Length == 0 || _nightHagGateAttempted.Contains(monster)
+            || MonsterTemplateLookup == null || _dice.Roll(3) != 1)
+            return false;
+
+        _nightHagGateAttempted.Add(monster);
+        var roll = _dice.Roll(100);
+        var success = roll <= percent;
+        RuleApplicationInfo.Publish("AD&D", ability, $"{monster.DisplayName} attempts to gate in another demon of its kind",
+            $"May gate in another demon of its type ({percent}% chance of success); one attempt per encounter.",
+            "1", "100", roll.ToString(), success ? "Gate opens." : "Gate fails.");
+        if (!success)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} tries to gate in another demon but fails (roll {roll} vs {percent}%)."));
+            return true;
+        }
+
+        var template = MonsterTemplateLookup(templateName) ?? MonsterTemplateLookup(templateName.Trim());
+        if (template == null)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} opens a gate, but nothing answers."));
+            return true;
+        }
+
+        var summoned = new MonsterInstance(template, 1, $"gate-{monster.GroupId}-{_dice.Roll(10000)}");
+        session.Monsters.Add(summoned);
+        events.Add(new CombatEvent($"{monster.DisplayName} gates in {summoned.DisplayName}!"));
+        return true;
+    }
+
+    private bool TryResolveSuccubusPower(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var hasGate = HasSpecialAbility(monster, "Succubus Gate") && !_nightHagGateAttempted.Contains(monster);
+        var hasCharm = HasSpecialAbility(monster, "Charm Person");
+        if ((!hasGate && !hasCharm) || _dice.Roll(3) != 1)
+            return false;
+
+        if (hasGate && (!hasCharm || _dice.Roll(2) == 1))
+        {
+            if (MonsterTemplateLookup == null)
+                return false;
+
+            _nightHagGateAttempted.Add(monster);
+            var opens = _dice.Roll(100);
+            RuleApplicationInfo.Publish("AD&D", "Succubus Gate", $"{monster.DisplayName} attempts to gate in a demon",
+                "A succubus may gate in a type IV (70%), type VI (25%), or a demon lord/prince (5%); only a 40% chance that the gate opens.",
+                "1", "100", opens.ToString(), opens <= 40 ? "Gate opens." : "Gate fails.");
+            if (opens > 40)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} tries to gate in a demon but fails (roll {opens} vs 40%)."));
+                return true;
+            }
+
+            var kind = _dice.Roll(100);
+            var templateName = kind <= 70 ? "Demon, Type IV"
+                : kind <= 95 ? "Demon, Type VI"
+                : _dice.Roll(2) == 1 ? "Orcus" : "Demogorgon";
+            var template = MonsterTemplateLookup(templateName);
+            if (template == null)
+            {
+                events.Add(new CombatEvent($"{monster.DisplayName} opens a gate, but nothing answers."));
+                return true;
+            }
+
+            var summoned = new MonsterInstance(template, 1, $"gate-{monster.GroupId}-{_dice.Roll(10000)}");
+            session.Monsters.Add(summoned);
+            events.Add(new CombatEvent($"{monster.DisplayName} gates in {summoned.DisplayName}!"));
+            return true;
+        }
+
+        var targets = GetSpellAffectablePartyTargets(monster, session, events, "Charm Person")
+            .Where(t => !t.HasStatus(CharacterStatus.Charmed))
+            .ToList();
+        if (targets.Count == 0)
+            return false;
+
+        var target = targets[_dice.Roll(targets.Count) - 1];
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+        var saveRoll = _dice.Roll(20);
+        var saved = saveRoll >= saveTarget;
+        RuleApplicationInfo.Publish("AD&D", "Charm Person", $"{monster.DisplayName} on {target.Name}",
+            "Charm person at will; save vs. spell negates.", "1", "20", saveRoll.ToString(),
+            $"Save target {saveTarget}. {(saved ? "Saved." : "Failed; charmed.")}");
+        if (saved)
+        {
+            events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s Charm Person (save {saveRoll} vs {saveTarget})."));
+            return true;
+        }
+
+        target.AddStatus(CharacterStatus.Charmed);
+        events.Add(new CombatEvent($"{target.Name} is charmed by {monster.DisplayName} and will attack party allies."));
         return true;
     }
 
@@ -7005,7 +7586,7 @@ public sealed partial class CombatResolver
 
     private void ApplyFearAura(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
-        var usesWandSave = HasSpecialAbility(monster, "Erinyes Fear");
+        var usesWandSave = HasAnySpecialAbility(monster, "Erinyes Fear", "Radiate Fear");
         if (!usesWandSave && !HasSpecialAbility(monster, "Fear Aura"))
             return;
 
@@ -7121,7 +7702,8 @@ public sealed partial class CombatResolver
     private bool TryResolveBoneDevilSummon(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
         var isErinyesSummon = HasSpecialAbility(monster, "Summon Erinyes");
-        if (!isErinyesSummon && !HasSpecialAbility(monster, "Summon Bone Devil"))
+        var isBarbedSummon = HasSpecialAbility(monster, "Summon Barbed Devil");
+        if (!isErinyesSummon && !isBarbedSummon && !HasSpecialAbility(monster, "Summon Bone Devil"))
             return false;
 
         // One summoning attempt in roughly four rounds; total devils of this kind are capped to keep encounters bounded.
@@ -7132,7 +7714,7 @@ public sealed partial class CombatResolver
         if (session.AliveMonsters.Count(m => string.Equals(m.Template.Name, monster.Template.Name, StringComparison.OrdinalIgnoreCase)) >= maxDevils)
             return false;
 
-        var successChance = isErinyesSummon ? 25 : 40;
+        var successChance = isBarbedSummon ? 30 : isErinyesSummon ? 25 : 40;
         var roll = _dice.Roll(100);
         var success = roll <= successChance;
         RuleApplicationInfo.Publish(
@@ -7450,7 +8032,7 @@ public sealed partial class CombatResolver
 
     private static void ApplyMonsterRegeneration(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
-        if (!HasSpecialAbility(monster, "Regeneration"))
+        if (!HasMonsterRegeneration(monster))
             return;
 
         if (session != null && session.GetMonsterWoundingActiveCount(monster) > 0)
@@ -7472,6 +8054,10 @@ public sealed partial class CombatResolver
             events.Add(new CombatEvent($"{monster.DisplayName} regenerates {healed} HP. HP {before}->{monster.CurrentHitPoints}."));
     }
 
+    public static bool HasMonsterRegeneration(MonsterInstance monster)
+        => GetMonsterAbilityNames(monster)
+            .Any(n => n != null && n.TrimStart().StartsWith("Regeneration", StringComparison.OrdinalIgnoreCase));
+
     private static int GetMonsterRegenerationPerRound(MonsterInstance monster)
     {
         if (monster?.Template?.SpecialDefenses == null)
@@ -7479,8 +8065,13 @@ public sealed partial class CombatResolver
 
         foreach (var defense in monster.Template.SpecialDefenses)
         {
-            if (!string.Equals(defense?.Name?.Trim(), "Regeneration", StringComparison.OrdinalIgnoreCase))
+            var defenseName = defense?.Name?.Trim() ?? string.Empty;
+            if (!defenseName.StartsWith("Regeneration", StringComparison.OrdinalIgnoreCase))
                 continue;
+
+            var nameMatch = Regex.Match(defenseName, @"(\d+)\s*(?:hp|hit\s*points?)", RegexOptions.IgnoreCase);
+            if (nameMatch.Success && int.TryParse(nameMatch.Groups[1].Value, out var fromName) && fromName > 0)
+                return fromName;
 
             var description = defense.Description ?? string.Empty;
             var m = Regex.Match(description, @"regenerates\s+(?<n>\d+)\s*(?:hit\s*points|hp)", RegexOptions.IgnoreCase);
@@ -10437,6 +11028,9 @@ public sealed partial class CombatResolver
 
     private static bool IsMummyAndVulnerableToImprovisedAntiUndeadWeapon(MonsterInstance target, Item? weapon)
     {
+        if (SpellDamageSaveHelper.IsWraith(target))
+            return IsHolyWaterWeapon(weapon);
+
         return SpellDamageSaveHelper.IsMummy(target)
                && (IsTorchWeapon(weapon) || IsBurningOilWeapon(weapon) || IsHolyWaterWeapon(weapon));
     }
@@ -11233,7 +11827,7 @@ public sealed partial class CombatResolver
         if (target?.Template == null)
             return false;
 
-        if (HasSpecialAbility(target, "Regeneration"))
+        if (HasMonsterRegeneration(target))
             return true;
 
         var composite = string.Join(" ",

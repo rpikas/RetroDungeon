@@ -109,6 +109,7 @@ public sealed class CombatCoordinator
             new ChantHandler(),
             new PrayerHandler(),
             new PyrotechnicsHandler(),
+            new ProduceFlameHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
             new Silence15RadiusHandler(),
@@ -155,6 +156,7 @@ public sealed class CombatCoordinator
             new PowerWordKillHandler(),
             new ColorSprayHandler(),
             new FearHandler(),
+            new TelekinesisHandler(),
             new ConfusionDruidHandler(),
             new ParalyzationHandler(),
             new PhantasmalForceHandler(),
@@ -244,6 +246,7 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+            HandleTelekinesisPrompts(owner, session, roundEvents);
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
@@ -322,6 +325,7 @@ public sealed class CombatCoordinator
 
                    var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
                    HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+                   HandleTelekinesisPrompts(owner, session, roundEvents);
                    ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
                    RoundResolved?.Invoke(session);
                    ShowRoundEvents(owner, roundEvents, session);
@@ -405,6 +409,7 @@ public sealed class CombatCoordinator
 
             var roundEvents = _combatResolver.ResolveRound(session, encounterForm.SelectedActions);
             HandleRotGrubFlamePrompts(owner, session, roundEvents, characterRepository);
+            HandleTelekinesisPrompts(owner, session, roundEvents);
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session);
@@ -2917,6 +2922,87 @@ public sealed class CombatCoordinator
             sb.AppendLine(e.Message);
 
         Say(owner, "Combat Round", sb.ToString(), session);
+    }
+
+    private void HandleTelekinesisPrompts(IWin32Window owner, CombatSession session, List<CombatEvent> roundEvents)
+    {
+        var names = roundEvents
+            .Select(e => e.Message)
+            .Where(m => m.StartsWith(CombatResolver.TelekinesisPromptPrefix, StringComparison.Ordinal))
+            .Select(m => m.Substring(CombatResolver.TelekinesisPromptPrefix.Length).Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (names.Count == 0)
+            return;
+
+        roundEvents.RemoveAll(e => e.Message.StartsWith(CombatResolver.TelekinesisPromptPrefix, StringComparison.Ordinal));
+
+        foreach (var name in names)
+        {
+            var victim = session.Party.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (victim == null || !_combatResolver.HasThrownWeapon(victim) || session.Outcome != CombatOutcome.InProgress)
+                continue;
+
+            var spares = victim.Inventory
+                .Where(i => i.Type == ItemType.Weapon && !i.RequiresAmmo && i.Slot == EquipmentSlot.MainHand)
+                .ToList();
+
+            var options = new List<string> { "R)un and get the weapon (2 rounds)" };
+            options.AddRange(spares.Select(s => $"E)quip {s.Name} from inventory"));
+            options.Add("F)ight with bare hands");
+
+            var picked = PromptChoice(owner, "Telekinesis", $"{victim.Name}'s weapon was thrown 20 feet away! Choose:", options);
+            if (picked <= 0)
+                _combatResolver.ApplyTelekinesisChoice(victim, 'R', null, roundEvents);
+            else if (picked <= spares.Count)
+                _combatResolver.ApplyTelekinesisChoice(victim, 'E', spares[picked - 1], roundEvents);
+            else
+                _combatResolver.ApplyTelekinesisChoice(victim, 'F', null, roundEvents);
+        }
+    }
+
+    private static int PromptChoice(IWin32Window owner, string title, string question, List<string> options)
+    {
+        var result = 0;
+        using var form = new Form
+        {
+            Text = title,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MinimizeBox = false,
+            MaximizeBox = false,
+            ShowInTaskbar = false,
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor,
+            ClientSize = new Size(620, 70 + options.Count * 44)
+        };
+
+        form.Controls.Add(new Label { Left = 16, Top = 14, Width = 588, Height = 40, Text = question, ForeColor = form.ForeColor });
+        for (var i = 0; i < options.Count; i++)
+        {
+            var index = i;
+            var button = new Button
+            {
+                Left = 16,
+                Top = 60 + i * 44,
+                Width = 588,
+                Height = 38,
+                Text = options[i],
+                ForeColor = form.ForeColor,
+                BackColor = Color.Black,
+                FlatStyle = FlatStyle.Flat
+            };
+            button.Click += (_, _) =>
+            {
+                result = index;
+                form.DialogResult = DialogResult.OK;
+            };
+            form.Controls.Add(button);
+        }
+
+        form.ShowDialog(owner);
+        return result;
     }
 
     private void HandleRotGrubFlamePrompts(IWin32Window owner, CombatSession session, List<CombatEvent> roundEvents, CharacterRepository characterRepository)

@@ -69,6 +69,7 @@ public sealed class CampCharacterInspectForm : Form
             new SummonInsectsHandler(),
             new SnareHandler(),
             new PyrotechnicsHandler(),
+            new ProduceFlameHandler(),
             new CallLightningHandler(),
             new EntangleHandler(),
             new Silence15RadiusHandler(),
@@ -109,6 +110,7 @@ public sealed class CampCharacterInspectForm : Form
             new PowerWordStunHandler(),
             new PowerWordKillHandler(),
             new FearHandler(),
+            new TelekinesisHandler(),
             new ParalyzationHandler(),
             new PhantasmalForceHandler()
         });

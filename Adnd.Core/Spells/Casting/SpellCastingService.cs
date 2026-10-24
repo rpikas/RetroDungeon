@@ -404,7 +404,7 @@ public sealed class SpellCastingService
             return false;
 
         var monster = ResolveEnemyTarget(target, request);
-        return monster != null && IsMummy(monster);
+        return monster != null && (IsMummy(monster) || Handlers.SpellDamageSaveHelper.IsWraith(monster));
     }
 
     private static MonsterInstance? ResolveEnemyTarget(SpellCastTarget target, SpellCastRequest request)
