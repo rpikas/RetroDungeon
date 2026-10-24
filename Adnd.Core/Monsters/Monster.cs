@@ -18,6 +18,7 @@ public class Monster
     public string MovementRate { get; set; } = string.Empty;//TBD string should be an enum
     public int HitDice { get; set; }//number of dices, default is d8. so for example 2 means 2d8 as default.
     public int HitDiceType { get; set; }//the type of dice for hit points, default is d8. so for example 6 means 2d6 as default if HitDice is 2
+    public List<int>? HitDiceOptions { get; set; }//optional: each instance picks one of these hit dice counts (e.g. 8, 12 or 16) instead of HitDice for rolling hit points
     public int ExtraHitPoints { get; set; }//extra hit points to add to the rolled hit points, default is 0
     public int THAC0 { get; set; }
     public int NumberOfAttacks { get; set; }

@@ -511,6 +511,14 @@ internal static class SpellDamageSaveHelper
             adjustedRolledDamage += fireDamageDiceCount;
         }
 
+        if (adjustedRolledDamage > 0
+            && fireDamageDiceCount > 0
+            && IsFireOrHeatSpell(spellName)
+            && HasSpecialDefense(monster, "Magical Fire -1 Per Die"))
+        {
+            adjustedRolledDamage = Math.Max(0, adjustedRolledDamage - fireDamageDiceCount);
+        }
+
         if (HasSpecialDefense(monster, "Blink"))
             adjustedRolledDamage = Math.Max(0, adjustedRolledDamage / 2);
 

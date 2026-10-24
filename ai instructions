@@ -5817,7 +5817,191 @@ is rolled and a 0 comes up, so total life span is 1281 years (1201
 + 80 
 + 0 
 = 1281).
-
+___
 Implement Ring of Three Wishes
 
 if old ui setting is true make the wish dialog look similar to other old ui style dialogs
+___
+FREETI 
+FREQUENCY: Very rare 
+NO. APPEARING: I 
+ARMORCLASS: 2 
+MOVE: 9"/24" 
+HIT DICE: 10 
+% IN LAIR: Nil 
+TREASURE TYPE: Nil 
+NO. OF ATTACKS: I 
+DAMAGE/ATTACK: 3-24 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: Nil 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Very 
+ALIGNMENT: Neutral (tend 
+towards lawful evil) 
+SIZE: 1 (12' tall) 
+PSIONICABILITY: Nil 
+Attack/Defense Modes: Nil 
+The efreet are creatures from the Elemental Plane of Fire, just as djinn 
+come from Plane of Air. They are enemies of the djinn and will always 
+attack when they encounter them. An efreeti can be forced to serve for a 
+maximum of 1,001 days or by causing it to fulfill three wishes. They are not 
+willing servants, and they will seek to pervert the intent of their masters by 
+adhering to the letter of commands. 
+An efreeti is able to do the following once per day: grant up to three 
+wishes (and go free), become invisible, assume gaseous form, detect 
+magic, enlarge (as o 10th level magic-user), polymorph self, create an 
+illusion with both visual and audial components which will last without 
+concentration until magically dispelled or touched, or create a wall of fire. 
+An efreeti can also produce flame or cause pyrotechnics as often as 
+desired. Attacks based on fire do no harm to efreet if the fire is of the 
+"normal" sort; magical fire attacks are at -1 on both "to hit" and damage 
+dice. 
+Efreet can carry up to 7,500 gold pieces weight, afoot or flying, without 
+tiring. They can carry double weight for only a limited time - three turns 
+afoot or but one turn aloft. For each 1.500 gold pieces of weight under 
+15,000 add one turn to either walking or flying time permitted. After 
+carrying excess weight the efreeti must rest for six full turns. 
+The fabled City of Brass, citadel of the Efreet, is on the plane from whence 
+they come. Capture of an efreeti is possible there, but tens or even 
+hundreds of efreet would possibly have to be faced also. Efreet ore 
+infamous for their dislike of servitude, their desire for revenge, their cruel 
+nature, and their ability to mislead. A powerful Sultan rules the Efreet. He 
+is served by many different sorts of nobles and officials (pashas, deys, 
+amirs, valis, and maliks). 
+The efreet are able to comrnunicote with any intelligent creature they 
+encounter by means of a limited form o
+
+An efreeti is able to do the following once per day: grant up to three 
+wishes
+
+Air Elemental 
+FREQUENCY: Very rare 
+NO. APPEARING: 1 
+ARMOR CLASS: 2 
+MOVE: 36" 
+HIT DICE: 8, 12 or 16 
+% IN LAIR: Nil 
+TREASURE TYPE: Nil 
+NO. OF ATTACKS: 1 
+DAMAGE/ATTACK: 2-20 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: +2 or better 
+weapon to hit 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: low 
+ALIGNMENT: Neutral 
+SIZE: 1 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+I.' 
+. . 
+Air elementals' only mode of locomotion is by "flying." They can, of 
+course, move at slower than the speed listed. If in combat in the air they 
+gain a 
++ 1 on hit probability and a +2 on each die of damage they cause. 
+Upon command an air elemental can form a whirlwind - a truncated 
+reverse cone, with a 2" bottom diameter, a 6" top diameter, and a height 
+in inches equal to the elementals' number of hit dice, i.e. 8". 12" or 16". If 
+the full height of the whirlwind can't be attained due to some overhead 
+obstruction, the whirlwind is only half strength. A full strength air 
+elemental whirlwind lasts for 1 melee round, sweeps away and kills all 
+creatures under three hit dice, and causes 2-16 hit points of damage on all 
+non-aerial creatures which it fails to kill outright. Formation of this 
+whirlwind or dissipation of it requires one full turn. 
+
+Hill Giant 
+FREQUENCY: Common 
+NO. APPEARING: I- 10 
+ARMOR CLASS: 4 
+MOVE: 12” 
+HIT DICE: 8 + 1-2 
+Yo IN LAIR: 25% 
+TREASURE TYPE: D 
+NO. OF AttACKS: 1 
+DAMAGE/AttACK: 2- 16 
+SPECIAL ATTACKS: Hurling rocks 
+for 2- 16 hit points 
+SPECIAL DEFENSES: See below 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Low 
+ALIGNMENT: Chaotic evil 
+SIZE: L (10%’ tall) 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Hill giants always dwell in caves or similar underground habitations. These 
+lairs are typically of foresoken areas. Hill giants sometimes have other 
+creatures in their lairs to act as guards; this is 50% likely, and the guarding 
+creatures will be 2-8 dire wolves (SO%), 1-3 giant lizards (30%) or a group 
+of 2-8 ogres (20%). If more than 4 hill giants are encountered in their lair 
+numbers 5, 7, and 9 will be giantesses (6 hit dice, and treat as ogres for 
+damage/attack) and 6, 8, and 10 will be young hill giants (roll percentile 
+dice for size). 
+Adult hill giants are able to hurl rocks from 1” to 20” distances, inflicting 2- 
+16 hit points of damage. They are able to catch similar missiles 30% of the 
+time. 50% of hill giants also speak ogre. 
+Description: Hill giants have tan to reddish brown skins, brown to black 
+hair, and red-rimmed eyes. They typically dress in rough hides or skins. 
+They use any form of weapon available but favor clubs. 
+
+Fire Giant 
+FREQUENCY: Uncommon 
+NO. APPEARING: 1-8 
+ARMOR CLASS: 3 
+MOVE: 12" 
+HIT DICE: 11 + 2-5 
+Yo IN LAIR: 35% 
+TREASURE TYPE: E 
+NO. OF ATTACKS: I 
+DAMAGEIATTACK: 5-30 
+SPECIAL ATTACKS: Hurling rocks 
+for 2-20 hit points 
+SPECIAL DEFENSES: Impervious tc 
+fire 
+MAGIC RESISTANCE: Standard 
+INTELLIGENCE: Average to low 
+ALIGNMENT: Lawful evil 
+SIZE L ( 12'toll) 
+PSIONICABILITY: Nil 
+Attack/Defense Modes: Nil 
+Fire giants are os often found in castles as in caverns. If found in their lair it 
+is 25% likely that they will have 1-4 hell hounds of the largest size os watch 
+dogs. If more than 4 fire giants are encountered in their lair the additional 
+ones will be females (corresponding to frost giants for hit dice and 
+damage/attack), except that if 7 or 8 are encountered the last one or two 
+will be young (roll percentile dice for size). 
+Adult fire giants are able to hurl rocks from 1" to 20" distances, inflic!ing 2- 
+20 hit points of damage. They can catch like missiles 50% of the time. Fire 
+giants ore impervious to fire, even red dragon breath. 
+Description: Fire gionts are very broad (about 6' at the shoulders), looking 
+almost like dwarves. Their skins are coal block, hoir is flaming red or bright 
+orange, and eyes are deep red. Their teeth are usually yellow orange. 
+They wear armor or dragon hides. They favor huge swords.
+74
+give movement= running speed to all npcs accordinv to this table
+Class
+Movement
+Assassin
+12
+Bard
+12
+Cleric
+9
+Druid
+12
+Fighter
+6
+Illusionist
+12
+Magic-User
+12
+Monk
+12
+Paladin
+6
+Ranger
+9
+Thief
+12
+
+
+

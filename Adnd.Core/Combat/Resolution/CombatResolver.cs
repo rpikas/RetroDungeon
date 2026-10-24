@@ -235,6 +235,9 @@ public sealed partial class CombatResolver
     private readonly Dictionary<MonsterInstance, bool> _iceDevilSpears = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly Dictionary<MonsterInstance, int> _hornedWeapons = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<MonsterInstance> _wallOfFireUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _whirlwindUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly HashSet<MonsterInstance> _rockHurlOpened = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
+    private readonly Dictionary<MonsterInstance, int> _whirlwindPhase = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly HashSet<string> _bleedingCharacters = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<MonsterInstance> _iceStormUsed = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
     private readonly Dictionary<string, int> _frightenedRounds = new(StringComparer.OrdinalIgnoreCase);
@@ -1174,6 +1177,15 @@ public sealed partial class CombatResolver
                 continue;
 
             if (TryResolveHornedWallOfFire(session, monster, events))
+                continue;
+
+            if (TryResolveEfreetiWish(session, monster, events))
+                continue;
+
+            if (TryResolveAirElementalWhirlwind(session, monster, events))
+                continue;
+
+            if (TryResolveHurlRocks(session, monster, events))
                 continue;
 
             if (TryResolveVrockGate(session, monster, events))
@@ -6644,6 +6656,9 @@ public sealed partial class CombatResolver
         _iceStormUsed.Clear();
         _hornedWeapons.Clear();
         _wallOfFireUsed.Clear();
+        _whirlwindUsed.Clear();
+        _rockHurlOpened.Clear();
+        _whirlwindPhase.Clear();
         _bleedingCharacters.Clear();
         foreach (var (owner, weapon) in _thrownWeapons.Values)
             owner.Inventory.Add(weapon);
@@ -7065,18 +7080,22 @@ public sealed partial class CombatResolver
 
     private bool TryResolveHornedWallOfFire(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
-        if (!HasSpecialAbility(monster, "Wall of Fire") || _wallOfFireUsed.Contains(monster) || _dice.Roll(3) != 1)
+        var normalWall = HasSpecialAbility(monster, "Wall of Fire (Normal)");
+        if ((!normalWall && !HasSpecialAbility(monster, "Wall of Fire")) || _wallOfFireUsed.Contains(monster) || _dice.Roll(3) != 1)
             return false;
 
         var party = session.ExposedParty.Where(IsAlive).ToList();
         if (party.Count == 0)
             return false;
 
+        var diceCount = normalWall ? 1 : 3;
         _wallOfFireUsed.Add(monster);
-        events.Add(new CombatEvent($"{monster.DisplayName} raises a wall of fire of triple strength!"));
+        events.Add(new CombatEvent(normalWall
+            ? $"{monster.DisplayName} raises a wall of fire!"
+            : $"{monster.DisplayName} raises a wall of fire of triple strength!"));
         foreach (var target in party)
         {
-            var damage = _dice.RollMany(8, 3);
+            var damage = _dice.RollMany(8, diceCount);
             var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(target, _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
             var saveRoll = _dice.Roll(20);
             var saved = saveRoll >= saveTarget;
@@ -7084,7 +7103,7 @@ public sealed partial class CombatResolver
             var before = target.CurrentHitPoints;
             target.CurrentHitPoints = Math.Max(0, before - applied);
             WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
-            events.Add(new CombatEvent($"{target.Name} is scorched for {before - target.CurrentHitPoints} damage (3d8, {(saved ? "saved for half" : "no save")}: {saveRoll} vs {saveTarget}). HP {before}->{target.CurrentHitPoints}."));
+            events.Add(new CombatEvent($"{target.Name} is scorched for {before - target.CurrentHitPoints} damage ({diceCount}d8, {(saved ? "saved for half" : "no save")}: {saveRoll} vs {saveTarget}). HP {before}->{target.CurrentHitPoints}."));
             if (target.CurrentHitPoints <= 0)
             {
                 target.AddStatus(CharacterStatus.Dead);
@@ -7092,6 +7111,166 @@ public sealed partial class CombatResolver
             }
         }
 
+        return true;
+    }
+
+    private bool TryResolveHurlRocks(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        var hurlAbility = monster.Template.SpecialAttacks
+            .Select(a => a?.Name?.Trim() ?? string.Empty)
+            .Select(n => Regex.Match(n, @"^Hurl Rocks(?:\s*\((\d+)d(\d+)\))?$", RegexOptions.IgnoreCase))
+            .FirstOrDefault(m => m.Success);
+        if (hurlAbility == null)
+            return false;
+
+        var diceCount = hurlAbility.Groups[1].Success ? int.Parse(hurlAbility.Groups[1].Value) : 2;
+        var dieSides = hurlAbility.Groups[2].Success ? int.Parse(hurlAbility.Groups[2].Value) : 8;
+        // A giant opens by hurling a rock as the party closes in; afterwards it only occasionally throws instead of striking.
+        var opened = _rockHurlOpened.Contains(monster);
+        if (opened && _dice.Roll(4) != 1)
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        _rockHurlOpened.Add(monster);
+        var target = party[_dice.Roll(party.Count) - 1];
+        var needed = Math.Clamp(GetMonsterThac0(monster) - target.ArmorClass, 1, 20);
+        var roll = _dice.Roll(20);
+        if (roll < needed)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} hurls a rock at {target.Name} but misses (rolled {roll}, needed {needed})."));
+            return true;
+        }
+
+        var damage = _dice.RollMany(dieSides, diceCount);
+        var before = target.CurrentHitPoints;
+        target.CurrentHitPoints = Math.Max(0, before - damage);
+        var actual = before - target.CurrentHitPoints;
+        WakeCharacterIfAsleepAfterDamage(target, actual, events);
+        events.Add(new CombatEvent($"{monster.DisplayName} hurls a rock at {target.Name} for {actual} damage ({diceCount}d{dieSides}; rolled {roll}, needed {needed}). HP {before}->{target.CurrentHitPoints}."));
+        if (target.CurrentHitPoints <= 0)
+        {
+            target.AddStatus(CharacterStatus.Dead);
+            events.Add(new CombatEvent($"{target.Name} is slain!"));
+        }
+
+        return true;
+    }
+
+    private bool TryResolveAirElementalWhirlwind(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Whirlwind"))
+            return false;
+
+        _whirlwindPhase.TryGetValue(monster, out var phase);
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+
+        if (phase == 0)
+        {
+            if (party.Count == 0 || _whirlwindUsed.Contains(monster) || _dice.Roll(3) != 1)
+                return false;
+
+            _whirlwindUsed.Add(monster);
+            _whirlwindPhase[monster] = 1;
+            events.Add(new CombatEvent($"{monster.DisplayName} spins up a whirlwind {monster.InstanceHitDice}\" high; it needs this whole turn to form."));
+            return true;
+        }
+
+        if (phase == 2)
+        {
+            _whirlwindPhase.Remove(monster);
+            events.Add(new CombatEvent($"{monster.DisplayName} spends its turn dissipating the whirlwind."));
+            return true;
+        }
+
+        _whirlwindPhase[monster] = 2;
+        events.Add(new CombatEvent($"The whirlwind of {monster.DisplayName} tears across the party!"));
+        foreach (var target in party)
+        {
+            if (target.Level < 3)
+            {
+                target.CurrentHitPoints = 0;
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} (under 3 hit dice) is swept away and killed!"));
+                continue;
+            }
+
+            var damage = _dice.RollMany(8, 2);
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, before - damage);
+            WakeCharacterIfAsleepAfterDamage(target, before - target.CurrentHitPoints, events);
+            events.Add(new CombatEvent($"{target.Name} is battered by the whirlwind for {before - target.CurrentHitPoints} damage (2d8). HP {before}->{target.CurrentHitPoints}."));
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is slain!"));
+            }
+        }
+
+        return true;
+    }
+
+    private bool TryResolveEfreetiWish(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Grant Wishes") || _dice.Roll(4) != 1)
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        var target = party[_dice.Roll(party.Count) - 1];
+        events.Add(new CombatEvent($"{monster.DisplayName} offers to grant {target.Name} a wish -- and twists its meaning to the letter!"));
+
+        var outcome = _dice.Roll(4);
+        if (outcome == 2 && target.Inventory.Count == 0)
+            outcome = 4;
+
+        switch (outcome)
+        {
+            case 1:
+            {
+                var before = target.CurrentHitPoints;
+                target.CurrentHitPoints = Math.Max(1, before / 2);
+                events.Add(new CombatEvent($"The wish for vigor drains {target.Name}'s life force. HP {before}->{target.CurrentHitPoints}."));
+                break;
+            }
+            case 2:
+            {
+                var item = target.Inventory[_dice.Roll(target.Inventory.Count) - 1];
+                target.Inventory.Remove(item);
+                events.Add(new CombatEvent($"The wish for treasure makes {target.Name}'s {item.Name} vanish forever."));
+                break;
+            }
+            case 3:
+            {
+                var scores = target.Abilities;
+                switch (_dice.Roll(6))
+                {
+                    case 1: scores.Strength = Math.Max(3, scores.Strength - 1); break;
+                    case 2: scores.Intelligence = Math.Max(3, scores.Intelligence - 1); break;
+                    case 3: scores.Wisdom = Math.Max(3, scores.Wisdom - 1); break;
+                    case 4: scores.Dexterity = Math.Max(3, scores.Dexterity - 1); break;
+                    case 5: scores.Constitution = Math.Max(3, scores.Constitution - 1); break;
+                    default: scores.Charisma = Math.Max(3, scores.Charisma - 1); break;
+                }
+
+                events.Add(new CombatEvent($"The wish for power curses {target.Name}: one ability score permanently drops by 1."));
+                break;
+            }
+            default:
+                target.AdvanceAgeByDays(10 * 365);
+                events.Add(new CombatEvent($"The wish for long life ages {target.Name} by 10 years (now {target.Age})."));
+                if (target.DiedOfOldAge)
+                    events.Add(new CombatEvent($"{target.Name} dies of old age!"));
+                break;
+        }
+
+        monster.HasFled = true;
+        monster.CurrentHitPoints = 0;
+        events.Add(new CombatEvent($"{monster.DisplayName} is free and vanishes in a puff of smoke."));
         return true;
     }
 
@@ -11606,7 +11785,7 @@ public sealed partial class CombatResolver
             if (string.IsNullOrWhiteSpace(text))
                 continue;
 
-            var match = Regex.Match(text, @"\+(\d+)\s*or\s*better\s*weapons\s*to\s*hit", RegexOptions.IgnoreCase);
+            var match = Regex.Match(text, @"\+(\d+)\s*or\s*better\s*weapons?\s*to\s*hit", RegexOptions.IgnoreCase);
             if (match.Success && int.TryParse(match.Groups[1].Value, out var parsed))
                 required = Math.Max(required, Math.Max(0, parsed));
         }

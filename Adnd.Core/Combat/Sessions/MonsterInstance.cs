@@ -15,8 +15,13 @@ public sealed class MonsterInstance
         Name = template.Name;
         InstanceMonsterType = template.Type;
 
+        var options = template.HitDiceOptions;
+        InstanceHitDice = options is { Count: > 0 }
+            ? options[Random.Shared.Next(options.Count)]
+            : template.HitDice;
+
         // Roll HP based on HitDice (1d8 per hit die)
-        var rolledHitPoints = RollHitPoints(template.HitDice, template.HitDiceType, template.ExtraHitPoints);
+        var rolledHitPoints = RollHitPoints(InstanceHitDice, template.HitDiceType, template.ExtraHitPoints);
         MaxHitPoints = rolledHitPoints;
         CurrentHitPoints = rolledHitPoints;
         BaseArmorClass = template.ArmorClass;
@@ -37,6 +42,7 @@ public sealed class MonsterInstance
     }
 
     public Monster Template { get; }
+    public int InstanceHitDice { get; }
     public int Index { get; }
     public string GroupId { get; }
     public string Name { get; }

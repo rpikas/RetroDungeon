@@ -1864,9 +1864,9 @@ public class Character
             ? Math.Max(1, DualClassOriginalLevel)
             : GetClassLevel(primaryClass);
 
-        var baseMove = (primaryClass == CharacterClass.Monk || monkOriginalUnlocked) && IsMonk()
-            ? GetMonkMove(effectiveLevel)
-            : 12;
+        var baseMove = monkOriginalUnlocked
+            ? GetClassRunSpeed(CharacterClass.Monk)
+            : (Classes.Count > 0 ? Classes.Min(GetClassRunSpeed) : GetClassRunSpeed(primaryClass));
 
         var armorMove = GetArmorMoveLimit();
         Move = IsWearingBodyArmor() ? Math.Min(baseMove, armorMove) : baseMove;
@@ -2035,6 +2035,15 @@ public class Character
             _ => -3
         };
     }
+
+    private static int GetClassRunSpeed(CharacterClass characterClass) => characterClass switch
+    {
+        CharacterClass.Cleric => 9,
+        CharacterClass.Ranger => 9,
+        CharacterClass.Fighter => 6,
+        CharacterClass.Paladin => 6,
+        _ => 12
+    };
 
     private static int GetMonkMove(int level)
     {

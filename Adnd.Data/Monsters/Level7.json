@@ -63,6 +63,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 4,
       "ExtraHitPoints": 2,
@@ -99,6 +100,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
+      "Movement": 9,
       "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -136,6 +138,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
+      "Movement": 6,
       "HitDice": 7,
       "HitDiceType": 10,
       "ExtraHitPoints": 0,
@@ -168,6 +171,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
@@ -209,6 +213,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 4,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -246,6 +251,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
@@ -283,6 +289,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 6,
       "ExtraHitPoints": 0,
@@ -320,6 +327,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -357,6 +365,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 5,
+      "Movement": 9,
       "HitDice": 7,
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
@@ -389,6 +398,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 6,
+      "Movement": 12,
       "HitDice": 7,
       "HitDiceType": 4,
       "ExtraHitPoints": 2,
@@ -426,6 +436,7 @@
       "NumberOfAppearancesMin": 2,
       "NumberOfAppearancesMax": 5,
       "ArmorClass": 3,
+      "Movement": 6,
       "HitDice": 7,
       "HitDiceType": 10,
       "ExtraHitPoints": 0,
@@ -1086,7 +1097,7 @@
     {
       "Name": "Efreeti",
       "Type": "Genie",
-      "Frequency": "Uncommon",
+      "Frequency": "Very rare",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 1,
       "ArmorClass": 2,
@@ -1106,14 +1117,22 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Magic Use",
-          "Description": "Can use genie spell-like abilities including illusions, wall of fire, and limited wishes."
+          "Name": "Wall of Fire (Normal)",
+          "Description": "Once per encounter an efreeti may raise a wall of fire: 1d8 fire damage to every party member (save vs. spell for half)."
+        },
+        {
+          "Name": "Grant Wishes",
+          "Description": "A hostile efreeti may grant a wish, twisting it to the letter (HP halved, item lost, ability -1 or 10 years of aging), and then goes free."
+        },
+        {
+          "Name": "Create Illusion",
+          "Description": "Can create a lasting illusion with visual and audial components (listed only)."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Fire Resistance",
-          "Description": "Takes reduced damage from fire; immune to normal fire."
+          "Name": "Magical Fire -1 Per Die",
+          "Description": "Normal fire does no harm; magical fire attacks do 1 less damage per die."
         }
       ],
       "MagicResistance": "Standard",
@@ -1135,6 +1154,7 @@
       "ArmorClass": 2,
       "Movement": 36,
       "HitDice": 12,
+      "HitDiceOptions": [ 8, 12, 16 ],
       "HitDiceType": 8,
       "ExtraHitPoints": 0,
       "%InLair": "0",
@@ -1150,12 +1170,12 @@
       "SpecialAttacks": [
         {
           "Name": "Whirlwind",
-          "Description": "Forms a whirlwind equal in height to its HD; kills creatures under 3 HD and deals 2–16 damage to non‑aerial creatures."
+          "Description": "Takes a turn to form (height in inches equals its HD), then sweeps the party for one round: creatures under 3 HD are killed, all others take 2d8. Takes a further turn to dissipate. Once per encounter."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "+2 Weapon Immunity",
+          "Name": "+2 or better weapon to hit",
           "Description": "Requires +2 or better weapon to hit."
         }
       ],
@@ -1217,7 +1237,7 @@
       "Type": "Giant",
       "Frequency": "Common",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 10,
       "ArmorClass": 4,
       "Movement": 12,
       "HitDice": 8,
@@ -1228,12 +1248,17 @@
       "IndividualTreasure": "",
       "Attacks": [
         {
-          "Name": "Throw rock",
+          "Name": "Club",
           "NumberOfAttacks": 1,
-          "Damage": "2d16"
+          "Damage": "2d8"
         }
       ],
-      "SpecialAttacks": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Hurl Rocks (2d8)",
+          "Description": "Hurls rocks from 1\" to 20\" for 2-16 damage; opens a fight by throwing a rock, then occasionally throws instead of striking."
+        }
+      ],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Strength": 22,
@@ -1251,12 +1276,12 @@
       "Type": "Giant",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 3,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 0,
       "Movement": 12,
       "HitDice": 9,
       "HitDiceType": 8,
-      "ExtraHitPoints": 1,
+      "ExtraHitPoints": 2,
       "%InLair": "30",
       "TreasureType": "D",
       "IndividualTreasure": "",
@@ -1269,8 +1294,8 @@
       ],
       "SpecialAttacks": [
         {
-          "Name": "Rock Throwing",
-          "Description": "Can hurl rocks for 3–30 damage at ranges from 1” to 30”."
+          "Name": "Hurl Rocks (3d10)",
+          "Description": "Hurls rocks from 1\" to 30\" for 3-30 damage; opens a fight by throwing a rock, then occasionally throws instead of striking."
         }
       ],
       "SpecialDefenses": [
@@ -1295,12 +1320,12 @@
       "Type": "Giant",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 2,
+      "NumberOfAppearancesMax": 8,
       "ArmorClass": 3,
       "Movement": 12,
       "HitDice": 11,
       "HitDiceType": 8,
-      "ExtraHitPoints": 2,
+      "ExtraHitPoints": 3,
       "%InLair": "35",
       "TreasureType": "E",
       "IndividualTreasure": "",
@@ -1311,11 +1336,16 @@
           "Damage": "5d6"
         }
       ],
-      "SpecialAttacks": [],
+      "SpecialAttacks": [
+        {
+          "Name": "Hurl Rocks (2d10)",
+          "Description": "Hurls rocks from 1\" to 20\" for 2-20 damage; opens a fight by throwing a rock, then occasionally throws instead of striking."
+        }
+      ],
       "SpecialDefenses": [
         {
-          "Name": "Fire Immunity",
-          "Description": "Completely impervious to fire."
+          "Name": "Immunity to fire and heat",
+          "Description": "Impervious to fire, even red dragon breath."
         }
       ],
       "MagicResistance": "Standard",
