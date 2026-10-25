@@ -954,6 +954,12 @@
       "Alignment": "Chaotic evil",
       "MagicResistance": "Standard",
       "Strength": 18,
+      "SpecialAbilities": [
+        {
+          "Name": "Level 6 Magic-User spells",
+          "Description": "Access to 1st–6th level spells."
+        }
+      ],
       "SpecialAttacks": [
         {
           "Name": "Energy Drain",

@@ -448,6 +448,15 @@ internal static class SpellDamageSaveHelper
             return new Outcome(0, 0, clayDamage == 0, clayDamage, clayBefore, monster.CurrentHitPoints, clayBefore - monster.CurrentHitPoints, false, null, null);
         }
 
+        if (HasSpecialDefense(monster, "Green Slime Spell Reaction"))
+        {
+            var slimeBefore = monster.CurrentHitPoints;
+            if (IsFireOrHeatSpell(spellName ?? string.Empty) || IsColdSpell(spellName ?? string.Empty))
+                monster.CurrentHitPoints = 0;
+
+            return new Outcome(0, 0, true, 0, slimeBefore, monster.CurrentHitPoints, slimeBefore - monster.CurrentHitPoints, false, null, null);
+        }
+
         if (HasSpecialDefense(monster, "Anti-magic Ray"))
             return new Outcome(0, 0, true, 0, monster.CurrentHitPoints, monster.CurrentHitPoints, 0, false, null, null);
 

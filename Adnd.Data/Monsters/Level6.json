@@ -577,7 +577,7 @@
           "Damage": "2d8"
         }
       ],
-      "SpecialAttacks": [ ],
+      "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Average-high",
@@ -909,7 +909,7 @@
       "Type": "Fungus",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
-      "NumberOfAppearancesMax": 1,
+      "NumberOfAppearancesMax": 6,
       "ArmorClass": 9,
       "Movement": 0,
       "HitDice": 2,
@@ -928,17 +928,21 @@
       "SpecialAttacks": [
         {
           "Name": "Flesh Conversion",
-          "Description": "Turns living flesh into green slime in 1–4 rounds; no resurrection possible."
+          "Description": "Drops from above and attaches to living flesh; in 1-4 rounds the victim becomes green slime (no resurrection possible)."
         },
         {
           "Name": "Corrosion",
-          "Description": "Consumes wood slowly and metal rapidly; plate armor destroyed in 3 rounds."
+          "Description": "Eats wood slowly (1 inch per hour) and metal quickly; plate armor is consumed in 3 rounds."
         }
       ],
       "SpecialDefenses": [
         {
-          "Name": "Immunity",
-          "Description": "Immune to most weapons and spells; only fire, cold, Cure Disease, or physical removal works."
+          "Name": "Immune to Weapons",
+          "Description": "Weapons do it no harm; it can be scraped off, excised, frozen or burned."
+        },
+        {
+          "Name": "Green Slime Spell Reaction",
+          "Description": "Only fire, cold or Cure Disease harm it; other spells have no effect."
         }
       ],
       "MagicResistance": "Standard",
@@ -971,7 +975,7 @@
           "Damage": "1d8"
         }
       ],
-      "SpecialAttacks": [ ],
+      "SpecialAttacks": [],
       "SpecialDefenses": [],
       "MagicResistance": "Standard",
       "Intelligence": "Semi-",

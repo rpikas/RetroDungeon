@@ -1228,6 +1228,12 @@
       "Alignment": "Chaotic evil",
       "MagicResistance": "Standard",
       "Strength": 18,
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Cleric spells",
+          "Description": "Access to 1st–5th level spells."
+        }
+      ],
       "SpecialAttacks": [
         {
           "Name": "Energy Drain",

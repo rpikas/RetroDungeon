@@ -46,6 +46,8 @@ public sealed class CureDiseaseHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
+        if (request.CombatSession?.TryCureGreenSlime(target.Name) == true)
+            result.Events.Add($"The green slime on {target.Name} withers and dies.");
         result.Events.Add(wasDiseased
             ? $"{target.Name} is no longer diseased and Constitution is restored."
             : $"{target.Name} is not diseased.");

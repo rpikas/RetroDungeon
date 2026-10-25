@@ -6146,5 +6146,40 @@ when monsters are snared I would like to see how many are snared just like hold 
 Update message Snare affected group 'default' with no save. to Snare affected group <Monster name> with no save.
 ___
 During time stop Serpentine Owl or other pets can not attack. Do not ask for actions of the other players that did not cast time stop. Just write status time stopped
-
-
+___
+Manually added pictures for all monsters
+___
+80,1
+GREEN SLIME 
+FREQUENCY: Rare 
+NO. APPEARING: 1-6 
+ARMOR CLASS: 9 
+MOVE: 0" 
+HIT DICE: 2 
+% IN LAIR: Nil 
+TREASURE TYPE: Nil 
+NO. OF ATTACKS: 0 
+DAMAGEIATTACK: Nil 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENSES: See below 
+MAGIC RESISTANCE: See below 
+INTELLIGENCE: Non- 
+ALIGNMENT: Neutral 
+SIZE: S 
+PSlONlC ABILITY: Nil 
+Attack/Defense Modes: Nil 
+Green slimes are strange plant growths found in subterraneon places. 
+Although they connot move, they slowly grow, feeding on onimol, 
+vegetable and metallic substances. They are sensitive to vibrotions and 
+will often drop upon passing creatures from above. 
+Green slime will attach itself to living flesh, and in 1-4 melee rounds 
+thereafter turn the creature into green slime (no resurrection possible). It 
+eats away wood slowly, consuming but one inch thickness in an hour. 
+Green slime eats metals quickly, going through plate armor in 3 melee 
+rounds. 
+It can be scraped off quickly (if the scraper is then discarded), excised, 
+frozen, or burned. A cure disease spell kills green slime. Other forms of 
+attack- 
+including weapons or spell - do it no harm. 
+49 
+Occosionally huge slimes or colonies of dozens have been reported. 

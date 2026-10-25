@@ -662,6 +662,19 @@ public sealed class CombatSession
         MirrorImageRounds[characterName] = rounds;
     }
 
+    public Dictionary<string, GreenSlimeAttachment> GreenSlimeAttachments { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    // Cure Disease kills the slime stuck to the character.
+    public bool TryCureGreenSlime(string characterName)
+    {
+        if (!GreenSlimeAttachments.TryGetValue(characterName, out var attachment))
+            return false;
+
+        attachment.Monster.CurrentHitPoints = 0;
+        GreenSlimeAttachments.Remove(characterName);
+        return true;
+    }
+
     public string? TimeStopCaster { get; private set; }
     public int TimeStopRounds { get; set; }
     public int TimeStopCastRound { get; private set; }
