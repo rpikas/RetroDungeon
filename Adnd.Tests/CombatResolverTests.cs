@@ -47,7 +47,7 @@ public class CombatResolverTests
     public void ResolveRound_AdvancesRoundNumberAndReportsEvents()
     {
         var hero = Fighter();
-        var session = new CombatSession([hero], [Brute()]);
+        var session = new CombatSession([hero], [Brute(hitDice: 30)]);
         var resolver = new CombatResolver(new FixedDice(max: true));
 
         var events = resolver.ResolveRound(session, Fight(hero));
