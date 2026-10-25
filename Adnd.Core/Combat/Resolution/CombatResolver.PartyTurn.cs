@@ -22,27 +22,35 @@ public sealed partial class CombatResolver
 {
     private bool ResolvePartyMemberTurn(RoundState state, Character member)
     {
+        if (ResolvePartyMemberStartOfTurn(state, member))
+            return false;
+
+        return ResolvePartyMemberAction(state, member);
+    }
+
+    // Returns true when the member's turn is over before an action is chosen (dead, frightened, asleep, held ...).
+    private bool ResolvePartyMemberStartOfTurn(RoundState state, Character member)
+    {
         var session = state.Session;
         var events = state.Events;
         var partyActions = state.PartyActions;
-        var parrying = state.Parrying;
 
         if (!IsAlive(member))
-            return false;
+            return true;
 
         if (state.TimeStopExtraRound && !ReferenceEquals(member, state.TimeStopCaster))
-            return false;
+            return true;
 
         TryApplyMaceOfDisruptionEvilBacklash(session, member, events);
         if (!IsAlive(member))
-            return false;
+            return true;
 
         var thunderboltsRest = session.GetPartyThunderboltsRestRounds(member.Name);
         if (thunderboltsRest > 0)
         {
             events.Add(new CombatEvent($"{member.Name} is resting after repeated Hammer of Thunderbolts throws and cannot act ({thunderboltsRest} round(s) remaining)."));
             session.TickPartyThunderboltsRest(member.Name);
-            return false;
+            return true;
         }
 
         if (session.RoundNumber == 1 && session.PartySurprisedRound1)
@@ -53,7 +61,7 @@ public sealed partial class CombatResolver
             if (!CanActDuringCompleteSurpriseWithCrossbowOfSpeed(member, surpriseAction))
             {
                 events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
-                return false;
+                return true;
             }
 
             events.Add(new CombatEvent($"{member.Name}'s Crossbow of Speed snaps to readiness and can fire once despite complete surprise (2nd segment effect)."));
@@ -80,13 +88,13 @@ public sealed partial class CombatResolver
                 {
                     member.AddStatus(CharacterStatus.Dead);
                     events.Add(new CombatEvent($"{member.Name} dies from blood loss!"));
-                    return false;
+                    return true;
                 }
             }
         }
 
         if (TryApplyConstrictionDamage(session, member, events))
-            return false;
+            return true;
 
         var veryHotFireExposureRounds = session.GetPartyVeryHotFireExposureRounds(member.Name);
         if (veryHotFireExposureRounds > 0)
@@ -122,7 +130,7 @@ public sealed partial class CombatResolver
                 {
                     member.AddStatus(CharacterStatus.Dead);
                     events.Add(new CombatEvent($"{member.Name} is consumed by the conflagration!"));
-                    return false;
+                    return true;
                 }
             }
 
@@ -156,7 +164,7 @@ public sealed partial class CombatResolver
                     events.Add(new CombatEvent($"{member.Name} is running after the weapon thrown by telekinesis ({remainingToFetch} round(s) remaining)."));
                 }
 
-                return false;
+                return true;
             }
         }
 
@@ -179,7 +187,7 @@ public sealed partial class CombatResolver
                     _frightenedRounds[member.Name] = frightenedLeft - 1;
                 }
 
-                return false;
+                return true;
             }
         }
 
@@ -197,13 +205,13 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{member.Name} regains clarity."));
             }
 
-            return false;
+            return true;
         }
 
         if (member.HasStatus(CharacterStatus.Charmed))
         {
             ResolveCharmedCharacterTurn(session, member, events);
-            return false;
+            return true;
         }
 
         var regeneration = GetEquippedRegeneration(member);
@@ -396,11 +404,11 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{member.Name} wakes up."));
             }
 
-            return false;
+            return true;
         }
 
         if (IsHeldByMonster(session, member, events))
-            return false;
+            return true;
 
         if (member.HasStatus(CharacterStatus.Webbed))
         {
@@ -416,7 +424,7 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{member.Name} breaks free of the webs."));
             }
 
-            return false;
+            return true;
         }
 
         if (member.HasStatus(CharacterStatus.Paralyzed))
@@ -425,13 +433,13 @@ public sealed partial class CombatResolver
             events.Add(new CombatEvent(remainingParalysis > 0
                 ? $"{member.Name} is paralyzed and cannot act ({remainingParalysis} round(s) remaining)."
                 : $"{member.Name} is no longer paralyzed."));
-            return false;
+            return true;
         }
 
         if (member.HasStatus(CharacterStatus.Petrified))
         {
             events.Add(new CombatEvent($"{member.Name} is petrified and cannot act."));
-            return false;
+            return true;
         }
 
         if (member.RotGrubDeathRoundsRemaining > 0)
@@ -442,9 +450,20 @@ public sealed partial class CombatResolver
                 member.CurrentHitPoints = 0;
                 member.AddStatus(CharacterStatus.Dead);
                 events.Add(new CombatEvent($"{member.Name} dies as rot grubs reach the heart."));
-                return false;
+                return true;
             }
         }
+
+        return false;
+    }
+
+    // Returns true when the whole round is over (all monsters defeated).
+    private bool ResolvePartyMemberAction(RoundState state, Character member)
+    {
+        var session = state.Session;
+        var events = state.Events;
+        var partyActions = state.PartyActions;
+        var parrying = state.Parrying;
 
         if (!partyActions.TryGetValue(member.Name, out var action))
             action = CombatAction.OfType(CombatActionType.Parry);
@@ -463,11 +482,7 @@ public sealed partial class CombatResolver
         switch (action.Type)
         {
             case CombatActionType.Fight:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member, clearRoundFlag: false);
                 ResolvePartyAttack(session, member, action, events);
                 break;
             case CombatActionType.Parry:
@@ -475,21 +490,11 @@ public sealed partial class CombatResolver
                 events.Add(new CombatEvent($"{member.Name} parries."));
                 break;
             case CombatActionType.UseItem:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 ResolvePartyUseItem(session, member, action, events);
                 break;
             case CombatActionType.BardCharm:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 ResolveBardCharm(session, member, action, events);
                 break;
             case CombatActionType.DispellUndead:
@@ -499,49 +504,24 @@ public sealed partial class CombatResolver
                     break;
                 }
 
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 ResolveDispellUndead(session, member, action, events);
                 break;
             case CombatActionType.LayOnHands:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 ResolveLayOnHands(session, member, action, events);
                 break;
             case CombatActionType.MonkBodyHeal:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 ResolveMonkBodyHeal(session, member, events);
                 break;
             case CombatActionType.Spell:
             case CombatActionType.CastSpell:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 ResolvePartySpell(session, member, action, events);
                 break;
             case CombatActionType.Run:
-                if (state.ChantActiveAtRoundStart && string.Equals(session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    session.BreakChant();
-                    state.ChantActiveAtRoundStart = false;
-                    events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
-                }
+                InterruptChantForAction(state, member);
                 state.PartyAttemptedRun = true;
                 events.Add(new CombatEvent($"{member.Name} tries to run!"));
                 break;
@@ -554,8 +534,19 @@ public sealed partial class CombatResolver
             events.Add(new CombatEvent("All monsters are defeated!"));
             return true;
         }
-    
 
         return false;
+    }
+
+    private static void InterruptChantForAction(RoundState state, Character member, bool clearRoundFlag = true)
+    {
+        if (!state.ChantActiveAtRoundStart
+            || !string.Equals(state.Session.ActiveChantCasterName, member.Name, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        state.Session.BreakChant();
+        if (clearRoundFlag)
+            state.ChantActiveAtRoundStart = false;
+        state.Events.Add(new CombatEvent($"{member.Name} stops chanting. Chant ends."));
     }
 }

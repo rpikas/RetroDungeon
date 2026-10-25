@@ -13,11 +13,24 @@ Status: built, **not yet play-tested** unless stated.
    - `Adnd.Game\Combat\CombatCoordinator.cs`
 4. Build with `dotnet build --nologo -v q`. The build fails with file-lock errors if the game is running; close it first.
 
+## CombatResolver layout and tests
+
+`CombatResolver` is a partial class in `Adnd.Core\Combat\Resolution`:
+
+- `CombatResolver.cs`: fields, `ResolveRound` (setup, initiative, Time Stop, phases), `FinalizeRound`, shared helpers.
+- `.RoundState.cs`: state shared by the turn methods.
+- `.PartyTurn.cs`: `ResolvePartyMemberStartOfTurn` (status ticks) and `ResolvePartyMemberAction` (action switch).
+- `.MonsterTurn.cs`: `ResolveMonsterTurn` dispatching to stages (`MonsterTurnFlow`: Proceed / EndTurn / EndRound), then `ResolveMonsterAttackSwing` and `ApplyMonsterOnHitEffects`.
+- Other partials are grouped by area (`PartyAttack`, `MonsterSpells`, `MonsterPowers`, `MagicWeapons`, `LevelN`, ...).
+
+Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests --nologo`. Monster hit points use the static `DiceRoller`, so use high hit dice in tests to avoid early deaths.
+
 ## Adding a monster power
 
 - Monster stats live in `Adnd.Data\Monsters\LevelN.json`. Hit points come from `HitDice` x d8 (+ `ExtraHitPoints`); for fixed-hp monsters use hp / 4.5 as hit dice.
 - Abilities and defenses are matched **by name** (`HasSpecialAbility`, `HasSpecialDefense`, `IsTemplate`). The JSON name must match the string used in code.
-- Per-monster turn powers are called from the monster loop in `CombatResolver.cs` (`TryResolveLevel8Powers`, `...Level9Powers`, `...Level10Powers`, `TryResolveGreenSlime`). Returning true ends that monster's turn.
+- Per-monster turn powers are called from `ResolveMonsterBreathGazesAndPowers` / `ResolveMonsterLatePowers` in `CombatResolver.MonsterTurn.cs` (`TryResolveLevel8Powers`, `...Level9Powers`, `...Level10Powers`, `TryResolveGreenSlime`). Returning true ends that monster's turn.
+- Monster spellcasting is table-driven: add a row to `MonsterSpellAttempts` in `CombatResolver.MonsterTurn.cs`.
 - On-hit effects go through `TryApplyLevel8OnHit`, `TryApplyPitFiendTail`, `TryApplyLevel10OnHit`.
 - Spell reactions of monsters (golems, Beholder, slime) are at the top of `SpellDamageSaveHelper.ApplyToMonster`.
 - Weapon immunity: `CanWeaponHarmTargetByMagicRequirement` (defense name "Immune to Weapons" blocks all weapons).

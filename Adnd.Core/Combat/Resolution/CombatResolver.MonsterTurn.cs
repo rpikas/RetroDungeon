@@ -46,6 +46,33 @@ public sealed partial class CombatResolver
         return ResolveMonsterMeleeAttacks(state, monster);
     }
 
+    // Order matters: the first spell that is attempted and resolved ends the monster's turn.
+    private static readonly (int Level, MonsterSpellTradition Tradition, bool DefaultFiftyPercent, Func<CombatResolver, MonsterInstance, CombatSession, List<CombatEvent>, bool> Cast)[] MonsterSpellAttempts =
+    [
+        (5, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel5IllusionistSpell(monster, session, events)),
+        (5, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel5MagicUserSpell(monster, session, events)),
+        (5, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel5DruidSpell(monster, session, events)),
+        (5, MonsterSpellTradition.Cleric, false, (resolver, monster, session, events) => resolver.ResolveLevel5ClericSpell(monster, session, events)),
+        (4, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel4IllusionistSpell(monster, session, events)),
+        (4, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel4MagicUserSpell(monster, session, events)),
+        (3, MonsterSpellTradition.MagicUser, true, (resolver, monster, session, events) => resolver.ResolveLevel3MagicUserSpell(monster, session, events)),
+        (3, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel3IllusionistSpell(monster, session, events)),
+        (3, MonsterSpellTradition.Cleric, false, (resolver, monster, session, events) => resolver.ResolveLevel3ClericSpell(monster, session, events)),
+        (2, MonsterSpellTradition.Illusionist, true, (resolver, monster, session, events) => resolver.ResolveLevel2IllusionistSpell(monster, session, events)),
+        (2, MonsterSpellTradition.MagicUser, true, (resolver, monster, session, events) => resolver.ResolveLevel2MagicUserSpell(monster, session, events)),
+        (1, MonsterSpellTradition.MagicUser, true, (resolver, monster, session, events) =>
+            {
+                resolver.ResolveLevel1MageSpells(monster, session, events);
+                return true;
+            }),
+        (1, MonsterSpellTradition.Cleric, true, (resolver, monster, session, events) => resolver.ResolveLevel1PriestSpell(monster, session, events)),
+        (4, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel4DruidSpell(monster, session, events)),
+        (3, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel3DruidSpell(monster, session, events)),
+        (2, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel2DruidSpell(monster, session, events)),
+        (1, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel1DruidSpell(monster, session, events)),
+        (1, MonsterSpellTradition.Illusionist, true, (resolver, monster, session, events) => resolver.ResolveLevel1IllusionistSpell(monster, session, events)),
+    ];
+
     private enum MonsterTurnFlow
     {
         Proceed,
@@ -116,134 +143,16 @@ public sealed partial class CombatResolver
             events.Add(new CombatEvent($"{monster.DisplayName} is feebleminded and cannot cast spells."));
         }
 
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 5, MonsterSpellTradition.Illusionist)
-            && ResolveLevel5IllusionistSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
+        if (isSilenced || isFeebleminded)
+            return MonsterTurnFlow.Proceed;
 
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 5, MonsterSpellTradition.MagicUser)
-            && ResolveLevel5MagicUserSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 5, MonsterSpellTradition.Druid)
-            && ResolveLevel5DruidSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 5, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 5, MonsterSpellTradition.Cleric)
-            && ResolveLevel5ClericSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 4, MonsterSpellTradition.Illusionist)
-            && ResolveLevel4IllusionistSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 4, MonsterSpellTradition.MagicUser)
-            && ResolveLevel4MagicUserSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-            && HasSpellTierAbility(monster, 3, MonsterSpellTradition.MagicUser)
-            && ResolveLevel3MagicUserSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 3, MonsterSpellTradition.Illusionist)
-            && ResolveLevel3IllusionistSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 3, MonsterSpellTradition.Cleric)
-            && ResolveLevel3ClericSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-            && HasSpellTierAbility(monster, 2, MonsterSpellTradition.Illusionist)
-            && ResolveLevel2IllusionistSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-            && HasSpellTierAbility(monster, 2, MonsterSpellTradition.MagicUser)
-            && ResolveLevel2MagicUserSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.MagicUser, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-            && HasSpellTierAbility(monster, 1, MonsterSpellTradition.MagicUser)
-            )
+        foreach (var (spellLevel, tradition, defaultFiftyPercent, cast) in MonsterSpellAttempts)
         {
-            ResolveLevel1MageSpells(monster, session, events);
-            return MonsterTurnFlow.EndTurn;
+            if (CanMonsterAttemptLevelSpell(monster, spellLevel, tradition, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: defaultFiftyPercent)
+                && HasSpellTierAbility(monster, spellLevel, tradition)
+                && cast(this, monster, session, events))
+                return MonsterTurnFlow.EndTurn;
         }
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Cleric, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-            && HasSpellTierAbility(monster, 1, MonsterSpellTradition.Cleric)
-            && ResolveLevel1PriestSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 4, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 4, MonsterSpellTradition.Druid)
-            && ResolveLevel4DruidSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 3, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 3, MonsterSpellTradition.Druid)
-            && ResolveLevel3DruidSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 2, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 2, MonsterSpellTradition.Druid)
-            && ResolveLevel2DruidSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Druid, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: false)
-            && HasSpellTierAbility(monster, 1, MonsterSpellTradition.Druid)
-            && ResolveLevel1DruidSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
-
-        if (!isSilenced
-            && !isFeebleminded
-            && CanMonsterAttemptLevelSpell(monster, 1, MonsterSpellTradition.Illusionist, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: true)
-            && HasSpellTierAbility(monster, 1, MonsterSpellTradition.Illusionist)
-            && ResolveLevel1IllusionistSpell(monster, session, events))
-            return MonsterTurnFlow.EndTurn;
 
         return MonsterTurnFlow.Proceed;
     }
