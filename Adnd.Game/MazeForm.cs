@@ -1880,8 +1880,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         bool leftWallDrawn = false;
         bool rightWallDrawn = false;
 
-        if (_currentDungeonLevel == 1 && cell.X == 0 && cell.Y == 0)
-            DrawCeilingShading(graphics, pen, viewport, depth, position, back);
+        var stairs = StairsAt(cell);
+        if (stairs != StairsKind.None)
+            DrawStairsShading(graphics, pen, viewport, depth, position, back, floor: stairs == StairsKind.Down);
 
         var frontCell = GetCellFartherAway(cell, _direction, 1);
         if (IsFrontBlocked(cell))
@@ -1994,21 +1995,30 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return hull.ToArray();
     }
 
-    // The stairs up lead through the ceiling, so it is shaded with closely spaced parallel lines.
-    private void DrawCeilingShading(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back)
+    // The stairs lead through the ceiling (up) or the floor (down), so that part of the square is shaded
+    // with closely spaced parallel lines.
+    private void DrawStairsShading(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back, bool floor)
     {
         var near = depth == 0 ? viewport : GetWallRect(depth - 1, position);
-        var height = back.Top - near.Top;
-        if (height < 2f || position != StraightAhead && depth == 0)
+        var nearEdge = floor ? near.Bottom : near.Top;
+        var backEdge = floor ? back.Bottom : back.Top;
+        var height = backEdge - nearEdge;
+        if (Math.Abs(height) < 2f || position != StraightAhead && depth == 0)
             return;
 
         using var thin = new Pen(pen.Color, 1f);
-        for (var y = near.Top; y <= back.Top; y += 3f)
+        // Only the middle of the surface: inset from the side walls and from the near and far edges.
+        const float sideInset = 0.25f;
+        const float depthInset = 0.2f;
+        var steps = (int)(Math.Abs(height) * (1f - (2f * depthInset)) / 3f);
+        for (var i = 0; i <= steps; i++)
         {
-            var t = (y - near.Top) / height;
+            var y = nearEdge + (height * depthInset) + (Math.Sign(height) * i * 3f);
+            var t = (y - nearEdge) / height;
             var left = near.Left + ((back.Left - near.Left) * t);
             var right = near.Right + ((back.Right - near.Right) * t);
-            graphics.DrawLine(thin, left, y, right, y);
+            var inset = (right - left) * sideInset;
+            graphics.DrawLine(thin, left + inset, y, right - inset, y);
         }
     }
 
@@ -2854,7 +2864,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private List<Character> GetViewerParty()
     {
         var party = _partyRepository.Load();
-        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var roster = _characterRepository.GetAllCached().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
 
         var ordered = new List<Character>();
         foreach (var memberName in party.Members)
@@ -2875,6 +2885,37 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         Close();
     }
 
+    private enum StairsKind { None, Up, Down }
+
+    // Stairs always go up on one floor and down on the other: level 1 (10,0) leads down to level 2 (10,0).
+    private StairsKind StairsAt(Point cell)
+    {
+        if (_currentDungeonLevel == 1 && cell.X == 0 && cell.Y == 0)
+            return StairsKind.Up;
+
+        if (!_thinWalls || cell.X != 10 || cell.Y != 0)
+            return StairsKind.None;
+
+        return _currentDungeonLevel switch
+        {
+            1 => StairsKind.Down,
+            2 => StairsKind.Up,
+            _ => StairsKind.None
+        };
+    }
+
+    // Takes the stairs at (10,0) to the neighbouring floor and lands on the stairs there.
+    private void TakeStairsToLevel(int level)
+    {
+        _currentDungeonLevel = level;
+        BuildMazeForLevel(level);
+        LoadEncounterLocationsForLevel(level);
+        _position = new Point(10, 0);
+        UpdateLighting();
+        Invalidate();
+        PublishToViewer();
+    }
+
     private void TryMoveForward()
     {
         var v = GetForwardVector(_direction);
@@ -2892,7 +2933,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             ShowDungeonElevatorDialog();
 
         if (_thinWalls && _currentDungeonLevel == 1 && _position.X == 12 && _position.Y == 9)
-            SayOnBoth("Sign", "A LARGE SIGN ON THE WALL READ: ** AREA OUT OF BOUNDS! **");
+            SayOnBoth("Sign", "A LARGE SIGN ON THE WALL READ:" + Environment.NewLine + "** AREA OUT OF BOUNDS! **");
 
         ProcessTreasureFindingStep();
         ProcessLightStep();
@@ -2908,6 +2949,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             {
                 LeaveDungeonForTown();
                 return;
+            }
+        }
+
+        if (_thinWalls && _position.X == 10 && _position.Y == 0)
+        {
+            var kind = StairsAt(_position);
+            if (kind != StairsKind.None)
+            {
+                var target = _currentDungeonLevel + (kind == StairsKind.Down ? 1 : -1);
+                var answer = AskOnBoth("Stairs", kind == StairsKind.Down ? "Stairs down, take them?" : "Stairs up, take them?");
+                if (answer == DialogResult.Yes)
+                {
+                    TakeStairsToLevel(target);
+                    return;
+                }
             }
         }
 
@@ -2956,11 +3012,18 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     // Each step uses up one step of Light. Magical darkness snuffs out Continual Light for good.
     private void ProcessLightStep()
     {
+        var enteredDarkness = _continualLightActive && IsDark(_position);
+        if (!enteredDarkness && _lightStepsRemaining <= 0)
+        {
+            UpdateLighting();
+            return;
+        }
+
         string? message = null;
         var party = _partyRepository.Load();
         var changed = false;
 
-        if (_continualLightActive && _darkAreas.Any(a => a.Contains(_position.X, _position.Y)))
+        if (enteredDarkness)
         {
             _continualLightActive = false;
             party.ContinualLightActive = false;
@@ -3220,7 +3283,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private void ApplyPoisonDamageForStep()
     {
         var party = _partyRepository.Load();
-        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var roster = _characterRepository.GetAllCached().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
         var members = party.Members.Where(roster.ContainsKey).Select(name => roster[name]).ToList();
         var effectsBeforeStep = GetStepEffects(members);
         if (!_stepEffects.SetEquals(effectsBeforeStep))

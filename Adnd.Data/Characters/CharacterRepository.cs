@@ -21,6 +21,25 @@ public class CharacterRepository
         Directory.CreateDirectory(_folder);
     }
 
+    private (int Count, long LatestTicks) _rosterCacheSignature;
+    private List<Character>? _rosterCache;
+
+    /// <summary>
+    /// The roster, reused until a character file changes. Meant for callers that run often (once per step)
+    /// and write back whatever they change; everyone else should use <see cref="GetAll"/>.
+    /// </summary>
+    public IReadOnlyList<Character> GetAllCached()
+    {
+        var signature = FolderSignature.Compute(_folder);
+        if (_rosterCache != null && _rosterCacheSignature == signature)
+            return _rosterCache;
+
+        var all = GetAll().ToList();
+        _rosterCache = all;
+        _rosterCacheSignature = FolderSignature.Compute(_folder);
+        return all;
+    }
+
     public IEnumerable<Character> GetAll()
     {
         var list = new List<Character>();
