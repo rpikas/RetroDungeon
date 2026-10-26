@@ -2887,30 +2887,39 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private enum StairsKind { None, Up, Down }
 
-    // Stairs always go up on one floor and down on the other: level 1 (10,0) leads down to level 2 (10,0).
+    // Stairs always go up on one floor and down on the other, and land on the matching stairs.
+    private static readonly Dictionary<int, (Point Up, Point? Down)> DungeonStairs = new()
+    {
+        [1] = (new Point(0, 0), new Point(10, 0)),
+        [2] = (new Point(7, 12), new Point(15, 16)),
+        [3] = (new Point(11, 15), null)
+    };
+
+    // Level 1's up stairs lead out to town; the others are on a floor that has a neighbour built.
     private StairsKind StairsAt(Point cell)
     {
         if (_currentDungeonLevel == 1 && cell.X == 0 && cell.Y == 0)
             return StairsKind.Up;
 
-        if (!_thinWalls || cell.X != 10 || cell.Y != 0)
+        if (!_thinWalls || !DungeonStairs.TryGetValue(_currentDungeonLevel, out var stairs))
             return StairsKind.None;
 
-        return _currentDungeonLevel switch
-        {
-            1 => StairsKind.Down,
-            2 => StairsKind.Up,
-            _ => StairsKind.None
-        };
+        if (cell == stairs.Up)
+            return StairsKind.Up;
+
+        return stairs.Down is { } down && cell == down && DungeonStairs.ContainsKey(_currentDungeonLevel + 1)
+            ? StairsKind.Down
+            : StairsKind.None;
     }
 
-    // Takes the stairs at (10,0) to the neighbouring floor and lands on the stairs there.
+    // Takes the stairs to the neighbouring floor and lands on the stairs there.
     private void TakeStairsToLevel(int level)
     {
+        var arrivedGoingDown = level > _currentDungeonLevel;
         _currentDungeonLevel = level;
         BuildMazeForLevel(level);
         LoadEncounterLocationsForLevel(level);
-        _position = new Point(10, 0);
+        _position = arrivedGoingDown ? DungeonStairs[level].Up : DungeonStairs[level].Down!.Value;
         UpdateLighting();
         Invalidate();
         PublishToViewer();
@@ -2952,18 +2961,15 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
         }
 
-        if (_thinWalls && _position.X == 10 && _position.Y == 0)
+        if (_thinWalls && StairsAt(_position) is var kind && kind != StairsKind.None
+            && !(kind == StairsKind.Up && _currentDungeonLevel == 1))
         {
-            var kind = StairsAt(_position);
-            if (kind != StairsKind.None)
+            var target = _currentDungeonLevel + (kind == StairsKind.Down ? 1 : -1);
+            var answer = AskOnBoth("Stairs", kind == StairsKind.Down ? "Stairs down, take them?" : "Stairs up, take them?");
+            if (answer == DialogResult.Yes)
             {
-                var target = _currentDungeonLevel + (kind == StairsKind.Down ? 1 : -1);
-                var answer = AskOnBoth("Stairs", kind == StairsKind.Down ? "Stairs down, take them?" : "Stairs up, take them?");
-                if (answer == DialogResult.Yes)
-                {
-                    TakeStairsToLevel(target);
-                    return;
-                }
+                TakeStairsToLevel(target);
+                return;
             }
         }
 
