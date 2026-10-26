@@ -543,7 +543,9 @@
       "XPValuePerHitPoint": 14,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 9, Roll 13-15 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Average to very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Dragon, Red",
@@ -597,7 +599,9 @@
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 9, Roll 13-15 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Dragon, Silver",
@@ -651,7 +655,9 @@
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 9, Roll 13-15 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Giant, Storm",
@@ -931,6 +937,8 @@
     },
     {
       "Name": "Nycadaemon",
+      "Intelligence": "Exceptional to genius",
+      "Alignment": "Evil (neutral)",
       "Type": "Daemon",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
@@ -1026,7 +1034,9 @@
       "InLair": 30,
       "TreasureType": "B,Q(x5),X",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 9, Roll 53-64"
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 53-64",
+      "Intelligence": "Non-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Rust Monster",
@@ -1310,7 +1320,9 @@
       "XPValuePerHitPoint": 9,
       "TreasureType": "I",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 9, Roll 84-93"
+      "DungeonRandomMonsterTableReference": "Level 9, Roll 84-93",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Xorn",
@@ -1402,7 +1414,9 @@
       ],
       "BaseXPValue": 3000,
       "TreasureType": "L",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Average to low",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Frost Giant",
@@ -1447,7 +1461,9 @@
       ],
       "BaseXPValue": 2800,
       "TreasureType": "L",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Average to low",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Hill Giant Chief",
@@ -1487,48 +1503,11 @@
       ],
       "BaseXPValue": 2200,
       "TreasureType": "K",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Low",
+      "Alignment": "Chaotic evil"
     },
-    {
-      "Name": "Giant Spider (Demonic)",
-      "Type": "Vermin",
-      "ArmorClass": 1,
-      "HitDice": 8,
-      "HitPoints": 48,
-      "Movement": {
-        "Walk": 40,
-        "Fly": 0,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 40
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 10,
-        "BreathWeapon": 11,
-        "Spell": 11
-      },
-      "Morale": {
-        "Value": 12
-      },
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Infernal Venom",
-          "Description": "Save vs poison or death; survivors take 1d6 damage per round for 3 rounds."
-        }
-      ],
-      "BaseXPValue": 2500,
-      "TreasureType": "None",
-      "Size": "Medium"
-    },
+
     {
       "Name": "Giant Scorpion (Huge)",
       "Type": "Vermin",
@@ -1572,93 +1551,12 @@
       ],
       "BaseXPValue": 2300,
       "TreasureType": "None",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Non-intelligent",
+      "Alignment": "Neutral"
     },
-    {
-      "Name": "Giant Bat (Dire)",
-      "Type": "Animal",
-      "ArmorClass": 5,
-      "HitDice": 7,
-      "HitPoints": 40,
-      "Movement": {
-        "Walk": 10,
-        "Fly": 50,
-        "Swim": 0,
-        "Burrow": 0,
-        "Climb": 0
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 9,
-        "RodStaffWand": 10,
-        "PetrificationPolymorph": 11,
-        "BreathWeapon": 12,
-        "Spell": 12
-      },
-      "Morale": {
-        "Value": 10
-      },
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Swooping Attack",
-          "Description": "On a dive, gains +2 to hit and +1d6 damage."
-        }
-      ],
-      "BaseXPValue": 1600,
-      "TreasureType": "None",
-      "Size": "Medium"
-    },
-    {
-      "Name": "Giant Snake (Ancient Python)",
-      "Type": "Animal",
-      "ArmorClass": 4,
-      "HitDice": 9,
-      "HitPoints": 54,
-      "Movement": {
-        "Walk": 20,
-        "Fly": 0,
-        "Swim": 10,
-        "Burrow": 0,
-        "Climb": 10
-      },
-      "SavingThrows": {
-        "ParalyzationPoisonDeath": 8,
-        "RodStaffWand": 9,
-        "PetrificationPolymorph": 10,
-        "BreathWeapon": 11,
-        "Spell": 11
-      },
-      "Morale": {
-        "Value": 11
-      },
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        },
-        {
-          "Name": "Constrict",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Crushing Coils",
-          "Description": "Held targets take automatic constrict damage each round."
-        }
-      ],
-      "BaseXPValue": 2200,
-      "TreasureType": "None",
-      "Size": "Medium"
-    },
+
+  
     {
       "Name": "High Priest",
       "Type": "Humanoid",

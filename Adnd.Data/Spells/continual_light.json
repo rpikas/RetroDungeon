@@ -1,0 +1,13 @@
+{
+  "Id": "continual_light",
+  "Name": "Continual Light",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "A permanent light that lets the party see two steps further in the dungeon. It lasts until Dispel Magic or Darkness is cast, or the party enters magical darkness.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Heal",
+  "EffectDescription": "The party sees two steps further in the dungeon until the light is dispelled or the party enters magical darkness."
+}

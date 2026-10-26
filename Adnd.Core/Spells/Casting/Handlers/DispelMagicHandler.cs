@@ -14,6 +14,13 @@ public sealed class DispelMagicHandler : ISpellEffectHandler
             return SpellCastResult.Failure("Missing spell definition.");
 
         var session = request.CombatSession;
+        if (request.Context == SpellUseContext.Exploration)
+        {
+            var light = new SpellCastResult { Success = true, DispelsLight = true };
+            light.Events.Add($"{request.Caster.Name} casts {spell.Name}. Any magical light carried by the party is dispelled.");
+            return light;
+        }
+
         if (request.Context != SpellUseContext.Combat || session == null)
             return SpellCastResult.Failure("Dispel Magic can only be cast in combat.");
 

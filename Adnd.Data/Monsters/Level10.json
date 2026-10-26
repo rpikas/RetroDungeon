@@ -536,6 +536,8 @@
     },
     {
       "Name": "Asmodeus",
+      "Intelligence": "Supra-genius",
+      "Alignment": "Lawful evil",
       "Type": "Devil, Arch",
       "Frequency": "Unique",
       "NumberOfAppearancesMin": 1,
@@ -652,7 +654,9 @@
       "XPValuePerHitPoint": 20,
       "TreasureType": "Special",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable",
+      "Intelligence": "Genius",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Dragon, Platinum (Bahamut)",
@@ -707,7 +711,9 @@
       "XPValuePerHitPoint": 20,
       "TreasureType": "Special",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable",
+      "Intelligence": "Supra-genius",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Red Dragon (Young Adult)",
@@ -743,7 +749,9 @@
       "Size": "Medium",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 2,
-      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable"
+      "DungeonRandomMonsterTableReference": "Level 10, Roll 31-40 then Dragon Subtable",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Fire Dragon",
@@ -1046,7 +1054,9 @@
           "Name": "Immunity to fire and heat",
           "Description": "Immune to fire."
         }
-      ]
+      ],
+      "Intelligence": "Genius",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Dispater",
@@ -1100,7 +1110,9 @@
           "Name": "Immunity to fire and heat",
           "Description": "Immune to fire."
         }
-      ]
+      ],
+      "Intelligence": "Genius",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Geryon",
@@ -1151,7 +1163,9 @@
           "Name": "Immunity to fire and heat",
           "Description": "Immune to fire."
         }
-      ]
+      ],
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Demogorgon",
@@ -1214,59 +1228,8 @@
       "Other": "Dual heads; hypnotic gaze; rotting tentacles; supreme demon lord of the Abyss.",
       "InfoUrl": "https://1eonline.info/1mm/demogorgon.htm"
     },
-    {
-      "Name": "Stone Giant Elder",
-      "Type": "Giant",
-      "ArmorClass": 2,
-      "HitDice": 10,
-      "HitPoints": 60,
-      "Movement": 40,
-      "Attacks": [
-        {
-          "Name": "Rock Throw",
-          "NumberOfAttacks": 1,
-          "Damage": "3d8"
-        },
-        {
-          "Name": "Club",
-          "NumberOfAttacks": 1,
-          "Damage": "2d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Rock Mastery",
-          "Description": "+3 to hit with thrown rocks."
-        }
-      ],
-      "BaseXPValue": 3200,
-      "TreasureType": "L",
-      "Size": "Medium"
-    },
-    {
-      "Name": "Fire Giant Champion",
-      "Type": "Giant",
-      "ArmorClass": 2,
-      "HitDice": 12,
-      "HitPoints": 72,
-      "Movement": 40,
-      "Attacks": [
-        {
-          "Name": "Flaming Greatsword",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6+3"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Aura of Flame",
-          "Description": "Adjacent foes take 1d4 fire damage per round."
-        }
-      ],
-      "BaseXPValue": 3800,
-      "TreasureType": "L",
-      "Size": "Medium"
-    },
+
+
     {
       "Name": "Hydra (7-Headed)",
       "Type": "Monstrous",
@@ -1289,94 +1252,11 @@
       ],
       "BaseXPValue": 3500,
       "TreasureType": "None",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Semi-intelligent",
+      "Alignment": "Neutral"
     },
-    {
-      "Name": "Wyvern Matriarch",
-      "Type": "Dragonkin",
-      "ArmorClass": 2,
-      "HitDice": 9,
-      "HitPoints": 54,
-      "Movement": 50,
-      "Attacks": [
-        {
-          "Name": "Bite",
-          "NumberOfAttacks": 1,
-          "Damage": "2d8"
-        },
-        {
-          "Name": "Sting",
-          "NumberOfAttacks": 1,
-          "Damage": "1d8"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Greater Venom",
-          "Description": "Sting forces save vs poison or death; success still takes 2d6 damage."
-        }
-      ],
-      "BaseXPValue": 2800,
-      "TreasureType": "J",
-      "Size": "Medium"
-    },
-    {
-      "Name": "Spectre Lord",
-      "Type": "Undead",
-      "ArmorClass": 1,
-      "HitDice": 9,
-      "HitPoints": 54,
-      "Movement": 30,
-      "Attacks": [
-        {
-          "Name": "Chilling Touch",
-          "NumberOfAttacks": 1,
-          "Damage": "1d10"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Greater Energy Drain",
-          "Description": "Target loses 2 levels unless save vs death."
-        },
-        {
-          "Name": "Incorporeal",
-          "Description": "Immune to non-magical weapons."
-        }
-      ],
-      "BaseXPValue": 4000,
-      "TreasureType": "K",
-      "Size": "Medium"
-    },
-    {
-      "Name": "Minotaur Champion",
-      "Type": "Monstrous Humanoid",
-      "ArmorClass": 4,
-      "HitDice": 9,
-      "HitPoints": 54,
-      "Movement": 30,
-      "Attacks": [
-        {
-          "Name": "Great Axe",
-          "NumberOfAttacks": 1,
-          "Damage": "3d6"
-        },
-        {
-          "Name": "Gore",
-          "NumberOfAttacks": 1,
-          "Damage": "2d6"
-        }
-      ],
-      "SpecialAbilities": [
-        {
-          "Name": "Champion of the Labyrinth",
-          "Description": "+2 to hit in dungeon corridors."
-        }
-      ],
-      "BaseXPValue": 2600,
-      "TreasureType": "D",
-      "Size": "Medium"
-    },
+    
     {
       "Name": "Earth Giant",
       "Type": "Giant",

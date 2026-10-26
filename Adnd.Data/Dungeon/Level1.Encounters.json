@@ -1,0 +1,8 @@
+{
+  "Level": 1,
+  "Locations": [
+    { "X": 1, "Y": 7, "ChancePercent": 80 },
+    { "X": 3, "Y": 3, "ChancePercent": 80 },
+    { "X": 6, "Y": 6, "ChancePercent": 80 }
+  ]
+}

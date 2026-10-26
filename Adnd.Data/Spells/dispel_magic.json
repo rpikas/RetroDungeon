@@ -7,7 +7,7 @@
   "RangeType": "Enemy",
   "Targeting": "Multiple",
   "TargetingScope": "SingleGroup",
-  "CastContext": "Combat",
+  "CastContext": "Both",
   "EffectType": "Damage",
   "EffectDescription": "Removes magical protections (invisibility, mirror image, barkskin, illusions) from the targeted monster group and harmful magic (charm, confusion, slow, web, sleep) from the party. Does not affect enchanted items."
 }

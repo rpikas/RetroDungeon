@@ -562,7 +562,9 @@
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 31-32, then Dragon table",
       "Source": "Adnd",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "High",
+      "Alignment": "Chaotic good"
     },
     {
       "Name": "White Dragon",
@@ -607,7 +609,9 @@
       "XPValuePerHitPoint": 3,
       "DungeonRandomMonsterTableReference": "Level 3, Roll 31-32, then Dragon table",
       "Source": "Adnd",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Average (low)",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Violet Fungi",
@@ -849,7 +853,9 @@
       "TreasureType": "None",
       "DungeonRandomMonsterTableReference": "Level 3, Roll 55-60",
       "Source": "Adnd",
-      "Size": "Medium"
+      "Size": "Medium",
+      "Intelligence": "Non-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Ogre",

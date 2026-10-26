@@ -26,5 +26,27 @@ public class Party
     public int TreasureFindingTargetY { get; set; } = -1;
     public int TreasureFindingCopperPieces { get; set; } = 0;
     public int TreasureFindingGemCount { get; set; } = 0;
+
+    // Light spell: steps left during which the party sees one step further.
+    public int LightStepsRemaining { get; set; } = 0;
+
+    // Continual Light: the party sees two steps further until dispelled or until it enters magical darkness.
+    public bool ContinualLightActive { get; set; } = false;
+
+    /// <summary>Stores what a Light, Continual Light or Dispel Magic cast outside combat did to the party's light.</summary>
+    public void ApplyLightSpellResult(Adnd.Core.Spells.Casting.SpellCastResult result)
+    {
+        if (result.LightSteps > 0)
+            LightStepsRemaining = Math.Max(LightStepsRemaining, result.LightSteps);
+
+        if (result.ContinualLight)
+            ContinualLightActive = true;
+
+        if (result.DispelsLight)
+        {
+            LightStepsRemaining = 0;
+            ContinualLightActive = false;
+        }
+    }
 }
 

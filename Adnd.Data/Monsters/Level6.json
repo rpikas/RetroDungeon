@@ -74,7 +74,8 @@
       "XPValuePerHitPoint": 4,
       "Source": "Adnd",
       "Other": "Climbs walls and ceilings; multiple tentacle hits require multiple saving throws.",
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 04-10"
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 04-10",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Lvl 6 Magic-User",
@@ -638,7 +639,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Bronze Dragon",
@@ -682,7 +685,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Copper Dragon",
@@ -726,7 +731,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "High",
+      "Alignment": "Chaotic good"
     },
     {
       "Name": "Gold Dragon",
@@ -770,7 +777,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Genius",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Green Dragon",
@@ -814,7 +823,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Average to very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Red Dragon",
@@ -858,7 +869,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Silver Dragon",
@@ -902,7 +915,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 6, Roll 20-21 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Green Slime",
@@ -952,7 +967,8 @@
       "XPValuePerHitPoint": 2,
       "Source": "Adnd",
       "Other": "Larger patches gain +1 HD per additional 3 square feet.",
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 22-25"
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 22-25",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Hydra 8 Heads",
@@ -1070,6 +1086,8 @@
     },
     {
       "Name": "Lycanthrope, Werebear",
+      "Intelligence": "Exceptional",
+      "Alignment": "Neutral good",
       "Type": "Lycanthrope",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
@@ -1198,7 +1216,8 @@
       "TreasureType": "E",
       "Alignment": "Lawful evil",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 46-50"
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 46-50",
+      "Intelligence": "Low"
     },
     {
       "Name": "Medusa",
@@ -1386,7 +1405,9 @@
       "TreasureType": "A",
       "Source": "Adnd",
       "Size": "Medium",
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 59-60"
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 59-60",
+      "Intelligence": "Average to exceptional",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Otyugh",
@@ -1690,7 +1711,9 @@
       "Size": "Medium",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 4,
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 89-93"
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 89-93",
+      "Intelligence": "Average",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Wind Walker",
@@ -1714,7 +1737,9 @@
         }
       ],
       "Size": "Medium",
-      "DungeonRandomMonsterTableReference": "Level 6, Roll 94-95"
+      "DungeonRandomMonsterTableReference": "Level 6, Roll 94-95",
+      "Intelligence": "Very",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Wraith",
@@ -2388,7 +2413,7 @@
       "Size": "Medium"
     },
     {
-      "Name": "Were Bear",
+      "Name": "Werebear",
       "Type": "Lycanthrope",
       "NumberOfAppearancesMin": 1,
       "NumberOfAppearancesMax": 2,

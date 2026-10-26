@@ -76,6 +76,7 @@ public sealed class CampCharacterInspectForm : Form
             new EntangleHandler(),
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
+            new LightHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
@@ -1196,7 +1197,7 @@ public sealed class CampCharacterInspectForm : Form
 
         var targets = new List<SpellCastTarget>();
 
-        if (spell.RangeType == SpellRangeType.Self)
+        if (spell.RangeType == SpellRangeType.Self || spell.Id == "dispel_magic")
         {
             targets.Add(SpellCastTarget.Ally(caster));
         }
@@ -1234,6 +1235,10 @@ public sealed class CampCharacterInspectForm : Form
 
         if (result.Success)
         {
+            var lightParty = _partyRepository.Load();
+            lightParty.ApplyLightSpellResult(result);
+            _partyRepository.Save(lightParty);
+
             foreach (var member in partyMembers)
                 _characterRepository.Save(member);
             _characterRepository.Save(caster);

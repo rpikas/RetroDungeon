@@ -105,6 +105,9 @@
     <Content Include="..\Adnd.Data\Encounters\**\*.json" Link="Data\Encounters\%(RecursiveDir)%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Adnd.Data\Dungeon\**\*.json" Link="Data\Dungeon\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

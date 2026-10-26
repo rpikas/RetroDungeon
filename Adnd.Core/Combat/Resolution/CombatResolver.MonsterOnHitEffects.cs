@@ -49,6 +49,9 @@ public sealed partial class CombatResolver
             assassinationRoll.Roll.ToString(),
             $"Assassin level {assassinLevel}, target level {victimLevel}, chance {assassinationRoll.ChancePercent}% => {(assassinationRoll.Success ? "success" : "failure")}.");
 
+        events.Add(new CombatEvent(
+            $"{monster.DisplayName} attempts to assassinate {target.Name}: chance {assassinationRoll.ChancePercent}%, rolled {assassinationRoll.Roll} (1d100) => {(assassinationRoll.Success ? "success" : "failure")}."));
+
         if (!assassinationRoll.Success)
         {
             events.Add(new CombatEvent($"{monster.DisplayName} attempts to assassinate {target.Name} but fails."));

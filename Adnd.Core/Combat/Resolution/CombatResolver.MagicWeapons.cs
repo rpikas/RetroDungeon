@@ -1107,7 +1107,7 @@ public sealed partial class CombatResolver
                 .Concat(GetMonsterAbilityNames(target)))
             .ToLowerInvariant();
 
-        return composite.Contains("doppelganger")
+        return composite.Contains("doppleganger")
                || composite.Contains("elemental")
                || composite.Contains("golem");
     }

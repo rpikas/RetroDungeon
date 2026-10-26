@@ -1646,15 +1646,8 @@ public sealed class TreasureService
         if (Math.Abs(countDivideFactor - 1d) > 0.0001d)
         {
             var factor = Math.Max(0d, countDivideFactor);
-            var scaledCount = string.Equals(category, "Gem", StringComparison.OrdinalIgnoreCase)
-                ? Math.Max(0, (int)Math.Round(count * factor, MidpointRounding.AwayFromZero))
-                : Math.Max(0, (int)Math.Ceiling(count / Math.Max(0.0001d, factor)));
-
-            if (string.Equals(category, "Gem", StringComparison.OrdinalIgnoreCase))
-                logs.Add($"    {category} count after multiplying by Lootfactor {factor.ToString("0.###", CultureInfo.InvariantCulture)}: {count} => {scaledCount}");
-            else
-                logs.Add($"    {category} count after dividing by Lootfactor {factor.ToString("0.###", CultureInfo.InvariantCulture)} and rounding up: {count} => {scaledCount}");
-
+            var scaledCount = Math.Max(0, (int)Math.Round(count * factor, MidpointRounding.AwayFromZero));
+            logs.Add($"    {category} count after multiplying by Lootfactor {factor.ToString("0.###", CultureInfo.InvariantCulture)}: {count} => {scaledCount}");
             count = scaledCount;
         }
 

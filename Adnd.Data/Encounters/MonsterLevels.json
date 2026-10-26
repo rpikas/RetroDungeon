@@ -89,7 +89,7 @@
       { "DiceMin": 1, "DiceMax": 8, "Creature": "Character — see Character Subtable", "CountMin": 2, "CountMax": 5 },
       { "DiceMin": 9, "DiceMax": 15, "Creature": "Cockatrice", "CountMin": 1, "CountMax": 2 },
       { "DiceMin": 16, "DiceMax": 18, "Creature": "Displacer beast", "CountMin": 1, "CountMax": 2 },
-      { "DiceMin": 19, "DiceMax": 22, "Creature": "Doppelganger", "CountMin": 1, "CountMax": 3 },
+      { "DiceMin": 19, "DiceMax": 22, "Creature": "Doppleganger", "CountMin": 1, "CountMax": 3 },
       { "DiceMin": 23, "DiceMax": 99, "Creature": "Dragon — see Dragon Subtable", "CountMin": 1, "CountMax": 1 },
       { "DiceMin": 25, "DiceMax": 26, "Creature": "Hydra, 7 heads", "CountMin": 1, "CountMax": 1 },
       { "DiceMin": 27, "DiceMax": 27, "Creature": "Pyrohydra, 6 heads", "CountMin": 1, "CountMax": 1 },

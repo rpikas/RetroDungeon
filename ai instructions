@@ -6182,4 +6182,153 @@ frozen, or burned. A cure disease spell kills green slime. Other forms of
 attack- 
 including weapons or spell - do it no harm. 
 49 
-Occosionally huge slimes or colonies of dozens have been reported. 
+Occasionally huge slimes or colonies of dozens have been reported. 
+
+refactored
+___
+
+NYCADAEMON 
+FREQUENCY: Very rare 
+NO. APPEARING: 1 (very 
+rarely, 7-21 
+ARMOUR CLASS: -4 
+MOVE: 12"/36" 
+HIT DICE: 12+36 POintS 
+% IN LAIR: Nil 
+TREASURE TYPE: Q(xlOl, X 
+NO. OF ATTACKS: 2 or 1 weapon 
+DAMAGEIATTACK: 9-16/9- 16 
+or by weapon +8 
+SPECIAL ATTACKS: See below 
+SPECIAL DEFENCES: See below 
+MAGIC RESISTANCE: Special 
+INTELLIGENCE: 
+Exceptional - genius 
+ALIGNMENT: Evil (neutral) 
+SIZE: L (about 8' tall and 
+broad) 
+PSlONlC ABILITY: Nil 
+Attack/Defence Modes: Nil 
+LEVEL/X.P. VALUE: 
+IX/6,800 + 16 per hit point 
+The race of nycadaemons are among the most powerful of the 
+creatures native to the Middle Lower Planes. Like their cousins the 
+mezzodaemons, nycadaemons are common to the planes of Tarterus, 
+Hades and Gehenna. Unlike their related creatures, they are also able 
+to enter the 666 Layers of the Abyss and the 9 Hells as they will. 
+Nycadaemons are avoided by all lesser creatures - night hags, mezzo- 
+daemons, lesser and greater devils, and most demons (see 
+ADVANCED DUNGEONS & DRAGONS MONSTER MANUAL) - 
+for the race is totally wicked and domineering, caring not who or 
+what they enslave or exploit, but always acting in an intelligent and 
+carefully calculated manner aimed at maximising personal power and 
+safety. Thus, these creatures will co-operate with other evil beings and 
+races whenever mutual actions are likely to prove beneficial to them- 
+selves. 
+Nycadaemons are very strong (comparable in strength to stone giants - see ADVANCED DUNGEONS & DRAGONS, MONSTER 
+MANUAL) and gain +8 on damage, so blows from their huge horny 
+fists inflict terrible punishment (9-16 hit points of damage each). 
+However, nycadaemons will employ suitably large magic weapons in 
+conjunction with a shield (c.f. mezzodaemon) whenever such weapons 
+are available. When using a weapon, these creatures have a +4 'to hit' 
+bonus due to their strength. 
+NYCADAEMON 
+As nycadaemons are clever and capable, they can use all sorts of 
+magic items appropriate to their size and nature. These creatures 
+have a graduated magic resistance which prevents low level magic 
+from functioning except rarely, and even higher level spell devices are 
+likely to malfunction with distressing regularity, so nycadaemons 
+typically shun all but the most powerful dweomered objects, - some 
+few miscellaneous objects, artifacts, relics and the like - and 
+enchanted weapons which have no magical projections to be affected 
+by their multi-planed structure. 
+The following powers can be used by nycadaemons: command three 
+times per day, dispel magic twice per day, dimension door three times 
+per day, gaseous form once per day, mirror image (4 images) twice per 
+day, reverse gravity twice per day, wind walk three times per day and 
+word of recall once per day. They may also employ any one of the 
+following powers once per round: comprehend languages, detect 
+invisibility, detect magic, enlarge (and reverse). fear (by touch), 
+invisibility (up to IO' radius), polymorph self, project image, read 
+magic, telepathy. 
+Only weapons of +2 or greater enchantqent will cause damage to 
+nycadaemons. Iron weapons and silver weapons do not harm these 
+creatures, unless the weapons are enchanted as noted. Paralysis and 
+poisons (including all gases) have no effect on them, and acids, cold 
+and fire cause them only half normal damage. They regenerate 3 hit 
+points of damage per turn (i.e. 0.3 hit points per melee round). 
+Nycadaemons are 100% resistant to magic of the first level, and this 
+resistance decreases in 5% increments k.f. mezzodaemon) to 60% at 
+ninth level. This is based upon 11th level of ability; it decreases in 
+5% steps if the spell-caster is of 12th or greater level and increases 
+by the same amount if the spell-caster is 10th level or lower. Be- 
+guiling, charm and suggestibn never affect the nycadaemon. 
+Examples: If a nycadaemon faces a 5th level spell from a 13th level 
+magicuser, its resistance is 80%-10% or 70%. If a 10th level magic- 
+user casts a a 4th level spell at a nycadaemon, its resistance is 85%+5% 
+= 90%. 
+The entire spectrum of radiation can be seen by nycadaemons (Le. 
+infrared, ultra-violet, X-rays, gamma rays etc.) The telepathic ability 
+of these creatures allows them to communicate on the telepathic level 
+with creatures of intelligence low or better. 
+Each nycadaemon has a personal name which they guard most care- 
+fully to avoid entrapment or servitude to some demon lord. arch devil 
+
+82,4
+
+I want an alternative to Maze called Dungeon that could be entered from Town. 
+It will also have 16 levels, stairs and evlevator in same position. 
+The probablity to encounter monsters will be the same and the monsters will be 
+the same as in the maze. The difference will be the layout of the dungeon. 
+If possible use the same engine and ui to dispaly the dungeon as the maze. 
+but i want the dungeon to support thin walls, that means the carving will not 
+work in the same way, I want it to be possible to define each square with a 
+number between 0 and 15 that defines the walls 1 means wall to the north, 
+2 means wall to the east, 4 south and 8 west. it is a boolean/binary represenation, 
+so for exampel 3 means wall to north and east. 15 means walls in all directions etc. 
+use the picture called Level1 here to define the first level: 
+C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\Dungeon
+83,2
+
+lootfactor should be multiplied not divided when finding treasure
+do if lootfactor is 0,2 then that should be multiplied by 0,2 and not divided by 0,2
+
+added levels.
+
+When defining the walls, 16 means there is a door the north, 32 door east, 64 door south, 128 door west. to draw a
+door, draw first a wall, then make rectangle slightly smaller than the wall but that goes all they way down to the
+floor
+
+some locations in the dungeon have an encounter with 80% chanse when first visited after entering the floor. the
+enounter is always inlair if possible when encountered in these squares. the squares on level 1 is 1,7 and 3,3 and
+6,6 present the encounter locations in a separeate json per floor
+
+implement 1st level cleric spell and 1st level illutionist spell.
+Duration 6 turns + 1 turn/level.
+I causes the party to see 1 step further in the dungeon
+
+Continual light 3rd level cleric spell and 3rd level illutionist spell.
+Duration permanent or until dispell magic is cast or Darkness or entering magical darkness.
+I causes the party to see 2 step further in the dungeon. Magical darkenss appear in squares
+from 0,9 to 7,9 and from 0,10 to 10,7 and from 13,9 to 18,9 and from 13,10 to 19,10.
+When darkness you only see 1 square ahead and a text Dark you seen nothing is shown. when moving east from column 19
+you enter column 0 and when moving west from column 0, you enter column 19. All maps on all floors are wrap around.
+
+when walking in to a woll Write OUCH! centralized with a big font. also when walking in to a door write OUCH! it
+should not open autatically only when pressing k
+
+dont change the graphics when door is opend, but move the party one step forward. after entering the door it will be autoamatically closed again.
+
+make the area above the stairs shaded. 85,3
+
+when darkness present only see the square you are on, notheing ahead show the darkenss with a shade something like
+in C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\Darkness.png
+
+in the dungeon only the elevator is in square 8,10
+when in square 12,9 show a message "A LARGE SIGN ON THE WALL READ: ** AREA OUT OF BOUNDS! **"
+Instead of writing Ouch when walking into a wall, write centralized with a big font in a frame "YOU CAN'T WALK THROUGH WALLS!"
+walking forward will automatically open doors, so no need to write OUCH!
+
+it should be possible to see the darkness from the side and from a distance, it should fill upp the east side of the
+wall in square 9,12
+

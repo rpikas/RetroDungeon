@@ -771,7 +771,9 @@
       "XPValuePerHitPoint": 14,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 11-12 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Average to very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Dragon, Red",
@@ -825,7 +827,9 @@
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 11-12 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Dragon, Silver",
@@ -879,7 +883,9 @@
       "XPValuePerHitPoint": 15,
       "TreasureType": "H",
       "DungeonRandomMonsterTableReference": "Level 8, Roll 11-12 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Ghost",
@@ -1481,7 +1487,9 @@
       "InLair": 30,
       "TreasureType": "B,Q(x5),X",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 8, Roll 57-64"
+      "DungeonRandomMonsterTableReference": "Level 8, Roll 57-64",
+      "Intelligence": "Non-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Rust Monster",
@@ -1725,7 +1733,9 @@
       "XPValuePerHitPoint": 9,
       "TreasureType": "I",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 8, Roll 87-92"
+      "DungeonRandomMonsterTableReference": "Level 8, Roll 87-92",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Xorn",

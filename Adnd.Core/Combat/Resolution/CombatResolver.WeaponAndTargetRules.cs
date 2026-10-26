@@ -578,7 +578,7 @@ public sealed partial class CombatResolver
         var lowerName = (target.Template.Name ?? string.Empty).ToLowerInvariant();
         if (lowerName.Contains("lycanthrope")
             || lowerName.Contains("were")
-            || lowerName.Contains("doppelganger")
+            || lowerName.Contains("doppleganger")
             || lowerName.Contains("wolfwer")
             || lowerName.Contains("shape changer")
             || lowerName.Contains("shapechanger"))

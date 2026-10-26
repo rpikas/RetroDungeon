@@ -4,8 +4,10 @@ using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
 using Adnd.Core.Dices;
+using Adnd.Core.Dungeon;
 using Adnd.Core.Monsters;
 using Adnd.Data.Characters;
+using Adnd.Data.Dungeon;
 using Adnd.Data.Encounters;
 using Adnd.Data.Monsters;
 using Adnd.Data.Party;
@@ -36,9 +38,14 @@ public sealed class MazeForm : Form
 
     private enum CellType { Wall, Floor }
 
-    private const int MaxVisibilityDepth = 5;
-    private const int DepthLevels = MaxVisibilityDepth - 1;
-    private const int StraightAhead = MaxVisibilityDepth - 1;
+    // Depth levels are the squares drawn, counting the one the party stands on. Normally the party sees 3 squares
+    // ahead; Light adds one, Continual Light two; magical darkness leaves only one square ahead.
+    private const int BaseDepthLevels = 4;
+    private const int LightDepthLevels = BaseDepthLevels + 1;
+    private const int ContinualLightDepthLevels = BaseDepthLevels + 2;
+    private const int DarkDepthLevels = 1;
+    private const int MaxDepthLevels = ContinualLightDepthLevels;
+    private const int StraightAhead = MaxDepthLevels;
     private const int PositionCount = (StraightAhead * 2) + 1;
     private const int TopLeft = 0;
     private const int BottomRight = 1;
@@ -52,10 +59,19 @@ public sealed class MazeForm : Form
         "Skeleton"
     };
 
-    private readonly PointF[,,] _backWallCoords = new PointF[DepthLevels, PositionCount, 2];
+    private readonly PointF[,,] _backWallCoords = new PointF[MaxDepthLevels, PositionCount, 2];
+    private int _depthLevels = BaseDepthLevels;
+    private int _lightStepsRemaining;
+    private bool _continualLightActive;
+    private bool _inMagicalDarkness;
+    private string? _centerMessage;
+    private IReadOnlyList<DungeonDarkArea> _darkAreas = Array.Empty<DungeonDarkArea>();
 
     private CellType[,] _maze;
     private Point _position = new(0, 0);
+
+    // The elevator is at (1,2) in the Maze and at (8,10) in the Dungeon.
+    private Point ElevatorPosition => _thinWalls ? new Point(8, 10) : new Point(1, 2);
     private Direction _direction = Direction.North;
     private readonly Random _random = new();
     private readonly PartyRepository _partyRepository = new();
@@ -76,7 +92,120 @@ public sealed class MazeForm : Form
     // running; the keyboard is unaffected either way.
     private ViewerControlPump? _viewerControl;
 
+    // Dungeon mode: same engine, but walls sit on square edges (see WallGrid). _maze still marks which
+    // squares can be entered, so encounters, treasure and the viewer work unchanged.
+    private readonly bool _thinWalls;
+    private WallGrid? _walls;
+    private HashSet<(int Depth, int Position)>? _visibleCells;
+    private readonly DungeonLayoutRepository _dungeonLayouts = new();
+    private IReadOnlyList<DungeonEncounterLocation> _encounterLocations = Array.Empty<DungeonEncounterLocation>();
+    private readonly HashSet<(int X, int Y)> _visitedEncounterLocations = new();
+
     private void BuildMazeForLevel(int level)
+    {
+        if (!_thinWalls)
+        {
+            BuildCarvedMazeForLevel(level);
+            return;
+        }
+
+        // Levels without a hand-drawn layout yet reuse the maze layout, converted to thin walls.
+        var walls = _dungeonLayouts.TryLoad(level);
+        if (walls is null)
+        {
+            BuildCarvedMazeForLevel(level);
+            walls = WallGrid.FromFloors(_maze.GetLength(0), _maze.GetLength(1), (x, y) => _maze[x, y] == CellType.Floor);
+        }
+
+        _walls = walls;
+        _maze = new CellType[walls.Width, walls.Height];
+        for (var y = 0; y < walls.Height; y++)
+            for (var x = 0; x < walls.Width; x++)
+                _maze[x, y] = walls.IsSolid(x, y) ? CellType.Wall : CellType.Floor;
+    }
+
+    private static WallSide ToWallSide(Direction direction) => direction switch
+    {
+        Direction.North => WallSide.North,
+        Direction.East => WallSide.East,
+        Direction.South => WallSide.South,
+        _ => WallSide.West
+    };
+
+    private bool CanStepForward()
+    {
+        if (_walls is not null)
+            return _walls.CanMove(_position.X, _position.Y, ToWallSide(_direction));
+
+        var v = GetForwardVector(_direction);
+        return IsOpen(new Point(_position.X + v.X, _position.Y + v.Y));
+    }
+
+    // Doors are drawn shut but the party walks straight through them.
+    private bool IsClosedDoor(Point cell, WallSide side)
+        => _walls is not null && _walls.HasDoor(cell.X, cell.Y, side);
+
+    // Whether the way from a square to its front, left or right neighbour is blocked.
+    private bool IsFrontBlocked(Point cell) => _walls is not null
+        ? _walls.HasWall(cell.X, cell.Y, ToWallSide(_direction)) || IsClosedDoor(cell, ToWallSide(_direction))
+        : !IsOpen(GetCellFartherAway(cell, _direction, 1));
+
+    private bool IsLeftBlocked(Point cell) => _walls is not null
+        ? _walls.HasWall(cell.X, cell.Y, ToWallSide(TurnLeft(_direction))) || IsClosedDoor(cell, ToWallSide(TurnLeft(_direction)))
+        : !IsOpen(GetCellToTheLeft(cell, _direction, 1));
+
+    private bool IsRightBlocked(Point cell) => _walls is not null
+        ? _walls.HasWall(cell.X, cell.Y, ToWallSide(TurnRight(_direction))) || IsClosedDoor(cell, ToWallSide(TurnRight(_direction)))
+        : !IsOpen(GetCellToTheRight(cell, _direction, 1));
+
+    private bool HasFrontDoor(Point cell) => IsClosedDoor(cell, ToWallSide(_direction));
+    private bool HasLeftDoor(Point cell) => IsClosedDoor(cell, ToWallSide(TurnLeft(_direction)));
+    private bool HasRightDoor(Point cell) => IsClosedDoor(cell, ToWallSide(TurnRight(_direction)));
+
+    // With thin walls a square beside the corridor is only visible if no wall stands in the way, so work
+    // out which (depth, position) squares the party can actually see before drawing.
+    private HashSet<(int Depth, int Position)> ComputeVisibleCells()
+    {
+        var visible = new HashSet<(int, int)>();
+        var pending = new Queue<(int Depth, int Position)>();
+        visible.Add((0, StraightAhead));
+        pending.Enqueue((0, StraightAhead));
+
+        while (pending.Count > 0)
+        {
+            var (depth, position) = pending.Dequeue();
+            var cell = GetCellFartherAway(_position, _direction, depth);
+            var offset = position - StraightAhead;
+            cell = offset < 0
+                ? GetCellToTheLeft(cell, _direction, -offset)
+                : GetCellToTheRight(cell, _direction, offset);
+
+            // Magical darkness can be seen but nothing can be seen through it.
+            if (IsDark(cell))
+                continue;
+
+            void Visit(int nextDepth, int nextPosition)
+            {
+                if (nextDepth >= _depthLevels || nextPosition < 0 || nextPosition >= PositionCount
+                    || Math.Abs(nextPosition - StraightAhead) > nextDepth + 1)
+                    return;
+
+                if (visible.Add((nextDepth, nextPosition)))
+                    pending.Enqueue((nextDepth, nextPosition));
+            }
+
+            if (!IsFrontBlocked(cell))
+                Visit(depth + 1, position);
+            if (offset <= 0 && !IsLeftBlocked(cell))
+                Visit(depth, position - 1);
+            if (offset >= 0 && !IsRightBlocked(cell))
+                Visit(depth, position + 1);
+        }
+
+        return visible;
+    }
+
+    private void BuildCarvedMazeForLevel(int level)
     {
         _maze = new CellType[22, 22];
 
@@ -714,9 +843,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             _maze[x, y] = CellType.Floor;
     }
 
-    public MazeForm()
+    public MazeForm(bool thinWalls = false)
     {
-        Text = "Maze";
+        _thinWalls = thinWalls;
+        Text = thinWalls ? "Dungeon" : "Maze";
         ClientSize = new Size(1200, 820);
         StartPosition = FormStartPosition.CenterScreen;
         KeyPreview = true;
@@ -734,6 +864,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         PruneUnavailablePartyMembers();
         BuildMazeForLevel(_currentDungeonLevel);
+        LoadEncounterLocationsForLevel(_currentDungeonLevel);
+        LoadLightFromParty();
         KeyDown += MazeForm_KeyDown;
 
         // Follow the fight. These are observers: combat neither waits for them nor changes course.
@@ -753,7 +885,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         Shown += (_, _) =>
         {
-            if (_position.X == 1 && _position.Y == 2)
+            if (_position == ElevatorPosition)
             {
                 ShowDungeonElevatorDialog();
                 Invalidate();
@@ -1353,6 +1485,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         // the table too.
         using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable);
         inspect.ShowDialog(this);
+        LoadLightFromParty();
         if (inspect.ReturnToTownRequested)
         {
             LeaveDungeonForTown();
@@ -1414,6 +1547,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         _currentDungeonLevel = selected.Value;
         BuildMazeForLevel(_currentDungeonLevel);
+        LoadEncounterLocationsForLevel(_currentDungeonLevel);
 
         if (!_fullMoonShownForThisDungeonTrip && IsFullMoonNight())
         {
@@ -1424,7 +1558,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         ApplyLycanthropyStateForDungeonDescent();
 
         // Elevator landing.
-        _position = new Point(1, 2);
+        _position = ElevatorPosition;
+        UpdateLighting();
 
         Invalidate();
         PublishToViewer();
@@ -1639,6 +1774,29 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         InitWallCoords(viewport);
         DrawScene(e.Graphics, pen, viewport);
 
+        if (_inMagicalDarkness)
+        {
+            using var darkBrush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
+            var size = e.Graphics.MeasureString("Dark, you see nothing.", Font);
+            e.Graphics.FillRectangle(Brushes.Black, viewport.X + 8f, viewport.Y + 4f, size.Width + 8f, size.Height + 4f);
+            e.Graphics.DrawString("Dark, you see nothing.", Font, darkBrush, new PointF(viewport.X + 12f, viewport.Y + 8f));
+        }
+        if (_centerMessage is not null)
+        {
+            using var bigFont = new Font(Font.FontFamily, _centerMessage.Length > 12 ? 30f : 48f, FontStyle.Bold);
+            using var bigBrush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
+            using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+            var textSize = e.Graphics.MeasureString(_centerMessage, bigFont, (int)(viewport.Width * 0.8f), format);
+            var box = new RectangleF(
+                viewport.X + ((viewport.Width - textSize.Width) / 2f) - 24f,
+                viewport.Y + ((viewport.Height - textSize.Height) / 2f) - 16f,
+                textSize.Width + 48f,
+                textSize.Height + 32f);
+            e.Graphics.FillRectangle(Brushes.Black, box);
+            e.Graphics.DrawRectangle(pen, box.X, box.Y, box.Width, box.Height);
+            e.Graphics.DrawString(_centerMessage, bigFont, bigBrush, box, format);
+        }
+
         if (_partyOverlayVisible)
         {
             DrawOverlayLegend(e.Graphics);
@@ -1652,9 +1810,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private void InitWallCoords(RectangleF viewport)
     {
-        var frames = BuildFrames(viewport, DepthLevels);
+        var frames = BuildFrames(viewport, _depthLevels);
 
-        for (int depth = 0; depth < DepthLevels; depth++)
+        for (int depth = 0; depth < _depthLevels; depth++)
         {
             var centerRect = frames[depth + 1];
             SetWallRect(depth, StraightAhead, centerRect);
@@ -1670,12 +1828,24 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private void DrawScene(Graphics graphics, Pen pen, RectangleF viewport)
     {
-        for (int depth = DepthLevels - 1; depth >= 0; depth--)
+        // Magical darkness hides the whole dungeon behind a dithered shade.
+        if (_inMagicalDarkness)
+        {
+            using var shade = new System.Drawing.Drawing2D.HatchBrush(
+                System.Drawing.Drawing2D.HatchStyle.Percent50, GameRulesProvider.Current.DefaultColor, Color.Black);
+            graphics.FillRectangle(shade, viewport);
+            return;
+        }
+
+        _visibleCells = _walls is null ? null : ComputeVisibleCells();
+
+        for (int depth = _depthLevels - 1; depth >= 0; depth--)
         {
             var centerCell = GetCellFartherAway(_position, _direction, depth);
-            DrawCellContents(graphics, pen, viewport, centerCell, depth, StraightAhead);
 
-            for (int i = 1; i <= depth + 1; i++)
+            // Outermost squares first and the centre last, so a wall beside the corridor is painted over
+            // the squares it hides behind it.
+            for (int i = depth + 1; i >= 1; i--)
             {
                 var leftCell = GetCellToTheLeft(centerCell, _direction, i);
                 DrawCellContents(graphics, pen, viewport, leftCell, depth, StraightAhead - i);
@@ -1683,58 +1853,81 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 var rightCell = GetCellToTheRight(centerCell, _direction, i);
                 DrawCellContents(graphics, pen, viewport, rightCell, depth, StraightAhead + i);
             }
+
+            DrawCellContents(graphics, pen, viewport, centerCell, depth, StraightAhead);
         }
     }
 
     private void DrawCellContents(Graphics graphics, Pen pen, RectangleF viewport, Point cell, int depth, int position)
     {
-        if (!IsOpen(cell) || depth < 0 || depth >= DepthLevels || position < 0 || position >= PositionCount)
+        if (!IsOpen(cell) || depth < 0 || depth >= _depthLevels || position < 0 || position >= PositionCount)
+            return;
+
+        if (_visibleCells is not null && !_visibleCells.Contains((depth, position)))
             return;
 
         var back = GetWallRect(depth, position);
         if (back.Height < 2f)
             return;
 
+        if (IsDark(cell))
+        {
+            DrawDarkCell(graphics, viewport, depth, position, back);
+            return;
+        }
+
         bool backWallDrawn = false;
         bool leftWallDrawn = false;
         bool rightWallDrawn = false;
 
+        if (_currentDungeonLevel == 1 && cell.X == 0 && cell.Y == 0)
+            DrawCeilingShading(graphics, pen, viewport, depth, position, back);
+
         var frontCell = GetCellFartherAway(cell, _direction, 1);
-        if (!IsOpen(frontCell))
+        if (IsFrontBlocked(cell))
         {
             using var wallBrush = new SolidBrush(Color.Black);
             graphics.FillRectangle(wallBrush, back);
             graphics.DrawRectangle(pen, back.X, back.Y, back.Width, back.Height);
             backWallDrawn = true;
+
+            if (HasFrontDoor(cell))
+            {
+                // Slightly narrower and lower than the wall, and reaching all the way down to the floor.
+                var door = new RectangleF(
+                    back.X + (back.Width * 0.15f),
+                    back.Y + (back.Height * 0.12f),
+                    back.Width * 0.70f,
+                    back.Height * 0.88f);
+                graphics.DrawRectangle(pen, door.X, door.Y, door.Width, door.Height);
+            }
         }
 
         if (position <= StraightAhead)
         {
-            var leftCell = GetCellToTheLeft(cell, _direction, 1);
-            if (!IsOpen(leftCell))
+            if (IsLeftBlocked(cell))
             {
-                DrawLeftWall(graphics, pen, viewport, depth, position, back);
+                DrawLeftWall(graphics, pen, viewport, depth, position, back, HasLeftDoor(cell));
                 leftWallDrawn = true;
             }
         }
 
         if (position >= StraightAhead)
         {
-            var rightCell = GetCellToTheRight(cell, _direction, 1);
-            if (!IsOpen(rightCell))
+            if (IsRightBlocked(cell))
             {
-                DrawRightWall(graphics, pen, viewport, depth, position, back);
+                DrawRightWall(graphics, pen, viewport, depth, position, back, HasRightDoor(cell));
                 rightWallDrawn = true;
             }
         }
 
-        var frontLeft = GetCellToTheLeft(frontCell, _direction, 1);
-        var frontRight = GetCellToTheRight(frontCell, _direction, 1);
+        bool frontLeftBlocked = IsLeftBlocked(frontCell);
+        bool frontRightBlocked = IsRightBlocked(frontCell);
 
-        bool drawLeftVertical = (backWallDrawn && (leftWallDrawn || !IsOpen(frontLeft))) ||
-                                (leftWallDrawn && !IsOpen(frontLeft));
-        bool drawRightVertical = (backWallDrawn && (rightWallDrawn || !IsOpen(frontRight))) ||
-                                 (rightWallDrawn && !IsOpen(frontRight));
+        bool drawLeftVertical = (backWallDrawn && (leftWallDrawn || frontLeftBlocked)) ||
+                                (leftWallDrawn && frontLeftBlocked);
+        bool drawRightVertical = (backWallDrawn && (rightWallDrawn || frontRightBlocked)) ||
+                                 (rightWallDrawn && frontRightBlocked);
 
         if (drawLeftVertical)
         {
@@ -1751,7 +1944,97 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
     }
 
-    private void DrawLeftWall(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back)
+    private bool IsDark(Point cell) => _darkAreas.Any(a => a.Contains(cell.X, cell.Y));
+
+    // A dark square is filled with the dithered shade over everything it occupies: the outline of its near and far faces.
+    private void DrawDarkCell(Graphics graphics, RectangleF viewport, int depth, int position, RectangleF back)
+    {
+        var near = depth == 0
+            ? ShiftRect(viewport, (position - StraightAhead) * viewport.Width)
+            : GetWallRect(depth - 1, position);
+
+        var points = new List<PointF>
+        {
+            new(near.Left, near.Top), new(near.Right, near.Top), new(near.Right, near.Bottom), new(near.Left, near.Bottom),
+            new(back.Left, back.Top), new(back.Right, back.Top), new(back.Right, back.Bottom), new(back.Left, back.Bottom)
+        };
+
+        var hull = ConvexHull(points);
+        var state = graphics.Save();
+        graphics.SetClip(viewport, System.Drawing.Drawing2D.CombineMode.Intersect);
+        using var shade = new System.Drawing.Drawing2D.HatchBrush(
+            System.Drawing.Drawing2D.HatchStyle.Percent50, GameRulesProvider.Current.DefaultColor, Color.Black);
+        graphics.FillPolygon(shade, hull);
+        graphics.Restore(state);
+    }
+
+    private static PointF[] ConvexHull(List<PointF> points)
+    {
+        var sorted = points.OrderBy(p => p.X).ThenBy(p => p.Y).ToList();
+        static float Cross(PointF o, PointF a, PointF b) => ((a.X - o.X) * (b.Y - o.Y)) - ((a.Y - o.Y) * (b.X - o.X));
+
+        var hull = new List<PointF>();
+        foreach (var p in sorted)
+        {
+            while (hull.Count >= 2 && Cross(hull[^2], hull[^1], p) <= 0)
+                hull.RemoveAt(hull.Count - 1);
+            hull.Add(p);
+        }
+
+        var lowerCount = hull.Count + 1;
+        for (var i = sorted.Count - 2; i >= 0; i--)
+        {
+            var p = sorted[i];
+            while (hull.Count >= lowerCount && Cross(hull[^2], hull[^1], p) <= 0)
+                hull.RemoveAt(hull.Count - 1);
+            hull.Add(p);
+        }
+
+        hull.RemoveAt(hull.Count - 1);
+        return hull.ToArray();
+    }
+
+    // The stairs up lead through the ceiling, so it is shaded with closely spaced parallel lines.
+    private void DrawCeilingShading(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back)
+    {
+        var near = depth == 0 ? viewport : GetWallRect(depth - 1, position);
+        var height = back.Top - near.Top;
+        if (height < 2f || position != StraightAhead && depth == 0)
+            return;
+
+        using var thin = new Pen(pen.Color, 1f);
+        for (var y = near.Top; y <= back.Top; y += 3f)
+        {
+            var t = (y - near.Top) / height;
+            var left = near.Left + ((back.Left - near.Left) * t);
+            var right = near.Right + ((back.Right - near.Right) * t);
+            graphics.DrawLine(thin, left, y, right, y);
+        }
+    }
+
+    private static void DrawSideDoor(Graphics graphics, Pen pen, PointF nearTop, PointF nearBottom, PointF farTop, PointF farBottom)
+    {
+        // Along the wall from the near edge to the far edge; the top is inset, the bottom stays on the floor.
+        static PointF Along(PointF a, PointF b, float t) => new(a.X + ((b.X - a.X) * t), a.Y + ((b.Y - a.Y) * t));
+
+        PointF Point(float t, bool top)
+        {
+            var wallTop = Along(nearTop, farTop, t);
+            var wallBottom = Along(nearBottom, farBottom, t);
+            return top ? Along(wallTop, wallBottom, 0.12f) : wallBottom;
+        }
+
+        var doorNearTop = Point(0.2f, true);
+        var doorNearBottom = Point(0.2f, false);
+        var doorFarTop = Point(0.8f, true);
+        var doorFarBottom = Point(0.8f, false);
+
+        graphics.DrawLine(pen, doorNearTop, doorFarTop);
+        graphics.DrawLine(pen, doorNearTop, doorNearBottom);
+        graphics.DrawLine(pen, doorFarTop, doorFarBottom);
+    }
+
+    private void DrawLeftWall(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back, bool door = false)
     {
         PointF nearTop;
         PointF nearBottom;
@@ -1779,9 +2062,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         graphics.DrawLine(pen, nearBottom, farBottom);
         graphics.DrawLine(pen, nearTop, nearBottom);
         graphics.DrawLine(pen, farTop, farBottom);
+
+        if (door)
+            DrawSideDoor(graphics, pen, nearTop, nearBottom, farTop, farBottom);
     }
 
-    private void DrawRightWall(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back)
+    private void DrawRightWall(Graphics graphics, Pen pen, RectangleF viewport, int depth, int position, RectangleF back, bool door = false)
     {
         PointF nearTop;
         PointF nearBottom;
@@ -1809,6 +2095,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         graphics.DrawLine(pen, nearBottom, farBottom);
         graphics.DrawLine(pen, nearTop, nearBottom);
         graphics.DrawLine(pen, farTop, farBottom);
+
+        if (door)
+            DrawSideDoor(graphics, pen, nearTop, nearBottom, farTop, farBottom);
     }
 
     private void SetWallRect(int depth, int position, RectangleF rect)
@@ -1995,7 +2284,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         for (int d = 0; d <= maxDepth; d++)
         {
             float u = d / (float)(maxDepth + 1);
-            float t = 1f - (float)Math.Pow(1f - u, 1.8f);
+            float t = 1f - (float)Math.Pow(1f - u, 1.5f);
 
             float left = Lerp(viewport.Left + 160f, cx, t);
             float right = Lerp(viewport.Right - 160f, cx, t);
@@ -2492,8 +2781,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         var options = new List<ViewerPromptOption>();
 
-        var ahead = GetForwardVector(_direction);
-        if (IsOpen(new Point(_position.X + ahead.X, _position.Y + ahead.Y)))
+        if (CanStepForward())
             options.Add(new ViewerPromptOption("forward", "Forward"));
 
         options.Add(new ViewerPromptOption("turnLeft", "Turn left"));
@@ -2590,17 +2878,24 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private void TryMoveForward()
     {
         var v = GetForwardVector(_direction);
-        var candidate = new Point(_position.X + v.X, _position.Y + v.Y);
-        if (!IsOpen(candidate))
+        var candidate = WrapCell(new Point(_position.X + v.X, _position.Y + v.Y));
+        if (!CanStepForward())
+        {
+            ShowCenteredMessage("YOU CAN'T WALK THROUGH WALLS!");
             return;
+        }
 
         _position = candidate;
         ApplyPoisonDamageForStep();
 
-        if (_position.X == 1 && _position.Y == 2)
+        if (_position == ElevatorPosition)
             ShowDungeonElevatorDialog();
 
+        if (_thinWalls && _currentDungeonLevel == 1 && _position.X == 12 && _position.Y == 9)
+            SayOnBoth("Sign", "A LARGE SIGN ON THE WALL READ: ** AREA OUT OF BOUNDS! **");
+
         ProcessTreasureFindingStep();
+        ProcessLightStep();
 
         if (_currentDungeonLevel == 1
             && _position.X == 0
@@ -2616,11 +2911,79 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
         }
 
-        TryRandomEncounter();
+        if (TryEncounterAtFixedLocation())
+        {
+            // The square's own encounter replaces the usual random check for this step.
+        }
+        else
+        {
+            TryRandomEncounter();
+        }
 
         var delayMs = Math.Max(0, GameRulesProvider.Current.DelayInMsbetweenActions);
         if (delayMs > 0)
             Thread.Sleep(delayMs);
+    }
+
+    // Flashes a short message in the middle of the view, then clears it.
+    private void ShowCenteredMessage(string text)
+    {
+        _centerMessage = text;
+        Refresh();
+        Thread.Sleep(600);
+        _centerMessage = null;
+        Invalidate();
+    }
+
+    private void LoadLightFromParty()
+    {
+        var party = _partyRepository.Load();
+        _lightStepsRemaining = Math.Max(0, party.LightStepsRemaining);
+        _continualLightActive = party.ContinualLightActive;
+        UpdateLighting();
+    }
+
+    private void UpdateLighting()
+    {
+        _inMagicalDarkness = _darkAreas.Any(a => a.Contains(_position.X, _position.Y));
+        _depthLevels = _inMagicalDarkness ? DarkDepthLevels
+            : _continualLightActive ? ContinualLightDepthLevels
+            : _lightStepsRemaining > 0 ? LightDepthLevels
+            : BaseDepthLevels;
+        Invalidate();
+    }
+
+    // Each step uses up one step of Light. Magical darkness snuffs out Continual Light for good.
+    private void ProcessLightStep()
+    {
+        string? message = null;
+        var party = _partyRepository.Load();
+        var changed = false;
+
+        if (_continualLightActive && _darkAreas.Any(a => a.Contains(_position.X, _position.Y)))
+        {
+            _continualLightActive = false;
+            party.ContinualLightActive = false;
+            changed = true;
+            message = "The magical darkness snuffs out the Continual Light.";
+        }
+
+        if (_lightStepsRemaining > 0)
+        {
+            _lightStepsRemaining--;
+            party.LightStepsRemaining = _lightStepsRemaining;
+            changed = true;
+            if (_lightStepsRemaining == 0 && message is null && !_continualLightActive)
+                message = "The magical light fades.";
+        }
+
+        if (changed)
+            _partyRepository.Save(party);
+
+        UpdateLighting();
+
+        if (message is not null)
+            SayOnBoth("Light", message);
     }
 
     private void ProcessTreasureFindingStep()
@@ -2712,6 +3075,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private List<Point> GetOpenTiles(int level)
     {
         var previousMaze = _maze;
+        var previousWalls = _walls;
         BuildMazeForLevel(level);
 
         var open = new List<Point>();
@@ -2725,6 +3089,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         _maze = previousMaze;
+        _walls = previousWalls;
         return open;
     }
 
@@ -3467,13 +3832,65 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 string.Equals(a?.Trim(), "Regeneration (1)", StringComparison.OrdinalIgnoreCase)));
     }
 
-    private void TryRandomEncounter()
+    private void TryRandomEncounter(double? chanceOverride = null, bool forceInLair = false)
     {
-        var configuredChance = GameRulesProvider.ClampChance(GameRulesProvider.Current.MonsterEncounterChance);
+        var configuredChance = chanceOverride
+            ?? GameRulesProvider.ClampChance(GameRulesProvider.Current.MonsterEncounterChance);
         var shouldEncounter = configuredChance > 0 && _random.NextDouble() < configuredChance;
         if (!shouldEncounter)
             return;
 
+        _combatCoordinator.ForceMonstersInLair = forceInLair;
+        try
+        {
+            RunRandomEncounter();
+        }
+        finally
+        {
+            _combatCoordinator.ForceMonstersInLair = false;
+        }
+    }
+
+    // Dungeon squares with a fixed encounter: rolled once, the first time the party steps there after
+    // entering the floor. Returns true when the square is such a location (and so was not visited before).
+    private bool TryEncounterAtFixedLocation()
+    {
+        if (!_thinWalls)
+            return false;
+
+        var location = _encounterLocations.FirstOrDefault(l => l.X == _position.X && l.Y == _position.Y);
+        if (location is null || !_visitedEncounterLocations.Add((location.X, location.Y)))
+            return false;
+
+        var chance = Math.Clamp(location.ChancePercent, 0, 100);
+        var roll = _random.Next(1, 101);
+        var encounter = roll <= chance;
+
+        RuleApplicationInfo.Publish(
+            "HomeBrew",
+            "",
+            $"Fixed encounter at ({location.X},{location.Y}) on level {_currentDungeonLevel}",
+            "First visit to the square after entering the floor: roll 1d100, an encounter happens on a roll of the chance or less. The monsters are in their lair when they have one.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Chance {chance}% => {(encounter ? "encounter" : "no encounter")}.");
+
+        if (encounter)
+            TryRandomEncounter(chanceOverride: 1d, forceInLair: true);
+
+        return true;
+    }
+
+    private void LoadEncounterLocationsForLevel(int level)
+    {
+        _visitedEncounterLocations.Clear();
+        _encounterLocations = _thinWalls ? _dungeonLayouts.LoadEncounterLocations(level) : Array.Empty<DungeonEncounterLocation>();
+        _darkAreas = _thinWalls ? _dungeonLayouts.LoadDarkAreas(level) : Array.Empty<DungeonDarkArea>();
+    }
+
+    private void RunRandomEncounter()
+    {
         var firstGroupRoll = RollDungeonMonsterForLevelWithCount(_currentDungeonLevel);
         var monsterName = firstGroupRoll?.MonsterName;
 
@@ -4932,37 +5349,47 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return string.Join(", ", statuses);
     }
 
-    private static Point GetCellFartherAway(Point referencePoint, Direction direction, int distance)
+    private Point GetCellFartherAway(Point referencePoint, Direction direction, int distance)
     {
-        return direction switch
+        return WrapCell(direction switch
         {
             Direction.North => new Point(referencePoint.X, referencePoint.Y - distance),
             Direction.South => new Point(referencePoint.X, referencePoint.Y + distance),
             Direction.East => new Point(referencePoint.X + distance, referencePoint.Y),
             _ => new Point(referencePoint.X - distance, referencePoint.Y)
-        };
+        });
     }
 
-    private static Point GetCellToTheLeft(Point referencePoint, Direction referenceDirection, int distance)
+    private Point GetCellToTheLeft(Point referencePoint, Direction referenceDirection, int distance)
     {
-        return referenceDirection switch
+        return WrapCell(referenceDirection switch
         {
             Direction.North => new Point(referencePoint.X - distance, referencePoint.Y),
             Direction.South => new Point(referencePoint.X + distance, referencePoint.Y),
             Direction.East => new Point(referencePoint.X, referencePoint.Y - distance),
             _ => new Point(referencePoint.X, referencePoint.Y + distance)
-        };
+        });
     }
 
-    private static Point GetCellToTheRight(Point referencePoint, Direction referenceDirection, int distance)
+    private Point GetCellToTheRight(Point referencePoint, Direction referenceDirection, int distance)
     {
-        return referenceDirection switch
+        return WrapCell(referenceDirection switch
         {
             Direction.North => new Point(referencePoint.X + distance, referencePoint.Y),
             Direction.South => new Point(referencePoint.X - distance, referencePoint.Y),
             Direction.East => new Point(referencePoint.X, referencePoint.Y + distance),
             _ => new Point(referencePoint.X, referencePoint.Y - distance)
-        };
+        });
+    }
+
+    // Dungeon maps wrap around; the maze keeps its outer walls and never leaves the grid.
+    private Point WrapCell(Point cell)
+    {
+        if (_walls is null)
+            return cell;
+
+        var (x, y) = _walls.Wrap(cell.X, cell.Y);
+        return new Point(x, y);
     }
 
     private static Direction TurnLeft(Direction direction) => direction switch
@@ -5003,9 +5430,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         _currentDungeonLevel = targetLevel;
         BuildMazeForLevel(_currentDungeonLevel);
-        _position = new Point(1, 2);
+        LoadEncounterLocationsForLevel(_currentDungeonLevel);
+        _position = ElevatorPosition;
         _direction = Direction.North;
-
+        UpdateLighting();
         // Publish here rather than waiting for the next keypress, so the table swaps levels as the
         // elevator doors close. The viewer clears the old level when it sees the new number.
         PublishToViewer();

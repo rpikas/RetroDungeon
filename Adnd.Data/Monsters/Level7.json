@@ -938,6 +938,8 @@
     },
     {
       "Name": "Dragon, Green",
+      "Intelligence": "Average to very",
+      "Alignment": "Lawful evil",
       "Type": "Dragon",
       "Frequency": "Rare",
       "NumberOfAppearancesMin": 1,
@@ -988,6 +990,8 @@
     },
     {
       "Name": "Dragon, Red",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
       "Type": "Dragon",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
@@ -1042,6 +1046,8 @@
     },
     {
       "Name": "Dragon, Silver",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good",
       "Type": "Dragon",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,
@@ -1682,6 +1688,8 @@
     },
     {
       "Name": "Invisible Stalker",
+      "Intelligence": "High",
+      "Alignment": "Neutral",
       "Type": "Elemental",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
@@ -2543,6 +2551,8 @@
     },
     {
       "Name": "Will-o-Wisp",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil",
       "Type": "Aberration",
       "Frequency": "Very Rare",
       "NumberOfAppearancesMin": 1,

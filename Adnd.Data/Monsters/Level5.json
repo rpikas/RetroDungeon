@@ -484,7 +484,7 @@
       "DungeonRandomMonsterTableReference": "Level 5, Roll 16-18"
     },
     {
-      "Name": "Doppelganger",
+      "Name": "Doppleganger",
       "Type": "Shapechanger",
       "Frequency": "Uncommon",
       "NumberOfAppearancesMin": 1,
@@ -563,7 +563,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Bronze Dragon",
@@ -607,7 +609,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Copper Dragon",
@@ -651,7 +655,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "High",
+      "Alignment": "Chaotic good"
     },
     {
       "Name": "Gold Dragon",
@@ -695,7 +701,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Genius",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Green Dragon",
@@ -739,7 +747,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Average to very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Red Dragon",
@@ -783,7 +793,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Silver Dragon",
@@ -827,7 +839,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Hydra 7 Heads",
@@ -897,7 +911,9 @@
       "TreasureType": "None",
       "Source": "Adnd",
       "DungeonRandomMonsterTableReference": "Level 5, Roll 27",
-      "DM comment": "Derived from existing pyrohydra entry pending a dedicated Pyrohydra 6 Heads template."
+      "DM comment": "Derived from existing pyrohydra entry pending a dedicated Pyrohydra 6 Heads template.",
+      "Intelligence": "Semi-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Imp",

@@ -71,3 +71,12 @@ Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests 
 
 Level 9 vampires should have level 5 cleric spells.
 Level 10 vampires should have level 6 magic-user spells
+
+## Dungeon mode, doors, fixed encounters, Light
+
+- Dungeon (thin walls) is entered with `D` in town. Layouts: `Adnd.Data\Dungeon\LevelN.json`; wall mask 1/2/4/8 = N/E/S/W wall, 16/32/64/128 = door N/E/S/W. Doors block sight but are passable.
+- `LevelN.Encounters.json` lists fixed squares (80% on first visit per floor, forced in-lair).
+- Light (Cleric 1 / Illusionist 1): lasts (6 + level) turns at 10 steps per turn, stored in `Party.LightStepsRemaining`, and the dungeon view shows one more square ahead. Exploration only.
+- Continual Light (Cleric 3 / Illusionist 3): `Party.ContinualLightActive`, two more squares ahead. Ended by Dispel Magic (now also castable outside combat, no target) or by stepping into magical darkness.
+- Magical darkness: rectangles in `LevelN.Darkness.json` (corners inclusive). In darkness the party sees one square ahead and "Dark, you see nothing." is shown. There is no Darkness spell yet.
+- Dungeon (thin-wall) maps wrap around in both directions (`WallGrid.Wrap`); a wall on the seam still blocks.

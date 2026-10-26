@@ -78,6 +78,7 @@ public class MainMenu
             Console.WriteLine("C)hurch of Chant");
             Console.WriteLine("B)oltac's Trading Post");
             Console.WriteLine("M)aze");
+            Console.WriteLine("D)ungeon");
             Console.WriteLine("S)ettings");
             Console.WriteLine("L<-eave");
 
@@ -147,6 +148,16 @@ public class MainMenu
                     }
 
                     EnterMaze();
+                    break;
+
+                case ConsoleKey.D:
+                    if (!HasPartyMembers())
+                    {
+                        ShowPartyRequiredMessage();
+                        break;
+                    }
+
+                    EnterMaze(thinWalls: true);
                     break;
 
                 case ConsoleKey.S:
@@ -317,7 +328,7 @@ public class MainMenu
     /// Down into the maze. Offered from anywhere in town, as the hub's M key always has been, but they leave
     /// from the gate -- that is where the stair is, and it is where they come back up to.
     /// </summary>
-    private void EnterMaze()
+    private void EnterMaze(bool thinWalls = false)
     {
         if (!ConfirmEarSeekerRiskBeforeDungeonEntry())
             return;
@@ -326,7 +337,7 @@ public class MainMenu
 
         ApplyEarSeekerDungeonEntryDeaths();
         RecalculatePartyCombatStateOnDungeonEntry();
-        _dungeonMenu.Show();
+        _dungeonMenu.Show(thinWalls);
 
         // A new day starts only after the party leaves the maze.
         var party = _partyRepo.Load();

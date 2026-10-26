@@ -41,6 +41,13 @@ public sealed class CombatCoordinator
                                                 //TryAssassinate-metoden. Jag ska kolla upp det.
 
     private readonly EncounterMonsterFactory _monsterFactory = new();
+
+    /// <summary>Puts every monster group created from now on in its lair, where it has one.</summary>
+    public bool ForceMonstersInLair
+    {
+        get => _monsterFactory.ForceInLair;
+        set => _monsterFactory.ForceInLair = value;
+    }
     private readonly CombatResolver _combatResolver;
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly PartyRepository _partyRepository = new();
@@ -114,6 +121,7 @@ public sealed class CombatCoordinator
             new EntangleHandler(),
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
+            new LightHandler(),
             new FaerieFireHandler(),
             new CharmPersonOrMammalHandler(),
             new CharmPersonHandler(),

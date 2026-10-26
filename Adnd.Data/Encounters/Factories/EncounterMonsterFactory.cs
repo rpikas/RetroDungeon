@@ -15,6 +15,12 @@ public sealed class EncounterMonsterFactory
     private readonly MonsterRepository _monsterRepository;
     private readonly Random _random = new();
 
+    /// <summary>
+    /// When set, every group created is placed in its lair if it has a lair at all (%InLair above 0),
+    /// instead of rolling for it. Used for fixed encounter locations in the dungeon.
+    /// </summary>
+    public bool ForceInLair { get; set; }
+
     private static int ParsePercent(string? raw, int defaultValue)
     {
         if (string.IsNullOrWhiteSpace(raw))
@@ -107,7 +113,7 @@ public sealed class EncounterMonsterFactory
         var lairTemplate = CloneMonster(template);
         var inLairRoll = _random.Next(1, 101);
         var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
-        var isInLair = inLairRoll <= inLairChance;
+        var isInLair = ForceInLair ? inLairChance > 0 : inLairRoll <= inLairChance;
 
         RuleApplicationInfo.Publish(
             lairTemplate.Name,
@@ -117,7 +123,7 @@ public sealed class EncounterMonsterFactory
             "1",
             "100",
             inLairRoll.ToString(),
-            $" {(isInLair ? "Group in lair" : "Group not in lair")}.");
+            $" {(isInLair ? "Group in lair" : "Group not in lair")}{(ForceInLair ? " (lair location: always in lair when possible)" : string.Empty)}.");
 
         var list = new List<MonsterInstance>(hitPointsPerDiePerMonster.Count);
         for (int i = 0; i < hitPointsPerDiePerMonster.Count; i++)
@@ -195,7 +201,7 @@ public sealed class EncounterMonsterFactory
 
         var inLairRoll = _random.Next(1, 101);
         var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
-        var isInLair = inLairRoll <= inLairChance;
+        var isInLair = ForceInLair ? inLairChance > 0 : inLairRoll <= inLairChance;
 
         RuleApplicationInfo.Publish(
             lairTemplate.Name,
@@ -207,7 +213,7 @@ public sealed class EncounterMonsterFactory
             "1",
             "100",
             inLairRoll.ToString(),
-            $" {(isInLair ? "Group in lair" : "Group not in lair")}.");
+            $" {(isInLair ? "Group in lair" : "Group not in lair")}{(ForceInLair ? " (lair location: always in lair when possible)" : string.Empty)}.");
     //    $"%InLair={inLairChance}%. {(isInLair ? "Group in lair" : "Group not in lair")}.");
 
         var list = new List<MonsterInstance>(count);

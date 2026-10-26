@@ -1,0 +1,13 @@
+{
+  "Id": "light_illusionist",
+  "Name": "Light",
+  "Class": "Illusionist",
+  "Level": 1,
+  "Description": "Lights the dungeon around the party. Duration 6 turns + 1 turn per caster level.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Heal",
+  "EffectDescription": "The party sees one step further in the dungeon for 6 turns + 1 turn per caster level."
+}

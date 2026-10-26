@@ -291,6 +291,9 @@ public sealed partial class CombatResolver
                 assassinationRoll.Roll.ToString(),
                 $"Assassin level {assassinLevel}, target HD {monsterLevel}, chance {assassinationRoll.ChancePercent}% => {(assassinationRoll.Success ? "success" : "failure")}.");
 
+            events.Add(new CombatEvent(
+                $"{member.Name} attempts to assassinate {target.DisplayName}: chance {assassinationRoll.ChancePercent}%, rolled {assassinationRoll.Roll} (1d100) => {(assassinationRoll.Success ? "success" : "failure")}."));
+
             if (assassinationRoll.Success)
             {
                 target.CurrentHitPoints = 0;

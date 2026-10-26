@@ -5,9 +5,9 @@ namespace Adnd.Game;
 
 public class DungeonMenu
 {
-    public void Show()
+    public void Show(bool thinWalls = false)
     {
-        using var maze = new MazeForm();
+        using var maze = new MazeForm(thinWalls);
 
         maze.Shown += (_, _) =>
         {

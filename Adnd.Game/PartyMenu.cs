@@ -46,6 +46,7 @@ public class PartyMenu
             new EntangleHandler(),
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
+            new LightHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
             new MagicMissileHandler(),
@@ -645,7 +646,7 @@ public class PartyMenu
 
         var targets = new List<SpellCastTarget>();
 
-        if (spell.RangeType == SpellRangeType.Self)
+        if (spell.RangeType == SpellRangeType.Self || spell.Id == "dispel_magic")
         {
             targets.Add(SpellCastTarget.Ally(caster));
         }
@@ -687,6 +688,10 @@ public class PartyMenu
 
         if (result.Success)
         {
+            var lightParty = _partyRepo.Load();
+            lightParty.ApplyLightSpellResult(result);
+            _partyRepo.Save(lightParty);
+
             foreach (var member in partyMembers)
                 _repo.Save(member);
             _repo.Save(caster);

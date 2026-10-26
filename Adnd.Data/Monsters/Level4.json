@@ -545,7 +545,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Bronze Dragon",
@@ -589,7 +591,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Copper Dragon",
@@ -633,7 +637,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "High",
+      "Alignment": "Chaotic good"
     },
     {
       "Name": "Gold Dragon",
@@ -677,7 +683,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Genius",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Green Dragon",
@@ -721,7 +729,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Average to very",
+      "Alignment": "Lawful evil"
     },
     {
       "Name": "Red Dragon",
@@ -765,7 +775,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Chaotic evil"
     },
     {
       "Name": "Silver Dragon",
@@ -809,7 +821,9 @@
       "XPValuePerHitPoint": 6,
       "TreasureType": "D",
       "DungeonRandomMonsterTableReference": "Level 4, Roll 23-24 then Dragon Subtable",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Exceptional",
+      "Alignment": "Lawful good"
     },
     {
       "Name": "Gargoyle",
@@ -1114,7 +1128,9 @@
       "BaseXPValue": 350,
       "TreasureType": "None",
       "Source": "Adnd",
-      "DungeonRandomMonsterTableReference": "Level 4, Roll 48"
+      "DungeonRandomMonsterTableReference": "Level 4, Roll 48",
+      "Intelligence": "Semi-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Werewolf",
@@ -1616,7 +1632,9 @@
       ],
       "BaseXPValue": 350,
       "TreasureType": "None",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Semi-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Poisonous Toad",
@@ -1692,7 +1710,9 @@
       ],
       "BaseXPValue": 450,
       "TreasureType": "C",
-      "Source": "Adnd"
+      "Source": "Adnd",
+      "Intelligence": "Semi-intelligent",
+      "Alignment": "Neutral"
     },
     {
       "Name": "Hell Hound",
