@@ -1256,7 +1256,58 @@
       "Intelligence": "Semi-intelligent",
       "Alignment": "Neutral"
     },
-    
+    {
+      "Name": "WERDNA",
+      "Type": "Demon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -7,
+      "HitDice": 10,
+      "Attacks": [
+        {
+          "Name": "Spell",
+          "NumberOfAttacks": 1,
+          "Damage": "8d5"
+        },
+        {
+          "Name": "Spell",
+          "NumberOfAttacks": 1,
+          "Damage": "8d5"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 9 Magic-User spells",
+          "Description": "50% chance Time Stop is cast and 50% chance Meteor Swarm."
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Energy Drain",
+          "Description": "Drains levels."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Immunity to fire and heat",
+          "Description": "Immune to fire."
+        },
+        {
+          "Name": "Cold Immunity",
+          "Description": "Immune to cold."
+        }
+      ],
+      "BaseXPValue": 10000,
+      "TreasureType": "F",
+      "Source": "Adnd",
+      "Size": "Medium"
+    },
     {
       "Name": "Earth Giant",
       "Type": "Giant",
