@@ -1,0 +1,77 @@
+{
+  "Category": "Misc",
+  "Items": [
+    {
+      "Status": "Implemented",
+      "Name": "Key of Bronze",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Opens the bronze passage on dungeon level 2. Without it the party is pushed back.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Key of Silver",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Opens the silver passage on dungeon level 2. Without it the party is pushed back.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Key of Gold",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Found beneath the bronze statue on dungeon level 2.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Statue of Bear",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Needed to pass the bear door on dungeon levels 2 and 4.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Statue of Frog",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Needed to pass the frog door on dungeon level 2.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Blue Ribbon",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Given by Trebor. Makes the elevator on dungeon level 4 accessible.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    }
+  ]
+}

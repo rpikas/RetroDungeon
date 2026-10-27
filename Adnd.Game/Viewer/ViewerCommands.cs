@@ -23,7 +23,8 @@ public static class ViewerCommands
         ["turnRight"] = Keys.Right,
         ["party"] = Keys.O,        // the party overlay
         ["camp"] = Keys.C,         // only while the overlay is up, exactly as on the keyboard
-        ["status"] = Keys.S,
+        ["status"] = Keys.T,
+        ["search"] = Keys.S,
         ["inspect"] = Keys.I,
         ["back"] = Keys.Escape,
     };

@@ -95,4 +95,24 @@ public class WallGridTests
         Assert.False(grid.HasDoor(1, 0, WallSide.West));
         Assert.False(grid.CanMove(1, 0, WallSide.West));
     }
+
+    [Fact]
+    public void SecretDoorLooksLikeWallFromBothSidesUntilRevealed()
+    {
+        var grid = WallGrid.FromRows(new[] { new[] { 32, 128 } });
+
+        grid.HideSecretDoor(0, 0, WallSide.East);
+
+        Assert.True(grid.HasWall(0, 0, WallSide.East));
+        Assert.True(grid.HasWall(1, 0, WallSide.West));
+        Assert.False(grid.HasDoor(0, 0, WallSide.East));
+        Assert.False(grid.CanMove(0, 0, WallSide.East));
+        Assert.Equal(new[] { WallSide.West }, grid.HiddenSecretDoorSides(1, 0));
+
+        Assert.True(grid.RevealSecretDoor(1, 0, WallSide.West));
+
+        Assert.True(grid.HasDoor(0, 0, WallSide.East));
+        Assert.True(grid.CanMove(1, 0, WallSide.West));
+        Assert.Empty(grid.HiddenSecretDoorSides(0, 0));
+    }
 }

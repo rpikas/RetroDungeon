@@ -118,6 +118,12 @@ public sealed class MazeForm : Form
         }
 
         _walls = walls;
+        foreach (var (revealedLevel, x, y, side) in _revealedSecretDoors)
+        {
+            if (revealedLevel == level)
+                walls.RevealSecretDoor(x, y, side);
+        }
+
         _maze = new CellType[walls.Width, walls.Height];
         for (var y = 0; y < walls.Height; y++)
             for (var x = 0; x < walls.Width; x++)
@@ -1710,7 +1716,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 case Keys.C:
                     ShowCampDialog();
                     return;
-                case Keys.S:
+                case Keys.T:
                     ShowPartyPopup("Party Status");
                     return;
                 case Keys.I:
@@ -1724,6 +1730,10 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         switch (e.KeyCode)
         {
+            case Keys.S:
+                SearchArea();
+                Invalidate();
+                break;
             case Keys.I:
                 TryRecoverOutCharactersAtCurrentPosition();
                 Invalidate();
@@ -2797,6 +2807,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         options.Add(new ViewerPromptOption("turnLeft", "Turn left"));
         options.Add(new ViewerPromptOption("turnRight", "Turn right"));
         options.Add(new ViewerPromptOption("party", _partyOverlayVisible ? "Hide party" : "Show party"));
+        options.Add(new ViewerPromptOption("search", "Search"));
 
         if (_partyOverlayVisible)
         {
@@ -2959,9 +2970,40 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             "ON IT ARE THE REMAINS OF CRYSTAL BALLS AND OTHER MAGICAL ARTIFACTS ALL NOW BROKEN.",
             "AS YOU ENTERED THE ROOM, A PANEL ON THE DOOR SLAMMED SHUT.", "THEN IT GLOWED A PALE BLUE. NO ONE CAN PRY IT OPEN.",
             "NEXT, THE DOOR ON THE OTHER SIDE OF THE ROOM STARTS TO GLOW BRIGHT ORANGE, INVITING THE PARTY TO USE IT."),
-        [(4, new Point(2, 10))] = Lines("A SIGN ON THE DOOR READS:", "PRIVATE EXPRESS SERVICE ELEVATOR!", "AUTHORIZED USERS ONLY!")
+        [(4, new Point(2, 10))] = Lines("A SIGN ON THE DOOR READS:", "PRIVATE EXPRESS SERVICE ELEVATOR!", "AUTHORIZED USERS ONLY!"),
+        [(2, new Point(18, 9))] = Lines("YOU SEE A STATUE OF A BEAR ON A PEDESTAL.", "ON THE WALL IS A SIGN READING \"I'VE GOT A MILLION OF'EM\"."),
+        [(2, new Point(4, 12))] = Lines("ON A SILVERY DISK STANDS A STATUE OF A FROG WEARING A RED AND BLUE CAPE.",
+            "THE STATUE ANIMATES AND SHAKES ITS LEGS WHILE IT YELLS \"YEAH .. YEAH ..\""),
+        [(2, new Point(11, 15))] = "A PLACARD NEAR THE GROUND READ: \"A DUNGEON'S DARK ...\"",
+        [(2, new Point(11, 14))] = "A PLACARD NEAR THE GROUND READ: \"WHEN IT'S NOT LIT ...\"",
+        [(2, new Point(11, 13))] = "A PLACARD NEAR THE GROUND READ: \"WATCH OUT. OR YOU'LL ..\""
         }
     }.SelectMany(m => m).ToDictionary(p => p.Key, p => p.Value);
+
+    // Statues the party picks up by stepping on the square, keyed by level and square.
+    private static readonly Dictionary<(int Level, Point Cell), string> DungeonItemPickups = new()
+    {
+        [(2, new Point(18, 9))] = "Statue of Bear",
+        [(2, new Point(4, 12))] = "Statue of Frog"
+    };
+
+    // Items found by pressing S on a specific square (the K markers on the level 1 map).
+    private static readonly Dictionary<(int Level, Point Cell), string> DungeonSearchItems = new()
+    {
+        [(1, new Point(18, 13))] = "Key of Silver",
+        [(1, new Point(3, 13))] = "Key of Bronze"
+    };
+
+    // Squares the party is pushed back from unless someone carries the named item.
+    private static readonly Dictionary<(int Level, Point Cell), (string Item, string Message)> DungeonRestrictedSquares = new()
+    {
+        [(2, new Point(12, 8))] = ("Key of Silver", Lines("AS YOU ENTER THIS ROOM, A SILVERY FOG ENVELOPS YOU.", "TERRIBLE DEMONS FORM ALL AROUND YOU.", "IN TERROR, YOU FLEE FROM THE ROOM!")),
+        [(2, new Point(7, 8))] = ("Key of Bronze", Lines("AS YOU ENTER THIS ROOM, A BRONZE SMOKE FILLS IT.", "YOU FEEL COMPELLED TO LEAVE IMMEDIATELY!")),
+        [(2, new Point(11, 4))] = ("Statue of Bear", "NOBODY IN THE PARTY CAN BREAK THE DOOR DOWN."),
+        [(2, new Point(12, 4))] = ("Statue of Frog", "NOBODY IN THE PARTY CAN BREAK THE DOOR DOWN.")
+    };
+
+    private static readonly Point Level2KeyOfGoldRoom = new(4, 16);
 
     private const string BlueRibbon = "Blue Ribbon";
     private static readonly Point Level4RibbonRoom = new(10, 11);
@@ -2976,6 +3018,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (DungeonMessages.TryGetValue((_currentDungeonLevel, _position), out var message))
             SayOnBoth("Message", message);
+
+        if (DungeonItemPickups.TryGetValue((_currentDungeonLevel, _position), out var pickup) && !PartyHasItem(pickup))
+            GivePartyItem(pickup, $"Found on level {_currentDungeonLevel}.");
+
+        if (_currentDungeonLevel == 2 && _position == Level2KeyOfGoldRoom && !PartyHasItem("Key of Gold"))
+        {
+            SayOnBoth("Message", Lines("IN THIS ROOM IS A STATUE OF A MONSTER WITH THE BODY OF A CHICKEN AND THE HEAD OF A CAT.",
+                "THE STATUE IS MADE OF BRONZE, AND LIES ON AN ONYX PEDESTAL.",
+                "THERE ARE UNUSUAL RUNES ON A PLAQUE THEREON."));
+            if (AskOnBoth("Look around", "Look around?") == DialogResult.Yes)
+            {
+                GivePartyItem("Key of Gold", "Found beneath the bronze statue on level 2.");
+                SayOnBoth("Key", "THE PARTY FINDS THE KEY OF GOLD!");
+            }
+        }
 
         if (_currentDungeonLevel != 4)
             return false;
@@ -2992,7 +3049,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 "TO AID YOU IN YOUR QUEST, I WILL GIVE YOU A BLUE RIBBON,",
                 "WHICH MAY BE USED TO ENTER THE ELEVATOR ON THIS FLOOR.",
                 "GO NOW - AND MAY THE GODS GUIDE YOU!\""));
-            GiveBlueRibbon();
+            GivePartyItem(BlueRibbon, "Given by Trebor. Makes the elevator on this floor accessible.");
         }
         else if (_position == Level4SleepRoom && !PartyHasItem(BlueRibbon))
         {
@@ -3006,20 +3063,23 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return _position == new Point(15, 10);
     }
 
-    private void GiveBlueRibbon()
+    private void GivePartyItem(string name, string description)
     {
         var receiver = GetViewerParty().FirstOrDefault();
         if (receiver is null)
             return;
 
-        receiver.Inventory.Add(new Adnd.Core.Items.Item
-        {
-            Name = BlueRibbon,
-            Type = Adnd.Core.Items.ItemType.Misc,
-            Weight = 0,
-            IsShopBuyable = false,
-            Description = "Given by Trebor. Makes the elevator on this floor accessible."
-        });
+        var item = new Adnd.Data.Items.ItemRepository("Data/Items").LoadAll()
+            .FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.OrdinalIgnoreCase))
+            ?? new Adnd.Core.Items.Item
+            {
+                Name = name,
+                Type = Adnd.Core.Items.ItemType.Misc,
+                Weight = 0,
+                IsShopBuyable = false,
+                Description = description
+            };
+        receiver.Inventory.Add(item);
         _characterRepository.Save(receiver);
     }
 
@@ -3071,6 +3131,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (!CanStepForward())
         {
             ShowCenteredMessage("YOU CAN'T WALK THROUGH WALLS!");
+            return;
+        }
+
+        if (_thinWalls && DungeonRestrictedSquares.TryGetValue((_currentDungeonLevel, candidate), out var restriction)
+            && !PartyHasItem(restriction.Item))
+        {
+            SayOnBoth("Message", restriction.Message);
             return;
         }
 
@@ -3459,7 +3526,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         SayOnBoth("Turn table", "THE TURN TABLE SPINS THE PARTY AROUND!");
     }
 
-    // Falling into a pit costs every party member 2d6 hit points.
+    // Falling into a pit costs every party member 2d6 hit points (1d8 on level 2).
     private void ProcessPitStep()
     {
         if (!_thinWalls || !DungeonPits.TryGetValue(_currentDungeonLevel, out var pits) || !pits.Contains(_position))
@@ -3474,7 +3541,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             if (!roster.TryGetValue(name, out var c) || c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead))
                 continue;
 
-            var damage = _random.Next(1, 7) + _random.Next(1, 7);
+            var damage = _currentDungeonLevel == 2 ? _random.Next(1, 9) : _random.Next(1, 7) + _random.Next(1, 7);
             var before = c.CurrentHitPoints;
             c.CurrentHitPoints = Math.Max(0, before - damage);
             messages.Add($"{c.Name} takes {before - c.CurrentHitPoints} damage. HP {before}->{c.CurrentHitPoints}.");
@@ -5507,6 +5574,67 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         return result;
+    }
+
+    private readonly HashSet<(int Level, int X, int Y, WallSide Side)> _revealedSecretDoors = new();
+
+    // S)earch: looks for secret doors on the square's edges and for lost characters lying here.
+    // Each hidden door is found on a 1 in 6; elves and half-elves search at 2 in 6.
+    private void SearchArea()
+    {
+        var foundSomething = false;
+
+        if (_thinWalls && _walls is not null)
+        {
+            var chance = GetViewerParty().Any(c => c.Race is Race.Elf or Race.HalfElf && !c.HasStatus(CharacterStatus.Dead)) ? 2 : 1;
+            foreach (var side in _walls.HiddenSecretDoorSides(_position.X, _position.Y).ToList())
+            {
+                var roll = _random.Next(1, 7);
+                var found = roll <= chance;
+                RuleApplicationInfo.Publish(
+                    "AD&D 1e",
+                    "PHB",
+                    "Searching for secret doors",
+                    "Roll 1d6 per hidden door on the square: found on a 1 (1-2 when an elf or half-elf searches).",
+                    "1",
+                    "6",
+                    roll.ToString(),
+                    found ? $"Secret door found to the {side}." : "Nothing found.");
+
+                if (!found || !_walls.RevealSecretDoor(_position.X, _position.Y, side))
+                    continue;
+
+                _revealedSecretDoors.Add((_currentDungeonLevel, _position.X, _position.Y, side));
+                foundSomething = true;
+                SayOnBoth("Search", $"THE PARTY FINDS A SECRET DOOR TO THE {side.ToString().ToUpperInvariant()}!");
+            }
+        }
+
+        if (_thinWalls && DungeonSearchItems.TryGetValue((_currentDungeonLevel, _position), out var hidden) && !PartyHasItem(hidden))
+        {
+            GivePartyItem(hidden, $"Found on level {_currentDungeonLevel}.");
+            SayOnBoth("Search", $"THE PARTY FINDS THE {hidden.ToUpperInvariant()}!");
+            foundSomething = true;
+        }
+
+        if (HasLostCharacterAtCurrentPosition())
+        {
+            TryRecoverOutCharactersAtCurrentPosition();
+            return;
+        }
+
+        if (!foundSomething)
+            SayOnBoth("Search", "The party searches but finds nothing.");
+    }
+
+    private bool HasLostCharacterAtCurrentPosition()
+    {
+        var party = _partyRepository.Load();
+        return _characterRepository.GetAll().Any(c => c.HasStatus(CharacterStatus.Out)
+            && c.DungeonLevel == _currentDungeonLevel
+            && c.DungeonCellX == _position.X
+            && c.DungeonCellY == _position.Y
+            && !party.Members.Contains(c.Name, StringComparer.OrdinalIgnoreCase));
     }
 
     private void TryRecoverOutCharactersAtCurrentPosition()

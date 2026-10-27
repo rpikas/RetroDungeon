@@ -44,6 +44,16 @@ public sealed class DungeonLayoutRepository
 
         // Rows from north to south, squares from west to east. Bits: 1 north, 2 east, 4 south, 8 west.
         public List<List<int>> Walls { get; set; } = new();
+
+        // Doors that look like plain wall until the party finds them.
+        public List<SecretDoorEntry> SecretDoors { get; set; } = new();
+    }
+
+    private sealed class SecretDoorEntry
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string Side { get; set; } = "East";
     }
 
     private sealed class EncounterLocationsFile
@@ -94,7 +104,10 @@ public sealed class DungeonLayoutRepository
 
         try
         {
-            return WallGrid.FromRows(file.Walls.Select(row => (IReadOnlyList<int>)row).ToList());
+            var grid = WallGrid.FromRows(file.Walls.Select(row => (IReadOnlyList<int>)row).ToList());
+            foreach (var door in file.SecretDoors)
+                grid.HideSecretDoor(door.X, door.Y, Enum.Parse<WallSide>(door.Side));
+            return grid;
         }
         catch (Exception ex) when (ex is ArgumentException)
         {

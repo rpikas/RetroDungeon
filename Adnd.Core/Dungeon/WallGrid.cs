@@ -130,6 +130,56 @@ public sealed class WallGrid
     public (int X, int Y) Wrap(int x, int y)
         => (((x % Width) + Width) % Width, ((y % Height) + Height) % Height);
 
+    private readonly HashSet<(int X, int Y, WallSide Side)> _secretDoors = new();
+
+    // An edge is stored once, from its east or south side.
+    private (int X, int Y, WallSide Side) CanonicalEdge(int x, int y, WallSide side)
+    {
+        if (side is WallSide.East or WallSide.South)
+            return (x, y, side);
+
+        var (nx, ny, opposite) = Neighbour(x, y, side);
+        return (nx, ny, opposite);
+    }
+
+    private void SetEdge(int x, int y, WallSide side, bool wall)
+    {
+        var (nx, ny, opposite) = Neighbour(x, y, side);
+        foreach (var (cx, cy, s) in new[] { (x, y, side), (nx, ny, opposite) })
+        {
+            var doorBit = (int)s << DoorShift;
+            var mask = _masks[cx, cy];
+            mask = wall ? (byte)((mask & ~doorBit) | (int)s) : (byte)((mask & ~(int)s) | doorBit);
+            _masks[cx, cy] = mask;
+        }
+    }
+
+    /// <summary>Turns the edge into a wall that is really a secret door, until it is revealed.</summary>
+    public void HideSecretDoor(int x, int y, WallSide side)
+    {
+        if (!Contains(x, y))
+            throw new ArgumentOutOfRangeException(nameof(x), $"Square ({x},{y}) is outside the grid.");
+
+        _secretDoors.Add(CanonicalEdge(x, y, side));
+        SetEdge(x, y, side, wall: true);
+    }
+
+    public bool IsSecretDoor(int x, int y, WallSide side) => Contains(x, y) && _secretDoors.Contains(CanonicalEdge(x, y, side));
+
+    /// <summary>Turns a hidden secret door into an ordinary door. Returns false when the edge has none.</summary>
+    public bool RevealSecretDoor(int x, int y, WallSide side)
+    {
+        if (!Contains(x, y) || !_secretDoors.Remove(CanonicalEdge(x, y, side)))
+            return false;
+
+        SetEdge(x, y, side, wall: false);
+        return true;
+    }
+
+    /// <summary>The sides of a square that still hide a secret door.</summary>
+    public IEnumerable<WallSide> HiddenSecretDoorSides(int x, int y)
+        => new[] { WallSide.North, WallSide.East, WallSide.South, WallSide.West }.Where(s => IsSecretDoor(x, y, s));
+
     /// <summary>Whether the view across the given edge is stopped: a wall or a (closed) door.</summary>
     public bool BlocksSight(int x, int y, WallSide side) => HasWall(x, y, side) || HasDoor(x, y, side);
 
