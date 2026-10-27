@@ -80,4 +80,19 @@ public class WallGridTests
         Assert.True(grid.CanMove(0, 0, WallSide.East));
         Assert.False(grid.IsSolid(0, 0));
     }
+
+    [Fact]
+    public void OneWayDoorOpensOnlyFromTheDoorSideAndLooksLikeWallFromTheOther()
+    {
+        // Door on the east edge of the left square (32), wall on the west edge of the right square (8).
+        var grid = WallGrid.FromRows(new[] { new[] { 32, 8 } });
+
+        Assert.True(grid.HasDoor(0, 0, WallSide.East));
+        Assert.False(grid.HasWall(0, 0, WallSide.East));
+        Assert.True(grid.CanMove(0, 0, WallSide.East));
+
+        Assert.True(grid.HasWall(1, 0, WallSide.West));
+        Assert.False(grid.HasDoor(1, 0, WallSide.West));
+        Assert.False(grid.CanMove(1, 0, WallSide.West));
+    }
 }

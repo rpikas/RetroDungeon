@@ -2892,8 +2892,147 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     {
         [1] = (new Point(0, 0), new Point(10, 0)),
         [2] = (new Point(7, 12), new Point(15, 16)),
-        [3] = (new Point(11, 15), null)
+        [3] = (new Point(11, 15), new Point(8, 1)),
+        [4] = (new Point(18, 10), new Point(7, 17)),
+        [5] = (new Point(0, 0), new Point(8, 8)),
+        [6] = (new Point(0, 0), new Point(16, 8)),
+        [7] = (new Point(10, 10), new Point(9, 18)),
+        [8] = (new Point(11, 9), null)
     };
+
+    // One-way teleports (the X -> X' marks on the maps), keyed by level and square.
+    private static readonly Dictionary<(int Level, Point From), Point> DungeonWarps = new()
+    {
+        [(6, new Point(2, 19))] = new Point(19, 2),
+        [(6, new Point(11, 14))] = new Point(0, 0),
+        [(7, new Point(12, 7))] = new Point(8, 2),
+        [(7, new Point(9, 9))] = new Point(2, 18),
+        [(8, new Point(10, 9))] = new Point(0, 0),
+        [(8, new Point(10, 10))] = new Point(14, 5),
+        [(8, new Point(9, 9))] = new Point(10, 12),
+        [(8, new Point(9, 10))] = new Point(4, 10),
+        [(8, new Point(7, 10))] = new Point(11, 8),
+        [(8, new Point(16, 15))] = new Point(11, 11),
+        [(8, new Point(13, 8))] = new Point(8, 8),
+        [(8, new Point(4, 1))] = new Point(8, 11),
+        [(8, new Point(13, 4))] = new Point(17, 8),
+        [(8, new Point(15, 10))] = new Point(12, 2),
+        [(8, new Point(11, 6))] = new Point(12, 2),
+        [(8, new Point(13, 0))] = new Point(12, 7),
+        [(8, new Point(15, 7))] = new Point(17, 2)
+    };
+
+    // Pits (the P marks on the maps), keyed by level.
+    private static readonly Dictionary<int, Point[]> DungeonPits = new()
+    {
+        [2] = [new Point(11, 12)],
+        [3] = [new Point(19, 5), new Point(19, 15), new Point(11, 0), new Point(11, 5), new Point(7, 0)],
+        [6] = [new Point(16, 6), new Point(16, 7)],
+        [7] = [new Point(6, 9), new Point(6, 10), new Point(5, 9), new Point(5, 10), new Point(4, 9), new Point(4, 10)]
+    };
+
+    // Turn tables (the T marks on the maps), keyed by level.
+    private static readonly Dictionary<int, Point[]> DungeonTurnTables = new()
+    {
+        [3] = [new Point(19, 10), new Point(3, 15), new Point(3, 0), new Point(19, 0)],
+        [5] = [new Point(5, 5)]
+    };
+
+    private static string Lines(params string[] lines) => string.Join(Environment.NewLine, lines);
+
+    private static IEnumerable<KeyValuePair<(int Level, Point Cell), string>> Mosaics(string text, params (int X, int Y)[] cells)
+        => cells.Select(c => KeyValuePair.Create((3, new Point(c.X, c.Y)), $"THE FLOOR HAS A MOSAIC READING: \"{text}\""));
+
+    // Messages shown each time the party steps on a square (the M marks on the maps), keyed by level and square.
+    private static readonly Dictionary<(int Level, Point Cell), string> DungeonMessages = new[]
+    {
+        Mosaics("TURN AROUND.", (3, 5), (15, 10), (15, 15)),
+        Mosaics("TURN LEFT.", (15, 0), (7, 10), (7, 15)),
+        Mosaics("TURN RIGHT.", (7, 5), (15, 5), (3, 10)),
+        new Dictionary<(int Level, Point Cell), string>
+        {
+        [(4, new Point(14, 10))] = Lines("A SIGN ON THE DOOR READS:", "*** TESTING GROUNDS CONTROL CENTER ***", "AUTHORIZED PERSONNEL ONLY!", "*** DO NOT ENTER ***"),
+        [(4, new Point(15, 10))] = Lines("SUDDENLY, A LOUD ALARM BELL CAN BE HEARD.", "THEN THE BELLS STOP, AND ARE REPLACED BY THE SOUNDS OF GUARDIAN MONSTERS!"),
+        [(4, new Point(15, 8))] = "A SIGN ON THE DOOR READS: \"TREASURE REPOSITORY.\"",
+        [(4, new Point(15, 12))] = "A SIGN ON THE DOOR READ: \"MONSTER ALLOCATION CENTER.\"",
+        [(4, new Point(11, 11))] = Lines("IN THIS ROOM, THERE IS A LARGE DESK.",
+            "ON IT ARE THE REMAINS OF CRYSTAL BALLS AND OTHER MAGICAL ARTIFACTS ALL NOW BROKEN.",
+            "AS YOU ENTERED THE ROOM, A PANEL ON THE DOOR SLAMMED SHUT.", "THEN IT GLOWED A PALE BLUE. NO ONE CAN PRY IT OPEN.",
+            "NEXT, THE DOOR ON THE OTHER SIDE OF THE ROOM STARTS TO GLOW BRIGHT ORANGE, INVITING THE PARTY TO USE IT."),
+        [(4, new Point(2, 10))] = Lines("A SIGN ON THE DOOR READS:", "PRIVATE EXPRESS SERVICE ELEVATOR!", "AUTHORIZED USERS ONLY!")
+        }
+    }.SelectMany(m => m).ToDictionary(p => p.Key, p => p.Value);
+
+    private const string BlueRibbon = "Blue Ribbon";
+    private static readonly Point Level4RibbonRoom = new(10, 11);
+    private static readonly Point Level4SleepRoom = new(1, 10);
+    private static readonly Point Level4SleepRoomOutside = new(2, 10);
+
+    // Square messages plus the level 4 scripted squares. Returns true when the square forces an encounter.
+    private bool ProcessSquareMessageStep()
+    {
+        if (!_thinWalls)
+            return false;
+
+        if (DungeonMessages.TryGetValue((_currentDungeonLevel, _position), out var message))
+            SayOnBoth("Message", message);
+
+        if (_currentDungeonLevel != 4)
+            return false;
+
+        if (_position == Level4RibbonRoom && !PartyHasItem(BlueRibbon))
+        {
+            SayOnBoth("Message", Lines("AS THE PARTY ENTERS THE ROOM, THE DOOR SLAMS SHUT, GLOWS ORANGE AND VANISHES!",
+                "A DOOR APPEARS TO THE RIGHT, A VOICE, COMING FROM THE CEILING ADDRESSES YOU:",
+                "\"CONGRATULATIONS, BRAVE ADVENTURERS!",
+                "TODAY YOU HAVE PROVED YOURSELF TO ME AND ARE NOW READY TO START YOUR QUEST!",
+                "YEARS AGO, MY AMULET WAS STOLEN BY THE EVIL WIZARD WERDNA.",
+                "WERDNA HIDES IN THE MAZE SOMEWHERE BELOW US.",
+                "FIND HIM, SLAY HIM AND RETURN TO ME THE AMULET!",
+                "TO AID YOU IN YOUR QUEST, I WILL GIVE YOU A BLUE RIBBON,",
+                "WHICH MAY BE USED TO ENTER THE ELEVATOR ON THIS FLOOR.",
+                "GO NOW - AND MAY THE GODS GUIDE YOU!\""));
+            GiveBlueRibbon();
+        }
+        else if (_position == Level4SleepRoom && !PartyHasItem(BlueRibbon))
+        {
+            SayOnBoth("Message", Lines("YOU ALL FALL ASLEEP! LATER, EVERYONE WAKES UP, FEELING SICK AND WEAK.",
+                "YOU ARE BACK OUTSIDE THE DOOR YOU TRIED TO ENTER."));
+            _position = Level4SleepRoomOutside;
+            UpdateLighting();
+            Invalidate();
+        }
+
+        return _position == new Point(15, 10);
+    }
+
+    private void GiveBlueRibbon()
+    {
+        var receiver = GetViewerParty().FirstOrDefault();
+        if (receiver is null)
+            return;
+
+        receiver.Inventory.Add(new Adnd.Core.Items.Item
+        {
+            Name = BlueRibbon,
+            Type = Adnd.Core.Items.ItemType.Misc,
+            Weight = 0,
+            IsShopBuyable = false,
+            Description = "Given by Trebor. Makes the elevator on this floor accessible."
+        });
+        _characterRepository.Save(receiver);
+    }
+
+    // Doors that only open for a party carrying a named item, keyed by level, square and the side crossed.
+    private static readonly Dictionary<(int Level, Point From, Direction Side), (string Item, string Message)> DungeonGatedDoors = new()
+    {
+        [(4, new Point(13, 17), Direction.West)] = ("Statue of Bear",
+            "A LARGE SLIDING WALL WITH THE IMAGE OF A BEAR UPON IT BLOCKS YOUR PATH AND FORCES YOU OUT OF THE ROOM." + Environment.NewLine
+            + "POSSESSION OF THE STATUE OF BEAR IS REQUIRED TO PASS THROUGH THIS SECTION.")
+    };
+
+    private bool PartyHasItem(string itemName)
+        => GetViewerParty().Any(c => c.Inventory.Any(i => string.Equals(i.Name, itemName, StringComparison.OrdinalIgnoreCase)));
 
     // Level 1's up stairs lead out to town; the others are on a floor that has a neighbour built.
     private StairsKind StairsAt(Point cell)
@@ -2935,6 +3074,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             return;
         }
 
+        if (_thinWalls && DungeonGatedDoors.TryGetValue((_currentDungeonLevel, _position, _direction), out var gate)
+            && !PartyHasItem(gate.Item))
+        {
+            SayOnBoth("Sliding Wall", gate.Message);
+            return;
+        }
+
         _position = candidate;
         ApplyPoisonDamageForStep();
 
@@ -2947,6 +3093,17 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         ProcessTreasureFindingStep();
         ProcessLightStep();
 
+        if (_thinWalls && DungeonWarps.TryGetValue((_currentDungeonLevel, _position), out var warpTo))
+        {
+            _position = warpTo;
+            UpdateLighting();
+            Invalidate();
+            SayOnBoth("Teleport", "A strange force teleports the party to another place!");
+        }
+
+        ProcessPitStep();
+        ProcessTurnTableStep();
+        var alarm = ProcessSquareMessageStep();
         if (_currentDungeonLevel == 1
             && _position.X == 0
             && _position.Y == 0
@@ -2973,7 +3130,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
         }
 
-        if (TryEncounterAtFixedLocation())
+        if (alarm)
+        {
+            TryRandomEncounter(chanceOverride: 1d, forceInLair: true);
+        }
+        else if (TryEncounterAtFixedLocation())
         {
             // The square's own encounter replaces the usual random check for this step.
         }
@@ -3284,6 +3445,50 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         if (reverted.Count > 0)
             SayOnBoth("Lycanthropy", $"Lycanthrope form fades after leaving dungeon: {string.Join(", ", reverted)}.");
+    }
+
+    // A turn table spins the party to face a random direction.
+    private void ProcessTurnTableStep()
+    {
+        if (!_thinWalls || !DungeonTurnTables.TryGetValue(_currentDungeonLevel, out var tables) || !tables.Contains(_position))
+            return;
+
+        _direction = (Direction)_random.Next(Enum.GetValues<Direction>().Length);
+        Invalidate();
+        PublishToViewer();
+        SayOnBoth("Turn table", "THE TURN TABLE SPINS THE PARTY AROUND!");
+    }
+
+    // Falling into a pit costs every party member 2d6 hit points.
+    private void ProcessPitStep()
+    {
+        if (!_thinWalls || !DungeonPits.TryGetValue(_currentDungeonLevel, out var pits) || !pits.Contains(_position))
+            return;
+
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAllCached().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var messages = new List<string> { "YOU FALL INTO A PIT!" };
+
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c) || c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead))
+                continue;
+
+            var damage = _random.Next(1, 7) + _random.Next(1, 7);
+            var before = c.CurrentHitPoints;
+            c.CurrentHitPoints = Math.Max(0, before - damage);
+            messages.Add($"{c.Name} takes {before - c.CurrentHitPoints} damage. HP {before}->{c.CurrentHitPoints}.");
+
+            if (c.CurrentHitPoints <= 0)
+            {
+                c.AddStatus(CharacterStatus.Dead);
+                messages.Add($"{c.Name} dies.");
+            }
+
+            _characterRepository.Save(c);
+        }
+
+        SayOnBoth("Pit", string.Join(Environment.NewLine, messages));
     }
 
     private void ApplyPoisonDamageForStep()

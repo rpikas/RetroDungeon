@@ -3,6 +3,14 @@
   "Locations": [
     { "X": 1, "Y": 7, "ChancePercent": 80 },
     { "X": 3, "Y": 3, "ChancePercent": 80 },
-    { "X": 6, "Y": 6, "ChancePercent": 80 }
+    { "X": 6, "Y": 6, "ChancePercent": 80 },
+    { "X": 17, "Y": 16, "ChancePercent": 80 },
+    { "X": 15, "Y": 17, "ChancePercent": 80 },
+    { "X": 14, "Y": 2, "ChancePercent": 80 },
+    { "X": 13, "Y": 17, "ChancePercent": 80 },
+    { "X": 12, "Y": 1, "ChancePercent": 80 },
+    { "X": 12, "Y": 6, "ChancePercent": 80 },
+    { "X": 11, "Y": 18, "ChancePercent": 80 },
+    { "X": 11, "Y": 19, "ChancePercent": 80 }
   ]
 }

@@ -16,7 +16,9 @@ public enum WallSide
 /// squares of their own. Each square holds a mask: 1 = wall to the north, 2 = east, 4 = south, 8 = west,
 /// added together, so 3 is north and east and 15 is walled in on every side. Doors use the next four bits:
 /// 16 = door north, 32 = east, 64 = south, 128 = west. A door is drawn as a wall with a door in it and
-/// blocks the view, but the party can walk through it.
+/// blocks the view, but the party can walk through it. A one-way door has the door on the square you enter
+/// from and a wall bit on the far square's matching side: it can be walked through only from the door side,
+/// and looks like a plain wall from the other side.
 /// Row 0 is the northernmost row and column 0 the westernmost, matching the maze's coordinates.
 /// The map wraps around: the square beyond the last column is column 0, and likewise for rows.
 /// </summary>
@@ -116,6 +118,10 @@ public sealed class WallGrid
         if ((_masks[x, y] & bit) != 0)
             return true;
 
+        // A wall on this side of a door recorded next door is the hidden face of a one-way door.
+        if ((_masks[x, y] & (int)side) != 0)
+            return false;
+
         var (nx, ny, opposite) = Neighbour(x, y, side);
         return (_masks[nx, ny] & ((int)opposite << DoorShift)) != 0;
     }
@@ -139,6 +145,10 @@ public sealed class WallGrid
 
         if ((_masks[x, y] & (int)side) != 0)
             return true;
+
+        // A one-way door: this square has the door and only the far side shows a wall.
+        if ((_masks[x, y] & ((int)side << DoorShift)) != 0)
+            return false;
 
         var (nx, ny, opposite) = Neighbour(x, y, side);
         return (_masks[nx, ny] & (int)opposite) != 0;

@@ -1,0 +1,17 @@
+{
+  "Level": 3,
+  "Locations": [
+    { "X": 18, "Y": 4, "ChancePercent": 80 },
+    { "X": 16, "Y": 1, "ChancePercent": 80 },
+    { "X": 16, "Y": 6, "ChancePercent": 80 },
+    { "X": 18, "Y": 14, "ChancePercent": 80 },
+    { "X": 16, "Y": 16, "ChancePercent": 80 },
+    { "X": 14, "Y": 14, "ChancePercent": 80 },
+    { "X": 14, "Y": 19, "ChancePercent": 80 },
+    { "X": 8, "Y": 2, "ChancePercent": 80 },
+    { "X": 8, "Y": 16, "ChancePercent": 80 },
+    { "X": 4, "Y": 1, "ChancePercent": 80 },
+    { "X": 4, "Y": 6, "ChancePercent": 80 },
+    { "X": 2, "Y": 19, "ChancePercent": 80 }
+  ]
+}
