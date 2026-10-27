@@ -13,6 +13,7 @@ public sealed class CombatSession
     public List<Character> Party { get; }
     public List<MonsterInstance> Monsters { get; }
     public int DungeonDay { get; set; } = 0;
+    public bool CannotRun { get; set; }
     public int RoundNumber { get; set; } = 1;
     public bool IsSpaciousArea { get; set; }
     public Dictionary<MonsterInstance, HashSet<Character>> RearAttackers { get; } = new();

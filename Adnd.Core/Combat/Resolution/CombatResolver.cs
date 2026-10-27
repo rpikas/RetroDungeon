@@ -399,7 +399,11 @@ public sealed partial class CombatResolver
                 return FinalizeRound(session, events);
         }
 
-        if (state.PartyAttemptedRun)
+        if (state.PartyAttemptedRun && session.CannotRun)
+        {
+            events.Add(new CombatEvent("There is no escape from this encounter!"));
+        }
+        else if (state.PartyAttemptedRun)
         {
             var allEncounterGroupsSnared = session.GetDistinctGroupIds().All(groupId =>
             {

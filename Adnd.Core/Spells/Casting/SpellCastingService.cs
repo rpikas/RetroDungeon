@@ -40,8 +40,14 @@ public sealed class SpellCastingService
         return _spellsById.TryGetValue(id, out var spell) ? spell : null;
     }
 
+    /// <summary>Set while the party stands in a magic-sealed area: no spell can be cast.</summary>
+    public static bool MagicSealed { get; set; }
+
     public SpellCastResult CastFromItem(SpellCastRequest request)
     {
+        if (MagicSealed)
+            return SpellCastResult.Failure("Magic is sealed in this place.");
+
         if (IsBlockedFromCasting(request.Caster))
             return SpellCastResult.Failure($"{request.Caster.Name} is feebleminded and cannot cast spells.");
 
@@ -243,6 +249,9 @@ public sealed class SpellCastingService
 
     public SpellCastResult Cast(SpellCastRequest request)
     {
+        if (MagicSealed)
+            return SpellCastResult.Failure("Magic is sealed in this place.");
+
         if (IsBlockedFromCasting(request.Caster))
             return SpellCastResult.Failure($"{request.Caster.Name} is feebleminded and cannot cast spells.");
 

@@ -204,10 +204,13 @@ public sealed class WallGrid
         return (_masks[nx, ny] & (int)opposite) != 0;
     }
 
-    /// <summary>Whether a step across the given edge is possible: no wall, and a non-solid square beyond it.</summary>
+    /// <summary>
+    /// Whether a step across the given edge is possible: no wall (a hidden secret door looks like a wall but
+    /// can be walked through), and a non-solid square beyond it.
+    /// </summary>
     public bool CanMove(int x, int y, WallSide side)
     {
-        if (HasWall(x, y, side))
+        if (HasWall(x, y, side) && !IsSecretDoor(x, y, side))
             return false;
 
         var (nx, ny, _) = Neighbour(x, y, side);

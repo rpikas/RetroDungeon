@@ -97,7 +97,7 @@ public class WallGridTests
     }
 
     [Fact]
-    public void SecretDoorLooksLikeWallFromBothSidesUntilRevealed()
+    public void SecretDoorLooksLikeWallFromBothSidesButCanBeWalkedThrough()
     {
         var grid = WallGrid.FromRows(new[] { new[] { 32, 128 } });
 
@@ -106,7 +106,8 @@ public class WallGridTests
         Assert.True(grid.HasWall(0, 0, WallSide.East));
         Assert.True(grid.HasWall(1, 0, WallSide.West));
         Assert.False(grid.HasDoor(0, 0, WallSide.East));
-        Assert.False(grid.CanMove(0, 0, WallSide.East));
+        Assert.True(grid.CanMove(0, 0, WallSide.East));
+        Assert.True(grid.CanMove(1, 0, WallSide.West));
         Assert.Equal(new[] { WallSide.West }, grid.HiddenSecretDoorSides(1, 0));
 
         Assert.True(grid.RevealSecretDoor(1, 0, WallSide.West));

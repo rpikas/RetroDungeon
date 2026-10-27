@@ -20,6 +20,8 @@ namespace Adnd.Core.Combat.Resolution;
 
 public sealed partial class CombatResolver
 {
+    private int _monsterTimeStopExtraTurns;
+
     private bool ResolveMonsterTurn(RoundState state, MonsterInstance monster)
     {
         if (!monster.IsAlive || !state.Session.Monsters.Contains(monster))
@@ -27,9 +29,17 @@ public sealed partial class CombatResolver
 
         MonsterTurnFlow flow;
 
+        _monsterTimeStopExtraTurns = 0;
         flow = ResolveMonsterTurnStartAndSpells(state, monster);
         if (flow != MonsterTurnFlow.Proceed)
-            return flow == MonsterTurnFlow.EndRound;
+        {
+            var endRound = flow == MonsterTurnFlow.EndRound;
+            for (var extra = _monsterTimeStopExtraTurns; extra > 0 && !endRound && monster.IsAlive; extra--)
+                endRound = ResolveMonsterMeleeAttacks(state, monster);
+
+            _monsterTimeStopExtraTurns = 0;
+            return endRound;
+        }
 
         flow = ResolveMonsterBreathGazesAndPowers(state, monster);
         if (flow != MonsterTurnFlow.Proceed)
@@ -49,6 +59,7 @@ public sealed partial class CombatResolver
     // Order matters: the first spell that is attempted and resolved ends the monster's turn.
     private static readonly (int Level, MonsterSpellTradition Tradition, bool DefaultFiftyPercent, Func<CombatResolver, MonsterInstance, CombatSession, List<CombatEvent>, bool> Cast)[] MonsterSpellAttempts =
     [
+        (9, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel9MagicUserSpell(monster, session, events)),
         (5, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel5IllusionistSpell(monster, session, events)),
         (5, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel5MagicUserSpell(monster, session, events)),
         (5, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel5DruidSpell(monster, session, events)),

@@ -71,7 +71,34 @@ public sealed class MazeForm : Form
     private Point _position = new(0, 0);
 
     // The elevator is at (1,2) in the Maze and at (8,10) in the Dungeon.
-    private Point ElevatorPosition => _thinWalls ? new Point(8, 10) : new Point(1, 2);
+    private Point ElevatorPosition => _thinWalls ? (_currentDungeonLevel is 8 or 9 ? new Point(0, 10) : new Point(8, 10)) : new Point(1, 2);
+
+    // Level 9 warp zones (W on the map), rows by N and columns by E. Each one sends the party back to Floor 1.
+    private static readonly string[] Level9WarpZones =
+    [
+        "WWWWWW......WWWWWWWW",
+        "WW................WW",
+        "WW................WW",
+        "WW..WWWWWWWWWWWW..WW",
+        "WW..WWWWWWWWWWWW..WW",
+        "WW..WWWWWWWWWWWW..WW",
+        "WW..WWWWWWWWWWWW..WW",
+        "....WWWWW...........",
+        "WW..WWWWW.........WW",
+        "WW..WWWWWWWWWW.WWWWW",
+        "WW..W.WW.WW....WWWWW",
+        "WW..W.WW.WW.WWWWWWWW",
+        "WW...W...WW.WWWWWWWW",
+        "WW..W....WW.WWWWWWWW",
+        "WW..W....WW.WWWWWWWW",
+        "WW..W....WW....WWWWW",
+        "WW..WWWWWWWWWW.W..WW",
+        "WW................WW",
+        "WW................WW",
+        "WWWWWW......WWWWWWWW"
+    ];
+
+    private static readonly Point Level9Chute = new(2, 8);
     private Direction _direction = Direction.North;
     private readonly Random _random = new();
     private readonly PartyRepository _partyRepository = new();
@@ -2908,29 +2935,33 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         [5] = (new Point(0, 0), new Point(8, 8)),
         [6] = (new Point(0, 0), new Point(16, 8)),
         [7] = (new Point(10, 10), new Point(9, 18)),
-        [8] = (new Point(11, 9), null)
+        [8] = (new Point(0, 0), null)
     };
 
     // One-way teleports (the X -> X' marks on the maps), keyed by level and square.
     private static readonly Dictionary<(int Level, Point From), Point> DungeonWarps = new()
     {
+        [(1, new Point(9, 5))] = new Point(4, 15),
+        [(1, new Point(4, 13))] = new Point(4, 15),
         [(6, new Point(2, 19))] = new Point(19, 2),
         [(6, new Point(11, 14))] = new Point(0, 0),
         [(7, new Point(12, 7))] = new Point(8, 2),
         [(7, new Point(9, 9))] = new Point(2, 18),
-        [(8, new Point(10, 9))] = new Point(0, 0),
-        [(8, new Point(10, 10))] = new Point(14, 5),
-        [(8, new Point(9, 9))] = new Point(10, 12),
-        [(8, new Point(9, 10))] = new Point(4, 10),
-        [(8, new Point(7, 10))] = new Point(11, 8),
-        [(8, new Point(16, 15))] = new Point(11, 11),
-        [(8, new Point(13, 8))] = new Point(8, 8),
-        [(8, new Point(4, 1))] = new Point(8, 11),
-        [(8, new Point(13, 4))] = new Point(17, 8),
-        [(8, new Point(15, 10))] = new Point(12, 2),
-        [(8, new Point(11, 6))] = new Point(12, 2),
-        [(8, new Point(13, 0))] = new Point(12, 7),
-        [(8, new Point(15, 7))] = new Point(17, 2)
+        [(8, new Point(0, 6))] = new Point(5, 5),
+        [(8, new Point(5, 11))] = new Point(18, 3),
+        [(8, new Point(15, 11))] = new Point(19, 14),
+        [(10, new Point(19, 1))] = new Point(0, 0),
+        [(10, new Point(8, 2))] = new Point(0, 0),
+        [(10, new Point(12, 8))] = new Point(0, 0),
+        [(10, new Point(18, 11))] = new Point(0, 0),
+        [(10, new Point(10, 17))] = new Point(0, 0),
+        [(10, new Point(12, 18))] = new Point(0, 0),
+        [(10, new Point(0, 10))] = new Point(14, 2),
+        [(10, new Point(19, 0))] = new Point(19, 4),
+        [(10, new Point(19, 10))] = new Point(17, 14),
+        [(10, new Point(11, 10))] = new Point(10, 5),
+        [(10, new Point(13, 19))] = new Point(9, 18),
+        [(10, new Point(11, 14))] = new Point(5, 12)
     };
 
     // Pits (the P marks on the maps), keyed by level.
@@ -2946,8 +2977,16 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private static readonly Dictionary<int, Point[]> DungeonTurnTables = new()
     {
         [3] = [new Point(19, 10), new Point(3, 15), new Point(3, 0), new Point(19, 0)],
-        [5] = [new Point(5, 5)]
+        [5] = [new Point(5, 5)],
+        [8] = DanceHallSquares()
     };
+
+    // The Dance Hall on Level 8: rotating floors at E0-E7 on N15-N19 and N0-N1, except the warp at E6-N0.
+    private static Point[] DanceHallSquares()
+        => Enumerable.Range(0, 8)
+            .SelectMany(y => new[] { 0, 1, 15, 16, 17, 18, 19 }.Select(x => new Point(x, y)))
+            .Where(p => p != new Point(0, 6))
+            .ToArray();
 
     private static string Lines(params string[] lines) => string.Join(Environment.NewLine, lines);
 
@@ -2962,10 +3001,21 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         Mosaics("TURN RIGHT.", (7, 5), (15, 5), (3, 10)),
         new Dictionary<(int Level, Point Cell), string>
         {
+        [(1, new Point(19, 9))] = Lines("\"MAPIRO MAHAMA DIROMAT!!\"", "A STRANGE GLOW SEEMS TO EMANATE FROM THIS ROOM.",
+            "IN THE CENTER, A SMALLISH MAN IN A LONG ROBE TURNS TOWARDS THE PARTY AND SHOUTS",
+            "\"BEGONE, STRANGERS!\" HE SLOWLY WAVES HIS HANDS, AND CHANTS", "\"MAPIRO MAHAMA DIROMAT!!\""),
+        [(1, new Point(5, 13))] = Lines("THERE IS A GEM ENCRUSTED STATUE OF A HOODED MAN HERE.", "A GOLDEN LIGHT EMANATES FROM THE HOOD.",
+            "IN FRONT OF THE STATUE IS AN ALTAR, IN WHICH PUNGENT INCENSE IS BURNING."),
         [(4, new Point(14, 10))] = Lines("A SIGN ON THE DOOR READS:", "*** TESTING GROUNDS CONTROL CENTER ***", "AUTHORIZED PERSONNEL ONLY!", "*** DO NOT ENTER ***"),
         [(4, new Point(15, 10))] = Lines("SUDDENLY, A LOUD ALARM BELL CAN BE HEARD.", "THEN THE BELLS STOP, AND ARE REPLACED BY THE SOUNDS OF GUARDIAN MONSTERS!"),
         [(4, new Point(15, 8))] = "A SIGN ON THE DOOR READS: \"TREASURE REPOSITORY.\"",
         [(4, new Point(15, 12))] = "A SIGN ON THE DOOR READ: \"MONSTER ALLOCATION CENTER.\"",
+        [(10, new Point(0, 0))] = Lines("INSCRIBED ON AN ORNATE, GOLD PLAQUE IS A MESSAGE.", "THE SCRIPT IS ORNATE, AND BLINKS IN VARIOUS COLOR:",
+            "\"YOU ARE TRESPASSING ON THE DOMAIN OF ** WERDNA **.", "THERE IS NO POSSIBILITY THAT YOU CAN GET PAST MY GUARDIANS!",
+            "SO SURE AM I OF MY DEFENSES THAT I GIVE YOU THIS CLUE:\"", "\"CONTRA-DEXTRA AVENUE\"", "PS - TREBOR SUX!"),
+        [(10, new Point(14, 3))] = Lines("ONE GROUP OF GUARDIANS HAVE BEEN DEFEATED, BUT THERE ARE MANY MORE.", "TURN BACK WHILE YOU CAN, FOOLS!"),
+        [(10, new Point(4, 17))] = Lines("A DESCREET SIGN ON THE WALL READS:", "LAIR OF THE EVIL WIZARD WERADNA! OFFICE",
+            "HOURS 9AM TO 3PM BY APPOINTMENT ONLY", "THE WIZARD IS * IN *!"),
         [(4, new Point(11, 11))] = Lines("IN THIS ROOM, THERE IS A LARGE DESK.",
             "ON IT ARE THE REMAINS OF CRYSTAL BALLS AND OTHER MAGICAL ARTIFACTS ALL NOW BROKEN.",
             "AS YOU ENTERED THE ROOM, A PANEL ON THE DOOR SLAMMED SHUT.", "THEN IT GLOWED A PALE BLUE. NO ONE CAN PRY IT OPEN.",
@@ -2987,11 +3037,19 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         [(2, new Point(4, 12))] = "Statue of Frog"
     };
 
-    // Items found by pressing S on a specific square (the K markers on the level 1 map).
-    private static readonly Dictionary<(int Level, Point Cell), string> DungeonSearchItems = new()
+    // Statues the party can look around at (the prompt on the square, or pressing S there) to find a key.
+    private static readonly Dictionary<(int Level, Point Cell), (string Item, string Message)> DungeonLookAroundItems = new()
     {
-        [(1, new Point(18, 13))] = "Key of Silver",
-        [(1, new Point(3, 13))] = "Key of Bronze"
+        [(1, new Point(3, 13))] = ("Key of Bronze", Lines("IN THIS ROOM IS A STATUE OF A MONSTER WITH THE BODY OF A CHICKEN AND THE HEAD OF A CAT.",
+            "THE STATUE IS MADE OF BRONZE, AND LIES ON AN ONYX PEDESTAL.",
+            "THERE ARE UNUSUAL RUNES ON A PLAQUE THEREON.")),
+        [(1, new Point(18, 13))] = ("Key of Silver", Lines("IN THIS ROOM IS A SILVER STATUE OF A BOAR. WITH HORNS AND LONG FANGS.",
+            "ON THE WALL BY THE STATUE IS A MESSAGE (PARTIALLY OBSCURED)",
+            "THAT APPEARS TO HAVE BEEN LEFT BY PASSING ELVES.",
+            "IT IS HARDLY LEGIBLE, BUT SOME COMMENTS WARNING ABOUT GHOSTS AND DEMONS CAN STILL BE MADE OUT.")),
+        [(2, new Point(4, 16))] = ("Key of Gold", Lines("IN THIS ROOM IS A STATUE OF A MONSTER WITH THE BODY OF A CHICKEN AND THE HEAD OF A CAT.",
+            "THE STATUE IS MADE OF BRONZE, AND LIES ON AN ONYX PEDESTAL.",
+            "THERE ARE UNUSUAL RUNES ON A PLAQUE THEREON."))
     };
 
     // Squares the party is pushed back from unless someone carries the named item.
@@ -3003,7 +3061,8 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         [(2, new Point(12, 4))] = ("Statue of Frog", "NOBODY IN THE PARTY CAN BREAK THE DOOR DOWN.")
     };
 
-    private static readonly Point Level2KeyOfGoldRoom = new(4, 16);
+    private static readonly Point Level1WizardRoom = new(19, 9);
+    private static readonly Point Level1MurphyShrine = new(5, 13);
 
     private const string BlueRibbon = "Blue Ribbon";
     private static readonly Point Level4RibbonRoom = new(10, 11);
@@ -3020,18 +3079,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             SayOnBoth("Message", message);
 
         if (DungeonItemPickups.TryGetValue((_currentDungeonLevel, _position), out var pickup) && !PartyHasItem(pickup))
-            GivePartyItem(pickup, $"Found on level {_currentDungeonLevel}.");
+            FindLookAroundItem(pickup);
 
-        if (_currentDungeonLevel == 2 && _position == Level2KeyOfGoldRoom && !PartyHasItem("Key of Gold"))
+        if (DungeonLookAroundItems.TryGetValue((_currentDungeonLevel, _position), out var lookAround) && !PartyHasItem(lookAround.Item))
         {
-            SayOnBoth("Message", Lines("IN THIS ROOM IS A STATUE OF A MONSTER WITH THE BODY OF A CHICKEN AND THE HEAD OF A CAT.",
-                "THE STATUE IS MADE OF BRONZE, AND LIES ON AN ONYX PEDESTAL.",
-                "THERE ARE UNUSUAL RUNES ON A PLAQUE THEREON."));
+            SayOnBoth("Message", lookAround.Message);
             if (AskOnBoth("Look around", "Look around?") == DialogResult.Yes)
-            {
-                GivePartyItem("Key of Gold", "Found beneath the bronze statue on level 2.");
-                SayOnBoth("Key", "THE PARTY FINDS THE KEY OF GOLD!");
-            }
+                FindLookAroundItem(lookAround.Item);
         }
 
         if (_currentDungeonLevel != 4)
@@ -3049,7 +3103,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 "TO AID YOU IN YOUR QUEST, I WILL GIVE YOU A BLUE RIBBON,",
                 "WHICH MAY BE USED TO ENTER THE ELEVATOR ON THIS FLOOR.",
                 "GO NOW - AND MAY THE GODS GUIDE YOU!\""));
-            GivePartyItem(BlueRibbon, "Given by Trebor. Makes the elevator on this floor accessible.");
+            var ribbonHolder = GivePartyItem(BlueRibbon, "Given by Trebor. Makes the elevator on this floor accessible.");
+            if (ribbonHolder is not null)
+                SayOnBoth("Blue Ribbon", $"{ribbonHolder.ToUpperInvariant()} RECEIVES THE BLUE RIBBON!");
         }
         else if (_position == Level4SleepRoom && !PartyHasItem(BlueRibbon))
         {
@@ -3063,11 +3119,11 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return _position == new Point(15, 10);
     }
 
-    private void GivePartyItem(string name, string description)
+    private string? GivePartyItem(string name, string description)
     {
         var receiver = GetViewerParty().FirstOrDefault();
         if (receiver is null)
-            return;
+            return null;
 
         var item = new Adnd.Data.Items.ItemRepository("Data/Items").LoadAll()
             .FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.OrdinalIgnoreCase))
@@ -3081,6 +3137,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             };
         receiver.Inventory.Add(item);
         _characterRepository.Save(receiver);
+        return receiver.Name;
     }
 
     // Doors that only open for a party carrying a named item, keyed by level, square and the side crossed.
@@ -3094,6 +3151,56 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     private bool PartyHasItem(string itemName)
         => GetViewerParty().Any(c => c.Inventory.Any(i => string.Equals(i.Name, itemName, StringComparison.OrdinalIgnoreCase)));
 
+    private void FindLookAroundItem(string itemName)
+    {
+        var finder = GivePartyItem(itemName, $"Found on level {_currentDungeonLevel}.");
+        SayOnBoth("Key", finder is null
+            ? $"THE PARTY FINDS THE {itemName.ToUpperInvariant()}!"
+            : $"{finder.ToUpperInvariant()} FINDS THE {itemName.ToUpperInvariant()}!");
+    }
+
+    // Level 1 scripted squares: the wizard who throws the party out, and Murphy's shrine with its ghosts.
+    // Returns true when the party was sent back to town.
+    private bool ProcessLevelOneScriptStep()
+    {
+        if (!_thinWalls || _currentDungeonLevel != 1)
+            return false;
+
+        if (_position == Level1WizardRoom)
+        {
+            LeaveDungeonForTown();
+            return true;
+        }
+
+        if (_position == Level1MurphyShrine && LoadEncounterParty().Count > 0)
+        {
+            _combatCoordinator.ForceMonstersInLair = true;
+            _combatCoordinator.CannotRun = true;
+            try
+            {
+                var outcome = _combatCoordinator.StartEncounter(
+                    this,
+                    "Murphy's Ghost",
+                    ResolveEncounterGroupCount("Murphy's Ghost", null),
+                    LoadEncounterParty(),
+                    _characterRepository,
+                    _currentDungeonLevel,
+                    dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
+                if (outcome == CombatOutcome.Defeat)
+                    HandlePartyDefeatAtCurrentCell();
+            }
+            finally
+            {
+                _combatCoordinator.ForceMonstersInLair = false;
+                _combatCoordinator.CannotRun = false;
+            }
+
+            PublishToViewer();
+        }
+
+        return false;
+    }
+
     // Level 1's up stairs lead out to town; the others are on a floor that has a neighbour built.
     private StairsKind StairsAt(Point cell)
     {
@@ -3103,8 +3210,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         if (!_thinWalls || !DungeonStairs.TryGetValue(_currentDungeonLevel, out var stairs))
             return StairsKind.None;
 
+        // The Dance Hall arrival on Level 8 has no way back up.
         if (cell == stairs.Up)
-            return StairsKind.Up;
+            return _currentDungeonLevel == 8 ? StairsKind.None : StairsKind.Up;
 
         return stairs.Down is { } down && cell == down && DungeonStairs.ContainsKey(_currentDungeonLevel + 1)
             ? StairsKind.Down
@@ -3152,7 +3260,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         ApplyPoisonDamageForStep();
 
         if (_position == ElevatorPosition)
-            ShowDungeonElevatorDialog();
+        {
+            if (_thinWalls && _currentDungeonLevel is 8 or 9 && !PartyHasItem("Blue Ribbon"))
+                SayOnBoth("Elevator", "THE ELEVATOR WON'T MOVE WITHOUT THE BLUE RIBBON.");
+            else
+                ShowDungeonElevatorDialog();
+        }
 
         if (_thinWalls && _currentDungeonLevel == 1 && _position.X == 12 && _position.Y == 9)
             SayOnBoth("Sign", "A LARGE SIGN ON THE WALL READ:" + Environment.NewLine + "** AREA OUT OF BOUNDS! **");
@@ -3168,9 +3281,14 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             SayOnBoth("Teleport", "A strange force teleports the party to another place!");
         }
 
+        if (ProcessLevelNineStep())
+            return;
+
         ProcessPitStep();
         ProcessTurnTableStep();
         var alarm = ProcessSquareMessageStep();
+        if (ProcessLevelOneScriptStep())
+            return;
         if (_currentDungeonLevel == 1
             && _position.X == 0
             && _position.Y == 0
@@ -3233,8 +3351,48 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         UpdateLighting();
     }
 
+    // Squares where all magic is sealed (X = north, Y = east), keyed by level: level 5's Hall of Silence.
+    private static readonly Dictionary<int, (int X1, int Y1, int X2, int Y2)> DungeonMagicSealedAreas = new()
+    {
+        [5] = (7, 10, 12, 16)
+    };
+
+    private void UpdateMagicSeal()
+    {
+        var sealedNow = _thinWalls
+            && DungeonMagicSealedAreas.TryGetValue(_currentDungeonLevel, out var area)
+            && _position.X >= area.X1 && _position.X <= area.X2
+            && _position.Y >= area.Y1 && _position.Y <= area.Y2;
+
+        if (sealedNow == Adnd.Core.Spells.Casting.SpellCastingService.MagicSealed)
+            return;
+
+        Adnd.Core.Spells.Casting.SpellCastingService.MagicSealed = sealedNow;
+        if (!sealedNow)
+            return;
+
+        // Magic cast before entering is cancelled as well.
+        var hadLight = _lightStepsRemaining > 0 || _continualLightActive;
+        _lightStepsRemaining = 0;
+        _continualLightActive = false;
+        var party = _partyRepository.Load();
+        party.LightStepsRemaining = 0;
+        party.ContinualLightActive = false;
+        _partyRepository.Save(party);
+
+        SayOnBoth("Hall of Silence", "MAGIC IS SEALED IN THIS SPACE." + Environment.NewLine
+            + (hadLight ? "ALL MAGIC CAST BEFORE ENTERING IS CANCELED." : "NO SPELL CAN BE CAST HERE."));
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        Adnd.Core.Spells.Casting.SpellCastingService.MagicSealed = false;
+        base.OnFormClosed(e);
+    }
+
     private void UpdateLighting()
     {
+        UpdateMagicSeal();
         _inMagicalDarkness = _darkAreas.Any(a => a.Contains(_position.X, _position.Y));
         _depthLevels = _inMagicalDarkness ? DarkDepthLevels
             : _continualLightActive ? ContinualLightDepthLevels
@@ -3527,6 +3685,53 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     }
 
     // Falling into a pit costs every party member 2d6 hit points (1d8 on level 2).
+    // Level 9: warp zones send the party to Floor 1, and the chute drops it to Floor 10. Returns true if the party left the floor.
+    private bool ProcessLevelNineStep()
+    {
+        if (_thinWalls && _currentDungeonLevel == 10 && _position == new Point(0, 1))
+        {
+            SayOnBoth("Teleport", "A strange force teleports the party back to the castle!");
+            LeaveDungeonForTown();
+            return true;
+        }
+
+        if (!_thinWalls || _currentDungeonLevel != 9)
+            return false;
+
+        if (Level9WarpZones[_position.X][_position.Y] == 'W')
+        {
+            SayOnBoth("Teleport", "A strange force teleports the party all the way back to Floor 1!");
+            JumpToDungeonLevel(1, new Point(0, 0));
+            return true;
+        }
+
+        if (_position == Level9Chute)
+        {
+            if (_dungeonLayouts.TryLoad(10) is null)
+            {
+                SayOnBoth("Chute", "YOU STEP ON A CHUTE, BUT THE WAY DOWN IS BLOCKED.");
+                return false;
+            }
+
+            SayOnBoth("Chute", "YOU FALL DOWN A CHUTE TO THE FLOOR BELOW!");
+            JumpToDungeonLevel(10, new Point(0, 0));
+            return true;
+        }
+
+        return false;
+    }
+
+    private void JumpToDungeonLevel(int level, Point position)
+    {
+        _currentDungeonLevel = level;
+        BuildMazeForLevel(level);
+        LoadEncounterLocationsForLevel(level);
+        _position = position;
+        UpdateLighting();
+        Invalidate();
+        PublishToViewer();
+    }
+
     private void ProcessPitStep()
     {
         if (!_thinWalls || !DungeonPits.TryGetValue(_currentDungeonLevel, out var pits) || !pits.Contains(_position))
@@ -5610,10 +5815,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             }
         }
 
-        if (_thinWalls && DungeonSearchItems.TryGetValue((_currentDungeonLevel, _position), out var hidden) && !PartyHasItem(hidden))
+        if (_thinWalls && DungeonLookAroundItems.TryGetValue((_currentDungeonLevel, _position), out var hidden) && !PartyHasItem(hidden.Item))
         {
-            GivePartyItem(hidden, $"Found on level {_currentDungeonLevel}.");
-            SayOnBoth("Search", $"THE PARTY FINDS THE {hidden.ToUpperInvariant()}!");
+            FindLookAroundItem(hidden.Item);
             foundSomething = true;
         }
 

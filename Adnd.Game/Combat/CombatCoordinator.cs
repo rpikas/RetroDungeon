@@ -48,6 +48,9 @@ public sealed class CombatCoordinator
         get => _monsterFactory.ForceInLair;
         set => _monsterFactory.ForceInLair = value;
     }
+    /// <summary>When set, encounters started from now on cannot be run away from.</summary>
+    public bool CannotRun { get; set; }
+
     private readonly CombatResolver _combatResolver;
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly PartyRepository _partyRepository = new();
@@ -195,7 +198,8 @@ public sealed class CombatCoordinator
             : _monsterFactory.CreateGroup(monsterName, monsterCount, "default", dungeonLevel);
         var session = new CombatSession(party, monsters)
         {
-            DungeonDay = Math.Max(0, dungeonDay ?? 0)
+            DungeonDay = Math.Max(0, dungeonDay ?? 0),
+            CannotRun = CannotRun
         };
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);
@@ -297,7 +301,8 @@ public sealed class CombatCoordinator
         var monsters = _monsterFactory.CreateMultipleGroups(normalized, dungeonLevel);
         var session = new CombatSession(party, monsters)
         {
-            DungeonDay = Math.Max(0, dungeonDay ?? 0)
+            DungeonDay = Math.Max(0, dungeonDay ?? 0),
+            CannotRun = CannotRun
         };
         ApplyEncounterSleepingMonsters(session);
         RestorePersistedRoundEffects(session);

@@ -380,6 +380,56 @@ public sealed partial class CombatResolver
         return true;
     }
 
+    private bool ResolveLevel9MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
+    {
+        var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Time Stop / Meteor Swarm");
+        if (aliveParty.Count == 0)
+            return true;
+
+        if (_dice.Roll(100) <= 50)
+        {
+            var extraTurns = _dice.Roll(4) + 1;
+            _monsterTimeStopExtraTurns = extraTurns;
+            events.Add(new CombatEvent($"{monster.DisplayName} casts Time Stop! Time stops for everyone but the caster, who gets {extraTurns} extra turn(s)."));
+            return true;
+        }
+
+        events.Add(new CombatEvent($"{monster.DisplayName} casts Meteor Swarm!"));
+        var hitCount = Math.Min(aliveParty.Count, _dice.Roll(3));
+        var targets = aliveParty.OrderBy(_ => _dice.Roll(1000)).Take(hitCount).ToList();
+        foreach (var target in targets)
+        {
+            var damage = 0;
+            for (var die = 0; die < 10; die++)
+                damage += _dice.Roll(4);
+
+            var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+                target,
+                _savingThrowService.GetSaveTarget(target, SaveThrowType.Spell));
+            if (session.IsChantActive || session.IsPrayerActive)
+                saveTarget = Math.Max(1, saveTarget - 1);
+
+            var saveRoll = _dice.Roll(20);
+            var applied = saveRoll >= saveTarget ? Math.Max(1, damage / 2) : damage;
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Max(0, before - applied);
+            var actual = before - target.CurrentHitPoints;
+            WakeCharacterIfAsleepAfterDamage(target, actual, events);
+
+            events.Add(new CombatEvent(saveRoll >= saveTarget
+                ? $"{target.Name} succeeds save ({saveRoll} vs {saveTarget}) and takes half meteor damage: {actual}. HP {before}->{target.CurrentHitPoints}."
+                : $"{target.Name} fails save ({saveRoll} vs {saveTarget}) and takes {actual} meteor damage. HP {before}->{target.CurrentHitPoints}."));
+
+            if (target.CurrentHitPoints <= 0)
+            {
+                target.AddStatus(CharacterStatus.Dead);
+                events.Add(new CombatEvent($"{target.Name} is obliterated by the meteors!"));
+            }
+        }
+
+        return true;
+    }
+
     private bool ResolveLevel5MagicUserSpell(MonsterInstance monster, CombatSession session, List<CombatEvent> events)
     {
         var aliveParty = GetSpellAffectablePartyTargets(monster, session, events, "Cone of Cold / Feeblemind");
