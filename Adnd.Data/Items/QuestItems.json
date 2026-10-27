@@ -72,6 +72,18 @@
       "Description": "Given by Trebor. Makes the elevator on dungeon level 4 accessible.",
       "Source": "Wizardry",
       "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Amulet of Werdna",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "The Mad Overlord's stolen amulet. It is cursed, so never wear it. The bearer regains 1 HP with every step, and using it casts Malor to return the party to town. Returning it to the surface earns 50,000 XP and 50,000 GP.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
     }
   ]
 }

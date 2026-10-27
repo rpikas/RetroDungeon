@@ -163,10 +163,15 @@ public static class ViewerMessage
         else
         {
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            var lineCount = Math.Max(1, lines.Length);
-            var maxLen = lines.Length == 0 ? 0 : lines.Max(l => l.Length);
-            var width = Math.Clamp(360 + (maxLen * 4), 420, 760);
-            var height = Math.Clamp(130 + (lineCount * 22), 120, 520);
+            var measureFont = new Font("Consolas", 14f, FontStyle.Bold);
+            var screen = Screen.FromControl(owner as Control ?? form).WorkingArea;
+            var maxWidth = Math.Max(420, Math.Min(1400, screen.Width - 60));
+            const int chrome = 60;
+            var widest = lines.Max(l => TextRenderer.MeasureText(l, measureFont, new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
+            var width = Math.Clamp(widest + chrome + 20, 420, maxWidth);
+            var wrapped = TextRenderer.MeasureText(message, measureFont, new Size(width - chrome, int.MaxValue),
+                TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
+            var height = Math.Clamp(wrapped.Height + 130, 120, Math.Max(240, screen.Height - 60));
             form.ClientSize = new Size(width, height);
 
             var framePanel = new Panel

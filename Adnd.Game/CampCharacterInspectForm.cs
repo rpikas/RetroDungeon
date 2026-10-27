@@ -1306,9 +1306,10 @@ public sealed class CampCharacterInspectForm : Form
                 grantsLevitationPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Levitate") || string.Equals(item.Name, "Potion of Levitation", StringComparison.OrdinalIgnoreCase),
                 grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
                 grantsTreasureFindingPotion = string.Equals(item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase),
-                isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase)
+                isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase),
+                isWerdnaAmulet = string.Equals(item.Name, "Amulet of Werdna", StringComparison.OrdinalIgnoreCase)
             })
-            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing)
+            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing || x.isWerdnaAmulet)
             .ToList();
 
         var updatedHumanControlMetadata = false;
@@ -1359,6 +1360,8 @@ public sealed class CampCharacterInspectForm : Form
                 ? disguisedName
                 : x.item.Type == ItemType.Scroll && !x.item.ScrollContentsKnown
                 ? $"{x.item.Name} (unread magical scroll)"
+                : x.isWerdnaAmulet
+                    ? $"{x.item.Name} (casts Malor: teleport to town)"
                 : x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
                 : x.isFigurine
@@ -1424,6 +1427,14 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         var selected = usableItems[itemIdx.Value];
+        if (selected.isWerdnaAmulet)
+        {
+            SayOnBoth("Amulet of Werdna", $"{user.Name} invokes the amulet. The party is teleported to town!");
+            ReturnToTownRequested = true;
+            Close();
+            return;
+        }
+
         if (selected.isFigurine)
         {
             var party = _partyRepository.Load();

@@ -1185,7 +1185,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         };
         form.Controls.Add(text);
 
-        string Row(int number, Character c) => $"{number}. {c.Name,-12} HP {c.CurrentHitPoints + "/" + c.MaxHitPoints,-7} AC {c.ArmorClass,2}";
+        string Row(int number, Character c) => $"{number}. {c.Name,-12} {c.GetClassesDisplayText("/"),-14} HP {c.CurrentHitPoints + "/" + c.MaxHitPoints,-7} AC {c.ArmorClass,2}";
 
         void Refresh()
         {
@@ -2377,6 +2377,12 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
     /// </summary>
     private DialogResult AskOnBoth(string title, string question)
     {
+        var questionText = string.IsNullOrWhiteSpace(question) ? "(Y/N)?" : question.ToUpperInvariant();
+        var questionFont = new Font("Consolas", 18f, FontStyle.Bold);
+        var questionSize = TextRenderer.MeasureText(questionText, questionFont, new Size(800, int.MaxValue),
+            TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
+        var questionHeight = Math.Max(80, questionSize.Height + 12);
+
         using var form = new Form
         {
             Text = title,
@@ -2388,7 +2394,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
             KeyPreview = true,
-            ClientSize = new Size(820, 190),
+            ClientSize = new Size(820, 110 + questionHeight),
         };
 
         var framePanel = new Panel
@@ -2419,18 +2425,18 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
             Left = 0,
             Top = 52,
             Width = framePanel.ClientSize.Width,
-            Height = 80,
-            Text = string.IsNullOrWhiteSpace(question) ? "(Y/N)?" : question.ToUpperInvariant(),
+            Height = questionHeight,
+            Text = questionText,
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 18f, FontStyle.Bold)
+            Font = questionFont
         };
 
         var optionsLabel = new Label
         {
             Left = 0,
-            Top = 132,
+            Top = 52 + questionHeight,
             Width = framePanel.ClientSize.Width,
             Height = 34,
             Text = "Y)ES    N)O",
@@ -2916,6 +2922,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
     private void LeaveDungeonForTown()
     {
+        AwardWerdnaAmuletReward();
         RestoreStrengthDrainedOnDungeonExit();
         RevertLycanthropeTransformationsOnDungeonExit();
         ApplyPartyAgingForDungeonExitDay();
@@ -2956,7 +2963,7 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         [(10, new Point(18, 11))] = new Point(0, 0),
         [(10, new Point(10, 17))] = new Point(0, 0),
         [(10, new Point(12, 18))] = new Point(0, 0),
-        [(10, new Point(0, 10))] = new Point(14, 2),
+        [(10, new Point(10, 0))] = new Point(14, 2),
         [(10, new Point(19, 0))] = new Point(19, 4),
         [(10, new Point(19, 10))] = new Point(17, 14),
         [(10, new Point(11, 10))] = new Point(10, 5),
@@ -3201,6 +3208,96 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         return false;
     }
 
+    private static readonly Point Level10WerdnaLair = new(3, 17);
+    private bool _werdnaDefeated;
+    private bool _werdnaRewardGiven;
+
+    // Werdna waits behind the door at E17-N3 with one or two groups of 1-4 Vampires, Liches or Demon Princes.
+    // The fight happens in the monsters' lair and can't be fled. Returns true when the party left the maze.
+    private bool ProcessWerdnaStep()
+    {
+        if (!_thinWalls || _currentDungeonLevel != 10 || _position != Level10WerdnaLair
+            || _werdnaDefeated || _random.Next(1, 101) > 90 || LoadEncounterParty().Count == 0)
+            return false;
+
+        string[] escorts = ["Vampire", "Lich", "Orcus", "Demogorgon", "Asmodeus"];
+        var groups = new List<(string name, int count)> { ("WERDNA", 1) };
+        var groupCount = _random.Next(1, 3);
+        for (var i = 0; i < groupCount; i++)
+            groups.Add((escorts[_random.Next(escorts.Length)], _random.Next(1, 5)));
+
+        SayOnBoth("Werdna", "WERDNA, THE EVIL WIZARD, TURNS TO FACE YOU. HIS GUARDIANS STIR!");
+        _combatCoordinator.ForceMonstersInLair = true;
+        _combatCoordinator.CannotRun = true;
+        CombatOutcome outcome;
+        try
+        {
+            outcome = _combatCoordinator.StartEncounterWithGroupCounts(
+                this,
+                groups,
+                LoadEncounterParty(),
+                _characterRepository,
+                _currentDungeonLevel,
+                dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
+        }
+        finally
+        {
+            _combatCoordinator.ForceMonstersInLair = false;
+            _combatCoordinator.CannotRun = false;
+        }
+
+        PublishToViewer();
+        if (outcome == CombatOutcome.Defeat)
+        {
+            HandlePartyDefeatAtCurrentCell();
+            return false;
+        }
+
+        if (outcome != CombatOutcome.Victory)
+            return false;
+
+        _werdnaDefeated = true;
+        var finder = GivePartyItem("Amulet of Werdna", "The Mad Overlord's amulet.");
+        SayOnBoth("Amulet", (finder ?? "THE PARTY").ToUpperInvariant() + " TAKES THE AMULET OF WERDNA! IT IS CURSED - NEVER WEAR IT.");
+        if (AskOnBoth("Amulet", "The amulet can cast MALOR. Use it to return to the castle now?") != DialogResult.Yes)
+            return false;
+
+        LeaveDungeonForTown();
+        return true;
+    }
+
+    // Returning the amulet to the surface earns 50,000 XP each and 50,000 GP for the party.
+    private void AwardWerdnaAmuletReward()
+    {
+        if (_werdnaRewardGiven || !PartyHasItem("Amulet of Werdna"))
+            return;
+
+        _werdnaRewardGiven = true;
+        foreach (var holder in GetViewerParty())
+        {
+            if (holder.Inventory.RemoveAll(i => string.Equals(i.Name, "Amulet of Werdna", StringComparison.OrdinalIgnoreCase)) > 0)
+                _characterRepository.Save(holder);
+        }
+        var levelUp = new Adnd.Core.Characters.Progression.LevelUpService();
+        var spells = new Adnd.Data.Spells.SpellRepository("Data/Spells").LoadAll();
+        var members = GetViewerParty();
+        foreach (var member in members)
+        {
+            levelUp.ApplyExperienceAndAutoLevel(member, 50000, spells);
+            _characterRepository.Save(member);
+        }
+
+        if (members.FirstOrDefault() is { } first)
+        {
+            first.GoldPieces += 50000;
+            _characterRepository.Save(first);
+        }
+
+        SayOnBoth("Congratulations", Lines("* * CONGRATULATIONS * *", "YOU HAVE RECOVERED THE AMULET", "AND PASSED THE OVERLORD'S TEST!",
+            "THE MAD OVERLORD HAS GRANTED YOU 50,000 GP AND EP!", "HE HAS ALSO INDUCTED YOU INTO HIS ELITE GUARD.",
+            "WEAR THE CHEVRON OF RANK (>) WITH HONOR.", "THE AMULET IS RETURNED TO TREBOR."));
+    }
+
     // Level 1's up stairs lead out to town; the others are on a floor that has a neighbour built.
     private StairsKind StairsAt(Point cell)
     {
@@ -3282,6 +3379,9 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
         }
 
         if (ProcessLevelNineStep())
+            return;
+
+        if (ProcessWerdnaStep())
             return;
 
         ProcessPitStep();
@@ -3784,6 +3884,13 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
                 continue;
 
             var wasLycanthropeDamageTriggered = c.LycanthropyTriggeredByDamage;
+
+            if (c.CurrentHitPoints > 0 && c.CurrentHitPoints < c.MaxHitPoints && !c.HasStatus(CharacterStatus.Dead)
+                && c.Inventory.Any(i => string.Equals(i.Name, "Amulet of Werdna", StringComparison.OrdinalIgnoreCase)))
+            {
+                c.CurrentHitPoints++;
+                changed = true;
+            }
 
             if (c.MummyRotRaiseWindowRoundsRemaining > 0
                 && (c.HasStatus(CharacterStatus.Dead) || c.HasStatus(CharacterStatus.Ashes) || c.CurrentHitPoints <= 0))

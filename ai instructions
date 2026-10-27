@@ -7162,3 +7162,12 @@ implement level 9 magic user spells where it is 50% chanse time stop is cast and
 Werdna will always appear with one or two groups of 1-4 of the following monsters: 
 Vampire, Lich or one of the Deamon princes. Werdna will always be in the lair of the monsters and will 
 be able to cast spells as a 19th level magic user. 
+
+when entering town the amulet of werdna disapears
+
+The messages shown in general, for example when finding the amulet, make sure the dialoag old style is big enough to
+fit the whole messges, if not make the dialog bigger.
+amulet of werdna generate 1 hp every step taken and it can cast teleport to town when used. 93,6
+
+___
+
