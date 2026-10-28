@@ -2,6 +2,7 @@
 //Läser alla JSON‑filer i en mapp och returnerar riktiga Core‑monster.
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Adnd.Core.Monsters;
 
@@ -47,6 +48,8 @@ public class MonsterRepository
             }
         }
 
-        return monsters;
+        // Monsters sharing a name (a Kobold in both books) are looked up by first match, so the configured
+        // source goes first. The sort is stable, so everything else keeps its file order.
+        return MonsterSourcePreference.Order(monsters, Adnd.Core.Config.GameRulesProvider.Current.MonsterSourceOptions);
     }
 }

@@ -7173,4 +7173,19 @@ ___
 when MonsterSourceOptions = OnlyWizardry then only monsters with source Wizardry should be encountered
 ___
 show a picture when finding treasure even if  MonsterSourceOptions = OnlyWizardry but show this
-picture instead Adnd.Game\Assets\ScenPictures\FindingTreasureWizardry.png
+picture instead Adnd.Game\Assets\ScenPictures\FindingTreasureWizardry.png 93,9
+___
+When encountering a monster with source Wizardry if there is a picture avaliable with the monster name and 
+suffix _Wiz then show that picture, for example if encountering a Kobold with source Wizardry, 
+show Kobold_Wiz.png instead of Kobold.png that should be shown if the source was ADND. 
+94,1
+Differentiate between monsters with the same name but different sources. so for example if  MonsterSourceOptions =
+OnlyWizardry an encountering a Kobold the data like "NumberOfAppearancesMin": should be piced from the json object
+with  "Source": "Wizardry".
+
+Do you think adding unit test and or updating .md files would be worht doing when doing changes like this? if so, 
+please do that.
+
+Do you think it would be a good idea to refactor for example MazeForm.cs and divide it? if so, please do that and if
+efficent to add tests and or documentation while you are refacoring it, please to that if you dont think it is
+efficent to do that now, we can save it for later.

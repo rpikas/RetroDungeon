@@ -61,7 +61,12 @@ Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests 
 
 ## Art lookup
 
-`Adnd.Game\MonsterArt.cs` searches `Assets\Monsters\Level1..10` and the root for the monster name (spaced, camel-case, slug, with and without commas). Known mismatches are file names that differ from the JSON name (for example `GreenDragon.png` for "Dragon, Green").
+`Adnd.Game\MonsterArt.cs` searches `Assets\Monsters\Level1..10` and the root for the monster name (spaced, camel-case, slug, with and without commas). Known mismatches are file names that differ from the JSON name (for example `GreenDragon.png` for "Dragon, Green"). A `_Wiz` variant (for example `Kobold_Wiz.png`) is tried first for monsters with source Wizardry, and for both-source monsters when `MonsterSourceOptions` is `OnlyWizardry`; the plain picture is the fallback.
+
+## Monster source options
+
+- Some names exist once per book (Kobold, Chimera, Gargoyle, Gorgon, Fire Giant ...). `MonsterRepository.GetAll()` orders monsters with `Adnd.Core.Monsters.MonsterSourcePreference`, so a first-match name lookup returns the entry for the configured `MonsterSourceOptions` (Wizardry first for `OnlyWizardry`, AD&D first for the AD&D options, file order for `All`).
+- With `OnlyWizardry`, random dungeon encounters skip the DMG tables (`MonsterLevels.json`) and pick Wizardry monsters of the rolled level, or of the closest level that has some. The "finding treasure" picture becomes `FindingTreasureWizardry.png`.
 
 ## Known issues to check
 
@@ -80,3 +85,6 @@ Level 10 vampires should have level 6 magic-user spells
 - Continual Light (Cleric 3 / Illusionist 3): `Party.ContinualLightActive`, two more squares ahead. Ended by Dispel Magic (now also castable outside combat, no target) or by stepping into magical darkness.
 - Magical darkness: rectangles in `LevelN.Darkness.json` (corners inclusive). In darkness the party sees one square ahead and "Dark, you see nothing." is shown. There is no Darkness spell yet.
 - Dungeon (thin-wall) maps wrap around in both directions (`WallGrid.Wrap`); a wall on the seam still blocks.
+- Levels 8-10 (from the Wizardry maps): Level 8 has a dance hall of rotating floors and a trapped arrival; Level 9 has warp squares back to Floor 1 and a chute to Level 10; Level 10 is Werdna's domain with chained teleports. Werdna waits at game square (3,17) (90% chance, once), with 1-2 groups of Vampires, Liches or Demon Princes, always in lair and no fleeing (`ProcessWerdnaStep`).
+- Amulet of Werdna (`QuestItems.json`): the bearer regains 1 HP per step, and using it from camp teleports the party to town. Reaching town with it awards 50,000 XP each and 50,000 GP once, and the amulet is surrendered.
+- Not done: the Level 9 A-room one-way door, the Level 10 guardian door gating, a real Malor spell, secret doors on Levels 6 and later.

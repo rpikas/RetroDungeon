@@ -20,12 +20,15 @@ namespace Adnd.Game;
 public static class MonsterArt
 {
     /// <summary>
-    /// Whether to prefer the "_Wiz" variant: the monster comes from both books and the rules are set to
-    /// Wizardry only. Mirrors the check EncounterForm has always made, in one place now.
+    /// Whether to prefer the "_Wiz" variant: the monster is a Wizardry one, or comes from both books and the
+    /// rules are set to Wizardry only. Falls back to the plain picture when no _Wiz file exists.
     /// </summary>
     public static bool WizardryFirst(Monster? monster)
     {
         if (monster is null) return false;
+
+        if (monster.Source == Sources.Wizardry)
+            return true;
 
         var sourceOption = GameRulesProvider.Current.MonsterSourceOptions;
         return monster.Source == Sources.WizardryAndAdnd && sourceOption == SourceOptions.OnlyWizardry;
