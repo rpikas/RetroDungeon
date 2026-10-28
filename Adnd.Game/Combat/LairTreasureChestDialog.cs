@@ -158,7 +158,6 @@ internal sealed class LairTreasureChestDialog : Form
             {
                 "TreasureChest.png",
                 "TreasureChest.webp",
-                "FindingTreasure.webp",
                 "dividing-treasure.webp"
             }
             : new[]

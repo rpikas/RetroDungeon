@@ -4197,15 +4197,16 @@ public sealed class CombatCoordinator
 
     private static string? ResolveFindingTreasureImagePath()
     {
-        var candidates = new[]
+        var baseName = GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyWizardry
+            ? "FindingTreasureWizardry"
+            : "FindingTreasure";
+        var extensions = new[] { "png", "webp" };
+        var candidates = extensions.SelectMany(ext => new[]
         {
-            Path.Combine("Assets", "ScenPictures", "FindingTreasure.png"),
-            Path.Combine("Assets", "ScenPictures", "FindingTreasure.webp"),
-            Path.Combine("..", "..", "..", "Assets", "ScenPictures", "FindingTreasure.png"),
-            Path.Combine("..", "..", "..", "Assets", "ScenPictures", "FindingTreasure.webp"),
-            Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", "FindingTreasure.png"),
-            Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", "FindingTreasure.webp")
-        };
+            Path.Combine("Assets", "ScenPictures", $"{baseName}.{ext}"),
+            Path.Combine("..", "..", "..", "Assets", "ScenPictures", $"{baseName}.{ext}"),
+            Path.Combine("..", "..", "..", "..", "Adnd.Game", "Assets", "ScenPictures", $"{baseName}.{ext}")
+        });
 
         foreach (var candidate in candidates)
         {

@@ -7170,4 +7170,7 @@ fit the whole messges, if not make the dialog bigger.
 amulet of werdna generate 1 hp every step taken and it can cast teleport to town when used. 93,6
 
 ___
-
+when MonsterSourceOptions = OnlyWizardry then only monsters with source Wizardry should be encountered
+___
+show a picture when finding treasure even if  MonsterSourceOptions = OnlyWizardry but show this
+picture instead Adnd.Game\Assets\ScenPictures\FindingTreasureWizardry.png
