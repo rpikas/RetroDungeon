@@ -5073,22 +5073,31 @@ redesign level 3 to have only one boarder corridor and to have 2 more rooms and 
 
         // Primary flow: MonsterEncounter.json determines monster level,
         // then MonsterLevels.json (1d100) determines creature and count.
-        var dmgRoll = RollFromDmgEncounterTable(rolledMonsterLevel, level);
+        var wizardryOnly = GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyWizardry;
+
+        // The DMG tables name AD&D creatures, so they are bypassed when only Wizardry monsters may appear.
+        var dmgRoll = wizardryOnly ? null : RollFromDmgEncounterTable(rolledMonsterLevel, level);
         if (dmgRoll != null)
             return dmgRoll;
 
         // Fallback when DMG table data is unavailable or cannot be mapped locally.
-        var monstersForLevel = _monsterRepository.GetAll()
+        var sourceOption = GameRulesProvider.Current.MonsterSourceOptions;
+        var allMonstersForSource = FilterMonstersBySource(_monsterRepository.GetAll().ToList(), sourceOption);
+        var monstersForLevel = allMonstersForSource
             .Where(m => m.DungeonLevel == rolledMonsterLevel)
             .ToList();
+
+        // A level with no Wizardry monsters borrows from the closest level that has some.
+        if (monstersForLevel.Count == 0 && wizardryOnly && allMonstersForSource.Count > 0)
+        {
+            var closest = allMonstersForSource.Min(m => Math.Abs(m.DungeonLevel - rolledMonsterLevel));
+            monstersForLevel = allMonstersForSource.Where(m => Math.Abs(m.DungeonLevel - rolledMonsterLevel) == closest).ToList();
+        }
 
         if (monstersForLevel.Count == 0)
             return null;
 
-        var sourceOption = GameRulesProvider.Current.MonsterSourceOptions;
-        var filteredMonsters = FilterMonstersBySource(monstersForLevel, sourceOption);
-        if (filteredMonsters.Count == 0)
-            return null;
+        var filteredMonsters = monstersForLevel;
 
         var selected = SelectMonsterByFrequencyWeight(filteredMonsters, level, rolledMonsterLevel);
         if (selected == null)
