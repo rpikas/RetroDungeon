@@ -7189,3 +7189,11 @@ please do that.
 Do you think it would be a good idea to refactor for example MazeForm.cs and divide it? if so, please do that and if
 efficent to add tests and or documentation while you are refacoring it, please to that if you dont think it is
 efficent to do that now, we can save it for later.
+
+the Stairs Up dialog, make it look more like in this picture: Adnd.Game\Assets\ScenPictures\StairsUp.png
+in the stairs up dialog, can you make the corners a bit curved and do not use double frames only one thick frame around it
+
+can you make other old style dialogs also having the same thickness of the frame and rounded corners, remember that
+many of them are bigger, so keep the size that the other dialogs currenlty have
+95,0
+make the camp dialog have the same style as the picture in Camp.png

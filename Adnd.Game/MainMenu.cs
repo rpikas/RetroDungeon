@@ -78,7 +78,7 @@ public class MainMenu
             Console.WriteLine("C)hurch of Chant");
             Console.WriteLine("B)oltac's Trading Post");
             Console.WriteLine("M)aze");
-            Console.WriteLine("D)ungeon");
+            Console.WriteLine("P)roving Grounds");
             Console.WriteLine("S)ettings");
             Console.WriteLine("L<-eave");
 
@@ -150,7 +150,7 @@ public class MainMenu
                     EnterMaze();
                     break;
 
-                case ConsoleKey.D:
+                case ConsoleKey.P:
                     if (!HasPartyMembers())
                     {
                         ShowPartyRequiredMessage();
@@ -417,9 +417,9 @@ public class MainMenu
         foreach (var member in atRisk)
             Console.WriteLine($"- {member.Name}");
 
-        Console.WriteLine("If you enter the dungeon now, infected character(s) will die on entry unless cured.");
+        Console.WriteLine("If you enter the Proving Grounds now, infected character(s) will die on entry unless cured.");
         Console.WriteLine("Go to the Church of Chant to cast Cure Disease before entering.");
-        Console.Write("Enter dungeon anyway? (Y = enter dungeon, N = go to church): ");
+        Console.Write("Enter the Proving Grounds anyway? (Y = enter, N = go to church): ");
 
         var key = Console.ReadKey(true).Key;
         Console.WriteLine();
@@ -472,7 +472,7 @@ public class MainMenu
             member.AddStatus(CharacterStatus.Dead);
             member.EarSeekerDeathOnNextDungeonEntry = false;
             _charRepo.Save(member);
-            messages.Add($"{member.Name} dies from untreated Ear Seeker disease when entering the dungeon.");
+            messages.Add($"{member.Name} dies from untreated Ear Seeker disease when entering the Proving Grounds.");
         }
 
         if (messages.Count > 0)

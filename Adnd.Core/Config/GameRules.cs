@@ -39,7 +39,8 @@ public enum SourceOptions
     OnlyAdndDMGEncounterTable,
     OnlyWizardry,
     AllButWizardry,// this will include WizardryAndAdnd
-    All
+    All,
+    LocationBased // Proving Grounds: only Wizardry monsters; Maze: only AD&D monsters
 }
 
 public enum BoltacItemSourceOptions
@@ -61,7 +62,17 @@ public class GameRules
     public int NumberOfItemsThatCouldBeFound { get; set; } = 5;
     public float ProbabilityFindingEachItem { get; set; } = 0.05f;
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
-    public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.OnlyWizardry;
+    public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.LocationBased;
+
+    // Set while the party is in the Proving Grounds (the Wizardry maps); false in the Maze and in town.
+    [JsonIgnore]
+    public bool InProvingGrounds { get; set; }
+
+    // The source filter to apply right now: LocationBased resolves to Wizardry in the Proving Grounds, AD&D elsewhere.
+    [JsonIgnore]
+    public SourceOptions EffectiveMonsterSourceOptions => MonsterSourceOptions == SourceOptions.LocationBased
+        ? (InProvingGrounds ? SourceOptions.OnlyWizardry : SourceOptions.OnlyAdnd)
+        : MonsterSourceOptions;
     public BoltacItemSourceOptions BoltacItemSourceFilter { get; set; } = BoltacItemSourceOptions.BothAdndAndWizardry;
     public bool UIOldStyle { get; set; } = true;
     public int DelayInMsbetweenActions { get; set; } =0;

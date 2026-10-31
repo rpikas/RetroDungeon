@@ -1268,13 +1268,12 @@ public sealed class CombatCoordinator
             ClientSize = new Size(900, 460),
         };
 
-        var framePanel = new Panel
+        var framePanel = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 
@@ -1376,13 +1375,12 @@ public sealed class CombatCoordinator
             ClientSize = new Size(900, 460),
         };
 
-        var framePanel = new Panel
+        var framePanel = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 
@@ -3115,13 +3113,12 @@ public sealed class CombatCoordinator
             ClientSize = oldStyle ? new Size(820, 190) : new Size(620, 170),
         };
 
-        var framePanel = new Panel
+        var framePanel = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 
@@ -4036,13 +4033,12 @@ public sealed class CombatCoordinator
             ClientSize = new Size(760, 180),
         };
 
-        var framePanel = new Panel
+        var framePanel = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 
@@ -4124,13 +4120,12 @@ public sealed class CombatCoordinator
             ClientSize = new Size(760, 500),
         };
 
-        var frame = new Panel
+        var frame = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 
@@ -4197,7 +4192,7 @@ public sealed class CombatCoordinator
 
     private static string? ResolveFindingTreasureImagePath()
     {
-        var baseName = GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyWizardry
+        var baseName = GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry
             ? "FindingTreasureWizardry"
             : "FindingTreasure";
         var extensions = new[] { "png", "webp" };
@@ -4251,13 +4246,12 @@ public sealed class CombatCoordinator
             ClientSize = oldStyle ? new Size(1000, 440) : new Size(820, 360),
         };
 
-        var framePanel = new Panel
+        var framePanel = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 

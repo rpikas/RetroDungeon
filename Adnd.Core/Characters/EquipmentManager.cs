@@ -155,7 +155,7 @@ public static class EquipmentManager
         var mainDamage = mainHandWeapon != null
                          && mainHandWeapon.Type == ItemType.Weapon
                          && !string.IsNullOrWhiteSpace(mainHandWeapon.Damage)
-            ? mainHandWeapon.Damage
+            ? mainHandWeapon.GetDamageExpression(false)
             : "1d2";
 
         var sameTwoHandedWeaponInBothHands = mainHandWeapon != null
@@ -206,6 +206,9 @@ public static class EquipmentManager
         // For two-handed occupancy mirrored in both hand slots, ensure AC/inventory are adjusted once.
         if (movedItems.Add(equipped))
         {
+            if (equipped.IsVersatileWeapon)
+                equipped.IsTwoHanded = false;
+
             c.ArmorClass += GetEffectiveArmorClassBonusForEquip(equipped);
             c.Inventory.Add(equipped);
         }

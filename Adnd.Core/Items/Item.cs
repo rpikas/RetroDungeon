@@ -23,6 +23,23 @@ public class Item
     public int SpeedFactor { get; set; } = 0;
     public string WeaponLength { get; set; } = ""; // e.g. "short", "medium", "long". TBD: should be enum
     public bool IsTwoHanded { get; set; } = false;
+
+    // Versatile weapons (bastard sword) can be wielded in one or two hands; IsTwoHanded holds the current choice.
+    public bool IsVersatileWeapon =>
+        Type == ItemType.Weapon
+        && Name.Contains("Sword", StringComparison.OrdinalIgnoreCase)
+        && Name.Contains("Bastard", StringComparison.OrdinalIgnoreCase);
+
+    public string GetDamageExpression(bool vsLarge)
+    {
+        if (IsVersatileWeapon)
+        {
+            var baseDamage = vsLarge ? "3d4" : "2d4";
+            return IsTwoHanded ? baseDamage + "+1" : baseDamage;
+        }
+
+        return vsLarge && !string.IsNullOrWhiteSpace(DamageVsLarge) ? DamageVsLarge : Damage;
+    }
     public string Range { get; set; } = ""; // e.g. for thrown or ranged weapons. Format: "10/20/30" for short/medium/long
     public string FireRate { get; set; } = "1"; // e.g. 1,2,3,1/2
     public bool RequiresAmmo { get; set; } = false;

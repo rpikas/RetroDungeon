@@ -25,6 +25,16 @@ Status: built, **not yet play-tested** unless stated.
 
 Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests --nologo`. Monster hit points use the static `DiceRoller`, so use high hit dice in tests to avoid early deaths.
 
+## MazeForm layout
+
+`MazeForm` is a `partial class` split by concern (behaviour unchanged):
+`MazeForm.cs` (fields, constructor, key input), `.Layout` (maze building, walls),
+`.Camp` (camp menus, prompts), `.Rendering` (drawing), `.Dialogs` (SayOnBoth/AskOnBoth, elevator),
+`.Viewer` (tabletop viewer publishing), `.DungeonData` (per-level tables),
+`.LevelScripts` (scripted squares, Werdna, pits), `.Movement` (stepping, light, treasure),
+`.StepEffects` (poison, disease, exit-day, full moon), `.Encounters` (encounter flow, defeat, search),
+`.EncounterTables` (rolling monsters, source filtering).
+
 ## Adding a monster power
 
 - Monster stats live in `Adnd.Data\Monsters\LevelN.json`. Hit points come from `HitDice` x d8 (+ `ExtraHitPoints`); for fixed-hp monsters use hp / 4.5 as hit dice.
@@ -88,3 +98,10 @@ Level 10 vampires should have level 6 magic-user spells
 - Levels 8-10 (from the Wizardry maps): Level 8 has a dance hall of rotating floors and a trapped arrival; Level 9 has warp squares back to Floor 1 and a chute to Level 10; Level 10 is Werdna's domain with chained teleports. Werdna waits at game square (3,17) (90% chance, once), with 1-2 groups of Vampires, Liches or Demon Princes, always in lair and no fleeing (`ProcessWerdnaStep`).
 - Amulet of Werdna (`QuestItems.json`): the bearer regains 1 HP per step, and using it from camp teleports the party to town. Reaching town with it awards 50,000 XP each and 50,000 GP once, and the amulet is surrendered.
 - Not done: the Level 9 A-room one-way door, the Level 10 guardian door gating, a real Malor spell, secret doors on Levels 6 and later.
+
+Per-level squares (stairs, keys, statues, traps) are listed in [wizardry-levels.md](wizardry-levels.md).
+
+### Secret and one-way doors
+
+- `SecretDoors` in `LevelN.json` (`X` = N, `Y` = E, `Side` East/South) look like walls until found with S)earch, but can be walked through. A room closed in on all sides is still enterable if it hides a secret door (`WallGrid.IsSolid`).
+- A one-way door is a door bit on the entry square plus a wall bit on the far square. Level 1 has 26 guessed from the blue arrows on the map picture; secret doors override them where both sit on the same edge.

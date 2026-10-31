@@ -116,4 +116,15 @@ public class WallGridTests
         Assert.True(grid.CanMove(1, 0, WallSide.West));
         Assert.Empty(grid.HiddenSecretDoorSides(0, 0));
     }
+
+    [Fact]
+    public void ClosedRoomWithOnlyASecretDoorCanStillBeEntered()
+    {
+        var grid = WallGrid.FromRows(new[] { new[] { 11, 15 } });
+
+        grid.HideSecretDoor(0, 0, WallSide.East);
+
+        Assert.False(grid.IsSolid(1, 0));
+        Assert.True(grid.CanMove(0, 0, WallSide.East));
+    }
 }

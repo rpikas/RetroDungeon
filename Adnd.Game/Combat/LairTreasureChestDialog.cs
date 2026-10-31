@@ -46,13 +46,12 @@ internal sealed class LairTreasureChestDialog : Form
         KeyPreview = true;
         ClientSize = new Size(620, 450);
 
-        var frame = new Panel
+        var frame = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = ClientSize.Width - 8,
             Height = ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 
@@ -151,7 +150,7 @@ internal sealed class LairTreasureChestDialog : Form
 
     private static Image? ResolveChestImage()
     {
-        var wizardryOnly = GameRulesProvider.Current.MonsterSourceOptions == SourceOptions.OnlyWizardry;
+        var wizardryOnly = GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry;
 
         var imageFileNames = wizardryOnly
             ? new[]

@@ -174,13 +174,12 @@ public static class ViewerMessage
             var height = Math.Clamp(wrapped.Height + 130, 120, Math.Max(240, screen.Height - 60));
             form.ClientSize = new Size(width, height);
 
-            var framePanel = new Panel
+            var framePanel = new OldStyleFramePanel
             {
                 Left = 4,
                 Top = 4,
                 Width = form.ClientSize.Width - 8,
                 Height = form.ClientSize.Height - 8,
-                BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.Black,
                 TabStop = true,
                 TabIndex = 0

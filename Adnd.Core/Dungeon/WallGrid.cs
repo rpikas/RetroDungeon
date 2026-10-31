@@ -105,8 +105,8 @@ public sealed class WallGrid
         _masks[x, y] = (byte)mask;
     }
 
-    /// <summary>A square walled in on all four sides. Nobody can enter it, so it plays as solid rock.</summary>
-    public bool IsSolid(int x, int y) => (GetMask(x, y) & AllWalls) == AllWalls;
+    /// <summary>A square walled in on all four sides. Nobody can enter it, so it plays as solid rock, unless one of its walls hides a secret door.</summary>
+    public bool IsSolid(int x, int y) => (GetMask(x, y) & AllWalls) == AllWalls && !HiddenSecretDoorSides(x, y).Any();
 
     /// <summary>Whether there is a door on the given edge, recorded on either of the two squares that share it.</summary>
     public bool HasDoor(int x, int y, WallSide side)

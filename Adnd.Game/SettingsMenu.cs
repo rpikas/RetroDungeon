@@ -62,6 +62,7 @@ public class SettingsMenu
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Where(p => p.CanRead && p.CanWrite)
             .Where(p => !string.Equals(p.Name, nameof(GameRules.DefaultColor), StringComparison.Ordinal))
+            .Where(p => !string.Equals(p.Name, nameof(GameRules.InProvingGrounds), StringComparison.Ordinal))
             .OrderBy(p => p.Name)
             .ToArray();
     }

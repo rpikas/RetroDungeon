@@ -541,13 +541,12 @@ public sealed class EncounterForm : Form
             ClientSize = new Size(520, 120),
         };
 
-        var framePanel = new Panel
+        var framePanel = new OldStyleFramePanel
         {
             Left = 4,
             Top = 4,
             Width = form.ClientSize.Width - 8,
             Height = form.ClientSize.Height - 8,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black
         };
 

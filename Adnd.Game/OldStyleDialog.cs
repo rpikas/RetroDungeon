@@ -34,10 +34,9 @@ internal static class OldStyleDialog
 
         form.ClientSize = new Size(820, dialogHeight);
 
-        var frame = new Panel
+        var frame = new OldStyleFramePanel
         {
             Dock = DockStyle.Fill,
-            BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.Black,
             Padding = new Padding(12)
         };

@@ -46,6 +46,19 @@ public static class EquipmentHelper
         // Determine target slot based on item type and properties
         if (item.Type == ItemType.Weapon)
         {
+            if (item.IsVersatileWeapon)
+            {
+                Console.WriteLine($"\nWield {item.Name}:");
+                Console.WriteLine("1. One hand (2d4)");
+                Console.WriteLine("2. Two hands (2d4+1)");
+                Console.Write("Choose grip: ");
+                var grip = InputHelper.ReadNumber(1, 2);
+                if (!grip.HasValue)
+                    return false;
+
+                item.IsTwoHanded = grip.Value == 2;
+            }
+
             if (IsRangedWeaponForEquip(item))
             {
                 targetSlot = EquipmentSlot.Range;
@@ -100,6 +113,9 @@ public static class EquipmentHelper
 
             // Restore original slot (for weapons it was null)
             item.Slot = originalSlot;
+
+            if (!ok && item.IsVersatileWeapon)
+                item.IsTwoHanded = false;
 
             if (ok)
             {

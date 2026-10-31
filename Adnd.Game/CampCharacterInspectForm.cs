@@ -43,6 +43,9 @@ public sealed class CampCharacterInspectForm : Form
 
     public bool ReturnToTownRequested { get; private set; }
 
+    /// <summary>Opens the equip chooser straight away (camp's E)QUIP).</summary>
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    public bool StartWithEquip { get; init; }
     public CampCharacterInspectForm(string characterName, List<string> partyMembers,
                                     Action<ViewerPrompt?>? publish = null)
     {
@@ -205,7 +208,12 @@ public sealed class CampCharacterInspectForm : Form
         // not press any of these buttons. The pump starts on Shown so it is the newest one -- the maze is
         // underneath -- and every action republishes the menu afterwards, because whatever the action asked
         // will have replaced the question on the table with its own.
-        Shown += (_, _) => StartTableMenu();
+        Shown += (_, _) =>
+        {
+            StartTableMenu();
+            if (StartWithEquip)
+                BeginInvoke(new Action(EquipAction));
+        };
         FormClosed += (_, _) => _tableMenu?.Dispose();
     }
 
@@ -359,10 +367,9 @@ public sealed class CampCharacterInspectForm : Form
             Padding = new Padding(4);
             BackColor = Color.Black;
 
-            var frame = new Panel
+            var frame = new OldStyleFramePanel
             {
                 Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.Black,
                 Padding = new Padding(12)
             };
@@ -877,6 +884,15 @@ public sealed class CampCharacterInspectForm : Form
         {
             var isRangedWeapon = IsRangedWeaponForEquip(item);
 
+            if (item.IsVersatileWeapon)
+            {
+                var grip = PromptChoice("Wield " + item.Name, new List<string> { "One hand (2d4)", "Two hands (2d4+1)" });
+                if (!grip.HasValue)
+                    return;
+
+                item.IsTwoHanded = grip.Value == 1;
+            }
+
             if (isRangedWeapon)
             {
                 targetSlot = EquipmentSlot.Range;
@@ -908,7 +924,12 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         if (!targetSlot.HasValue)
+        {
+            if (item.IsVersatileWeapon)
+                item.IsTwoHanded = false;
+
             return;
+        }
 
         var originalSlot = item.Slot;
         item.Slot = targetSlot.Value;
@@ -916,6 +937,9 @@ public sealed class CampCharacterInspectForm : Form
         var ok = EquipmentManager.Equip(c, item);
 
         item.Slot = originalSlot;
+
+        if (!ok && item.IsVersatileWeapon)
+            item.IsTwoHanded = false;
 
         if (ok)
         {

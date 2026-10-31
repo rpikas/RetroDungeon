@@ -50,6 +50,6 @@ public class MonsterRepository
 
         // Monsters sharing a name (a Kobold in both books) are looked up by first match, so the configured
         // source goes first. The sort is stable, so everything else keeps its file order.
-        return MonsterSourcePreference.Order(monsters, Adnd.Core.Config.GameRulesProvider.Current.MonsterSourceOptions);
+        return MonsterSourcePreference.Order(monsters, Adnd.Core.Config.GameRulesProvider.Current.EffectiveMonsterSourceOptions);
     }
 }

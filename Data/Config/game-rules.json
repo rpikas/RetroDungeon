@@ -9,7 +9,7 @@
   "NumberOfItemsThatCouldBeFound": 5,
   "ProbabilityFindingEachItem": 0.05,
   "ItemSourceOptions": 4,
-  "MonsterSourceOptions": 2,
+  "MonsterSourceOptions": 5,
   "BoltacItemSourceFilter": 2,
   "UIOldStyle": true,
   "DelayInMsbetweenActions": 0,

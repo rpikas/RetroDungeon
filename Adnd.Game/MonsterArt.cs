@@ -30,7 +30,7 @@ public static class MonsterArt
         if (monster.Source == Sources.Wizardry)
             return true;
 
-        var sourceOption = GameRulesProvider.Current.MonsterSourceOptions;
+        var sourceOption = GameRulesProvider.Current.EffectiveMonsterSourceOptions;
         return monster.Source == Sources.WizardryAndAdnd && sourceOption == SourceOptions.OnlyWizardry;
     }
 

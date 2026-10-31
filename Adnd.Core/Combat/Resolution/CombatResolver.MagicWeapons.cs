@@ -24,6 +24,9 @@ public sealed partial class CombatResolver
     {
         if (mainHand != null && mainHand.Type == ItemType.Weapon)
         {
+            if (mainHand.IsVersatileWeapon)
+                return mainHand.GetDamageExpression(target.Template.Size == MonsterSize.Large);
+
             if (target.Template.Size == MonsterSize.Large && !string.IsNullOrWhiteSpace(mainHand.DamageVsLarge))
                 return mainHand.DamageVsLarge;
 
