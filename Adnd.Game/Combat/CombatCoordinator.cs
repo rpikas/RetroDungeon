@@ -267,7 +267,7 @@ public sealed class CombatCoordinator
             HandleTelekinesisPrompts(owner, session, roundEvents);
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
-            ShowRoundEvents(owner, roundEvents, session);
+            ShowRoundEvents(owner, roundEvents, session, encounterForm);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
@@ -347,7 +347,7 @@ public sealed class CombatCoordinator
                    HandleTelekinesisPrompts(owner, session, roundEvents);
                    ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
                    RoundResolved?.Invoke(session);
-                   ShowRoundEvents(owner, roundEvents, session);
+                   ShowRoundEvents(owner, roundEvents, session, encounterForm);
 
                    MoveDeadPartyMembersToEnd(session.Party);
                }
@@ -431,7 +431,7 @@ public sealed class CombatCoordinator
             HandleTelekinesisPrompts(owner, session, roundEvents);
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
-            ShowRoundEvents(owner, roundEvents, session);
+            ShowRoundEvents(owner, roundEvents, session, encounterForm);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
@@ -2952,11 +2952,22 @@ public sealed class CombatCoordinator
     }
 
     private void ShowRoundEvents(IWin32Window owner, IEnumerable<Adnd.Core.Combat.Events.CombatEvent> events,
-                                 CombatSession session)
+                                 CombatSession session, EncounterForm? wizardryForm = null)
     {
         var sb = new StringBuilder();
         foreach (var e in events)
             sb.AppendLine(e.Message);
+
+        if (wizardryForm is { IsWizardryStyle: true } && sb.Length > 0)
+        {
+            RuleApplicationInfo.Publish($"Combat Round:\n{sb}");
+            var visible = events
+                .Select(e => e.Message)
+                .Where(m => !System.Text.RegularExpressions.Regex.IsMatch(
+                    m, @"THAC0|\bto[- ]hit\b|\bto hit\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase));
+            wizardryForm.PlayResults(owner, visible);
+            return;
+        }
 
         Say(owner, "Combat Round", sb.ToString(), session);
     }

@@ -186,6 +186,12 @@ public sealed class EncounterForm : Form
         _currentIndex = FindNextActionableIndex(-1);
         UpdateHeader();
         UpdatePartyList();
+
+        if (monsterTemplate != null && monsterTemplate.Source == Sources.Wizardry)
+        {
+            _wizardryStyle = true;
+            ApplyWizardryLayout();
+        }
     }
 
     // Constructor for multiple group encounters
@@ -458,6 +464,12 @@ public sealed class EncounterForm : Form
         _currentIndex = FindNextActionableIndex(-1);
         UpdateHeader();
         UpdatePartyList();
+
+        if (session.AliveMonsters.Any() && session.AliveMonsters.All(m => m.Template.Source == Sources.Wizardry))
+        {
+            _wizardryStyle = true;
+            ApplyWizardryLayout();
+        }
     }
 
     /// <summary>
@@ -477,14 +489,28 @@ public sealed class EncounterForm : Form
     {
         base.OnShown(e);
 
+        if (_resultLines != null)
+        {
+            StartResultPlayback();
+            return;
+        }
+
         if (_session != null && _session.RoundNumber == 1 && _session.PartySurprisedRound1)
         {
-            ShowTimedSurpriseDialog(this, "SURPRISE", "PARTY SURPRISED", 3000);
+            if (!_wizardryStyle)
+                ShowTimedSurpriseDialog(this, "SURPRISE", "PARTY SURPRISED", 3000);
 
             foreach (var member in _party)
             {
                 if (IsActionable(member))
                     _actions[member.Name] = CombatAction.OfType(CombatActionType.Parry);
+            }
+
+            if (_wizardryStyle)
+            {
+                _resultLines = new List<string> { "The party is surprised!" };
+                StartResultPlayback();
+                return;
             }
 
             DialogResult = DialogResult.OK;
@@ -493,8 +519,30 @@ public sealed class EncounterForm : Form
         }
 
         if (_session != null && _session.RoundNumber == 1 && _session.MonstersSurprisedRound1)
-            ShowTimedSurpriseDialog(this, "SURPRISE", "MONSTERS SURPRISED", 3000);
+        {
+            if (_wizardryStyle)
+            {
+                _resultLines = new List<string> { "The monsters are surprised!" };
+                _afterResults = () =>
+                {
+                    _resultLines = null;
+                    UpdateHeader();
+                    StartViewerPump();
+                };
+                StartResultPlayback();
+                return;
+            }
 
+            ShowTimedSurpriseDialog(this, "SURPRISE", "MONSTERS SURPRISED", 3000);
+        }
+
+        StartViewerPump();
+    }
+
+    private Action? _afterResults;
+
+    private void StartViewerPump()
+    {
         _viewerControl = ViewerControlPump.Start(this, ViewerCommands.Combat, InjectViewerKey, HandleViewerCommand);
         ViewerPromptChanged?.Invoke(BuildViewerPrompt());
     }
@@ -523,6 +571,171 @@ public sealed class EncounterForm : Form
         }
 
         base.OnFormClosing(e);
+    }
+
+    // Wizardry monsters get the Proving Grounds look: framed panels and a small monster over the maze view.
+    private bool _wizardryStyle;
+    private List<string>? _resultLines;
+    private int _resultIndex;
+    private System.Windows.Forms.Timer? _resultTimer;
+
+    internal bool IsWizardryStyle => _wizardryStyle;
+
+    /// <summary>Shows the round's results one line at a time inside this form: every second, or sooner on any key.</summary>
+    internal void PlayResults(IWin32Window owner, IEnumerable<string> lines)
+    {
+        var list = lines.Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => l.Trim()).ToList();
+        if (list.Count == 0)
+            return;
+
+        _resultLines = list;
+        _resultIndex = 0;
+        DialogResult = DialogResult.None;
+        UpdatePartyList();
+        ShowDialog(owner);
+        _resultLines = null;
+    }
+
+    private void ShowResultLine()
+    {
+        if (_resultLines == null)
+            return;
+
+        if (_resultIndex >= _resultLines.Count)
+        {
+            _resultTimer?.Stop();
+            if (_afterResults != null)
+            {
+                var after = _afterResults;
+                _afterResults = null;
+                after();
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
+            return;
+        }
+
+        _optionsTitleLabel.Text = string.Empty;
+        _optionsLegendLabel.Text = _resultLines[_resultIndex++].ToUpperInvariant();
+        UpdatePartyList();
+        _resultTimer?.Stop();
+        _resultTimer?.Start();
+    }
+
+    private void StartResultPlayback()
+    {
+        _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _resultTimer ??= new System.Windows.Forms.Timer { Interval = 1000 };
+        _resultTimer.Tick -= ResultTimer_Tick;
+        _resultTimer.Tick += ResultTimer_Tick;
+        ShowResultLine();
+    }
+
+    private void ResultTimer_Tick(object? sender, EventArgs e) => ShowResultLine();
+
+    private sealed class WizardryFrame : Panel
+    {
+        public WizardryFrame()
+        {
+            DoubleBuffered = true;
+            BackColor = Color.Black;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            OldStyleFrame.Draw(e.Graphics, ClientRectangle, GameRulesProvider.Current.DefaultColor);
+        }
+    }
+
+    private void ApplyWizardryLayout()
+    {
+        const int margin = 8;
+        const int gap = 6;
+        const int inner = 12;
+        var width = 980;
+        var frameWidth = width - 2 * margin;
+        var y = margin;
+
+        WizardryFrame NewFrame(int height)
+        {
+            var frame = new WizardryFrame { Left = margin, Top = y, Width = frameWidth, Height = height };
+            Controls.Add(frame);
+            y += height + gap;
+            return frame;
+        }
+
+        void Place(Control control, Control parent, int left, int top, int w, int h)
+        {
+            parent.Controls.Add(control);
+            control.SetBounds(left, top, w, h);
+        }
+
+        Controls.Clear();
+
+        var headerFrame = NewFrame(_multipleGroups ? 110 : 64);
+        _headerLabel.TextAlign = ContentAlignment.MiddleLeft;
+        Place(_headerLabel, headerFrame, inner, 8, frameWidth - 2 * inner, headerFrame.Height - 16);
+
+        var optionsFrame = NewFrame(128);
+        Place(_optionsTitleLabel, optionsFrame, inner, 8, frameWidth - 2 * inner, 36);
+        Place(_optionsLegendLabel, optionsFrame, inner, 48, frameWidth - 2 * inner, 72);
+
+        var stripFrame = NewFrame(176);
+        _monsterPanel.BorderStyle = BorderStyle.None;
+        Place(_monsterPanel, stripFrame, OldStyleFrame.Thickness, OldStyleFrame.Thickness,
+            frameWidth - 2 * OldStyleFrame.Thickness, stripFrame.Height - 2 * OldStyleFrame.Thickness);
+
+        var partyFrame = NewFrame(236);
+        Place(_partyList, partyFrame, inner, inner, frameWidth - 2 * inner, partyFrame.Height - 2 * inner);
+
+        ClientSize = new Size(width, y + margin - gap);
+    }
+
+    // One corridor frame: the nearest wall seen straight on, like the Proving Grounds view.
+    private static void DrawCorridorFrame(Graphics g, Rectangle rect)
+    {
+        using var pen = new Pen(GameRulesProvider.Current.DefaultColor, 2f);
+        var outer = new Rectangle(rect.Left + 6, rect.Top + 4, rect.Width - 12, rect.Height - 8);
+        var insetX = outer.Width / 4;
+        var insetY = outer.Height / 5;
+        var back = new Rectangle(outer.Left + insetX, outer.Top + insetY, outer.Width - 2 * insetX, outer.Height - 2 * insetY);
+        g.DrawRectangle(pen, back);
+        g.DrawLine(pen, outer.Left, outer.Top, back.Left, back.Top);
+        g.DrawLine(pen, outer.Right, outer.Top, back.Right, back.Top);
+        g.DrawLine(pen, outer.Left, outer.Bottom, back.Left, back.Bottom);
+        g.DrawLine(pen, outer.Right, outer.Bottom, back.Right, back.Bottom);
+    }
+
+    private void PaintWizardryStrip(Graphics g, Rectangle rect)
+    {
+        g.Clear(Color.Black);
+        DrawCorridorFrame(g, rect);
+
+        var images = _monsterImages.Count > 0
+            ? _monsterImages.Select(m => m.Image).Where(i => i != null).Cast<Image>().ToList()
+            : (_monsterImage != null ? new List<Image> { _monsterImage } : new List<Image>());
+        if (images.Count == 0)
+            return;
+
+        const int maxHeight = 120;
+        var slotWidth = rect.Width / images.Count;
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+
+        for (var i = 0; i < images.Count; i++)
+        {
+            var image = images[i];
+            var scale = Math.Min((slotWidth - 20) / (float)image.Width, Math.Min(maxHeight, rect.Height - 16) / (float)image.Height);
+            var w = (int)(image.Width * scale);
+            var h = (int)(image.Height * scale);
+            var x = rect.Left + i * slotWidth + (slotWidth - w) / 2;
+            var yPos = rect.Top + (rect.Height - h) / 2;
+            g.DrawImage(image, new Rectangle(x, yPos, w, h));
+        }
     }
 
     private static void ShowTimedSurpriseDialog(IWin32Window owner, string titleText, string messageText, int autoCloseMilliseconds)
@@ -604,6 +817,7 @@ public sealed class EncounterForm : Form
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
         _viewerControl?.Dispose();
+        _resultTimer?.Dispose();
         base.OnFormClosed(e);
     }
 
@@ -752,6 +966,16 @@ public sealed class EncounterForm : Form
 
     private void EncounterForm_KeyDown(object? sender, KeyEventArgs e)
     {
+        if (_resultLines != null)
+        {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+            if (e.KeyCode == Keys.Escape)
+                _resultIndex = _resultLines.Count;
+            ShowResultLine();
+            return;
+        }
+
         if (_currentIndex >= 0 && _currentIndex < _party.Count && _session?.IsSwallowed(_party[_currentIndex].Name) == true)
         {
             e.Handled = true;
@@ -2596,7 +2820,12 @@ public sealed class EncounterForm : Form
 
         var rect = _monsterPanel.ClientRectangle;
 
-        // Handle multiple group images
+        if (_wizardryStyle)
+        {
+            PaintWizardryStrip(g, rect);
+            return;
+        }
+
         if (_monsterImages.Count > 0)
         {
             DrawMultipleMonsterImages(g, rect, _monsterImages);
