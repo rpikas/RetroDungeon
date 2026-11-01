@@ -314,16 +314,31 @@ public sealed partial class MazeForm
 
     private EncounterRoll? RollDungeonMonsterForLevelWithCount(int level)
     {
+        var wizardryOnly = GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry;
+
+        // Playing Wizardry: the fixed per-level monster list replaces the AD&D level and creature tables.
+        if (wizardryOnly)
+        {
+            var wizardryName = WizardryEncounterTable.Pick(level, _random);
+            RuleApplicationInfo.Publish(
+                "Wizardry",
+                "Encounter table",
+                $"Roll monster for dungeon level {level}",
+                "Wizardry monsters are picked from the fixed list for the dungeon level.",
+                "1",
+                WizardryEncounterTable.GetMonsters(level).Count.ToString(),
+                "-",
+                $"{wizardryName}.");
+            return new EncounterRoll(wizardryName, null, Math.Clamp(level, WizardryEncounterTable.MinLevel, WizardryEncounterTable.MaxLevel));
+        }
+
         var rolledMonsterLevel = RollMonsterLevelFromEncounterTable(level);
         if (rolledMonsterLevel <= 0)
             return null;
 
         // Primary flow: MonsterEncounter.json determines monster level,
         // then MonsterLevels.json (1d100) determines creature and count.
-        var wizardryOnly = GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry;
-
-        // The DMG tables name AD&D creatures, so they are bypassed when only Wizardry monsters may appear.
-        var dmgRoll = wizardryOnly ? null : RollFromDmgEncounterTable(rolledMonsterLevel, level);
+        var dmgRoll = RollFromDmgEncounterTable(rolledMonsterLevel, level);
         if (dmgRoll != null)
             return dmgRoll;
 

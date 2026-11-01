@@ -270,6 +270,7 @@ public sealed class CombatCoordinator
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session, encounterForm);
+            RewardInsideEncounterForm(owner, session, characterRepository, dungeonLevel, encounterForm);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
@@ -350,6 +351,7 @@ public sealed class CombatCoordinator
                    ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
                    RoundResolved?.Invoke(session);
                    ShowRoundEvents(owner, roundEvents, session, encounterForm);
+                   RewardInsideEncounterForm(owner, session, characterRepository, dungeonLevel, encounterForm);
 
                    MoveDeadPartyMembersToEnd(session.Party);
                }
@@ -434,6 +436,7 @@ public sealed class CombatCoordinator
             ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
             RoundResolved?.Invoke(session);
             ShowRoundEvents(owner, roundEvents, session, encounterForm);
+            RewardInsideEncounterForm(owner, session, characterRepository, dungeonLevel, encounterForm);
 
             MoveDeadPartyMembersToEnd(session.Party);
         }
@@ -728,8 +731,22 @@ public sealed class CombatCoordinator
         session.MirrorImageRounds.Clear();
     }
    
-    private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel)
+    private CombatSession? _rewardedSession;
+
+    private void RewardInsideEncounterForm(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel, EncounterForm form)
     {
+        if (session.Outcome == CombatOutcome.Victory && form.IsWizardryStyle)
+            ApplyVictoryRewards(owner, session, characterRepository, dungeonLevel, form);
+    }
+
+    private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel, EncounterForm? rewardForm = null)
+    {
+        if (ReferenceEquals(_rewardedSession, session))
+            return;
+        _rewardedSession = session;
+
+        var isWizardryEncounter = session.Monsters.Count > 0 && session.Monsters.All(m => m.Template.Source == Sources.Wizardry);
+
         var survivors = session.Party
             .Where(c => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead))
             .ToList();
@@ -817,7 +834,8 @@ public sealed class CombatCoordinator
         int xpRemainder = totalMonsterXp % survivors.Count;
         int gemJewelryXpPool = Math.Max(0, effectiveTreasure.TotalGemValueGp + effectiveTreasure.TotalJewelryValueGp);
         int magicItemXpPool = Math.Max(0, effectiveTreasure.MagicPlaceholders.Sum(m => Math.Max(0, m.ExperienceValue) * Math.Max(1, m.Count)));
-        int goldXpPool = Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool + magicItemXpPool;
+        // Wizardry has no XP for treasure and no prime requisite XP bonus.
+        int goldXpPool = isWizardryEncounter ? 0 : Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool + magicItemXpPool;
         int goldXpEach = goldXpPool / survivors.Count;
         int goldXpRemainder = goldXpPool % survivors.Count;
 
@@ -840,7 +858,9 @@ public sealed class CombatCoordinator
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
             var goldXpGain = goldXpEach + (i < goldXpRemainder ? 1 : 0);
             var xpModifierPercent = XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
-            var individualBonus = (int)Math.Round(baseGain * (xpModifierPercent / 100.0), MidpointRounding.AwayFromZero);
+            var individualBonus = isWizardryEncounter
+                ? 0
+                : (int)Math.Round(baseGain * (xpModifierPercent / 100.0), MidpointRounding.AwayFromZero);
 
             baseXpByCharacter[survivor.Name] = baseGain;
             bonusXpByCharacter[survivor.Name] = individualBonus;
@@ -1122,8 +1142,36 @@ public sealed class CombatCoordinator
             }
         }
 
-        Say(owner, "Combat Rewards", sb.ToString(), session);
+        if (!isWizardryEncounter)
+        {
+            Say(owner, "Combat Rewards", sb.ToString(), session);
+            return;
+        }
+
+        RuleApplicationInfo.Publish($"Combat Rewards:\n{sb}");
+
+        var summary = new List<string>();
+        var goldEach = survivors.Count > 0 ? effectiveTreasure.GoldPieces / survivors.Count : 0;
+        var found = new List<string>();
+        if (goldEach > 0)
+            found.Add($"You found {goldEach} gold each.");
+        var xpEachShown = levelUpResults.Count > 0 ? levelUpResults.Max(r => r.ExperienceAfter - r.ExperienceBefore) : 0;
+        var itemParts = magicAward.AssignedItems.Select(a => $"{a.ReceiverName} found {AddArticle(a.ItemName)}").ToList();
+        var xpText = $"You got {xpEachShown} xp each";
+        summary.Add(string.Join(" ", found.Append(itemParts.Count > 0
+            ? $"{xpText} and {JoinWithAnd(itemParts)}."
+            : $"{xpText}.")));
+        foreach (var r in levelUpResults.Where(r => r.NewLevel > r.OldLevel))
+            summary.Add($"{r.CharacterName} reached level {r.NewLevel}!");
+
+        rewardForm?.PlayResults(owner, summary);
     }
+
+    private static string AddArticle(string name)
+        => name.Length > 0 && "AEIOUaeiou".Contains(name[0]) ? $"an {name}" : $"a {name}";
+
+    private static string JoinWithAnd(IReadOnlyList<string> parts)
+        => parts.Count <= 1 ? string.Concat(parts) : string.Join(", ", parts.Take(parts.Count - 1)) + " and " + parts[^1];
 
     private List<string> PromptSelectWeaponProficienciesOnLevelUp(
         IWin32Window owner,

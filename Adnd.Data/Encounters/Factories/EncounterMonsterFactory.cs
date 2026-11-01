@@ -21,6 +21,12 @@ public sealed class EncounterMonsterFactory
     /// </summary>
     public bool ForceInLair { get; set; }
 
+    // Wizardry monsters are in their lair only at lair locations, never when met while walking.
+    private bool IsGroupInLair(Monster template, int inLairChance, int inLairRoll)
+        => template.Source == Sources.Wizardry
+            ? ForceInLair
+            : ForceInLair ? inLairChance > 0 : inLairRoll <= inLairChance;
+
     private static int ParsePercent(string? raw, int defaultValue)
     {
         if (string.IsNullOrWhiteSpace(raw))
@@ -113,7 +119,7 @@ public sealed class EncounterMonsterFactory
         var lairTemplate = CloneMonster(template);
         var inLairRoll = _random.Next(1, 101);
         var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
-        var isInLair = ForceInLair ? inLairChance > 0 : inLairRoll <= inLairChance;
+        var isInLair = IsGroupInLair(lairTemplate, inLairChance, inLairRoll);
 
         RuleApplicationInfo.Publish(
             lairTemplate.Name,
@@ -191,6 +197,9 @@ public sealed class EncounterMonsterFactory
         }
 
         var encounterTemplate = CloneMonster(template);
+        // A Wizardry monster's treasure depends on the level where it was met, not on the first level it is listed for.
+        if (encounterTemplate.Source == Sources.Wizardry && dungeonLevel is > 0)
+            encounterTemplate.DungeonLevel = dungeonLevel.Value;
         var forcedDragonPairHitPointsPerDie = TryGetForcedDragonPairHitPointsPerDie(encounterTemplate, count, dungeonLevel);
         if (forcedDragonPairHitPointsPerDie == null)
             ApplyDragonAgeHitPointProfile(encounterTemplate, dungeonLevel);
@@ -201,7 +210,7 @@ public sealed class EncounterMonsterFactory
 
         var inLairRoll = _random.Next(1, 101);
         var inLairChance = Math.Clamp(lairTemplate.InLairPercent, 0, 100);
-        var isInLair = ForceInLair ? inLairChance > 0 : inLairRoll <= inLairChance;
+        var isInLair = IsGroupInLair(lairTemplate, inLairChance, inLairRoll);
 
         RuleApplicationInfo.Publish(
             lairTemplate.Name,

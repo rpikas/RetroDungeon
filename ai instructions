@@ -7395,5 +7395,16 @@ These are the items with numbers
 91	RING OF HEALING
 92	RING PRO UNDEAD
 93	DEADLY RING
+6,2
 ___
+After killing wizardry mobs you get no extra xp for the gp found as in ADND, you only get the xp for the monsters killed.
+Also there is no xp bonus after killing wizardry mobs as in ADND.
+Do not open a new dialog to show the details about the treasure found, instead show it in the combat log.
+But show a summary in the encounter dialog, for example "You found 102 gold each. You got 82 xp each and Bubba found a Long Sword +1"
 
+There are certain locations in Proving grouds where the chanse is specified that it usally 80 % chanse to encounter
+monsters, in such encounters the monsters are always in lair. But when bumbing into monster when waliking in the
+dungeon the wizardry monsters are never in lair.
+
+when playing wizardry and deciding what level monster to encounter the normal table that is used for adnd should not be used. 
+then this table should be used. Wizardry: Proving Grounds of the Mad Overlord/Monsters - Wizardry Wiki 
