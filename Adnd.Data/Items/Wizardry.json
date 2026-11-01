@@ -910,9 +910,9 @@
       "IsTwoHanded": false,
       "Range": "",
       "ArmorClassBonus": 0,
-      "MagicBonus": 0,
+      "MagicBonus": 1,
       "SpecialAbilities": [
-        "Protection vs Mages"
+        "+2 vs. magic-using and enchanted creatures"
       ],
       "IsCursed": false,
       "IsShopBuyable": true,
@@ -925,12 +925,12 @@
         "Bard"
       ],
       "Rarity": "Rare",
-      "Description": "A blade designed to kill mages.",
+      "Description": "A +1 blade that is +2 vs. magic-using and enchanted creatures.",
       "Source": "Wizardry",
       "Version": "1e",
       "StockQuantity": 0,
       "Slot": "",
-      "ToHitBonus": 0
+      "ToHitBonus": 1
     },
     {
       "Name": "Were Slayer",
