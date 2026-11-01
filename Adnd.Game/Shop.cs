@@ -145,6 +145,9 @@ public static class Shop
         if (!canGoInSlot)
             return false;
 
+        if (!EquipmentManager.MeetsAlignmentRequirement(character, item))
+            return false;
+
         if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
             return true;
 

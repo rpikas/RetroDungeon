@@ -176,6 +176,8 @@ public sealed partial class CombatResolver
         ["Sword of Wounding"] = "sword long",
         ["Vorpal Blade +1"] = "sword long",
         ["Mage Masher"] = "sword short",
+        ["Evil Sword +3"] = "sword long",
+        ["Evil S-Sword +3"] = "sword short",
         ["Were Slayer"] = "sword long",
         ["Dragon Slayer"] = "sword long",
         ["Shuriken"] = "dagger",

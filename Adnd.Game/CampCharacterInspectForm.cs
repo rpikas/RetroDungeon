@@ -870,6 +870,7 @@ public sealed class CampCharacterInspectForm : Form
         var equipable = c.Inventory
             .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue)
             .Where(it => it.AllowedClasses.Count == 0 || c.Classes.Any(cls => it.AllowedClasses.Contains(cls)))
+            .Where(it => EquipmentManager.MeetsAlignmentRequirement(c, it))
             .ToList();
 
         if (equipable.Count == 0)

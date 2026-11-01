@@ -41,6 +41,13 @@ public static class EquipmentHelper
             return false;
         }
 
+        if (!EquipmentManager.MeetsAlignmentRequirement(c, item))
+        {
+            Console.WriteLine($"\n{c.Name} cannot equip {item.Name}. Only evil-aligned characters can use it.");
+            Console.ReadKey(true);
+            return false;
+        }
+
         EquipmentSlot? targetSlot = null;
 
         // Determine target slot based on item type and properties

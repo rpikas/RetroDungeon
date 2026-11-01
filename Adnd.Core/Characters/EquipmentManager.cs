@@ -45,11 +45,24 @@ public static class EquipmentManager
                || name.Contains("HandAxe", StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>Items with the "Evil Only" ability can only be equipped by evil-aligned characters.</summary>
+    public static bool MeetsAlignmentRequirement(Character c, Item item)
+    {
+        if (item?.SpecialAbilities == null
+            || !item.SpecialAbilities.Any(a => string.Equals(a?.Trim(), "Evil Only", StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        return c.Alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil;
+    }
+
     public static bool Equip(Character c, Item item)
     {
         EnsureEquipmentSlots(c);
 
         if (item.Slot == null)
+            return false;
+
+        if (!MeetsAlignmentRequirement(c, item))
             return false;
 
         if (item.AllowedClasses != null

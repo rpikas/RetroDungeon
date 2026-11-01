@@ -1548,9 +1548,44 @@
       "Name": "Evil S-Sword +3",
       "Type": "Weapon",
       "Cost": 50000,
-      "Weight": 60,
+      "Weight": 35,
       "Damage": "1d6+3",
       "DamageVsLarge": "1d8+3",
+      "DamageType": "Slashing",
+      "SpeedFactor": 3,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 3,
+      "SpecialAbilities": [
+        "Evil Only"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A Short Sword +3 that can only be equipped by characters of evil alignment.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 3
+    },
+    {
+      "Name": "Evil Sword +3",
+      "Type": "Weapon",
+      "Cost": 50000,
+      "Weight": 60,
+      "Damage": "1d8+3",
+      "DamageVsLarge": "1d12+3",
       "DamageType": "Slashing",
       "SpeedFactor": 5,
       "WeaponLength": "Medium",
@@ -1559,9 +1594,9 @@
       "ArmorClassBonus": 0,
       "MagicBonus": 3,
       "SpecialAbilities": [
-        "Soul Drain"
+        "Evil Only"
       ],
-      "IsCursed": true,
+      "IsCursed": false,
       "IsShopBuyable": true,
       "AllowedClasses": [
         "Fighter",
@@ -1572,47 +1607,12 @@
         "Bard"
       ],
       "Rarity": "Very Rare",
-      "Description": "A cursed blade that drains souls.",
+      "Description": "A Long Sword +3 that can only be equipped by characters of evil alignment.",
       "Source": "Wizardry",
       "Version": "1e",
       "StockQuantity": 0,
       "Slot": "",
-      "ToHitBonus": 0
-    },
-    {
-      "Name": "Evil Sword +3",
-      "Type": "Weapon",
-      "Cost": 50000,
-      "Weight": 60,
-      "Damage": "1d8+3",
-      "DamageVsLarge": "2d6+3",
-      "DamageType": "Slashing",
-      "SpeedFactor": 6,
-      "WeaponLength": "Medium",
-      "IsTwoHanded": false,
-      "Range": "",
-      "ArmorClassBonus": 0,
-      "MagicBonus": 3,
-      "SpecialAbilities": [
-        "Evil Aura"
-      ],
-      "IsCursed": true,
-      "IsShopBuyable": true,
-      "AllowedClasses": [
-        "Fighter",
-        "Paladin",
-        "Ranger",
-        "Thief",
-        "Assassin",
-        "Bard"
-      ],
-      "Rarity": "Very Rare",
-      "Description": "A cursed saber infused with evil.",
-      "Source": "Wizardry",
-      "Version": "1e",
-      "StockQuantity": 0,
-      "Slot": "",
-      "ToHitBonus": 0
+      "ToHitBonus": 3
     },
     {
       "Name": "Evil Shield +3",
