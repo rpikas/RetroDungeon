@@ -1088,26 +1088,17 @@
       "WeaponLength": "Short",
       "IsTwoHanded": false,
       "Range": "10/20/30",
-      "ArmorClassBonus": 0,
+      "ArmorClassBonus": 3,
       "MagicBonus": 0,
-      "SpecialAbilities": [
-        "Extra Attack"
-      ],
+      "SpecialAbilities": [],
       "IsCursed": false,
       "IsShopBuyable": true,
       "AllowedClasses": [
-        "Paladin",
-        "Ranger",
-        "Druid",
         "MagicUser",
-        "Illusionist",
-        "Thief",
-        "Assassin",
-        "Fighter",
-        "Bard"
+        "Illusionist"
       ],
       "Rarity": "Very Rare",
-      "Description": "A dagger that grants extra speed.",
+      "Description": "A dagger that improves the wearer's armor class by 3. Usable by magic users and illusionists.",
       "Source": "Wizardry",
       "Version": "1e",
       "StockQuantity": 0,

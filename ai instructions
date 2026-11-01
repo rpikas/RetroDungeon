@@ -7202,3 +7202,15 @@ i want a setting DelayInbetweenCombatMessages default set to 1 secound I want th
 how much dealy there should be inbetween messages instead of always having 1 sec as now
 ___
 
+in the church update prices:
+neutralize poison cost 1000 gp
+Raise dead cost 1000 plus 500 per level of target
+Requrection cost twice as much as Raise dead.
+Cast Restoration that cures Feeblemind, lost levels cost 10000 plus a like amount per level of experience of the recipient.
+Restoration is only effective if the spell is cast within 1 day/level of experience of the cleric casting it. 
+Both the caster and recipient age by two years when the spell is cast. Implement Level 7 Cleric spell restoration if not done. 
+Clerics in Temple are asumed to be level 15
+___
+Dagger of Speed only usable my magic users and gives the user ac 3
+Illusionists can also use it and it has no extra attack you can remove that
+___
