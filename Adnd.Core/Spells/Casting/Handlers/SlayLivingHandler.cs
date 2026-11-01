@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Adnd.Core.Combat.Sessions;
 
 namespace Adnd.Core.Spells.Casting.Handlers;
@@ -54,7 +53,7 @@ public sealed class SlayLivingHandler : ISpellEffectHandler
             return result;
         }
 
-        var deathResistance = GetDeathResistancePercent(target);
+        var deathResistance = SpellDamageSaveHelper.GetDeathResistancePercent(target);
         if (deathResistance > 0)
         {
             var resistRoll = rng.Next(1, 101);
@@ -82,20 +81,4 @@ public sealed class SlayLivingHandler : ISpellEffectHandler
     private static bool IsUndead(MonsterInstance monster)
         => monster.Template.Type == Monsters.MonsterType.Undead
            || monster.Template.SpecialAbilities.Any(a => string.Equals(a.Name?.Trim(), "Undead", StringComparison.OrdinalIgnoreCase));
-
-    // Reads the percentage from a "Death Resistance" ability, e.g. "Death resistant (30%)."
-    private static int GetDeathResistancePercent(MonsterInstance monster)
-    {
-        foreach (var ability in monster.Template.SpecialAbilities)
-        {
-            if (!string.Equals(ability.Name?.Trim(), "Death Resistance", StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            var m = Regex.Match(ability.Description ?? string.Empty, @"(\d+)\s*%");
-            if (m.Success && int.TryParse(m.Groups[1].Value, out var percent))
-                return Math.Clamp(percent, 0, 100);
-        }
-
-        return 0;
-    }
 }

@@ -313,6 +313,25 @@ internal static class SpellDamageSaveHelper
                || key.Contains("ice", StringComparison.Ordinal);
     }
 
+    private static bool HasAbility(MonsterInstance monster, string abilityName)
+        => monster.Template.SpecialAbilities.Any(a => string.Equals(a.Name?.Trim(), abilityName, StringComparison.OrdinalIgnoreCase));
+
+    // Reads the percentage from a "Death Resistance" ability, e.g. "Death resistant (30%)."
+    internal static int GetDeathResistancePercent(MonsterInstance monster)
+    {
+        foreach (var ability in monster.Template.SpecialAbilities)
+        {
+            if (!string.Equals(ability.Name?.Trim(), "Death Resistance", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            var m = System.Text.RegularExpressions.Regex.Match(ability.Description ?? string.Empty, @"(\d+)\s*%");
+            if (m.Success && int.TryParse(m.Groups[1].Value, out var percent))
+                return Math.Clamp(percent, 0, 100);
+        }
+
+        return 0;
+    }
+
     private static bool HasSpecialDefense(MonsterInstance monster, string defenseName)
     {
         return monster.Template.SpecialDefenses.Any(d =>
@@ -593,6 +612,11 @@ internal static class SpellDamageSaveHelper
 
         if (HasSpecialDefense(monster, "Blink"))
             adjustedRolledDamage = Math.Max(0, adjustedRolledDamage / 2);
+
+        // Wizardry "Fire Resistance" / "Cold Resistance" abilities halve damage from that element.
+        if ((IsFireOrHeatSpell(spellName ?? string.Empty) && HasAbility(monster, "Fire Resistance"))
+            || (IsColdSpell(spellName ?? string.Empty) && HasAbility(monster, "Cold Resistance")))
+            adjustedRolledDamage /= 2;
 
         if (HasImmunityToSomeAttacks(monster) && IsColdSpell(spellName))
         {

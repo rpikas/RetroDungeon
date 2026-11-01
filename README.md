@@ -134,6 +134,22 @@ can regain HP. Otherwise, they cast an available non-healing spell or attack nor
 Damage that cannot be healed by spells, such as Sword of Wounding damage, does not
 make a monster an eligible healing target.
 
+## Wizardry monster abilities
+
+Wizardry monsters live in `Adnd.Data\Monsters\Wizardry.json`. Their special abilities work like this in combat:
+
+| Ability | Effect |
+|---|---|
+| Run | A monster at 25% HP or less flees with a 50% chance each turn. |
+| Help | 25% chance per turn, once per combat, to call 1d4 monsters of its own kind. Reinforcements cannot call for more. |
+| LvlDrain | Each hit drains N levels (no save). |
+| Decapitate | 5% chance per hit; a failed save vs Death kills instantly. |
+| Stoning | On hit, save vs Petrification or turn to stone. |
+| Breath Attack (Fire/Cold/Poison/Petrify) | 33% chance per turn. The whole party takes half the monster's current HP (save vs Breath for half). Petrify breath turns to stone on a failed save instead of dealing damage. |
+| Fire / Cold Resistance | Halves fire / cold spell damage against the monster. |
+| Death Resistance (N%) | N% chance to survive Slay Living and Finger of Death, even after a failed save. |
+| Slept | Informational; Sleep already works on every non-undead monster. |
+
 ## The tabletop viewer (optional)
 
 `WizardryViewer/` is a Unity project that watches the game and lays it out as a miniatures

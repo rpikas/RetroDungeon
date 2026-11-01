@@ -173,8 +173,17 @@ public sealed partial class CombatResolver
         var session = state.Session;
         var events = state.Events;
 
+        if (TryResolveWizardryRun(monster, events))
+            return MonsterTurnFlow.EndTurn;
+
+        if (TryResolveWizardryHelp(session, monster, events))
+            return MonsterTurnFlow.EndTurn;
+
         if (HasSpecialAbility(monster, "Dragon breath")
             && ResolveDragonBreathCurrentHp(monster, session, events))
+            return MonsterTurnFlow.EndTurn;
+
+        if (TryResolveWizardryBreathAttack(session, monster, events))
             return MonsterTurnFlow.EndTurn;
 
         if (TryResolveHellHoundBreatheFire(monster, session, events))
@@ -967,6 +976,10 @@ public sealed partial class CombatResolver
         TryApplyInfestation(monster, target, events);
         TryApplyTickDisease(monster, target, events);
         TryApplyEnergyDrain(monster, target, session, events);
+        TryApplyWizardryLevelDrain(monster, target, events);
+        TryApplyWizardryDecapitate(monster, target, events);
+        if (!IsAlive(target))
+            return;
         TryApplyLevel8OnHit(session, monster, target, attack.Name, events);
         TryApplyPitFiendTail(monster, target, attack.Name, events);
         TryApplyLevel10OnHit(monster, target, attack.Name, events);

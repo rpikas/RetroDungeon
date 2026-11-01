@@ -50,6 +50,17 @@ public sealed class FingerOfDeathHandler : ISpellEffectHandler
             return result;
         }
 
+        var deathResistance = SpellDamageSaveHelper.GetDeathResistancePercent(target);
+        if (deathResistance > 0)
+        {
+            var resistRoll = rng.Next(1, 101);
+            if (resistRoll <= deathResistance)
+            {
+                result.Events.Add($"{target.DisplayName} fails save ({saveRoll} vs {saveTarget}) but resists death ({resistRoll} on 1d100 vs {deathResistance}%).");
+                return result;
+            }
+        }
+
         if (SpellDamageSaveHelper.IsNegatedByMagicResistance(target, rng, spell.Name))
         {
             result.Events.Add($"{target.DisplayName} negates Finger of Death with magic resistance.");

@@ -37,7 +37,8 @@ Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests 
 
 ## Adding a monster power
 
-- Monster stats live in `Adnd.Data\Monsters\LevelN.json`. Hit points come from `HitDice` x d8 (+ `ExtraHitPoints`); for fixed-hp monsters use hp / 4.5 as hit dice.
+- Wizardry-source monsters live in `Adnd.Data\Monsters\Wizardry.json` (one monster per entry in `DungeonLevels`); their abilities are in `CombatResolver.WizardryAbilities.cs` and are described in the README.
+- Other monster stats live in `Adnd.Data\Monsters\LevelN.json`. Hit points come from `HitDice` x d8 (+ `ExtraHitPoints`); for fixed-hp monsters use hp / 4.5 as hit dice.
 - Abilities and defenses are matched **by name** (`HasSpecialAbility`, `HasSpecialDefense`, `IsTemplate`). The JSON name must match the string used in code.
 - Per-monster turn powers are called from `ResolveMonsterBreathGazesAndPowers` / `ResolveMonsterLatePowers` in `CombatResolver.MonsterTurn.cs` (`TryResolveLevel8Powers`, `...Level9Powers`, `...Level10Powers`, `TryResolveGreenSlime`). Returning true ends that monster's turn.
 - Monster spellcasting is table-driven: add a row to `MonsterSpellAttempts` in `CombatResolver.MonsterTurn.cs`.

@@ -412,6 +412,7 @@ public sealed partial class CombatResolver
         _nightHagSleepUsed.Clear();
         _nightHagEnfeeblementUses.Clear();
         _nightHagGateAttempted.Clear();
+        _wizardryHelpCalled.Clear();
         _frightenedRounds.Clear();
         _iceDevilSpears.Clear();
         _iceStormUsed.Clear();

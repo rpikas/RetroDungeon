@@ -143,7 +143,7 @@ public sealed partial class CombatResolver
 
     private void TryApplyPetrificationFromSpecialAttacks(MonsterInstance monster, Character target, List<CombatEvent> events)
     {
-        if (!HasAnySpecialAbility(monster, "Petrifying Gaze", "Petrification Touch"))
+        if (!HasAnySpecialAbility(monster, "Petrifying Gaze", "Petrification Touch", "Stoning"))
             return;
 
         if (target.HasStatus(CharacterStatus.Petrified))
@@ -153,7 +153,7 @@ public sealed partial class CombatResolver
         var saveRoll = _dice.Roll(20);
         var failedSave = saveRoll < saveTarget;
 
-        var attackName = HasAnySpecialAbility(monster, "Petrification Touch") ? "Petrification Touch" : "Petrifying Gaze";
+        var attackName = HasAnySpecialAbility(monster, "Petrification Touch", "Stoning") ? "Petrification Touch" : "Petrifying Gaze";
 
         RuleApplicationInfo.Publish(
             "AD&D",
