@@ -1,0 +1,4492 @@
+{
+  "Source": "Wizardry",
+  "Monsters": [
+    {
+      "Name": "Arch Mage (Lesser)",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 9,
+      "HitDice": 8,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 2 Mage spells",
+          "Description": "Level 2 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "BaseXPValue": 790,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Arch Mage (Greater)",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 0,
+      "HitDice": 20,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 20,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 6 Mage spells",
+          "Description": "Level 6 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 3160,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Attack Dog",
+      "Unidentified": "Animal",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 1,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 1120,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Bishop",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        },
+        {
+          "Name": "Level 3 Priest spells",
+          "Description": "Level 3 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 1135,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Bleeb",
+      "Unidentified": "Strange Animal",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 0,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 10,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+1"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Help",
+          "Description": "May call for reinforcements."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "BaseXPValue": 3300,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Boring Beetle",
+      "Unidentified": "Insect",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 3,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mandibles",
+          "NumberOfAttacks": 1,
+          "Damage": "5d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "BaseXPValue": 1120,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Bubbly Slime",
+      "Unidentified": "Slime",
+      "Type": "Other",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 12,
+      "HitDice": 1,
+      "HitDiceType": 3,
+      "ExtraHitPoints": 1,
+      "Level": 1,
+      "Size": "Small",
+      "Attacks": [
+        {
+          "Name": "Slime",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 55,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        1
+      ]
+    },
+    {
+      "Name": "Bushwacker",
+      "Unidentified": "Scruffy Man",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 8,
+      "HitDice": 3,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 1,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6+1"
+        },
+        {
+          "Name": "Long Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 620,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Capybara",
+      "Unidentified": "Giant Rodent",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 9,
+      "ArmorClass": 8,
+      "HitDice": 4,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        }
+      ],
+      "BaseXPValue": 520,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Champ Samurai",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "HitDice": 10,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 10,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "BaseXPValue": 2395,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Chimera",
+      "Unidentified": "Strange Animal",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 2,
+      "HitDice": 9,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Level": 9,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Horn",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "3d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "70 hp damage breath",
+          "Description": "Fire breath attack."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (54%)."
+        }
+      ],
+      "BaseXPValue": 3515,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "Coyote",
+      "Unidentified": "Mangy Dog",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 8,
+      "HitDice": 4,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
+        }
+      ],
+      "BaseXPValue": 780,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Creeping Coin?",
+      "Unidentified": "Small Object",
+      "Type": "Other",
+      "Frequency": "Rare",
+      "NumberOfAppearancesMin": 9,
+      "NumberOfAppearancesMax": 9,
+      "ArmorClass": 4,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 0,
+      "Level": 1,
+      "Size": "Small",
+      "Attacks": [
+        {
+          "Name": "bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "1 hp damage breath",
+          "Description": "1 hp damage breath on everybody in party"
+        },
+        {
+          "Name": "Help",
+          "Description": "May call for reinforcements."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 920,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        2
+      ]
+    },
+    {
+      "Name": "Creeping Crud",
+      "Unidentified": "Slime",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 7,
+      "ArmorClass": 6,
+      "HitDice": 3,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 3,
+      "Size": "Small",
+      "Attacks": [
+        {
+          "Name": "Poison",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 550,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        2
+      ]
+    },
+    {
+      "Name": "Dragon Fly",
+      "Unidentified": "Fly",
+      "Type": "Dragon",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 4,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 2,
+      "Size": "Medium",
+      "MagicResistance": "20%",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Dragon breath",
+          "Description": "Can exhale a cone of fire causing damage to all creatures in its path."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (20%)."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (12%)."
+        }
+      ],
+      "BaseXPValue": 1275,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Dragon Puppy",
+      "Unidentified": "Animal",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Attack (Cold)",
+          "Description": "Breath attack (cold)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "BaseXPValue": 2280,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "Dragon Zombie",
+      "Unidentified": "Dragon",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -2,
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 12,
+      "Size": "Medium",
+      "MagicResistance": "25%",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Level 5 Mage spells",
+          "Description": "Level 5 Mage spells"
+        },
+        {
+          "Name": "Breath Attack (Fire)",
+          "Description": "Breath attack (fire)."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (25%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 5360,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Earth Giant",
+      "Unidentified": "Giant",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 9,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 40,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "85%",
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (85%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 20675,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Fire Dragon",
+      "Unidentified": "Dragon",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 12,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "4d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Mage spells",
+          "Description": "Level 5 Mage spells"
+        },
+        {
+          "Name": "100 hp damage breath",
+          "Description": "Fire breath attack."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (72%)."
+        }
+      ],
+      "BaseXPValue": 5000,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Fire Giant",
+      "Unidentified": "Giant",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 3,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "Level": 11,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "5d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (66%)."
+        }
+      ],
+      "BaseXPValue": 2115,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Flack",
+      "Unidentified": "Strange Animal",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -3,
+      "HitDice": 15,
+      "HitDiceType": 12,
+      "ExtraHitPoints": 0,
+      "Level": 15,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "4d8+3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Breath Attack (Cold)",
+          "Description": "Breath attack (cold)."
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Stoning",
+          "Description": "May petrify."
+        },
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (90%)."
+        }
+      ],
+      "BaseXPValue": 9200,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Frost Giant",
+      "Unidentified": "Giant",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 50,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "95%",
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "3d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (95%)."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 41355,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Gargoyle",
+      "Unidentified": "Gargoyle",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "Level": 4,
+      "Size": "Medium",
+      "MagicResistance": "50%",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Wing Buffet",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (50%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        }
+      ],
+      "BaseXPValue": 2435,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Gas Cloud",
+      "Unidentified": "Gas Cloud",
+      "Type": "Enchant",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 10,
+      "HitDice": 2,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 2,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Poison attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 2 Mage spells",
+          "Description": "Level 2 Mage spells"
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (12%)."
+        }
+      ],
+      "BaseXPValue": 350,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        2
+      ]
+    },
+    {
+      "Name": "Gas Dragon",
+      "Unidentified": "Dragon",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 3,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        },
+        {
+          "Name": "50 hp damage breath",
+          "Description": "Gas breath attack."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "BaseXPValue": 2075,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Gaze Hound",
+      "Unidentified": "Strange Animal",
+      "Type": "Beast",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": -1,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        }
+      ],
+      "BaseXPValue": 1235,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Giant Spider",
+      "Unidentified": "Insect",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 4,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        }
+      ],
+      "BaseXPValue": 960,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Giant Toad",
+      "Unidentified": "Amphibian",
+      "Type": "Animal",
+      "NumberOfAppearancesMin": 6,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 7,
+      "HitDice": 4,
+      "HitDiceType": 5,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Swallow",
+          "NumberOfAttacks": 1,
+          "Damage": "2d3+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        }
+      ],
+      "BaseXPValue": 795,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Gorgon",
+      "Unidentified": "Strange Animal",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Hoof",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "80 hp damage breath",
+          "Description": "Petrifying breath attack."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "BaseXPValue": 2920,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Grave Mist",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mist Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Mist Lash",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Mist Crush",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 1080,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Greater Demon",
+      "Unidentified": "Demon",
+      "Type": "Demon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": -3,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 11,
+      "Size": "Medium",
+      "MagicResistance": "95%",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d12"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Mage spells",
+          "Description": "Level 5 Mage spells"
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Help",
+          "Description": "May call for reinforcements."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (95%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (66%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 44570,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Hatamoto",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 12,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (72%)."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "High Master",
+      "Unidentified": "Conehead",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -2,
+      "HitDice": 15,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 15,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        },
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (90%)."
+        }
+      ],
+      "BaseXPValue": 3000,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "High Ninja",
+      "Unidentified": "Man in Kimono",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -1,
+      "HitDice": 12,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 12,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (72%)."
+        }
+      ],
+      "BaseXPValue": 1600,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "High Priest(Lesser)",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Priest spells",
+          "Description": "Level 5 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "BaseXPValue": 2160,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "High Priest(Greater)",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 2,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 11,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 6 Priest spells",
+          "Description": "Level 6 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (66%)."
+        }
+      ],
+      "BaseXPValue": 3300,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "High Wizard",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 12,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 12,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 6 Mage spells",
+          "Description": "Level 6 Mage spells"
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (72%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 2395,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        7
+      ]
+    },
+    {
+      "Name": "Highwayman",
+      "Unidentified": "Man in Chain",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 12,
+      "ArmorClass": 6,
+      "HitDice": 3,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2+1"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2+1"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2+1"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 840,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Huge Spider",
+      "Unidentified": "Insect",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 2,
+      "Level": 2,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (12%)."
+        }
+      ],
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Killer Wolf",
+      "Unidentified": "Animal",
+      "Type": "Beast",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 0,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 6,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (36%)."
+        }
+      ],
+      "BaseXPValue": 1460,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        7
+      ]
+    },
+    {
+      "Name": "Kobold",
+      "Unidentified": "Small Humanoid",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 8,
+      "HitDice": 2,
+      "HitDiceType": 3,
+      "ExtraHitPoints": 1,
+      "Level": 2,
+      "Size": "Small",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2+1"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d2+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (12%)."
+        }
+      ],
+      "BaseXPValue": 415,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        1
+      ]
+    },
+    {
+      "Name": "Lesser Demon",
+      "Unidentified": "Demon",
+      "Type": "Demon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "60%",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Tail",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Help",
+          "Description": "May call for reinforcements."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (60%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "BaseXPValue": 5100,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Lvl 1 Mage",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 4,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 1,
+      "Level": 1,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "2d2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 475,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        1
+      ]
+    },
+    {
+      "Name": "Lvl 1 Ninja",
+      "Unidentified": "Kimonoed Man",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 2,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 2,
+      "Level": 2,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Throwing star",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Nunchaku",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (12%)."
+        }
+      ],
+      "BaseXPValue": 600,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        2
+      ]
+    },
+    {
+      "Name": "Lvl 1 Priest",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 5,
+      "HitDice": 1,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 1,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Priest spells",
+          "Description": "Level 1 Priest spells"
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 515,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        1
+      ]
+    },
+    {
+      "Name": "Lvl 3 Ninja",
+      "Unidentified": "Kimonoed Man",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 10,
+      "ArmorClass": 3,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 1360,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Lvl 3 Priest",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 5,
+      "NumberOfAppearancesMax": 7,
+      "ArmorClass": 4,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 2 Priest spells",
+          "Description": "Level 2 Priest spells"
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 990,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Lvl 3 Samurai",
+      "Unidentified": "Kimonoed Man",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 3,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 4,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6+1"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 1 Mage spells",
+          "Description": "Level 1 Mage spells"
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 795,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Lvl 4 Thief",
+      "Unidentified": "Man in Leather",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 10,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
+        }
+      ],
+      "BaseXPValue": 740,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Lvl 5 Mage",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 10,
+      "HitDice": 5,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "BaseXPValue": 620,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Lvl 5 Priest",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 3 Priest spells",
+          "Description": "Level 3 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "BaseXPValue": 1220,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Lvl 6 Ninja",
+      "Unidentified": "Man in Black",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 6,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 6,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (36%)."
+        }
+      ],
+      "BaseXPValue": 1520,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "Lvl 7 Fighter",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": 0,
+      "HitDice": 7,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 7,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        },
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "BaseXPValue": 1900,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Lvl 7 Mage",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 8,
+      "HitDice": 7,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 4 Mage spells",
+          "Description": "Level 4 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "BaseXPValue": 1000,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4,
+        6
+      ]
+    },
+    {
+      "Name": "Lvl 7 Thief",
+      "Unidentified": "Man in Leather",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 7,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Level": 7,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x3 damage at level 5-8."
+        }
+      ],
+      "BaseXPValue": 1220,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        7
+      ]
+    },
+    {
+      "Name": "Lvl 8 Bishop",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Staff",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8+4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Level 4 Priest spells",
+          "Description": "Level 4 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "BaseXPValue": 2060,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Lvl 8 Fighter",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": -1,
+      "HitDice": 8,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12+2"
+        },
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "BaseXPValue": 2140,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Lvl 8 Ninja",
+      "Unidentified": "Monk",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "HitDice": 8,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "BaseXPValue": 1020,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Lvl 8 Priest",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 3,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 7,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 4 Priest spells",
+          "Description": "Level 4 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "BaseXPValue": 1720,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "Lvl 10 Fighter",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 0,
+      "HitDice": 7,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 7,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        },
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "BaseXPValue": 1900,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Lvl 10 Mage",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 10,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 10,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Mage spells",
+          "Description": "Level 5 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "BaseXPValue": 1400,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Lifestealer",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 3,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Level": 5,
+      "Size": "Medium",
+      "MagicResistance": "20%",
+      "Attacks": [
+        {
+          "Name": "Drain Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Level 3 Priest spells",
+          "Description": "Level 3 Priest spells"
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 2 experience level(s)."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (20%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 2240,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        7
+      ]
+    },
+    {
+      "Name": "Maelific",
+      "Unidentified": "Unseen Being",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -5,
+      "HitDice": 25,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 25,
+      "Size": "Medium",
+      "MagicResistance": "50%",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d0+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Level 7 Mage spells",
+          "Description": "Level 7 Mage spells"
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 3 experience level(s)."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (50%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 3 HP/Round",
+          "Description": "Regenerates 3 hit points per round."
+        }
+      ],
+      "BaseXPValue": 7460,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Major Daimyo",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 0,
+      "HitDice": 7,
+      "HitDiceType": 12,
+      "ExtraHitPoints": 0,
+      "Level": 7,
+      "Size": "Medium",
+      "MagicResistance": "20%",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (20%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "BaseXPValue": 2340,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Master Ninja",
+      "Unidentified": "Man in Robes",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 3,
+      "HitDice": 10,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 10,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10+3"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10+3"
+        },
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d10+3"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "BaseXPValue": 1280,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6,
+        7
+      ]
+    },
+    {
+      "Name": "Master Thief(Lesser)",
+      "Unidentified": "Man in Leather",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 4,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x2 damage at level 1-4."
+        }
+      ],
+      "BaseXPValue": 960,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Master Thief(Greater)",
+      "Unidentified": "Man in Leather",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 6,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Level": 6,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (36%)."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x4 damage at level 9-12."
+        }
+      ],
+      "BaseXPValue": 1140,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "B",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Medusalizard",
+      "Unidentified": "Strange Animal",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Stoning",
+          "Description": "May petrify."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "SpecialAttacks": [
+        {
+          "Name": "Petrifying Gaze",
+          "Description": "Gaze may petrify."
+        }
+      ],
+      "BaseXPValue": 1040,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Minor Daimyo",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "HitDice": 4,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Katana",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 1200,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Murphy's Ghost",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -3,
+      "HitDice": 10,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 10,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "40%",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d1+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (40%)."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 4450,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Nightstalker",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Level": 5,
+      "Size": "Medium",
+      "MagicResistance": "25%",
+      "Attacks": [
+        {
+          "Name": "Shadow Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 1 experience level(s)."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (25%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 1635,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        7
+      ]
+    },
+    {
+      "Name": "Ogre",
+      "Unidentified": "Ogre",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 960,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5
+      ]
+    },
+    {
+      "Name": "Ogre Lord",
+      "Unidentified": "Ogre",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 8,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 8,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Club",
+          "NumberOfAttacks": 1,
+          "Damage": "1d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (48%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 1790,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Orc",
+      "Unidentified": "Small Humanoid",
+      "Type": "Humanoid",
+      "Frequency": "Common",
+      "NumberOfAppearancesMin": 3,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 10,
+      "HitDice": 1,
+      "HitDiceType": 4,
+      "ExtraHitPoints": 0,
+      "Level": 1,
+      "Size": "Large",
+      "Attacks": [
+        {
+          "Name": "Battle Axe",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 235,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        1
+      ]
+    },
+    {
+      "Name": "Poison Giant",
+      "Unidentified": "Giant",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 3,
+      "HitDice": 1,
+      "HitDiceType": 1,
+      "ExtraHitPoints": 80,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "95%",
+      "Attacks": [
+        {
+          "Name": "Fist",
+          "NumberOfAttacks": 1,
+          "Damage": "4d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "100 hp damage breath",
+          "Description": "Poison breath attack."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (95%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (6%)."
+        }
+      ],
+      "BaseXPValue": 41320,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Priestess",
+      "Unidentified": "Priest",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 4,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Mace",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6+2"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 2 Priest spells",
+          "Description": "Level 2 Priest spells"
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 870,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Raver Lord",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": 10,
+      "HitDice": 15,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 15,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        },
+        {
+          "Name": "Strike",
+          "NumberOfAttacks": 1,
+          "Damage": "3d12"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 5 Mage spells",
+          "Description": "Level 5 Mage spells"
+        },
+        {
+          "Name": "Level 4 Priest spells",
+          "Description": "Level 4 Priest spells"
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (90%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 2 HP/Round",
+          "Description": "Regenerates 2 hit points per round."
+        }
+      ],
+      "BaseXPValue": 4155,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Rogue",
+      "Unidentified": "Scruffy Man",
+      "Type": "Humanoid",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 10,
+      "HitDice": 2,
+      "HitDiceType": 5,
+      "ExtraHitPoints": 1,
+      "Level": 2,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Short Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "2d2+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (12%)."
+        }
+      ],
+      "BaseXPValue": 380,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        2
+      ]
+    },
+    {
+      "Name": "Rotting Corpse",
+      "Unidentified": "Weird Humanoid",
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 6,
+      "HitDice": 2,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 2,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 680,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Shade",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 7,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Shadow Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 1 experience level(s)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 875,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Spirit",
+      "Unidentified": "Unseen Entity",
+      "Type": "Spirit",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 2,
+      "HitDice": 7,
+      "HitDiceType": 3,
+      "ExtraHitPoints": 2,
+      "Level": 7,
+      "Size": "Medium",
+      "MagicResistance": "25%",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (25%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 1405,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        4
+      ]
+    },
+    {
+      "Name": "Swordsman",
+      "Unidentified": "Man in Armor",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 3,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 0,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Sword",
+          "NumberOfAttacks": 1,
+          "Damage": "2d7"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "BaseXPValue": 960,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        5,
+        6
+      ]
+    },
+    {
+      "Name": "Thief",
+      "Unidentified": "Man in Leather",
+      "Type": "Humanoid",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 5,
+      "ArmorClass": 4,
+      "HitDice": 9,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 0,
+      "Level": 9,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Dagger",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        },
+        {
+          "Name": "Punch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d3"
+        },
+        {
+          "Name": "Backstab",
+          "NumberOfAttacks": 1,
+          "Damage": "3d8"
+        },
+        {
+          "Name": "Kick",
+          "NumberOfAttacks": 1,
+          "Damage": "2d10"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (54%)."
+        },
+        {
+          "Name": "Backstab",
+          "Description": "Backstab on surprise from behind: +4 to hit; x4 damage at level 9-12."
+        }
+      ],
+      "BaseXPValue": 1640,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "Troll",
+      "Unidentified": "Strange Animal",
+      "Type": "Giant",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 3,
+      "ArmorClass": 4,
+      "HitDice": 6,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 6,
+      "Level": 6,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (36%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 3 HP/Round",
+          "Description": "Regenerates 3 hit points per round."
+        }
+      ],
+      "BaseXPValue": 1720,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "A",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        8
+      ]
+    },
+    {
+      "Name": "Undead Kobold",
+      "Unidentified": "Skeleton",
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 7,
+      "ArmorClass": 10,
+      "HitDice": 2,
+      "HitDiceType": 3,
+      "ExtraHitPoints": 2,
+      "Level": 2,
+      "Size": "Small",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 230,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "J,WornEquipment",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        1
+      ]
+    },
+    {
+      "Name": "Vampire",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": -1,
+      "HitDice": 11,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 11,
+      "Size": "Medium",
+      "MagicResistance": "20%",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Level 3 Mage spells",
+          "Description": "Level 3 Mage spells"
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 2 experience level(s)."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (20%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 3330,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Vampire Lord",
+      "Unidentified": "Unseen Entity",
+      "Type": "Undead",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -5,
+      "HitDice": 20,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 20,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Touch",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Level 6 Mage spells",
+          "Description": "Level 6 Mage spells"
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 4 experience level(s)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 4 HP/Round",
+          "Description": "Regenerates 4 hit points per round."
+        }
+      ],
+      "BaseXPValue": 7320,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "E",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Vorpal Bunny",
+      "Unidentified": "Rabbit",
+      "Type": "Animal",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 3,
+      "HitDiceType": 6,
+      "ExtraHitPoints": 2,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        },
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "BaseXPValue": 735,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "D",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "W*E*R*D*N*A",
+      "Unidentified": "Man in Robes",
+      "Type": "Demon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 1,
+      "ArmorClass": -7,
+      "HitDice": 10,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 200,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "70%",
+      "Attacks": [
+        {
+          "Name": "Spell",
+          "NumberOfAttacks": 1,
+          "Damage": "8d5"
+        },
+        {
+          "Name": "Spell",
+          "NumberOfAttacks": 1,
+          "Damage": "8d5"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Level 7 Mage spells",
+          "Description": "Level 7 Mage spells"
+        },
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Stoning",
+          "Description": "May petrify."
+        },
+        {
+          "Name": "LvlDrain",
+          "Description": "Drains 4 experience level(s)."
+        },
+        {
+          "Name": "Decapitate",
+          "Description": "Can attempt to decapitate its target."
+        },
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (70%)."
+        },
+        {
+          "Name": "Fire Resistance",
+          "Description": "Resistant to fire."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Regeneration 5 HP/Round",
+          "Description": "Regenerates 5 hit points per round."
+        }
+      ],
+      "BaseXPValue": 15880,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "F",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        10
+      ]
+    },
+    {
+      "Name": "Were Bear",
+      "Unidentified": "Bear",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 4,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 6,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "3d6+1"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Run",
+          "Description": "May flee from combat."
+        },
+        {
+          "Name": "Cold Resistance",
+          "Description": "Resistant to cold."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Werebears can only be hit by silver or magical weapons."
+        },
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 1320,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Wererat",
+      "Unidentified": "Wererat",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 4,
+      "ArmorClass": 6,
+      "HitDice": 3,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 1,
+      "Level": 3,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Attack",
+          "NumberOfAttacks": 1,
+          "Damage": "1d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (18%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Werewolves can only be hit by silver or magical weapons."
+        }
+      ],
+      "BaseXPValue": 755,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        3
+      ]
+    },
+    {
+      "Name": "Weretiger",
+      "Unidentified": "Animal",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 8,
+      "ArmorClass": 4,
+      "HitDice": 5,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 5,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d6"
+        },
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "1d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (30%)."
+        },
+        {
+          "Name": "Slept",
+          "Description": "Can be affected by sleep effects."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Weretigers can only be hit by silver or magical weapons."
+        },
+        {
+          "Name": "Regeneration 1 HP/Round",
+          "Description": "Regenerates 1 hit points per round."
+        }
+      ],
+      "BaseXPValue": 1405,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Werewolf",
+      "Unidentified": "Wolf",
+      "Type": "Lycanthrope",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 5,
+      "HitDice": 4,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 3,
+      "Level": 4,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        },
+        {
+          "Name": "Claw",
+          "NumberOfAttacks": 1,
+          "Damage": "2d4"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (24%)."
+        }
+      ],
+      "SpecialDefenses": [
+        {
+          "Name": "Silver or Magic Weapons Required",
+          "Description": "Werewolves can only be hit by silver or magical weapons."
+        }
+      ],
+      "BaseXPValue": 975,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        6
+      ]
+    },
+    {
+      "Name": "Will O' Wisp",
+      "Unidentified": "Unseen Entity",
+      "Type": "Monster",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 2,
+      "ArmorClass": -8,
+      "HitDice": 10,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 0,
+      "Level": 10,
+      "Size": "Medium",
+      "MagicResistance": "95%",
+      "Attacks": [
+        {
+          "Name": "Shock",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Magic Resistance",
+          "Description": "Magic resistant (95%)."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (60%)."
+        }
+      ],
+      "BaseXPValue": 43320,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Wyvern",
+      "Unidentified": "Strange Animal",
+      "Type": "Dragon",
+      "NumberOfAppearancesMin": 1,
+      "NumberOfAppearancesMax": 6,
+      "ArmorClass": 3,
+      "HitDice": 7,
+      "HitDiceType": 8,
+      "ExtraHitPoints": 7,
+      "Level": 7,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Bite",
+          "NumberOfAttacks": 1,
+          "Damage": "2d8"
+        },
+        {
+          "Name": "Sting",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Poison",
+          "Description": "May poison."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (42%)."
+        }
+      ],
+      "BaseXPValue": 1540,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "C",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        9
+      ]
+    },
+    {
+      "Name": "Zombie",
+      "Unidentified": "Weird Humanoid",
+      "Type": "Undead",
+      "Frequency": "Uncommon",
+      "NumberOfAppearancesMin": 2,
+      "NumberOfAppearancesMax": 7,
+      "ArmorClass": 4,
+      "HitDice": 1,
+      "HitDiceType": 10,
+      "ExtraHitPoints": 1,
+      "Level": 1,
+      "Size": "Medium",
+      "Attacks": [
+        {
+          "Name": "Slam",
+          "NumberOfAttacks": 1,
+          "Damage": "1d6"
+        }
+      ],
+      "SpecialAbilities": [
+        {
+          "Name": "Undead",
+          "Description": "Undead."
+        },
+        {
+          "Name": "Paralyze",
+          "Description": "May paralyze."
+        },
+        {
+          "Name": "Death Resistance",
+          "Description": "Death resistant (100%)."
+        }
+      ],
+      "BaseXPValue": 520,
+      "XPValuePerHitPoint": 0,
+      "TreasureType": "None",
+      "Source": "Wizardry",
+      "DungeonLevels": [
+        2
+      ]
+    }
+  ]
+}

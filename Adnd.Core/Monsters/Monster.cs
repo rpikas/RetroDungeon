@@ -28,6 +28,8 @@ public class Monster
     public MonsterSize Size { get; set; } = MonsterSize.Medium;
     public int HitPoints { get; set; }
     public int DungeonLevel { get; set; } // Dungeon level where this monster appears
+    public string UnidentifiedName { get; set; } = string.Empty; // Wizardry: what the monster looks like before it is identified
+    public int Level { get; set; } // Wizardry monster level
     public Sources Source { get; set; } = Sources.Adnd;
     /*Example of a monster in JSON format:
             "ClimateTerain": "Temperate",

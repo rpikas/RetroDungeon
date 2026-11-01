@@ -83,6 +83,7 @@ public class PartyMenu
             new FireStormHandler(),
             new UnholyWordHandler(),
             new FingerOfDeathHandler(),
+            new SlayLivingHandler(),
             new IncendiaryCloudHandler(),
             new MeteorSwarmHandler(),
             new PowerWordStunHandler(),

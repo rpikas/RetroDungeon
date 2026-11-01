@@ -166,6 +166,7 @@ public sealed class CombatCoordinator
             new FireStormHandler(),
             new UnholyWordHandler(),
             new FingerOfDeathHandler(),
+            new SlayLivingHandler(),
             new IncendiaryCloudHandler(),
             new MeteorSwarmHandler(),
             new PowerWordStunHandler(),

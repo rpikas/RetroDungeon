@@ -79,6 +79,8 @@ public static class MonsterImporter
             IndividualTreasure = string.IsNullOrWhiteSpace(json.IndividualTreasure) ? "None" : json.IndividualTreasure,
             TreasureChanceOverride = json.TreasureChanceOverride,
             Source = ParseSource(json),
+            UnidentifiedName = json.Unidentified ?? string.Empty,
+            Level = json.Level,
 
             Movement = new MonsterMovement
             {

@@ -1,0 +1,13 @@
+{
+  "Id": "slay_living",
+  "Name": "Slay Living",
+  "Class": "Cleric",
+  "Level": 5,
+  "Description": "A touch of deadly divine power that can slay one living foe outright.",
+  "RangeType": "Enemy",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Target must save vs spell or die instantly. Creatures with Death Resistance have that percentage chance to survive."
+}

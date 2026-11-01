@@ -45,6 +45,11 @@ public class MonsterJsonModel
     public string IndividualTreasure { get; set; } = "None";
     public double? TreasureChanceOverride { get; set; }
     public string Source { get; set; } = "Adnd";
+
+    // Wizardry monsters: the unidentified name, the monster level and the dungeon levels it appears on.
+    public string Unidentified { get; set; } = "";
+    public int Level { get; set; }
+    public List<int> DungeonLevels { get; set; } = new();
 }
 
 public class MonsterLevelJsonModel

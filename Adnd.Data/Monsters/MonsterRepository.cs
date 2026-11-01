@@ -30,9 +30,14 @@ public class MonsterRepository
                 {
                     if (m != null)
                     {
-                        var monster = MonsterImporter.Convert(m);
-                        monster.DungeonLevel = grouped.Level; // Set the dungeon level
-                        monsters.Add(monster);
+                        // A monster can appear on several dungeon levels (Wizardry.json); it is added once per level.
+                        var dungeonLevels = m.DungeonLevels is { Count: > 0 } ? m.DungeonLevels : new List<int> { grouped.Level };
+                        foreach (var dungeonLevel in dungeonLevels)
+                        {
+                            var monster = MonsterImporter.Convert(m);
+                            monster.DungeonLevel = dungeonLevel;
+                            monsters.Add(monster);
+                        }
                     }
                 }
 
