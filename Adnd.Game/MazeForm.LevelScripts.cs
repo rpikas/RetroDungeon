@@ -320,6 +320,29 @@ public sealed partial class MazeForm
         return false;
     }
 
+    // Malor: north is -Y and east is +X on the map. A target outside the dungeon or inside solid rock fizzles.
+    private (bool Teleported, string Message) TryMalorTeleport(int north, int east, int down)
+    {
+        var level = _currentDungeonLevel + down;
+        var target = new Point(_position.X + east, _position.Y - north);
+        if (level < MinDungeonLevel || level > MaxDungeonLevel)
+            return (false, "The spell fizzles: there is no such dungeon level.");
+
+        var originalLevel = _currentDungeonLevel;
+        BuildMazeForLevel(level);
+        var valid = target.X >= 0 && target.Y >= 0
+            && target.X < _maze.GetLength(0) && target.Y < _maze.GetLength(1)
+            && _maze[target.X, target.Y] == CellType.Floor;
+        if (!valid)
+        {
+            BuildMazeForLevel(originalLevel);
+            return (false, "The spell fizzles: the destination is not open ground.");
+        }
+
+        JumpToDungeonLevel(level, target);
+        return (true, $"The party is teleported to ({target.X},{target.Y}) on dungeon level {level}.");
+    }
+
     private void JumpToDungeonLevel(int level, Point position)
     {
         _currentDungeonLevel = level;

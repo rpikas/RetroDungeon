@@ -33,7 +33,31 @@ public sealed class CharacterSavingThrowService
             targets.Add(target);
         }
 
-        return targets.Count == 0 ? 20 : targets.Min();
+        return targets.Count == 0 ? 20 : Math.Max(1, targets.Min() - GetEquippedPoisonSaveBonus(c, type));
+    }
+
+    // Wielded or worn items with an ability such as "+3 to saves vs. poison" lower the target number.
+    private static int GetEquippedPoisonSaveBonus(Character c, SaveThrowType type)
+    {
+        if (type != SaveThrowType.ParalyzationPoisonDeath || c.Equipment == null)
+            return 0;
+
+        var bonus = 0;
+        foreach (var item in c.Equipment.Values)
+        {
+            if (item?.SpecialAbilities == null)
+                continue;
+
+            foreach (var ability in item.SpecialAbilities)
+            {
+                var match = System.Text.RegularExpressions.Regex.Match(ability ?? "",
+                    @"^\+(\d+) to saves? vs\.? poison", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (match.Success)
+                    bonus += int.Parse(match.Groups[1].Value);
+            }
+        }
+
+        return bonus;
     }
 
     private int GetClassSaveTarget(CharacterClass cls, int level, SaveThrowType type)

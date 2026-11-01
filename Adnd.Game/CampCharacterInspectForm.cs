@@ -46,6 +46,13 @@ public sealed class CampCharacterInspectForm : Form
     /// <summary>Describes where the party is (level, position, facing); set by the maze so DUMAPIC items can report it.</summary>
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public Func<string>? LocationInfoProvider { get; init; }
+
+    // Teleports the party by (north, east, levels down); set only while in the maze.
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    public Func<int, int, int, (bool Teleported, string Message)>? MalorTeleport { get; init; }
+
+    private const int MaxMalorLevels = 16;
+
     /// <summary>Opens the equip chooser straight away (camp's E)QUIP).</summary>
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public bool StartWithEquip { get; init; }
@@ -1338,9 +1345,10 @@ public sealed class CampCharacterInspectForm : Form
                 grantsTreasureFindingPotion = string.Equals(item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase),
                 isWerdnaAmulet = string.Equals(item.Name, "Amulet of Werdna", StringComparison.OrdinalIgnoreCase),
-                isDumapic = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "DUMAPIC")
+                isDumapic = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "DUMAPIC"),
+                isMalor = MalorTeleport != null && Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Malor")
             })
-            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing || x.isWerdnaAmulet || x.isDumapic)
+            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing || x.isWerdnaAmulet || x.isDumapic || x.isMalor)
             .ToList();
 
         var updatedHumanControlMetadata = false;
@@ -1395,6 +1403,8 @@ public sealed class CampCharacterInspectForm : Form
                     ? $"{x.item.Name} (casts Malor: teleport to town)"
                 : x.isDumapic
                     ? $"{x.item.Name} (casts Dumapic: shows position)"
+                : x.isMalor
+                    ? $"{x.item.Name} (casts Malor: teleport the party)"
                 : x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
                 : x.isFigurine
@@ -1465,6 +1475,25 @@ public sealed class CampCharacterInspectForm : Form
             SayOnBoth("Amulet of Werdna", $"{user.Name} invokes the amulet. The party is teleported to town!");
             ReturnToTownRequested = true;
             Close();
+            return;
+        }
+
+        if (selected.isMalor)
+        {
+            var north = PromptNumberInput("Malor", "Squares north (negative = south)", -99, 99);
+            if (!north.HasValue)
+                return;
+            var east = PromptNumberInput("Malor", "Squares east (negative = west)", -99, 99);
+            if (!east.HasValue)
+                return;
+            var down = PromptNumberInput("Malor", "Levels down (negative = up)", -MaxMalorLevels, MaxMalorLevels);
+            if (!down.HasValue)
+                return;
+
+            var (teleported, message) = MalorTeleport!(north.Value, east.Value, down.Value);
+            SayOnBoth("Malor", $"{user.Name} chants MALOR. {message}");
+            if (teleported)
+                Close();
             return;
         }
 

@@ -7214,3 +7214,10 @@ ___
 Dagger of Speed only usable my magic users and gives the user ac 3
 Illusionists can also use it and it has no extra attack you can remove that
 ___
+Evil Sword +3 in Wizardry can be implemented as a Long Sword +3 but can only be equiped by charaters with Evil Alignment
+Evil S-Sword +3 in Wizardry can be implemented as a Short Sword +3 but can only be equiped by charaters with Evil Alignment
+___
+Helm of Malor when used cast Malor, it opens a dialog how many positions north and east you wnant to move. negative are allowed, 
+how many levels down. then teleport the party
+implement Mace of Poison, it works like a Mace+2 and when wielded save vs. poison is +3
+___

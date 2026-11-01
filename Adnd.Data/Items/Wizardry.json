@@ -1642,22 +1642,26 @@
       "Name": "Helm +2 (E)",
       "Type": "Armor",
       "Slot": "Head",
-      "Cost": 8000,
-      "Weight": 1,
+      "Cost": 7000,
+      "Weight": 60,
       "IsShopBuyable": true,
-      "ArmorClassBonus": 0,
+      "ArmorClassBonus": 3,
       "Damage": "",
       "AllowedClasses": [
         "Fighter",
         "Paladin",
         "Ranger",
         "Cleric",
+        "Druid",
         "Thief",
-        "Assassin"
+        "Assassin",
+        "Bard"
       ],
-      "Rarity": "Common",
-      "Description": "Evil Characters Only",
-      "SpecialAbilities": [],
+      "Rarity": "Rare",
+      "Description": "A magically enhanced helm, like Helm +2. Only evil-aligned characters can equip it.",
+      "SpecialAbilities": [
+        "Evil Only"
+      ],
       "Source": "Wizardry",
       "StockQuantity": 0
     },
@@ -1674,9 +1678,9 @@
         "MagicUser"
       ],
       "Rarity": "Rare",
-      "Description": "[Use] Chants Malor; equipable by Mages",
+      "Description": "[Use] Chants Malor; equipable by Mages. Choose how far north/east (negative allowed) and how many levels down to teleport the party.",
       "SpecialAbilities": [
-        "Casts teleport"
+        "Casts Malor"
       ],
       "Source": "Wizardry",
       "StockQuantity": 0
@@ -2030,7 +2034,7 @@
       "Weight": 50,
       "IsShopBuyable": true,
       "ArmorClassBonus": 0,
-      "Damage": "1d6+1",
+      "Damage": "1d6+2",
       "AllowedClasses": [
         "Fighter",
         "Paladin",
@@ -2040,22 +2044,22 @@
         "Bard"
       ],
       "Rarity": "Rare",
-      "Description": "A mace that poisons its victims.",
+      "Description": "Works like a Mace +2. The wielder gets +3 on saving throws vs. poison.",
       "SpecialAbilities": [
-        "Poison"
+        "+3 to saves vs. poison when wielded"
       ],
       "Source": "Wizardry",
       "StockQuantity": 0,
-      "DamageVsLarge": "1d4+1",
+      "DamageVsLarge": "1d4+2",
       "DamageType": "Blunt",
       "SpeedFactor": 6,
       "WeaponLength": "Short",
       "IsTwoHanded": false,
       "Range": "",
-      "MagicBonus": 0,
+      "MagicBonus": 2,
       "IsCursed": false,
       "Version": "1e",
-      "ToHitBonus": 0
+      "ToHitBonus": 2
     },
     {
       "Name": "Shield +1",

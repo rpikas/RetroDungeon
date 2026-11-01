@@ -103,6 +103,7 @@ public sealed partial class CombatResolver
         ["Mace+2"] = "mace footman",
         ["Mace+3"] = "mace footman",
         ["Mace Pro Poison +2"] = "mace footman",
+        ["Mace of Poison"] = "mace footman",
         ["Dagger"] = "dagger",
         ["Dagger +1"] = "dagger",
         ["Dagger +2"] = "dagger",
