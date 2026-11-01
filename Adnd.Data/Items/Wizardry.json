@@ -79,7 +79,7 @@
       "Slot": "Head",
       "Cost": 25000,
       "Weight": 60,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 3,
       "Damage": "",
       "AllowedClasses": [
@@ -114,7 +114,7 @@
       "StockQuantity": 0
     },
     {
-      "Name": "Copper Gloves",
+      "Name": "Gloves of Copper",
       "Type": "Armor",
       "Slot": "Hands",
       "Cost": 6000,
@@ -134,7 +134,7 @@
       "Rarity": "Uncommon",
       "Description": "Simple copper gloves that offer minor protection.",
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": 2
     },
     {
       "Name": "Silver Gloves",
@@ -222,10 +222,10 @@
         "Ranger",
         "Cleric"
       ],
-      "Rarity": "Rare",
+      "Rarity": "Common",
       "Description": "Polished chain mail reinforced with magic. / Shiny Chain",
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": 2
     },
     {
       "Name": "Leather +1",
@@ -246,10 +246,10 @@
         "Assassin",
         "Bard"
       ],
-      "Rarity": "Rare",
+      "Rarity": "Common",
       "Description": "Enhanced leather armor with extra padding. / Padded Leather",
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": 2
     },
     {
       "Name": "Plate Mail +1",
@@ -286,10 +286,10 @@
         "Ranger",
         "Cleric"
       ],
-      "Rarity": "Rare",
+      "Rarity": "Common",
       "Description": "Magically strengthened breastplate. / Body Armor",
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": 2
     },
     {
       "Name": "Leather +2",
@@ -359,7 +359,7 @@
       "Slot": "Body",
       "Cost": 8000,
       "Weight": 400,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 5,
       "Damage": "",
       "AllowedClasses": [
@@ -450,7 +450,7 @@
       "Slot": "Body",
       "Cost": 150000,
       "Weight": 500,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 9,
       "Damage": "",
       "AllowedClasses": [
@@ -467,7 +467,7 @@
       "Slot": "Body",
       "Cost": 1000000,
       "Weight": 300,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 10,
       "Damage": "",
       "AllowedClasses": [
@@ -484,7 +484,7 @@
       "Slot": "MainHand",
       "Cost": 1000,
       "Weight": 3,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "1d6",
       "AllowedClasses": [
@@ -506,7 +506,7 @@
       "Slot": "MainHand",
       "Cost": 1000,
       "Weight": 4,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "1d8",
       "AllowedClasses": [
@@ -527,7 +527,7 @@
       "Slot": "MainHand",
       "Cost": 1000,
       "Weight": 5,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "2d3",
       "DamageType": "Blunt",
@@ -549,7 +549,7 @@
       "Slot": "MainHand",
       "Cost": 2500,
       "Weight": 5,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "1d8",
       "DamageType": "Blunt",
@@ -571,7 +571,7 @@
       "Slot": "MainHand",
       "Cost": 8000,
       "Weight": 4,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "1d4",
       "DamageType": "Blunt",
@@ -594,7 +594,7 @@
       "Slot": "Body",
       "Cost": 1500,
       "Weight": 15,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 1,
       "Damage": "",
       "AllowedClasses": [
@@ -617,7 +617,7 @@
       "Slot": "Body",
       "Cost": 1500,
       "Weight": 40,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 2,
       "Damage": "",
       "AllowedClasses": [
@@ -639,7 +639,7 @@
       "Slot": "Body",
       "Cost": 1500,
       "Weight": 35,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 3,
       "Damage": "",
       "AllowedClasses": [
@@ -661,7 +661,7 @@
       "Slot": "Body",
       "Cost": 1500,
       "Weight": 15,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [
@@ -684,7 +684,7 @@
       "Slot": "Body",
       "Cost": 1500,
       "Weight": 40,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 2,
       "Damage": "",
       "AllowedClasses": [
@@ -706,7 +706,7 @@
       "Slot": "Body",
       "Cost": 1500,
       "Weight": 35,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 3,
       "Damage": "",
       "AllowedClasses": [
@@ -728,7 +728,7 @@
       "Slot": "Body",
       "Cost": 8000,
       "Weight": 15,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [
@@ -751,7 +751,7 @@
       "Slot": "Body",
       "Cost": 8000,
       "Weight": 5,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 2,
       "Damage": "",
       "AllowedClasses": [
@@ -773,7 +773,7 @@
       "Slot": "Body",
       "Cost": 8000,
       "Weight": 40,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 1,
       "Damage": "",
       "AllowedClasses": [
@@ -795,7 +795,7 @@
       "Slot": "Body",
       "Cost": 8000,
       "Weight": 35,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 2,
       "Damage": "",
       "AllowedClasses": [
@@ -817,7 +817,7 @@
       "Slot": "OffHand",
       "Cost": 1500,
       "Weight": 10,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 1,
       "Damage": "",
       "AllowedClasses": [
@@ -839,7 +839,7 @@
       "Slot": "OffHand",
       "Cost": 8000,
       "Weight": 10,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [
@@ -861,7 +861,7 @@
       "Slot": "Head",
       "Cost": 50000,
       "Weight": 6,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 2,
       "Damage": "",
       "AllowedClasses": [
@@ -882,7 +882,7 @@
       "Slot": "Ring1",
       "Cost": 500000,
       "Weight": 1,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [
@@ -1200,7 +1200,7 @@
         "Cursed"
       ],
       "IsCursed": true,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "AllowedClasses": [
         "Fighter",
         "Paladin",
@@ -1218,7 +1218,6 @@
       "ToHitBonus": 0
     },
     {
-      "Status": "NotImplemented",
       "Name": "Jeweled Amulet",
       "Type": "MagicItem",
       "Slot": "Neck",
@@ -1241,7 +1240,7 @@
         "Monk"
       ],
       "Rarity": "Uncommon",
-      "Description": "A jeweled amulet that casts DUMAPIC.",
+      "Description": "When used, reveals your position, dungeon level and facing direction (casts DUMAPIC).",
       "SpecialAbilities": [
         "Casts DUMAPIC"
       ],
@@ -1273,9 +1272,9 @@
       "Slot": "",
       "Cost": 75,
       "Weight": 1,
-      "StockQuantity": 5,
+      "StockQuantity": 0,
       "ArmorClassBonus": 0,
-      "IsShopBuyable": true,
+      "IsShopBuyable": false,
       "Damage": "",
       "AllowedClasses": [
         "All"
@@ -1287,12 +1286,12 @@
       "Source": "Wizardry"
     },
     {
-      "Name": "Potion of Invisibility",
+      "Name": "Potion of Sopic",
       "Type": "Potion",
       "Slot": "",
-      "Cost": 250,
+      "Cost": 1500,
       "Weight": 1,
-      "StockQuantity": 5,
+      "StockQuantity": -1,
       "ArmorClassBonus": 0,
       "IsShopBuyable": true,
       "Damage": "",
@@ -1302,8 +1301,9 @@
       "SpecialAbilities": [
         "Casts Invisibility"
       ],
-      "Rarity": "Uncommon",
-      "Source": "Wizardry"
+      "Rarity": "Common",
+      "Source": "Wizardry",
+      "Description": "Caster -4 AC Temp"
     },
     {
       "Status": "Implemented",
@@ -1530,26 +1530,6 @@
       "StockQuantity": 0
     },
     {
-      "Name": "Wand of Lightning",
-      "Type": "MagicItem",
-      "Slot": "MainHand",
-      "Cost": 30000,
-      "Weight": 2,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 0,
-      "Damage": "",
-      "AllowedClasses": [
-        "MagicUser"
-      ],
-      "Rarity": "Rare",
-      "Description": "Wand that casts Lightning Bolt.",
-      "SpecialAbilities": [
-        "Casts Lightning Bolt"
-      ],
-      "Source": "Wizardry",
-      "StockQuantity": 2
-    },
-    {
       "Name": "Rod of Flame",
       "Type": "MagicItem",
       "Slot": "MainHand",
@@ -1589,7 +1569,7 @@
         "Soul Drain"
       ],
       "IsCursed": true,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "AllowedClasses": [
         "Fighter",
         "Paladin",
@@ -1624,7 +1604,7 @@
         "Evil Aura"
       ],
       "IsCursed": true,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "AllowedClasses": [
         "Fighter",
         "Paladin",
@@ -1647,7 +1627,7 @@
       "Slot": "OffHand",
       "Cost": 9000,
       "Weight": 100,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 4,
       "Damage": "",
       "AllowedClasses": [
@@ -1671,7 +1651,7 @@
       "Slot": "Head",
       "Cost": 8000,
       "Weight": 1,
-      "IsShopBuyable": false,
+      "IsShopBuyable": true,
       "ArmorClassBonus": 0,
       "Damage": "",
       "AllowedClasses": [
@@ -1726,7 +1706,7 @@
         "Casts neutralize poison"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Potion of Dios",
@@ -1746,26 +1726,7 @@
         "Casts cure light wounds"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
-    },
-    {
-      "Status": "NotImplemented",
-      "Name": "Potion of Sopic",
-      "Type": "Potion",
-      "Slot": "",
-      "Cost": 1500,
-      "Weight": 1,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 0,
-      "Damage": "",
-      "AllowedClasses": [
-        "All"
-      ],
-      "Rarity": "Common",
-      "Description": "Caster -4 AC Temp",
-      "SpecialAbilities": [],
-      "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Potion of Dial",
@@ -1785,7 +1746,7 @@
         "Casts cure serious wounds"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Scroll of Katino",
@@ -1815,7 +1776,7 @@
         "Casts sleep"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Scroll of Badios",
@@ -1845,7 +1806,7 @@
         "Casts cause light wounds"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Scroll of Halito",
@@ -1875,7 +1836,7 @@
         "Casts magic missile"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Scroll of Lomilwa",
@@ -1905,7 +1866,7 @@
         "Casts light"
       ],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Status": "NotImplemented",
@@ -1934,7 +1895,7 @@
       "Description": "Makes Enemies easier to hit",
       "SpecialAbilities": [],
       "Source": "Wizardry",
-      "StockQuantity": 0
+      "StockQuantity": -1
     },
     {
       "Name": "Scroll of Badial",
@@ -1987,7 +1948,7 @@
       "Description": "An anointed mace.",
       "SpecialAbilities": [],
       "Source": "Wizardry",
-      "StockQuantity": 0,
+      "StockQuantity": -1,
       "DamageVsLarge": "1d4+1",
       "DamageType": "Blunt",
       "SpeedFactor": 6,
@@ -2020,7 +1981,7 @@
       "Description": "An anointed flail.",
       "SpecialAbilities": [],
       "Source": "Wizardry",
-      "StockQuantity": 0,
+      "StockQuantity": -1,
       "DamageVsLarge": "2d8",
       "DamageType": "Blunt",
       "SpeedFactor": 7,
@@ -2101,6 +2062,67 @@
       "IsCursed": false,
       "Version": "1e",
       "ToHitBonus": 0
+    },
+    {
+      "Name": "Shield +1",
+      "Type": "Shield",
+      "Slot": "OffHand",
+      "Cost": 1500,
+      "Weight": 350,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Common",
+      "Description": "A magically enhanced shield.",
+      "Source": "Wizardry",
+      "StockQuantity": 2
+    },
+    {
+      "Name": "Staff +2",
+      "Type": "Weapon",
+      "Cost": 2500,
+      "Weight": 50,
+      "Damage": "1d6+2",
+      "DamageVsLarge": "1d6+2",
+      "DamageType": "Blunt",
+      "SpeedFactor": 4,
+      "WeaponLength": "Long",
+      "IsTwoHanded": true,
+      "Range": "5/10/15",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 2,
+      "SpecialAbilities": [
+        ""
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "A powerful enchanted staff.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 2,
+      "Slot": "",
+      "ToHitBonus": 2
     }
   ]
 }

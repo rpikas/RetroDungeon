@@ -43,6 +43,9 @@ public sealed class CampCharacterInspectForm : Form
 
     public bool ReturnToTownRequested { get; private set; }
 
+    /// <summary>Describes where the party is (level, position, facing); set by the maze so DUMAPIC items can report it.</summary>
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    public Func<string>? LocationInfoProvider { get; init; }
     /// <summary>Opens the equip chooser straight away (camp's E)QUIP).</summary>
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public bool StartWithEquip { get; init; }
@@ -1332,9 +1335,10 @@ public sealed class CampCharacterInspectForm : Form
                 grantsSpeedPotion = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "Haste") || string.Equals(item.Name, "Potion of Speed", StringComparison.OrdinalIgnoreCase),
                 grantsTreasureFindingPotion = string.Equals(item.Name, "Potion of Treasure Finding", StringComparison.OrdinalIgnoreCase),
                 isPotionOfHealing = string.Equals(item.Name, "Potion of Healing", StringComparison.OrdinalIgnoreCase),
-                isWerdnaAmulet = string.Equals(item.Name, "Amulet of Werdna", StringComparison.OrdinalIgnoreCase)
+                isWerdnaAmulet = string.Equals(item.Name, "Amulet of Werdna", StringComparison.OrdinalIgnoreCase),
+                isDumapic = Adnd.Core.Items.ItemSpecialAbilityParser.HasCastsAbility(item, "DUMAPIC")
             })
-            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing || x.isWerdnaAmulet)
+            .Where(x => x.spell != null || x.isFigurine || x.grantsRegeneration || x.grantsFireResistancePotion || x.grantsGiantStrengthPotion || x.grantsAnimalControlPotion || x.grantsHumanControlPotion || x.grantsHeroismPotion || x.grantsSuperHeroismPotion || x.grantsInvulnerabilityPotion || x.grantsProtectionFromMagicScroll || x.grantsLevitationPotion || x.grantsSpeedPotion || x.grantsTreasureFindingPotion || x.isPotionOfHealing || x.isWerdnaAmulet || x.isDumapic)
             .ToList();
 
         var updatedHumanControlMetadata = false;
@@ -1387,6 +1391,8 @@ public sealed class CampCharacterInspectForm : Form
                 ? $"{x.item.Name} (unread magical scroll)"
                 : x.isWerdnaAmulet
                     ? $"{x.item.Name} (casts Malor: teleport to town)"
+                : x.isDumapic
+                    ? $"{x.item.Name} (casts Dumapic: shows position)"
                 : x.spell != null
                 ? $"{x.item.Name} (casts {x.spell!.Name})"
                 : x.isFigurine
@@ -1457,6 +1463,12 @@ public sealed class CampCharacterInspectForm : Form
             SayOnBoth("Amulet of Werdna", $"{user.Name} invokes the amulet. The party is teleported to town!");
             ReturnToTownRequested = true;
             Close();
+            return;
+        }
+
+        if (selected.isDumapic)
+        {
+            SayOnBoth("Dumapic", $"{user.Name} uses the {selected.item.Name}. {(LocationInfoProvider?.Invoke() ?? "The amulet cannot tell where you are.")}");
             return;
         }
 

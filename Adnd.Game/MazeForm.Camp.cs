@@ -552,7 +552,8 @@ public sealed partial class MazeForm
         // the table too.
         using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable)
         {
-            StartWithEquip = startWithEquip
+            StartWithEquip = startWithEquip,
+            LocationInfoProvider = () => $"You are at ({_position.X},{_position.Y}) on dungeon level {_currentDungeonLevel}, facing {CompassHeading()}."
         };
         inspect.ShowDialog(this);
         LoadLightFromParty();

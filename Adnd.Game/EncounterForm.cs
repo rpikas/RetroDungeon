@@ -1442,6 +1442,19 @@ public sealed class EncounterForm : Form
         if (string.Equals(item.Name, "Potion of Cure Poison", StringComparison.OrdinalIgnoreCase))
             return "Neutralize Poison";
 
+        switch (item.Name.ToLowerInvariant())
+        {
+            case "potion of latumofis": return "Neutralize Poison";
+            case "potion of dios": return "Cure Light Wounds";
+            case "potion of dial": return "Cure Serious Wounds";
+            case "potion of sopic": return "Invisibility";
+            case "scroll of katino": return "Sleep";
+            case "scroll of badios": return "Cause Light Wounds";
+            case "scroll of halito": return "Magic Missile";
+            case "scroll of lomilwa": return "Light";
+            case "scroll of badial": return "Cause Serious Wounds";
+        }
+
         if (item.Name.StartsWith("Potion of ", StringComparison.OrdinalIgnoreCase))
             return item.Name[10..].Trim();
 

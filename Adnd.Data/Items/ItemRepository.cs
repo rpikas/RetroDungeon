@@ -60,10 +60,17 @@ public class ItemRepository
 
         return list
             .Where(i => i.Status != ItemStatus.NotImplemented)
-            .GroupBy(i => i.Name, StringComparer.OrdinalIgnoreCase)
+            .GroupBy(i => (i.Name.ToLowerInvariant(), IsWizardryOnly(i.Source)))
             .Select(g => g.First())
             .ToList();
     }
+
+    // A Wizardry-only item may share its name with an AD&D item (e.g. Chain Mail +1); both are kept so
+    // each game mode can use its own.
+    private static bool IsWizardryOnly(string? source) =>
+        !string.IsNullOrWhiteSpace(source)
+        && source.Contains("wizardry", StringComparison.OrdinalIgnoreCase)
+        && !source.Contains("adnd", StringComparison.OrdinalIgnoreCase);
 
     public bool TryAdjustStock(string itemName, int delta)
     {
