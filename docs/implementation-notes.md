@@ -39,6 +39,8 @@ Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests 
 
 - Jeweled Amulet (DUMAPIC): using it in camp (U)se Item) reports the party's position, dungeon level and facing via `CampCharacterInspectForm.LocationInfoProvider`, which `MazeForm.Camp.cs` supplies.
 - Mage Masher (Wizardry) is a +1 weapon with the ability text "+2 vs. magic-using and enchanted creatures", so it reuses the Sword +1, +2 rule in `CombatResolver.WeaponAndTargetRules.cs` (covered by `MageMasherTests`).
+- Were Slayer (Wizardry) is a +1 weapon with the ability text "+3 vs. lycanthropes and shape changers", so it reuses the Sword +1, +3 rule (covered by `MageMasherTests`).
+- Dragon Slayer (Wizardry) copies the stats and abilities of "Sword +2, Dragon Slayer"; the existing rule matches the "Dragon Slayer" ability text.
 - `StockQuantity` in item JSON: `-1` = unlimited shop stock (mapped to `null` in `ItemRepository`), `0` = out of stock, positive = finite stock. Long Sword is set to `-1`.
 - Wizardry-source items (incl. former `CursedItems.json`/`QuestItems.json`) live in `Adnd.Data\Items\Wizardry.json`. Wizardry spell items without an AD&D equivalent (Potion of Sopic, Scroll of Dilto) are `NotImplemented`; items that only differ by name from existing ones (e.g. Silver Key = Key of Silver) were not duplicated.
 - Wizardry-source monsters live in `Adnd.Data\Monsters\Wizardry.json` (one monster per entry in `DungeonLevels`); their abilities are in `CombatResolver.WizardryAbilities.cs` and are described in the README.

@@ -972,17 +972,19 @@
       "Type": "Weapon",
       "Cost": 10000,
       "Weight": 4,
-      "Damage": "1d10",
-      "DamageVsLarge": "1d12",
+      "Damage": "1d8+2",
+      "DamageVsLarge": "1d12+2",
       "DamageType": "Slashing",
       "SpeedFactor": 5,
       "WeaponLength": "Medium",
       "IsTwoHanded": false,
       "Range": "",
       "ArmorClassBonus": 0,
-      "MagicBonus": 0,
+      "MagicBonus": 2,
       "SpecialAbilities": [
-        "Bonus vs Dragons"
+        "Dragon Slayer",
+        "+4 vs. true dragons (excluding Bahamut and Tiamat)",
+        "Triple damage vs. one randomly determined dragon type"
       ],
       "IsCursed": false,
       "IsShopBuyable": true,
@@ -995,12 +997,12 @@
         "Bard"
       ],
       "Rarity": "Rare",
-      "Description": "A sword deadly to dragons.",
+      "Description": "A +2 sword that is +4 vs. true dragons, with triple damage vs. one random dragon type.",
       "Source": "Wizardry",
       "Version": "1e",
       "StockQuantity": 0,
       "Slot": "",
-      "ToHitBonus": 0
+      "ToHitBonus": 2
     },
     {
       "Name": "Staff of Silence",
