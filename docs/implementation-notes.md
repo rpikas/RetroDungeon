@@ -37,6 +37,8 @@ Characterization tests are in `Adnd.Tests` (xUnit). Run `dotnet test Adnd.Tests 
 
 ## Adding a monster power
 
+- `StockQuantity` in item JSON: `-1` = unlimited shop stock (mapped to `null` in `ItemRepository`), `0` = out of stock, positive = finite stock. Long Sword is set to `-1`.
+- Wizardry-source items (incl. former `CursedItems.json`/`QuestItems.json`) live in `Adnd.Data\Items\Wizardry.json`. Wizardry spell items without an AD&D equivalent (Potion of Sopic, Scroll of Dilto) are `NotImplemented`; items that only differ by name from existing ones (e.g. Silver Key = Key of Silver) were not duplicated.
 - Wizardry-source monsters live in `Adnd.Data\Monsters\Wizardry.json` (one monster per entry in `DungeonLevels`); their abilities are in `CombatResolver.WizardryAbilities.cs` and are described in the README.
 - Other monster stats live in `Adnd.Data\Monsters\LevelN.json`. Hit points come from `HitDice` x d8 (+ `ExtraHitPoints`); for fixed-hp monsters use hp / 4.5 as hit dice.
 - Abilities and defenses are matched **by name** (`HasSpecialAbility`, `HasSpecialDefense`, `IsTemplate`). The JSON name must match the string used in code.

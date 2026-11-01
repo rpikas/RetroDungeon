@@ -11,55 +11,14 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": true,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Potion Healing 2d4+2" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Potion Healing 2d4+2"
+      ],
       "Rarity": "Uncommon",
       "Source": "Adnd"
-    },
-    {
-      "Name": "Potion of Extra Healing",
-      "Type": "Potion",
-      "Slot": "",
-      "Cost": 150,
-      "Weight": 1,
-      "StockQuantity": 0,
-      "ArmorClassBonus": 0,
-      "IsShopBuyable": true,
-      "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Cure Serious Wounds" ],
-      "Rarity": "Uncommon",
-      "Source": "Wizardry"
-    },
-    {
-      "Name": "Potion of Cure Poison",
-      "Type": "Potion",
-      "Slot": "",
-      "Cost": 75,
-      "Weight": 1,
-      "StockQuantity": 5,
-      "ArmorClassBonus": 0,
-      "IsShopBuyable": true,
-      "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Cure Poison" ],
-      "Rarity": "Uncommon",
-      "Source": "Wizardry"
-    },
-    {
-      "Name": "Potion of Invisibility",
-      "Type": "Potion",
-      "Slot": "",
-      "Cost": 250,
-      "Weight": 1,
-      "StockQuantity": 5,
-      "ArmorClassBonus": 0,
-      "IsShopBuyable": true,
-      "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Invisibility" ],
-      "Rarity": "Uncommon",
-      "Source": "Wizardry"
     },
     {
       "Name": "Potion of Speed",
@@ -71,8 +30,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Haste" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Haste"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -87,8 +50,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Heroism" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Heroism"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -103,8 +70,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Super-Heroism" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Super-Heroism"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -119,8 +90,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Giant Strength" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Giant Strength"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -135,13 +110,16 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Fire Resistance" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Fire Resistance"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
     },
-
     {
       "Name": "Potion of Levitation",
       "Type": "Potion",
@@ -152,8 +130,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Levitate" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Levitate"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -168,8 +150,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Invulnerability" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Invulnerability"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -184,8 +170,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Regeneration" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Regeneration"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -200,8 +190,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "4d6 fire",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Fire Breath" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Fire Breath"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -216,8 +210,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Cold Resistance" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Cold Resistance"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -232,8 +230,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "DelusionPotion" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "DelusionPotion"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -248,8 +250,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": true,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Cure Disease" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Cure Disease"
+      ],
       "Rarity": "Uncommon",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -264,8 +270,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Animal Control" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Animal Control"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -280,8 +290,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Undead Control" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Undead Control"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -296,8 +310,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Climbing" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Climbing"
+      ],
       "Rarity": "Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -312,8 +330,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Flying" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Flying"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"
@@ -328,13 +350,16 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Polymorph Self" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Polymorph Self"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"
     },
-
     {
       "Name": "Potion of Human Control",
       "Type": "Potion",
@@ -345,8 +370,12 @@
       "ArmorClassBonus": 0,
       "IsShopBuyable": false,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
-      "SpecialAbilities": [ "Casts Human Control" ],
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Human Control"
+      ],
       "Rarity": "Very Rare",
       "Source": "Adnd",
       "Status": "Implemented"

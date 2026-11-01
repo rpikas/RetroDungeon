@@ -286,7 +286,7 @@ public class ShopMenu
             var it = items[sel.Value];
             Console.WriteLine($"Gold before: {buyer.GoldPieces} gp");
 
-            if (it.StockQuantity.HasValue && it.StockQuantity.Value <= 0)
+            if (!Shop.InStock(it))
             {
                 Console.WriteLine("This item is out of stock.");
             }

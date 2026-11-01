@@ -83,7 +83,7 @@ public class ItemRepository
             if (!target.IsShopBuyable)
                 return false;
 
-            if (target.StockQuantity.HasValue)
+            if (target.StockQuantity is >= 0)
             {
                 var next = target.StockQuantity.Value + delta;
                 if (next < 0)
@@ -106,7 +106,7 @@ public class ItemRepository
         if (!single.IsShopBuyable)
             return false;
 
-        if (single.StockQuantity.HasValue)
+        if (single.StockQuantity is >= 0)
         {
             var next = single.StockQuantity.Value + delta;
             if (next < 0)
@@ -156,7 +156,7 @@ public class ItemRepository
             Weight = model.Weight,
             ToHitBonus = model.ToHitBonus,
             IsShopBuyable = model.IsShopBuyable,
-            StockQuantity = model.StockQuantity,
+            StockQuantity = model.StockQuantity is < 0 ? null : model.StockQuantity, // -1 in JSON = unlimited stock
             ArmorClassBonus = model.ArmorClassBonus,
             Damage = model.Damage,
             DamageVsLarge = model.DamageVsLarge,

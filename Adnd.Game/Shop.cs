@@ -83,7 +83,7 @@ public static class Shop
         FilterBoltacItemsBySource(
         items.LoadAll()
             .Where(i => i.IsShopBuyable || (i.StockQuantity.HasValue && i.StockQuantity.Value > 0))
-            .Where(i => !i.StockQuantity.HasValue || i.StockQuantity.Value > 0)
+            .Where(InStock)
             .Take(9999)
             .ToList(),
         GameRulesProvider.Current.BoltacItemSourceFilter);
@@ -105,8 +105,10 @@ public static class Shop
         };
     }
 
+    // "WizardryAndAdnd" items belong to both shops.
     private static bool IsAdndSource(string? source) =>
-        !IsWizardrySource(source);
+        !IsWizardrySource(source)
+        || source!.Contains("adnd", StringComparison.OrdinalIgnoreCase);
 
     private static bool IsWizardrySource(string? source) =>
         !string.IsNullOrWhiteSpace(source)
@@ -121,11 +123,14 @@ public static class Shop
     public static string FormatSellPrice(Item item)
         => FormatCostFromSilverPieces(SellPriceInSilverPieces(item));
 
-    public static bool InStock(Item item) => !item.StockQuantity.HasValue || item.StockQuantity.Value > 0;
+    /// <summary>Unlimited stock: null, or -1 as written in the item JSON.</summary>
+    public static bool IsUnlimitedStock(Item item) => !item.StockQuantity.HasValue || item.StockQuantity.Value < 0;
+
+    public static bool InStock(Item item) => IsUnlimitedStock(item) || item.StockQuantity!.Value > 0;
 
     /// <summary>Stock as the shop shows it: a number, or a dash for something he never runs out of.</summary>
     public static string StockDisplay(Item item) =>
-        item.StockQuantity.HasValue ? item.StockQuantity.Value.ToString() : "-";
+        IsUnlimitedStock(item) ? "-" : item.StockQuantity!.Value.ToString();
 
     /// <summary>
     /// Whether this character could actually wear or wield it. A hint rather than a rule: anyone may BUY

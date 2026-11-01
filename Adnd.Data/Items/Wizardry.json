@@ -1,0 +1,2106 @@
+{
+  "Category": "Wizardry",
+  "Items": [
+    {
+      "Name": "Helmet",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 50,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Common",
+      "Description": "A simple metal helmet offering basic head protection.",
+      "Source": "Wizardry",
+      "StockQuantity": -1
+    },
+    {
+      "Name": "Helm +1",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 1500,
+      "Weight": 60,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Uncommon",
+      "Description": "A reinforced iron helm infused with minor protective magic./  Iron Helm",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Helm +2",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 7000,
+      "Weight": 60,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 3,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A magically enhanced helm that sharpens perception./ Helm of Sight",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Evil Helm +3",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 25000,
+      "Weight": 60,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 3,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Rare",
+      "Description": "A cursed helm radiating malevolent force./ Helm of Evil",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Helm +3",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 250000,
+      "Weight": 70,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 4,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A powerful enchanted helm offering superior protection./ Helm of Defense",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Copper Gloves",
+      "Type": "Armor",
+      "Slot": "Hands",
+      "Cost": 6000,
+      "Weight": 30,
+      "ArmorClassBonus": 1,
+      "IsShopBuyable": true,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Uncommon",
+      "Description": "Simple copper gloves that offer minor protection.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Silver Gloves",
+      "Type": "Armor",
+      "Slot": "Hands",
+      "Cost": 60000,
+      "Weight": 20,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 3,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "Magically enhanced silver gloves that provide excellent protection.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Robes",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 15,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "Simple cloth robes offering minimal protection.",
+      "Source": "Wizardry",
+      "StockQuantity": -1
+    },
+    {
+      "Name": "Breast Plate",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 200,
+      "Weight": 350,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 4,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Uncommon",
+      "Description": "A metal breastplate protecting the torso.",
+      "Source": "Wizardry",
+      "StockQuantity": -1
+    },
+    {
+      "Name": "Chain Mail +1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 400,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 4,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Rare",
+      "Description": "Polished chain mail reinforced with magic. / Shiny Chain",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Leather +1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 150,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 3,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "Enhanced leather armor with extra padding. / Padded Leather",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Plate Mail +1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 500,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 6,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Rare",
+      "Description": "Reinforced plate mail offering superior defense. / Sturdy Plate",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Breast Plate +1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 350,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 5,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Rare",
+      "Description": "Magically strengthened breastplate. / Body Armor",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Leather +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 6000,
+      "Weight": 150,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 4,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "Leather armor treated with magical oils. / Treated Leather",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Chain +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 6000,
+      "Weight": 250,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 5,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric"
+      ],
+      "Rarity": "Rare",
+      "Description": "Lightweight enchanted chain mail crafted by elves. / Elven Chain",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Plate Mail +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 6000,
+      "Weight": 500,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 7,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin"
+      ],
+      "Rarity": "Rare",
+      "Description": "Elite plate armor of exceptional craftsmanship. / 1st Class Plate",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Evil Chain +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 8000,
+      "Weight": 400,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 5,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter"
+      ],
+      "Rarity": "Rare",
+      "Description": "A cursed chain mail infused with evil power. / Chain of Evil",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Neutral Plate +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 8000,
+      "Weight": 500,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 7,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter"
+      ],
+      "Rarity": "Rare",
+      "Description": "A magically balanced plate mail for neutral warriors. / Neutral Plate",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Breast Plate +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 10000,
+      "Weight": 350,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 6,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Rare",
+      "Description": "A breastplate blessed with protective magic. / B-Plate of Boons",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Breast Plate +3",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 100000,
+      "Weight": 350,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 7,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "Legendary armor worn by heroic champions. / Armor of Heroes",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Chain Protection vs. Fire +2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 150000,
+      "Weight": 400,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 6,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "Fire-resistant chain mail imbued with elemental magic. / Chain Pro Fire",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Evil Plate +3",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 150000,
+      "Weight": 500,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 9,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A cursed plate mail radiating malevolent force. / Armor of Evil",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Lords Garb +3",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1000000,
+      "Weight": 300,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 10,
+      "Damage": "",
+      "AllowedClasses": [
+        "Paladin"
+      ],
+      "Rarity": "Legendary",
+      "Description": "Mythical armor granting regeneration and protection vs dragons, were-creatures, demons and undead. / Armor of Lords",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Short Sword -1",
+      "Type": "Weapon",
+      "Slot": "MainHand",
+      "Cost": 1000,
+      "Weight": 3,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "1d6",
+      "AllowedClasses": [
+        "Fighter",
+        "Thief",
+        "Assassin"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed short sword that weakens its wielder./ Epee of Dismay",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Long Sword -1",
+      "Type": "Weapon",
+      "Slot": "MainHand",
+      "Cost": 1000,
+      "Weight": 4,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "1d8",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed long sword that performs poorly in combat./ Sword of Swishes",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Mace -1",
+      "Type": "Weapon",
+      "Slot": "MainHand",
+      "Cost": 1000,
+      "Weight": 5,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "2d3",
+      "DamageType": "Blunt",
+      "AllowedClasses": [
+        "Fighter",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed mace that brings misfortune to its wielder./ Mace of Misfortune",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Mace -2",
+      "Type": "Weapon",
+      "Slot": "MainHand",
+      "Cost": 2500,
+      "Weight": 5,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "1d8",
+      "DamageType": "Blunt",
+      "AllowedClasses": [
+        "Fighter",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A heavily cursed mace that drains vitality./ Morbid Mace",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Staff -2",
+      "Type": "Weapon",
+      "Slot": "MainHand",
+      "Cost": 8000,
+      "Weight": 4,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "1d4",
+      "DamageType": "Blunt",
+      "AllowedClasses": [
+        "Mage",
+        "Cleric",
+        "Monk"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A warped staff that reduces magical focus./ Bent Staff",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Leather -1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 15,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Thief",
+        "Assassin",
+        "Ranger"
+      ],
+      "Rarity": "Cursed",
+      "Description": "Decayed leather armor that barely protects./ Rotten Leather",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Chain -1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 40,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "Rust-eaten chain mail that hinders movement./ Corroded Chain",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Breast Plate -1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 35,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 3,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cracked breastplate that offers unreliable protection./ Broken B-Plate",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Leather -2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 15,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Thief",
+        "Assassin",
+        "Ranger"
+      ],
+      "Rarity": "Cursed",
+      "Description": "Decayed leather armor that barely protects./ Leather of Loss",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Chain -1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 40,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "Rust-eaten chain mail that hinders movement./ Corroded Chain",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Breast Plate -1",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 1500,
+      "Weight": 35,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 3,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cracked breastplate that offers unreliable protection./ Broken B-Plate",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Leather -2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 8000,
+      "Weight": 15,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Thief",
+        "Assassin",
+        "Ranger"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed leather armor that weakens the wearer./ Leather of Loss",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Cursed Robe -2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 8000,
+      "Weight": 5,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Mage",
+        "Illusionist",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A robe that binds the wearer with dark magic./ Robe of Curses",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Chain -2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 8000,
+      "Weight": 40,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed chain mail that saps strength./ Chain of Curses",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Breast Plate -2",
+      "Type": "Armor",
+      "Slot": "Body",
+      "Cost": 8000,
+      "Weight": 35,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A breastplate tainted with infernal energy./ Devil's B-Plate",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Shield -1",
+      "Type": "Armor",
+      "Slot": "OffHand",
+      "Cost": 1500,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 1,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A warped shield that barely functions./ Screwy Shield",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Shield -2",
+      "Type": "Armor",
+      "Slot": "OffHand",
+      "Cost": 8000,
+      "Weight": 10,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Cleric"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed shield that offers no protection./ Shield of Nothing",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Cursed Helmet -2",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 50000,
+      "Weight": 6,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 2,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A cursed helm that clouds the mind./ Helm of Hangovers",
+      "SpecialAbilities": [
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Deadly Ring",
+      "Type": "MagicItem",
+      "Slot": "Ring1",
+      "Cost": 500000,
+      "Weight": 1,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "Rarity": "Cursed",
+      "Description": "A ring that drains life from its wearer.",
+      "SpecialAbilities": [
+        "Regeneration -3",
+        "Cursed"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Mage Masher",
+      "Type": "Weapon",
+      "Cost": 10000,
+      "Weight": 3,
+      "Damage": "1d6+1",
+      "DamageVsLarge": "1d8+1",
+      "DamageType": "Slashing",
+      "SpeedFactor": 3,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Protection vs Mages"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A blade designed to kill mages.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Were Slayer",
+      "Type": "Weapon",
+      "Cost": 10000,
+      "Weight": 4,
+      "Damage": "1d10",
+      "DamageVsLarge": "1d12",
+      "DamageType": "Slashing",
+      "SpeedFactor": 5,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Bonus vs Were Creatures"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A sword deadly to were-creatures.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Dragon Slayer",
+      "Type": "Weapon",
+      "Cost": 10000,
+      "Weight": 4,
+      "Damage": "1d10",
+      "DamageVsLarge": "1d12",
+      "DamageType": "Slashing",
+      "SpeedFactor": 5,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Bonus vs Dragons"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A sword deadly to dragons.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Staff of Silence",
+      "Type": "Weapon",
+      "Cost": 15000,
+      "Weight": 50,
+      "Damage": "1d6",
+      "DamageVsLarge": "1d6",
+      "DamageType": "Blunt",
+      "SpeedFactor": 4,
+      "WeaponLength": "Long",
+      "IsTwoHanded": true,
+      "Range": "5/10/15",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Silence Aura"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Rare",
+      "Description": "A staff that radiates silence.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Vorpal Blade +1",
+      "Type": "Weapon",
+      "Cost": 15000,
+      "Weight": 4,
+      "Damage": "2d6+4",
+      "DamageVsLarge": "2d6+4",
+      "DamageType": "Slashing",
+      "SpeedFactor": 7,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Vorpal Strike"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A deadly vorpal blade.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Dagger of Speed",
+      "Type": "Weapon",
+      "Cost": 30000,
+      "Weight": 1,
+      "Damage": "1d4",
+      "DamageVsLarge": "1d3",
+      "DamageType": "Piercing",
+      "SpeedFactor": 1,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "10/20/30",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Extra Attack"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Paladin",
+        "Ranger",
+        "Druid",
+        "MagicUser",
+        "Illusionist",
+        "Thief",
+        "Assassin",
+        "Fighter",
+        "Bard"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A dagger that grants extra speed.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Thieves Dagger",
+      "Type": "Weapon",
+      "Cost": 50000,
+      "Weight": 1,
+      "Damage": "1d6",
+      "DamageVsLarge": "1d4",
+      "DamageType": "Piercing",
+      "SpeedFactor": 2,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "10/20/30",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Backstab Bonus"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Druid",
+        "MagicUser",
+        "Illusionist",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A dagger favored by thieves.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Shuriken",
+      "Type": "Weapon",
+      "Cost": 50000,
+      "Weight": 1,
+      "Damage": "1d6+10",
+      "DamageVsLarge": "1d6+10",
+      "DamageType": "Piercing",
+      "SpeedFactor": 2,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "20/40/60",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 0,
+      "SpecialAbilities": [
+        "Thrown Weapon"
+      ],
+      "IsCursed": false,
+      "IsShopBuyable": true,
+      "AllowedClasses": [
+        "Assassin",
+        "Thief"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A deadly enchanted shuriken.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Muramasa Blade",
+      "Type": "Weapon",
+      "Cost": 1000000,
+      "Weight": 5,
+      "Damage": "4d10+6",
+      "DamageVsLarge": "4d10+6",
+      "DamageType": "Slashing",
+      "SpeedFactor": 8,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 5,
+      "SpecialAbilities": [
+        "Life Drain",
+        "Cursed"
+      ],
+      "IsCursed": true,
+      "IsShopBuyable": false,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Legendary",
+      "Description": "The legendary Muramasa Blade.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Status": "NotImplemented",
+      "Name": "Jeweled Amulet",
+      "Type": "MagicItem",
+      "Slot": "Neck",
+      "Cost": 5000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Uncommon",
+      "Description": "A jeweled amulet that casts DUMAPIC.",
+      "SpecialAbilities": [
+        "Casts DUMAPIC"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Potion of Extra Healing",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 150,
+      "Weight": 1,
+      "StockQuantity": 0,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": true,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Cure Serious Wounds"
+      ],
+      "Rarity": "Uncommon",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Potion of Cure Poison",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 75,
+      "Weight": 1,
+      "StockQuantity": 5,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": true,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Cure Poison"
+      ],
+      "Rarity": "Uncommon",
+      "Source": "Wizardry"
+    },
+    {
+      "Name": "Potion of Invisibility",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 250,
+      "Weight": 1,
+      "StockQuantity": 5,
+      "ArmorClassBonus": 0,
+      "IsShopBuyable": true,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "SpecialAbilities": [
+        "Casts Invisibility"
+      ],
+      "Rarity": "Uncommon",
+      "Source": "Wizardry"
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Key of Bronze",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Opens the bronze passage on dungeon level 2. Without it the party is pushed back.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Key of Silver",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Opens the silver passage on dungeon level 2. Without it the party is pushed back.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Key of Gold",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Found beneath the bronze statue on dungeon level 2.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Statue of Bear",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Needed to pass the bear door on dungeon levels 2 and 4.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Statue of Frog",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Needed to pass the frog door on dungeon level 2.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Blue Ribbon",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "Given by Trebor. Makes the elevator on dungeon level 4 accessible.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "Implemented",
+      "Name": "Amulet of Werdna",
+      "Type": "Misc",
+      "Cost": 0,
+      "Weight": 0,
+      "IsShopBuyable": false,
+      "Rarity": "Unique",
+      "Description": "The Mad Overlord's stolen amulet. It is cursed, so never wear it. The bearer regains 1 HP with every step, and using it casts Malor to return the party to town. Returning it to the surface earns 50,000 XP and 50,000 GP.",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Ring of Shielding",
+      "Type": "MagicItem",
+      "Slot": "Ring1",
+      "Cost": 10000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Uncommon",
+      "Description": "A protective ring that casts PORFIC./ ",
+      "SpecialAbilities": [
+        "Casts PORFIC"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Ring of Rigidity",
+      "Type": "MagicItem",
+      "Slot": "Ring1",
+      "Cost": 15000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Paladin"
+      ],
+      "Rarity": "Rare",
+      "Description": "An amulet that casts MANIFO.",
+      "SpecialAbilities": [
+        "Casts MANIFO"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Ring of Suffocation",
+      "Type": "MagicItem",
+      "Slot": "Ring1",
+      "Cost": 20000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Rare",
+      "Description": "A deadly ring that casts MAKANITO.",
+      "SpecialAbilities": [
+        "Casts MAKANITO"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Ring of Healing",
+      "Type": "MagicItem",
+      "Slot": "Ring1",
+      "Cost": 30000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A ring that grants regeneration.",
+      "SpecialAbilities": [
+        "Regeneration (1)"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Ring Pro Undead",
+      "Type": "MagicItem",
+      "Slot": "Ring1",
+      "Cost": 500000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A powerful ring that protects against undead.",
+      "SpecialAbilities": [
+        "Protection: Undead"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Wand of Lightning",
+      "Type": "MagicItem",
+      "Slot": "MainHand",
+      "Cost": 30000,
+      "Weight": 2,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "MagicUser"
+      ],
+      "Rarity": "Rare",
+      "Description": "Wand that casts Lightning Bolt.",
+      "SpecialAbilities": [
+        "Casts Lightning Bolt"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 2
+    },
+    {
+      "Name": "Rod of Flame",
+      "Type": "MagicItem",
+      "Slot": "MainHand",
+      "Cost": 25000,
+      "Weight": 2,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Ranger",
+        "MagicUser",
+        "Illusionist"
+      ],
+      "Rarity": "Rare",
+      "Description": "A fiery rod that protects against fire and casts Fireball.",
+      "SpecialAbilities": [
+        "Casts Fireball"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 2
+    },
+    {
+      "Name": "Evil S-Sword +3",
+      "Type": "Weapon",
+      "Cost": 50000,
+      "Weight": 60,
+      "Damage": "1d6+3",
+      "DamageVsLarge": "1d8+3",
+      "DamageType": "Slashing",
+      "SpeedFactor": 5,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 3,
+      "SpecialAbilities": [
+        "Soul Drain"
+      ],
+      "IsCursed": true,
+      "IsShopBuyable": false,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A cursed blade that drains souls.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Evil Sword +3",
+      "Type": "Weapon",
+      "Cost": 50000,
+      "Weight": 60,
+      "Damage": "1d8+3",
+      "DamageVsLarge": "2d6+3",
+      "DamageType": "Slashing",
+      "SpeedFactor": 6,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": false,
+      "Range": "",
+      "ArmorClassBonus": 0,
+      "MagicBonus": 3,
+      "SpecialAbilities": [
+        "Evil Aura"
+      ],
+      "IsCursed": true,
+      "IsShopBuyable": false,
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Very Rare",
+      "Description": "A cursed saber infused with evil.",
+      "Source": "Wizardry",
+      "Version": "1e",
+      "StockQuantity": 0,
+      "Slot": "",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Evil Shield +3",
+      "Type": "Shield",
+      "Slot": "OffHand",
+      "Cost": 9000,
+      "Weight": 100,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 4,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A cursed shield infused with evil power. / Shield of Evil",
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Helm +2 (E)",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 8000,
+      "Weight": 1,
+      "IsShopBuyable": false,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Thief",
+        "Assassin"
+      ],
+      "Rarity": "Common",
+      "Description": "Evil Characters Only",
+      "SpecialAbilities": [],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Helm of Malor",
+      "Type": "Armor",
+      "Slot": "Head",
+      "Cost": 25000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "MagicUser"
+      ],
+      "Rarity": "Rare",
+      "Description": "[Use] Chants Malor; equipable by Mages",
+      "SpecialAbilities": [
+        "Casts teleport"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Potion of Latumofis",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 300,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "Rarity": "Common",
+      "Description": "Cure Poison",
+      "SpecialAbilities": [
+        "Casts neutralize poison"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Potion of Dios",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "Rarity": "Common",
+      "Description": "Restore 1-8 HP",
+      "SpecialAbilities": [
+        "Casts cure light wounds"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "NotImplemented",
+      "Name": "Potion of Sopic",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 1500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "Rarity": "Common",
+      "Description": "Caster -4 AC Temp",
+      "SpecialAbilities": [],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Potion of Dial",
+      "Type": "Potion",
+      "Slot": "",
+      "Cost": 5000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "All"
+      ],
+      "Rarity": "Common",
+      "Description": "Restore 2-16 HP",
+      "SpecialAbilities": [
+        "Casts cure serious wounds"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Scroll of Katino",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "Put Enemies to Sleep",
+      "SpecialAbilities": [
+        "Casts sleep"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Scroll of Badios",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "1-8 Dmg Against an Enemy",
+      "SpecialAbilities": [
+        "Casts cause light wounds"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Scroll of Halito",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "1-8 Fire Dmg Against an Enemy",
+      "SpecialAbilities": [
+        "Casts magic missile"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Scroll of Lomilwa",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 2500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "Chants Lomilwa",
+      "SpecialAbilities": [
+        "Casts light"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Status": "NotImplemented",
+      "Name": "Scroll of Dilto",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 2500,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "Makes Enemies easier to hit",
+      "SpecialAbilities": [],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Scroll of Badial",
+      "Type": "Scroll",
+      "Slot": "",
+      "Cost": 8000,
+      "Weight": 1,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Uncommon",
+      "Description": "2-16 Dmg Against an Enemy",
+      "SpecialAbilities": [
+        "Casts cause serious wounds"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0
+    },
+    {
+      "Name": "Anointed Mace",
+      "Type": "Weapon",
+      "Slot": "",
+      "Cost": 30,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "1d6+1",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Common",
+      "Description": "An anointed mace.",
+      "SpecialAbilities": [],
+      "Source": "Wizardry",
+      "StockQuantity": 0,
+      "DamageVsLarge": "1d4+1",
+      "DamageType": "Blunt",
+      "SpeedFactor": 6,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "",
+      "MagicBonus": 0,
+      "IsCursed": false,
+      "Version": "1e",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Anointed Flail",
+      "Type": "Weapon",
+      "Slot": "",
+      "Cost": 150,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "2d7",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Common",
+      "Description": "An anointed flail.",
+      "SpecialAbilities": [],
+      "Source": "Wizardry",
+      "StockQuantity": 0,
+      "DamageVsLarge": "2d8",
+      "DamageType": "Blunt",
+      "SpeedFactor": 7,
+      "WeaponLength": "Medium",
+      "IsTwoHanded": true,
+      "Range": "",
+      "MagicBonus": 0,
+      "IsCursed": false,
+      "Version": "1e",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Staff of Mogref",
+      "Type": "Weapon",
+      "Slot": "",
+      "Cost": 3000,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "1d6",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "MagicUser",
+        "Illusionist",
+        "Monk"
+      ],
+      "Rarity": "Common",
+      "Description": "[Use] Chants Mogref",
+      "SpecialAbilities": [],
+      "Source": "Wizardry",
+      "StockQuantity": 0,
+      "DamageVsLarge": "1d6",
+      "DamageType": "Blunt",
+      "SpeedFactor": 4,
+      "WeaponLength": "Long",
+      "IsTwoHanded": true,
+      "Range": "",
+      "MagicBonus": 0,
+      "IsCursed": false,
+      "Version": "1e",
+      "ToHitBonus": 0
+    },
+    {
+      "Name": "Mace of Poison",
+      "Type": "Weapon",
+      "Slot": "",
+      "Cost": 10000,
+      "Weight": 50,
+      "IsShopBuyable": true,
+      "ArmorClassBonus": 0,
+      "Damage": "1d6+1",
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Assassin",
+        "Bard"
+      ],
+      "Rarity": "Rare",
+      "Description": "A mace that poisons its victims.",
+      "SpecialAbilities": [
+        "Poison"
+      ],
+      "Source": "Wizardry",
+      "StockQuantity": 0,
+      "DamageVsLarge": "1d4+1",
+      "DamageType": "Blunt",
+      "SpeedFactor": 6,
+      "WeaponLength": "Short",
+      "IsTwoHanded": false,
+      "Range": "",
+      "MagicBonus": 0,
+      "IsCursed": false,
+      "Version": "1e",
+      "ToHitBonus": 0
+    }
+  ]
+}

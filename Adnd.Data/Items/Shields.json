@@ -10,11 +10,20 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Common",
       "Description": "A small shield offering basic protection./Small Shield",
-      "Source": "Adnd",
-      "StockQuantity": 6
+      "Source": "WizardryAndAdnd",
+      "StockQuantity": -1
     },
     {
       "Name": "Large Shield",
@@ -25,11 +34,20 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Common",
       "Description": "A small shield offering basic protection./Small Shield",
-      "Source": "Adnd",
-      "StockQuantity": 6
+      "Source": "WizardryAndAdnd",
+      "StockQuantity": -1
     },
     {
       "Name": "Small Shield,wooden",
@@ -40,40 +58,19 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Common",
       "Description": "A small shield offering basic protection./Small Shield",
       "Source": "Adnd",
-      "StockQuantity": 6
-    },
-    {
-      "Name": "Small Shield",
-      "Type": "Shield",
-      "Slot": "OffHand",
-      "Cost": 20,
-      "Weight": 50,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 1,
-      "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
-      "Rarity": "Common",
-      "Description": "A small shield offering basic protection./Small Shield",
-      "Source": "Wizardry",
-      "StockQuantity": 6
-    },
-    {
-      "Name": "Large Shield",
-      "Type": "Shield",
-      "Slot": "OffHand",
-      "Cost": 40,
-      "Weight": 100,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 2,
-      "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
-      "Rarity": "Common",
-      "Description": "A large shield providing solid defense.",
-      "Source": "Wizardry",
       "StockQuantity": 6
     },
     {
@@ -85,7 +82,16 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 2,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Uncommon",
       "Description": "A sturdy iron shield reinforced with magic. / Iron Shield",
       "Source": "Adnd",
@@ -100,25 +106,19 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 3,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Rare",
       "Description": "A magically enhanced shield offering excellent protection. / Shield of Support",
       "Source": "Adnd",
-      "StockQuantity": 0
-    },
-    {
-      "Name": "Evil Shield +3",
-      "Type": "Shield",
-      "Slot": "OffHand",
-      "Cost": 9000,
-      "Weight": 100,
-      "IsShopBuyable": false,
-      "ArmorClassBonus": 4,
-      "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
-      "Rarity": "Rare",
-      "Description": "A cursed shield infused with evil power. / Shield of Evil",
-      "Source": "Wizardry",
       "StockQuantity": 0
     },
     {
@@ -130,7 +130,16 @@
       "IsShopBuyable": true,
       "ArmorClassBonus": 4,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Very Rare",
       "Description": "A powerful enchanted shield offering superior defense. / Shield of Defense",
       "Source": "Adnd",
@@ -145,7 +154,16 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 6,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger",
+        "Cleric",
+        "Druid",
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Legendary",
       "Description": "Legendary enchanted shield.",
       "Source": "Adnd",

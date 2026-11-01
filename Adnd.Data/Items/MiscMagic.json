@@ -11,10 +11,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A ceramic container that magically creates liquids when the user names the substance",
-      "SpecialAbilities": [ "Casts Create Liquid" ],
+      "SpecialAbilities": [
+        "Casts Create Liquid"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -28,7 +32,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed amulet that makes the wearer easy to magically locate.",
       "SpecialAbilities": [],
@@ -45,7 +51,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "An amulet that protects the wearer from level drain and death magic.",
       "SpecialAbilities": [],
@@ -62,7 +70,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "An amulet that allows planar travel, though often unpredictably.",
       "SpecialAbilities": [],
@@ -79,7 +89,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "An amulet that prevents magical detection and scrying.",
       "SpecialAbilities": [],
@@ -96,7 +108,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A mechanical device that transforms into a submersible vehicle.",
       "SpecialAbilities": [],
@@ -113,7 +127,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "An arrow that always points toward a chosen destination.",
       "SpecialAbilities": [],
@@ -130,7 +146,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Legendary",
       "Description": "A powerful artifact or relic with unique effects determined by special tables.",
       "SpecialAbilities": [],
@@ -147,7 +165,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A bag containing magical beans with unpredictable effects.",
       "SpecialAbilities": [],
@@ -164,7 +184,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed bag that consumes items placed inside.",
       "SpecialAbilities": [],
@@ -181,7 +203,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical bag that holds far more than its size suggests.",
       "SpecialAbilities": [],
@@ -198,7 +222,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed bag that transforms items placed inside into worthless material.",
       "SpecialAbilities": [],
@@ -215,7 +241,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A bag that summons random creatures when used.",
       "SpecialAbilities": [],
@@ -232,7 +260,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A beaker that produces random magical potions.",
       "SpecialAbilities": [],
@@ -249,7 +279,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A wooden box that unfolds into a functional boat.",
       "SpecialAbilities": [],
@@ -266,7 +298,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Legendary",
       "Description": "A holy tome that grants great power to good clerics.",
       "SpecialAbilities": [],
@@ -283,7 +317,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Legendary",
       "Description": "A magical book containing many spells, its pages turning unpredictably.",
       "SpecialAbilities": [],
@@ -300,7 +336,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Legendary",
       "Description": "A corrupt tome that empowers evil clerics and harms good creatures.",
       "SpecialAbilities": [],
@@ -317,7 +355,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Small magical boats that move erratically when activated.",
       "SpecialAbilities": [],
@@ -334,7 +374,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Boots that allow the wearer to move silently.",
       "SpecialAbilities": [],
@@ -351,7 +393,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "Boots that allow the wearer to levitate at will.",
       "SpecialAbilities": [],
@@ -368,7 +412,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "Boots that greatly increase the wearer's movement speed.",
       "SpecialAbilities": [],
@@ -385,7 +431,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "Boots that enhance walking speed and jumping distance.",
       "SpecialAbilities": [],
@@ -402,7 +450,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A bowl that summons and controls water elementals.",
       "SpecialAbilities": [],
@@ -419,7 +469,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed bowl that harms those who use it.",
       "SpecialAbilities": [],
@@ -436,7 +488,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Bracers that improve the wearer's armor class.",
       "SpecialAbilities": [],
@@ -453,7 +507,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": -2,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "Cursed bracers that worsen the wearer's armor class.",
       "SpecialAbilities": [],
@@ -470,7 +526,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A brazier that summons and controls fire elementals.",
       "SpecialAbilities": [],
@@ -487,7 +545,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Uncommon",
       "Description": "A brazier that emits magical smoke causing sleep.",
       "SpecialAbilities": [],
@@ -504,7 +564,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A brooch that absorbs magic missile attacks.",
       "SpecialAbilities": [],
@@ -521,7 +583,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A broom that animates and attacks creatures nearby.",
       "SpecialAbilities": [],
@@ -538,7 +602,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A magical broom that allows the user to fly.",
       "SpecialAbilities": [],
@@ -555,7 +621,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A purse that magically produces coins each day.",
       "SpecialAbilities": [],
@@ -572,7 +640,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Rare",
       "Description": "A candle that enhances clerical spellcasting and summons extraplanar beings.",
       "SpecialAbilities": [],
@@ -589,7 +659,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical carpet capable of flight and carrying passengers.",
       "SpecialAbilities": [],
@@ -606,7 +678,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A censer that summons and controls air elementals.",
       "SpecialAbilities": [],
@@ -623,7 +697,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed censer that summons hostile air elementals instead of friendly ones.",
       "SpecialAbilities": [],
@@ -640,7 +716,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical chime that opens locks and sealed doors when struck.",
       "SpecialAbilities": [],
@@ -657,7 +735,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Legendary",
       "Description": "A cursed chime that inflicts magical hunger upon those nearby.",
       "SpecialAbilities": [],
@@ -674,10 +754,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 2,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "This cloak displaces the wearer's apparent location. The first missile or melee attack aimed at the wearer in combat misses automatically; thereafter it grants +2 AC and +2 on saving throws versus aimed attack forms.",
-      "SpecialAbilities": [ "Displacement" ],
+      "SpecialAbilities": [
+        "Displacement"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -691,7 +775,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A cloak that grants superior stealth and blending with surroundings.",
       "SpecialAbilities": [],
@@ -708,7 +794,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A cloak that grants resistance to magical energy attacks.",
       "SpecialAbilities": [],
@@ -725,7 +813,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed cloak that poisons the wearer when donned.",
       "SpecialAbilities": [],
@@ -742,7 +832,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A cloak that improves the wearer's armor class and saving throws.",
       "SpecialAbilities": [],
@@ -759,7 +851,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Rare",
       "Description": "A crystal sphere used for scrying distant locations and creatures.",
       "SpecialAbilities": [],
@@ -776,7 +870,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Uncommon",
       "Description": "A crystal ball that can hypnotize those who gaze into it.",
       "SpecialAbilities": [],
@@ -793,10 +889,19 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A small figurine that transforms into a magical creature when activated.",
-      "SpecialAbilities": [ "FigurineType:Unknown", "FigurineActive:0", "FigurineWeekStartDay:0", "FigurineUsesInWeek:0", "FigurineLastUseDay:-99999", "FigurineSummonDay:-1" ],
+      "SpecialAbilities": [
+        "FigurineType:Unknown",
+        "FigurineActive:0",
+        "FigurineWeekStartDay:0",
+        "FigurineUsesInWeek:0",
+        "FigurineLastUseDay:-99999",
+        "FigurineSummonDay:-1"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -810,7 +915,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed flask that releases harmful magical effects when opened.",
       "SpecialAbilities": [],
@@ -827,7 +934,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Gauntlets that increase the wearer's manual dexterity and agility.",
       "SpecialAbilities": [],
@@ -844,7 +953,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "Cursed gauntlets that cause the wearer to drop items and fail actions.",
       "SpecialAbilities": [],
@@ -861,7 +972,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Fighter", "Thief" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Fighter",
+        "Thief"
+      ],
       "Rarity": "Rare",
       "Description": "Gauntlets that grant the wearer the immense strength of an ogre.",
       "SpecialAbilities": [],
@@ -878,7 +993,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Fighter", "Thief" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Fighter",
+        "Thief"
+      ],
       "Rarity": "Rare",
       "Description": "Gauntlets that grant exceptional swimming and climbing ability.",
       "SpecialAbilities": [],
@@ -895,7 +1014,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A gem that emits blinding beams of light when activated.",
       "SpecialAbilities": [],
@@ -912,7 +1033,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A gem that grants true seeing and reveals illusions and invisibility.",
       "SpecialAbilities": [],
@@ -929,7 +1052,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Fighter", "Thief" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Fighter",
+        "Thief"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed girdle that permanently changes the wearer's gender.",
       "SpecialAbilities": [],
@@ -946,7 +1073,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Fighter", "Thief" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Fighter",
+        "Thief"
+      ],
       "Rarity": "Uncommon",
       "Description": "A girdle that grants the wearer the strength of a giant.",
       "SpecialAbilities": [],
@@ -963,7 +1094,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Legendary",
       "Description": "A powerful helm studded with gems that unleash devastating magical effects.",
       "SpecialAbilities": [],
@@ -980,7 +1113,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A helm that allows the wearer to understand languages and read magical texts.",
       "SpecialAbilities": [],
@@ -997,7 +1132,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed helm that permanently reverses the wearer's alignment.",
       "SpecialAbilities": [],
@@ -1014,7 +1151,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A helm that grants telepathic communication and mind‑reading abilities.",
       "SpecialAbilities": [],
@@ -1031,7 +1170,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A helm that allows the wearer to teleport to known locations.",
       "SpecialAbilities": [],
@@ -1048,7 +1189,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A helm that allows the wearer to breathe and see clearly underwater.",
       "SpecialAbilities": [],
@@ -1065,7 +1208,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A horn that unleashes a powerful sonic blast capable of destroying structures.",
       "SpecialAbilities": [],
@@ -1082,7 +1227,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Legendary",
       "Description": "A whimsical horn that produces harmless magical bubbles.",
       "SpecialAbilities": [],
@@ -1099,7 +1246,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A horn that causes structures and tunnels to collapse when blown.",
       "SpecialAbilities": [],
@@ -1116,7 +1265,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Fighter" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Fighter"
+      ],
       "Rarity": "Rare",
       "Description": "A horn that commands sea creatures and controls water-based magic.",
       "SpecialAbilities": [],
@@ -1133,7 +1285,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A horn that summons warrior spirits from Valhalla to fight for the user.",
       "SpecialAbilities": [],
@@ -1150,7 +1304,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Magical horseshoes that greatly increase a mount's movement speed.",
       "SpecialAbilities": [],
@@ -1167,7 +1323,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Horseshoes that allow a mount to move without touching the ground.",
       "SpecialAbilities": [],
@@ -1184,7 +1342,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Rare",
       "Description": "Incense that enhances clerical spellcasting when used during prayer.",
       "SpecialAbilities": [],
@@ -1201,7 +1361,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Uncommon",
       "Description": "Cursed incense that causes the user to become dangerously obsessed with a task.",
       "SpecialAbilities": [],
@@ -1218,7 +1380,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A floating magical stone that sustains the wearer without food or water.",
       "SpecialAbilities": [],
@@ -1235,7 +1399,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A floating stone that grants a small armor class bonus.",
       "SpecialAbilities": [],
@@ -1252,7 +1418,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Rare",
       "Description": "A floating stone that enhances magical spellcasting energy.",
       "SpecialAbilities": [],
@@ -1269,7 +1437,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Rare",
       "Description": "A floating stone that increases the wearer's wisdom and insight.",
       "SpecialAbilities": [],
@@ -1286,7 +1456,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Fighter" ],
+      "AllowedClasses": [
+        "Fighter"
+      ],
       "Rarity": "Rare",
       "Description": "A floating stone that enhances physical coordination and combat ability.",
       "SpecialAbilities": [],
@@ -1303,7 +1475,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A floating stone that boosts magical potency and spell accuracy.",
       "SpecialAbilities": [],
@@ -1320,7 +1494,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Rare",
       "Description": "A floating stone that enhances the wearer's physical health and vitality.",
       "SpecialAbilities": [],
@@ -1337,7 +1513,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A floating stone that increases the wearer's intelligence and spellcraft.",
       "SpecialAbilities": [],
@@ -1354,7 +1532,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A floating stone that stores spell energy for later use.",
       "SpecialAbilities": [],
@@ -1371,7 +1551,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Thief" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Thief"
+      ],
       "Rarity": "Rare",
       "Description": "A set of magical iron bands that can restrain a target when thrown.",
       "SpecialAbilities": [],
@@ -1388,7 +1571,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Cleric" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Cleric"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical flask capable of trapping extraplanar creatures.",
       "SpecialAbilities": [],
@@ -1405,7 +1591,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Lightning Strike",
-      "AllowedClasses": [ "Fighter" ],
+      "AllowedClasses": [
+        "Fighter"
+      ],
       "Rarity": "Rare",
       "Description": "A javelin that transforms into a bolt of lightning when thrown.",
       "SpecialAbilities": [],
@@ -1422,7 +1610,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Piercing",
-      "AllowedClasses": [ "Fighter" ],
+      "AllowedClasses": [
+        "Fighter"
+      ],
       "Rarity": "Rare",
       "Description": "A magical javelin that penetrates armor with ease.",
       "SpecialAbilities": [],
@@ -1439,7 +1629,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A jug that produces various magical liquids on command.",
       "SpecialAbilities": [],
@@ -1456,7 +1648,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Druid" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Druid"
+      ],
       "Rarity": "Rare",
       "Description": "A healing ointment that cures wounds, diseases, and poisons.",
       "SpecialAbilities": [],
@@ -1473,7 +1668,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Rare",
       "Description": "A magnifying lens that reveals hidden objects and secret doors.",
       "SpecialAbilities": [],
@@ -1490,7 +1689,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Fighter" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Fighter"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical tome that permanently increases the reader's Constitution.",
       "SpecialAbilities": [],
@@ -1507,7 +1709,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Fighter" ],
+      "AllowedClasses": [
+        "Fighter"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical tome that permanently increases the reader's Strength.",
       "SpecialAbilities": [],
@@ -1524,7 +1728,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Legendary",
       "Description": "A tome containing instructions for creating powerful golems.",
       "SpecialAbilities": [],
@@ -1541,7 +1747,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Thief", "Assassin", "Bard" ],
+      "AllowedClasses": [
+        "Thief",
+        "Assassin",
+        "Bard"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical tome that permanently increases the reader's Dexterity.",
       "SpecialAbilities": [],
@@ -1558,7 +1768,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Illusionist" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Illusionist"
+      ],
       "Rarity": "Rare",
       "Description": "Magical paints that create real objects when applied to a surface.",
       "SpecialAbilities": [],
@@ -1575,7 +1788,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Petrification Gaze",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A cursed mask that turns the wearer into a petrifying horror.",
       "SpecialAbilities": [],
@@ -1592,7 +1807,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Illusionist" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Illusionist"
+      ],
       "Rarity": "Rare",
       "Description": "A medallion that grants the wearer extrasensory perception.",
       "SpecialAbilities": [],
@@ -1609,7 +1827,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Illusionist" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Illusionist"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed medallion that broadcasts the wearer's thoughts to others.",
       "SpecialAbilities": [],
@@ -1626,7 +1847,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A powerful mirror that traps creatures within extradimensional cells.",
       "SpecialAbilities": [],
@@ -1643,7 +1866,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Legendary",
       "Description": "A mirror that grants scrying, ESP, and powerful mental abilities.",
       "SpecialAbilities": [],
@@ -1660,7 +1885,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Fireball",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A necklace with magical beads that explode as fireballs when thrown.",
       "SpecialAbilities": [],
@@ -1677,7 +1904,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Strangulation",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed necklace that strangles the wearer to death when put on.",
       "SpecialAbilities": [],
@@ -1694,7 +1923,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Entanglement",
-      "AllowedClasses": [ "Fighter", "Thief" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Thief"
+      ],
       "Rarity": "Rare",
       "Description": "A magical net that automatically entangles creatures it is thrown at.",
       "SpecialAbilities": [],
@@ -1711,7 +1943,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Illusionist" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Illusionist"
+      ],
       "Rarity": "Rare",
       "Description": "Magical pigments that create real objects when painted onto a surface.",
       "SpecialAbilities": [],
@@ -1728,7 +1963,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "All" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Enhanced pigments capable of creating larger and more complex real objects.",
       "SpecialAbilities": [],
@@ -1745,7 +1983,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Lightning, Thunder",
-      "AllowedClasses": [ "MagicUser", "Cleric" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Cleric"
+      ],
       "Rarity": "Very Rare",
       "Description": "A powerful orb that allows the user to summon and control storms.",
       "SpecialAbilities": [],
@@ -1762,7 +2003,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Rare",
       "Description": "A pearl that restores a previously cast spell to the user.",
       "SpecialAbilities": [],
@@ -1779,7 +2022,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Druid" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Druid"
+      ],
       "Rarity": "Rare",
       "Description": "A periapt that protects the wearer from disease and sickness.",
       "SpecialAbilities": [],
@@ -1796,7 +2042,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Druid" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Druid"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical pendant that grants immunity to all poisons.",
       "SpecialAbilities": [],
@@ -1813,7 +2062,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "Druid" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Druid"
+      ],
       "Rarity": "Rare",
       "Description": "A periapt that stabilizes the wearer and doubles natural healing speed.",
       "SpecialAbilities": [],
@@ -1830,7 +2082,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Rare",
       "Description": "A holy item that warns the wearer when an action violates their deity's ethos.",
       "SpecialAbilities": [],
@@ -1847,7 +2101,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Fear",
-      "AllowedClasses": [ "Bard", "Thief", "Assassin" ],
+      "AllowedClasses": [
+        "Bard",
+        "Thief",
+        "Assassin"
+      ],
       "Rarity": "Rare",
       "Description": "Pipes that emit a terrifying melody causing fear in nearby creatures.",
       "SpecialAbilities": [],
@@ -1864,7 +2122,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Bard", "Thief" ],
+      "AllowedClasses": [
+        "Bard",
+        "Thief"
+      ],
       "Rarity": "Rare",
       "Description": "Pipes that summon and control swarms of rats from nearby areas.",
       "SpecialAbilities": [],
@@ -1881,7 +2142,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical cloth that creates an extradimensional space when unfolded.",
       "SpecialAbilities": [],
@@ -1898,7 +2161,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A magical token that creates a massive immovable anchor when used.",
       "SpecialAbilities": [],
@@ -1915,7 +2180,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A token that summons a large magical bird capable of carrying messages.",
       "SpecialAbilities": [],
@@ -1932,7 +2199,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Wind Gust",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A token that creates a powerful fan generating strong gusts of wind.",
       "SpecialAbilities": [],
@@ -1949,7 +2218,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A token that summons a large magical swan-shaped boat.",
       "SpecialAbilities": [],
@@ -1966,7 +2237,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A token that instantly grows into a full-sized oak tree.",
       "SpecialAbilities": [],
@@ -1983,7 +2256,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Whip Strike",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A token that becomes a magical whip capable of attacking on its own.",
       "SpecialAbilities": [],
@@ -2000,7 +2275,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Cleric" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Cleric"
+      ],
       "Rarity": "Very Rare",
       "Description": "A robe covered in magical eyes granting all-around vision and detection.",
       "SpecialAbilities": [],
@@ -2017,7 +2295,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Dazzle",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A robe that emits dazzling lights capable of confusing and stunning foes.",
       "SpecialAbilities": [],
@@ -2034,7 +2314,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Magic Missile",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A robe that allows the wearer to travel to the Astral Plane and fire star bolts.",
       "SpecialAbilities": [],
@@ -2051,14 +2333,15 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A robe with patches that transform into useful tools and objects.",
       "SpecialAbilities": [],
       "Source": "Adnd",
       "StockQuantity": 0
     },
-
     {
       "Status": "Implemented",
       "Name": "Rope of Climbing",
@@ -2069,7 +2352,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Thief", "Fighter", "All" ],
+      "AllowedClasses": [
+        "Thief",
+        "Fighter",
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A magical rope that moves on command and assists in climbing.",
       "SpecialAbilities": [],
@@ -2086,7 +2373,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Entanglement",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A rope that animates and entangles creatures when commanded.",
       "SpecialAbilities": [],
@@ -2103,7 +2392,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Aggro",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed scarab that causes nearby enemies to become enraged at the wearer.",
       "SpecialAbilities": [],
@@ -2120,7 +2411,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Spell Resistance",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A scarab that protects the wearer from curses, death magic, and harmful spells.",
       "SpecialAbilities": [],
@@ -2137,7 +2430,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Instant Death",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed scarab that kills the wearer when activated.",
       "SpecialAbilities": [],
@@ -2154,7 +2449,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "Thief", "MagicUser" ],
+      "AllowedClasses": [
+        "Thief",
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A cloak that allows the wearer to blend into shadows and become nearly invisible.",
       "SpecialAbilities": [],
@@ -2171,7 +2469,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Cleric" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Cleric"
+      ],
       "Rarity": "Uncommon",
       "Description": "A cursed shield that attracts all incoming missile attacks toward the wearer.",
       "SpecialAbilities": [],
@@ -2188,7 +2489,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "An incredibly strong magical adhesive that bonds permanently to any surface.",
       "SpecialAbilities": [],
@@ -2205,7 +2508,11 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Cleric", "All" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Cleric",
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A magical spade that can dig enormous trenches and move earth effortlessly.",
       "SpecialAbilities": [],
@@ -2222,7 +2529,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Earth Elemental Control",
-      "AllowedClasses": [ "MagicUser", "Cleric" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Cleric"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical stone that summons and commands earth elementals.",
       "SpecialAbilities": [],
@@ -2239,7 +2549,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 1,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A stone that improves saving throws, ability checks, and general fortune.",
       "SpecialAbilities": [],
@@ -2256,10 +2568,15 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Holy Destruction",
-      "AllowedClasses": [ "Cleric", "Paladin" ],
+      "AllowedClasses": [
+        "Cleric",
+        "Paladin"
+      ],
       "Rarity": "Legendary",
       "Description": "A powerful talisman that destroys evil creatures who touch it.",
-      "SpecialAbilities": [ "Talisman of Pure Good" ],
+      "SpecialAbilities": [
+        "Talisman of Pure Good"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2273,7 +2590,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Unholy Destruction",
-      "AllowedClasses": [ "Cleric" ],
+      "AllowedClasses": [
+        "Cleric"
+      ],
       "Rarity": "Legendary",
       "Description": "A talisman that annihilates good creatures who touch it.",
       "SpecialAbilities": [],
@@ -2290,7 +2609,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Sphere Control",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A talisman that allows limited control over a Sphere of Annihilation.",
       "SpecialAbilities": [],
@@ -2307,7 +2628,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical tome that permanently increases the reader’s Intelligence.",
       "SpecialAbilities": [],
@@ -2324,7 +2647,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "All" ],
+      "AllowedClasses": [
+        "Cleric",
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A tome that permanently increases the reader’s Charisma.",
       "SpecialAbilities": [],
@@ -2341,7 +2667,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Cleric", "MagicUser" ],
+      "AllowedClasses": [
+        "Cleric",
+        "MagicUser"
+      ],
       "Rarity": "Very Rare",
       "Description": "A tome that permanently increases the reader’s Wisdom.",
       "SpecialAbilities": [],
@@ -2358,7 +2687,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A magical liquid that dissolves Sovereign Glue and other powerful adhesives.",
       "SpecialAbilities": [],
@@ -2375,7 +2706,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "Intelligence & Wisdom Drain",
-      "AllowedClasses": [ "MagicUser" ],
+      "AllowedClasses": [
+        "MagicUser"
+      ],
       "Rarity": "Legendary",
       "Description": "A cursed tome that permanently drains Intelligence and Wisdom from anyone who reads it.",
       "SpecialAbilities": [],
@@ -2392,7 +2725,10 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "All" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "All"
+      ],
       "Rarity": "Legendary",
       "Description": "A magical portal that opens gateways to random other planes of existence.",
       "SpecialAbilities": [],
@@ -2409,28 +2745,13 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A magical harness that grants the wearer the ability to fly like a bird.",
       "SpecialAbilities": [],
       "Source": "Adnd",
-      "StockQuantity": 0
-    },
-    {
-      "Status": "NotImplemented",
-      "Name": "Jeweled Amulet",
-      "Type": "MagicItem",
-      "Slot": "Neck",
-      "Cost": 5000,
-      "Weight": 1,
-      "IsShopBuyable": true,
-      "ArmorClassBonus": 0,
-      "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger", "Cleric", "Druid", "Thief", "Assassin", "Bard", "MagicUser", "Illusionist", "Monk" ],
-      "Rarity": "Uncommon",
-      "Description": "A jeweled amulet that casts DUMAPIC.",
-      "SpecialAbilities": [ "Casts DUMAPIC" ],
-      "Source": "Wizardry",
       "StockQuantity": 0
     },
     {
@@ -2443,7 +2764,9 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 6,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "Magical bracers that provide substantial armor protection.",
       "SpecialAbilities": [],
@@ -2460,10 +2783,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Absorbs magic missile attacks up to a limited total.",
-      "SpecialAbilities": [ "Magic Missile Absorption" ],
+      "SpecialAbilities": [
+        "Magic Missile Absorption"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2477,10 +2804,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A cloak that grants exceptional stealth.",
-      "SpecialAbilities": [ "Stealth Bonus" ],
+      "SpecialAbilities": [
+        "Stealth Bonus"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2494,10 +2825,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Reveals invisible creatures in an area.",
-      "SpecialAbilities": [ "Reveal Invisibility" ],
+      "SpecialAbilities": [
+        "Reveal Invisibility"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2511,10 +2846,21 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A figurine that becomes a magical owl companion when activated.",
-      "SpecialAbilities": [ "FigurineType:SerpentineOwl", "FigurineActive:0", "FigurineWeekStartDay:0", "FigurineUsesInWeek:0", "FigurineLastUseDay:-99999", "FigurineSummonDay:-1", "FigurineRuined:0", "FigurineOwlGiantUsesRemaining:3" ],
+      "SpecialAbilities": [
+        "FigurineType:SerpentineOwl",
+        "FigurineActive:0",
+        "FigurineWeekStartDay:0",
+        "FigurineUsesInWeek:0",
+        "FigurineLastUseDay:-99999",
+        "FigurineSummonDay:-1",
+        "FigurineRuined:0",
+        "FigurineOwlGiantUsesRemaining:3"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2528,10 +2874,19 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Commands an ebony fly mount (core implementation: summon/revert/cooldown).",
-      "SpecialAbilities": [ "FigurineType:EbonyFly", "FigurineActive:0", "FigurineWeekStartDay:0", "FigurineUsesInWeek:0", "FigurineLastUseDay:-99999", "FigurineSummonDay:-1" ],
+      "SpecialAbilities": [
+        "FigurineType:EbonyFly",
+        "FigurineActive:0",
+        "FigurineWeekStartDay:0",
+        "FigurineUsesInWeek:0",
+        "FigurineLastUseDay:-99999",
+        "FigurineSummonDay:-1"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2545,10 +2900,19 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "Commands a pair of golden lions (core implementation: summon/revert/cooldown).",
-      "SpecialAbilities": [ "FigurineType:GoldenLions", "FigurineActive:0", "FigurineWeekStartDay:0", "FigurineUsesInWeek:0", "FigurineLastUseDay:-99999", "FigurineSummonDay:-1" ],
+      "SpecialAbilities": [
+        "FigurineType:GoldenLions",
+        "FigurineActive:0",
+        "FigurineWeekStartDay:0",
+        "FigurineUsesInWeek:0",
+        "FigurineLastUseDay:-99999",
+        "FigurineSummonDay:-1"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2562,10 +2926,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "Increase movement and jumping ability.",
-      "SpecialAbilities": [ "Movement Bonus" ],
+      "SpecialAbilities": [
+        "Movement Bonus"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2579,10 +2947,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A pipe that can summon and control rats.",
-      "SpecialAbilities": [ "Summon Rats" ],
+      "SpecialAbilities": [
+        "Summon Rats"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2596,10 +2968,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A robe that allows the wearer to blend into surroundings.",
-      "SpecialAbilities": [ "Camouflage" ],
+      "SpecialAbilities": [
+        "Camouflage"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2613,10 +2989,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A rope that animates and climbs on command.",
-      "SpecialAbilities": [ "Autonomous Climb" ],
+      "SpecialAbilities": [
+        "Autonomous Climb"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2630,10 +3010,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Rare",
       "Description": "A rope that binds and entangles targets.",
-      "SpecialAbilities": [ "Entangle Target" ],
+      "SpecialAbilities": [
+        "Entangle Target"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2647,10 +3031,16 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "Fighter", "Paladin", "Ranger" ],
+      "AllowedClasses": [
+        "Fighter",
+        "Paladin",
+        "Ranger"
+      ],
       "Rarity": "Legendary",
       "Description": "Summons berserk warriors when blown.",
-      "SpecialAbilities": [ "Summon Berserkers" ],
+      "SpecialAbilities": [
+        "Summon Berserkers"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2664,10 +3054,15 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "MagicUser", "Illusionist" ],
+      "AllowedClasses": [
+        "MagicUser",
+        "Illusionist"
+      ],
       "Rarity": "Legendary",
       "Description": "Dazzling robe with powerful defensive and confusion effects.",
-      "SpecialAbilities": [ "Scintillating Defense" ],
+      "SpecialAbilities": [
+        "Scintillating Defense"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2681,10 +3076,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical cube that projects protective force barriers.",
-      "SpecialAbilities": [ "Force Barrier" ],
+      "SpecialAbilities": [
+        "Force Barrier"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     },
@@ -2698,10 +3097,14 @@
       "IsShopBuyable": false,
       "ArmorClassBonus": 0,
       "Damage": "",
-      "AllowedClasses": [ "All" ],
+      "AllowedClasses": [
+        "All"
+      ],
       "Rarity": "Very Rare",
       "Description": "A magical eye set that grants charm powers.",
-      "SpecialAbilities": [ "Charm" ],
+      "SpecialAbilities": [
+        "Charm"
+      ],
       "Source": "Adnd",
       "StockQuantity": 0
     }
