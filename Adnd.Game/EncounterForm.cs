@@ -628,7 +628,8 @@ public sealed class EncounterForm : Form
     {
         _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
         _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
-        _resultTimer ??= new System.Windows.Forms.Timer { Interval = 1000 };
+        _resultTimer ??= new System.Windows.Forms.Timer();
+        _resultTimer.Interval = Math.Max(1, GameRulesProvider.Current.DelayInbetweenCombatMessages);
         _resultTimer.Tick -= ResultTimer_Tick;
         _resultTimer.Tick += ResultTimer_Tick;
         ShowResultLine();

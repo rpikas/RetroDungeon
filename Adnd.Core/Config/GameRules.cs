@@ -76,6 +76,8 @@ public class GameRules
     public BoltacItemSourceOptions BoltacItemSourceFilter { get; set; } = BoltacItemSourceOptions.BothAdndAndWizardry;
     public bool UIOldStyle { get; set; } = true;
     public int DelayInMsbetweenActions { get; set; } =0;
+    // Milliseconds between messages in Wizardry-style combat.
+    public int DelayInbetweenCombatMessages { get; set; } = 1000;
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
     public bool ShowReferencesInRuleAndDiceInfo { get; set; } = true;
     public bool ShowToHitRoll { get; set; } = false;

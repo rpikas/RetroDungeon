@@ -13,6 +13,7 @@
   "BoltacItemSourceFilter": 2,
   "UIOldStyle": true,
   "DelayInMsbetweenActions": 0,
+  "DelayInbetweenCombatMessages": 1000,
   "ShowDiceRollAndRuleApplicationInfo": true,
   "ShowReferencesInRuleAndDiceInfo": true,
   "ShowToHitRoll": false,
