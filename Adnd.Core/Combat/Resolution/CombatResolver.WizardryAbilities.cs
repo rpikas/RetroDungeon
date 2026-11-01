@@ -11,7 +11,7 @@ namespace Adnd.Core.Combat.Resolution;
 public sealed partial class CombatResolver
 {
     private const string WizardryHelpGroupPrefix = "help-";
-    private const int WizardryDecapitateChancePercent = 5;
+    private const int WizardryDecapitateChancePercentPerHitDie = 2;
 
     private readonly HashSet<MonsterInstance> _wizardryHelpCalled = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
 
@@ -103,8 +103,15 @@ public sealed partial class CombatResolver
         if (!HasSpecialAbility(monster, "Decapitate") || !IsAlive(target))
             return;
 
+        var chancePercent = Math.Max(1, monster.Template.HitDice) * WizardryDecapitateChancePercentPerHitDie;
         var roll = _dice.Roll(100);
-        if (roll > WizardryDecapitateChancePercent)
+        var attempted = roll <= chancePercent;
+        RuleApplicationInfo.Publish("Wizardry", "Decapitate",
+            $"{monster.DisplayName} decapitate chance vs {target.Name}",
+            $"Decapitate chance is {WizardryDecapitateChancePercentPerHitDie}% per hit die: {Math.Max(1, monster.Template.HitDice)} HD = {chancePercent}%.",
+            "1", "100", roll.ToString(),
+            attempted ? $"Rolled {roll} <= {chancePercent}%: decapitation attempt." : $"Rolled {roll} > {chancePercent}%: no attempt.");
+        if (!attempted)
             return;
 
         var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
@@ -115,7 +122,7 @@ public sealed partial class CombatResolver
 
         RuleApplicationInfo.Publish("Wizardry", "Decapitate",
             $"{monster.DisplayName} attempts to decapitate {target.Name}",
-            $"A hit has a {WizardryDecapitateChancePercent}% chance to be a decapitation attempt; failing a save vs Death kills instantly.",
+            $"A hit can be a decapitation attempt ({WizardryDecapitateChancePercentPerHitDie}% per hit die); failing a save vs Death kills instantly.",
             "1", "20", saveRoll.ToString(),
             $"Save target {saveTarget}. {(failed ? "Failed save: decapitated." : "Successful save.")}");
 
