@@ -109,6 +109,7 @@ public sealed class CombatCoordinator
             new CureDiseaseHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
+            new RestorationHandler(),
             new HarmHandler(),
             new SpiritualHammerHandler(),
             new GlyphOfWardingHandler(),

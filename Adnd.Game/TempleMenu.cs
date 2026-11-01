@@ -25,16 +25,18 @@ public class TempleMenu
             Console.WriteLine("=== Church of Chant ===");
             Console.WriteLine("Service / Spell                Fee");
             Console.WriteLine("Heal hit points                15 gp/hp");
-            Console.WriteLine($"Cure poison                    {Temple.CurePoisonCost} gp");
+            Console.WriteLine($"Neutralize poison              {Temple.CurePoisonCost} gp");
             Console.WriteLine($"Remove paralyzation            {Temple.CureParalysisCost} gp");
-            Console.WriteLine($"Raise dead                     {Temple.RaiseDeadCost} gp");
-            Console.WriteLine($"Resurrection                   {Temple.RaiseFromAshesCost} gp");
+            Console.WriteLine($"Raise dead                     {Temple.RaiseDeadBaseCost} gp + {Temple.RaiseDeadCostPerLevel} gp/level of target");
+            Console.WriteLine($"Resurrection                   twice the Raise dead fee");
+            Console.WriteLine($"Restoration                    {RestorationRules.BaseCost} gp + {RestorationRules.CostPerRecipientLevel} gp/level of recipient");
             Console.WriteLine($"Cure feeblemind                {Temple.CureFeeblemindCost} gp");
             Console.WriteLine($"Cure disease                   {Temple.CureDiseaseCost} gp");
             Console.WriteLine($"Restore from petrification     {Temple.RestorePetrificationCost} gp");
             Console.WriteLine();
             Console.WriteLine("H)eal Party");
             Console.WriteLine("R)aise Dead");
+            Console.WriteLine("E) Restoration (lost level, feeblemind)");
             Console.WriteLine("L<-eave");
             if (_viewer.Enabled)
                 Console.WriteLine("(or click whoever needs tending on the table)");
@@ -61,6 +63,7 @@ public class TempleMenu
 
             if (key == ConsoleKey.H) HealParty(party);
             else if (key == ConsoleKey.R) RaiseDead(party);
+            else if (key == ConsoleKey.E) Restoration(party);
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
     }
@@ -235,6 +238,65 @@ public class TempleMenu
     {
         var roster = _charRepo.GetAll().ToDictionary(c => c.Name, c => c, StringComparer.OrdinalIgnoreCase);
         return party.Members.Where(roster.ContainsKey).Select(name => roster[name]).ToList();
+    }
+
+    private void Restoration(Party party)
+    {
+        var partyCharacters = PartyCharacters(party);
+        var candidates = partyCharacters.Where(Temple.CanBeRestored).ToList();
+
+        if (candidates.Count == 0)
+        {
+            Console.WriteLine("No one can be helped by Restoration (a level must have been drained within 15 days, or feeblemind present).");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.Clear();
+        Console.WriteLine("=== RESTORATION ===");
+        Console.WriteLine("The temple cleric (level 15) restores one drained level and cures feeblemind. Recipient ages 2 years.");
+        Console.WriteLine();
+        for (var i = 0; i < candidates.Count; i++)
+        {
+            var c = candidates[i];
+            Console.WriteLine($"{i + 1}. {c.Name} (level {c.Level}, Cost {Temple.CostToRestore(c)} gp)");
+        }
+
+        Console.Write("Choose #: ");
+        var selection = InputHelper.ReadNumber(1, candidates.Count);
+        if (!selection.HasValue)
+        {
+            Console.WriteLine("Invalid selection.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var target = candidates[selection.Value - 1];
+        var cost = Temple.CostToRestore(target);
+
+        Console.WriteLine();
+        Console.WriteLine($"Who will pay {cost} gp?");
+        for (var i = 0; i < partyCharacters.Count; i++)
+        {
+            var payer = partyCharacters[i];
+            var canAfford = payer.GoldPieces >= cost ? "" : " (not enough)";
+            Console.WriteLine($"{i + 1}. {payer.Name} ({payer.GoldPieces} gp){canAfford}");
+        }
+
+        Console.Write("Choose #: ");
+        var payerSelection = InputHelper.ReadNumber(1, partyCharacters.Count);
+        if (!payerSelection.HasValue)
+        {
+            Console.WriteLine("Invalid selection.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.WriteLine();
+        foreach (var line in Temple.Restore(target, partyCharacters[payerSelection.Value - 1], _charRepo))
+            Console.WriteLine(line);
+
+        Console.ReadKey(true);
     }
 
     private void RaiseDead(Party party)

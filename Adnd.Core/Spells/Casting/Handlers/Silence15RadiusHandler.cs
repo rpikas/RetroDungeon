@@ -24,7 +24,7 @@ public sealed class Silence15RadiusHandler : ISpellEffectHandler
         if (targets.Count == 0)
             return SpellCastResult.Failure("No valid targets for Silence 15' Radius in the selected group.");
 
-        var casterLevel = Math.Max(1, request.Caster.GetClassLevel(CharacterClass.Cleric));
+        var casterLevel = Math.Max(1, Math.Max(request.Caster.GetClassLevel(CharacterClass.Cleric), request.Caster.Level));
         var rounds = casterLevel * 2;
 
         foreach (var target in targets)

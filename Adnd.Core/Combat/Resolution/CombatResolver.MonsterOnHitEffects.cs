@@ -780,11 +780,55 @@ public sealed partial class CombatResolver
         }
 
         newLevel = oldLevel - 1;
+        target.LevelDrainHistory.Add(new LevelDrainRecord
+        {
+            Class = primaryClass,
+            LevelBefore = oldLevel,
+            ExperienceBefore = progression.Experience
+        });
+        target.DaysSinceLevelDrain = 0;
         progression.Level = newLevel;
         progression.Experience = Math.Min(
             progression.Experience,
             Math.Max(0, ExperienceTable.GetThresholdForLevel(primaryClass, newLevel)));
 
+        SyncAfterLevelChange(target, primaryClass, newLevel);
+        return true;
+    }
+
+    /// <summary>Gives back the most recently drained level (Restoration). Returns false when none is recorded.</summary>
+    internal static bool TryRestoreOneDrainedLevel(Character target, out int oldLevel, out int newLevel)
+    {
+        oldLevel = target.Level;
+        newLevel = target.Level;
+        if (target.LevelDrainHistory.Count == 0)
+            return false;
+
+        target.EnsureClassProgressions();
+        var record = target.LevelDrainHistory[^1];
+        var progression = target.ClassProgressions.FirstOrDefault(p => p.Class == record.Class);
+        if (progression == null)
+        {
+            target.LevelDrainHistory.Clear();
+            return false;
+        }
+
+        target.LevelDrainHistory.RemoveAt(target.LevelDrainHistory.Count - 1);
+        oldLevel = progression.Level;
+        progression.Level = Math.Max(progression.Level, record.LevelBefore);
+        progression.Experience = Math.Max(progression.Experience, record.ExperienceBefore);
+        newLevel = progression.Level;
+
+        SyncAfterLevelChange(target, record.Class, newLevel);
+        if (target.LevelDrainHistory.Count == 0)
+            target.DaysSinceLevelDrain = 0;
+
+        return true;
+    }
+
+    private static void SyncAfterLevelChange(Character target, CharacterClass primaryClass, int newLevel)
+    {
+        var progression = target.ClassProgressions.First(p => p.Class == primaryClass);
         if (target.Classes.Count <= 1)
         {
             target.Level = newLevel;
@@ -801,8 +845,6 @@ public sealed partial class CombatResolver
         target.RefreshMonkProgressionStats();
         if (!GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
             WeaponProficiencyRules.EnsureAutoProficiencies(target);
-
-        return true;
     }
 
     private void TryApplyStrengthDrain(MonsterInstance monster, Character target, List<CombatEvent> events)

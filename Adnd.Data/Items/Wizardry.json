@@ -1005,7 +1005,7 @@
       "ToHitBonus": 2
     },
     {
-      "Name": "Staff of Silence",
+      "Name": "Staff of Montino",
       "Type": "Weapon",
       "Cost": 15000,
       "Weight": 50,
@@ -1019,7 +1019,7 @@
       "ArmorClassBonus": 0,
       "MagicBonus": 0,
       "SpecialAbilities": [
-        "Silence Aura"
+        "Casts Silence 15' Radius"
       ],
       "IsCursed": false,
       "IsShopBuyable": true,
@@ -1034,7 +1034,7 @@
         "Monk"
       ],
       "Rarity": "Rare",
-      "Description": "A staff that radiates silence.",
+      "Description": "A staff that casts Silence 15' Radius on a group of monsters when used.",
       "Source": "Wizardry",
       "Version": "1e",
       "StockQuantity": 0,

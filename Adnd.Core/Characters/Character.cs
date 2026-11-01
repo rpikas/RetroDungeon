@@ -144,6 +144,8 @@ public class Character
     public int AgeDays { get; set; }
     public int? MaximumNaturalAgeYears { get; set; }
     public bool DiedOfOldAge { get; set; }
+    public List<LevelDrainRecord> LevelDrainHistory { get; set; } = new();
+    public int DaysSinceLevelDrain { get; set; }
     public bool HasLifeExtensionProtection { get; set; }
     public List<Item> Inventory { get; set; } = new();
     public List<string> WeaponProficiencies { get; set; } = new();
@@ -1013,6 +1015,9 @@ public class Character
             return;
 
         var previousCategory = GetAgeCategory();
+
+        if (LevelDrainHistory.Count > 0)
+            DaysSinceLevelDrain += days;
 
         AgeDays = Math.Max(0, AgeDays) + days;
         var extraYears = AgeDays / 365;

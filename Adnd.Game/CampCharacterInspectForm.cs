@@ -70,6 +70,7 @@ public sealed class CampCharacterInspectForm : Form
             new CureDiseaseHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
+            new RestorationHandler(),
             new SpiritualHammerHandler(),
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),

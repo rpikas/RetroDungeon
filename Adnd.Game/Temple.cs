@@ -25,8 +25,8 @@ public static class Temple
     public const int CureFeeblemindCost = 3000;
     public const int RestorePetrificationCost = 3000;
 
-    public const int RaiseDeadCost = 5000;
-    public const int RaiseFromAshesCost = 7000;
+    public const int RaiseDeadBaseCost = 1000;
+    public const int RaiseDeadCostPerLevel = 500;
 
     public static bool NeedsHealing(Character c) =>
         c.CurrentHitPoints < c.MaxHitPoints
@@ -70,8 +70,39 @@ public static class Temple
         && !c.HasStatus(CharacterStatus.Lost)
         && !c.MummyRotRaiseExpired;
 
-    public static int CostToRaise(Character c) =>
-        c.HasStatus(CharacterStatus.Ashes) ? RaiseFromAshesCost : RaiseDeadCost;
+    /// <summary>Raise Dead: 1000 gp plus 500 gp per level of the target. Resurrection (from ashes) costs twice that.</summary>
+    public static int CostToRaise(Character c)
+    {
+        var raiseDead = RaiseDeadBaseCost + RaiseDeadCostPerLevel * Math.Max(1, c.Level);
+        return c.HasStatus(CharacterStatus.Ashes) ? raiseDead * 2 : raiseDead;
+    }
+
+    public static int CostToRestore(Character c) => RestorationRules.CostFor(c);
+
+    /// <summary>Temple clerics are assumed to be level 15, so a level drained up to 15 days ago can be restored.</summary>
+    public static bool CanBeRestored(Character c) =>
+        !c.HasStatus(CharacterStatus.Dead)
+        && !c.HasStatus(CharacterStatus.Ashes)
+        && !c.HasStatus(CharacterStatus.Lost)
+        && RestorationRules.CanBenefit(c, RestorationRules.TempleClericLevel);
+
+    /// <summary>Casts Restoration for <paramref name="target"/>, charging <paramref name="payer"/>.</summary>
+    public static List<string> Restore(Character target, Character payer, CharacterRepository repo)
+    {
+        var events = new List<string>();
+        var cost = CostToRestore(target);
+        if (payer.GoldPieces < cost)
+        {
+            events.Add($"{payer.Name} does not have enough gold ({cost} gp needed).");
+            return events;
+        }
+
+        payer.GoldPieces -= cost;
+        events.AddRange(RestorationRules.Apply(target, null, RestorationRules.TempleClericLevel));
+        events.Add($"{payer.Name} paid {cost} gp.");
+        Save(target, payer, repo);
+        return events;
+    }
 
     /// <summary>
     /// Heals one character out of their own gold. Returns false when they cannot pay, so the caller can say so

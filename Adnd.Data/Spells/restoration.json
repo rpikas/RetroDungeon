@@ -1,0 +1,13 @@
+{
+  "Id": "restoration",
+  "Name": "Restoration",
+  "Class": "Cleric",
+  "Level": 7,
+  "Description": "Restores one level lost to energy drain and cures feeblemind.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Both",
+  "EffectType": "Heal",
+  "EffectDescription": "Cures feeblemind and returns one drained level, but only if cast within 1 day per level of the cleric after the drain. Caster and recipient both age two years."
+}

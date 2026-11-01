@@ -114,6 +114,7 @@ public sealed partial class CombatResolver
         ["Staff +2"] = "staff quarter",
         ["Staff +3"] = "staff quarter",
         ["Staff of Silence"] = "staff quarter",
+        ["Staff of Montino"] = "staff quarter",
         ["Flail"] = "flail military",
         ["Flail +1"] = "flail military",
         ["Flail, footman's"] = "flail footman",

@@ -34,6 +34,7 @@ public class PartyMenu
             new CureDiseaseHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
+            new RestorationHandler(),
             new SpiritualHammerHandler(),
             new GlyphOfWardingHandler(),
             new FlameStrikeHandler(),
