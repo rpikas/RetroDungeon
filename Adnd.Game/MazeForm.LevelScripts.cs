@@ -148,6 +148,67 @@ public sealed partial class MazeForm
         return false;
     }
 
+    private static readonly Point Level4AmbushSquare = new(12, 14);
+
+    // Level 4 ambush: 99% on the first visit after entering the floor. A hostile mixed group that can't be fled.
+    // Returns true when the party was sent back to town after a defeat.
+    private bool ProcessLevelFourAmbushStep()
+    {
+        if (!_thinWalls || _currentDungeonLevel != 4 || _position != Level4AmbushSquare
+            || !_visitedEncounterLocations.Add((_position.X, _position.Y)) || LoadEncounterParty().Count == 0)
+            return false;
+
+        var roll = _random.Next(1, 101);
+        var triggered = roll <= 99;
+        RuleApplicationInfo.Publish(
+            "HomeBrew",
+            "",
+            $"Scripted ambush at ({_position.X},{_position.Y}) on level 4",
+            "First visit to the square after entering the floor: roll 1d100, the ambush happens on a roll of 99 or less. The group is hostile and cannot be fled.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Chance 99% => {(triggered ? "ambush" : "no ambush")}.");
+        if (!triggered)
+            return false;
+
+        var groups = new List<(string name, int count)>
+        {
+            ("Lvl 7 Fighter", 2),
+            ("Lvl 7 Mage", 2),
+            ("High Priest(Lesser)", 2),
+            ("High Ninja", 1)
+        };
+
+        SayOnBoth("Ambush", "TWO LVL 7 FIGHTERS, TWO LVL 7 MAGES, TWO HIGH PRIESTS AND A HIGH NINJA APPEAR BEFORE YOU! THEY ARE NOT FRIENDLY.");
+        _combatCoordinator.CannotRun = true;
+        CombatOutcome outcome;
+        try
+        {
+            outcome = _combatCoordinator.StartEncounterWithGroupCounts(
+                this,
+                groups,
+                LoadEncounterParty(),
+                _characterRepository,
+                _currentDungeonLevel,
+                skipSurpriseRoll: false,
+                dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
+        }
+        finally
+        {
+            _combatCoordinator.CannotRun = false;
+        }
+
+        PublishToViewer();
+        if (outcome == CombatOutcome.Defeat)
+        {
+            HandlePartyDefeatAtCurrentCell();
+            return false;
+        }
+
+        return false;
+    }
+
     private static readonly Point Level10WerdnaLair = new(3, 17);
 
     private bool _werdnaDefeated;

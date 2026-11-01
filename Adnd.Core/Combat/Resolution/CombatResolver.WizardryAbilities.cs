@@ -12,6 +12,7 @@ public sealed partial class CombatResolver
 {
     private const string WizardryHelpGroupPrefix = "help-";
     private const int WizardryDecapitateChancePercentPerHitDie = 2;
+    private const int WizardryAutokillChancePercent = 2;
 
     private readonly HashSet<MonsterInstance> _wizardryHelpCalled = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
 
@@ -136,6 +137,45 @@ public sealed partial class CombatResolver
         target.CurrentHitPoints = 0;
         target.AddStatus(CharacterStatus.Dead);
         events.Add(new CombatEvent($"{monster.DisplayName} decapitates {target.Name}! (save {saveRoll} vs {saveTarget}). HP {beforeHp}->0."));
+    }
+
+    private void TryApplyWizardryAutokill(MonsterInstance monster, Character target, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Autokill") || !IsAlive(target))
+            return;
+
+        var roll = _dice.Roll(100);
+        var attempted = roll <= WizardryAutokillChancePercent;
+        RuleApplicationInfo.Publish("Wizardry", "Autokill",
+            $"{monster.DisplayName} autokill chance vs {target.Name}",
+            $"Autokill chance is {WizardryAutokillChancePercent}% per hit.",
+            "1", "100", roll.ToString(),
+            attempted ? $"Rolled {roll} <= {WizardryAutokillChancePercent}%: autokill attempt." : $"Rolled {roll} > {WizardryAutokillChancePercent}%: no attempt.");
+        if (!attempted)
+            return;
+
+        var saveTarget = ApplyUniversalPotionInvulnerabilitySaveBonus(
+            target,
+            _savingThrowService.GetSaveTarget(target, SaveThrowType.ParalyzationPoisonDeath));
+        var saveRoll = _dice.Roll(20);
+        var failed = saveRoll < saveTarget;
+
+        RuleApplicationInfo.Publish("Wizardry", "Autokill",
+            $"{monster.DisplayName} attempts an autokill on {target.Name}",
+            "Failing a save vs Death kills instantly.",
+            "1", "20", saveRoll.ToString(),
+            $"Save target {saveTarget}. {(failed ? "Failed save: killed." : "Successful save.")}");
+
+        if (!failed)
+        {
+            events.Add(new CombatEvent($"{monster.DisplayName} strikes at a vital spot of {target.Name}, but {target.Name} survives (save {saveRoll} vs {saveTarget})."));
+            return;
+        }
+
+        var beforeHp = target.CurrentHitPoints;
+        target.CurrentHitPoints = 0;
+        target.AddStatus(CharacterStatus.Dead);
+        events.Add(new CombatEvent($"{monster.DisplayName} kills {target.Name} instantly! (save {saveRoll} vs {saveTarget}). HP {beforeHp}->0."));
     }
 
     // "Breath Attack (Fire|Cold|Poison|Petrify)": 33% chance per turn; deals half the monster's current HP to the whole

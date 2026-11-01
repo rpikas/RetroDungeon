@@ -625,8 +625,8 @@
       ],
       "SpecialAbilities": [
         {
-          "Name": "Dragon breath",
-          "Description": "Can exhale a cone of fire causing damage to all creatures in its path."
+          "Name": "Dragon Fly Breath",
+          "Description": "Exhales fire for 2-5 damage to everyone in the party (save vs. breath weapon for half)."
         },
         {
           "Name": "Magic Resistance",
@@ -1547,6 +1547,10 @@
       ],
       "SpecialAbilities": [
         {
+          "Name": "Autokill",
+          "Description": "Can attempt to instantly kill its target."
+        },
+        {
           "Name": "Decapitate",
           "Description": "Can attempt to decapitate its target."
         },
@@ -1997,6 +2001,10 @@
       ],
       "SpecialAbilities": [
         {
+          "Name": "Autokill",
+          "Description": "Can attempt to instantly kill its target."
+        },
+        {
           "Name": "Decapitate",
           "Description": "Can attempt to decapitate its target."
         },
@@ -2092,6 +2100,10 @@
         }
       ],
       "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "Can attempt to instantly kill its target."
+        },
         {
           "Name": "Poison",
           "Description": "May poison."
@@ -2351,6 +2363,10 @@
       ],
       "SpecialAbilities": [
         {
+          "Name": "Autokill",
+          "Description": "Can attempt to instantly kill its target."
+        },
+        {
           "Name": "Death Resistance",
           "Description": "Death resistant (36%)."
         }
@@ -2583,6 +2599,10 @@
         }
       ],
       "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "Can attempt to instantly kill its target."
+        },
         {
           "Name": "Decapitate",
           "Description": "Can attempt to decapitate its target."
@@ -2902,6 +2922,10 @@
         }
       ],
       "SpecialAbilities": [
+        {
+          "Name": "Autokill",
+          "Description": "Can attempt to instantly kill its target."
+        },
         {
           "Name": "Decapitate",
           "Description": "Can attempt to decapitate its target."

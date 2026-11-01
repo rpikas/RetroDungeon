@@ -82,6 +82,8 @@ public sealed partial class MazeForm
         if (ProcessWerdnaStep())
             return;
 
+        ProcessLevelFourAmbushStep();
+
         ProcessPitStep();
         ProcessTurnTableStep();
         var alarm = ProcessSquareMessageStep();

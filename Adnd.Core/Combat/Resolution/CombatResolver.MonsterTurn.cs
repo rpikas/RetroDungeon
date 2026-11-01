@@ -186,6 +186,9 @@ public sealed partial class CombatResolver
         if (TryResolveWizardryBreathAttack(session, monster, events))
             return MonsterTurnFlow.EndTurn;
 
+        if (TryResolveDragonFlyBreath(session, monster, events))
+            return MonsterTurnFlow.EndTurn;
+
         if (TryResolveHellHoundBreatheFire(monster, session, events))
             return MonsterTurnFlow.EndTurn;
 
@@ -996,6 +999,7 @@ public sealed partial class CombatResolver
         TryApplyEnergyDrain(monster, target, session, events);
         TryApplyWizardryLevelDrain(monster, target, events);
         TryApplyWizardryDecapitate(monster, target, events);
+        TryApplyWizardryAutokill(monster, target, events);
         if (!IsAlive(target))
             return;
         TryApplyLevel8OnHit(session, monster, target, attack.Name, events);

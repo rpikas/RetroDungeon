@@ -205,6 +205,31 @@ public sealed partial class CombatResolver
         return true;
     }
 
+    // "Dragon Fly Breath": 33% chance per turn; fire for 1d4+1 (2-5) to the whole party, save vs breath for half.
+    private bool TryResolveDragonFlyBreath(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
+    {
+        if (!HasSpecialAbility(monster, "Dragon Fly Breath"))
+            return false;
+
+        var chanceRoll = _dice.Roll(3);
+        RuleApplicationInfo.Publish("Wizardry", "Dragon Fly Breath",
+            $"{monster.DisplayName} breath chance",
+            "33% chance per turn to breathe fire for 2-5 damage on the whole party.",
+            "1", "3", chanceRoll.ToString(),
+            chanceRoll == 1 ? "Breathes." : "No breath.");
+        if (chanceRoll != 1)
+            return false;
+
+        var party = session.ExposedParty.Where(IsAlive).ToList();
+        if (party.Count == 0)
+            return false;
+
+        var damage = _dice.Roll(4) + 1;
+        events.Add(new CombatEvent($"{monster.DisplayName} uses Dragon Fly Breath for {damage} damage!"));
+        ResolveFireBreathDamage(monster, party, damage, "Dragon Fly breath", events);
+        return true;
+    }
+
     private void ResolveFireBreathDamage(MonsterInstance monster, IReadOnlyList<Character> targets, int breathDamage, string breathName, List<CombatEvent> events)
     {
         foreach (var target in targets)
