@@ -8,6 +8,7 @@
 - When adjusting Blade Barrier in this project, use Cleric level 6 (not level 8).
 - Finger of Death should be a Druid spell at level 7 (not a Magic-User spell).
 - Slay Living is a level 5 Cleric spell: save vs spell or die; undead are unaffected; a "Death Resistance" ability percentage gives that chance to survive (also applies to Finger of Death).
+- Monster spellcasting: a monster with "Level N Mage/Priest/Druid/Illusionist spells" always uses them (100%) for every class and level. Only age-related dragon magic has a configured chance (previously a 50% default applied to several levels).
 - Wizardry monster abilities: Run (flees at ≤25% HP, 50%/turn), Help (25%/turn once per combat, calls 1d4 of its own kind; reinforcements can't call more), LvlDrain (drains N levels on hit), Decapitate (5% per hit, save vs Death or die), Stoning (petrify on hit, save vs Petrification), Breath Attack (X) (33%/turn, half current HP to the party, save for half), Fire/Cold Resistance (halves spell damage of that element). Slept is informational (Sleep already works on all non-undead).
 - Cure Serious Wounds should exist as a level 4 Druid spell and work exactly like the Cleric version (same healing behavior).
 - Improved Phantasmal Force should be configured as a level 2 Illusionist spell (not level 3).

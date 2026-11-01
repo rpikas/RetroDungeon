@@ -929,8 +929,7 @@ public sealed partial class CombatResolver
         int spellLevel,
         MonsterSpellTradition requestedTradition,
         List<CombatEvent> events,
-        Dictionary<int, MonsterLevelMagicUseDecision> decisionCache,
-        bool useDefaultFiftyPercentWhenNoConfiguredChance)
+        Dictionary<int, MonsterLevelMagicUseDecision> decisionCache)
     {
         if (monster?.Template == null)
             return false;
@@ -947,10 +946,11 @@ public sealed partial class CombatResolver
         }
 
         var configuredChance = TryGetMonsterLevelMagicUseChance(monster, spellLevel);
-        if (configuredChance == null && !useDefaultFiftyPercentWhenNoConfiguredChance)
+        // Without a configured chance (only age-related dragon magic has one) a monster always uses its spells.
+        if (configuredChance == null)
             return true;
 
-        var chancePercent = configuredChance?.ChancePercent ?? 50;
+        var chancePercent = configuredChance!.ChancePercent;
         var isAgeRelatedDragonMagic = configuredChance?.IsAgeRelatedDragonMagic == true;
         var roll = _dice.Roll(100);
         var shouldUseMagic = roll <= chancePercent;

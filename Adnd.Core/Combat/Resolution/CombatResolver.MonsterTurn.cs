@@ -1,4 +1,4 @@
-﻿using Adnd.Core.Assassination;
+using Adnd.Core.Assassination;
 using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
@@ -57,31 +57,31 @@ public sealed partial class CombatResolver
     }
 
     // Order matters: the first spell that is attempted and resolved ends the monster's turn.
-    private static readonly (int Level, MonsterSpellTradition Tradition, bool DefaultFiftyPercent, Func<CombatResolver, MonsterInstance, CombatSession, List<CombatEvent>, bool> Cast)[] MonsterSpellAttempts =
+    private static readonly (int Level, MonsterSpellTradition Tradition, Func<CombatResolver, MonsterInstance, CombatSession, List<CombatEvent>, bool> Cast)[] MonsterSpellAttempts =
     [
-        (9, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel9MagicUserSpell(monster, session, events)),
-        (5, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel5IllusionistSpell(monster, session, events)),
-        (5, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel5MagicUserSpell(monster, session, events)),
-        (5, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel5DruidSpell(monster, session, events)),
-        (5, MonsterSpellTradition.Cleric, false, (resolver, monster, session, events) => resolver.ResolveLevel5ClericSpell(monster, session, events)),
-        (4, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel4IllusionistSpell(monster, session, events)),
-        (4, MonsterSpellTradition.MagicUser, false, (resolver, monster, session, events) => resolver.ResolveLevel4MagicUserSpell(monster, session, events)),
-        (3, MonsterSpellTradition.MagicUser, true, (resolver, monster, session, events) => resolver.ResolveLevel3MagicUserSpell(monster, session, events)),
-        (3, MonsterSpellTradition.Illusionist, false, (resolver, monster, session, events) => resolver.ResolveLevel3IllusionistSpell(monster, session, events)),
-        (3, MonsterSpellTradition.Cleric, false, (resolver, monster, session, events) => resolver.ResolveLevel3ClericSpell(monster, session, events)),
-        (2, MonsterSpellTradition.Illusionist, true, (resolver, monster, session, events) => resolver.ResolveLevel2IllusionistSpell(monster, session, events)),
-        (2, MonsterSpellTradition.MagicUser, true, (resolver, monster, session, events) => resolver.ResolveLevel2MagicUserSpell(monster, session, events)),
-        (1, MonsterSpellTradition.MagicUser, true, (resolver, monster, session, events) =>
+        (9, MonsterSpellTradition.MagicUser, (resolver, monster, session, events) => resolver.ResolveLevel9MagicUserSpell(monster, session, events)),
+        (5, MonsterSpellTradition.Illusionist, (resolver, monster, session, events) => resolver.ResolveLevel5IllusionistSpell(monster, session, events)),
+        (5, MonsterSpellTradition.MagicUser, (resolver, monster, session, events) => resolver.ResolveLevel5MagicUserSpell(monster, session, events)),
+        (5, MonsterSpellTradition.Druid, (resolver, monster, session, events) => resolver.ResolveLevel5DruidSpell(monster, session, events)),
+        (5, MonsterSpellTradition.Cleric, (resolver, monster, session, events) => resolver.ResolveLevel5ClericSpell(monster, session, events)),
+        (4, MonsterSpellTradition.Illusionist, (resolver, monster, session, events) => resolver.ResolveLevel4IllusionistSpell(monster, session, events)),
+        (4, MonsterSpellTradition.MagicUser, (resolver, monster, session, events) => resolver.ResolveLevel4MagicUserSpell(monster, session, events)),
+        (3, MonsterSpellTradition.MagicUser, (resolver, monster, session, events) => resolver.ResolveLevel3MagicUserSpell(monster, session, events)),
+        (3, MonsterSpellTradition.Illusionist, (resolver, monster, session, events) => resolver.ResolveLevel3IllusionistSpell(monster, session, events)),
+        (3, MonsterSpellTradition.Cleric, (resolver, monster, session, events) => resolver.ResolveLevel3ClericSpell(monster, session, events)),
+        (2, MonsterSpellTradition.Illusionist, (resolver, monster, session, events) => resolver.ResolveLevel2IllusionistSpell(monster, session, events)),
+        (2, MonsterSpellTradition.MagicUser, (resolver, monster, session, events) => resolver.ResolveLevel2MagicUserSpell(monster, session, events)),
+        (1, MonsterSpellTradition.MagicUser, (resolver, monster, session, events) =>
             {
                 resolver.ResolveLevel1MageSpells(monster, session, events);
                 return true;
             }),
-        (1, MonsterSpellTradition.Cleric, true, (resolver, monster, session, events) => resolver.ResolveLevel1PriestSpell(monster, session, events)),
-        (4, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel4DruidSpell(monster, session, events)),
-        (3, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel3DruidSpell(monster, session, events)),
-        (2, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel2DruidSpell(monster, session, events)),
-        (1, MonsterSpellTradition.Druid, false, (resolver, monster, session, events) => resolver.ResolveLevel1DruidSpell(monster, session, events)),
-        (1, MonsterSpellTradition.Illusionist, true, (resolver, monster, session, events) => resolver.ResolveLevel1IllusionistSpell(monster, session, events)),
+        (1, MonsterSpellTradition.Cleric, (resolver, monster, session, events) => resolver.ResolveLevel1PriestSpell(monster, session, events)),
+        (4, MonsterSpellTradition.Druid, (resolver, monster, session, events) => resolver.ResolveLevel4DruidSpell(monster, session, events)),
+        (3, MonsterSpellTradition.Druid, (resolver, monster, session, events) => resolver.ResolveLevel3DruidSpell(monster, session, events)),
+        (2, MonsterSpellTradition.Druid, (resolver, monster, session, events) => resolver.ResolveLevel2DruidSpell(monster, session, events)),
+        (1, MonsterSpellTradition.Druid, (resolver, monster, session, events) => resolver.ResolveLevel1DruidSpell(monster, session, events)),
+        (1, MonsterSpellTradition.Illusionist, (resolver, monster, session, events) => resolver.ResolveLevel1IllusionistSpell(monster, session, events)),
     ];
 
     private enum MonsterTurnFlow
@@ -157,9 +157,9 @@ public sealed partial class CombatResolver
         if (isSilenced || isFeebleminded)
             return MonsterTurnFlow.Proceed;
 
-        foreach (var (spellLevel, tradition, defaultFiftyPercent, cast) in MonsterSpellAttempts)
+        foreach (var (spellLevel, tradition, cast) in MonsterSpellAttempts)
         {
-            if (CanMonsterAttemptLevelSpell(monster, spellLevel, tradition, events, levelMagicUseDecisions, useDefaultFiftyPercentWhenNoConfiguredChance: defaultFiftyPercent)
+            if (CanMonsterAttemptLevelSpell(monster, spellLevel, tradition, events, levelMagicUseDecisions)
                 && HasSpellTierAbility(monster, spellLevel, tradition)
                 && cast(this, monster, session, events))
                 return MonsterTurnFlow.EndTurn;
