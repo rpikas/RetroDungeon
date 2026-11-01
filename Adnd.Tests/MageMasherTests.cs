@@ -35,6 +35,24 @@ public class MageMasherTests
     }
 
     [Fact]
+    public void WereSlayer_GetsExtraPlusTwoAgainstLycanthropesOnly()
+    {
+        var weapon = new Item
+        {
+            Name = "Were Slayer",
+            Type = ItemType.Weapon,
+            MagicBonus = 1,
+            ToHitBonus = 1,
+            SpecialAbilities = ["+3 vs. lycanthropes and shape changers"],
+        };
+        var werewolf = new MonsterInstance(new Monster { Name = "Lycanthrope Werewolf", HitDice = 4 }, 0);
+        var kobold = new MonsterInstance(new Monster { Name = "Kobold", HitDice = 1 }, 0);
+
+        Assert.Equal(2, SituationalBonus(weapon, werewolf));
+        Assert.Equal(0, SituationalBonus(weapon, kobold));
+    }
+
+    [Fact]
     public void MageMasher_GetsNoExtraBonusAgainstOrdinaryMonsters()
     {
         var kobold = new MonsterInstance(new Monster { Name = "Kobold", HitDice = 1 }, 0);

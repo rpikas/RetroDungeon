@@ -945,9 +945,9 @@
       "IsTwoHanded": false,
       "Range": "",
       "ArmorClassBonus": 0,
-      "MagicBonus": 0,
+      "MagicBonus": 1,
       "SpecialAbilities": [
-        "Bonus vs Were Creatures"
+        "+3 vs. lycanthropes and shape changers"
       ],
       "IsCursed": false,
       "IsShopBuyable": true,
@@ -960,12 +960,12 @@
         "Bard"
       ],
       "Rarity": "Rare",
-      "Description": "A sword deadly to were-creatures.",
+      "Description": "A +1 sword that is +3 vs. lycanthropes and shape changers.",
       "Source": "Wizardry",
       "Version": "1e",
       "StockQuantity": 0,
       "Slot": "",
-      "ToHitBonus": 0
+      "ToHitBonus": 1
     },
     {
       "Name": "Dragon Slayer",
