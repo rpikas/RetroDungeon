@@ -1869,7 +1869,6 @@
       "StockQuantity": -1
     },
     {
-      "Status": "NotImplemented",
       "Name": "Scroll of Dilto",
       "Type": "Scroll",
       "Slot": "",
@@ -1892,8 +1891,10 @@
         "Monk"
       ],
       "Rarity": "Common",
-      "Description": "Makes Enemies easier to hit",
-      "SpecialAbilities": [],
+      "Description": "Blesses the party (casts Bless)",
+      "SpecialAbilities": [
+        "Casts bless"
+      ],
       "Source": "Wizardry",
       "StockQuantity": -1
     },

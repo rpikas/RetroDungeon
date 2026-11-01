@@ -248,6 +248,7 @@ public sealed class SpellCastingService
             case "scroll of badios": return "Cause Light Wounds";
             case "scroll of halito": return "Magic Missile";
             case "scroll of lomilwa": return "Light";
+            case "scroll of dilto": return "Bless";
             case "scroll of badial": return "Cause Serious Wounds";
         }
 
