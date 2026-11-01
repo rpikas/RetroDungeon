@@ -40,6 +40,12 @@ public sealed class SlayLivingHandler : ISpellEffectHandler
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
 
+        if (IsUndead(target))
+        {
+            result.Events.Add($"{target.DisplayName} is undead and is unaffected by Slay Living.");
+            return result;
+        }
+
         var saveTarget = SpellDamageSaveHelper.GetMonsterMagicSaveTarget(target, 20);
         var saveRoll = rng.Next(1, 21);
         if (saveRoll >= saveTarget)
@@ -72,6 +78,10 @@ public sealed class SlayLivingHandler : ISpellEffectHandler
 
         return result;
     }
+
+    private static bool IsUndead(MonsterInstance monster)
+        => monster.Template.Type == Monsters.MonsterType.Undead
+           || monster.Template.SpecialAbilities.Any(a => string.Equals(a.Name?.Trim(), "Undead", StringComparison.OrdinalIgnoreCase));
 
     // Reads the percentage from a "Death Resistance" ability, e.g. "Death resistant (30%)."
     private static int GetDeathResistancePercent(MonsterInstance monster)
