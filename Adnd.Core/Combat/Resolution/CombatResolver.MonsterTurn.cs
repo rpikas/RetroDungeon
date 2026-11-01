@@ -755,6 +755,18 @@ public sealed partial class CombatResolver
         return false;
     }
 
+    internal static bool HasUndeadProtection(Character c)
+        => c.Equipment.Values.Any(i => i?.SpecialAbilities != null
+            && i.SpecialAbilities.Any(a => string.Equals(a?.Trim(), "Protection: Undead", StringComparison.OrdinalIgnoreCase)));
+
+    internal static bool IsUndeadMonster(MonsterInstance monster)
+        => monster.Template.Type == Adnd.Core.Monsters.MonsterType.Undead
+           || monster.Template.SpecialAbilities.Any(a => string.Equals(a.Name?.Trim(), "Undead", StringComparison.OrdinalIgnoreCase));
+
+    // Ring Pro Undead: an undead attacker has a 50% chance to lose the attack against the wearer.
+    private bool IsUndeadAttackWardedOff(MonsterInstance monster, Character target)
+        => HasUndeadProtection(target) && IsUndeadMonster(monster) && _dice.Roll(2) == 1;
+
     private enum AttackSwingResult
     {
         Next,
@@ -792,6 +804,12 @@ public sealed partial class CombatResolver
 
         if (!CanMonsterLocateTarget(monster, target, events))
             return AttackSwingResult.Next;
+
+        if (IsUndeadAttackWardedOff(monster, target))
+        {
+            events.Add(new CombatEvent($"{target.Name}'s Ring Pro Undead wards off {monster.DisplayName}; the attack fails."));
+            return AttackSwingResult.Next;
+        }
 
         var invulnerabilityAcBonus = target.HasActivePotionInvulnerability
             ? target.PotionInvulnerabilityArmorClassBonus

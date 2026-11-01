@@ -1405,9 +1405,9 @@
         "Monk"
       ],
       "Rarity": "Uncommon",
-      "Description": "A protective ring that casts PORFIC./ ",
+      "Description": "A protective ring that casts PORFIC (the Shield spell: AC 2 if worse).",
       "SpecialAbilities": [
-        "Casts PORFIC"
+        "Casts Shield"
       ],
       "Source": "Wizardry",
       "StockQuantity": 0
@@ -1425,9 +1425,9 @@
         "Paladin"
       ],
       "Rarity": "Rare",
-      "Description": "An amulet that casts MANIFO.",
+      "Description": "A ring that casts MANIFO (the Hold Monster spell).",
       "SpecialAbilities": [
-        "Casts MANIFO"
+        "Casts Hold Monster"
       ],
       "Source": "Wizardry",
       "StockQuantity": 0
@@ -1455,9 +1455,9 @@
         "Monk"
       ],
       "Rarity": "Rare",
-      "Description": "A deadly ring that casts MAKANITO.",
+      "Description": "A deadly ring that casts MAKANITO (the Cloudkill spell).",
       "SpecialAbilities": [
-        "Casts MAKANITO"
+        "Casts Cloudkill"
       ],
       "Source": "Wizardry",
       "StockQuantity": 0

@@ -9,5 +9,5 @@
   "TargetingScope": "SingleGroup",
   "CastContext": "Combat",
   "EffectType": "Damage",
-  "EffectDescription": "Instantly slays all monsters with 3 HD or lower in the chosen group."
+  "EffectDescription": "Slays monsters under 4+1 HD outright; 4+1 to 5+1 HD save vs. poison at -4 or die; up to 6 HD save vs. poison or die."
 }

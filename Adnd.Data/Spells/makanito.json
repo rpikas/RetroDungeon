@@ -1,0 +1,13 @@
+{
+  "Id": "makanito",
+  "Name": "Makanito",
+  "Class": "Cleric",
+  "Level": 5,
+  "Description": "A deadly poisonous cloud rolls over one enemy group (the Wizardry Makanito, same as Cloudkill).",
+  "RangeType": "Enemy",
+  "Targeting": "Multiple",
+  "TargetingScope": "SingleGroup",
+  "CastContext": "Combat",
+  "EffectType": "Damage",
+  "EffectDescription": "Slays monsters under 4+1 HD outright; 4+1 to 5+1 HD save vs. poison at -4 or die; up to 6 HD save vs. poison or die."
+}

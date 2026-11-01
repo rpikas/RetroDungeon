@@ -32,7 +32,6 @@
       ],
       "BaseXPValue": 790,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -69,7 +68,6 @@
       ],
       "BaseXPValue": 3160,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -110,7 +108,6 @@
       ],
       "BaseXPValue": 1120,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -156,7 +153,6 @@
       ],
       "BaseXPValue": 1135,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -211,7 +207,6 @@
       ],
       "BaseXPValue": 3300,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -244,7 +239,6 @@
       ],
       "BaseXPValue": 1120,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -278,7 +272,6 @@
       ],
       "BaseXPValue": 55,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry",
       "DungeonLevels": [
         1
@@ -321,7 +314,6 @@
       ],
       "BaseXPValue": 620,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -363,7 +355,6 @@
       ],
       "BaseXPValue": 520,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -401,7 +392,6 @@
       ],
       "BaseXPValue": 2395,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -467,7 +457,6 @@
       ],
       "BaseXPValue": 3515,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -508,7 +497,6 @@
       ],
       "BaseXPValue": 780,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -558,7 +546,6 @@
       ],
       "BaseXPValue": 920,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry",
       "DungeonLevels": [
         2
@@ -600,7 +587,6 @@
       ],
       "BaseXPValue": 550,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         2
@@ -657,7 +643,6 @@
       ],
       "BaseXPValue": 1275,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -694,7 +679,6 @@
       ],
       "BaseXPValue": 2280,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -754,7 +738,6 @@
       ],
       "BaseXPValue": 5360,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -797,7 +780,6 @@
       ],
       "BaseXPValue": 20675,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -848,7 +830,6 @@
       ],
       "BaseXPValue": 5000,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -885,7 +866,6 @@
       ],
       "BaseXPValue": 2115,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -946,7 +926,6 @@
       ],
       "BaseXPValue": 9200,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -988,7 +967,6 @@
       ],
       "BaseXPValue": 41355,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -1041,7 +1019,6 @@
       ],
       "BaseXPValue": 2435,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -1087,7 +1064,6 @@
       ],
       "BaseXPValue": 350,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         2
@@ -1138,7 +1114,6 @@
       ],
       "BaseXPValue": 2075,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -1179,7 +1154,6 @@
       ],
       "BaseXPValue": 1235,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -1217,7 +1191,6 @@
       ],
       "BaseXPValue": 960,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -1272,7 +1245,6 @@
       ],
       "BaseXPValue": 795,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -1309,7 +1281,6 @@
       ],
       "BaseXPValue": 2920,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -1360,7 +1331,6 @@
       ],
       "BaseXPValue": 1080,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -1441,7 +1411,6 @@
       ],
       "BaseXPValue": 44570,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -1488,7 +1457,6 @@
       ],
       "BaseXPValue": 1600,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -1543,7 +1511,6 @@
       ],
       "BaseXPValue": 3000,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -1590,7 +1557,6 @@
       ],
       "BaseXPValue": 1600,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -1627,7 +1593,6 @@
       ],
       "BaseXPValue": 2160,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -1669,7 +1634,6 @@
       ],
       "BaseXPValue": 3300,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -1714,7 +1678,6 @@
       ],
       "BaseXPValue": 2395,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         7
@@ -1771,7 +1734,6 @@
       ],
       "BaseXPValue": 840,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -1809,7 +1771,6 @@
       ],
       "BaseXPValue": 600,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -1847,7 +1808,6 @@
       ],
       "BaseXPValue": 1460,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         7
@@ -1894,7 +1854,6 @@
       ],
       "BaseXPValue": 415,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry",
       "DungeonLevels": [
         1
@@ -1960,7 +1919,6 @@
       ],
       "BaseXPValue": 5100,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -2002,7 +1960,6 @@
       ],
       "BaseXPValue": 475,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry",
       "DungeonLevels": [
         1
@@ -2050,7 +2007,6 @@
       ],
       "BaseXPValue": 600,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         2
@@ -2091,7 +2047,6 @@
       ],
       "BaseXPValue": 515,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         1
@@ -2152,7 +2107,6 @@
       ],
       "BaseXPValue": 1360,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -2197,7 +2151,6 @@
       ],
       "BaseXPValue": 990,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -2248,7 +2201,6 @@
       ],
       "BaseXPValue": 795,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -2290,7 +2242,6 @@
       ],
       "BaseXPValue": 740,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -2328,7 +2279,6 @@
       ],
       "BaseXPValue": 620,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -2365,7 +2315,6 @@
       ],
       "BaseXPValue": 1220,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -2408,7 +2357,6 @@
       ],
       "BaseXPValue": 1520,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -2446,7 +2394,6 @@
       ],
       "BaseXPValue": 1900,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -2483,7 +2430,6 @@
       ],
       "BaseXPValue": 1000,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4,
@@ -2530,7 +2476,6 @@
       ],
       "BaseXPValue": 1220,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         7
@@ -2571,7 +2516,6 @@
       ],
       "BaseXPValue": 2060,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -2609,7 +2553,6 @@
       ],
       "BaseXPValue": 2140,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -2651,7 +2594,6 @@
       ],
       "BaseXPValue": 1020,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -2689,7 +2631,6 @@
       ],
       "BaseXPValue": 1720,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -2727,7 +2668,6 @@
       ],
       "BaseXPValue": 1900,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -2764,7 +2704,6 @@
       ],
       "BaseXPValue": 1400,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -2818,7 +2757,6 @@
       ],
       "BaseXPValue": 2240,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         7
@@ -2887,7 +2825,6 @@
       ],
       "BaseXPValue": 7460,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -2930,7 +2867,6 @@
       ],
       "BaseXPValue": 2340,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -2977,7 +2913,6 @@
       ],
       "BaseXPValue": 1280,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         6,
@@ -3029,7 +2964,6 @@
       ],
       "BaseXPValue": 960,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -3075,7 +3009,6 @@
       ],
       "BaseXPValue": 1140,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "B",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -3118,7 +3051,6 @@
       ],
       "BaseXPValue": 1040,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -3155,7 +3087,6 @@
       ],
       "BaseXPValue": 1200,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -3215,7 +3146,6 @@
       ],
       "BaseXPValue": 4450,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -3261,7 +3191,6 @@
       ],
       "BaseXPValue": 1635,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         7
@@ -3302,7 +3231,6 @@
       ],
       "BaseXPValue": 960,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         5
@@ -3345,7 +3273,6 @@
       ],
       "BaseXPValue": 1790,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -3387,7 +3314,6 @@
       ],
       "BaseXPValue": 235,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         1
@@ -3429,7 +3355,6 @@
       ],
       "BaseXPValue": 41320,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -3466,7 +3391,6 @@
       ],
       "BaseXPValue": 870,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -3522,7 +3446,6 @@
       ],
       "BaseXPValue": 4155,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -3565,7 +3488,6 @@
       ],
       "BaseXPValue": 380,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         2
@@ -3617,7 +3539,6 @@
       ],
       "BaseXPValue": 680,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -3658,7 +3579,6 @@
       ],
       "BaseXPValue": 875,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -3711,7 +3631,6 @@
       ],
       "BaseXPValue": 1405,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         4
@@ -3748,7 +3667,6 @@
       ],
       "BaseXPValue": 960,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         5,
@@ -3805,7 +3723,6 @@
       ],
       "BaseXPValue": 1640,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -3854,7 +3771,6 @@
       ],
       "BaseXPValue": 1720,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "A",
       "Source": "Wizardry",
       "DungeonLevels": [
         8
@@ -3900,7 +3816,6 @@
       ],
       "BaseXPValue": 230,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "J,WornEquipment",
       "Source": "Wizardry",
       "DungeonLevels": [
         1
@@ -3970,7 +3885,6 @@
       ],
       "BaseXPValue": 3330,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -4025,7 +3939,6 @@
       ],
       "BaseXPValue": 7320,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "E",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -4076,7 +3989,6 @@
       ],
       "BaseXPValue": 735,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "D",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -4157,7 +4069,6 @@
       ],
       "BaseXPValue": 15880,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "F",
       "Source": "Wizardry",
       "DungeonLevels": [
         10
@@ -4216,7 +4127,6 @@
       ],
       "BaseXPValue": 1320,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -4255,7 +4165,6 @@
       ],
       "BaseXPValue": 755,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         3
@@ -4316,7 +4225,6 @@
       ],
       "BaseXPValue": 1405,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -4360,7 +4268,6 @@
       ],
       "BaseXPValue": 975,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         6
@@ -4398,7 +4305,6 @@
       ],
       "BaseXPValue": 43320,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -4440,7 +4346,6 @@
       ],
       "BaseXPValue": 1540,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "C",
       "Source": "Wizardry",
       "DungeonLevels": [
         9
@@ -4482,7 +4387,6 @@
       ],
       "BaseXPValue": 520,
       "XPValuePerHitPoint": 0,
-      "TreasureType": "None",
       "Source": "Wizardry",
       "DungeonLevels": [
         2

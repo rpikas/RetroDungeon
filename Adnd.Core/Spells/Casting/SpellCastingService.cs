@@ -224,7 +224,19 @@ public sealed class SpellCastingService
         if (string.IsNullOrWhiteSpace(spellName))
             return null;
 
-        return FindSpellByName(spellName);
+        return FindSpellByName(spellName, preferLowestLevel: true);
+    }
+
+    // Some spell names exist for several classes (Shield); item casts use the lowest-level version.
+    private Spell? FindSpellByName(string name, bool preferLowestLevel)
+    {
+        if (!preferLowestLevel)
+            return FindSpellByName(name);
+
+        return _spellsById.Values
+            .Where(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(s => s.Level)
+            .FirstOrDefault();
     }
 
     private static string InferSpellNameFromItemName(Item item)

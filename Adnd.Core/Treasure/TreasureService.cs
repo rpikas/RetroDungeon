@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Adnd.Core.Combat.Sessions;
+using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
 
 namespace Adnd.Core.Treasure;
@@ -32,6 +33,12 @@ public sealed class TreasureService
                 continue;
 
             var representative = members[0];
+            if (representative.Template.Source == Sources.Wizardry)
+            {
+                RollWizardryTreasure(representative, result);
+                continue;
+            }
+
             result.LogLines.Add($"Group {representative.GroupId}: non-individual treasure is rolled once for the whole group ({members.Count} monster(s)).");
             RollLairTreasure(representative, members.Count, result, linkedRuleMessages);
 
@@ -72,6 +79,34 @@ public sealed class TreasureService
 
         return result;
     }
+
+    private void RollWizardryTreasure(MonsterInstance representative, TreasureResult result)
+    {
+        var inLair = representative.IsInLair;
+        var roll = WizardryTreasureTable.Roll(representative.Template.DungeonLevel, inLair, _random);
+        result.LogLines.Add($"{representative.DisplayName}: {roll.Log}");
+
+        var bucket = inLair ? result.Lair : result.NonLair;
+        bucket.GoldPieces += roll.Gold;
+        result.GoldPieces += roll.Gold;
+
+        foreach (var number in roll.ItemNumbers)
+        {
+            var name = WizardryTreasureTable.GetItemNameCandidates(number).FirstOrDefault() ?? string.Empty;
+            result.LogLines.Add($"{representative.DisplayName}: chest item #{number} = {name}.");
+            bucket.MagicPlaceholders.Add(CreateWizardryPlaceholder(name));
+            result.MagicPlaceholders.Add(CreateWizardryPlaceholder(name));
+        }
+    }
+
+    private static TreasureMagicPlaceholderResult CreateWizardryPlaceholder(string name)
+        => new()
+        {
+            Table = "Wizardry item",
+            Count = 1,
+            SourceTable = WizardryTreasureTable.SourceTable,
+            ResolvedName = name
+        };
 
     private void RollLairTreasure(MonsterInstance monster, int groupCount, TreasureResult result, List<(string page, string message)> linkedRuleMessages)
     {
@@ -1812,7 +1847,7 @@ public sealed class TreasureService
    //         .Select(a => new TreasureValuableResult { Category = a.Category, ValueGp = a.ValueGp, SourceTable = a.SourceTable })
    //         .ToList();
         result.Total.MagicPlaceholders = result.MagicPlaceholders
-            .Select(m => new TreasureMagicPlaceholderResult { Table = m.Table, Count = m.Count, SourceTable = m.SourceTable })
+            .Select(m => new TreasureMagicPlaceholderResult { Table = m.Table, Count = m.Count, SourceTable = m.SourceTable, ResolvedName = m.ResolvedName, ExperienceValue = m.ExperienceValue })
             .ToList();
     }
 
