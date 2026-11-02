@@ -1,0 +1,12 @@
+{
+  "Id": "remove_curse",
+  "Name": "Remove Curse",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "Removes curses from a character and the items they have equipped, or from a single item.",
+  "RangeType": "Ally",
+  "Targeting": "Single",
+  "CastContext": "Exploration",
+  "EffectType": "Heal",
+  "EffectDescription": "Cast on a character: lifts all curses on the character and on every item equipped by the character. Cast on an item: lifts the curse on that item only."
+}

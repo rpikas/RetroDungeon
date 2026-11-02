@@ -78,6 +78,8 @@ public class GameRules
     public int DelayInMsbetweenActions { get; set; } =0;
     // Milliseconds between messages in Wizardry-style combat.
     public int DelayInbetweenCombatMessages { get; set; } = 1000;
+    // Percent chance (0-100) that Wizardry monsters offer to leave the party alone; their alignment is ignored.
+    public int WizardryMonstersWillLeaveYouAloneChanse { get; set; } = 10;
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
     public bool ShowReferencesInRuleAndDiceInfo { get; set; } = true;
     public bool ShowToHitRoll { get; set; } = false;

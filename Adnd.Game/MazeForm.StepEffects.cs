@@ -89,6 +89,15 @@ public sealed partial class MazeForm
                 }
             }
 
+            var ringDrain = EquipmentManager.ApplyEquippedLifeDrain(c);
+            if (ringDrain > 0)
+            {
+                changed = true;
+                messages.Add($"{c.Name}'s cursed ring drains {ringDrain} HP. HP {c.CurrentHitPoints + ringDrain}->{c.CurrentHitPoints}.");
+                if (c.HasStatus(CharacterStatus.Dead))
+                    messages.Add($"{c.Name} dies from the ring's drain.");
+            }
+
             if (c.CurrentHitPoints > 0
                 && !c.HasStatus(CharacterStatus.Dead)
                 && !c.HasStatus(CharacterStatus.Petrified)
@@ -202,6 +211,8 @@ public sealed partial class MazeForm
                 effects.Add((c.Name, "Paralysis"));
             if (!c.HasStatus(CharacterStatus.Petrified) && c.CurrentHitPoints < c.MaxHitPoints && HasEquippedRegeneration(c))
                 effects.Add((c.Name, "Regeneration"));
+            if (EquipmentManager.GetEquippedLifeDrain(c) > 0)
+                effects.Add((c.Name, "CursedRing"));
             if (c.LycanthropyTriggeredByDamage && c.HasStatus(CharacterStatus.LycanthropeTransformed))
                 effects.Add((c.Name, "Lycanthropy"));
         }

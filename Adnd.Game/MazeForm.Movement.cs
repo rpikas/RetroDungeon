@@ -54,6 +54,11 @@ public sealed partial class MazeForm
         _position = candidate;
         ApplyPoisonDamageForStep();
 
+        // Draw the new square (walls, doors) before any sign, message or dialog appears.
+        UpdateLighting();
+        Refresh();
+        PublishToViewer();
+
         if (IsElevatorSquare(_position))
         {
             if (_thinWalls && _currentDungeonLevel is 8 or 9 && !PartyHasItem("Blue Ribbon"))

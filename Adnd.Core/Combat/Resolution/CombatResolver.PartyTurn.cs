@@ -45,6 +45,17 @@ public sealed partial class CombatResolver
         if (!IsAlive(member))
             return true;
 
+        var lifeDrain = EquipmentManager.ApplyEquippedLifeDrain(member);
+        if (lifeDrain > 0)
+        {
+            events.Add(new CombatEvent($"{member.Name}'s cursed ring drains {lifeDrain} HP. HP {member.CurrentHitPoints + lifeDrain}->{member.CurrentHitPoints}."));
+            if (!IsAlive(member))
+            {
+                events.Add(new CombatEvent($"{member.Name} dies from the ring's drain."));
+                return true;
+            }
+        }
+
         var thunderboltsRest = session.GetPartyThunderboltsRestRounds(member.Name);
         if (thunderboltsRest > 0)
         {

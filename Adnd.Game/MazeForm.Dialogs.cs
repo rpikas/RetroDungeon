@@ -283,11 +283,11 @@ public sealed partial class MazeForm
         return result;
     }
 
-    private DialogResult AskNeutralEncounterOnBoth(string encounterName)
+    private DialogResult AskNeutralEncounterOnBoth(string encounterName, bool ignoreAlignment = false)
     {
         using var form = new Form
         {
-            Text = "Neutral Encounter",
+            Text = ignoreAlignment ? "Encounter" : "Neutral Encounter",
             FormBorderStyle = FormBorderStyle.None,
             StartPosition = FormStartPosition.CenterParent,
             MinimizeBox = false,
@@ -314,7 +314,7 @@ public sealed partial class MazeForm
             Top = 10,
             Width = framePanel.ClientSize.Width,
             Height = 36,
-            Text = "NEUTRAL ENCOUNTER",
+            Text = ignoreAlignment ? "ENCOUNTER" : "NEUTRAL ENCOUNTER",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -327,7 +327,7 @@ public sealed partial class MazeForm
             Top = 50,
             Width = framePanel.ClientSize.Width - 24,
             Height = 62,
-            Text = $"A group of neutral {encounterName} is approaching.{Environment.NewLine}Do you L)eave them alone or A)ttack?",
+            Text = $"A group of {(ignoreAlignment ? string.Empty : "neutral ")}{encounterName} is approaching.{Environment.NewLine}Do you L)eave them alone or A)ttack?",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -354,7 +354,7 @@ public sealed partial class MazeForm
         framePanel.Controls.Add(messageLabel);
         form.Controls.Add(framePanel);
 
-        var prompt = new ViewerPrompt("choice", $"Neutral {encounterName} approach. Leave alone or attack?", null, new[]
+        var prompt = new ViewerPrompt("choice", $"{(ignoreAlignment ? string.Empty : "Neutral ")}{encounterName} approach. Leave alone or attack?", null, new[]
         {
             new ViewerPromptOption("leave", "Leave alone"),
             new ViewerPromptOption("attack", "Attack")
@@ -480,8 +480,24 @@ public sealed partial class MazeForm
         PublishToViewer();
     }
 
+    private static string ElevatorLabel(int level, bool letters) =>
+        letters ? ((char)('A' + level - MinDungeonLevel)).ToString() : level.ToString();
+
+    private static bool TryParseElevatorInput(string text, bool letters, out int level)
+    {
+        text = text.Trim();
+        level = 0;
+        if (letters && text.Length == 1 && char.IsLetter(text[0]))
+            level = char.ToUpperInvariant(text[0]) - 'A' + MinDungeonLevel;
+        else if (!letters && !int.TryParse(text, out level))
+            return false;
+
+        return level >= MinDungeonLevel && level <= MaxDungeonLevel;
+    }
+
     private int? PromptElevatorLevelOnBoth()
     {
+        var wizardryLetters = IsPlayingWizardry;
         using var form = new Form
         {
             Text = "Elevator",
@@ -523,8 +539,8 @@ public sealed partial class MazeForm
             Left = 0,
             Top = 52,
             Width = framePanel.ClientSize.Width,
-            Height = 28,
-            Text = $"CURRENT LEVEL {_currentDungeonLevel}  ↵  CHOOSE ({MinDungeonLevel}-{MaxDungeonLevel})",
+            Height = 48,
+            Text = wizardryLetters ? $"THERE ARE BUTTONS HERE MARKED {ElevatorLabel(MinDungeonLevel, true)} THROUGH {ElevatorLabel(MaxDungeonLevel, true)}.{Environment.NewLine}PRESS ONE (↵ TO LEAVE)" : $"CURRENT LEVEL {_currentDungeonLevel}  ↵  CHOOSE ({MinDungeonLevel}-{MaxDungeonLevel})",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -534,10 +550,10 @@ public sealed partial class MazeForm
         var floorsLabel = new Label
         {
             Left = 0,
-            Top = 88,
+            Top = 104,
             Width = framePanel.ClientSize.Width,
-            Height = 380,
-            Text = string.Join(Environment.NewLine, Enumerable.Range(MinDungeonLevel, MaxDungeonLevel - MinDungeonLevel + 1).Select(n => $"{n}. Level {n}")),
+            Height = 364,
+            Text = string.Join(Environment.NewLine, Enumerable.Range(MinDungeonLevel, MaxDungeonLevel - MinDungeonLevel + 1).Select(n => wizardryLetters ? $"{ElevatorLabel(n, true)}. Level {n}" : $"{n}. Level {n}")),
             TextAlign = ContentAlignment.TopCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -582,7 +598,7 @@ public sealed partial class MazeForm
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= MinDungeonLevel && parsed <= MaxDungeonLevel)
+                if (TryParseElevatorInput(input.Text, wizardryLetters, out var parsed))
                 {
                     selected = parsed;
                     form.DialogResult = DialogResult.OK;
@@ -616,7 +632,7 @@ public sealed partial class MazeForm
                 return selected.Value;
 
             // Viewer choice path defaults to the first option if no keyboard value was entered.
-            if (int.TryParse(input.Text.Trim(), out var parsed) && parsed >= MinDungeonLevel && parsed <= MaxDungeonLevel)
+            if (TryParseElevatorInput(input.Text, wizardryLetters, out var parsed))
                 return parsed;
         }
 

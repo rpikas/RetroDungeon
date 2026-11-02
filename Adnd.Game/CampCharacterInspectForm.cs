@@ -75,6 +75,7 @@ public sealed class CampCharacterInspectForm : Form
             new StoneToFleshHandler(),
             new NeutralizePoisonHandler(),
             new CureDiseaseHandler(),
+            new RemoveCurseHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
             new RestorationHandler(),
@@ -1036,6 +1037,12 @@ public sealed class CampCharacterInspectForm : Form
         if (!idx.HasValue)
             return;
 
+        if (c.Equipment[equipped[idx.Value]]?.IsCursed == true)
+        {
+            SayOnBoth("Unequip", $"{c.Equipment[equipped[idx.Value]]!.Name} is cursed and cannot be removed until Remove Curse is cast.");
+            return;
+        }
+
         if (EquipmentManager.Unequip(c, equipped[idx.Value]))
         {
             c.RefreshRingProtectionEffects();
@@ -1233,6 +1240,7 @@ public sealed class CampCharacterInspectForm : Form
             _characterRepository.Save(caster);
 
         var targets = new List<SpellCastTarget>();
+        Adnd.Core.Items.Item? removeCurseItem = null;
 
         if (spell.RangeType == SpellRangeType.Self || spell.Id == "dispel_magic")
         {
@@ -1249,6 +1257,30 @@ public sealed class CampCharacterInspectForm : Form
                 return;
 
             targets.Add(SpellCastTarget.Ally(partyMembers[targetIdx.Value]));
+
+            if (spell.Id == "remove_curse")
+            {
+                var owner = partyMembers[targetIdx.Value];
+                var mode = PromptChoice("Remove Curse", new List<string> { $"Cast on {owner.Name}", "Cast on an item" });
+                if (!mode.HasValue)
+                    return;
+
+                if (mode.Value == 1)
+                {
+                    var carried = owner.Equipment.Values.Where(i => i != null).Select(i => i!).Distinct().Concat(owner.Inventory).ToList();
+                    if (carried.Count == 0)
+                    {
+                        SayOnBoth("Remove Curse", $"{owner.Name} carries no items.");
+                        return;
+                    }
+
+                    var itemIdx = PromptChoice("Choose Item", carried.Select(i => i.Name).ToList());
+                    if (!itemIdx.HasValue)
+                        return;
+
+                    removeCurseItem = carried[itemIdx.Value];
+                }
+            }
         }
         else
         {
@@ -1262,6 +1294,7 @@ public sealed class CampCharacterInspectForm : Form
             SpellId = spell.Id,
             Context = SpellUseContext.Exploration,
             Targets = targets,
+            TargetItem = removeCurseItem,
             PartyTargets = partyMembers,
             MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
         });

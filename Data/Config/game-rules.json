@@ -14,6 +14,7 @@
   "UIOldStyle": true,
   "DelayInMsbetweenActions": 0,
   "DelayInbetweenCombatMessages": 1000,
+  "WizardryMonstersWillLeaveYouAloneChanse": 10,
   "ShowDiceRollAndRuleApplicationInfo": true,
   "ShowReferencesInRuleAndDiceInfo": true,
   "ShowToHitRoll": false,

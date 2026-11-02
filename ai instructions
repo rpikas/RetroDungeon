@@ -7420,3 +7420,26 @@ target and write the chanse and roll to the log-
 
 on level 4, pos 12,14 Enconter will appear with 99% before you in the following group: Two Lvl 7 Fighters, two Lvl 7
 Mages, two High Priests, and one High Ninja. They will not be friendly, and it will be impossible to run away.
+7,9
+___
+The chest on level 4, pos 12,14 should always deop
+Latumofis potion
+Deadly ring
+Rod of flame
+
+When deadly ring is equiped the bearer will loose 3 hp every step taken and during every round when equiped
+When deadly ring is equiped, it can not be unequiped before remove curse cast.
+implement level 3 cleric spell remove curse if not done yet. 
+It can be cast on a character or on an item. 
+If cast on a character it will remove all curses on the character and all items equiped by the character. 
+If cast on an item it will remove the curse on that item only.
+
+introduce a setting WizardryMonstersWillLeaveYouAloneChanse that is default set to 10
+when encountering wizardry monsters the alignment is ignored when it comes to if they offer to leave you alone
+instead the % chanse in the setting should be used to determine that.
+
+when playing wizardry the UI for the Elevators should have letter instead of Numbers A-D is 1-4 it should look like this
+
+when entering a sqaure with a sign or similar, first draw the new square with sourounding walls and doors in traning
+grounds or maze then show the sign
+

@@ -51,6 +51,13 @@ public sealed class CombatCoordinator
     /// <summary>When set, encounters started from now on cannot be run away from.</summary>
     public bool CannotRun { get; set; }
 
+    /// <summary>When set, the chest of the next Wizardry encounter holds exactly these items.</summary>
+    public IReadOnlyList<string>? GuaranteedChestItems
+    {
+        get => _treasureService.GuaranteedWizardryChestItems;
+        set => _treasureService.GuaranteedWizardryChestItems = value;
+    }
+
     private readonly CombatResolver _combatResolver;
     private readonly CharacterSavingThrowService _savingThrowService = new();
     private readonly PartyRepository _partyRepository = new();
@@ -107,6 +114,7 @@ public sealed class CombatCoordinator
             new StoneToFleshHandler(),
             new NeutralizePoisonHandler(),
             new CureDiseaseHandler(),
+            new RemoveCurseHandler(),
             new RaiseDeadHandler(),
             new ResurrectionHandler(),
             new RestorationHandler(),
@@ -2881,6 +2889,7 @@ public sealed class CombatCoordinator
         return new Item
         {
             Name = source.Name,
+            IsCursed = source.IsCursed,
             Type = source.Type,
             Slot = source.Slot,
             Cost = source.Cost,

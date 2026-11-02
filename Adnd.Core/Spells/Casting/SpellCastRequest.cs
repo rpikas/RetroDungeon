@@ -24,4 +24,7 @@ public sealed class SpellCastRequest
     public bool IsScrollSpell { get; set; }
     public string? SourceItemName { get; set; }
     public int? EffectiveCasterLevel { get; set; }
+
+    /// <summary>Set when the spell is cast on an item instead of a character (Remove Curse).</summary>
+    public Adnd.Core.Items.Item? TargetItem { get; set; }
 }

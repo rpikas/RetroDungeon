@@ -889,11 +889,12 @@
         "All"
       ],
       "Rarity": "Cursed",
-      "Description": "A ring that drains life from its wearer.",
+      "Description": "A ring that drains life from its wearer: 3 HP lost every step and every combat round. Once worn it cannot be removed until Remove Curse is cast.",
       "SpecialAbilities": [
         "Regeneration -3",
         "Cursed"
       ],
+      "IsCursed": true,
       "Source": "Wizardry",
       "StockQuantity": 0
     },

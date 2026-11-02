@@ -83,9 +83,36 @@ public sealed partial class MazeForm
 
     private bool ShouldOfferFriendlyEncounterChoice(List<Character> party, IEnumerable<string> groupMonsterNames)
     {
-        return PartyHasNoEvilCharacters(party)
+        return !IsPlayingWizardry
+               && PartyHasNoEvilCharacters(party)
                && AreAllEncounterGroupsGood(groupMonsterNames);
     }
+
+    private static bool IsPlayingWizardry
+        => GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry;
+
+    // Wizardry monsters offer to leave the party alone by the configured chance, whatever their alignment.
+    private bool RollWizardryLeaveAlone()
+    {
+        var chance = Math.Clamp(GameRulesProvider.Current.WizardryMonstersWillLeaveYouAloneChanse, 0, 100);
+        var roll = _random.Next(1, 101);
+        var offered = roll <= chance;
+        RuleApplicationInfo.Publish(
+            "HomeBrew",
+            "",
+            "Wizardry monsters leave the party alone",
+            "Alignment is ignored for Wizardry monsters; roll 1d100 against WizardryMonstersWillLeaveYouAloneChanse. On a roll of the chance or less the party may leave them alone or attack.",
+            "1",
+            "100",
+            roll.ToString(),
+            $"Chance {chance}% => {(offered ? "offer to leave alone" : "no offer")}.");
+        return offered;
+    }
+
+    private bool ShouldOfferLeaveAloneChoice(IEnumerable<string> groupMonsterNames)
+        => IsPlayingWizardry
+            ? RollWizardryLeaveAlone()
+            : AreAllEncounterGroupsNeutral(groupMonsterNames) && _random.Next(1, 101) <= 50;
 
     private void ApplyGoodEncounterAttackConsequences(List<Character> party, string encounterName)
     {
@@ -339,14 +366,14 @@ public sealed partial class MazeForm
 
             var askedLeaveOrAttack = false;
 
-            if (AreAllEncounterGroupsNeutral(groups.Select(g => g.name)) && _random.Next(1, 101) <= 50)
+            if (ShouldOfferLeaveAloneChoice(groups.Select(g => g.name)))
             {
                 var distinctNames = groups.Select(g => g.name).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
                 var neutralName = distinctNames.Count == 1
                     ? distinctNames[0]
                     : string.Join(", ", distinctNames);
 
-                if (AskNeutralEncounterOnBoth(neutralName) == DialogResult.No)
+                if (AskNeutralEncounterOnBoth(neutralName, IsPlayingWizardry) == DialogResult.No)
                 {
                     PublishToViewer();
                     return;
@@ -398,9 +425,9 @@ public sealed partial class MazeForm
                 numberOfMonsters);
             var askedLeaveOrAttack = false;
 
-            if (AreAllEncounterGroupsNeutral(new[] { monsterName }) && _random.Next(1, 101) <= 50)
+            if (ShouldOfferLeaveAloneChoice(new[] { monsterName }))
             {
-                if (AskNeutralEncounterOnBoth(monsterName) == DialogResult.No)
+                if (AskNeutralEncounterOnBoth(monsterName, IsPlayingWizardry) == DialogResult.No)
                 {
                     PublishToViewer();
                     return;

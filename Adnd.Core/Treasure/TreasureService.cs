@@ -80,9 +80,13 @@ public sealed class TreasureService
         return result;
     }
 
+    /// <summary>When set, the next Wizardry encounter drops these items in its chest instead of the rolled ones.</summary>
+    public IReadOnlyList<string>? GuaranteedWizardryChestItems { get; set; }
+
     private void RollWizardryTreasure(MonsterInstance representative, TreasureResult result)
     {
-        var inLair = representative.IsInLair;
+        var guaranteed = GuaranteedWizardryChestItems;
+        var inLair = representative.IsInLair || guaranteed is { Count: > 0 };
         var roll = WizardryTreasureTable.Roll(representative.Template.DungeonLevel, inLair, _random);
         result.LogLines.Add($"{representative.DisplayName}: {roll.Log}");
 
@@ -90,10 +94,12 @@ public sealed class TreasureService
         bucket.GoldPieces += roll.Gold;
         result.GoldPieces += roll.Gold;
 
-        foreach (var number in roll.ItemNumbers)
+        var names = guaranteed is { Count: > 0 }
+            ? guaranteed.ToList()
+            : roll.ItemNumbers.Select(n => WizardryTreasureTable.GetItemNameCandidates(n).FirstOrDefault() ?? string.Empty).ToList();
+        foreach (var name in names)
         {
-            var name = WizardryTreasureTable.GetItemNameCandidates(number).FirstOrDefault() ?? string.Empty;
-            result.LogLines.Add($"{representative.DisplayName}: chest item #{number} = {name}.");
+            result.LogLines.Add($"{representative.DisplayName}: chest item = {name}{(guaranteed is { Count: > 0 } ? " (guaranteed)" : string.Empty)}.");
             bucket.MagicPlaceholders.Add(CreateWizardryPlaceholder(name));
             result.MagicPlaceholders.Add(CreateWizardryPlaceholder(name));
         }

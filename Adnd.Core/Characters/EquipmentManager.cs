@@ -55,6 +55,66 @@ public static class EquipmentManager
         return c.Alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil;
     }
 
+    /// <summary>HP lost per step and per combat round from equipped items with a negative "Regeneration -N" ability (Deadly Ring).</summary>
+    public static int GetEquippedLifeDrain(Character c)
+    {
+        var drain = 0;
+        foreach (var item in c.Equipment.Values)
+        {
+            if (item?.SpecialAbilities == null)
+                continue;
+
+            foreach (var ability in item.SpecialAbilities)
+            {
+                var m = System.Text.RegularExpressions.Regex.Match(ability ?? string.Empty, @"^\s*Regeneration\s*-\s*(\d+)\s*$");
+                if (m.Success)
+                    drain += int.Parse(m.Groups[1].Value);
+            }
+        }
+
+        return drain;
+    }
+
+    /// <summary>Applies the equipped life drain to <paramref name="c"/>. Returns the HP actually lost.</summary>
+    public static int ApplyEquippedLifeDrain(Character c)
+    {
+        if (c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead) || c.HasStatus(CharacterStatus.Ashes) || c.HasStatus(CharacterStatus.Lost))
+            return 0;
+
+        var drain = GetEquippedLifeDrain(c);
+        if (drain <= 0)
+            return 0;
+
+        var before = c.CurrentHitPoints;
+        c.CurrentHitPoints = Math.Max(0, before - drain);
+        if (c.CurrentHitPoints <= 0)
+            c.AddStatus(CharacterStatus.Dead);
+        return before - c.CurrentHitPoints;
+    }
+
+    /// <summary>Remove Curse on a character: lifts every curse on the character's equipped items. Returns the items freed.</summary>
+    public static List<Item> RemoveCursesFromEquipment(Character c)
+    {
+        var freed = new List<Item>();
+        foreach (var item in c.Equipment.Values.Where(i => i != null && i.IsCursed).Distinct())
+        {
+            if (RemoveCurse(item!))
+                freed.Add(item!);
+        }
+
+        return freed;
+    }
+
+    /// <summary>Lifts the curse on one item, so it can be taken off again.</summary>
+    public static bool RemoveCurse(Item item)
+    {
+        if (!item.IsCursed)
+            return false;
+
+        item.IsCursed = false;
+        return true;
+    }
+
     public static bool Equip(Character c, Item item)
     {
         EnsureEquipmentSlots(c);
@@ -74,6 +134,10 @@ public static class EquipmentManager
 
         var slot = item.Slot.Value;
         var isHandSlot = slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand;
+
+        // A cursed item stays on until Remove Curse is cast.
+        if (c.Equipment[slot]?.IsCursed == true)
+            return false;
 
         if (isHandSlot
             && (c.Equipment[EquipmentSlot.MainHand]?.IsTwoHanded == true
@@ -125,6 +189,9 @@ public static class EquipmentManager
 
         var equipped = c.Equipment[slot];
         if (equipped == null)
+            return false;
+
+        if (equipped.IsCursed)
             return false;
 
         var movedItems = new System.Collections.Generic.HashSet<Item>();

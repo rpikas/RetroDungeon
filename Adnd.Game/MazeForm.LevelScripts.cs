@@ -182,6 +182,7 @@ public sealed partial class MazeForm
 
         SayOnBoth("Ambush", "TWO LVL 7 FIGHTERS, TWO LVL 7 MAGES, TWO HIGH PRIESTS AND A HIGH NINJA APPEAR BEFORE YOU! THEY ARE NOT FRIENDLY.");
         _combatCoordinator.CannotRun = true;
+        _combatCoordinator.GuaranteedChestItems = ["Potion of Latumofis", "Deadly Ring", "Rod of Flame"];
         CombatOutcome outcome;
         try
         {
@@ -197,6 +198,7 @@ public sealed partial class MazeForm
         finally
         {
             _combatCoordinator.CannotRun = false;
+            _combatCoordinator.GuaranteedChestItems = null;
         }
 
         PublishToViewer();
