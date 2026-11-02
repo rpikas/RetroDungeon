@@ -1,4 +1,4 @@
-using Adnd.Game.Viewer;
+﻿using Adnd.Game.Viewer;
 using Adnd.Core.Config;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -17,7 +17,7 @@ internal enum LairChestChoice
 
 internal sealed class LairTreasureChestDialog : Form
 {
-    private static readonly IReadOnlyDictionary<string, Keys> Vocabulary = new Dictionary<string, Keys>(StringComparer.OrdinalIgnoreCase)
+    internal static readonly IReadOnlyDictionary<string, Keys> Vocabulary = new Dictionary<string, Keys>(StringComparer.OrdinalIgnoreCase)
     {
         ["open"] = Keys.O,
         ["cast"] = Keys.C,
@@ -93,12 +93,98 @@ internal sealed class LairTreasureChestDialog : Form
             Font = new Font("Consolas", 18f, FontStyle.Bold)
         };
 
-        frame.Controls.Add(title);
-        frame.Controls.Add(picture);
-        frame.Controls.Add(options);
-        Controls.Add(frame);
+        if (GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry)
+        {
+            BuildWizardryLayout(picture.Image);
+        }
+        else
+        {
+            frame.Controls.Add(title);
+            frame.Controls.Add(picture);
+            frame.Controls.Add(options);
+            Controls.Add(frame);
+        }
 
         KeyDown += (_, e) => HandleChoiceKey(e.KeyCode);
+    }
+
+    // Proving Grounds look: options in a frame on top, the corridor below with a small chest where a monster would stand.
+    private void BuildWizardryLayout(Image? chest)
+    {
+        const int margin = 8;
+        const int gap = 6;
+        const int width = 980;
+        var frameWidth = width - 2 * margin;
+        var color = GameRulesProvider.Current.DefaultColor;
+
+        var optionsFrame = new OldStyleFramePanel
+        {
+            Left = margin,
+            Top = margin,
+            Width = frameWidth,
+            Height = 128,
+            BackColor = Color.Black
+        };
+
+        optionsFrame.Controls.Add(new Label
+        {
+            Left = 12,
+            Top = 8,
+            Width = frameWidth - 24,
+            Height = 36,
+            Text = "A CHEST!  YOU MAY:",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = color,
+            Font = new Font("Consolas", 22f, FontStyle.Bold)
+        });
+
+        optionsFrame.Controls.Add(new Label
+        {
+            Left = 12,
+            Top = 48,
+            Width = frameWidth - 24,
+            Height = 72,
+            Text = "O)PEN   C)AST FIND TRAPS   L)EAVE ALONE" + Environment.NewLine + "I)NSPECT   B)ACK",
+            TextAlign = ContentAlignment.MiddleCenter,
+            BackColor = Color.Black,
+            ForeColor = color,
+            Font = new Font("Consolas", 18f, FontStyle.Bold)
+        });
+
+        var stripTop = margin + optionsFrame.Height + gap;
+        var strip = new Panel
+        {
+            Left = margin,
+            Top = stripTop,
+            Width = frameWidth,
+            Height = 176,
+            BackColor = Color.Black
+        };
+
+        typeof(Panel).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.SetValue(strip, true);
+        strip.Paint += (_, e) =>
+        {
+            var g = e.Graphics;
+            g.Clear(Color.Black);
+            EncounterForm.DrawCorridorFrame(g, strip.ClientRectangle);
+            if (chest != null)
+            {
+                const int maxHeight = 64;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                var scale = Math.Min(maxHeight / (float)chest.Height, 160f / chest.Width);
+                var w = (int)(chest.Width * scale);
+                var h = (int)(chest.Height * scale);
+                g.DrawImage(chest, new Rectangle((strip.Width - w) / 2, (strip.Height - h) / 2 + 20, w, h));
+            }
+
+            OldStyleFrame.Draw(g, strip.ClientRectangle, color);
+        };
+
+        Controls.Add(optionsFrame);
+        Controls.Add(strip);
+        ClientSize = new Size(width, stripTop + strip.Height + margin);
     }
 
     protected override void OnShown(EventArgs e)
@@ -148,7 +234,7 @@ internal sealed class LairTreasureChestDialog : Form
             CloseWith(LairChestChoice.Back);
     }
 
-    private static Image? ResolveChestImage()
+    internal static Image? ResolveChestImage()
     {
         var wizardryOnly = GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry;
 

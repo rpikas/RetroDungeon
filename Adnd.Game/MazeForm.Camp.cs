@@ -609,16 +609,42 @@ public sealed partial class MazeForm
         var minLevel = usedPrivateElevator ? 4 : MinDungeonLevel;
         var maxLevel = !_thinWalls ? MaxDungeonLevel : usedPrivateElevator ? 9 : 4;
 
-        var sb = new StringBuilder();
-        sb.AppendLine("Choose dungeon level:");
-        sb.AppendLine();
-        for (var n = minLevel; n <= maxLevel; n++)
-            sb.AppendLine($"{n}. Level {n}");
+        // Proving Grounds floors are marked with buttons A, B, C... in Wizardry; the maze keeps numbers.
+        var letters = _thinWalls && IsPlayingWizardry;
+        int? selected;
+        if (letters)
+        {
+            string Letter(int n) => ((char)('A' + n - MinDungeonLevel)).ToString();
+            var text = $"THERE ARE BUTTONS HERE MARKED {Letter(minLevel)} THROUGH {Letter(maxLevel)}."
+                + Environment.NewLine + Environment.NewLine + "PRESS ONE (↵ TO LEAVE)"
+                + Environment.NewLine + Environment.NewLine
+                + string.Join(Environment.NewLine, Enumerable.Range(minLevel, maxLevel - minLevel + 1).Select(n => $"{Letter(n)}. Level {n}"));
+            var labels = Enumerable.Range(minLevel, maxLevel - minLevel + 1).Select(n => $"Button {Letter(n)}").ToList();
+            var answer = PromptForText("Elevator", text, labels, minLevel)?.Trim();
+            selected = null;
+            if (!string.IsNullOrEmpty(answer))
+            {
+                var level = answer.Length == 1 && char.IsLetter(answer[0])
+                    ? char.ToUpperInvariant(answer[0]) - 'A' + MinDungeonLevel
+                    : int.TryParse(answer, out var parsed) ? parsed : 0;
+                if (level >= minLevel && level <= maxLevel)
+                    selected = level;
+            }
+        }
+        else
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Choose dungeon level:");
+            sb.AppendLine();
+            for (var n = minLevel; n <= maxLevel; n++)
+                sb.AppendLine($"{n}. Level {n}");
 
-        sb.AppendLine();
-        sb.Append($"Current level: {_currentDungeonLevel}");
+            sb.AppendLine();
+            sb.Append($"Current level: {_currentDungeonLevel}");
 
-        var selected = PromptForNumber("Elevator", sb.ToString(), minLevel, maxLevel);
+            selected = PromptForNumber("Elevator", sb.ToString(), minLevel, maxLevel);
+        }
+
         if (!selected.HasValue)
             return;
 

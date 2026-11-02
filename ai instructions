@@ -7442,4 +7442,11 @@ when playing wizardry the UI for the Elevators should have letter instead of Num
 
 when entering a sqaure with a sign or similar, first draw the new square with sourounding walls and doors in traning
 grounds or maze then show the sign
+9,0
+___
 
+when finding a treasure chest and playing wizardry, make chest smller and place it where you placed the picture of the mob. 
+have the options above it just when selecting option duing combat and have the proving grounds walls in teh background like this:
+
+in the disarm trap dialog change Y)es N)o to just (Y/N) in this dialog and other old style dialogs to be consistent.
+in the disarm trap dialog show who will try to disarm

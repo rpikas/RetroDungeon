@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -489,6 +489,24 @@ public sealed class EncounterForm : Form
     {
         base.OnShown(e);
 
+        if (_chestMode)
+        {
+            _viewerControl = ViewerControlPump.Start(this, Adnd.Game.Combat.LairTreasureChestDialog.Vocabulary, HandleChestKey);
+            ViewerPromptChanged?.Invoke(new ViewerPrompt(
+                "choice",
+                "Treasure chest: O)pen, C)ast Find Traps, L)eave, I)nspect, B)ack",
+                null,
+                new[]
+                {
+                    new ViewerPromptOption("open", "Open"),
+                    new ViewerPromptOption("cast", "Cast Find Traps"),
+                    new ViewerPromptOption("leave", "Leave"),
+                    new ViewerPromptOption("inspect", "Inspect"),
+                    new ViewerPromptOption("back", "Back")
+                }));
+            return;
+        }
+
         if (_resultLines != null)
         {
             StartResultPlayback();
@@ -697,7 +715,7 @@ public sealed class EncounterForm : Form
     }
 
     // One corridor frame: the nearest wall seen straight on, like the Proving Grounds view.
-    private static void DrawCorridorFrame(Graphics g, Rectangle rect)
+    internal static void DrawCorridorFrame(Graphics g, Rectangle rect)
     {
         using var pen = new Pen(GameRulesProvider.Current.DefaultColor, 2f);
         var outer = new Rectangle(rect.Left + 6, rect.Top + 4, rect.Width - 12, rect.Height - 8);
@@ -715,6 +733,21 @@ public sealed class EncounterForm : Form
     {
         g.Clear(Color.Black);
         DrawCorridorFrame(g, rect);
+
+        if (_chestMode)
+        {
+            if (_chestImage != null)
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                var scale = Math.Min(64f / _chestImage.Height, 160f / _chestImage.Width);
+                var w = (int)(_chestImage.Width * scale);
+                var h = (int)(_chestImage.Height * scale);
+                g.DrawImage(_chestImage, new Rectangle(rect.Left + (rect.Width - w) / 2, rect.Top + (rect.Height - h) / 2 + 20, w, h));
+            }
+
+            return;
+        }
 
         var images = _monsterImages.Count > 0
             ? _monsterImages.Select(m => m.Image).Where(i => i != null).Cast<Image>().ToList()
@@ -965,8 +998,62 @@ public sealed class EncounterForm : Form
             options);
     }
 
+    private bool _chestMode;
+    private Image? _chestImage;
+    private Adnd.Game.Combat.LairChestChoice _chestChoice = Adnd.Game.Combat.LairChestChoice.Back;
+
+    /// <summary>Shows a treasure chest in the monster strip with the chest options above it, and returns the pick.</summary>
+    internal Adnd.Game.Combat.LairChestChoice ShowChestChoice(IWin32Window owner, Image? chestImage)
+    {
+        _chestMode = true;
+        _chestImage = chestImage;
+        _chestChoice = Adnd.Game.Combat.LairChestChoice.Back;
+        _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _optionsTitleLabel.Text = "A CHEST!  YOU MAY:";
+        _optionsLegendLabel.Text = "O)PEN   C)AST FIND TRAPS   L)EAVE ALONE" + Environment.NewLine + "I)NSPECT   B)ACK";
+        _monsterPanel.Invalidate();
+        DialogResult = DialogResult.None;
+        ShowDialog(owner);
+        _chestMode = false;
+        _chestImage = null;
+        _monsterPanel.Invalidate();
+        return _chestChoice;
+    }
+
+    private void HandleChestKey(Keys key)
+    {
+        Adnd.Game.Combat.LairChestChoice? choice = key switch
+        {
+            Keys.O => Adnd.Game.Combat.LairChestChoice.Open,
+            Keys.C => Adnd.Game.Combat.LairChestChoice.CastFindTraps,
+            Keys.L => Adnd.Game.Combat.LairChestChoice.LeaveAlone,
+            Keys.I => Adnd.Game.Combat.LairChestChoice.Inspect,
+            Keys.B or Keys.Escape => Adnd.Game.Combat.LairChestChoice.Back,
+            _ => null
+        };
+
+        if (choice is null)
+            return;
+
+        _chestChoice = choice.Value;
+        _viewerControl?.Dispose();
+        _viewerControl = null;
+        ViewerPromptChanged?.Invoke(null);
+        DialogResult = DialogResult.OK;
+        Close();
+    }
+
     private void EncounterForm_KeyDown(object? sender, KeyEventArgs e)
     {
+        if (_chestMode)
+        {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+            HandleChestKey(e.KeyCode);
+            return;
+        }
+
         if (_resultLines != null)
         {
             e.Handled = true;

@@ -831,7 +831,7 @@ public sealed class CombatCoordinator
         {
             var rolledTrap = _chestTrapTableProvider.RollTrap(dungeonDepth, _random, out var trapRollInfo);
             RuleApplicationInfo.Publish(trapRollInfo);
-            chestResolution = ResolveLairChestInteraction(owner, session, survivors, dungeonDepth, rolledTrap);
+            chestResolution = ResolveLairChestInteraction(owner, session, survivors, dungeonDepth, rolledTrap, rewardForm);
         }
 
         var effectiveTreasure = BuildEffectiveTreasure(treasure, chestResolution.IncludeLairTreasure);
@@ -3264,7 +3264,7 @@ public sealed class CombatCoordinator
             Top = oldStyle ? 132 : 124,
             Width = framePanel.ClientSize.Width,
             Height = oldStyle ? 34 : 26,
-            Text = oldStyle ? "Y)ES    N)O" : "(Y/N)",
+            Text = "(Y/N)",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -3800,7 +3800,7 @@ public sealed class CombatCoordinator
         public bool TrapTriggered { get; set; }
     }
 
-    private LairChestResolutionResult ResolveLairChestInteraction(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, ChestTrapType trapType)
+    private LairChestResolutionResult ResolveLairChestInteraction(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, ChestTrapType trapType, EncounterForm? rewardForm = null)
     {
         var result = new LairChestResolutionResult
         {
@@ -3811,10 +3811,20 @@ public sealed class CombatCoordinator
 
         while (true)
         {
-            using var dialog = new LairTreasureChestDialog(p => ViewerPromptChanged?.Invoke(session, p));
-            dialog.ShowDialog(owner);
+            LairChestChoice choice;
+            if (rewardForm is { IsWizardryStyle: true })
+            {
+                using var chestImage = LairTreasureChestDialog.ResolveChestImage();
+                choice = rewardForm.ShowChestChoice(owner, chestImage);
+            }
+            else
+            {
+                using var dialog = new LairTreasureChestDialog(p => ViewerPromptChanged?.Invoke(session, p));
+                dialog.ShowDialog(owner);
+                choice = dialog.Choice;
+            }
 
-            switch (dialog.Choice)
+            switch (choice)
             {
                 case LairChestChoice.LeaveAlone:
                     result.IncludeLairTreasure = false;
@@ -3835,7 +3845,7 @@ public sealed class CombatCoordinator
                     break;
             }
 
-            if (dialog.Choice != LairChestChoice.Open && dialog.Choice != LairChestChoice.CastFindTraps && dialog.Choice != LairChestChoice.Inspect)
+            if (choice != LairChestChoice.Open && choice != LairChestChoice.CastFindTraps && choice != LairChestChoice.Inspect)
                 continue;
 
             var openerPick = PromptSelectPartyMember(owner, session, survivors, "Open chest", "Choose who opens the chest:", allowLeaveOption: true);
@@ -3952,7 +3962,7 @@ public sealed class CombatCoordinator
         result.TrapFound = true;
         RuleApplicationInfo.PublishLinked("PHB", "28TheifSpeicilaAbilitesChance", $"Find Traps result: trap found by {inspector.Name} ({FormatTrapName(result.TrapType)}).");
         Say(owner, "Treasure Chest", $"{inspector.Name} finds trap: {FormatTrapName(result.TrapType)}.", session);
-        var attempt = AskYesNoOnBoth(owner, session, "Disarm Trap", "Attempt to disarm the trap?");
+        var attempt = AskYesNoOnBoth(owner, session, "Disarm Trap", $"{inspector.Name} will try to disarm the trap. Attempt it?");
         if (attempt != DialogResult.Yes)
         {
             RuleApplicationInfo.Publish("Disarm Traps result: not attempted (trap remains armed).");

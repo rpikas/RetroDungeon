@@ -4181,12 +4181,7 @@
           "Description": "Death resistant (18%)."
         }
       ],
-      "SpecialDefenses": [
-        {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Werewolves can only be hit by silver or magical weapons."
-        }
-      ],
+      "SpecialDefenses": [ ],
       "BaseXPValue": 755,
       "XPValuePerHitPoint": 0,
       "Source": "Wizardry",

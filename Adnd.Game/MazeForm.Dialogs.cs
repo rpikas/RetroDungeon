@@ -113,7 +113,7 @@ public sealed partial class MazeForm
             Top = 52 + questionHeight,
             Width = framePanel.ClientSize.Width,
             Height = 34,
-            Text = "Y)ES    N)O",
+            Text = "(Y/N)",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
