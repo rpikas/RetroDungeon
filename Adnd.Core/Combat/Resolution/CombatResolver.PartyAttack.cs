@@ -841,7 +841,7 @@ public sealed partial class CombatResolver
 
             var partyDamageModText = partyDamageBonusApplied ? " +1 chant/prayer" : string.Empty;
             events.Add(new CombatEvent(
-                $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}{partyDamageModText}) for {damage}  damage. HP {before}->{target.CurrentHitPoints}."));
+                $"{member.Name} hits {target.DisplayName} with {weaponName} ({damageFormula}{partyDamageModText}) for {damage} damage. HP {before}->{target.CurrentHitPoints}."));
 
             var didSplitFromSlashing = actualDamageToTarget > 0
                 && IsSlashingAttack(mainHand)

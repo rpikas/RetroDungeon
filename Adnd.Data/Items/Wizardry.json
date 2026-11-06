@@ -1285,7 +1285,7 @@
       "Slot": "",
       "Cost": 1500,
       "Weight": 1,
-      "StockQuantity": -1,
+      "StockQuantity": 0,
       "ArmorClassBonus": 0,
       "IsShopBuyable": true,
       "Damage": "",
@@ -1744,7 +1744,7 @@
         "Casts cure serious wounds"
       ],
       "Source": "Wizardry",
-      "StockQuantity": -1
+      "StockQuantity": 0
     },
     {
       "Name": "Scroll of Katino",
@@ -1804,7 +1804,7 @@
         "Casts cause light wounds"
       ],
       "Source": "Wizardry",
-      "StockQuantity": -1
+      "StockQuantity": 0
     },
     {
       "Name": "Scroll of Halito",
@@ -1864,7 +1864,7 @@
         "Casts light"
       ],
       "Source": "Wizardry",
-      "StockQuantity": -1
+      "StockQuantity": 0
     },
     {
       "Name": "Scroll of Dilto",
@@ -1894,7 +1894,7 @@
         "Casts bless"
       ],
       "Source": "Wizardry",
-      "StockQuantity": -1
+      "StockQuantity": 0
     },
     {
       "Name": "Scroll of Badial",
@@ -1934,7 +1934,8 @@
       "Weight": 50,
       "IsShopBuyable": true,
       "ArmorClassBonus": 0,
-      "Damage": "1d6+1",
+      "Damage": "2d3",
+      "DamageVsLarge": "1d4",
       "AllowedClasses": [
         "Fighter",
         "Paladin",
@@ -1967,7 +1968,8 @@
       "Weight": 50,
       "IsShopBuyable": true,
       "ArmorClassBonus": 0,
-      "Damage": "2d7",
+      "Damage": "1d7",
+      "DamageVsLarge": "2d8",
       "AllowedClasses": [
         "Fighter",
         "Paladin",

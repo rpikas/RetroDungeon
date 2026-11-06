@@ -87,7 +87,7 @@ public sealed partial class MazeForm
         if (ProcessWerdnaStep())
             return;
 
-        ProcessLevelFourAmbushStep();
+        var ambushed = ProcessLevelFourAmbushStep();
 
         ProcessPitStep();
         ProcessTurnTableStep();
@@ -120,7 +120,11 @@ public sealed partial class MazeForm
             }
         }
 
-        if (alarm)
+        if (ambushed)
+        {
+            // The scripted ambush was this step's encounter.
+        }
+        else if (alarm)
         {
             TryRandomEncounter(chanceOverride: 1d, forceInLair: true);
         }
@@ -402,7 +406,7 @@ public sealed partial class MazeForm
         party.TreasureFindingStepsRemaining = 0;
         _partyRepository.Save(party);
 
-        RuleApplicationInfo.Publish($"Potion of Treasure Finding cache recovered at L{_currentDungeonLevel} ({_position.X},{_position.Y}): {party.TreasureFindingCopperPieces} cp and {party.TreasureFindingGemCount} gems.");
+        RuleApplicationInfo.Publish($"Potion of Treasure Finding cache recovered at L{_currentDungeonLevel} {PositionText}: {party.TreasureFindingCopperPieces} cp and {party.TreasureFindingGemCount} gems.");
         SayOnBoth("Treasure Finding", $"Treasure found! {receiver.Name} collects {party.TreasureFindingCopperPieces} cp and {party.TreasureFindingGemCount} gems.");
     }
 

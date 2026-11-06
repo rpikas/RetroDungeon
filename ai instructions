@@ -7450,3 +7450,44 @@ have the options above it just when selecting option duing combat and have the p
 
 in the disarm trap dialog change Y)es N)o to just (Y/N) in this dialog and other old style dialogs to be consistent.
 in the disarm trap dialog show who will try to disarm
+___
+when playing wizardry and showing the treasure found dialog, then make the picture smaller and have the proving grounds was as a
+background and make it integrated with the encounter dialog. show the picture in the same place as the mob picture is shown.
+
+When playing wizardry and showing the who will inspect dialog, also ask the question in the encounter dialog that looks similiar
+to this: 
+when party is surprised and can not act, show status Surprised in the Encounter dialog for each charater, not parry. 
+also no need to write messages for every charater that they parry when surprised.
+
+in wizardry when showing the last message, how much xp and gold you got, wait 4 extra secounds before closing it or
+until any key is pressed.
+
+there is an extra space in this message: "Gimli hits Kobold #3 with Club (1d6+2) for 7  damage. HP 6->0."
+it should be "Gimli hits Kobold #3 with Club (1d6+2) for 7 damage. HP 6->0."
+
+In wizardry when a good charater attacks firendly group of monsters there should be 5% chanse alignemnet change to
+Chaotic Neutral or Neutral Evil. if an evil charater leave friendly group alone there is a 5% chanse alignment
+change to LawfulNeutral or ChaoticGood. rules when playing adnd should not change
+
+On level 4 monsters will appear with 80% chanse in the following squares:
+pos 4,15
+pos 7,15
+pos 9,15
+pos 11,15
+pos 4,16
+pos 10,16
+11,8
+11,9
+1,5
+1,4
+3,5
+1,2
+2,2
+19,3
+19,4
+
+Scroll of Dilto, Scroll of Lomilwa, Scroll of Badios, Potion of Dial, Potion of Sopic should have no stock in the shop initially
+
+Anointed Mace should give 2d3 in damage to size S and M. L same damage as Mace
+Anointed Flail should give 1d7 in damage to size S and M. L same damage as Flail
+

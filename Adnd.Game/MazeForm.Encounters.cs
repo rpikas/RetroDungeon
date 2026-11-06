@@ -114,6 +114,42 @@ public sealed partial class MazeForm
             ? RollWizardryLeaveAlone()
             : AreAllEncounterGroupsNeutral(groupMonsterNames) && _random.Next(1, 101) <= 50;
 
+    private const int WizardryFriendlyAlignmentChangeChancePercent = 5;
+
+    // Wizardry: attacking a friendly group risks a good character turning Chaotic Neutral / Neutral Evil;
+    // leaving it alone risks an evil character turning Lawful Neutral / Chaotic Good.
+    private void ApplyWizardryFriendlyAlignmentChance(List<Character> party, bool leftAlone)
+    {
+        var changed = new List<string>();
+        foreach (var member in party)
+        {
+            var affected = leftAlone ? member.Alignment is Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil : member.IsGoodAlignment();
+            if (!affected || member.CurrentHitPoints <= 0)
+                continue;
+
+            var roll = _random.Next(1, 101);
+            var changes = roll <= WizardryFriendlyAlignmentChangeChancePercent;
+            RuleApplicationInfo.Publish(
+                $"Wizardry friendly group ({(leftAlone ? "left alone" : "attacked")}): {member.Name} alignment change roll 1d100={roll} vs {WizardryFriendlyAlignmentChangeChancePercent}% => {(changes ? "changes" : "no change")}.");
+            if (!changes)
+                continue;
+
+            var options = leftAlone
+                ? new[] { Alignment.LawfulNeutral, Alignment.ChaoticGood }
+                : new[] { Alignment.ChaoticNeutral, Alignment.NeutralEvil };
+            var newAlignment = options[_random.Next(0, 2)];
+            member.Alignment = newAlignment;
+            member.ApplyAlignmentBasedClassConsequences();
+            member.RefreshMoveFromArmorAndClass();
+            member.RefreshMonkProgressionStats();
+            _characterRepository.Save(member);
+            changed.Add($"{member.Name} -> {newAlignment.ToAbbreviation()}");
+        }
+
+        if (changed.Count > 0)
+            SayOnBoth("Alignment Shift", "Alignment changed: " + string.Join(", ", changed));
+    }
+
     private void ApplyGoodEncounterAttackConsequences(List<Character> party, string encounterName)
     {
         var goodMembers = party.Where(c => c.IsGoodAlignment()).ToList();
@@ -373,7 +409,11 @@ public sealed partial class MazeForm
                     ? distinctNames[0]
                     : string.Join(", ", distinctNames);
 
-                if (AskNeutralEncounterOnBoth(neutralName, IsPlayingWizardry) == DialogResult.No)
+                var leaveAnswer = AskNeutralEncounterOnBoth(neutralName, IsPlayingWizardry);
+                if (IsPlayingWizardry)
+                    ApplyWizardryFriendlyAlignmentChance(party, leftAlone: leaveAnswer == DialogResult.No);
+
+                if (leaveAnswer == DialogResult.No)
                 {
                     PublishToViewer();
                     return;
@@ -427,7 +467,11 @@ public sealed partial class MazeForm
 
             if (ShouldOfferLeaveAloneChoice(new[] { monsterName }))
             {
-                if (AskNeutralEncounterOnBoth(monsterName, IsPlayingWizardry) == DialogResult.No)
+                var leaveAnswer = AskNeutralEncounterOnBoth(monsterName, IsPlayingWizardry);
+                if (IsPlayingWizardry)
+                    ApplyWizardryFriendlyAlignmentChance(party, leftAlone: leaveAnswer == DialogResult.No);
+
+                if (leaveAnswer == DialogResult.No)
                 {
                     PublishToViewer();
                     return;
@@ -480,6 +524,12 @@ public sealed partial class MazeForm
         var partyData = _partyRepository.Load();
         var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
         var movedOut = new List<string>();
+        var fallen = partyData.Members
+            .Select(n => roster.TryGetValue(n, out var c) ? c : null)
+            .OfType<Character>()
+            .ToList();
+
+        ShowCemeteryOnBoth(fallen);
 
         foreach (var memberName in partyData.Members)
         {
@@ -497,7 +547,7 @@ public sealed partial class MazeForm
         if (movedOut.Count > 0)
         {
             RuleApplicationInfo.Publish(
-                $"Party defeat: moved characters to dungeon position L{_currentDungeonLevel} ({_position.X},{_position.Y}) and marked OUT: {string.Join(", ", movedOut)}.");
+                $"Party defeat: moved characters to dungeon position L{_currentDungeonLevel} {PositionText} and marked OUT: {string.Join(", ", movedOut)}.");
         }
 
         partyData.Members.Clear();
@@ -676,7 +726,7 @@ public sealed partial class MazeForm
         {
             _partyRepository.Save(party);
             RuleApplicationInfo.Publish(
-                $"Recovered out character(s) at L{_currentDungeonLevel} ({_position.X},{_position.Y}): {string.Join(", ", picks.Select(c => c.Name))}. Status changed OUT->IN and added to party.");
+                $"Recovered out character(s) at L{_currentDungeonLevel} {PositionText}: {string.Join(", ", picks.Select(c => c.Name))}. Status changed OUT->IN and added to party.");
             SayOnBoth("Inspect Area", $"Added to party: {string.Join(", ", picks.Select(c => c.Name))}.");
         }
     }

@@ -1,0 +1,3400 @@
+
+https://gamefaqs.gamespot.com/switch/462480-wizardry-proving-grounds-of-the-mad-overlord-remaster/faqs/42047
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+             | W I Z A R D R Y:  P R O V I N G  G R O U N D S  |
+             +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                   | O F  T H E  M A D   O V E R L O R D |
+                   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+              GAME:  WIZARDRY:  PROVING GROUNDS OF THE MAD OVERLORD
+          PLATFORM:  NES
+             GENRE:  FIRST PERSON RPG
+           CREATOR:  SirTech Copyright 1987
+AUTHOR OF THIS FAQ:  Kevin Butler AKA War Doc
+            E-MAIL:  kevinb(at)technologist(dot)com
+       FAQ VERSION:  1.02
+
+-------------------------------------------------------------------------------
+
+                              TABLE OF CONTENTS
+
+     UNIT   I:  INTRODUCTION
+
+ 1.  Legal Stuff
+ 2.  Version Information
+ 3.  Acknowledgements
+ 4.  Welcome
+ 5.  Overview
+
+     UNIT  II:  PLAYING THE GAME
+
+ 6.  Getting Started:  Castle
+
+     6.1  Gilgamesh's Tavern
+     6.2  Adventurer's Inn
+     6.3  Boltac's Trading Post
+     6.4  Temple of Cant
+     6.5  Edge of Town
+
+ 7.  Getting Started:  Maze
+
+     7.1  Combat
+     7.2  Loot
+
+ 8.  Taking Control
+
+     UNIT  III:  STRATEGIES
+
+ 9.  General Strategies
+10.  Specific Strategies for Levels
+
+     10. 1  Level  1
+     10. 2  Level  2
+     10. 3  Level  3
+     10. 4  Level  4
+     10. 5  Level  5
+     10. 6  Level  6
+     10. 7  Level  7
+     10. 8  Level  8
+     10. 9  Level  9
+     10.10  Level 10
+
+     UNIT  IV:  APPENDIX
+
+11.  Experience and Leveling
+12.  Spells
+
+     12.1  Cleric Spells
+     12.2  Mage Spells
+
+13.  Enemies
+
+     13.1  Animals
+     13.2  Clerics
+     13.3  Demons, Dragons, and Enchanted
+     13.4  Fighters
+     13.5  Giants, Insects, Myths, and Weres
+     13.6  Mages
+     13.7  Thieves
+     13.8  Undead
+
+14.  Items
+
+     14.1  Armor
+     14.2  Gauntlets and Helmets
+     14.3  Misc Items
+     14.4  Shields
+     14.5  Weapons
+
+    UNIT   V:  CONCLUSION
+
+15.  Conclusion
+
+_______________________________________________________________________________
+
+To find a particular chapter or subchapter do the following:
+
+1.  Highlight the chapter or subchapter name you wish to find.
+2.  Press CTRL-C
+3.  Press CTRL-F
+4.  Press CTRL-V
+5.  Press CTRL-F
+5.  You will arrive at the desired chapter or subchapter.
+
+_______________________________________________________________________________
+
+                                **************
+********************************* U N I T  I **********************************
+                                **************
++=================+
+| 1.  LEGAL STUFF |============================================================
++=================+
+
+This guide may not be reproduced under any circumstances except for personal
+private use.  It may not be placed on any web site or otherwise distributed
+publicly without advanced permission from the author.  Use of this guide on
+any other web site or as part of any public display is strictly prohibited, and
+a violation of copyright.  All content in this guide is Copyright 2005 by
+Kevin Butler.  Only the sites listed below have permission to publish this
+work or to display it:
+
+www.gamefaqs.com
+www.cheats.de
+faqs.ign.com
+www.neoseeker.com
+www.wonderdogsoftware.com
+www.1up.com
+
+If you wish to put this guide on your site, e-mail me and ask.  Save yourself
+the headache of putting up with lawsuits and whatnot because you failed to ask
+a simple "Can I post your guide on <insert site>?".  If you wish to use info
+in this guide, please acknowledge that you have done so.  If I don't respond or
+I say no, accept it as fact.  This especially goes out to Dave at
+www.cheatcc.com since he has a habit of taking guides without permission.  In
+addition, do not modify this guide in any way whatsoever to suit your purposes.
+The latest version can always be found at www.gamefaqs.com.
+
+If you see this guide on any other site then the one listed above, please
+e-mail me.  If you wish to ask questions or give input to this guide, please
+e-mail me.  Just have Wizardry as the subject so I know it isn't another kooky
+vendor trying to sell me hair gel or another XXX site telling me I have new
+friends.
+
++=========================+
+| 2.  VERSION INFORMATION |====================================================
++=========================+
+
+Version 1.0   03/26/06:  A guide is born.
+
+Version 1.01  04/05/06:  1.  Fixed several errors in headers.
+                         2.  Fixed some clerical spells.
+                         3.  Fixed some monsters and XP's.
+
+Version 1.02  09/17/06:  Fixed some issues in Chapters 10.4 and 10.5
+
++======================+
+| 3.  ACKNOWLEDGEMENTS |=======================================================
++======================+
+
+The following are a list of people or organizations that have made this FAQ
+possible:
+
+My wonderful family (who has had to put up with the tapping on the keyboard)
+SirTech for making a great game
+GameFAQ's for putting up this FAQ
+DvD Translations for bringing up a couple of errors I had in Chapters 10.4 and
+10.5
+
++=============+
+| 4.  WELCOME |================================================================
++=============+
+
+Welcome to my FAQ for Wizardry.  Since this is an first-person RPG, there
+is no walkthrough per se.  Instead, this FAQ is broken up into parts.  First
+you will be given an explanation of choices you have for playing the game.
+Next, you will be given all the possible commands you can give with a brief
+description of what those commands are.  The last part is dedicated to
+strategy.  This strategy will give you an idea on how to fulfill the
+requirements for getting the various items or doing the various tasks required
+to complete each area.  Input is appreciated along with constructive criticism.
+If you wish to e-mail me thoughts on this FAQ, better ways of doing things,
+other strategies, etc., feel free.  Make sure you put Wizardry in the subject.
+If you don't, I'm liable to discard the e-mail as spam.
+
++==============+
+| 5.  OVERVIEW |===============================================================
++==============+
+
+Wizardry is considered to be the "ancient" ancestor of RPG-style games created
+by Robert Woodhead and Andrew C Greenberg.  It was most certainly the biggest
+seller of its time when it was released in the early 1980's.  Wizardry was a
+composite of a few early dungeon crawlers such as pedit 15 and dnd (both of
+which were written on a PLATO mainframe).  Wizardry, which was released first
+for the Apple II series of computers, featured wire-frame, three-dimensional
+graphics.  For that time period, this was considered a big deal.  In addition
+to having an interactive maze when you moved, Wizardry also displayed pictures
+of the monsters you were fighting.  Although they were static images, it gave
+a little more life to the game.  Besides these innovations, Wizardry was still
+basically a text-based game but it was these innovations that made it extremely
+popular and even had seven other sequels through the years.  Wizardry also had
+spin-offs such as Bard's Tale and the first Might and Magic games.
+
+The story behind the first Wizardry:  Proving Grounds of the Mad Overlord are
+simple.  It seems that ages ago, the evil wizard Werdna (Andrew Greenberg's
+name spelled backwards) stole an amulet that was very powerful.  Through the
+ages, many adventurers attempted to retrieve this amulet but only met with
+grief.  The current overlord Trebor (Robert Woodhead spelled backward) has
+devised a test (of sorts) to ensure that only the best of the best can go
+through the dungeon and battle Werdna.  He built a series of dungeons and mazes
+to not only test out the adventurers, but also to enable them to build up
+enough power so that they may defeat Werdna and bring the amulet back to its
+rightful owners.
+
+                               ***************
+******************************** U N I T  II **********************************
+                               ***************
+
++==============================+
+| 6.  GETTING STARTED:  CASTLE |===============================================
++==============================+
+
+Once the game has loaded you will get a menu asking whether you wish to Start
+Game or Select Switch.
+
+If you Select Switch, then you have the option of going through a maze that is
+filled in or just line-vector graphics (like the Apple or PC), turn music on or
+off, and/or turn sound on or off.
+
+After you select Start Game, you will get the main Castle menu.  Discussion
+about the Exploration menu is discussed in Chapter 7.
+
+The main Castle menu looks like this:
+
+                                  +--------+
+                      +-----------+ Castle +---------+
+                      |           +--------+         |
+                      |                              |
+                      |                              |
+                      |                              |
+                      |   +-----------------------+  |
+                      |   | Gilgamesh's Tavern    |  |
+                      |   | Adventurer's Inn      |  |
+                      |   | Boltac's Trading Post |  |
+                      |   | Temple of Cant        |  |
+                      |   | Edge of Town          |  |
+                      |   +-----------------------+  |
+                      |                              |
+                      |                              |
+                      |                              |
+                      |                              |
+                     ++------------------------------++
+                     |  Name     Class AC Hits Status |
+                     |     BRIEF CHARACTER STATS      |
+                     +--------------------------------+
+
+
+
+
+ __________________________
+/ 6.1  Gilgamesh's Tavern /____________________________________________________
+--------------------------
+
+It is here that you can create or modify your party members.  Your choices are:
+
++-----------+
+| 6.1.1 Add |------------------------------------------------------------------
++-----------+
+
+Allows you to add party members.  Keep in mind that when you are adding
+members, alignment plays a factor.  In other words, if you have good characters
+in a party, evil characters can't come along and the opposite is true for evil
+characters in a party in regard to good characters.
+
++---------------+
+| 6.1.2  Remove |--------------------------------------------------------------
++---------------+
+
+Allows you to remove party members.
+
++----------------+
+| 6.1.3  Inspect |-------------------------------------------------------------
++----------------+
+
+Allows you to inspect a party member.  When you choose this option, the
+following screen is displayed (You can read in detail on how to create
+characters in Chapter 6.4.1.1):
+                        
+                    +----------------------------------+
+                    | Charname  L ## A-CLx Racex       |
+                    |                                  |
+                    | E.P.    #########    Age  ##     |
+                    | Gold    #########    A.C. ##     |
+                    |    STATS                         |
+                    | Strength ##    H.P.####/####     |
+                    |     I.Q. ##                      |
+                    |    Piety ##    Status ??         |
+                    | Vitality ##                      |
+                    | Agility  ##  M #/#/#/#/#/#/#     |
+                    |    Luck  ##  C #/#/#/#/#/#/#     |
+                    |                      COMMANDS    |
+                    |  Item #1         +---------------+
+                    |  Item #2         | Spell         |
+                    |  Item #3         | Equip         |
+                    |  Item #4         | Trade         |
+                    |  Item #5         | Identify      |
+                    |  Item #6         | Use           |
+                    |  Item #7         | Pool Gold     |
+                    |  Item #8         | Read          |
+                    +------------------+ Drop          |
+                                       | Leave         |
+                                       +---------------+
+
+CHARNAME:  Character's Name
+
+L       :  Character's current level
+
+A       :  Characters alignment.  There are three alignments a character can
+           be:  Good, Neutral, or Evil.
+
+CL      :  The character's class.  There are eight of them:  Fighter, Mage,
+           Priest, Thief, Wizard, Ninja, Lord, and Samurai
+
+RACE    :  The character's race.  There are five races:  Dwarf, Elf, Gnome,
+           Hobbit, or Human.
+
+E.P.    :  Experience Points.  These are what allows a character to advance up
+           in level.  A full chart of monster's and their E.P. is found in
+           Chapter 13.
+
+AGE     :  How old your character is.  After age 50, a character tends to lose
+           stats until they die.
+
+GOLD    :  How much money a character has.
+
+A.C.    :  A character's armor class.  The lower the number, the harder it is
+           to hit a character.  A LO will be displayed on the BRIEF CHARACTER
+           STAT screen when A.C. is lower then -9.
+
+STATS   :  These six statistics determine the initial character's class.  After
+           that, they indicate hit probability, damage, spell success, thieving
+           success, etc.
+
+H.P.    :  How many hits of damage a character can sustain before they are
+           killed.  The first number is the current hit points while the last
+           number is the total number of hit points.
+
+STATUS  :  This displays the current character's condition.  There are ##
+           conditions:  Ok Asleep Afraid P-lyze Petrif Dead Ashed Lost
+
+M and C :  These are the number of Mage and/or Cleric spells the character has
+           left.  You can have a maximum of nine per spell level.
+
+ITEM    :  You have eight slots to store items.  Symbols in front of the items
+           indicate their use or condition.  These symbols are:
+       
+           #:  Unusable or Broken
+           *:  Equipped
+           ?:  Unknown Item (Unidentified)
+
+COMMANDS:  These are commands to manipulate your characters or get more
+           detailed information.  Some commands are only issuable in camp.
+           This will be denoted by CAMP after the command:
+
+           SPELL(CAMP)   :  Allows you to cast spells such as healing and
+                            expedition-type spells.
+
+           EQUIP         :  Allows you to equip your character with their
+                            equipment.
+
+           TRADE         :  Allows you to trade items between characters.
+
+           IDENTIFY(CAMP):  Allows your Wizard to identify items.  The item
+                            must be traded to the Wizard before they can
+                            identify it.
+
+           USE(CAMP)     :  Allows your character to use an item (see Chapter
+                            14 for special item uses).
+
+           POOL GOLD     :  Allows one character to be holding all of the
+                            party's gold.
+
+           READ          :  Allows the character (if allowed mage and/or cleric
+                            spells) to read their spellbooks to see what spells
+                            they know.
+
+           DROP          :  Allows the character to drop an item.  NOTE:  The
+                            item must not be equipped or you will not be able
+                            to drop it.
+
+           LEAVE         :  Return to the previous screen.
+
++-------------------+
+| 6.1.4  Divvy Gold |----------------------------------------------------------
++-------------------+
+
+This enables you to evenly distribute the gold amongst the party members.
+Basically it takes all of the gold and divides by the number of party members.
+
++--------------+
+| 6.1.5  Leave |---------------------------------------------------------------
++--------------+
+
+Return to the previous menu.
+
+ ________________________
+/ 6.2  Adventurer's Inn /______________________________________________________
+------------------------
+
+Well, you have been out adventuring but you have taken a bit of damage or you
+haven't taken too much damage but your spell points are exhausted.  Look no
+further then the Adventurer's Inn to help the weary character recover.  The
+prices and recovery rates are as follows:
+
+LEGEND:  $/WK=COST PER WEEK; HP=HP RECOVERED
+
+                       +-----------------+------+----+
+                       | LOCATION        | $/WK | HP |
+                       +-----------------+------+----+
+                       +-----------------+------+----+
+                       | STABLES         | FREE |  0 |
+                       +-----------------+------+----+
+                       | A COT           |  10  |  1 |
+                       +-----------------+------+----+
+                       | ECONOMY ROOMS   |  50  |  3 |
+                       +-----------------+------+----+
+                       | MERCHANT SUITES | 200  |  7 |
+                       +-----------------+------+----+
+                       | ROYAL SUITE     | 500  | 10 |
+                       +-----------------+------+----+
+
+In addition to a good nights rest and recovery, it is at the Adventurers Inn
+that you gain levels when you have the prerequisite amount of experience
+points.  If you don't have the required experience points, you will get a
+screen showing how many more experience points you need to make the next
+level.
+
+HINT:  It is best to use your cleric to heal party members then have said
+cleric stay in the stables to recover their spell points.  Although some aging
+will occur, it won't be nearly as devastating as staying weeks on end
+recovering large amounts of hit points.
+
+ _____________________________
+/ 6.3  Boltac's Trading Post /_________________________________________________
+-----------------------------
+
+Good intentions are great and all for exploring the mazes below the castle, but
+they won't enable you to defeat very many monsters.  Boltac is your friendly,
+neighborhood shop.  With a limitless supply of non-magical supplies and a
+limited supply of magic, Boltac is the name you can "trust".  He not only sells
+goods, he will also buy goods, identify things, and uncurse items for you.
+
+A full chart of all items available in Wizardry (with their respective costs)
+can be found in Chapter xx.
+
+Specifics also include that you pay full price to get things identified and un-
+cursed and Boltac will pay half-price for things you sell to him.
+
+ ______________________
+/ 6.4  Temple of Cant /________________________________________________________
+----------------------
+
+During your adventures through the mazes and dungeons, bad things will happen
+to your characters.  It can be something as simple as paralysis or something
+more permanent such as death.  Regardless of the affliction, you can bring them
+to the temple.  For a "small" donation, the temple usually can fix what ails
+your character.  Prices are below:
+
+Paralysis is 100 GP/Character Level
+Dead      is 250 GP/Character Level
+Ashed     is 500 GP/Character Level
+
+Once your character learns the appropriate spells, the temple can become a
+thing of the past.
+
+ ____________________
+/ 6.5  Edge of Town /__________________________________________________________
+--------------------
+
+It is here that you can enter the dungeons below, go to the training grounds,
+or recover a lost party.
+
++-------------------------+
+| 6.5.1  Training Grounds |----------------------------------------------------
++-------------------------+
+
+In the Training Grounds, you have a lot of choices in regard to characters.
+
+/=================\
+| 6.5.1.1  Create |------------------------------------------------------------
+\=================/
+
+If you are going to be adventuring, you need characters to form parties with.
+This is where you can "custom" make your characters to suit your purposes.  You
+get a maximum of 20 characters you can create so be sure when you are creating
+characters so that they fit you idea of the ideal party.
+
+-  When you select this option, your first choice will be to name your
+   character.  You can use a maximum of eight letters and/or symbols to name
+   your character.  Once you have named your character, you can now choose
+   whether to create this character or not.
+
+-  Your next choice is the race of your character.  Race can play a big role
+   since certain races are better at certain things.  Humans are used as the
+   baseline while the other races are compared against them.  The chart below
+   shows the base stats for each race:
+
+LEGEND:  HUM=HUMAN; DWA=DWARF; GNO=GNOME; HOB=HOBBIT
+
+                 +-----------+-----------------------------+
+                 |           |            RACE             |
+                 | ATTRIBUTE | HUM | ELF | DWA | GNO | HOB |
+                 +-----------+-----+-----+-----+-----+-----+
+                 +-----------+-----+-----+-----+-----+-----+
+                 | STRENGTH  |  8  |   7 |  10 |   7 |   5 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | I.Q.      |  8  |  10 |   7 |   7 |   7 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | PIETY     |  5  |  10 |  10 |  10 |   7 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | VITALITY  |  8  |   6 |  10 |   8 |   6 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | AGILITY   |  8  |   9 |   5 |  10 |  10 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | LUCK      |  9  |   6 |   6 |   7 |  12 |
+                 +-----------+-----+-----+-----+-----+-----+
+
+-  As you can see from the chart above, certain races seem to lend themselves
+   to certain professions.  When you get to the discussion relating to a
+   character's class, you will see how certain stats will allow you to make
+   your character a certain class.
+
+-  After you choose your class, you will then select your alignment.  This only
+   will play a major role if you decide you want to be certain classes.  Again,
+   this will be shown with the chart relating to character class.
+
+-  The next screen will give you the base stats of the race you chose.  Below
+   the stats you will see Bonus followed by a number.  This is the number of
+   points you can add to any stat.  Depending on what class of character you
+   wish to create will determine where you will put your points.  Below is a
+   chart of classes and alignments:
+
+LEGEND:  STR=STRENGTH; IQ=I.Q.; PIE=PIETY; VIT=VITALITY; AGI=AGILITY; LUC=LUCK;
+         ALIGN=ALIGNMENT
+
++---------+----------------------------------------------------+
+|         |                        STAT                        |
+| CLASS   | STR | IQ | PIE | VIT | AGI | LUC | ALIGNMENT       |
++---------+-----+----+-----+-----+-----+-----+-----------------+
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| CLERIC  | --- | -- |  11 | --- | --- | --- | ANY NON-NEUTRAL |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| FIGHTER |  11 | -- | --- | --- | --- | --- | ANY             |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| LORD    |  15 | 12 |  12 |  15 |  14 |  15 | ONLY GOOD       |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| MAGE    | --- | 11 | --- | --- | --- | --- | ANY             |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| NINJA   |  17 | 17 |  17 |  17 |  17 |  17 | ONLY EVIL       |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| SAMURAI |  15 | 11 |  10 |  14 |  10 | --- | ANY NON-EVIL    |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| THIEF   | --- | -- | --- | --- |  11 | --- | ANY NON-GOOD    |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| WIZARD  | --- | 12 |  12 | --- | --- | --- | ANY NON-NEUTRAL |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+
+-  Once you've chosen the class, you will again be asked if you wish to create
+   this character.  Regardless of your answer, you will be returned to Training
+   Grounds screen.
+
+/======================================\
+| 6.5.1.2  Stat and Class Explanations |---------------------------------------
+\======================================/
+
+These are more detailed explanations as it relates to Stats and Classes.
+
+STATS:
+
+STRENGTH:  The physical strength of a character and a primary attribute for
+           fighters.  The stronger they are, the more damage they can inflict
+           on a foe.
+
+I.Q.    :  This is a primary attribute for mages.  This is what enables a mage
+           to cast spells and also gives them a better percentage chance of the
+           spell working.
+
+PIETY   :  This is a primary attribute for clerics.  This is what enables a
+           cleric to cast spells and also gives them a better percentage chance
+           of the spell working.
+
+VITALITY:  The health of a character.  A higher vitality translates to more hit
+           points and also a better chance of being brought back from the dead.
+
+AGILITY :  The ability of a character to get out of trouble faster then they
+           got into it.  A primary attribute for thieves.
+
+LUCK    :  The mystery factor that can have a positive influence on the above
+           factors.
+
+CLASSES:
+
+CLERIC :  The healers of the party.  These characters are primarily around for
+          not only their ability to heal party members, but also with casting
+          protection spells.  They are also decent fighters.
+
+FIGHTER:  Their purpose in life is to hack their enemies into little, bitty
+          pieces.
+
+LORD   :  A combination of a fighter and cleric.  They get the power of the
+          fighter and at fourth level, they start to learn clerical spells as
+          well.
+
+MAGE   :  The magic user.  As they progress in levels, they acquire more
+          devastating spells.  This more then makes up for their inability to
+          do hand-to-hand combat.
+
+NINJA  :  These are the assassins.  Ninjas have the ability to make one hit
+          instant kills.  In addition, if they are unencumbered by armor, their
+          armor class goes down as they level up.
+
+SAMURAI:  A combination of a fighter and mage.  As with the lord, they get the
+          power of the fighter.  At fourth level, they start to learn mage
+          spells.
+
+THIEF  :  Pretty self-explanatory.  Thieves are responsible for taking care of
+          the traps on treasure chests that are found.
+WIZARD :  A combination of a cleric and a mage.  Although they start out with
+          mage spells, wizard's start acquiring clerical spells at fourth
+          level.  They combine the best of clerics and mages to produce a
+          rather well-rounded character that who is both devastating in hand-to
+          -hand combat and magical combat as well.
+
+/==================\
+| 6.5.1.3  Inspect |-----------------------------------------------------------
+\==================/
+
+Same as using the "Inspect" option in Chapter 6.1.3 except all you can do is
+read your character's spell books (if they have any).
+
+/=================\
+| 6.5.1.4  Delete |------------------------------------------------------------
+\=================/
+
+Permanently deletes a character from your roster.
+
+/======================\
+| 6.5.1.5  Change Name |-------------------------------------------------------
+\======================/
+
+Allows you to change a character's name.  Again, you are only allowed to use
+eight characters as a name.
+
+/=======================\
+| 6.5.1.6  Change Class |------------------------------------------------------
+\=======================/
+
+This allows you to change your character from one class to another.  If you
+qualify (as per the chart in Chapter 6.5.1.1, then you can change your
+character to another class.  The following events occur when you change classes
+in this manner:
+
+-  You incur a four to seven year age penalty.  This is to reflect the fact
+   that you have to retrain in your new profession and it takes some time to
+   untrain you from your other one.
+
+-  All of your stats go back to the base stats (as per the chart in Chapter
+   6.5.1.1) according to your character's race.
+
+-  You lose all experience points and start at zero again.
+
+-  You retain all of your hit points previously earned but you go back to level
+   one again.
+
+-  If have a character that used some kind of magic, then you receive one spell
+   point per spell that is in your character's books.  For example, if you
+   convert from a cleric to a fighter and you knew all spells up to fourth
+   level, then your spell points would be 5/4/4/4.
+
+-  If a character changes from a magic using character into a non-magic using
+   character, they may still learn spells.  This will happen if they know at
+   least one spell in a level.  They will eventually learn the other spells and
+   also raise their spell points accordingly.
+
+NOTE:  If you use an item to change a character's class (i.e. using the Dagger
+of Thieves to convert someone to a ninja), then the above rules don't apply.
+Instead, the following rules are in effect:
+
+-  You incur no age, stat, magical, or experience point penalties.
+
+-  You will incur, though a penalty as related to experience points.  For
+   example, if you converted a character who was 10th level into another class
+   via a magical device, that character would stay at 10th level until they
+   accumulated enough experience points to make them 10th level in their new
+   class.  This example illustrates this point:
+
+   -  10th level thief converts, via magical device, to a 10th level ninja.
+      This character remains the same except they are now a ninja.
+
+   -  The character must gain an additional 228,157 experience points before
+      they can start to level as a ninja.  If they had been at a higher level
+      before the conversion, the experience point total would have been higher.
+
+/================\
+| 6.5.1.7  Leave |-------------------------------------------------------------
+\================/
+
+Return to the previous menu.
+
+
+
++-------------+
+| 6.5.2  Maze |----------------------------------------------------------------
++-------------+
+
+Enter the Proving Grounds of the Mad Overlord.  You will automatically be in
+camp when you initially enter the maze from the castle.
+
++-------------------------------+
+| 6.5.3  Restart an "Out" party |----------------------------------------------
++-------------------------------+
+
+If the power "accidentally" gets cut off while a party is in the maze, use this
+option to recover said party.
+
++-------------------+
+| 6.5.4  Leave Game |----------------------------------------------------------
++-------------------+
+
+As the name implies, this writes all data and exits the game back to the main
+screen again.
+
+
+Information regarding your travels through the mazes and training grounds are
+discussed in more detail in later chapters.
+
+You can use the "Restart an "OUT" party" option if your characters get trapped
+in the mazes due to power failure.
+
+Using the "Leave Game" option saves your game and exits you out of the game.
+
++============================+
+| 7.  GETTING STARTED:  MAZE |=================================================
++============================+
+
+When you select the "Maze" option from "Edge of Town" menu, you will
+automatically be in camp.  While in camp, you can Inspect your characters, Re-
+order the party members, Equip all of your party members, or Leave the camp.
+The rest will be covered in Chapters 9 and 10.
+
+When you enter the maze, you will be presented with a three-dimensional picture
+of the maze at the top and a list of your characters below.  You can have
+encounters anywhere in the maze.
+
+In addition, the top window will also display messages and points of interest
+in the maze.
+
+ ______________
+/ 7.1  Combat /________________________________________________________________
+--------------
+
+When an encounter does occur, you will be presented this screen (only the first
+three characters will fight.  If there are less then three characters,
+disregard):
+
+                                  MONSTERS
+                        +--------------------------+   
+                        | # MONSTER GROUP 1 (#)    |
+                        | # MONSTER GROUP 2 (#)    |
+                        | # MONSTER GROUP 3 (#)    |
+                     +--+------+-------------------+--+
+                     |         |       COMMANDS       |
+                     |         |       Fight          |
+                     | MONSTER |       Parry          |
+                     |         |       Spell          |
+                     |         |       Dispell        |
+                     | PICTURE |       Run            |
+                     |         |       Take Back      |
+                     |         |                      |
+                     +---------+----------------------+
+                     |  Name     Class AC Hits Status |
+                     |     BRIEF CHARACTER STATS      |
+                     +--------------------------------+
+
+MONSTERS:  This will have the number of monsters in front (per group), the name
+           or appearance of the group, and a number in parenthesis after it.
+           The last number is the number of monsters that can actively attack
+           out of the total number of monsters.
+
+MONSTER PICTURE:  It will show the picture or some sort of hazy unidentifiable
+                  picture if the monster is still unknown.
+
+COMMANDS:  The following command may be issued during combat:
+
+           FIGHT    :  Use your weapon or your hands to fight.  If multiple
+                       groups of monsters, it will ask you which group you wish
+                       to fight.
+
+           PARRY    :  You use your weapon or hands to defend yourself.  This
+                       makes your character harder to hit.
+
+           SPELL    :  This option is available if your character can cast
+                       spells.  Once selected, you will get a choice of spells
+                       to cast.
+
+           DISPELL  :  Only available to clerics, lords, and wizards.  This
+                       allows a character to dispell a group of undead.
+
+           RUN      :  Give you a chance to possibly escape from the monsters.
+
+           TAKE BACK:  Allows you to redo any combat commands again.
+
+ ____________
+/ 7.2  Loot /__________________________________________________________________
+------------
+
+After you defeat the monsters, you will either get the spoils of combat or you
+may be presented with a treasure chest.  Your choices are:
+
+INSPECT    :  Determine what kind of trap is on the chest.  The different types
+              of traps are:
+
+              ALARM          :  Brings in surrounding monsters to do battle
+                                with your party.
+
+              CLERIC'S CRISIS:  Paralyzes all clerics and wizards.
+
+              CROSSBOW BOLT  :  Hits whoever is opening the chest.
+
+              EXPLODING BOX  :  Causes shrapnel damage to all party members.
+
+              GAS BOMB       :  Poison bombs all party members with a chance of
+                                actually poisoning them.
+
+              MAGE'S MISERY  :  Paralyzes all mages and wizards.
+
+              POISON NEEDLE  :  Hits the opener with a poisoned needle with a
+                                chance of actually poisoning them.
+
+              STUNNER        :  Paralyzes the opener.
+
+              TELEPORTER     :  Randomly teleports the party to another part of
+                                the level.
+
+CALFO      :  Use the cleric spell to determine the trap.
+
+DISARM     :  Select the character that you wish to disarm the trap.
+
+OPEN       :  Just open up the chest without disarming any traps (if there are
+              any).
+
+LEAVE ALONE:  Just walk away from the chest and continue on with your journey.
+
+NOTE:  Keep in mind that your best chance at getting rare items is to open up
+chests.  Many items will never be for sale at Boltac's but you can make a tidy
+profit selling overstockage of rare items to him.
+
++====================+
+| 8.  TAKING CONTROL |=========================================================
++====================+
+
+The controls for this game are pretty simple:
+
+              +---------------------+--------------------------+
+              | BUTTON INVOLVED     | RESULT                   |
+              +---------------------+--------------------------+
+              +---------------------+--------------------------+
+              |          A          | CONFIRM A CHOICE OR      |
+              |                     | CHOOSE AN OPTION         |
+              +---------------------+--------------------------+
+              |          B          | CANCEL A CHOICE OR BACK  |
+              |                     | UP TO THE PREVIOUS MENU  |
+              +---------------------+--------------------------+
+              | DIRECTIONAL PAD     | MOVE YOUR PARTY THROUGH  |
+              |                     | THE MAZE                 |
+              +---------------------+--------------------------+
+
+                               ****************
+******************************** U N I T  III *********************************
+                               ****************
+
++========================+
+| 9.  GENERAL STRATEGIES |=====================================================
++========================+
+
+These are general strategies to make your journey through the different areas
+more enjoyable (or tolerable at least).  These also can be used when you don't
+want to look at the specific strategies and want to solve things on your own.
+Again, these are not all-encompassing and I know there are other general
+strategies to use.  These are, though, the best I have found to work for me.
+
+ __________________________
+/ 9.1  Run Away, Run Away /____________________________________________________
+--------------------------
+
+When you first start playing, most monsters will be stronger then your party.
+ This means that you will need to do mostly "hit and run" tactics to ensure
+your characters survive their first few encounters.  After you build up enough
+experience and levels, things will get easier.  This isn't saying, though, that
+you must stand "toe-to-toe" with every monster you encounter.  Even the most
+powerful parties can be whittled down with a few well-place sleep or silence
+spells.  In addition to spellcasting, some monsters also have some nasty breath
+weapons and can even drain a character's level.  So that powerful 15th level
+fighter may become a weaker 11th level fighter with appropriate loss of hit
+points and other stats to boot.  Keep these things in mind and remember, there
+is no shame in running away from a battle.  As the old maxim goes, "he who
+turns and runs away lives to fight another day".  Remember, dead adventurers do
+no good plus they waste any fine equipment you may have.
+
+ ________________________
+/ 9.2  Scorched Dungeon /______________________________________________________
+------------------------
+
+For most adventurers, there is only one purpose in going through the maze:
+Kill or be killed.  This means you will have to use every means at your
+disposal in order to ensure that you come out victorious.  This isn't saying,
+though, that some monster groups may attempt to make peace.  It will be up to
+you on that matter but keep in mind that your alignment can change.
+
+ _______________________________
+/ 9.3  You Are Here...And Lost /_______________________________________________
+-------------------------------
+
+All the dungeon levels are 20x20 grids.  However, this doesn't mean that levels
+cannot wrap-around onto themselves giving the appearance of the maze being much
+bigger then it actually is.  The most reliable way to get through the dungeon
+is to use some grid paper and map everything out.  In addition, you can use the
+mage spell DUMAPIC to determine your location.
+
+ _______________________________________
+/ 9.4  Ooops, Where Are My Characters? /_______________________________________
+---------------------------------------
+
+Sometimes bad things can happen in the maze.  You may lose your entire party
+due to being overwhelmed by monsters.  Of course, other bad things can happen
+such as a power loss.  If your party is lost due to being defeated by monsters,
+you will have to send out a relief expedition to rescue those party members.
+The fifth level cleric spell KANDI will help in finding those characters that
+are still in the maze.  As for your other problem, just recovering an "OUT"
+party should suffice.
+
+ _____________________________________________
+/ 9.5  The Right Equipment for the Right Job /_________________________________
+---------------------------------------------
+
+All characters excel at using or equipping certain pieces of equipment.  For
+fighters, nothing beats the Blade 'Cusinart for your hacking and chopping
+needs.  Clerics and wizards cannot use sharpened weapons so their are several
+maces available for their needs.  This also goes along with armor.  Good
+protection will ensure that your characters are hit less while they deal out
+more punishment.
+
+ ______________________________________
+/ 9.6  Borrowing Things...Permanently /________________________________________
+--------------------------------------
+
+Raid every treasure chest you come across.  This is especially true in the
+lower levels.  There are many rare items that can only be gotten from treasure
+chests.  In addition to having lots of goodies, you can sell any excess back to
+Boltac's and make money hand over fist, or you can trade it to new characters.
+Imagine a level one fighter with Plate +2, a Blade 'Cusinart, and Silver
+Gauntlets.  They may be low level but nothing is going to mess with them.
+
+ ___________________________
+/ 9.7  Let the Party Begin /___________________________________________________
+---------------------------
+
+Before you even begin expeditioning down in the maze, you need to create a
+well-balanced party.  There are as many theories as to what constitutes a well-
+balanced party as to how many people play this game.  In my opinion, if you
+have at least a fighter or two, cleric, thief, and a mage, you have a pretty
+good start.  Now, this isn't to say that you can't have someone else who also
+possesses combined skills such as a lord which is a fighter/cleric or a wizard
+which is a cleric/mage.  Again, balance is the key to running a successful
+party.
+
+ _________________________
+/ 9.8  Who Invited Them? /_____________________________________________________
+-------------------------
+
+Encounters are the lifeblood of any expedition.  It is with encounters that you
+gain experience, level up your characters, and collect loot.  Keep this in mind
+but also remember other factors in regard to fighting.
+
+ __________________________________________
+/ 9.9  The Good, the Bad, and the Neutral /____________________________________
+------------------------------------------
+
+Alignment doesn't play a major role in this game.  The two areas it really
+affects are what characters you can put together.  If there are any evil or
+good characters in a party, then those of the opposite alignment (good or evil)
+cannot join the party.  This sometimes will affect classes such as lords being
+good or ninjas being evil.  There is an exception to this rule that if you
+either use a device to convert or through your own actions, you can even have
+evil lords (trust me, I've done it many times).
+
++=====================================+
+| 10.  SPECIFIC STRATEGIES FOR LEVELS |========================================
++=====================================+
+
+There aren't really any specific strategies for this game.  There are, though,
+a couple of things that you are required to do before you can enter the lower
+levels of the maze.  In the next few chapters, I'll give you an idea of what
+you will be up against.
+
+ _________________
+/ 10. 1  Level 1 /_____________________________________________________________
+-----------------
+
+An introductory level.  This is where you get your first feel for this game and
+where you will do your initial "training".  There is no reason your characters
+can't be up to level 6 or 7 before they leave this floor.  Some things to note:
+
+-  At 13E, 18N is a Silver Key.  This will be useful on the second floor of the
+   maze.
+
+-  At 13E, 3N is a Bronze Key.  This will be useful on the second floor of the
+maze.
+
+-  At 9E, 13N is an area that fills with gold smoke.  You will need the gold
+   key on the second floor to get through this area.
+
+-  The elevator that can take you down to the fourth floor is located at 10E,
+   8N.
+
+-  Once your characters are fourth or fifth level, send them over to 13E, 5N
+   and tangle with the Murphy's Ghost.  You can accumulate quite a bit of
+   experience for minimal damage.
+
+-  Stairs down are located at 0E, 10N while the stairs going into the castle
+   are at 0E, 0N.
+
+ _________________
+/ 10. 2  Level 2 /_____________________________________________________________
+-----------------
+
+Things now start to get interesting.  You meet all manner of monster on this
+level.  You get to have your first encounters with enemy spell-casters such as
+the level one clerics and mages.  In addition, you encounter creatures that use
+breath weapons.  Some points of interest:
+
+-  The Silver Key grants you access to 8E, 12N.  Go up to 9E, 18N to get the
+   Bear Statue.
+
+-  The Bronze Key grants you access to 8E, 7N.  Go down to 12E, 4N to get the
+   Frog Statue.
+
+-  Go through the double doors at 4E, 11&12N and enter the dark area.  Go
+   around and to the middle to get the Gold Key at 4E, 16N.
+
+-  The elevator, located at 10E, 8N, is located in a "closet-type" area and
+   doesn't give you full access to the level.
+
+-  The stairs up are located at 12E, 7N and the stairs down are at 16E, 15N.
+
+ _________________
+/ 10. 3  Level 3 /_____________________________________________________________
+-----------------
+
+Things get a little more exciting on this level.  Besides the fact that the
+monsters get tougher, you will also have to deal with anomalies in the maze
+also.  You will have to navigate around pits and spinners.
+
+-  It would probably be a very good idea to acquire a Ring of Jewels.  This way
+   you save yourself spell points trying to figure out where you are all the
+   time.  This will be especially true after you have been on a spinner.
+
+-  The elevator is located within a mini-maze of its own.  Once you enter the
+   area around the elevator, you cannot go back onto the third level unless you
+   teleport or go to the second or fourth levels and use the stairs down or up
+   respectively.
+
+-  Stairs down are located at 1E, 8N in a small closet.
+
+ _________________
+/ 10. 4  Level 4 /_____________________________________________________________
+-----------------
+
+Although this level looks small at first given what limited access you have, it
+is actually a pretty big level.  As usual, the monsters get tougher but that is
+minor compared to the real test you will have to complete on this level.
+
+-  Your characters need to be at least 11th or 12th level to complete this part
+   of the quest.  It is required that you go to the "Monster Allocation Center"
+   12E, 15N to do battle.  Be forewarned, these monsters come from the lowest
+   depths of the maze.  You will encounter:
+
+   2 LEVEL 7 MAGES(3)
+   2 HIGH CLERICS (3)
+   2 LEVEL 7 FIGHTERS
+   1 HIGH NINJA
+
+   -  The best solution is to take out the High Ninja and Mages first since
+      they can do the most damage.  Use your Cleric to silence the High
+      Clerics.  You should be able to clear out this room without any trouble.
+      Follow the closets around to acquire the Blue Ribbon at 11E, 10N.  This
+      will allow you access to the elevator at 10E, 0N to enter the lowest
+      depths of the dungeon.
+
+-  Although you cannot get to the rest of the level from here, you can use the
+   teleporter traps on chests and MALOR to get around.  In addition, you can
+   access the rest of the level from the third level.  Stairs up are located at
+   10E, 18N and the stairs down to the fifth level are located at 17E, 7N.
+
+-  In order to get through the door at 17E, 12&13N, you must have the Bear
+   Statue.
+
+-  In the hallway in front of the "Monster Allocation Center", an alarm will
+   constantly go off which means you will constantly have encounters.  In
+   addition, the two side rooms offer you the same opportunity.  This is a good
+   way to build up characters.
+
+ _________________
+/ 10. 5  Level 5 /_____________________________________________________________
+-----------------
+
+More monsters much tougher.  Plus the undead seem to wander around a lot on
+this level.  You will also be introduced to the "dead magic" areas.  These are
+areas that spells will not work.  You will also encounter the "terminal" hall-
+way.  This is a hallway that wraps-around the level making it seem like an
+infinitely long hallway.
+
+-  Remember the "dead-magic" areas are both a blessing and curse.  A blessing
+   in the sense that your enemies will have to physically battle your party
+   which usually puts them at a disadvantage.  A curse because you cannot heal
+   any characters with spells.
+
+-  Stairs down are located at 8E, 8N and the staircase going up to the fourth
+   level is at 0E, 0N.  You can also us the elevator or MALOR to go up.
+
+-  This level has a lot of rooms and doors in it so make sure you keep track of
+   your location when you are out and about mapping this level.
+
+ _________________
+/ 10. 6  Level 6 /_____________________________________________________________
+-----------------
+The monsters are more dangerous on this level and you get to encounter an the
+entire gambit including demons.  There are many rooms, dark area, "dead magic"
+areas, etc. for you to deal with.
+
+-  Stairs are located at 8E, 16N if you want to go down and at 19E, 19N if you
+   want to go up.  Interestingly enough, the up stairs do not correspond to the
+   down stairs of level five.
+
+-  There are a few teleport areas located on this level.  If an area starts to
+   look familiar, use a DUMAPIC to see where you are located.  In addition,
+   mapping is critical so you don't get lost.
+
+ _________________
+/ 10. 7  Level 7 /_____________________________________________________________
+-----------------
+
+This is one of the most confusing mazes you have been in yet.  Everything you
+could find in one maze is located here.  Be particularly concerned about the
+amount of pits that are on this level.  They can do more to tear down a party
+then most of the monsters on this level.
+
+-  This is a level that is best avoided if you can help it.  If you can't, be
+   sure to map out everything because there are a lot of teleporters and pits
+   on this level.
+
+-  Both sets of stairs are buried in closets.  In turn, these closets are
+   buried within the center of the level within a nasty little maze of rooms.
+   Stairs up are at 10E, 10N while the stairs down are at 18E, 9N.
+
+-  You will encounter some of the toughest monsters, to date, on this level.
+   From this point on, the monsters don't get too much worse until you enter
+   the tenth level.
+
+ _________________
+/ 10. 8  Level 8 /_____________________________________________________________
+-----------------
+
+This level is loaded with teleporters and rooms galore.  It could drive even
+the most organized mapmaker insane.  This is where the Ring of Jewels will pay
+for itself since you practically have to cast a DUMAPIC every time you take a
+step since there are so many teleporters around.
+
+-  Stairs up are located at 9E, 11N which again, is offset from the stairs on
+   the level above.  It is also located in a room full of teleporters so be
+   sure you are mapping and getting your location at each step.
+
+-  Dark areas seem to abound on this level.  This is especially true in front
+   of the elevator.  In addition, teleporters are located within these dark
+   areas to further confuse you.
+
+-  You will get to deal with the giant population on this level.  Some of them
+   yield excellent amounts of experience points to help your character's level
+   even faster.
+
+ _________________
+/ 10. 9  Level 9 /_____________________________________________________________
+-----------------
+
+This level is pretty straightforward.  There is no way to access it except for
+the elevator.  You can only access level ten from this level.  The monsters are
+mostly undead, which is a very bad thing since most of them drain levels.  Be
+sure your party is high levels or you won't survive your ordeal.
+
+-  After you get off the elevator, go through the door, turn left and enter the
+   room.  Take care of the bad guys and go down the shoot in the upper-right
+   corner of the room located at 8E, 2N to enter the tenth level.
+
+-  You can also wander around this floor.  Surprisingly, it is very straight-
+   forward with no pits, spinners, dark areas, teleporters, etc.  This is,
+   though, counterbalanced by the fact that the monsters are at their maximum
+   levels of nastiness.
+
+ __________________
+/ 10.10  Level 10 /____________________________________________________________
+------------------
+
+This is for all the marbles.  You have entered the level that WERDNA is on.
+The monsters here have no mercy and none should be given.  You will have to
+battle your way through six rooms before you make it to WERDNA.  These six
+rooms are loaded with monsters, of the worst kind, designed to wear your party
+down and if possible, kill them off.
+
+-  You can instantly return to the castle at anytime.  In each room is an
+   alcove to the right when you first enter the door.  Go into the alcove to
+   return to the castle.
+
+-  There is no way to avoid these battles.  MALOR fails to function except to
+   let you go up.  In addition, DUMAPIC also fails to function on this level.
+   One way to map out this level is to enter an area, then MALOR up to a higher
+   level then cast DUMAPIC.
+
+-  All the rooms have a teleport square, these are located as follows:
+
+   ROOM 1:  Follow the wall left to get to the next hallway.
+
+   ROOM 2:  Follow the wall left to get to the next hallway.
+
+   ROOM 3:  Go straight and you will enter the next hallway.
+
+   ROOM 4:  Go left one square.  Turn right and go forward to enter the next
+            hallway.
+
+   ROOM 5:  Go straight and go down the hallway.
+
+   ROOM 6:  Turn left and go to the wall.  Turn right and go to the wall.  Turn
+            around and follow the hallway to WERDNA's lair.
+
+-  When you enter WERDNA's lair, he apparently is entertaining some guests.
+   These guests include a VAMPIRE LORD and 4 VAMPIRES.  This will be the
+   roughest battle you will ever fight but if you built up your characters,
+   this battle should be pretty easy.
+
+   -  Send everyone you can after WERDNA.  He has a lot of hit points and he is
+      very devastating on the attack.  Don't be fooled just because he is a
+      mage.
+
+   -  Have your spellcasters unload with MALIKTOS and TILTOWAITS.  If you have
+      enough of these cast, you may very well overcome the magic resistances of
+      all creatures in this room.  At the very least, you will weaken them
+      considerably.
+
+   -  After WERDNA is finished, take care of the VAMPIRE LORD and VAMPIRES (in
+      that order) if they haven't already been eliminated.
+
+-  After the smoke clears and WERDNA is defeated, use the amulet to cast MALOR.
+   From the point you entered this room, you can enter 17W, 3S, 9U to get to
+   the stairs leading to the castle.
+
+-  Upon ascending the stairs, you will be congratulated and handsomely rewarded
+   with the following:
+
+   -  50,000 experience points.
+
+   -  50,000 gold pieces
+
+   -  The privilege of displaying a ">" next to your name in recognition of
+      taking out WERDNA.
+
+After this, the credits will roll.  Don't despair, you can continue to go
+through the mazes and defeat WERDNA over and over again to see how high you can
+level your characters.
+
+                               ***************
+******************************** U N I T  IV **********************************
+                               ***************
+
++==============================+
+| 11.  EXPERIENCE AND LEVELING |===============================================
++==============================+
+
+If your characters are going to be successful, then they must acquire
+experience.  Experience is acquired by defeating the many monsters that wander
+around the mazes below the castle.  Gain enough experience and your character
+can level.  Leveling can improve a character's stats, allow them to gain new
+spells, and be able to strike multiple times to name a few.  The chart below
+shows the type of characters and experience required for each level:
+
++---------+----------------------------------------------------------+
+|         |                   EXPERIENCE REQUIRED                    |
+| CLASS   |   1   |   2   |   3   |   4   |   5    |   6    |   7    |
++---------+-------+-------+-------+-------+--------+--------+--------+
++---------+-------+-------+-------+-------+--------+--------+--------+
+| CLERIC  | 1,050 | 1,810 | 3,120 | 5,379 |  9,274 | 15,989 | 27,567 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| FIGHTER | 1,000 | 1,724 | 2,972 | 5,124 |  8,834 | 15,231 | 26,260 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| LORD    | 1,300 | 2,280 | 4,000 | 7,017 | 12,310 | 21,596 | 37,887 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| MAGE    | 1,100 | 1,896 | 3,268 | 5,634 |  9,713 | 16,746 | 28,872 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| NINJA   | 1,450 | 2,543 | 4,461 | 7,826 | 13,729 | 24,085 | 42,254 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| SAMURAI | 1,200 | 2,105 | 3,677 | 6,477 | 11,363 | 19,935 | 34,973 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| THIEF   |   900 | 1,551 | 2,674 | 4,610 |  7,948 | 13,703 | 23,625 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| WIZARD  | 1,200 | 2,105 | 3,677 | 6,477 | 11,363 | 19,935 | 34,973 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+
++---------+----------------------------------------------------------------+
+|         |                      EXPERIENCE REQUIRED                       |
+| CLASS   |   8    |    9    |   10    |   11    |   12    | 13 AND BEYOND |
++---------+--------+---------+---------+---------+---------+---------------+
++---------+--------+---------+---------+---------+---------+---------------+
+| CLERIC  | 47,529 |  81,946 | 141,286 | 243,596 | 419,993 | 304,132/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| FIGHTER | 45,275 |  78,060 | 134,586 | 232,044 | 400,075 | 289,709/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| LORD    | 66,468 | 116,610 | 204,578 | 358,908 | 629,663 | 475,008/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| MAGE    | 49,779 |  85,825 | 147,974 | 255,127 | 439,874 | 318,529/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| NINJA   | 74,129 | 130,050 | 228,157 | 400,275 | 702,236 | 529,756/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| SAMURAI | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 | 428,479/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| THIEF   | 40,732 |  70,227 | 121,081 | 208,760 | 359,931 | 260,639/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| WIZARD  | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 | 428,479/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+
++=============+
+| 12.  SPELLS |================================================================
++=============+
+
+What makes some classes of characters more deadly then others is not only their
+ability to use weapons.  A character's ability to use spells can have a
+devastating effect on any monster or monsters that are encountered.  As a
+spell-casting character moves up in levels, they acquire higher level spells.
+This, in turn, translates to more devastating spells.
+
+There are seven levels of spells for both clerics and mages.  In addition,
+characters such as lords, samurai, and wizards also have the ability to use
+spells.  Below are listed the priest and mage spells available in the game.
+The spells are set up like this and are listed in alphabetical order:
+
+NAME       :  NAME OF THE SPELL
+CAST       :  CAMP, COMBAT, OR BOTH
+EFFECTS    :  WHAT ARE THE SPELL'S EFFECTS
+
+DESCRIPTION:  BRIEF DESCRIPTION OF SPELL
+
+ ______________________
+/ 12.1  Cleric Spells /________________________________________________________
+----------------------
+
+Cleric spells are more aligned with healing and protecting the party.  There
+are, though, a few clerical spells that can cause a lot of destruction.
+
++------------------------+
+| 12.1.1  Level 1 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  KALKI
+CAST       :  COMBAT
+EFFECTS    :  LOWERS THE AC OF THE PARTY BY ONE
+
+DESCRIPTION:  This spell will lower all armor classes of the characters by one
+              point for the duration of the combat.
+
+NAME       :  DIOS
+CAST       :  BOTH
+EFFECTS    :  HEALS FROM 1-8 POINTS OF DAMAGE TO A CHARACTER
+
+DESCRIPTION:  This spell can be used both in camp and combat to heal a
+              character.
+
+NAME       :  BADIOS
+CAST       :  COMBAT
+EFFECTS    :  DOES 1-8 POINTS OF DAMAGE AGAINST ONE MONSTER
+
+DESCRIPTION:  This spell is the reverse of the healing spell DIOS.
+
+NAME       :  MILWA
+CAST       :  CAMP
+EFFECTS    :  CREATES A LIGHT IN THE DUNGEON
+
+DESCRIPTION:  A spell which lasts a short time.  MILWA can reveal the maze
+              several squares ahead plus it also reveals the locations of
+              secret doors.
+
+NAME       :  PORFIC
+CAST       :  COMBAT
+EFFECTS    :  LOWERS THE AC OF THE CASTER BY FOUR
+
+DESCRIPTION:  This spell will lower the armor class of the caster by four
+              points for the duration of combat.
+
++------------------------+
+| 12.1.2  Level 2 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  MATU
+CAST       :  COMBAT
+EFFECTS    :  LOWERS THE AC OF THE PARTY BY TWO
+
+DESCRIPTION:  This spell will lower all armor classes of the characters by two
+              points for the duration of the combat.
+
+NAME       :  CALFO
+CAST       :  COMBAT
+EFFECTS    :  REVEALS A CHEST'S TRAP
+
+DESCRIPTION:  This spell is only available when your are looking to disarm a
+              trap on a chest.  There is still a slight chance that this spell
+              may fail to reveal what the trap is.
+
+NAME       :  MANIFO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES PARALYSIS IN A GROUP OF MONSTERS
+
+DESCRIPTION:  This spell, if successful, will effectively immobilize a group of
+              monsters (immobilization is dependent on a monster's
+              resistances).  This allows party members to strike for double
+              damage.
+
+NAME       :  MONTINO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES SOUND TO QUIT TRANSMITTING AROUND A GROUP OF MONSTERS
+
+DESCRIPTION:  An effective spell to use against spellcasters.  If successful,
+              this spell will silence them and prevent them from using magic.
+ 
++------------------------+
+| 12.1.3  Level 3 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  LOMILWA
+CAST       :  CAMP
+EFFECTS    :  CREATES A LIGHT IN THE DUNGEON
+
+DESCRIPTION:  A longer version of MILWA.  This version lasts the entire
+              expedition into the dungeon and is only extinguished when
+              entering a dark area or when you go to the castle.  You will see
+              LIGHT in the status box indicating that this spell is active.
+
+NAME       :  DIALKO
+CAST       :  BOTH
+EFFECTS    :  CURES PARALYSIS
+
+DESCRIPTION:  In addition to curing paralysis, it also cures against spell-
+              effects which mimic paralysis such as KATINO and MANIFO.
+
+NAME       :  LATUMAPIC
+CAST       :  BOTH
+EFFECTS    :  IDENTIFIES MONSTERS
+
+DESCRIPTION:  This can be cast either in camp or combat.  Either way, it allows
+              you to identify all monsters until you go back into the castle
+              again.  You will see IDENTIFY in the status box indicating that
+              this spell is active.
+
+NAME       :  BAMATU
+CAST       :  COMBAT
+EFFECTS    :  LOWERS THE AC OF THE PARTY BY FOUR
+
+DESCRIPTION:  This spell will lower all armor classes of the characters by four
+              points for the duration of the combat.
+ 
++------------------------+
+| 12.1.4  Level 4 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  DIAL
+CAST       :  BOTH
+EFFECTS    :  HEALS FROM 2-16 POINTS OF DAMAGE
+
+DESCRIPTION:  This spell can be used both in camp and combat to heal a
+              character.
+
+NAME       :  BADIAL
+CAST       :  COMBAT
+EFFECTS    :  DOES 2-16 POINTS OF DAMAGE AGAINST ONE MONSTER
+
+DESCRIPTION:  This spell is the reverse of the healing spell DIAL.
+
+NAME       :  LATUMOFIS
+CAST       :  BOTH
+EFFECTS    :  CURES POISONING
+
+DESCRIPTION:  This spell can be used both in camp and combat to neutralize the
+              effects of poisoning.
+
+NAME       :  MAPORFIC
+CAST       :  BOTH
+EFFECTS    :  LOWERS THE AC OF ALL CHARACTERS BY TWO POINTS
+
+DESCRIPTION:  Once cast, this spell lasts the entire duration of you time in
+              the dungeon.  It is only negated when you go up to the castle
+              again.  You will see PROTECT in the status box indicating that
+              this spell is active.
+
++------------------------+
+| 12.1.5  Level 5 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  DIALMA
+CAST       :  BOTH
+EFFECTS    :  HEALS FROM 3-24 POINTS OF DAMAGE
+
+DESCRIPTION:  This spell can be used both in camp and combat to heal a
+              character.
+
+NAME       :  BADIALMA
+CAST       :  COMBAT
+EFFECTS    :  DOES 3-24 POINTS OF DAMAGE AGAINST ONE MONSTER
+
+DESCRIPTION:  This spell is the reverse of the healing spell DIALMA.
+ 
+NAME       :  LITOKAN
+CAST       :  COMBAT
+EFFECTS    :  DOES 3-24 POINTS OF DAMAGE AGAINST ONE MONSTER GROUP
+
+DESCRIPTION:  Causes a pillar of flame to ravage a group of monsters.
+
+NAME       :  KANDI
+CAST       :  CAMP
+EFFECTS    :  LOCATE LOST PARTY MEMBERS
+
+DESCRIPTION:  If you lose a party in the dungeon, this spell can be used to
+              locate said characters so you can mount a rescue operation.
+
+NAME       :  DI
+CAST       :  CAMP
+EFFECTS    :  RESURRECTION
+
+DESCRIPTION:  This spell will bring a dead character back to life.  This is
+              dependent on the spellcaster and the character being brought
+              back.  Failure means the character is ASHED and needs something
+              stronger.  Success means the character has one hit point.
+
+NAME       :  BADI
+CAST       :  COMBAT
+EFFECTS    :  INSTANT DEATH TO ONE MONSTER
+
+DESCRIPTION:  The reverse of DI.  This spell attempts to slay one monster
+              instantly.
+
++------------------------+
+| 12.1.6  Level 6 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  LORTO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES BLADES TO SLICE THROUGH A MONSTER GROUP DOING 6-36 POINTS
+              OF DAMAGE
+
+DESCRIPTION:  This spell causes non-elemental-type damage to a group of
+              monsters.
+
+NAME       :  MADI
+CAST       :  BOTH
+EFFECTS    :  RESTORES ALL HIT POINTS AND CURES ALL STATUS AFFLICTIONS ON ONE
+              CHARACTER
+
+DESCRIPTION:  This is the most powerful healing spell available.  Although it
+              won't bring the dead back to life, it will pretty much bring a
+              character back to full potential again.
+
+NAME       :  MABADI
+CAST       :  COMBAT
+EFFECTS    :  REMOVES ALL HIT POINTS SAVE ONE FROM THE TARGET MONSTER
+
+DESCRIPTION:  This spell is extremely effective, if it works, against monsters
+              with high numbers of hit points.  Of course, enemy clerics also
+              use this spell to great effect.
+
+NAME       :  LOKTOFEIT
+CAST       :  COMBAT
+EFFECTS    :  TRANSPORTS THE PARTY BACK TO THE CASTLE
+
+DESCRIPTION:  When things get desperate and grim, this spell may save you.  The
+              penalty for use is the loss of all character's equipment and most
+              gold.  In addition, this spell may fail.
+
++------------------------+
+| 12.1.7  Level 7 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  MALIKTO
+CAST       :  COMBAT
+EFFECTS    :  DOES 12-72 POINTS OF DAMAGE TO ALL MONSTERS
+
+DESCRIPTION:  Sends a shower of meteors down upon your enemies.
+
+NAME       :  KADORTO
+CAST       :  CAMP
+EFFECTS    :  RESURRECT DEAD CHARACTERS
+
+DESCRIPTION:  The more powerful version of DI, this spell also will resurrect
+              ASHED characters.  Characters resurrected with this spell have
+              all their hit points.  Failure to raise an ASHED character means
+              they are lost forever.
+
+ ____________________
+/ 12.2  Mage Spells /__________________________________________________________
+--------------------
+
+Mage spells are more aligned with killing and destruction in mind.  Many mage
+spells are extremely devastating to whole groups of monsters.  There are even
+a couple of spells so powerful, that they actually drain levels from the
+caster.
+
++------------------------+
+| 12.2.1  Level 1 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  HALITO
+CAST       :  COMBAT
+EFFECTS    :  1-8 HIT POINT FIREBALL AGAINST ONE MONSTER
+
+DESCRIPTION:  Allows the caster to throw a ball of fire at a monster.
+
+NAME       :  MOGREF
+CAST       :  COMBAT
+EFFECTS    :  LOWERS THE AC OF THE CASTER BY TWO
+
+DESCRIPTION:  This spell will lower the armor class of the caster by two points
+              for the duration of combat
+
+NAME       :  KATINO
+CAST       :  COMBAT
+EFFECTS    :  PUTS MONSTERS IN ONE GROUP TO SLEEP
+
+DESCRIPTION:  This spell, if successful, will effectively immobilize a group of
+              monsters (immobilization is dependent on a monster's
+              resistances).  This allows party members to strike for double
+              damage.
+
+NAME       :  DUMAPIC
+CAST       :  CAMP
+EFFECTS    :  GIVES THE LOCATION OF THE PARTY
+
+DESCRIPTION:  This is an extremely valuable spell (especially when you are
+              mapping).  It gives your location relative to the stairs leading
+              back up into the castle.  It is given as E and N coordinates plus
+              how many levels below the first you are.
+
++------------------------+
+| 12.2.2  Level 2 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  DILTO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES DARKNESS TO SURROUND A GROUP OF MONSTERS
+
+DESCRIPTION:  This spell is handy because it cloaks your party.  Therefore, you
+              have a better chance at hitting the monsters within a group.
+
+NAME       :  SOPIC
+CAST       :  COMBAT
+EFFECTS    :  CAUSES THE CASTER TO BECOME TRANSPARENT, LOWERING THEIR AC BY 4
+
+DESCRIPTION:  This spell will lower the armor class of the caster by four
+              points for the duration of combat.
+
++------------------------+
+| 12.2.3  Level 3 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  MAHALITO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES 4-24 POINTS OF DAMAGE TO A GROUP OF MONSTERS
+
+DESCRIPTION:  This is an improved HALITO spell which can fireball a group of
+              monsters.
+
+NAME       :  MOLITO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES 3-18 POINTS OF DAMAGE TO A GROUP OF MONSTERS
+
+DESCRIPTION:  This spell causes 3-18 points of non-elemental damage so if
+              monsters are resistant to heat or cold...
+
++------------------------+
+| 12.2.4  Level 4 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  MORLIS
+CAST       :  COMBAT
+EFFECTS    :  CAUSES DARKNESS AND FEAR TO AFFECT A MONSTER GROUP
+
+DESCRIPTION:  These two factors combined will basically nullify a monster's
+              attack for the duration of the spell.
+
+NAME       :  DALTO
+CAST       :  COMBAT
+EFFECTS    :  CAUSE 6-36 POINTS OF COLD DAMAGE ON A GROUP OF MONSTERS
+
+DESCRIPTION:  Causes a blizzard to be created that damages the monster group.
+
+NAME       :  LAHALITO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES 6-36 POINTS OF DAMAGE TO A MONSTER GROUP
+
+DESCRIPTION:  This is the "powerhouse" version of MAHALITO designed to clear
+              out those pesky rooms and corridors.
+
++------------------------+
+| 12.2.5  Level 5 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  MAMORLIS
+CAST       :  COMBAT
+EFFECTS    :  CAUSES DARKNESS AND FEAR TO AFFECT ALL MONSTERS
+
+DESCRIPTION:  These two factors combined will basically nullify a monster's
+              attack for the duration of the spell.
+
+NAME       :  MAKANITO
+CAST       :  COMBAT
+EFFECTS    :  CAUSES A VACUUM TO FORM AROUND ALL MONSTER GROUPS
+
+DESCRIPTION:  If they breathe air, then there is a chance they will be affected
+              by this spell.  Most anything with under 40 hit points will be
+              suffocated.
+
+NAME       :  MADALTO
+CAST       :  COMBAT
+EFFECTS    :  CAUSE 8-64 POINTS OF COLD DAMAGE ON A GROUP OF MONSTERS
+
+DESCRIPTION:  This is the industrial version of the DALTO spell.  Causes a
+              really big blizzard to form.
+
++------------------------+
+| 12.2.6  Level 6 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  LAKANITO
+CAST       :  COMBAT
+EFFECTS    :  SUFFOCATES ONE GROUP OF MONSTERS IF THEY BREATHE AIR
+
+DESCRIPTION:  This spell still has a chance of failing depending on the
+              monsters you are attacking.
+
+NAME       :  ZILWAN
+CAST       :  COMBAT
+EFFECTS    :  DESTROYS ONE UNDEAD MONSTER
+
+DESCRIPTION:  Basically, this spell will eradicate one monster of the undead
+              variety.  Not good against groups of undead.
+
+NAME       :  MASOPIC
+CAST       :  COMBAT
+EFFECTS    :  LOWERS THE AC OF THE PARTY BY FOUR
+
+DESCRIPTION:  This spell will lower all armor classes of the characters by four
+              points for the duration of the combat.
+
+NAME       :  HAMAN
+CAST       :  COMBAT
+EFFECTS    :  THERE ARE SEVERAL EFFECTS THAT CAN OCCUR WHEN YOU CHOOSE THIS
+              SPELL:
+
+              AUGMENT MAGIC   :  ENHANCES SPELLS TO DO MORE DAMAGE OR TO CURE
+                                 GREATER POINTS.
+
+              CURE PARTY      :  CURES THE ENTIRE PARTY OF ALL STATUS AILMENTS.
+
+              SILENCE ENEMIES :  SILENCES ALL MONSTERS.
+
+              TELEPORT ENEMIES:  TELEPORTS ALL MONSTERS FROM OUT OF THE COMBAT
+                                 AREA.
+
+              HEAL PARTY      :  CASTS A MADI ON THE ENTIRE PARTY
+
+DESCRIPTION:  The effects of this spell are so powerful, that the character
+              loses a level of experience just to cast it.
+
++------------------------+
+| 12.2.7  Level 7 Spells |-----------------------------------------------------
++------------------------+
+
+NAME       :  MALOR
+CAST       :  BOTH
+EFFECTS    :  ALLOWS A PARTY TO TELEPORT TO A DESTINATION
+
+DESCRIPTION:  When used in camp, you can determine your destination.  This
+              means that you may teleport into solid rock, which means instant
+              death.  Used in combat, it will teleport you to some random point
+              on the same level.
+
+NAME       :  MAHAMAN
+CAST       :  COMBAT
+EFFECTS    :  SAME AS HAMAN EXCEPT ADD THESE:
+
+              PROTECT PARTY :  DROPS THE ARMOR CLASS OF ALL PARTY MEMBERS BY 20
+                               POINTS FOR THE DURATION OF COMBAT.
+              RAISE THE DEAD:  BRINGS DEAD CHARACTERS BACK TO LIFE WITH A DI
+                               SPELL.
+              
+
+DESCRIPTION:  The conditions for this spell are the same as for HAMAN.
+
+NAME       :  TILTOWAIT
+CAST       :  COMBAT
+EFFECTS    :  CAUSE A LARGE EXPLOSION TO OCCUR THAT DOES 10-100 POINTS OF
+              DAMAGE TO ALL MONSTERS
+
+DESCRIPTION:  This is basically a room, corridor, etc. cleaner.  It affects all
+              monsters and it pretty much can clean their clocks.
+
++==============+
+| 13.  ENEMIES |===============================================================
++==============+
+
+Throughout your travels in the maze, you will encounter many different types of
+monsters (101 to be exact).  These monsters are as varied as the characters you
+bring down in to the maze.  Each monster has a specific listing of statistics
+unique to that monster.  In addition, each monster belongs to a certain type.
+This becomes important later on as you acquire items that deal damage or
+protect you from certain types of monsters.  The monsters are first broken down
+by their type, then they are listed alphabetically under that type.  All things
+after an equal sign are headers for what the column actually is.  If there
+isn't an equal sign, that means what is listed is the actual header):
+
+The following is an explanation of the various abbreviations used in regard to
+the items listed in the next few sub-chapters of enemies.
+
+UNIDENT=UNIDENTIFED NAME:  Unless you have LATUMAPIC going, you may encounter
+                           monster groups you can't readily identify.  These
+                           are what the unknown monsters are called.
+
+#APP=# OF MONSTERS THAT WILL APPEAR:  This is a random number determined by a
+                                      dice roll.  If this column shows some-
+                                      thing like 1D6, then you can have any-
+                                      where from one to six of these monsters
+                                      appear.
+
+HP=HIT POINTS:  The number of hit points a monster will have.  This, like a
+                character's hit points, is how much damage a monster will take
+                before it is killed.  This is a random number determined by
+                the dice plus any add-ons.  1D3+1 means a monster will have
+                anywhere from two to four hit points.
+
+AC=ARMOR CLASS:  How hard or easy it is to hit the monster.  The lower the
+                 number, the harder it will be to hit the monster.
+
+RG=REGENERATION:  How many hit points the monster regenerates per round.
+
+MR=MAGICAL RESISTANCE:  This is a percentage chance that a spell will fail
+                        against this monster.  This includes both direct attack
+                        spells and area-effect spells.
+
+RST=RESISTANCE(S):  These are the things the creature is resistant to.  In
+                    other words, they won't be affected by attacks based on the
+                    following:
+
+                    COL=COLD
+                    FIR=FIRE
+                    FRI=FRIENDS (IF THIS IS SHOWN, IT MEANS A MONSTER CAN BE
+                                 FRIENDLY)
+                    LVD=LEVEL DRAIN
+                    POI=POISON
+
+#AT=# ATTACKS:  How many attacks the monster does per round.
+
+DAMAGE:  Amount of damage a monster does per attack.
+
+LD=LEVEL DRAIN:  Some monsters can drain levels from a character.  The number
+                 represented here is the number of levels that will be drained
+                 with a successful hit by the monster.
+
+BRW=BREATH WEAPON:  The type of breath weapon (if any) the monster possesses.
+                    Breath weapons are:
+
+                    COL=COLD
+                    FIR=FIRE
+                    LVD=LEVEL DRAIN
+                    POI=POISON
+                    STO=STONING
+
+CSL=CLERICAL SPELL LEVEL:  This number represents the level of cleric spells
+                           the monster knows.  For example, if this number is
+                           three, then the monster knows all clerical spells
+                           for the first three levels.
+
+MSL=MAGE SPELL LEVEL:  This number represents the level of mage spells the
+                       monster knows.  For example, if this number is three,
+                       then the monster knows all mage spells for the first
+                       three levels.
+
+ATT PROP=ATTACK PROPERTIES AND OTHER INFO:  This column represents specific
+                                            attack types the monster can
+                                            perform.  In addition, it also
+                                            lists other characteristics
+                                            regarding said monster.
+
+                                            AKL=AUTOKILL ATTACK
+                                            HLP=DOES MONSTER CALL FOR HELP?
+                                            PAR=PARALYZING ATTACK
+                                            POI=POISON ATTACK
+                                            RUN=DOES MONSTER RUN?
+                                            SLE=SLEEP ATTACK
+                                            STO=STONING ATTACK
+
+GRH=GROUP HELP:  These are the monsters that the current monster will appear
+                 with.
+
+%GH=% GROUP HELP:  The percentage chance that the current monster will appear
+                   with the monsters under the GRH column.  A 100% means that
+                   the current monster always appears with the designated GRH
+                   monsters.
+
+XP=EXPERIENCE POINTS:  This number represents the total amount of experience
+                       points a monster is worth.  This number is then divided
+                       by the number of people you have in your party.  For
+                       example, a monster worth 600 XP will yield 100 XP per
+                       character in a six-character party.
+
+ ________________
+/ 13.1  Animals /______________________________________________________________
+----------------
+
++---------------+------------------------+-------+-------+----+----+----+
+| NAME          | UNIDENT                | #APP  |  HP   | AC | RG | MR |
++---------------+------------------------+-------+-------+----+----+----+
++---------------+------------------------+-------+-------+----+----+----+
+| ATTACK DOG    | ANIMAL/ANIMALS         |  1D6  |  4D8  |  1 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| BLEEB         | STRANGE ANIMAL/ANIMALS |  1D8  | 10D8  |  0 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| BUBBLY SLIME  | SLIME/SLIMES           |  2D2  | 1D3+1 | 12 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| CAPYBARA      | GIANT RODENT/RODENTS   | 2D4+1 |   4D4 |  8 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| CHIMERA       | STRANGE ANIMAL/ANIMALS |  1D4  |   9D6 |  2 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| COYOTE        | MANGY DOG/DOGS         |  4D2  |   4D6 |  8 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| CREEPING CRUD | SLIME/SLIMES           | 1D6+1 |   3D4 |  6 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| FLACK         | STRANGE ANIMAL/ANIMALS |  1D1  | 15D12 | -3 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| GAZE HOUND    | STRANGE ANIMAL/ANIMALS |  1D5  |   4D8 | -1 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| GIANT TOAD    | AMPHIBIAN/AMPHIBIANS   | 2D2+4 |   4D5 |  7 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| KILLER WOLF   | ANIMAL/ANIMALS         |  1D6  |   6D8 |  0 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| VORPAL BUNNY  | RABBIT/RABBITS         | 2D3+2 | 3D6+2 |  6 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| WERE BEAR     | BEAR/BEARS             | 2D3+2 |   5D8 |  6 |  1 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+| WYVERN        | STRANGE ANIMAL/ANIMALS |  1D6  | 7D8+7 |  4 |  0 |  0 |
++---------------+------------------------+-------+-------+----+----+----+
+
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| NAME          | RST            | #AT | DAMAGE        | LD | BRW | CSL | MSL |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| ATTACK DOG    |                |  1  | 1D8+1/1D8+1   |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| BLEEB         | FRI, FIR, COL, |  1  | 1D8+1/1D8+1   |  0 |     |  0  |  0  |
+|               | POI, LVD       |     |               |    |     |     |     |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| BUBBLY SLIME  |                |  1  | 1D8+1/1D8+1   |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| CAPYBARA      |                |  1  | 1D8+1/1D8+1   |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| CHIMERA       | FIR            |  6  | 1D3/1D3/1D4/  |  0 | FIR |  0  |  0  |
+|               |                |     | 1D4/2D4/3D4   |    |     |     |     |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| COYOTE        | POI, LVD       |  1  | 4D4           |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| CREEPING CRUD | COL            |  1  | 1D3           |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| FLACK         | FRI, FIR, COL  |  1  | 4D8+3         |  0 | COL |  0  |  0  |
+|               | POI, LVD       |     |               |    |     |     |     |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| GAZE HOUND    |                |  1  | 1D2           |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| GIANT TOAD    | FIR            |  3  | 1D4/1D6/2D3+2 |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| KILLER WOLF   |                |  2  | 2D4/2D4       |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| VORPAL BUNNY  | COL            |  2  | 1D6/1D8       |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| WERE BEAR     | COL, POI       |  1  | 3D6+1         |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+| WYVERN        |                |  2  | 2D8/1D6       |  0 |     |  0  |  0  |
++---------------+----------------+-----+---------------+----+-----+-----+-----+
+
++---------------+----------------+----------------+------+--------+
+| NAME          | ATT PROP       | GRH            | %GRH | XP     |
++---------------+----------------+----------------+------+--------+
++---------------+----------------+----------------+------+--------+
+| ATTACK DOG    | SLE, RUN       | DRAGON FLY     |   20 |  1,120 |
++---------------+----------------+----------------+------+--------+
+| BLEEB         | RUN, HLP       | NINJA, MASTER  |   20 |  3,300 |
++---------------+----------------+----------------+------+--------+
+| BUBBLY SLIME  |                | ORC            |   10 |     55 |
++---------------+----------------+----------------+------+--------+
+| CAPYBARA      | POI, RUN       | COYOTE         |   20 |    520 |
++---------------+----------------+----------------+------+--------+
+| CHIMERA       |                | MAGE, ARCH(1)  |   20 |  3,515 |
++---------------+----------------+----------------+------+--------+
+| COYOTE        | RUN            | VORPAL BUNNY   |   25 |    780 |
++---------------+----------------+----------------+------+--------+
+| CREEPING CRUD | POI            | BUBBLY SLIME   |   24 |    550 |
++---------------+----------------+----------------+------+--------+
+| FLACK         | STO, POI, PAR, | MURPHY'S GHOST |  100 |  9,200 |
+|               | AKL            |                |      |        |
++---------------+----------------+----------------+------+--------+
+| GAZE HOUND    | PAR, RUN       | GAZE HOUND     |   20 |  1,235 |
++---------------+----------------+----------------+------+--------+
+| GIANT TOAD    | POI, RUN       | COYOTE         |   20 |    795 |
++---------------+----------------+----------------+------+--------+
+| KILLER WOLF   |                | DRAGON PUPPY   |   15 |  1,460 |
++---------------+----------------+----------------+------+--------+
+| VORPAL BUNNY  | AKL, RUN       | CAPYBARA       |   20 |    735 |
++---------------+----------------+----------------+------+--------+
+| WERE BEAR     | POI, PAR, RUN  | VORPAL BUNNY   |   30 |  1,320 |
++---------------+----------------+----------------+------+--------+
+| WYVERN        | POI            | SPIRIT         |   20 |  1,540 |
++---------------+----------------+----------------+------+--------+
+
+ ________________
+/ 13.2  Clerics /______________________________________________________________
+----------------
+
++-----------------+------------------------+-------+-------+----+----+----+
+| NAME            | UNIDENT                | #APP  |  HP   | AC | RG | MR |
++-----------------+------------------------+-------+-------+----+----+----+
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, HIGH(1) | CLERIC/CLERICS         |  1D6  |   8D8 |  3 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, HIGH(2) | CLERIC/CLERICS         |  1D1  |  11D8 |  2 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, HIGH(3) | CLERIC/CLERICS         | 2D2+3 |   8D8 |  2 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC          | CLERIC/CLERICS         |  1D6  | 3D8+1 |  4 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, LVL 1   | CLERIC/CLERICS         | 1D4+1 |   1D8 |  5 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, LVL 3   | CLERIC/CLERICS         | 2D2+3 | 3D8+1 |  4 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, LVL 5   | CLERIC/CLERICS         |  1D5  |   5D8 |  4 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| CLERIC, LVL 8   | CLERIC/CLERICS         |  1D5  |   7D8 |  3 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| WIZARD          | CLERIC/CLERICS         |  1D6  |   4D8 |  4 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| WIZARD, LVL 8   | CLERIC/CLERICS         |  1D6  |   8D8 |  2 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME            | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, HIGH(1) |                |  1  | 1D8+2       |  0 |     |  5  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, HIGH(2) |                |  1  | 1D8/1D8     |  0 |     |  6  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, HIGH(3) |                |  1  | 1D8+4       |  0 |     |  5  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC          |                |  1  | 1D6+2       |  0 |     |  2  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, LVL 1   |                |  1  | 1D8         |  0 |     |  1  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, LVL 3   |                |  1  | 1D8+2       |  0 |     |  2  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, LVL 5   |                |  1  | 1D6+2       |  0 |     |  3  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CLERIC, LVL 8   |                |  1  | 1D8         |  0 |     |  4  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WIZARD          |                |  1  | 1D10        |  0 |     |  3  |  1  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WIZARD, LVL 8   |                |  1  | 1D8+4       |  0 |     |  4  |  3  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+
++-----------------+----------------+----------------+------+--------+
+| NAME            | ATT PROP       | GRH            | %GRH | XP     |
++-----------------+----------------+----------------+------+--------+
++-----------------+----------------+----------------+------+--------+
+| CLERIC, HIGH(1) |                | SAMURAI, CHAMP |   20 |  2,160 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC, HIGH(2) |                | FIRE GIANT     |  100 |  3,300 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC, HIGH(3) |                | NINJA, HIGH    |  100 |  2,200 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC          | SLE            | GAS DRAGON     |   60 |    870 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC, LVL 1   | SLE, RUN       | ROGUE          |   25 |    515 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC, LVL 3   | POI, SLE, RUN  | CLERIC, LVL 1  |   30 |    990 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC, LVL 5   |                | NINJA, LVL 6   |   20 |  1,220 |
++-----------------+----------------+----------------+------+--------+
+| CLERIC, LVL 8   |                | WYVERN         |   20 |  1,720 |
++-----------------+----------------+----------------+------+--------+
+| WIZARD          | SLE            | DAIMYO, MINOR  |   10 |  1,135 |
++-----------------+----------------+----------------+------+--------+
+| WIZARD, LVL 8   |                | GORGON         |   20 |  2,060 |
++-----------------+----------------+----------------+------+--------+
+
+ _______________________________________
+/ 13.3  Demons, Dragons, and Enchanted /_______________________________________
+---------------------------------------
+
++-----------------+------------------------+-------+-------+----+----+----+
+| NAME            | UNIDENT                | #APP  |  HP   | AC | RG | MR |
++-----------------+------------------------+-------+-------+----+----+----+
++-----------------+------------------------+-------+-------+----+----+----+
+| CREEPING COIN?  | SMALL OBJECT/OBJEXTS   |  9D1  |   1D1 |  4 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DEMON, GREATER  | DEMON/DEMONS           |  1D6  |  11D8 | -3 |  1 | 95 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DEMON, LESSER   | DEMON/DEMONS           |  1D1  |  10D8 |  4 |  0 | 60 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DRAGON FLY      | FLY/FLIES              | 1D3+1 |   2D8 |  4 |  0 | 20 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DRAGON PUPPY    | ANIMAL/ANIMALS         |   1D6 |  5D10 |  4 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DRAGON, FIRE    | DRAGON/DRAGONS         |   1D4 |  12D8 | -1 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DRAGON, GAS     | DRAGON/DRAGONS         |   1D4 |   5D8 |  3 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| DRAGON, ZOMBIE  | DRAGON/DRAGONS         |   1D4 |  12D8 | -2 |  0 | 25 |
++-----------------+------------------------+-------+-------+----+----+----+
+| GARGOYLE        | GARGOYLE/GARGOYLES     |   1D6 | 4D8+4 |  5 |  0 | 50 |
++-----------------+------------------------+-------+-------+----+----+----+
+| GAS CLOUD       | GAS CLOUD/CLOUDS       |   2D4 |   2D4 | 10 |  0 |  0 |
++-----------------+------------------------+-------+-------+----+----+----+
+| WILL O' WISP    | UNSEEN ENTITY/ENTITIES |   1D2 |  10D8 | -8 |  0 | 95 |
++-----------------+------------------------+-------+-------+----+----+----+
+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME            | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| CREEPING COIN?  | FIR, COL, POI, |  1  | 1D1         |  0 | LVD |  0  |  0  |
+|                 | LVD            |     |             |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DEMON, GREATER  |                |  5  | 2D12/1D6/   |  0 |     |  0  |  5  |
+|                 |                |     | 1D4/1D4/1D4 |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DEMON, LESSER   |                |  5  | 2D6/2D6/1D3 |  0 |     |  0  |  3  |
+|                 |                |     | 1D3/1D4+4   |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DRAGON FLY      | FIR            |  3  | 1D4/1D4/1D6 |  0 | FIR |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DRAGON PUPPY    |                |  1  | 1D10        |  0 | COL |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DRAGON, FIRE    |                |  2  | 1D4/1D4/4D4 |  0 | FIR |  0  |  5  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DRAGON, GAS     |                |  3  | 1D4/1D4/3D6 |  0 | POI |  0  |  1  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DRAGON, ZOMBIE  |                |  3  | 1D8/1D8/    |  0 | LVD |  0  |  5  |
+|                 |                |     | 3D12        |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GARGOYLE        |                |  4  | 1D3/1D3/    |  0 |     |  0  |  0  |
+|                 |                |     | 1D6/1D4     |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GAS CLOUD       |                |  1  | 1D4         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WILL O' WISP    |                |  1  | 2D8         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+
++-----------------+----------------+----------------+------+--------+
+| NAME            | ATT PROP       | GRH            | %GRH | XP     |
++-----------------+----------------+----------------+------+--------+
++-----------------+----------------+----------------+------+--------+
+| CREEPING COIN?  | HLP            | CREEPING COIN? |  100 |    920 |
++-----------------+----------------+----------------+------+--------+
+| DEMON, GREATER  | POI, PAR, HLP  | NINJA, LVL 8   |   70 | 44,090 |
++-----------------+----------------+----------------+------+--------+
+| DEMON, LESSER   | HLP            | NINJA, LVL 8   |   80 |  5,100 |
++-----------------+----------------+----------------+------+--------+
+| DRAGON FLY      | SLE            |                |    0 |  1,275 |
++-----------------+----------------+----------------+------+--------+
+| DRAGON PUPPY    |                | WERERAT        |   10 |  2,280 |
++-----------------+----------------+----------------+------+--------+
+| DRAGON, FIRE    |                |                |    0 |  5,000 |
++-----------------+----------------+----------------+------+--------+
+| DRAGON, GAS     |                | DRAGON FLY     |   40 |  2,075 |
++-----------------+----------------+----------------+------+--------+
+| DRAGON, ZOMBIE  |                | BLEEB          |   10 |  5,200 |
++-----------------+----------------+----------------+------+--------+
+| GARGOYLE        |                |                |    0 |  2,435 |
++-----------------+----------------+----------------+------+--------+
+| GAS CLOUD       | PAR, RUN       | BUBBLY SLIME   |   15 |    350 |
++-----------------+----------------+----------------+------+--------+
+| WILL O' WISP    |                |                |    0 | 42,840 |
++-----------------+----------------+----------------+------+--------+
+
+ _________________
+/ 13.4  Fighters /_____________________________________________________________
+-----------------
+
++-----------------+--------------------------+-------+-------+----+----+----+
+| NAME            | UNIDENT                  | #APP  |  HP   | AC | RG | MR |
++-----------------+--------------------------+-------+-------+----+----+----+
++-----------------+--------------------------+-------+-------+----+----+----+
+| BUSHWACKER      | SCRUFFY MAN/MEN          |  1D4  | 3D6+1 |  8 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| DAIMYO, MAJOR   | MAN IN ARMOR             |  1D5  |  7D12 |  0 |  0 | 20 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| DAIMYO, MINOR   | MAN IN ARMOR             |  1D6  |  4D10 |  2 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| FIGHTER, LVL 7  | MAN/MEN IN ARMOR         |  2D1  |  7D10 |  0 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| FIGHTER, LVL 8  | MAN/MEN IN ARMOR         |  1D6  |  8D10 | -1 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| FIGHTER, LVL 10 | MAN/MEN IN ARMOR         |  1D6  |  7D10 |  0 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| HATAMOTO        | MAN/MEN IN ROBES         |  1D1  |  12D4 | -1 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| HIGH MASTER     | CONEHEAD/HEADS           |  1D1  |  15D4 | -2 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| HIGHWAYMAN      | MAN/MEN IN CHAIN         |  2D6  | 3D4+2 |  6 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| KOBOLD          | SMALL HUMANOID/HUMANOIDS | 2D2+1 | 2D3+1 |  8 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| NINJA, HIGH     | MAN/MEN IN KIMONOS       |  1D1  |  12D4 | -1 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| NINJA, LVL 1    | KIMONOED MAN/MEN         |  2D4  | 2D4+2 |  5 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| NINJA, LVL 3    | KIMONOED MAN/MEN         | 2D4+2 |   3D8 |  3 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| NINJA, LVL 6    | MAN/MEN IN BLACK         |  1D5  |  6D10 |  6 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| NINJA, LVL 8    | MONK/MONKS               |  1D3  |   8D4 |  4 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| NINJA, MASTER   | MAN/MEN IN ROBES         |  1D5  |  10D4 |  3 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| OGRE            | OGRE/OGRES               |  1D8  | 4D8+1 |  5 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| ORC             | SMALL HUMANOID/HUMANOIDS |  3D2  |   1D4 | 10 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| RAVER LORD      | MAN/MEN IN ARMOR         |  1D1  | 15D10 | 10 |  2 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| SAMURAI, LVL 3  | KIMONOED MAN/MEN         |  4D2  | 3D6+4 |  5 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| SAMURAI, CHAMP  | MAN/MEN IN ARMOR         |  1D6  | 10D10 |  2 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| SWORDSMAN       | MAN/MEN IN ARMOR         |  1D6  |  3D10 |  3 |  0 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+| TROLL           | STRANGE ANIMAL/ANIMALS   |  1D3  | 6D8+6 |  4 |  3 |  0 |
++-----------------+--------------------------+-------+-------+----+----+----+
+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME            | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| BUSHWACKER      |                |  2  | 1D6+1/2D4+1 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DAIMYO, MAJOR   |                |  2  | 1D10/1D4    |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| DAIMYO, MINOR   |                |  1  | 1D12        |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| FIGHTER, LVL 7  |                |  2  | 1D12/1D12   |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| FIGHTER, LVL 8  |                |  2  | 1D12+2      |  0 |     |  0  |  0  |
+|                 |                |     | 1D12+2      |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| FIGHTER, LVL 10 |                |  2  | 1D12/1D12   |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| HATAMOTO        |                |  3  | 3D8/3D8/3D8 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| HIGH MASTER     | FIR, COL, POI, |  2  | 3D12/3D12/  |  0 |     |  0  |  0  |
+|                 | LVD            |     | 3D6         |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| HIGHWAYMAN      |                |  4  | 1D2+1/1D2+1 |  0 |     |  0  |  0  |
+|                 |                |     | 1D2+1/1D2+1 |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| KOBOLD          | FRI, COL       |  2  | 1D2+1/1D2+1 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NINJA, HIGH     |                |  3  | 3D8/3D8/3D8 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NINJA, LVL 1    |                |  3  | 1D4/1D4/1D4 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NINJA, LVL 3    |                |  5  | 1D4/1D4/1D4 |  0 |     |  0  |  0  |
+|                 |                |     | 1D4/1D4     |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NINJA, LVL 6    |                |  3  | 1D6/1D6/1D6 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NINJA, LVL 8    |                |  2  | 2D6/1D6     |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NINJA, MASTER   |                |  3  | 1D10+3/     |  0 |     |  0  |  0  |
+|                 |                |     | 1D10+3/     |    |     |     |     |
+|                 |                |     | 1D10+3/     |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| OGRE            |                |  1  | 2D6         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| ORC             | FIR            |  1  | 1D4         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| RAVER LORD      | FIR            |  2  | 3D12/3D12   |  0 |     |  4  |  5  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SAMURAI, LVL 3  |                |  3  | 1D4+1/1D6+1 |  0 |     |  0  |  1  |
+|                 |                |     | 1D4+1       |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SAMURAI, CHAMP  |                |  1  | 1D12        |  0 |     |  0  |  1  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SWORDSMAN       |                |  1  | 2D7         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| TROLL           |                |  3  | 1D4+4/1D4+4 |  0 |     |  0  |  0  |
+|                 |                |     | 1D4+4       |    |     |     |     |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+
++-----------------+----------------+------------------+------+--------+
+| NAME            | ATT PROP       | GRH              | %GRH | XP     |
++-----------------+----------------+------------------+------+--------+
++-----------------+----------------+------------------+------+--------+
+| BUSHWACKER      | SLE, RUN       | ZOMBIE           |   20 |    380 |
++-----------------+----------------+------------------+------+--------+
+| DAIMYO, MAJOR   |                | CLERIC, LVL 5    |   50 |  2,340 |
++-----------------+----------------+------------------+------+--------+
+| DAIMYO, MINOR   | SLE            | WIZARD           |   20 |  1,200 |
++-----------------+----------------+------------------+------+--------+
+| FIGHTER, LVL 7  |                | MAGE, LVL 7(3)   |  100 |  1,900 |
++-----------------+----------------+------------------+------+--------+
+| FIGHTER, LVL 8  |                | FIGHTER, LVL 8   |   20 |  2,140 |
++-----------------+----------------+------------------+------+--------+
+| FIGHTER, LVL 10 |                | FIGHTER, LVL 10  |   10 |  1,900 |
++-----------------+----------------+------------------+------+--------+
+| HATAMOTO        | AKL            | MAGE, LVL 10(2)  |  100 |  1,600 |
++-----------------+----------------+------------------+------+--------+
+| HIGH MASTER     | AKL            | HATAMOTO         |  100 |  3,000 |
++-----------------+----------------+------------------+------+--------+
+| HIGHWAYMAN      | AKL, SLE, RUN  | ZOMBIE           |   20 |    840 |
++-----------------+----------------+------------------+------+--------+
+| KOBOLD          | SLE, RUN       | ORC              |   15 |    415 |
++-----------------+----------------+------------------+------+--------+
+| NINJA, HIGH     | AKL            |                  |    0 |  1,600 |
++-----------------+----------------+------------------+------+--------+
+| NINJA, LVL 1    | AKL, SLE       | NINJA, LVL 1     |   20 |    600 |
++-----------------+----------------+------------------+------+--------+
+| NINJA, LVL 3    | POI, AKL       | NINJA, LVL 1     |   20 |  1,360 |
++-----------------+----------------+------------------+------+--------+
+| NINJA, LVL 6    |                | THIEF, MASTER(1) |   20 |  1,520 |
++-----------------+----------------+------------------+------+--------+
+| NINJA, LVL 8    | AKL            | NIGHTSTALKER     |   20 |  1,020 |
++-----------------+----------------+------------------+------+--------+
+| NINJA, MASTER   | AKL            | MAGE, LVL 7(2)   |   30 |  1,280 |
++-----------------+----------------+------------------+------+--------+
+| OGRE            | SLE, RUN       | VORPAL BUNNY     |   20 |    960 |
++-----------------+----------------+------------------+------+--------+
+| ORC             | SLE, RUN       | KOBOLD           |   20 |    235 |
++-----------------+----------------+------------------+------+--------+
+| RAVER LORD      |                | CLERIC, HIGH(2)  |  100 |  4,155 |
++-----------------+----------------+------------------+------+--------+
+| SAMURAI, LVL 3  | RUN            | CREEPING COIN?   |   20 |    795 |
++-----------------+----------------+------------------+------+--------+
+| SAMURAI, CHAMP  |                | CLERIC, HIGH(1)  |   25 |  2,395 |
++-----------------+----------------+------------------+------+--------+
+| SWORDSMAN       | SLE            | ATTACK DOG       |   35 |    960 |
++-----------------+----------------+------------------+------+--------+
+| TROLL           |                | TROLL            |    5 |  1,720 |
++-----------------+----------------+------------------+------+--------+
+
+ __________________________________________
+/ 13.5  Giants, Insects, Myths, and Weres /____________________________________
+------------------------------------------
+
++-----------------+--------------------------+-------+--------+----+----+----+
+| NAME            | UNIDENT                  | #APP  |  HP    | AC | RG | MR |
++-----------------+--------------------------+-------+--------+----+----+----+
++-----------------+--------------------------+-------+--------+----+----+----+
+| BORING BEETLE   | INSECT/INSECTS           |  1D8  |  5D8   |  3 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| GIANT, EARTH    | GIANT/GIANTS             |  1D5  | 1D1+40 |  9 |  0 | 85 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| GIANT, FIRE     | GIANT/GIANTS             |  1D4  | 11D8+4 |  3 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| GIANT, FROST    | GIANT/GIANTS             |  1D4  | 1D8+50 |  6 |  0 | 95 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| GIANT, POISON   | GIANT/GIANTS             |  1D4  | 1D1+80 |  3 |  0 | 95 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| GORGON          | STRANGE ANIMAL/ANIMALS   |  1D1  |   8D8  |  2 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| MEDUSALIZARD    | STRANGE ANIMAL/ANIMALS   |  1D6  |   5D8  |  6 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| SPIDER, GIANT   | INSECT/INSECTS           |  1D6  | 4D8+4  |  4 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| SPIDER, HUGE(1) | INSECT/INSECTS           |  1D8  | 2D8+2  |  6 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| SPIDER, HUGE(2) | INSECT/INSECTS           | 1D8+1 | 2D8+2  |  6 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| SPIRIT          | UNSEEN ENTITY            |  1D6  | 7D3+2  |  2 |  1 | 25 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| WERERAT         | WERERAT/RATS             |  1D4  | 3D8+1  |  6 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| WERETIGER       | ANIMAL/ANIMALS           |  1D8  |   5D8  |  4 |  1 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+| WEREWOLF        | WOLF/WOLVES              |  1D6  | 4D8+3  |  5 |  0 |  0 |
++-----------------+--------------------------+-------+--------+----+----+----+
+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME            | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| BORING BEETLE   |                |  1  | 5D4         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GIANT, EARTH    |                |  2  | 2D8/2D8     |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GIANT, FIRE     | FIR            |  1  | 5D6         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GIANT, FROST    | COL            |  1  | 3D10        |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GIANT, POISON   |                |  1  | 4D10        |  0 | POI |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GORGON          |                |  1  | 2D6         |  0 | STO |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MEDUSALIZAR     |                |  1  | 1D3         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SPIDER, GIANT   |                |  1  | 2D4         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SPIDER, HUGE(1) |                |  1  | 1D6         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SPIDER, HUGE(2) |                |  1  | 1D6         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SPIRIT          |                |  1  | 1D4         |  0 |     |  0  |  3  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WERERAT         |                |  1  | 1D8         |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WERETIGER       |                |  3  | 2D6/2D6/1D4 |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WEREWOLF        |                |  2  | 2D4/2D4     |  0 |     |  0  |  0  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+
++-----------------+----------------+------------------+------+--------+
+| NAME            | ATT PROP       | GRH              | %GRH | XP     |
++-----------------+----------------+------------------+------+--------+
++-----------------+----------------+------------------+------+--------+
+| BORING BEETLE   |                | SPIDER, HUGE(1)  |   20 |  1,120 |
++-----------------+----------------+------------------+------+--------+
+| GIANT, EARTH    |                |                  |    0 | 20,435 |
++-----------------+----------------+------------------+------+--------+
+| GIANT, FIRE     |                | LESSER DEMON     |   10 |  2,115 |
++-----------------+----------------+------------------+------+--------+
+| GIANT, FROST    |                | THIEF            |   30 | 40,875 |
++-----------------+----------------+------------------+------+--------+
+| GIANT, POISON   |                | WILL O' WISP     |   50 | 40,840 |
++-----------------+----------------+------------------+------+--------+
+| GORGON          |                | CHIMERA          |   50 |  2,920 |
++-----------------+----------------+------------------+------+--------+
+| MEDUSALIZARD    | STO            | SPIRIT           |   20 |  1,040 |
++-----------------+----------------+------------------+------+--------+
+| SPIDER, GIANT   | POI            | SPIDER, HUGE(1)  |   20 |    960 |
++-----------------+----------------+------------------+------+--------+
+| SPIDER, HUGE(1) | POI, SLE       | BORING BEETLE    |   10 |    600 |
++-----------------+----------------+------------------+------+--------+
+| SPIDER, HUGE(2) | POI, SLE       | SHADE            |   10 |    600 |
++-----------------+----------------+------------------+------+--------+
+| SPIRIT          | POI            | GARGOYLE         |   20 |  1,245 |
++-----------------+----------------+------------------+------+--------+
+| WERERAT         | SLE            | COYOTE           |   50 |    755 |
++-----------------+----------------+------------------+------+--------+
+| WERETIGER       | POI, SLE       | WEREWOLF         |   20 |  1,405 |
++-----------------+----------------+------------------+------+--------+
+| WEREWOLF        |                | WERERAT          |   25 |    975 |
++-----------------+----------------+------------------+------+--------+
+
+ ______________
+/ 13.6  Mages /________________________________________________________________
+--------------
+
++-----------------+-------------------------+-------+----------+----+----+----+
+| NAME            | UNIDENT                 | #APP  |  HP      | AC | RG | MR |
++-----------------+-------------------------+-------+----------+----+----+----+
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, ARCH(1)   | MAN/MEN IN ROBES        |  1D6  | 8D4+2    |  9 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, ARCH(2)   | MAN/MEN IN ROBES        |  1D1  |  20D4    |  0 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, LVL 1     | MAN/MEN IN ROBES        |  1D1  | 1D4+1    |  4 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, LVL 5     | MAN/MEN IN ROBES        |  1D6  |   5D4    | 10 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, LVL 7(1)  | MAN/MEN IN ROBES        |  1D6  |   7D4    |  8 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, LVL 7(2)  | MAN/MEN IN ROBES        |  1D6  |   7D4    |  8 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, LVL 7(3)  | MAN/MEN IN ROBES        |  2D1  |   7D4    |  8 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| MAGE, LVL 10    | MAN/MEN IN ROBES        |  1D6  |  10D4    | 10 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| OGRE LORD       | INSECT/INSECTS          |  1D5  |   8D8    |  4 |  1 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| W E R D N A     | MAN IN ROBES            |  1D1  | 10D10+20 | -7 |  5 | 70 |
++-----------------+-------------------------+-------+----------+----+----+----+
+| WIZARD, HIGH    | MAN/MEN IN ROBES        |  1D1  |  12D4    |  4 |  0 |  0 |
++-----------------+-------------------------+-------+----------+----+----+----+
+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME            | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, ARCH(1)   |                |  1  | 1D4         |  0 |     |  0  |  2  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, ARCH(2)   |                |  1  | 1D4         |  0 |     |  0  |  6  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, LVL 1     |                |  1  | 2D2         |  0 |     |  0  |  1  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, LVL 5     |                |  1  | 1D4         |  0 |     |  0  |  3  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, LVL 7(1)  |                |  1  | 1D4         |  0 |     |  0  |  4  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, LVL 7(2)  |                |  1  | 1D4         |  0 |     |  0  |  5  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, LVL 7(3)  |                |  1  | 1D4         |  0 |     |  0  |  4  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAGE, LVL 10    |                |  1  | 1D4         |  0 |     |  0  |  5  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| OGRE LORD       |                |  1  | 1D12        |  0 |     |  0  |  3  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| W E R D N A     | FIR, COL, POI  |  2  | 8D5/8D5     |  4 |     |  7  |  7  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+| WIZARD, HIGH    | FIR            |  1  | 1D4         |  0 |     |  0  |  6  |
++-----------------+----------------+-----+-------------+----+-----+-----+-----+
+
++-----------------+----------------+------------------+------+--------+
+| NAME            | ATT PROP       | GRH              | %GRH | XP     |
++-----------------+----------------+------------------+------+--------+
++-----------------+----------------+------------------+------+--------+
+| MAGE, ARCH(1)   |                | SAMURAI, CHAMP   |   30 |    790 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, ARCH(2)   |                | WIZARD, HIGH     |  100 |  3,160 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, LVL 1     | SLE, RUN       | HIGHWAYMEN       |   20 |    475 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, LVL 5     | SLE            | THIEF, LVL 4     |   20 |    620 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, LVL 7(1)  | SLE            | NINJA, LVL 6     |   20 |  1,000 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, LVL 7(2)  |                | WYVERN           |   30 |  1,240 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, LVL 7(3)  | SLE            | CLERIC, HIGH(3)  |  100 |  1,000 |
++-----------------+----------------+------------------+------+--------+
+| MAGE, LVL 10    |                | GORGON           |   30 |  1,400 |
++-----------------+----------------+------------------+------+--------+
+| OGRE LORD       |                | TROLL            |   10 |  1,790 |
++-----------------+----------------+------------------+------+--------+
+| W E R D N A     | STO, POI, PAR, | VAMPIRE LORD     |  100 | 15,880 |
+|                 | AKL            |                  |      |        |
++-----------------+----------------+------------------+------+--------+
+| WIZARD, HIGH    |                | WIZARD, LVL 8    |  100 |  2,395 |
++-----------------+----------------+------------------+------+--------+
+
+ ________________
+/ 13.7  Thieves /______________________________________________________________
+----------------
+
++------------------+------------------------+-------+----------+----+----+----+
+| NAME             | UNIDENT                | #APP  |  HP      | AC | RG | MR |
++------------------+------------------------+-------+----------+----+----+----+
++------------------+------------------------+-------+----------+----+----+----+
+| ROGUE            | SCRUFFY MAN/MEN        | 1D4+1 | 2D5+1    | 10 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+| THIEF            | MAN/MEN IN LEATHER     |  1D5  |   9D6    |  4 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+| THIEF, LVL 4     | MAN/MEN IN LEATHER     |  1D6  | 4D8+3    | 10 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+| THIEF, LVL 7     | MAN/MEN IN LEATHER     |  1D5  |   7D6    |  4 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+| THIEF, MASTER(1) | MAN/MEN IN LEATHER     |  1D6  |   4D6    |  4 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+| THIEF, MASTER(2) | MAN/MEN IN LEATHER     |  1D6  |   6D6    |  3 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+| THIEF, MASTER(3) | MAN/MEN IN LEATHER     |  1D1  |  12D6    |  2 |  0 |  0 |
++------------------+------------------------+-------+----------+----+----+----+
+
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME             | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| ROGUE            |                |  2  | 1D4/2D2+1   |  0 |     |  0  |  0  |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| THIEF            |                |  4  | 1D8/1D3/    |  0 |     |  0  |  0  |
+|                  |                |     | 3D8/2D10    |    |     |     |     |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| THIEF, LVL 4     |                |  2  | 1D6/2D6     |  0 |     |  0  |  0  |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| THIEF, LVL 7     |                |  2  | 1D8/3D8     |  0 |     |  0  |  0  |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| THIEF, MASTER(1) |                |  3  | 1D6/1D6/2D6 |  0 |     |  0  |  0  |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| THIEF, MASTER(2) |                |  2  | 1D8/3D8     |  0 |     |  0  |  0  |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+| THIEF, MASTER(3) | POI            |  2  | 1D8/5D8     |  0 |     |  0  |  0  |
++------------------+----------------+-----+-------------+----+-----+-----+-----+
+
++------------------+----------------+------------------+------+--------+
+| NAME             | ATT PROP       | GRH              | %GRH | XP     |
++------------------+----------------+------------------+------+--------+
++------------------+----------------+------------------+------+--------+
+| ROGUE            | SLE, RUN       | ORC              |   20 |    620 |
++------------------+----------------+------------------+------+--------+
+| THIEF            | RUN            | GORGON           |   20 |  1,640 |
++------------------+----------------+------------------+------+--------+
+| THIEF, LVL 4     |                | WIZARD           |   20 |  2,395 |
++------------------+----------------+------------------+------+--------+
+| THIEF, LVL 7     | RUN            | CLERIC, LVL 8    |   20 |  1,220 |
++------------------+----------------+------------------+------+--------+
+| THIEF, MASTER(1) | SLE, RUN       | CLERIC, LVL 5    |   10 |    960 |
++------------------+----------------+------------------+------+--------+
+| THIEF, MASTER(2) | RUN            | MAGE, ARCH(1)    |   25 |  1,140 |
++------------------+----------------+------------------+------+--------+
+| THIEF, MASTER(3) | RUN            | FIGHTER, LVL 8   |  100 |  1,935 |
++------------------+----------------+------------------+------+--------+
+
+ _______________
+/ 13.8  Undead /_______________________________________________________________
+---------------
+
++----------------+--------------------------+-------+----------+----+----+----+
+| NAME           | UNIDENT                  | #APP  |  HP      | AC | RG | MR |
++----------------+--------------------------+-------+----------+----+----+----+
++----------------+--------------------------+-------+----------+----+----+----+
+| GRAVE MIST     | UNSEEN ENTITY            |  1D6  |   4D8    |  4 |  0 |  0 |
++----------------+--------------------------+-------+----------+----+----+----+
+| LIFESTEALER    | UNSEEN ENTITY/ENTITIES   |  1D1  | 5D8+3    |  3 |  0 | 20 |
++----------------+--------------------------+-------+----------+----+----+----+
+| MAELIFIC       | UNSEEN BEING/BEINGS      | 1D0+1 |  25D4    | -5 |  3 | 50 |
++----------------+--------------------------+-------+----------+----+----+----+
+| MURPHY'S GHOST | UNSEEN ENTITY/ENTITIES   |  1D1  | 10D10+10 | -3 |  1 | 40 |
++----------------+--------------------------+-------+----------+----+----+----+
+| NIGHTSTALKER   | UNSEEN ENTITY/ENTITIES   |  2D3  | 5D8+3    |  4 |  0 | 25 |
++----------------+--------------------------+-------+----------+----+----+----+
+| ROTTING CORPSE | WEIRD HUMANOID/HUMANOIDS |  1D5  |   2D8    |  6 |  0 |  0 |
++----------------+--------------------------+-------+----------+----+----+----+
+| SHADE          | UNSEEN ENTITY            |  1D6  | 3D8+3    |  7 |  0 |  0 |
++----------------+--------------------------+-------+----------+----+----+----+
+| UNDEAD KOBOLD  | SKELETON/SKELETONS       | 1D6+1 | 2D3+2    | 10 |  0 |  0 |
++----------------+--------------------------+-------+----------+----+----+----+
+| VAMPIRE        | UNSEEN ENTITY            |  1D4  |  11D8    | -1 |  1 | 20 |
++----------------+--------------------------+-------+----------+----+----+----+
+| VAMPIRE LORD   | UNSEEN ENTITY/ENTITYS    |  1D1  |  20D8    | -5 |  4 |  0 |
++----------------+--------------------------+-------+----------+----+----+----+
+| ZOMBIE         | WEIRD HUMANOID/HUMANOIDS | 1D6+1 | 3D8+1    |  6 |  0 |  0 |
++----------------+--------------------------+-------+----------+----+----+----+
+
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NAME           | RST            | #AT | DAMAGE      | LD | BRW | CSL | MSL |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| GRAVE MIST     |                |  3  | 1D4/1D4/1D8 |  0 |     |  0  |  0  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| LIFESTEALER    | POI, LVD       |  1  | 1D4         |  2 |     |  3  |  3  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MAELIFIC       |                |  2  | 1D4/1D0+1   |  3 |     |  0  |  7  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| MURPHY'S GHOST | FIR, COL, POI, |  1  | 1D1+1       |  0 |     |  0  |  0  |
+|                | LVD            |     |             |    |     |     |     |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| NIGHTSTALKER   |                |  1  | 1D6         |  1 |     |  0  |  0  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| ROTTING CORPSE |                |  3  | 1D3/1D3/1D6 |  0 |     |  0  |  0  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| SHADE          |                |  1  | 1D4+1       |  1 |     |  0  |  0  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| UNDEAD KOBOLD  | FIR, COL       |  1  | 1D4+1       |  0 |     |  0  |  0  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| VAMPIRE        | POI, LVD       |  3  | 2D8/1D4/1D4 |  2 |     |  0  |  3  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| VAMPIRE LORD   |                |  1  | 1D4         |  4 |     |  0  |  6  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+| ZOMBIE         |                |  1  | 1D6         |  0 |     |  0  |  0  |
++----------------+----------------+-----+-------------+----+-----+-----+-----+
+
++----------------+----------------+------------------+------+--------+
+| NAME           | ATT PROP       | GRH              | %GRH | XP     |
++----------------+----------------+------------------+------+--------+
++----------------+----------------+------------------+------+--------+
+| GRAVE MIST     | PAR            | SHADE            |   20 |  1,080 |
++----------------+----------------+------------------+------+--------+
+| LIFESTEALER    |                | LIFESTEALER      |   50 |  2,240 |
++----------------+----------------+------------------+------+--------+
+| MAELIFIC       | POI, PAR       | GIANT, POISON    |  100 |  7,460 |
++----------------+----------------+------------------+------+--------+
+| MURPHY'S GHOST | SLE            | MURPHY'S GHOST   |   80 |  4,450 |
++----------------+----------------+------------------+------+--------+
+| NIGHTSTALKER   |                | OGRE LORD        |   23 |  1,475 |
++----------------+----------------+------------------+------+--------+
+| ROTTING CORPSE | PAR            | GRAVE MIST       |   10 |    680 |
++----------------+----------------+------------------+------+--------+
+| SHADE          |                | ROTTING CORPSE   |   20 |    875 |
++----------------+----------------+------------------+------+--------+
+| UNDEAD KOBOLD  |                | KOBOLD           |   10 |    230 |
++----------------+----------------+------------------+------+--------+
+| VAMPIRE        | PAR            | VAMPIRE          |   15 |  3,330 |
++----------------+----------------+------------------+------+--------+
+| VAMPIRE LORD   | PAR            | VAMPIRE          |  100 |  7,320 |
++----------------+----------------+------------------+------+--------+
+| ZOMBIE         | PAR            | CREEPING CRUD    |   20 |    520 |
++----------------+----------------+------------------+------+--------+
+
++============+
+| 14.  ITEMS |=================================================================
++============+
+
+These things help you in your quest through the mazes.  None of these things
+are absolutely vital to winning the game, but they certainly make things a lot
+easier in getting through the game.  Items are broken down by their function
+such as armor, weapons, etc. (all things after an equal sign are headers for
+what the column actually is.  If there isn't an equal sign, that means what is
+listed is the actual header):
+
+The following is an explanation of the various abbreviations used in regard to
+the items listed in the next few sub-chapters of items.
+
+DMG=DAMAGE:  The amount of damage an item will do.  When you have something
+             like 2D4+3, this means you roll a four-sided dice two times and
+             add three to that result.  You will then get a range of 5-11 for
+             damage.
+
+TH=TO HIT BONUS:  This bonus enables your character to more easily hit a
+                  monster.  This is especially useful against monsters with
+                  very low armor classes.
+
++SW=# OF SWINGS:  How many times said weapon can be swung.  This basically
+                  means if you can swing said weapon four times, your character
+                  has the potential to do DMGx4.
+
+AK=AUTOKILL:  Can said weapon allow the character to perform an autokill.
+
+AL=ALIGNMENT:  Some weapons have alignments.  If a character with a different
+               alignment attempts to equip said item, then that item will be
+               cursed and have the opposite effect.  This also refers to
+               whether an item is cursed.  The alignments are:
+
+               EV=EVIL
+               NE=NEUTRAL
+               GO=GOOD
+               NO=NO ALIGNMENT
+               CU=CURSED ITEM
+
+USAGE:  What classes of character(s) can use said item.  The classes are:
+
+        C=CLERIC
+        F=FIGHTER
+        L=LORD
+        M=MAGE
+        N=NINJA
+        S=SUMARAI
+        T=THIEF
+        W=WIZARD
+
+PURPOSE:  Some items allow a character to do things above and beyond the normal
+          damage for said weapon.  These items, such as the Slayer of Dragons,
+          do double damage against a specific type of monster.
+
+AA=ARMOR CLASS ADJUSTMENT:  This represents an modifications to a character's
+                            armor class.  Subtract all positive numbers from
+                            the current armor class and add all negative
+                            numbers to it.  For example, a character with an
+                            eight armor class puts on a helmet.  Since it is +1
+                            for armor class (AC), the new AC is seven.
+                            Conversely, if the helmet was -1, then the new AC
+                            would be nine.
+
++MA=MAGICAL ADJUSTMENT:  This represents magical protection for a character.
+                         It also represents the chance that a character will
+                         not be affected by a monster's spells.
+
+RG=REGENERATION:  Some items allow a character to heal a specific amount of hit
+                  points/turn.
+
+PROTECTION:  The item protects the character against certain types of monsters
+             and reduces said monster's effects upon the character.
+
+RESIST=RESISTANCE:  The item protects the character against certain types of
+                    elements or harm.  These resistances are:
+
+                    COLD
+                    FIRE
+                    LEVEL DRAIN
+                    POISON
+                    STONING
+
+SPELL:  This refers mostly to scrolls and potions.  This can, though, refer
+        to items such as rings, amulets, armor, and weapons.  When used, these
+        items will produce some sort of spell effect.
+
+BRK=BREAK:  This is the percentage chance an item will break after using it.
+
+AFTERBR:  What the item becomes after it is broken.
+
+UNIDENT=UNIDENTIFIED LOOK:  What type of item this may be.  Whenever you
+                            receive an item in the maze, odds are you will be
+                            given this description of what it is versus what
+                            the actual item is.  You can either use a Wizard or
+                            Boltac's to identify said item.
+
+ ______________
+/ 14.1  Armor /________________________________________________________________
+--------------
+
++-------------------+---------+----+----+---------------+---------+----+-----+
+| NAME              | PRICE   | TH | AL | USAGE         | PURPOSE | AA | +MA |
++-------------------+---------+----+----+---------------+---------+----+-----+
++-------------------+---------+----+----+---------------+---------+----+-----+
+| 1ST CLASS PLATE   |    6000 | NA | NO | C,F,L,N,S     |         |  7 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ARMOR OF EVIL     |  150000 | NA | EV | C,F,L,N,S     |         |  9 |  15 |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ARMOR OF FREON    |  150000 | NA | NO | C,F,L,N,S     |         |  6 |  15 |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ARMOR OF HEROES   |  100000 | NA | NO | C,F,L,N,S     |         |  7 |  10 |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ARMOR OF LORDS    | 1000000 | NA | NO | L             | WERE    | 10 | 100 |
+|                   |         |    |    |               | UNDEAD  |    |     |
+|                   |         |    |    |               | DEMON   |    |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| BODY ARMOR        |    1500 | NA | NO | F,L,N,S       |         |  5 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| B-PLATE OF BOONS  |   10000 | NA | NO | C,F,L,N,S     |         |  6 |   1 |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| B-PLATE OF FIENDS |    8000 | NA | CU | F,L,N,S       |         |  2 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| BREAST PLATE      |     200 | NA | NA | F,L,N,S       |         |  4 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| BROKEN B-PLATE    |    1500 | NA | CU | C,F,L,N,S     |         |  3 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| CHAIN MAIL        |      90 | NA | NA | C,F,L,N,S     |         |  3 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| CHAIN OF CURSES   |    8000 | NA | CU | C,F,L,N,S     |         |  1 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| CHAIN OF EVIL     |    8000 | NA | EV | C,F,L,N,S     |         |  5 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| CORRODED CHAIN    |    1500 | NA | CU | C,F,L,N,S     |         |  2 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ELVEN CHAIN       |    6000 | NA | NA | C,F,L,N,S     |         |  5 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| LEATHER ARMOR     |      50 | NA | NA | C,F,L,N,S,T,W |         |  2 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| LEATHER OF LOSS   |    8000 | NA | NA | C,F,L,N,S,T,W |         |  0 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| NEUTRAL PLATE     |    8000 | NA | NA | F,L,N,S       |         |  7 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| PADDED LEATHER    |    1500 | NA | NA | C,F,L,N,S,T,W |         |  3 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| PLATE MAIL        |     750 | NA | NA | F,L,N,S       |         |  5 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ROBE OF CURSES    |    8000 | -2 | CU | ALL           |         | -2 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ROBES             |      15 | NA | NA | ALL           |         |  1 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| ROTTEN LEATHER    |    1500 | NA | CU | C,F,L,N,S,T,W |         |  1 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SHINY CHAIN       |    1500 | NA | NA | C,F,L,N,S     |         |  4 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| STURDY PLATE      |    6000 | NA | NA | F,L,N,S       |         |  6 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| TREATED LEATHER   |    6000 | NA | NA | C,F,L,N,S,T,W |         |  4 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+
++-------------------+----+--------------+---------+-------------+
+| NAME              | RG | PROTECTION   |  RESIST | UNIDENT     |
++-------------------+----+--------------+---------+-------------+
++-------------------+----+--------------+---------+-------------+
+| 1ST CLASS PLATE   |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| ARMOR OF EVIL     |    |              |         | PLATE ARMOR |
++-------------------+----+--------------+---------+-------------+
+| ARMOR OF FREON    |    |              | FIRE    | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| ARMOR OF HEROES   |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| ARMOR OF LORDS*   |  1 | DRAGON, MYTH |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| BODY ARMOR        |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| B-PLATE OF BOONS  |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| B-PLATE OF FIENDS |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| BREAST PLATE      |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| BROKEN B-PLATE    |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| CHAIN MAIL        |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| CHAIN OF CURSES   |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| CHAIN OF EVIL     |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| CORRODED CHAIN    |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| ELVEN CHAIN       |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| LEATHER ARMOR     |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| LEATHER OF LOSS   |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| NEUTRAL PLATE     |    |              |         | PLATE ARMOR |
++-------------------+----+--------------+---------+-------------+
+| PADDED LEATHER    |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| PLATE MAIL        |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| ROBE OF CURSES    |    |              |         | ROBE        |
++-------------------+----+--------------+---------+-------------+
+| ROBES             |    |              |         | CLOTHING    |
++-------------------+----+--------------+---------+-------------+
+| ROTTEN LEATHER    |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| SHINEY CHAIN      |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| STURDY PLATE      |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+| TREATED LEATHER   |    |              |         | ARMOR       |
++-------------------+----+--------------+---------+-------------+
+
+* CASTS A MADI ON THE USER WHEN USED.  IT HAS A 50% CHANCE OF BREAKING INTO A
+  BROKEN ITEM WHEN USED IN THIS MANNER.
+
+ ______________________________
+/ 14.2  Gauntlets and Helmets /________________________________________________
+------------------------------
+
++-------------------+---------+----+----+---------+----+-----+--------+
+| NAME              | PRICE   | TH | AL | USAGE   | AA | +MA | SPELL  |
++-------------------+---------+----+----+---------+----+-----+--------+
++-------------------+---------+----+----+---------+----+-----+--------+
+| GLOVES OF COPPER  |    6000 | NA | NO | F,L,N,S |  1 |     |        |
++-------------------+---------+----+----+---------+----+-----+--------+
+| GLOVES OF SILVER  |   60000 | NA | NO | F,L,N,S |  3 |   6 |        |
++-------------------+---------+----+----+---------+----+-----+--------+
+| HELM              |     100 | NA | NO | F,L,N,S |  1 |     |        |
++-------------------+---------+----+----+---------+----+-----+--------+
+| HELM OF EVIL      |    8000 | NA | EV | F,L,N,S |  3 |     | BADIOS |
++-------------------+---------+----+----+---------+----+-----+--------+
+| HELM OF HANGOVERS |   50000 | -2 | CU | F,L,N,S | -2 |   5 |        |
++-------------------+---------+----+----+---------+----+-----+--------+
+| HELM OF HARDINESS |    3000 | NA | NA | F,L,N,S |  2 |     |        |
++-------------------+---------+----+----+---------+----+-----+--------+
+
++-------------------+-----------+
+| NAME              | UNIDENT   |
++-------------------+-----------+
++-------------------+-----------+
+| GLOVES OF COPPER  | GAUNTLETS |
++-------------------+-----------+
+| GLOVES OF SILVER  | GLOVES    |
++-------------------+-----------+
+| HELM              | HELM      |
++-------------------+-----------+
+| HELM OF EVIL      | HELM      |
++-------------------+-----------+
+| HELM OF HANGOVERS | HELM      |
++-------------------+-----------+
+| HELM OF HARDINESS | HELM      |
++-------------------+-----------+
+
+ ___________________
+/ 14.3  Misc Items /___________________________________________________________
+-------------------
+
++----------------------+--------+----+----+---------+------------+-----------+
+| NAME                 | PRICE  | TH | AL | USAGE   | LOCATION   | SPELL     |
++----------------------+--------+----+----+---------+------------+-----------+
++----------------------+--------+----+----+---------+------------+-----------+
+| BLUE RIBBON          |      0 | NA | NO | NONE    | 11E,10N,4D | NONE      |
++----------------------+--------+----+----+---------+------------+-----------+
+| KEY OF BRONZE        |      0 | NA | NO | NONE    | 13E, 3N,1D | NONE      |
++----------------------+--------+----+----+---------+------------+-----------+
+| KEY OF GOLD          |      0 | NA | NO | NONE    |  4E,16N,2D | NONE      |
++----------------------+--------+----+----+---------+------------+-----------+
+| KEY OF SILVER        |      0 | NA | NO | NONE    | 13E,18N,1D | NONE      |
++----------------------+--------+----+----+---------+------------+-----------+
+| POT OF CURING        |    500 | NA | NO | ALL     |            | DIOS      |
++----------------------+--------+----+----+---------+------------+-----------+
+| POT OF NEUTRALIZING  |    300 | NA | NO | ALL     |            | LATUMOFIS |
++----------------------+--------+----+----+---------+------------+-----------+
+| POTION OF GLASS      |   1500 | NA | NO | ALL     |            | SOPIC     |
++----------------------+--------+----+----+---------+------------+-----------+
+| POTION OF HEALING    |   5000 | NA | NO | ALL     |            | DIAL      |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF AFFLICTION |   8000 | NA | NO | ALL     |            | BADIAL    |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF AGONY      |    500 | NA | NO | ALL     |            | BADIOS    |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF BRIGHTNESS |   2500 | NA | NO | ALL     |            | LOMILWA   |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF DARKNESS   |   2500 | NA | NO | ALL     |            | DILTO     |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF FIRE       |    500 | NA | NO | ALL     |            | HALITO    |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF PAIN       |    500 | NA | NO | ALL     |            | BADIOS    |
++----------------------+--------+----+----+---------+------------+-----------+
+| SCROLL OF SLEEP      |    500 | NA | NO | ALL     |            | KATINO    |
++----------------------+--------+----+----+---------+------------+-----------+
+| STATUE OF BEAR       |      0 | NA | NO | NONE    |  9E,18N,1D | NONE      |
++----------------------+--------+----+----+---------+------------+-----------+
+| STATUE OF FROG       |      0 | NA | NO | NONE    | 12E, 4N,1D | NONE      |
++----------------------+--------+----+----+---------+------------+-----------+
+
++----------------------+---------------+
+| NAME                 | UNIDENT       |
++----------------------+---------------+
++----------------------+---------------+
+| BLUE RIBBON          | BLUE RIBBON   |
++----------------------+---------------+
+| KEY OF BRONZE        | KEY OF BRONZE |
++----------------------+---------------+
+| KEY OF GOLD          | KEY OF GOLD   |
++----------------------+---------------+
+| KEY OF SILVER        | KEY OF SILVER |
++----------------------+---------------+
+| POT OF CURING        | POTION        |
++----------------------+---------------+
+| POT OF NEUTRALIZING  | POTION        |
++----------------------+---------------+
+| POTION OF GLASS      | POTION        |
++----------------------+---------------+
+| POTION OF HEALING    | POTION        |
++----------------------+---------------+
+| SCROLL OF AFFLICTION | SCROLL        |
++----------------------+---------------+
+| SCROLL OF AGONY      | SCROLL        |
++----------------------+---------------+
+| SCROLL OF BRIGHTNESS | SCROLL        |
++----------------------+---------------+
+| SCROLL OF DARKNESS   | SCROLL        |
++----------------------+---------------+
+| SCROLL OF FIRE       | SCROLL        |
++----------------------+---------------+
+| SCROLL OF PAIN       | SCROLL        |
++----------------------+---------------+
+| SCROLL OF SLEEP      | SCROLL        |
++----------------------+---------------+
+| STATUE OF BEAR       | STATUE        |
++----------------------+---------------+
+| STATUE OF FROG       | STATUE        |
++----------------------+---------------+
+
+ ________________
+/ 14.4  Shields /______________________________________________________________
+----------------
+
++-------------------+---------+----+----+---------------+---------+----+-----+
+| NAME              | PRICE   | TH | AL | USAGE         | PURPOSE | AA | +MA |
++-------------------+---------+----+----+---------------+---------+----+-----+
++-------------------+---------+----+----+---------------+---------+----+-----+
+| IRON SHIELD       |    1500 | NA | NO | C,F,L,N,S,T   |         |  4 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| LARGE SHIELD      |      40 | NA | NO | C,F,L,N,S     |         |  3 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SCREWY SHIELD     |    1500 | NA | CU | C,F,L,S,T     |         | -1 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SHIELD OF DEFENSE |  250000 | NA | NO | C,F,L,N,S     |         |  6 |  25 |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SHIELD OF EVIL    |   25000 | NA | EV | C,F,L,N,S,T   |         |  5 |   2 |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SHIELD OF NOTHING |    8000 | NA | CU | C,F,L,N,S,T   |         |    |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SHIELD OF SUPPORT |    7000 | NA | NO | C,F,L,N,S     |         |  5 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+| SMALL SHIELD      |      20 | NA | NO | C,F,L,N,S,T,W |         |  2 |     |
++-------------------+---------+----+----+---------------+---------+----+-----+
+
++-------------------+----+--------------+---------+---------+
+| NAME              | RG | PROTECTION   |  RESIST | UNIDENT |
++-------------------+----+--------------+---------+---------+
++-------------------+----+--------------+---------+---------+
+| IRON SHIELD       |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| LARGE SHIELD      |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| SCREWY SHIELD     |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| SHIELD OF DEFENSE |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| SHIELD OF EVIL    |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| SHIELD OF NOTHING |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| SHIELD OF SUPPORT |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+| SMALL SHIELD      |    |              |         | SHIELD  |
++-------------------+----+--------------+---------+---------+
+
+ ________________
+/ 14.5  Weapons /______________________________________________________________
+----------------
+
++---------------------+----------+--------+----+-----+----+----+--------------+
+| NAME                | PRICE    | DMG    | TH | +SW | AK | AL | USAGE        |
++---------------------+----------+--------+----+-----+----+----+--------------+
++---------------------+----------+--------+----+-----+----+----+--------------+
+| ANNOINTED FLAIL     |     150  | 1D7    |  3 |   0 | NO | NO | C,F,L,N,S    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| ANNOINTED MACE      |      30  | 2D3    |  2 |   0 | NO | NO | C,F,L,N,S,W  |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| BENT STAFF          |    8000  | 1D4    | -2 |   1 | NO | CU | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| BLADE CUSINART      |   15000  | 1D3+9  |  6 |   4 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| BLADE OF BITING     |   15000  | 1D6+1  |  4 |   2 | NO | NO | F,L,N,S,T    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| DAGGER              |       5  | 1D4    |  1 |   0 | NO | NO | F,L,M,N,S,T  |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| DAGGER OF SLICING   |    8000  | 1D4+2  |  3 |   2 | NO | NO | F,L,M,N,S,T  |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| DAGGER OF SPEED     |   30000  | 1D4    | -1 |   7 | NO | NO | M,N          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| DAGGER OF THIEVES   |   50000  | 1D6    |  5 |   4 | NO | NO | N,T          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| EPEE OF DISASTER    |    8000  | 1D6    |  1 |   1 | NO | CU | F,L,N,S,T    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| EPEE OF DISMAY      |    1000  | 1D6    | -1 |   1 | NO | CU | F,L,N,S,T    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| EPEE OF EXCELLENCE  |    4000  | 1D6+2  |  5 |   3 | NO | NO | F,L,N,S,T    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| LONG SWORD          |      25  | 1D8    |  4 |   0 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MACE OF MISFORTUNE  |    1000  | 2D3    | -1 |   1 | NO | CU | C,F,L,N,S,W  |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MACE OF POUNDING    |   12500  | 2D4+1  |  3 |   2 | NO | NO | C,F,L,N,S    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MACE OF POWER       |    4000  | 1D8+2  |  4 |   2 | NO | NO | C,L,N,S,W    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MACE OF SNAKES      |   10000  | 1D8    |  3 |   2 | NO | NO | C,F,L,N,S,W  |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MASHER OF MAGES     |   10000  | 1D6+1  |  5 |   2 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MORBID MACE         |    8000  | 1D8    |  0 |   0 | NO | CU | C,F,L,N,S,W  |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| MURAMASA BLADE      | 1000000  | 10D5   |  8 |   3 | NO | NO | S            |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF DEATH       |  500000  | NA     | NA |  NA | NA | CU | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF DISPELLING  |  500000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF HEALING     |  300000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF JEWELS      |    5000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF MOVEMENT    |   25000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF RIGIDITY    |   15000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF SHIELDING   |   10000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| RING OF SUFFOCATION |   20000  | NA     | NA |  NA | NA | NA | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| ROD OF FLAME        |   25000  | NA     | NA |  NA | NA | NA | M,S,W        |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| ROD OF IRON         |    3000  | 1D6    |  1 |   0 | NO | NO | M,W          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| ROD OF SILENCE      |   15000  | 1D5+1  |  1 |   1 | NO | NO | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SABER OF EVIL       |   50000  | 1D10+3 |  7 |   4 | NO | EV | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SHORT SWORD         |      15  | 1D6    |  3 |   0 | NO | NO | F,L,N,S,T    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SHURIKEN            |   50000  | 1D5+10 |  7 |   3 | YE | EV | N            |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SLAYER OF DRAGONS   |   10000  | 1D10+1 |  1 |   1 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SOUL SLAYER         |   50000  | 1D6    |  6 |   4 | NO | EV | F,L,N,S,T    |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| STAFF               |      10  | 1D5    |  0 |   0 | NO | NO | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| STUDLY STAFF        |    2500  | 1D4+2  |  2 |   1 | NO | NO | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SWORD OF SLASHING   |    4000  | 1D10+2 |  6 |   3 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SWORD OF SLICING    |   10000  | 1D8+1  |  5 |   2 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| SWORD OF SWISHES    |    1000  | 1D8    | -1 |   0 | NO | CU | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| WERDNA'S AMULET     | 49000000 | NA     | NA |  NA | NO | CU | ALL          |
++---------------------+----------+--------+----+-----+----+----+--------------+
+| WERESLAYER          |    10000 | 1D10+1 |  5 |   2 | NO | NO | F,L,N,S      |
++---------------------+----------+--------+----+-----+----+----+--------------+
+
++---------------------+---------+----+------+----+------------+-------------+
+| NAME                | PURPOSE | AA | +MA  | RG | PROTECTION | RESIST      |
++---------------------+---------+----+------+----+------------+-------------+
++---------------------+---------+----+------+----+------------+-------------+
+| ANNOINTED FLAIL     |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| ANNOINTED MACE      |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| BENT STAFF          |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| BLADE CUSINART      |         |    |    1 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| BLADE OF BITING     |         |    |    1 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| DAGGER              |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| DAGGER OF SLICING   |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| DAGGER OF SPEED     |         | -3 |    3 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| DAGGER OF THIEVES   |         |    |    5 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| EPEE OF DISASTER    |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| EPEE OF DISMAY      |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| EPEE OF EXCELLENCE  |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| LONG SWORD          |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| MACE OF MISFORTUNE  |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| MACE OF POUNDING    |         |    |    1 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| MACE OF POWER       |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| MACE OF SNAKES      |         |    |      |    | INSECTS    | POISON      |
++---------------------+---------+----+------+----+------------+-------------+
+| MASHER OF MAGES     | MAGE    |    |      |    | MAGE       |             |
++---------------------+---------+----+------+----+------------+-------------+
+| MORBID MACE         |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| MURAMASA BLADE      |         |    |  100 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF DEATH       |         |    |   50 | -3 |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF DISPELLING  |         |    |   50 |    | UNDEAD     |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF HEALING     |         |    |   30 |  1 |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF JEWELS      |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF MOVEMENT    |         |  2 |    2 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF RIGIDITY    |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF SHIELDING   |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| RING OF SUFFOCATION |         |    |    2 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| ROD OF FLAME        |         |    |    2 |    |            | FIRE        |
++---------------------+---------+----+------+----+------------+-------------+
+| ROD OF IRON         |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| ROD OF SILENCE      |         |    |    1 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SABER OF EVIL       |         |    |    5 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SHORT SWORD         |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SHURIKEN            |         |    |    5 |    |            | POISON      |
+|                     |         |    |      |    |            | LEVEL DRAIN |
++---------------------+---------+----+------+----+------------+-------------+
+| SLAYER OF DRAGONS   | DRAGON  |    |    1 |    | DRAGON     |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SOUL SLAYER         |         |    |    5 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| STAFF               |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| STUDLY STAFF        |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SWORD OF SLASHING   |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SWORD OF SLICING    |         |    |    1 |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| SWORD OF SWISHES    |         |    |      |    |            |             |
++---------------------+---------+----+------+----+------------+-------------+
+| WERDNA'S AMULET     |         | 10 | 9999 |  5 | ALL BUT    | ALL         |
+|                     |         |    |      |    | ENCHANTED  |             |
++---------------------+---------+----+------+----+------------+-------------+
+| WERESLAYER          | WERE    |    |    1 |    | WERE       |             |
++---------------------+---------+----+------+----+------------+-------------+
+
++---------------------+-----------------+-----+-------------+---------------+
+| NAME                | SPELL           | BRK |AFTRBRK      |UNIDENT        |
++---------------------+-----------------+-----+-------------+---------------+
++---------------------+-----------------+-----+-------------+---------------+
+| ANNOINTED FLAIL     |                 |     |             | STICK W/CHAIN |
++---------------------+-----------------+-----+-------------+---------------+
+| ANNOINTED MACE      |                 |     |             | KNOBBED STICK |
++---------------------+-----------------+-----+-------------+---------------+
+| BENT STAFF          |                 |     |             | STICK         |
++---------------------+-----------------+-----+-------------+---------------+
+| BLADE CUSINART      |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| BLADE OF BITING     |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| DAGGER              |                 |     |             | DAGGER        |
++---------------------+-----------------+-----+-------------+---------------+
+| DAGGER OF SLICING   |                 |     |             | DAGGGER       |
++---------------------+-----------------+-----+-------------+---------------+
+| DAGGER OF SPEED     |                 |     |             | DAGGER        |
++---------------------+-----------------+-----+-------------+---------------+
+| DAGGER OF THIEVES   | CHANGES A THIEF | 100 | BROKEN ITEM | DAGGER        |
+|                     | INTO A NINJA    |     |             |               |
+|                     | WHEN USED       |     |             |               |
++---------------------+-----------------+-----+-------------+---------------+
+| EPEE OF DISASTER    |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| EPEE OF DISMAY      |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| EPEE OF EXCELLENCE  |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| LONG SWORD          |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| MACE OF MISFORTUNE  |                 |     |             | KNOBBED STICK |
++---------------------+-----------------+-----+-------------+---------------+
+| MACE OF POUNDING    |                 |     |             | KNOBBED STICK |
++---------------------+-----------------+-----+-------------+---------------+
+| MACE OF POWER       |                 |     |             | KNOBBED STICK |
++---------------------+-----------------+-----+-------------+---------------+
+| MACE OF SNAKES      |                 |     |             | KNOBBED STICK |
++---------------------+-----------------+-----+-------------+---------------+
+| MASHER OF MAGES     |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| MORBID MACE         |                 |     |             | KNOBBED STICK |
++---------------------+-----------------+-----+-------------+---------------+
+| MURASAMA            | ADDS +1 TO ST   |  50 | BROKEN ITEM | SWORD         |
+|                     | WHEN USED       |     |             |               |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF DEATH       |                 |     |             | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF DISPELLING  |                 |     |             | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF HEALING     |                 |     |             | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF JEWELS      | DUMAPIC         |   0 |             | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF MOVEMENT    | MALOR           | 100 | DISAPPEARS  | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF RIGIDITY    | MANIFO          |  10 | BROKEN ITEM | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF SHIELDING   | PORFIC          |   5 | BROKEN ITEM | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| RING OF SUFFOCATION | MAKANITO        |   5 | BROKEN ITEM | RING          |
++---------------------+-----------------+-----+-------------+---------------+
+| ROD OF FLAME        | MAHALITO        |  10 | BROKEN ITEM | ROD           |
++---------------------+-----------------+-----+-------------+---------------+
+| ROD OF IRON         | MONGREF         |  25 | BROKEN ITEM | STAFF         |
++---------------------+-----------------+-----+-------------+---------------+
+| ROD OF SILENCE      | MONTINO         |  10 | STAFF       | STAFF         |
++---------------------+-----------------+-----+-------------+---------------+
+| SABER OF EVIL       |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| SHORT SWORD         |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| SHURIKEN            | ADDS +1 TO HP   |  50 | BROKEN ITEM | WEAPON        |
+|                     | WHEN USED       |     |             |               |
++---------------------+-----------------+-----+-------------+---------------+
+| SLAYER OF DRAGONS   |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| SOUL SLAYER         |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| STAFF               |                 |     |             | STICK         |
++---------------------+-----------------+-----+-------------+---------------+
+| STUDLY STAFF        |                 |     |             | STICK         |
++---------------------+-----------------+-----+-------------+---------------+
+| SWORD OF SLASHING   |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| SWORD OF SLICING    |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| SWORD OF SWISHES    |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+| WERDNA'S AMULET     | MALOR           |   0 |             | AMULET        |
++---------------------+-----------------+-----+-------------+---------------+
+| WERESLAYER          |                 |     |             | SWORD         |
++---------------------+-----------------+-----+-------------+---------------+
+
+                               **************
+******************************** U N I T  V ***********************************
+                               **************
+
++=================+
+| 15.  CONCLUSION |============================================================
++=================+
+
+Wizardry was the first RPG that I owned for a computer console.  When I
+originally purchased this game in 1982, I never realized how addicting it would
+become.  I spent hours in front of that Apple II+ building up my characters,
+mapping out the mazes, or just finding different strategies to use on the
+monsters.  It was a major sense of accomplishment when I finally found and
+defeated WERDNA.  Even after all of these years, I still enjoy playing this
+game.  Even though I originally played it on the Apple, I have also played it
+on other systems such as the PC and NES to name a couple and they both are
+faithful translations of the original.  Although the graphics are primitive and
+the storyline isn't that heavily involved, this game still seems to hold a
+special place with me.  This guide was a lot of fun to write and I hope you get
+as much enjoyment out of reading it as I did writing it.  If you do have other
+ideas or thoughts, please e-mail me and share them.  Who knows, maybe I'll
+start a Q&A chapter in this guide if enough people ask the same questions.
+Anyway, thank you again for reading this guide.
+
+To see other FAQ's I have written please go to:
+
+           http://www.gamefaqs.com/features/recognition/32991.html
+
+           ~~~  No trees were harmed in the making of this FAQ ~~~

@@ -4141,10 +4141,6 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Werebears can only be hit by silver or magical weapons."
-        },
-        {
           "Name": "Regeneration 1 HP/Round",
           "Description": "Regenerates 1 hit points per round."
         }
@@ -4234,10 +4230,6 @@
       ],
       "SpecialDefenses": [
         {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Weretigers can only be hit by silver or magical weapons."
-        },
-        {
           "Name": "Regeneration 1 HP/Round",
           "Description": "Regenerates 1 hit points per round."
         }
@@ -4279,12 +4271,7 @@
           "Description": "Death resistant (24%)."
         }
       ],
-      "SpecialDefenses": [
-        {
-          "Name": "Silver or Magic Weapons Required",
-          "Description": "Werewolves can only be hit by silver or magical weapons."
-        }
-      ],
+      "SpecialDefenses": [],
       "BaseXPValue": 975,
       "XPValuePerHitPoint": 0,
       "Source": "Wizardry",

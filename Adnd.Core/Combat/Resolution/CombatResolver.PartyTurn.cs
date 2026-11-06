@@ -70,10 +70,7 @@ public sealed partial class CombatResolver
                 surpriseAction = CombatAction.OfType(CombatActionType.Parry);
 
             if (!CanActDuringCompleteSurpriseWithCrossbowOfSpeed(member, surpriseAction))
-            {
-                events.Add(new CombatEvent($"{member.Name} is surprised and cannot act in round 1."));
                 return true;
-            }
 
             events.Add(new CombatEvent($"{member.Name}'s Crossbow of Speed snaps to readiness and can fire once despite complete surprise (2nd segment effect)."));
         }

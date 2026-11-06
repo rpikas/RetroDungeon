@@ -86,6 +86,8 @@ public sealed class TreasureService
     private void RollWizardryTreasure(MonsterInstance representative, TreasureResult result)
     {
         var guaranteed = GuaranteedWizardryChestItems;
+        // The guaranteed items drop once for the whole encounter, not once per monster group.
+        GuaranteedWizardryChestItems = null;
         var inLair = representative.IsInLair || guaranteed is { Count: > 0 };
         var roll = WizardryTreasureTable.Roll(representative.Template.DungeonLevel, inLair, _random);
         result.LogLines.Add($"{representative.DisplayName}: {roll.Log}");

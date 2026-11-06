@@ -383,7 +383,7 @@ public sealed class CombatCoordinator
         var groups = new List<(string name, int count)>();
         foreach (var monsterName in monsterNames)
         {
-            var monster = monsterRepository.GetAll().FirstOrDefault(m => string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
+            var monster = monsterRepository.GetAll().FirstOrDefault(m =>             string.Equals(m.Name, monsterName, StringComparison.OrdinalIgnoreCase));
             int count;
             if (monster != null)
             {
@@ -831,7 +831,15 @@ public sealed class CombatCoordinator
         {
             var rolledTrap = _chestTrapTableProvider.RollTrap(dungeonDepth, _random, out var trapRollInfo);
             RuleApplicationInfo.Publish(trapRollInfo);
-            chestResolution = ResolveLairChestInteraction(owner, session, survivors, dungeonDepth, rolledTrap, rewardForm);
+            _chestForm = rewardForm;
+            try
+            {
+                chestResolution = ResolveLairChestInteraction(owner, session, survivors, dungeonDepth, rolledTrap, rewardForm);
+            }
+            finally
+            {
+                _chestForm = null;
+            }
         }
 
         var effectiveTreasure = BuildEffectiveTreasure(treasure, chestResolution.IncludeLairTreasure);
@@ -1150,7 +1158,9 @@ public sealed class CombatCoordinator
             }
         }
 
-        if (!isWizardryEncounter)
+        // The compact in-form summary only exists inside the Wizardry-style encounter form; everything else
+        // (AD&D, with or without a chest) keeps the full Combat Rewards dialog.
+        if (!isWizardryEncounter || rewardForm is not { IsWizardryStyle: true })
         {
             Say(owner, "Combat Rewards", sb.ToString(), session);
             return;
@@ -1172,7 +1182,8 @@ public sealed class CombatCoordinator
         foreach (var r in levelUpResults.Where(r => r.NewLevel > r.OldLevel))
             summary.Add($"{r.CharacterName} reached level {r.NewLevel}!");
 
-        rewardForm?.PlayResults(owner, summary);
+        // Hold the final XP/gold line a few extra seconds (or until a key is pressed).
+        rewardForm?.PlayResults(owner, summary, extraHoldOnLastLineMs: 4000);
     }
 
     private static string AddArticle(string name)
@@ -3459,6 +3470,23 @@ public sealed class CombatCoordinator
         monsterName = string.Empty;
         count = 1;
 
+        // Playing Wizardry: reinforcements come from the fixed Wizardry list for the level, like any other Wizardry encounter.
+        if (GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry)
+        {
+            var picked = WizardryEncounterTable.Pick(dungeonLevel, _random);
+            var template = _monsterRepository.GetAll().FirstOrDefault(m =>
+                m.Source == Sources.Wizardry && string.Equals(m.Name, picked, StringComparison.OrdinalIgnoreCase));
+            if (template != null)
+            {
+                var min = Math.Max(1, Math.Min(template.NumberOfAppearancesMin, template.NumberOfAppearancesMax));
+                var max = Math.Max(min, Math.Max(template.NumberOfAppearancesMin, template.NumberOfAppearancesMax));
+                count = _random.Next(min, max + 1);
+            }
+
+            RuleApplicationInfo.Publish($"Wizardry alarm reinforcement at dungeon level {dungeonLevel}: {count} {monsterName}.");
+            return true;
+        }
+
         var monsterLevel = RollMonsterLevelFromEncounterTable(dungeonLevel);
         var rolled = RollFromMonsterLevels(monsterLevel, dungeonLevel);
         if (rolled == null)
@@ -3800,6 +3828,8 @@ public sealed class CombatCoordinator
         public bool TrapTriggered { get; set; }
     }
 
+    private EncounterForm? _chestForm;
+
     private LairChestResolutionResult ResolveLairChestInteraction(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, ChestTrapType trapType, EncounterForm? rewardForm = null)
     {
         var result = new LairChestResolutionResult
@@ -3870,7 +3900,7 @@ public sealed class CombatCoordinator
                     ApplyChestTrapEffect(owner, session, survivors, opener, dungeonLevel, trapType, result);
             }
 
-            ShowTreasureFoundDialog(owner, session);
+            ShowTreasureFoundDialog(owner, session, rewardForm);
             return result;
         }
     }
@@ -4220,11 +4250,26 @@ public sealed class CombatCoordinator
         ViewerPromptChanged?.Invoke(session, null);
     }
 
-    private void ShowTreasureFoundDialog(IWin32Window owner, CombatSession session)
+    private void ShowTreasureFoundDialog(IWin32Window owner, CombatSession session, EncounterForm? rewardForm = null)
     {
         var imagePath = ResolveFindingTreasureImagePath();
         if (string.IsNullOrWhiteSpace(imagePath) || !File.Exists(imagePath))
             return;
+
+        if (rewardForm is { IsWizardryStyle: true })
+        {
+            try
+            {
+                using var src = Image.FromFile(imagePath);
+                using var image = new Bitmap(src);
+                rewardForm.ShowPictureNotice(owner, image, "TREASURE FOUND!", "PRESS ↵ TO CONTINUE");
+                return;
+            }
+            catch (Exception ex) when (ex is ExternalException || ex is OutOfMemoryException || ex is ArgumentException)
+            {
+                return;
+            }
+        }
 
         using var form = new Form
         {
@@ -4350,6 +4395,20 @@ public sealed class CombatCoordinator
 
         if (selectable.Count == 0)
             return (null, false);
+
+        if (_chestForm is { IsWizardryStyle: true } chestForm)
+        {
+            var verb = title switch
+            {
+                "Open chest" => "open",
+                "Inspect chest" => "inspect",
+                "Disarm Trap" => "disarm",
+                _ => title
+            };
+            using var chestImage = LairTreasureChestDialog.ResolveChestImage();
+            var pick = chestForm.ShowMemberPick(owner, chestImage, verb, selectable.Select(c => c.Name).ToList(), allowLeaveOption);
+            return (pick.Index >= 0 ? selectable[pick.Index] : null, pick.Leave);
+        }
 
         var oldStyle = GameRulesProvider.Current.UIOldStyle;
         using var form = new Form

@@ -489,6 +489,36 @@ public sealed class EncounterForm : Form
     {
         base.OnShown(e);
 
+        if (_chestMode && _pickNames != null)
+        {
+            var vocab = new Dictionary<string, Keys>(StringComparer.OrdinalIgnoreCase) { ["back"] = Keys.B };
+            if (_pickAllowLeave)
+                vocab["leave"] = Keys.L;
+            var pickOptions = new List<ViewerPromptOption>();
+            for (var i = 0; i < _pickNames.Count; i++)
+            {
+                vocab[$"pick:{i + 1}"] = Keys.D1 + i;
+                pickOptions.Add(new ViewerPromptOption($"pick:{i + 1}", _pickNames[i]));
+            }
+
+            pickOptions.Add(new ViewerPromptOption("back", "Back"));
+            if (_pickAllowLeave)
+                pickOptions.Add(new ViewerPromptOption("leave", "Leave"));
+
+            _viewerControl = ViewerControlPump.Start(this, vocab, HandleChestKey);
+            ViewerPromptChanged?.Invoke(new ViewerPrompt("choice", _pickQuestion, null, pickOptions));
+            return;
+        }
+
+        if (_chestMode && _noticeMode)
+        {
+            _viewerControl = ViewerControlPump.Start(this,
+                new Dictionary<string, Keys>(StringComparer.OrdinalIgnoreCase) { ["continue"] = Keys.Enter }, HandleChestKey);
+            ViewerPromptChanged?.Invoke(new ViewerPrompt("choice", "Treasure found.", null,
+                new[] { new ViewerPromptOption("continue", "Continue") }));
+            return;
+        }
+
         if (_chestMode)
         {
             _viewerControl = ViewerControlPump.Start(this, Adnd.Game.Combat.LairTreasureChestDialog.Vocabulary, HandleChestKey);
@@ -600,8 +630,9 @@ public sealed class EncounterForm : Form
     internal bool IsWizardryStyle => _wizardryStyle;
 
     /// <summary>Shows the round's results one line at a time inside this form: every second, or sooner on any key.</summary>
-    internal void PlayResults(IWin32Window owner, IEnumerable<string> lines)
+    internal void PlayResults(IWin32Window owner, IEnumerable<string> lines, int extraHoldOnLastLineMs = 0)
     {
+        _lastLineExtraMs = extraHoldOnLastLineMs;
         var list = lines.Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => l.Trim()).ToList();
         if (list.Count == 0)
             return;
@@ -613,6 +644,8 @@ public sealed class EncounterForm : Form
         ShowDialog(owner);
         _resultLines = null;
     }
+
+    private int _lastLineExtraMs;
 
     private void ShowResultLine()
     {
@@ -638,6 +671,12 @@ public sealed class EncounterForm : Form
         _optionsTitleLabel.Text = string.Empty;
         _optionsLegendLabel.Text = _resultLines[_resultIndex++].ToUpperInvariant();
         UpdatePartyList();
+        if (_resultTimer != null)
+        {
+            var baseDelay = Math.Max(1, GameRulesProvider.Current.DelayInbetweenCombatMessages);
+            _resultTimer.Interval = _resultIndex >= _resultLines.Count ? baseDelay + Math.Max(0, _lastLineExtraMs) : baseDelay;
+        }
+
         _resultTimer?.Stop();
         _resultTimer?.Start();
     }
@@ -734,16 +773,17 @@ public sealed class EncounterForm : Form
         g.Clear(Color.Black);
         DrawCorridorFrame(g, rect);
 
-        if (_chestMode)
+        if (_chestMode || _heldImage != null)
         {
-            if (_chestImage != null)
+            var picture = _chestMode ? _chestImage : _heldImage;
+            if (picture != null)
             {
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                var scale = Math.Min(64f / _chestImage.Height, 160f / _chestImage.Width);
-                var w = (int)(_chestImage.Width * scale);
-                var h = (int)(_chestImage.Height * scale);
-                g.DrawImage(_chestImage, new Rectangle(rect.Left + (rect.Width - w) / 2, rect.Top + (rect.Height - h) / 2 + 20, w, h));
+                var scale = Math.Min(64f / picture.Height, 160f / picture.Width);
+                var w = (int)(picture.Width * scale);
+                var h = (int)(picture.Height * scale);
+                g.DrawImage(picture, new Rectangle(rect.Left + (rect.Width - w) / 2, rect.Top + (rect.Height - h) / 2 + 20, w, h));
             }
 
             return;
@@ -1021,8 +1061,96 @@ public sealed class EncounterForm : Form
         return _chestChoice;
     }
 
+    private bool _noticeMode;
+    private IReadOnlyList<string>? _pickNames;
+    private bool _pickAllowLeave;
+    private string _pickQuestion = string.Empty;
+    private int _pickIndex = -1;
+    private bool _pickLeave;
+
+    /// <summary>Asks "who will ...?" over the chest picture. Number picks a member; Enter or L leaves (when allowed); B or Esc goes back.</summary>
+    internal (int Index, bool Leave) ShowMemberPick(IWin32Window owner, Image? image, string verb, IReadOnlyList<string> names, bool allowLeave)
+    {
+        _chestMode = true;
+        _chestImage = image;
+        _pickNames = names;
+        _pickAllowLeave = allowLeave;
+        _pickIndex = -1;
+        _pickLeave = false;
+        _pickQuestion = $"Who (#) will {verb.ToLowerInvariant()}?";
+        _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
+        var savedHeader = _headerLabel.Text;
+        _headerLabel.Text = string.Empty;
+        _optionsTitleLabel.Text = string.Empty;
+        _optionsLegendLabel.Text = $"WHO (#) WILL {verb.ToUpperInvariant()} ?" + Environment.NewLine + "↵ TO LEAVE";
+        _monsterPanel.Invalidate();
+        DialogResult = DialogResult.None;
+        ShowDialog(owner);
+        _headerLabel.Text = savedHeader;
+        _pickNames = null;
+        _chestMode = false;
+        _chestImage = null;
+        _monsterPanel.Invalidate();
+        return (_pickIndex, _pickLeave);
+    }
+
+    /// <summary>Shows a picture (the treasure found) in the monster strip until Enter or Escape.</summary>
+    internal void ShowPictureNotice(IWin32Window owner, Image? image, string title, string legend)
+    {
+        _noticeMode = true;
+        _chestMode = true;
+        _chestImage = image;
+        _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
+        _optionsTitleLabel.Text = title;
+        _optionsLegendLabel.Text = legend;
+        _monsterPanel.Invalidate();
+        DialogResult = DialogResult.None;
+        ShowDialog(owner);
+        _noticeMode = false;
+        _chestMode = false;
+        // Keep the picture in the strip for the results that follow.
+        _heldImage?.Dispose();
+        _heldImage = image != null ? new Bitmap(image) : null;
+        _chestImage = null;
+        _monsterPanel.Invalidate();
+    }
+
+    private Image? _heldImage;
+
     private void HandleChestKey(Keys key)
     {
+        if (_pickNames != null)
+        {
+            if (key >= Keys.D1 && key <= Keys.D9 && key - Keys.D1 < _pickNames.Count)
+                _pickIndex = key - Keys.D1;
+            else if (key == Keys.L && _pickAllowLeave || key == Keys.Enter && _pickAllowLeave)
+                _pickLeave = true;
+            else if (key is not (Keys.B or Keys.Escape or Keys.Enter))
+                return;
+
+            _viewerControl?.Dispose();
+            _viewerControl = null;
+            ViewerPromptChanged?.Invoke(null);
+            DialogResult = DialogResult.OK;
+            Close();
+            return;
+        }
+
+        if (_noticeMode)
+        {
+            if (key is not (Keys.Enter or Keys.Escape or Keys.Space))
+                return;
+
+            _viewerControl?.Dispose();
+            _viewerControl = null;
+            ViewerPromptChanged?.Invoke(null);
+            DialogResult = DialogResult.OK;
+            Close();
+            return;
+        }
+
         Adnd.Game.Combat.LairChestChoice? choice = key switch
         {
             Keys.O => Adnd.Game.Combat.LairChestChoice.Open,
@@ -2792,6 +2920,8 @@ public sealed class EncounterForm : Form
         if (c.HasStatus(CharacterStatus.Ashes)) statuses.Add("ASHES");
         if (c.HasStatus(CharacterStatus.Lost)) statuses.Add("LOST");
         if (c.HasStatus(CharacterStatus.Paralyzed)) statuses.Add("PARALYZED");
+        if (statuses.Count == 0 && _session is { RoundNumber: 1, PartySurprisedRound1: true })
+            statuses.Add("SURPRISED");
         if (c.HasStatus(CharacterStatus.Asleep))
         {
             var rounds = _session?.GetPartyAsleepRounds(c.Name) ?? 0;

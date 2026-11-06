@@ -69,6 +69,22 @@ public static class MonsterArt
             }
         }
 
+        // Pictures that belong only to Wizardry monsters (and the _Wiz variants) live in their own folder.
+        foreach (var wizFolder in new[]
+                 {
+                     Path.Combine(baseDir, "Assets", "Monsters", "Wizardry"),
+                     Path.Combine("Adnd.Game", "Assets", "Monsters", "Wizardry"),
+                     Path.Combine("Assets", "Monsters", "Wizardry")
+                 })
+        {
+            AddCandidates(wizFolder, slug, useWizardrySuffix);
+            AddCandidates(wizFolder, camelCase, useWizardrySuffix);
+            AddCandidates(wizFolder, noCommaSlug, useWizardrySuffix);
+            AddCandidates(wizFolder, noCommaCamelCase, useWizardrySuffix);
+            AddCandidates(wizFolder, monsterName, useWizardrySuffix);
+            AddCandidates(wizFolder, noComma, useWizardrySuffix);
+        }
+
         // If dungeonLevel is provided, search in level-specific folder first
         if (dungeonLevel.HasValue)
         {

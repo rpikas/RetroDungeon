@@ -553,7 +553,7 @@ public sealed partial class MazeForm
         using var inspect = new CampCharacterInspectForm(selectedCharacter.Name, activeMembers, PublishTable)
         {
             StartWithEquip = startWithEquip,
-            LocationInfoProvider = () => $"You are at ({_position.X},{_position.Y}) on dungeon level {_currentDungeonLevel}, facing {CompassHeading()}.",
+            LocationInfoProvider = () => $"You are at {PositionText} on dungeon level {_currentDungeonLevel}, facing {CompassHeading()}.",
             MalorTeleport = TryMalorTeleport
         };
         inspect.ShowDialog(this);

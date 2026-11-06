@@ -148,22 +148,32 @@ public sealed partial class MazeForm
         return false;
     }
 
-    private static readonly Point Level4AmbushSquare = new(12, 14);
+    // Proving Grounds positions are shown as (Y,X); this is the internal X=14, Y=12, i.e. shown 12,14.
+    private static readonly Point Level4AmbushSquare = new(14, 12);
+    private string PositionText => _thinWalls ? $"({_position.Y},{_position.X})" : $"({_position.X},{_position.Y})";
 
     // Level 4 ambush: 99% on the first visit after entering the floor. A hostile mixed group that can't be fled.
-    // Returns true when the party was sent back to town after a defeat.
+    // Returns true when the ambush took place, so no further encounter is rolled for that step.
     private bool ProcessLevelFourAmbushStep()
     {
-        if (!_thinWalls || _currentDungeonLevel != 4 || _position != Level4AmbushSquare
-            || !_visitedEncounterLocations.Add((_position.X, _position.Y)) || LoadEncounterParty().Count == 0)
+        if (!_thinWalls || _currentDungeonLevel != 4 || _position != Level4AmbushSquare)
             return false;
+
+        var firstVisit = _visitedEncounterLocations.Add((_position.X, _position.Y));
+        var partySize = LoadEncounterParty().Count;
+        if (!firstVisit || partySize == 0)
+        {
+            RuleApplicationInfo.Publish(
+                $"Scripted ambush at {PositionText} on level 4 skipped: {(firstVisit ? "no party members" : "square already visited since entering the floor")}.");
+            return false;
+        }
 
         var roll = _random.Next(1, 101);
         var triggered = roll <= 99;
         RuleApplicationInfo.Publish(
             "HomeBrew",
             "",
-            $"Scripted ambush at ({_position.X},{_position.Y}) on level 4",
+            $"Scripted ambush at {PositionText} on level 4",
             "First visit to the square after entering the floor: roll 1d100, the ambush happens on a roll of 99 or less. The group is hostile and cannot be fled.",
             "1",
             "100",
@@ -203,12 +213,9 @@ public sealed partial class MazeForm
 
         PublishToViewer();
         if (outcome == CombatOutcome.Defeat)
-        {
             HandlePartyDefeatAtCurrentCell();
-            return false;
-        }
 
-        return false;
+        return true;
     }
 
     private static readonly Point Level10WerdnaLair = new(3, 17);
