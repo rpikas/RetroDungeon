@@ -7183,15 +7183,16 @@ Differentiate between monsters with the same name but different sources. so for 
 OnlyWizardry an encountering a Kobold the data like "NumberOfAppearancesMin": should be piced from the json object
 with  "Source": "Wizardry".
 
-Do you think adding unit test and or updating .md files would be worht doing when doing changes like this? if so, 
-please do that.
+Do you think adding unit test and or updating .md files would be worht doing when doing changes like this? 
+if so, please do that.
 
 Do you think it would be a good idea to refactor for example MazeForm.cs and divide it? if so, please do that and if
 efficent to add tests and or documentation while you are refacoring it, please to that if you dont think it is
 efficent to do that now, we can save it for later.
 
 the Stairs Up dialog, make it look more like in this picture: Adnd.Game\Assets\ScenPictures\StairsUp.png
-in the stairs up dialog, can you make the corners a bit curved and do not use double frames only one thick frame around it
+in the stairs up dialog, can you make the corners a bit curved and do not use double 
+frames only one thick frame around it
 
 can you make other old style dialogs also having the same thickness of the frame and rounded corners, remember that
 many of them are bigger, so keep the size that the other dialogs currenlty have
@@ -7206,28 +7207,36 @@ in the church update prices:
 neutralize poison cost 1000 gp
 Raise dead cost 1000 plus 500 per level of target
 Requrection cost twice as much as Raise dead.
-Cast Restoration that cures Feeblemind, lost levels cost 10000 plus a like amount per level of experience of the recipient.
+Cast Restoration that cures Feeblemind, lost levels cost 10000 plus a like amount 
+per level of experience of the recipient.
 Restoration is only effective if the spell is cast within 1 day/level of experience of the cleric casting it. 
-Both the caster and recipient age by two years when the spell is cast. Implement Level 7 Cleric spell restoration if not done. 
+Both the caster and recipient age by two years when the spell is cast. 
+Implement Level 7 Cleric spell restoration if not done. 
 Clerics in Temple are asumed to be level 15
 ___
 Dagger of Speed only usable my magic users and gives the user ac 3
 Illusionists can also use it and it has no extra attack you can remove that
 ___
-Evil Sword +3 in Wizardry can be implemented as a Long Sword +3 but can only be equiped by charaters with Evil Alignment
-Evil S-Sword +3 in Wizardry can be implemented as a Short Sword +3 but can only be equiped by charaters with Evil Alignment
+Evil Sword +3 in Wizardry can be implemented as a Long Sword +3 but can only be equiped by charaters
+with Evil Alignment
+Evil S-Sword +3 in Wizardry can be implemented as a Short Sword +3 but can only be equiped by charaters 
+with Evil Alignment
 ___
-Helm of Malor when used cast Malor, it opens a dialog how many positions north and east you wnant to move. negative are allowed, 
+Helm of Malor when used cast Malor, it opens a dialog how many positions north and east you wnant to move. 
+negative are allowed, 
 how many levels down. then teleport the party
 implement Mace of Poison, it works like a Mace+2 and when wielded save vs. poison is +3
 ___
-Ring Pro Undead (Ring of Protection from Undead) is one of the rarest items in Wizardry I. Item databases identify it simply as
+Ring Pro Undead (Ring of Protection from Undead) is one of the rarest items in Wizardry I. 
+Item databases identify it simply as
 "Pro Undead" (protection
 What that protection actually does was unclear for years, but analysis of the original game code indicates:
-When an undead monster targets the protected character, there is roughly a 50% chance the monster's action simply fails and 
+When an undead monster targets the protected character, there is roughly a 50% chance the monster's 
+action simply fails and 
 the monster loses its turn. This can affect melee attacks and other actions.
 More importantly for Wizardry players:
-Protection from undead can prevent attacks from undead that would otherwise inflict effects such as level drain or paralysis, because the attack never happens if the protection check succeeds.
+Protection from undead can prevent attacks from undead that would otherwise inflict effects such as 
+level drain or paralysis, because the attack never happens if the protection check succeeds.
 
 Ring of Shielding cast PORFIC that is the same thing as shield spell
 Ring of Rigidity cast Manifo, that is the same as hold monster
@@ -7397,29 +7406,38 @@ These are the items with numbers
 93	DEADLY RING
 6,2
 ___
-After killing wizardry mobs you get no extra xp for the gp found as in ADND, you only get the xp for the monsters killed.
+After killing wizardry mobs you get no extra xp for the gp found as in ADND, you only get the xp 
+for the monsters killed.
 Also there is no xp bonus after killing wizardry mobs as in ADND.
 Do not open a new dialog to show the details about the treasure found, instead show it in the combat log.
-But show a summary in the encounter dialog, for example "You found 102 gold each. You got 82 xp each and Bubba found a Long Sword +1"
+But show a summary in the encounter dialog, for example "You found 102 gold each. You got 82 xp each
+and Bubba found a Long Sword +1"
 
-There are certain locations in Proving grouds where the chanse is specified that it usally 80 % chanse to encounter
-monsters, in such encounters the monsters are always in lair. But when bumbing into monster when waliking in the
+There are certain locations in Proving grouds where the chanse is specified that it usally 80 % chanse 
+to encounter
+monsters, in such encounters the monsters are always in lair. But when bumbing into monster when 
+waliking in the
 dungeon the wizardry monsters are never in lair.
 
-when playing wizardry and deciding what level monster to encounter the normal table that is used for adnd should not be used. 
+when playing wizardry and deciding what level monster to encounter the normal table that is used for
+adnd should not be used. 
 then this table should be used. Wizardry: Proving Grounds of the Mad Overlord/Monsters - Wizardry Wiki 
 
-the special attack decapitate is 2% per hit dice of the monster. write the chanse and the roll to the log when
+the special attack decapitate is 2% per hit dice of the monster. write the chanse and the roll to the 
+log when
 rolling 
 ___
 7,4
 update breath for dragon fly to dragon fly breath and make it 2-5 in damage to all in the party
 
-All Ninjas should have special attack Autokill, that should work exaclty like Decapitate 2% chanse to instant kill
+All Ninjas should have special attack Autokill, that should work exaclty like Decapitate 2% chanse to 
+instant kill
 target and write the chanse and roll to the log-
 
-on level 4, pos 12,14 Enconter will appear with 99% before you in the following group: Two Lvl 7 Fighters, two Lvl 7
-Mages, two High Priests, and one High Ninja. They will not be friendly, and it will be impossible to run away.
+on level 4, pos 12,14 Enconter will appear with 99% before you in the following group: 
+Two Lvl 7 Fighters, two Lvl 7
+Mages, two High Priests, and one High Ninja. They will not be friendly, and it will be impossible 
+to run away.
 7,9
 ___
 The chest on level 4, pos 12,14 should always deop
@@ -7427,7 +7445,8 @@ Latumofis potion
 Deadly ring
 Rod of flame
 
-When deadly ring is equiped the bearer will loose 3 hp every step taken and during every round when equiped
+When deadly ring is equiped the bearer will loose 3 hp every step taken and during every round 
+when equiped
 When deadly ring is equiped, it can not be unequiped before remove curse cast.
 implement level 3 cleric spell remove curse if not done yet. 
 It can be cast on a character or on an item. 
@@ -7435,38 +7454,52 @@ If cast on a character it will remove all curses on the character and all items 
 If cast on an item it will remove the curse on that item only.
 
 introduce a setting WizardryMonstersWillLeaveYouAloneChanse that is default set to 10
-when encountering wizardry monsters the alignment is ignored when it comes to if they offer to leave you alone
+when encountering wizardry monsters the alignment is ignored when it comes to if they offer to 
+leave you alone
 instead the % chanse in the setting should be used to determine that.
 
-when playing wizardry the UI for the Elevators should have letter instead of Numbers A-D is 1-4 it should look like this
+when playing wizardry the UI for the Elevators should have letter instead of Numbers A-D is 1-4 
+it should look like this
 
-when entering a sqaure with a sign or similar, first draw the new square with sourounding walls and doors in traning
+when entering a sqaure with a sign or similar, first draw the new square with sourounding walls 
+and doors in traning
 grounds or maze then show the sign
 9,0
 ___
 
-when finding a treasure chest and playing wizardry, make chest smller and place it where you placed the picture of the mob. 
-have the options above it just when selecting option duing combat and have the proving grounds walls in teh background like this:
+when finding a treasure chest and playing wizardry, make chest smller and place it where you 
+placed the picture of the mob. 
+have the options above it just when selecting option duing combat and have the proving grounds 
+walls in teh background like this:
 
-in the disarm trap dialog change Y)es N)o to just (Y/N) in this dialog and other old style dialogs to be consistent.
+in the disarm trap dialog change Y)es N)o to just (Y/N) in this dialog and other old style 
+dialogs to be consistent.
 in the disarm trap dialog show who will try to disarm
 ___
-when playing wizardry and showing the treasure found dialog, then make the picture smaller and have the proving grounds was as a
-background and make it integrated with the encounter dialog. show the picture in the same place as the mob picture is shown.
+when playing wizardry and showing the treasure found dialog, then make the picture smaller and 
+have the proving grounds was as a
+background and make it integrated with the encounter dialog. show the picture in the same place 
+as the mob picture is shown.
 
-When playing wizardry and showing the who will inspect dialog, also ask the question in the encounter dialog that looks similiar
+When playing wizardry and showing the who will inspect dialog, also ask the question in the 
+encounter dialog that looks similiar
 to this: 
-when party is surprised and can not act, show status Surprised in the Encounter dialog for each charater, not parry. 
+when party is surprised and can not act, show status Surprised in the Encounter dialog for each 
+charater, not parry. 
 also no need to write messages for every charater that they parry when surprised.
 
-in wizardry when showing the last message, how much xp and gold you got, wait 4 extra secounds before closing it or
+in wizardry when showing the last message, how much xp and gold you got, wait 4 extra secounds 
+before closing it or
 until any key is pressed.
 
-there is an extra space in this message: "Gimli hits Kobold #3 with Club (1d6+2) for 7  damage. HP 6->0."
+there is an extra space in this message: "Gimli hits Kobold #3 with Club (1d6+2) for 7  damage. 
+HP 6->0."
 it should be "Gimli hits Kobold #3 with Club (1d6+2) for 7 damage. HP 6->0."
 
-In wizardry when a good charater attacks firendly group of monsters there should be 5% chanse alignemnet change to
-Chaotic Neutral or Neutral Evil. if an evil charater leave friendly group alone there is a 5% chanse alignment
+In wizardry when a good charater attacks firendly group of monsters there should be 5% chanse 
+alignemnet change to
+Chaotic Neutral or Neutral Evil. if an evil charater leave friendly group alone there is a 
+5% chanse alignment
 change to LawfulNeutral or ChaoticGood. rules when playing adnd should not change
 
 On level 4 monsters will appear with 80% chanse in the following squares:
@@ -7486,7 +7519,8 @@ pos 10,16
 19,3
 19,4
 
-Scroll of Dilto, Scroll of Lomilwa, Scroll of Badios, Potion of Dial, Potion of Sopic should have no stock in the shop initially
+Scroll of Dilto, Scroll of Lomilwa, Scroll of Badios, Potion of Dial, Potion of Sopic should 
+have no stock in the shop initially
 
 Anointed Mace should give 2d3 in damage to size S and M. L same damage as Mace
 Anointed Flail should give 1d7 in damage to size S and M. L same damage as Flail
@@ -7496,8 +7530,738 @@ ___
 i Want the Proving grouds form/maze form to be the same form as the encounter form.
 So the look of the charaters at the bottom should remain the same when in battle. 
 Use the font and fontsize from the encounter form int the maze form and the proving grounds form.
-When walking in the maze/proving grounds that graphis is shown, but the grapics should be replaced with encoutner info as it looks 
+When walking in the maze/proving grounds that graphis is shown, but the grapics should be 
+replaced with encoutner info as it looks 
 now when encountering monsters. The graphics should be shown again when the encounter is over.
 
-in noticed that when resizing the maze horizontal to make it wider but not higher the graphics of the first square does not 
-go in s straight line with the other squares further away. I want the line to be straight even when resizing the dungeon
+in noticed that when resizing the maze horizontal to make it wider but not higher the graphics 
+of the first square does not 
+go in s straight line with the other squares further away. I want the line to be straight even 
+when resizing the dungeon
+14,8
+___
+
+I noticed that in the dungeon graphics sometimes walls are sticking out a bit from the frame, 
+for example in 0,0 looking north 
+in the maze the north wall from 2,0 is sticking out a bit from the frame to the right. 
+I want all walls to be inside the frame and not sticking out
+
+I want a form to be used when navigating in the city, and it should be called RetroDungeon.
+It should be the same form as currently used for Maze and Proving grounds, since they also 
+will be called RetroDungeon you can 
+put the info of what dungeon you are in beside the Level.
+
+when encountering monsters and displying the monster have the picture centralized as now when 
+the proving grounds form is small, 
+but when bigger then move down the picture a bit so it looks like the monster is standing on the floor
+15,5
+
+also move down the picture of chest and treasure down to the same position as the monster.
+
+if leaving a chest alone dont show a picture of the monster you just killed again
+
+only the main menu in town should show the picture of the town and then this picture named 
+C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures\WizardryTown.png should be shown
+16,0
+
+How should we plan this work you think?
+In settings introduce an option called Rules that could be set to ADND or Wizardry. 
+The default should be ADND and all current charaters and rules are for ADND. 
+When set to Wizardry all ADND charaters should be removed from party.
+And when setting it back to ADND all Wizardry charaters should be removed from party.
+When rules are set to Wizardry:
+1. only Wizardry charaters should be seen allowed to be created and added to the party.
+2. when creating new charcters in training grounds wizardry charaters are created.
+3. Wizardy charters have different stats and abilities than ADND charaters, 
+so when creating new Wizardry charaters the stats should be set according to Wizardry rules.
+The following text is only applicable for Wizardry charaters and when rules are set to Wizardry!
+
+and not ADND charaters or when rules are set to ADND.
+ the race of your character.  The following races are available in Wizardry
+ The chart below shows the base stats for each race:
+
+LEGEND:  HUM=HUMAN; DWA=DWARF; GNO=GNOME; HOB=HOBBIT
+
+                 +-----------+-----------------------------+
+                 |           |            RACE             |
+                 | ATTRIBUTE | HUM | ELF | DWA | GNO | HOB |
+                 +-----------+-----+-----+-----+-----+-----+
+                 +-----------+-----+-----+-----+-----+-----+
+                 | STRENGTH  |  8  |   7 |  10 |   7 |   5 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | I.Q.      |  8  |  10 |   7 |   7 |   7 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | PIETY     |  5  |  10 |  10 |  10 |   7 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | VITALITY  |  8  |   6 |  10 |   8 |   6 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | AGILITY   |  8  |   9 |   5 |  10 |  10 |
+                 +-----------+-----+-----+-----+-----+-----+
+                 | LUCK      |  9  |   6 |   6 |   7 |  12 |
+                 +-----------+-----+-----+-----+-----+-----+
+
+When creating a new character, bonus points to assign to stats are typically 1d4+6. 
+The player can assign these points to any of the stats, but no stat can exceed 18.
+However, after these are assigned, there is a 1/11 chance of getting an additional 10 bonus points.
+And after that, 
+as long as you don’t have 20 points already, there’s a 1/11 chance of getting ANOTHER 10 bonus points.
+
+ Below is a chart of stats required for classes and alignments 
+
+LEGEND:  STR=STRENGTH; IQ=I.Q.; PIE=PIETY; VIT=VITALITY; AGI=AGILITY; LUC=LUCK;
+         ALIGN=ALIGNMENT
+
++---------+----------------------------------------------------+
+|         |                        STAT                        |
+| CLASS   | STR | IQ | PIE | VIT | AGI | LUC | ALIGNMENT       |
++---------+-----+----+-----+-----+-----+-----+-----------------+
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| PRIEST  | --- | -- |  11 | --- | --- | --- | ANY NON-NEUTRAL |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| FIGHTER |  11 | -- | --- | --- | --- | --- | ANY             |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| LORD    |  15 | 12 |  12 |  15 |  14 |  15 | ONLY GOOD       |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| MAGE    | --- | 11 | --- | --- | --- | --- | ANY             |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| NINJA   |  17 | 17 |  17 |  17 |  17 |  17 | ONLY EVIL       |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| SAMURAI |  15 | 11 |  10 |  14 |  10 | --- | ANY NON-EVIL    |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| THIEF   | --- | -- | --- | --- |  11 | --- | ANY NON-GOOD    |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+| BISHOP  | --- | 12 |  12 | --- | --- | --- | ANY NON-NEUTRAL |
++---------+-----+----+-----+-----+-----+-----+-----------------+
+
+-  Once you've chosen the class, you will again be asked if you wish to create
+   this character.  Regardless of your answer, you will be returned to Training
+   Grounds screen.
+
+The xp required to reach the next level is as follows for wizardry classes.  
+
++---------+----------------------------------------------------------+
+|         |                   EXPERIENCE REQUIRED                    |
+| CLASS   |   1   |   2   |   3   |   4   |   5    |   6    |   7    |
++---------+-------+-------+-------+-------+--------+--------+--------+
++---------+-------+-------+-------+-------+--------+--------+--------+
+| PRIEST  | 1,050 | 1,810 | 3,120 | 5,379 |  9,274 | 15,989 | 27,567 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| FIGHTER | 1,000 | 1,724 | 2,972 | 5,124 |  8,834 | 15,231 | 26,260 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| LORD    | 1,300 | 2,280 | 4,000 | 7,017 | 12,310 | 21,596 | 37,887 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| MAGE    | 1,100 | 1,896 | 3,268 | 5,634 |  9,713 | 16,746 | 28,872 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| NINJA   | 1,450 | 2,543 | 4,461 | 7,826 | 13,729 | 24,085 | 42,254 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| SAMURAI | 1,200 | 2,105 | 3,677 | 6,477 | 11,363 | 19,935 | 34,973 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| THIEF   |   900 | 1,551 | 2,674 | 4,610 |  7,948 | 13,703 | 23,625 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+| BISHOP  | 1,200 | 2,105 | 3,677 | 6,477 | 11,363 | 19,935 | 34,973 |
++---------+-------+-------+-------+-------+--------+--------+--------+
+
++---------+----------------------------------------------------------------+
+|         |                      EXPERIENCE REQUIRED                       |
+| CLASS   |   8    |    9    |   10    |   11    |   12    | 13 AND BEYOND |
++---------+--------+---------+---------+---------+---------+---------------+
++---------+--------+---------+---------+---------+---------+---------------+
+| PRIEST  | 47,529 |  81,946 | 141,286 | 243,596 | 419,993 | 304,132/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| FIGHTER | 45,275 |  78,060 | 134,586 | 232,044 | 400,075 | 289,709/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| LORD    | 66,468 | 116,610 | 204,578 | 358,908 | 629,663 | 475,008/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| MAGE    | 49,779 |  85,825 | 147,974 | 255,127 | 439,874 | 318,529/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| NINJA   | 74,129 | 130,050 | 228,157 | 400,275 | 702,236 | 529,756/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| SAMURAI | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 | 428,479/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| THIEF   | 40,732 |  70,227 | 121,081 | 208,760 | 359,931 | 260,639/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+| BISHOP  | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 | 428,479/LEVEL |
++---------+--------+---------+---------+---------+---------+---------------+
+
+source https://datadrivengamer.blogspot.com/2019/08/the-not-so-basic-mechanics-of-wizardry.html#:~:text=
+When%20creating%20a%20new%20character%2C%20bonus%20points%20to,1%2F11%20chance%20of%20getting%20ANOTHER
+%2010%20bonus%20points.
+
+
+Initial gold is set to 1d100 +89.
+Strength
+The only purpose of strength is to affect two hidden stats, “HitCalcMod” and “HitDam,” which affect your 
+melee accuracy and damage. Values below 6 incur a penalty to both, and values above 15 incur a bonus to both. 
+There is essentially no difference between a strength of 6 and a strength of 15. More on this later.
+
+IQ and piety
+Whenever you level up, each spell that you are eligible to learn has a chance of (IQ/30) to be learned. 
+For priest spells, this is (Piety/30), of course. The first spell in each circle will always be learned 
+as soon as it is possible to.
+
+Each combat round, each character has a chance of (IQ + Piety + CharacterLevel)/99 to identify a monster group. 
+The monster group identified is randomly chosen from 1-4, and if the monster group selected doesn't exist 
+or has already been identified, then nothing happens.
+
+Vitality
+Chances of a successful Di or Kadorto are the target's Vitality * 4%. A success permanently lowers the
+target's Vitality by 1.
+
+Chances of successfully raising a dead character at the Temple of Cant are (Vitality * 3%) + 50%.
+
+Chances of successfully restoring an ashen character at the Temple of Cant are (Vitality * 3%) + 40%.
+
+If a player's vitality goes below 3 for any reason, they are LOST. If this happens when leveling up, 
+you get the "YOU HAVE DIED OF OLD AGE" message.
+
+When leveling up, high and low vitality grants a maxHP bonus or penalty, which stacks with the class bonus.
+
+VIT	Effect
+3	-2
+4	-1
+5	-1
+16	+1
+17	+2
+18	+3
+
+
+
+Agility
+Each round, each character has an initiative roll of 1d10. Initiative is further modified by agility.
+
+If you step into a pit, each character has a chance of (Agility - Maze Level) * 4% to avoid damage.
+
+HitCalcMod
+A hidden stat mentioned previously, used to determine your hit odds.
+
+Base value for fighters, priests, samurai, lords, and ninjas is (CharacterLevel/3) + 2.
+
+Base value for mages, thieves, and bishops is (CharacterLevel/5).
+
+If your strength is higher than 15, you get a (Strength – 15) bonus. If it’s below 6, then you get a 
+(6 – Strength) penalty.
+
+This value is further increased by equipping weapons, each of which has an invisible value.
+
+Each strike’s chance of hitting is:
+(HitCalcMod + MonsterAC + (3*Victim) - 1) * 5%
+
+This calculated value is then clamped to the 5% - 95% range. There is always at least a 5% chance of 
+hitting and at least a 5% chance of missing, i.e. natural 1 and natural 20 in D&D parlance.
+
+I am not 100% sure what “victim” means, but I think it refers to the monster’s group position in the fight. 
+A group in the first position would have a victim value of 1, a group in the second position would have a victim value of 2, and so on, meaning monster groups in the rear group ranks are more vulnerable. This would be counterintuitive, and I have had trouble testing this theory, but it’s still my best guess on how it works.
+
+ArmorClass
+Base of 10, and reduced by armor and magic. All magic effects stack, except for multiple casts of Maporfic. 
+Parrying has the invisible effect of reducing your AC by 2 for the round.
+
+Your chance to be hit in melee per strike is:
+(MonsterLevel + ArmorClass) * 5%
+
+Just as with being on the delivering end of melee, the calculated value here is clamped to the 5% - 95% range. 
+CritHit
+Boolean value, always true for ninjas, and conferrable to non-ninjas with some items. When true, 
+you have a chance to inflict critical hits.
+
+SwingCount
+The number of strikes per combat round.
+
+Fighters, samurai, and lords have values of:
+(CharacterLevel/5) + 1
+
+Ninjas get:
+(CharacterLevel/5) + 2
+
+10 is the limit for these classes, and every other class only gets 1.
+
+Each strike has its own chance to hit or miss, as determined by HitCalcMod.
+
+Some weapons have a SwingCount value of their own. This does not stack with your character's value; 
+the higher value is the one that takes. For thieves, mages, priests, and bishops, this is the only 
+way to get more than one strike per round.
+
+HitDam
+An invisible stat representing your damage dice. Base value is 2d2, and is overridden when equipping a weapon.
+
+If your strength is higher than 15, you get a (Strength – 15) bonus. If it’s below 6, then you get 
+a (6 – Strength) penalty.
+
+So let’s say you are a level 1 ninja with 17 strength, and you have a 1d6+1 weapon. Your ninja class allows 
+you two strikes per round at level 1, and your 17 strength confers a +2 HitDam bonus. When you attack, 
+you hit up to twice, and each hit will do 1d6+3 damage.
+
+LostXYL
+A multi-purpose variable. This stores the coordinates in the dungeon, as well as your awards, which in Wizardry 1 
+only include the chevron. But during an active expedition, the ‘X’ value of your coordinates is instead used 
+to store your poison value. Because of this quirk, disbanding your party cures poison.
+
+When poisoned, every step and combat round has a 25% of reducing your HP by 1 (or reducing the effect of 
+healing by 1). The engine allows for poison values greater than 1, but there are no game events that can 
+raise your poison value past 1, and being poisoned while already poisoned does not make you more badly poisoned.
+
+Wizardry
+Dispell has a base success rate of 50% + (Level * 5%) – (MonsterLevel * 10%) per undead monster. 
+Only undead with OK status may be dispelled.
+
+Bishops learn Dispell at level 4, and have a -20% penalty.
+
+Lords learn Dispell at level 9, and have a -40% penalty.
+
+Priests always have Dispell and use it without penalty.
+
+Anti-mage traps affect mages and samurai.
+
+Anti-priest traps affect priests and bishops, but not lords.
+
+New mages and bishops start with Halito and Katino. Characters who change their class to mage learn Katino.
+
+New priests start with Dios and Badios. Characters who change their class to priest learn Dios.
+
+All spellcasting classes have two spellpoint values, used for the purpose of determining how many SP’s are 
+gained per circle per level. The bishop is treated as two separate classes here, one for its mage spells and
+one for its priest spells.
+
+A	B
+Priest	0	2
+Mage	0	2
+Bishop (Priest)	3	4
+Bishop (Mage)	0	4
+Lord (Priest)	3	2
+Samurai (Mage)	3	3
+
+SP’s per circle per level are determined by this formula:
+[Character Level] – ValueA + ValueB – (ValueB * Circle)
+
+The value is clipped to the 0-9 range.
+
+So, for instance, a level 9 bishop would receive spell points accordingly:
+
+1	2	3	4	5	6	7
+Mage	9	5	1	0	0	0	0
+Priest	6	2	0	0	0	0	0
+
+A character is guaranteed one spell point in each circle for each known spell. This number is not added 
+to the previous value, but compared, and the bigger number takes.
+
+For instance, suppose a priest reaches level 9. The formula says his priest SP’s should look like this:
+9/7/5/3/1/0/0
+
+But suppose he miraculously learns all six priest spells in the fifth circle, and already knows all of the
+spells in the first four circles. His guaranteed SP’s, then, would be:
+5/4/4/4/6/0/0
+
+The game compares the value for each circle and selects the bigger one, resulting in:
+9/7/5/4/6/0/0
+
+Through this mechanic, an accomplished spellcaster can change classes and retain a respectable SP pool, 
+because spells are not forgotten when changing classes or losing levels.
+
+Former spellcasters who changed class can actually learn spells when levelling up! All characters are 
+eligible to learn spells in any circle where they know at least one spell. A Mage who reaches level 13
+will automatically learn Malor. Even if he learned no other level 7 Mage spells, he could then change to
+a Fighter or Priest, and then be eligible to learn more level 7 Mage spells, simply because he already knows one.
+However, if a Mage changed class before learning Malor, he would only be eligible to keep learning level 6 Mage spells.
+
+Thievery
+A thief's chance to successfully inspect traps is Agility * 6%, but never more than 95%.
+
+A ninjas' chance to successfully inspect traps is Agility * 4%, but never more than 95%.
+
+Calfo works 95% of the time.
+
+All other's chance is Agility * 1%.
+
+A failed inspect or Calfo will reveal the name of a random trap type.
+
+The chance for a thief or ninja to disarm a correctly identified trap is:
+(50 + Character Level - Maze Level)/70
+
+The chance for anyone else is:
+(Character Level - Maze Level)/70
+
+If disarming fails, the chance to avoid setting off the trap is Agility * 5%.
+
+Ninjutsu
+Whenever a ninja (or any character with CritHit) inflicts damage, the odds of delivering a critical 
+hit are (CharacterLevel * 2%), but no more than 50%.
+
+Multiple strikes do not grant multiple chances to inflict critical hits. The overall attack gives one 
+chance for a critical hit, and only if it inflicted at least one damage point.
+
+
+Despite what the manual says, you are better off equipping ninjas. Unarmed ninjas do 2d4 base damage. 
+That's better than the 2d2 of other classes, but it’s not hard to find better weapons! Ninjas can score 
+critical hits just as well and just as frequently with weapons as without.
+
+As for armor, a naked ninja’s AC is:
+8 – [Character Level]/3
+
+Not really worth it, I think! A naked ninja would need to be level 21 to match the effect of wearing 
+just Evil Plate +3.
+
+Leveling up
+When you level up, each stat has a 75% to change.
+
+If a stat changes, there is an (AgeInYears/130) chance that it decreases by 1 point. Otherwise, 
+it increases by 1 point.
+
+If a stat would decrease from 18 to 17, there is a 5/6 chance that it will stay at 18 anyway.
+
+If a stat would increase from 18 to 19, then it will stay at 18 instead.
+
+Whenever you level up, your maxHP is essentially re-rolled.
+Fighters and lords roll d10’s.
+Priests and samurai roll d8’s.
+Thieves, bishops, and ninjas roll d6’s.
+Mages roll d4’s.
+
+Each class rolls once per level, except for Samurai, who roll one additional time (e.g. a level 5 samurai 
+rolls 6 times). Each roll is further modified by the character’s vitality.
+
+So, for example, if a Thief reaches level 12, and has vitality of 18, this means rolling 1d6 +3 twelve 
+times and summing the results. We would expect an average sum of 78. This sum becomes the thief’s new HP, 
+provided it’s bigger than the previous value.
+
+If the new HP value is not greater than it was before levelling up, then the result is discarded and you 
+just gain 1 HP.
+
+Because maxHP is recalculated on each level up, and it can’t go down, it trends toward the high end of 
+what’s possible for your class. This is also why HP gains are slow after switching classes; your HP is 
+higher than it “should” be for your new class at low levels, so your HP won’t grow until you’re a high 
+enough level that you “should” be gaining again.
+
+Aging
+Surprisingly, and contradicting the manual, resting does NOT increase your age! Is this a bug?
+
+Age is internally stored in weeks, but displayed in years.
+
+New characters are a random age from 18 years, to 23 years and 39 weeks.
+
+Changing class ages the character 1d3+3 years, plus 44 weeks.
+
+Disbanding the party ages everyone in it 25 weeks.
+
+Any service at the Temple of Cant ages the character 1d52 weeks.
+
+Despite what the manual says, age does not affect the success rate of resurrection. Vitality does, though.
+
+Statuses
+Statuses from best to worst are:
+OK, AFRAID, ASLEEP, PLYZE, STONED, DEAD, ASHES, LOST
+
+It is not possible to have multiple statuses, and if you are inflicted with one while already inflicted 
+with another, then the worse status will keep. Poison, however, is not a status, and can exist concurrently 
+with one.
+
+Prices to cure status at the Temple of Cant:
+PLYZE: 100 * CharacterLevel
+STONED: 200 * CharacterLevel
+DEAD: 250 * CharacterLevel
+ASHES: 500 * CharacterLevel
+Poison is automatically cured when returning to town.
+
+Alignment
+The party alignment is determined by its first non-neutral member. If all members are neutral, then the 
+party is neutral.
+
+Neutral and evil parties will never encounter friendly monsters.
+
+If you choose to fight a friendly group of monsters, each good party member has a 1/2000 chance to turn evil.
+
+Misc
+Every step has a 1% chance of an encounter.
+
+Kicking a door into a flagged room without a treasure chest has a 12.5% chance of causing an encounter.
+
+When you run, odds of success are:
+39% – (MazeLevel * 3%)
+
+If the party size is 3 or less then add this to the above odds:
+20% - (PartyCount * 5%)
+
+If the monsters are demoralized (e.g. some of them want to run), then add 20% to the odds.
+
+Running NEVER works in level 10!
+
+In any unfriendly encounter, there is a 19% chance of surprising the monsters, and a 15.4% chance that the 
+monsters surprise you.
+
+https://howtomakeanrpg.com/r/l/g/wizardry/
+Fighter - Require strength of 11. Can use all weapons and armor. No alignment restriction. Gains an extra 
+attack every 4 levels.
+Mage - Require intelligence of 11. May only use daggers or staffs. Can only wear robes. Can cast spells. 
+No alignment restriction.
+
+Priest - Require piety of 11. May not use helmets, may only use staffs or cudgels but may wear any armor or shield. 
+Can cast priest spells and dispel undead. May not have a neutral alignment.
+
+Thief — Require agility of 11. May use daggers or short swords as weapons. Can wear leather armor and use a shield. 
+May not have a good alignment.
+
+Bishop — May wear leather armor and use priest weapons. They can cast mage spells. 
+From level 4 they can dispel undead and cast priest spells. They can identify magic weapons. 
+Bishops may not be neutral.
+
+Samurai — Can use all weapons and armor. At the fourth level of ability they slowly begin to acquire magical spells. 
+May not have an evil alignment.
+
+Lord — Can use all weapons and armor. From 4th level they can cast priest spells, and gain the ability to dispel undead. 
+Must have a good alignment.
+
+Ninja - Can use all weapons and armor. Must have an evil alignment.
+
+Inventory
+Each character can hold up to eight items as well as any gold they find. Objects in the game have a type is one of:
+
+Weapon
+Armor
+Shield
+Helmet
+Gauntlet
+Special
+Misc
+Each character can equip an item in their weapon, armor, shield, helm and gauntlet slot. A character may be 
+prevented from equipping an item based on stats and class.
+
+Combat
+Combat only occurs in the maze it’s handled in separate combat state. When you first enter a level, 
+some areas of the map are marked as combat locations and there’s also a 1% chance combat will occur each time party moves. 
+Kicking down a door increase the chance of combat occurring, as does triggering an alarm trap when opening a chest.
+
+Here’s the code that determines if combat is encountered:
+
+PASCAL
+Copy
+IF (((RANDOM MOD 99) = 35) OR     // 1% chance 
+    (CHSTALRM = 1) OR             // "Chest alarm" is active
+    (FIGHTMAP[MAZEX][MAZEY])) OR  // Fight marked at current position
+   
+   (INITTURN AND                  // Ensures only one event per turn
+    (INCHAR = CHR(75)) AND        // the input character is 'K' 
+    (MAZE.FIGHTS[MAZEX][MAZEY] = 1)) AND  // is a fight is allowed here?
+    ((RANDOM MOD 8) = 3)          // AND a 12.5% chance succeeds
+THEN
+    ENCOUNTR;
+
+    When combat occurs a number from 1 to 3 is picked that’s used to look up a enemy encounter for that level. 
+    The chances are not uniform 1 (75% chance), 2 (18.75% chance) or 3 (6.25%) and the tougher encounters are 
+    usually the rarer ones. Once this is decided combat begins
+    Combat Action Order
+Once you confirm your plan then the combat order is determined. Each party member is given a score from 
+0 to 10 where a lower score means they’ll attack earlier. This uses the character agility stat but there’s 
+also a random fuzzing. Here’s how it works:
+
+Choose a random number from 0 - 9 AGIL1TEN (possibly meaning agility 1 to 10).
+Modify this random number according to the party members agility stat. See the table below.
+Clamp the result from 1 to 10.
+Agility Attribute	Modifier to AGIL1TEN
+3+	+3
+4-5	+2
+6-7	+1
+8-14	0 (no change)
+15	-1
+16	-2
+17	-3
+18+	-4
+The action order is determined by AGIL1TEN score with lowest going first.
+
+Attack damage is calculated separately for the player attacking monsters in DAN2ENMY and for monsters 
+attacking players DAM2ME. Please note all these function names were not original they’re from the decompiled source.
+
+The attack function begins by calculating the hit chance.
+
+PASCAL
+Copy
+HPCALCPC := 21
+  - BATTLERC[VICTIM].B.AC // Target's natural armor class
+  - CHARACTR[BATI].HPCALCMD // Attack bonuses to hit
+  + BATTLERC[VICTIM].A.TEMP04[SINGLEX].ARMORCL // Target's armor penalties 
+  - 3 * VICTIM; // Subtract 3 * the victim index
+There’s actually a bug in the original code here. The 3 * VICTIM is supposed to make monsters in the 
+front line easier to hit, but it actually makes the ones in the backline easier to hit.
+
+The HPCALCPC is then clamped between 1 and 19. A lower the value the better chance of landing a hit.
+
+PASCAL
+Copy
+FOR TEMPX := 1 TO CHARACTR[BATI].SWINGCNT DO // For the number of attacks the character has
+  IF (RANDOM MOD 20) >= HPCALCPC THEN // roll a D20 and if it's > HPCALCPC then hit lands
+  BEGIN
+    (* Increase damage counter *)
+    HPDAMAGE := HPDAMAGE + CALCHP(CHARACTR[BATI].HPDAMRC);
+    // Handle the hit
+BATI might stand for “battler index”, it’s an index into the list of characters that make up the party. 
+CALCHP is a dice rolling type function that takes a record with the number of dice, the number of faces 
+and the bonus, like 3d6+1. Damage to the target is stored in HPDAMAGE based on a dice roll stored in the 
+character’s HPDAMRC record. Character may have multiple attacks in a single session so this damage code 
+is all in a for-loop and it’s repeated for the number of attacks the character has.
+
+Once the base damage is determined there’s a check to see if the target is asleep and if so the damage is 
+doubled. Then there’s a check to see if the weapon is effective against the enemy type and if so the damage
+is doubled again. Hit or miss messages are printed to the screen with the damage values and then the damage 
+is subtracted from the targets remaining health points.
+
+Next you’d think there’d be a check to see if the target is dead - but no, it’s critical hit time. 
+If a hit has inflicted some damage and the attacker can critical hit, then the chance of critical is 
+character_level * 2% clamped to a maximum of 50%. Even if this check is passed there’s chance for the 
+target to resist IF (RANDOM MOD 35) > BATTLERC[ VICTIM].B.HPREC.LEVEL + 10, which in pseudo code can 
+simplified to
+
+CSHARP
+Copy
+if(random(1, 35) - 10 > target.level)
+{ 
+    DoCrit()
+}
+In Wizardry monster levels range from 1 to 25. Maelific is the only enemy with level 25 but most 
+“high level” enemies are around 10 and therefore will resist critical hits 40% of the time. Maelific, 
+at level 25, cannot be critically hit.
+
+If the critical lands the target’s health is set to zero; instant death and a message flashes up 
+saying “A CRITICAL HIT!”. There’s a final check to see if the enemy is dead. If so a message is 
+printed and the target’s status is set to DEAD and the HP to 0.
+
+Mage and Clerics have access to different sets of spells. The spells themselves are split into seven 
+“levels”. For instance here are the level 1 mage spells
+
+HALITO - 1-8 damage to one enemy.
+KATINO - Put 1 group of enemies to sleep.
+MOGREF - Improves the armor of the caster by 2 during combat.
+DUMAPIC - Shows the map of the current floor.
+and here are the level 1 cleric spells:
+
+BADIOS - 1-8 points damage to one monster
+DIOS - Heals 1-8 points to one character
+KALKI - Improves the armor of entire party by 1 for a combat encounter
+MILWA - Extends field of vision and reveals secret doors. Lasts for around ~40 moves are made or 
+until you enter a dark area.
+PORFIC - Improves the armor of the caster by 4 during combat
+The more powerful the spell the higher spell level it will be in. Magic users spend one spell
+points to cast one spell. Each level has its own reserve of spell points and characters have fewer 
+higher level spell points compared to the lower levels.
+
+Advancement
+Wizardry has a level and experience system but there are some novelties you don’t see in many modern games.
+
+You don’t level-up as soon as you get enough experience. You can can only level up by resting at the 
+tavern outside of the dungeon.
+
+Experience points are awarded for killing monsters. Each time a party kills a group of monsters, 
+each survivor gets some experience points. When the total reaches a certain value, you attain the 
+next level of ability when you rest in the castle.
+
+From the Wizardry manual, 1981
+The experience curve levels off at level 13, once you reach that level it’s the same experience 
+amount to attain each future level. On levelling up you may gain spells, spell slots and increase attributes. 
+One novelty is that attributes may also decline! If a character’s Age stat is greater than 50 than 
+you may occasionally see the decline of an attribute. Characters may also die of old age but the 
+age has to get extremely high, multiple hundreds of years.
+
+To level-up one must return to the castle and rest at the Adventurer’s Inn. On levelling up each 
+stat has a 75% chance to increase stats, though if you’re very old you may see it decline!
+
+Characters with the relevant class learn spells automatically as they gain levels.
+16,0
+___
+when creating a wizardry char first level chars always got 8 hp
+
+select first race, then alignment, then show the stats and as the points are distributed, 
+show real time what classes that could be selected as you add and remove points. 
+
+New rule: When creating a charater regardless of class they should get 8 hp as level 1 the normal algoritm 
+for how differernt classes get hp works after level 1
+
+when creating a wiz char and adding stats have an arrow indicating what stat you want to increase, it will start
+at strength and you can use the enter to movve it down with a wrap around after Luck back to Str.
+Up and down arrow keys are used to increase decrease the stat that is currently selected. Press Esc when done
+Let the screen look similar to the following:
+
+when creating charaters in wizardry and adnd there are diffrenet rules when it comes to hp. The rules for hp 
+when it comes to adnd should not change but the hp and maxhp for wizardry charaters should always be 8 regardless of class
+
+How do you think we shouold go about implementing these spells only applicable for some  wizardry classes? 
+
+Level 1 spells
+Mage
+Dumapic: Gives the exact current coordinates (x,y) of the caster, including depth underground.
+Halito: Fireball that deals 1d8 (1-8) points of fire damage to a single target.
+Katino: Attempt to put one enemy group to sleep. Slumbering targets can be hit for double damage.
+Mogref: Lowers the Armor Class of the caster by 2 for the duration of a single battle.
+Priest
+Badios: Inflicts 1d8 (1-8) Hit Points of damage to a single target.
+Dios: Heals 1d8 (1-8) Hit Points of damage for a single target.
+Kalki: Lowers the Armor Class of the entire party by 1 for the duration of a single battle.
+Milwa: Lesser light spell that illuminates the dungeon, allowing you to see farther and increasing the probability of spotting secret doors. It only lasts a short time.
+Porfic: Lowers the Armor Class of the caster by 4 for the duration of a single battle.
+Level 2 Spells
+Mage
+Dilto: Envelopes an enemy group in darkness, raising their Armor Class for the duration of a single battle, which increases your probability of successfully hitting them.
+Melito: Magical sparks that deal 1d8 (1-8) points of damage to each member of an enemy group.
+Sopic: Invisibility spell that lowers the Armor Class of the caster by 4 for the duration of a single battle.
+Priest
+Calfo: Identifies the type of trap, if any, on a treasure chest. Beware: the assessment is not always accurate.
+Matu: Lowers the Armor Class of the entire party by 2 for the duration of a single battle.
+Manifo: Paralyzes an enemy group. Paralyzed targets can be hit for double damage.
+Montino: Silences an enemy group. Silenced targets cannot cast spells.
+Level 3 Spells
+Mage
+Mahalito: Firestorm that deals 4d6 (4-24) points of damage to each member of an enemy group.
+Molito: Non-elemental energy blast that deals 3d6 (3-18) points of damage to each member of an enemy group.
+Priest
+Bamatu: Lowers the Armor Class of the entire party by 4 for the duration of a single battle.
+Dialko: Cures paralysis and awakens sleepers.
+Latumapic: Automatically identifies all opponents for the duration of your stay in the dungeon.
+Lomilwa: Greater light spell that illuminates the dungeon, allowing you to see farther and increasing the probability of spotting secret doors. It lasts until you exit the dungeon or the effect is dispelled by entering a dark zone.
+Level 4 Spells
+Mage
+Dalto: Blizzard that deals 6d6 (6-36) points of freezing damage to each member of an enemy group.
+Lahalito: Inferno that deals 6d6 (6-36) points of fire damage to each member of an enemy group.
+Morlis: Lesser fear spell. Creates intimidating illusions that frighten a group of opponents, possibly causing them to flee the battle in terror.
+Priest
+Badial: Inflicts 2d8 (2-16) Hit Points of damage to a single target.
+Latumofis: Neutralizes the poison status effect.
+Dial: Heals 2d8 (2-16) Hit Points of damage for a single target.
+Maporfic: Lowers the Armor Class of the entire party by 2 for the duration of your stay in the dungeon.
+Level 5 Spells
+Mage
+Madalto: Arctic frost that deals 8d8 (8-64) points of freezing damage to each member of an enemy group.
+Makanito: Creates a vacuum that suffocates enemies with less than 35-40 Hit Points, killing them instantly.
+Mamorlis: Greater fear spell. Creates horrifying illusions that frightens all opponents, possibly causing them to flee the battle in terror.
+Priest
+Badi: Death magic; kills a single target instantly.
+Badialma: Inflicts 3d8 (3-24) Hit Points of damage to a single target.
+Di: Lesser life magic that revives one fallen comrade with 1 Hit Point and a decrease in their vitality. There is a chance of failure; if that happens, the character will be reduced to ashes.
+Dialma: Heals 3d8 (3-24) Hit Points of damage for a single target.
+Kandi: Gives the location of missing/dead party members in the dungeon so that you know where to look for them.
+Litokan: Righteous pillar of flame that deals 3d8 (3-24) points of fire damage to each member of an enemy group.
+Level 6 Spells
+Mage
+Haman: Lesser divine intervention--this powerful magic can turn the tide of even the most hopeless of battles. Your party may find themselves completely healed/cured, the potency of their spells enhanced, or all of your enemies may be silenced or teleported away. This great boon also costs the caster to lose an entire experience level when it is cast.
+Lakanito: Suffocates all enemies in a group, regardless of their Hit Points, killing them instantly.
+Masopic: Lowers the Armor Class of the entire party by 4 for the duration of a single battle.
+Zilwan: Instantly destroys one Undead monster.
+Priest
+Loktofeit: Last resort escape spell. The party is teleported out of the dungeon and back to town, but they forfeit all of their items and most of their gold in the process.
+Lorto: Ripping blades deal 6d6 (6-36) points of non-elemental damage to each member of an enemy group.
+Mabadi: Reduces a single target down to 1d8 (1-8) Hit Points.
+Madi: Fully restores all the Hit Points of a single character and removes all negative status effects.
+Level 7 Spells
+Mage
+Mahaman: Greater divine intervention all but ensures victory. Your party may find themselves completely healed/cured, dead comrades restored to life, everyone's Armor Class temporarily reduced by 20, the potency of spells enhanced, and all of your enemies might be silenced, teleported away, or outright annihilated. This devastatingly powerful magic doesn't come cheap: the caster has to relearn the spell again and also loses one experience level.
+Malor: Teleportation; simply input the coordinates (x,y) and dungeon depth you want, and you'll be whisked to that location in an instant. Be VERY careful: teleporting into stone is instantly fatal and your party will be lost forever if you do so. If you use Malor to escape during combat, you'll be randomly sent to another spot on that level of the dungeon.
+Tiltowait: The ultimate attack spell; the catastrophic energies released by this magic deal 10d10 (10-100) points of damage to all enemies.
+Priest
+Kadorto: Greater life magic that revives one fallen comrade with full Hit Points, even if all that remains is ashes. However, if this spells fails, then the character is lost forever.
+Malikto: Devastating force that inflicts 12d6 (12-72) points of damage on all enemies.
+
+Notes
+When a given enemy's entry indicates that they have a spell rank in the "Special Properties" section, either in the Mage or Priest schools of magic, or both, then they can cast all spells of that level and lower (i.e., an Ogre Lord, who knows Level 3 Mage Spells, can cast any of the Level 1, 2, or 3 Mage spells listed below, although, obviously, he's only going to use combat spells in a fight, not Dumapic.) Naturally, the greater an opponent's spell proficiency/repertoire is, the more dangerous they are.
+
+reuse the AD&D memorize-and-slots system for now. 
+monsters with source Wizardry should use wizardry spells and the other way around.
+
+introduce a setting ShowCityPictures that is default true and when plying wizardry and ShowCityPictures=true show picutres from C:\Users\rober\source\repos\RetroDungeon\Adnd.Game\Assets\ScenPictures
+When in Shop show: WizardryBoltax.png
+When in Church show WizardryTemple.png
+When in Adventures in show WizardryAdventuresInn.png

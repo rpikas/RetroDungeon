@@ -34,6 +34,12 @@ public sealed partial class MazeForm
         e.Graphics.Clear(Color.Black);
         e.Graphics.SmoothingMode = SmoothingMode.None;
 
+        if (_cityMode)
+        {
+            DrawCity(e.Graphics);
+            return;
+        }
+
         // A fight takes over the window; only the party table stays where it always is.
         if (_encounterForm != null)
         {
@@ -50,7 +56,13 @@ public sealed partial class MazeForm
         e.Graphics.DrawRectangle(pen, viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
         InitWallCoords(viewport);
+
+        // Squares far to the side reach past the frame; nothing may be drawn outside it.
+        var sceneState = e.Graphics.Save();
+        e.Graphics.SetClip(RectangleF.Inflate(viewport, -1f, -1f), CombineMode.Intersect);
         DrawScene(e.Graphics, pen, viewport);
+        e.Graphics.Restore(sceneState);
+        e.Graphics.DrawRectangle(pen, viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
         if (_inMagicalDarkness)
         {
@@ -429,7 +441,7 @@ public sealed partial class MazeForm
     {
         var heading = CompassHeading();
 
-        var status = $"Level: {_currentDungeonLevel}   Pos: {PositionText}   Facing: {heading}   Esc: Party view";
+        var status = $"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}   Esc: Party view";
         using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
         graphics.DrawString(status, HudFont, brush, new PointF(16f, ClientSize.Height - 54f));
     }
@@ -440,7 +452,7 @@ public sealed partial class MazeForm
 
         using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
         graphics.DrawString("A/D or ←/→: Turn   W or ↑: Move   C: Camp   K: Kick   Esc: Toggle full dungeon view", HudFont, brush, new PointF(16f, 6f));
-        graphics.DrawString($"Level: {_currentDungeonLevel}   Pos: {PositionText}   Facing: {heading}", HudFont, brush, new PointF(16f, 30f));
+        graphics.DrawString($"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}", HudFont, brush, new PointF(16f, 30f));
     }
 
     /// <summary>

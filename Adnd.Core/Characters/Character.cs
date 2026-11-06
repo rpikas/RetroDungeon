@@ -18,7 +18,18 @@ public class Character
 
     private const int CarryCapacityFactor = 10;
     public string Name { get; set; } = "";
+    // Existing characters (no value saved) are ADND.
+    public Adnd.Core.Config.Ruleset Ruleset { get; set; } = Adnd.Core.Config.Ruleset.ADND;
     public Race Race { get; set; }
+    // Halflings are called Hobbits in Wizardry.
+    [System.Text.Json.Serialization.JsonIgnore]
+    public string RaceDisplayName => Ruleset == Adnd.Core.Config.Ruleset.Wizardry && Race == Race.Halfling ? "Hobbit" : Race.ToDisplayString();
+    // Set only for Wizardry characters. Their Classes entry holds the closest AD&D class so shared systems keep working.
+    public Adnd.Core.Wizardry.WizardryClass? WizardryClass { get; set; }
+    // Wizardry stats are stored in Abilities: Strength, Intelligence=I.Q., Wisdom=Piety, Dexterity=Agility, Constitution=Vitality, Charisma=Luck.
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Adnd.Core.Wizardry.WizardryStats WizardryStats => new(
+        Abilities.Strength, Abilities.Intelligence, Abilities.Wisdom, Abilities.Constitution, Abilities.Dexterity, Abilities.Charisma);
     // Keep a computed legacy Class property for compatibility (primary class)
     [System.Text.Json.Serialization.JsonIgnore]
     public CharacterClass Class => Classes.Count > 0 ? Classes[0] : default;
@@ -889,6 +900,9 @@ public class Character
 
     public string GetClassesDisplayText(string separator = "/")
     {
+        if (WizardryClass.HasValue)
+            return WizardryClass.Value.ToString();
+
         if (Classes == null || Classes.Count == 0)
             return GetClassDisplayName(Class);
 

@@ -103,6 +103,7 @@ public sealed class CampCharacterInspectForm : Form
             new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
+            new WizardrySpellHandler(),
             new StrengthHandler(),
             new HasteHandler(),
             new SlowHandler(),
@@ -756,7 +757,7 @@ public sealed class CampCharacterInspectForm : Form
     private static string BuildOldStyleInspectView(Character c)
     {
         var classText = c.GetClassesDisplayText("/").ToUpperInvariant();
-        var raceText = c.Race.ToDisplayString().ToUpperInvariant();
+        var raceText = c.RaceDisplayName.ToUpperInvariant();
         var alignmentText = c.Alignment.ToAbbreviation();
         var statusText = c.Status == CharacterStatus.None ? "OK" : c.Status.ToString().ToUpperInvariant();
         var levelText = c.Classes.Count > 1

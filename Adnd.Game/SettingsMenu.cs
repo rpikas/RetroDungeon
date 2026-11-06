@@ -49,11 +49,33 @@ public class SettingsMenu
 
                 if (!Equals(beforeValue, afterValue))
                 {
+                    if (property.Name == nameof(GameRules.Rules))
+                        RemoveOtherRulesetMembersFromParty(rules.Rules);
+
                     RuleApplicationInfo.Publish(
                         $"Settings changed: {property.Name} = {FormatValue(beforeValue)}; now {FormatValue(afterValue)}.");
                 }
             }
         }
+    }
+
+    // Party members from the other ruleset are dropped from the party; they stay in the roster.
+    private static void RemoveOtherRulesetMembersFromParty(Ruleset active)
+    {
+        var partyRepo = new Adnd.Data.Party.PartyRepository("Data/Party");
+        var roster = new Adnd.Data.Characters.CharacterRepository("Data/Characters").GetAll()
+            .ToDictionary(c => c.Name, c => c.Ruleset, StringComparer.OrdinalIgnoreCase);
+
+        var party = partyRepo.Load();
+        var kept = party.Members.Where(m => roster.TryGetValue(m, out var r) && r == active).ToList();
+        if (kept.Count == party.Members.Count)
+            return;
+
+        party.Members = kept;
+        party.CurrentShopperIndex = -1;
+        partyRepo.Save(party);
+        Console.WriteLine($"\nParty cleared of characters that don't belong to the {active} rules.");
+        Console.ReadKey(true);
     }
 
     private static PropertyInfo[] GetEditableProperties()

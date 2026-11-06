@@ -29,6 +29,7 @@ public class SpellRepository
         }
 
         var loaded = LoadFromDisk();
+        loaded.AddRange(WizardrySpells.All);
 
         lock (CacheLock)
             Cache[key] = (signature, loaded);
@@ -69,10 +70,11 @@ public class SpellRepository
         return list;
     }
 
-    public List<Spell> LoadByClass(SpellClass spellClass)
+    public List<Spell> LoadByClass(SpellClass spellClass, Adnd.Core.Config.Ruleset? ruleset = null)
     {
+        var wanted = ruleset ?? Adnd.Core.Config.GameRulesProvider.Current.Rules;
         return LoadAll()
-            .Where(s => s.SpellClass == spellClass)
+            .Where(s => s.SpellClass == spellClass && s.Ruleset == wanted)
             .OrderBy(s => s.Level)
             .ThenBy(s => s.Name)
             .ToList();

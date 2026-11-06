@@ -809,13 +809,16 @@ public sealed class EncounterForm : Form
                 var scale = Math.Min(64f / picture.Height, 160f / picture.Width);
                 var w = (int)(picture.Width * scale);
                 var h = (int)(picture.Height * scale);
-                g.DrawImage(picture, new Rectangle(rect.Left + (rect.Width - w) / 2, rect.Top + (rect.Height - h) / 2 + 20, w, h));
+                var chestTop = rect.Top + (rect.Height - h) / 2 + 20;
+                g.DrawImage(picture, new Rectangle(rect.Left + (rect.Width - w) / 2, Math.Max(chestTop, WizardryFloorY(rect) - h), w, h));
             }
 
             return;
         }
 
-        var images = _monsterImages.Count > 0
+        var images = _monstersHidden
+            ? new List<Image>()
+            : _monsterImages.Count > 0
             ? _monsterImages.Select(m => m.Image).Where(i => i != null).Cast<Image>().ToList()
             : (_monsterImage != null ? new List<Image> { _monsterImage } : new List<Image>());
         if (images.Count == 0)
@@ -834,8 +837,20 @@ public sealed class EncounterForm : Form
             var h = (int)(image.Height * scale);
             var x = rect.Left + i * slotWidth + (slotWidth - w) / 2;
             var yPos = rect.Top + (rect.Height - h) / 2;
+
+            // Once the strip is taller than the default, let the monster stand on the corridor floor
+            // instead of floating in the middle.
+            yPos = Math.Max(yPos, WizardryFloorY(rect) - h);
+
             g.DrawImage(image, new Rectangle(x, yPos, w, h));
         }
+    }
+
+    // Where feet touch the floor of the corridor frame: a little in front of the far wall's foot.
+    private static int WizardryFloorY(Rectangle rect)
+    {
+        var insetY = (rect.Height - 8) / 5;
+        return Math.Min(rect.Bottom - 4 - (int)(insetY * 0.65f), rect.Bottom - 8);
     }
 
     private static void ShowTimedSurpriseDialog(IWin32Window owner, string titleText, string messageText, int autoCloseMilliseconds)
@@ -1145,6 +1160,16 @@ public sealed class EncounterForm : Form
 
     private Image? _heldImage;
 
+    private bool _monstersHidden;
+
+    /// <summary>Empties the monster strip, e.g. once a chest is left alone and the dead monsters should not reappear.</summary>
+    internal void HideMonsters()
+    {
+        _monstersHidden = true;
+        _heldImage?.Dispose();
+        _heldImage = null;
+        _monsterPanel.Invalidate();
+    }
     private void HandleChestKey(Keys key)
     {
         if (_pickNames != null)
@@ -2153,7 +2178,7 @@ public sealed class EncounterForm : Form
         foreach (var state in caster.Spellcasting)
         {
             var byClass = allSpells
-                .Where(s => s.SpellClass == state.SpellClass && (s.CastContext == SpellCastContext.Both || s.CastContext == SpellCastContext.Combat))
+                .Where(s => s.SpellClass == state.SpellClass && s.Ruleset == caster.Ruleset && (s.CastContext == SpellCastContext.Both || s.CastContext == SpellCastContext.Combat))
                 .Where(s => _roundNumber == 1 || !string.Equals(s.Id, "bless", StringComparison.OrdinalIgnoreCase))
                 .ToList();
 

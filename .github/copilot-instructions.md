@@ -3,6 +3,8 @@
 
 ## Project Guidelines
 - Use the return-style arrow symbol (↵) instead of '<-' in UI labels where applicable.
+- "wiz" means Wizardry. "in wiz" means the monsters, items or rules setting is Wizardry (context decides which).
+- Every new or changed Wizardry rule must be documented in docs\Wizardry-Handbook.md and covered by a unit test in Adnd.Tests\WizardryRulesTests.cs in the same change.
 ## Game Mechanics
 - At encounter start (before round 1 only), party and monsters roll surprise; if only one side is surprised, it cannot act in round 1. Surprise must be shown in AD&D rule/dice info and encounter dialog.
 - When adjusting Blade Barrier in this project, use Cleric level 6 (not level 8).

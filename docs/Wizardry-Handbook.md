@@ -1,0 +1,119 @@
+# Wizardry Player's Handbook
+
+Rules for characters when **Rules = Wizardry** in Settings. AD&D characters and rules are not affected.
+Each rule names the code that implements it and the test that guards it. When a Wizardry rule is added or changed,
+update this file and its test in the same change.
+
+Code: `Adnd.Core\Wizardry\WizardryRules.cs`, `Adnd.Core\Wizardry\WizardryCharacterFactory.cs`.
+Tests: `Adnd.Tests\WizardryRulesTests.cs`.
+
+Source of the numbers: https://datadrivengamer.blogspot.com/2019/08/the-not-so-basic-mechanics-of-wizardry.html
+
+## 1. Ruleset and party
+
+- Settings has a `Rules` option: `ADND` (default) or `Wizardry`.
+- Every character belongs to one ruleset. Characters saved before this option existed are ADND.
+- Changing `Rules` removes party members of the other ruleset from the party. They stay in the roster.
+- The Training Grounds and the Party menu only list characters of the active ruleset.
+- In Wizardry, "Halfling" is shown as **Hobbit**.
+
+## 2. Creating a character
+
+Order: race, alignment, bonus points (with the live class list), class, name.
+
+### Races: base stats
+
+| Stat     | Human | Elf | Dwarf | Gnome | Hobbit |
+|----------|------:|----:|------:|------:|-------:|
+| Strength |     8 |   7 |    10 |     7 |      5 |
+| I.Q.     |     8 |  10 |     7 |     7 |      7 |
+| Piety    |     5 |  10 |    10 |    10 |      7 |
+| Vitality |     8 |   6 |    10 |     8 |      6 |
+| Agility  |     8 |   9 |     5 |    10 |     10 |
+| Luck     |     9 |   6 |     6 |     7 |     12 |
+
+### Bonus points
+
+- Bonus points to assign: **1d4+6**.
+- 1 in 11 chance of **+10** more. If the total is still under 20, another 1 in 11 chance of **+10**.
+- No stat can exceed **18**, and no stat can go below the race base.
+- All points must be spent before finishing (unless every stat is at 18).
+- Screen: ↵ moves the pointer (wraps from Luck to Strength), ↑ adds a point, ↓ removes one, Esc finishes.
+  The classes you can pick are shown live and update as points change.
+
+### Class requirements
+
+`--` means no minimum.
+
+| Class   | STR | IQ | PIE | VIT | AGI | LUC | Alignment       |
+|---------|----:|---:|----:|----:|----:|----:|-----------------|
+| Priest  |  -- | -- |  11 |  -- |  -- |  -- | Good or Evil    |
+| Fighter |  11 | -- |  -- |  -- |  -- |  -- | Any             |
+| Lord    |  15 | 12 |  12 |  15 |  14 |  15 | Good only       |
+| Mage    |  -- | 11 |  -- |  -- |  -- |  -- | Any             |
+| Ninja   |  17 | 17 |  17 |  17 |  17 |  17 | Evil only       |
+| Samurai |  15 | 11 |  10 |  14 |  10 |  -- | Good or Neutral |
+| Thief   |  -- | -- |  -- |  -- |  11 |  -- | Neutral or Evil |
+| Bishop  |  -- | 12 |  12 |  -- |  -- |  -- | Good or Evil    |
+
+### Starting values (level 1)
+
+- **HP and max HP: always 8**, whatever the class. The class hit dice work from level 2.
+- Gold: **1d100 + 89**.
+- Age: 18 to 23 years.
+- AC 10. Damage 2d2 (Ninja 2d4).
+- Stats are stored in the ability fields: Strength, I.Q. = Intelligence, Piety = Wisdom, Vitality = Constitution,
+  Agility = Dexterity, Luck = Charisma.
+- The character also keeps the nearest AD&D class (for example Priest = Cleric) so shared systems keep working.
+
+## 3. Experience
+
+XP needed to go from level N to the next level. Level 13 and beyond needs the same amount for every level.
+`TotalXpForLevel` is the sum of the earlier steps.
+
+| Class   |     1 |     2 |     3 |     4 |      5 |      6 |      7 |
+|---------|------:|------:|------:|------:|-------:|-------:|-------:|
+| Priest  | 1,050 | 1,810 | 3,120 | 5,379 |  9,274 | 15,989 | 27,567 |
+| Fighter | 1,000 | 1,724 | 2,972 | 5,124 |  8,834 | 15,231 | 26,260 |
+| Lord    | 1,300 | 2,280 | 4,000 | 7,017 | 12,310 | 21,596 | 37,887 |
+| Mage    | 1,100 | 1,896 | 3,268 | 5,634 |  9,713 | 16,746 | 28,872 |
+| Ninja   | 1,450 | 2,543 | 4,461 | 7,826 | 13,729 | 24,085 | 42,254 |
+| Samurai | 1,200 | 2,105 | 3,677 | 6,477 | 11,363 | 19,935 | 34,973 |
+| Thief   |   900 | 1,551 | 2,674 | 4,610 |  7,948 | 13,703 | 23,625 |
+| Bishop  | 1,200 | 2,105 | 3,677 | 6,477 | 11,363 | 19,935 | 34,973 |
+
+| Class   |      8 |       9 |      10 |      11 |      12 | 13 and beyond (per level) |
+|---------|-------:|--------:|--------:|--------:|--------:|--------------------------:|
+| Priest  | 47,529 |  81,946 | 141,286 | 243,596 | 419,993 |                   304,132 |
+| Fighter | 45,275 |  78,060 | 134,586 | 232,044 | 400,075 |                   289,709 |
+| Lord    | 66,468 | 116,610 | 204,578 | 358,908 | 629,663 |                   475,008 |
+| Mage    | 49,779 |  85,825 | 147,974 | 255,127 | 439,874 |                   318,529 |
+| Ninja   | 74,129 | 130,050 | 228,157 | 400,275 | 702,236 |                   529,756 |
+| Samurai | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 |                   428,479 |
+| Thief   | 40,732 |  70,227 | 121,081 | 208,760 | 359,931 |                   260,639 |
+| Bishop  | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 |                   428,479 |
+
+## 4. Hit points after level 1
+
+Max HP is re-rolled at each level up (data in place, level-up not yet implemented).
+
+- Hit die: Fighter and Lord d10; Priest and Samurai d8; Thief, Bishop and Ninja d6; Mage d4.
+- Number of dice: the character's level. A Samurai rolls one extra.
+- Vitality modifier per die: 3 = -2, 4-5 = -1, 6-15 = 0, 16 = +1, 17 = +2, 18 = +3.
+
+## 5. Spells
+
+Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monsters only use spells of their own ruleset: Wizardry characters and monsters with source Wizardry use these spells, AD&D ones use the AD&D spells.
+
+- Mage spells (22) are cast by Mage-school characters (Mage, Bishop); Priest spells (29) by Priest-school characters. Circles 1-7.
+- Spell slots per day still come from the AD&D memorize-and-slots system for now (Mage = Magic-User slots, Priest = Cleric slots).
+- Starting spells: Mage and Bishop know Halito and Katino; Priest knows Dios and Badios.
+- The first spell of each circle is always learned once the character has slots for that circle.
+- Monsters with "Level N Mage/Priest spells" can cast every Wizardry spell of that school up to circle N, always (100%).
+- Implemented effects: damage (single target, group, all enemies; a successful save halves it; sleeping or paralyzed targets take double), healing (Dios, Dial, Dialma, Madi), sleep (Katino), paralyze (Manifo), silence (Montino), fear (Morlis, Mamorlis), Makanito (kills enemies below 35 HP), Badi and Lakanito (instant kill), Zilwan (kills one undead), Mabadi (reduces to 1d8 HP).
+- Monsters cast damage, healing, Katino and Badi (save vs spell avoids sleep and death).
+- Other spells (armor class buffs, light, detection, resurrection, teleport, divine intervention, cures) can be learned but report "not implemented" when cast.
+
+## 6. Not implemented yet
+
+Level-up, learning spells by chance on level-up, spell points per circle, hit and damage calculation, armor class, initiative, aging, statuses and temple costs.

@@ -153,6 +153,7 @@ public sealed class CombatCoordinator
             new TimeStopHandler(),
             new BlessHandler(),
             new SleepHandler(),
+            new WizardrySpellHandler(),
             new StrengthHandler(),
             new HasteHandler(),
             new SlowHandler(),
@@ -3858,6 +3859,7 @@ public sealed class CombatCoordinator
             {
                 case LairChestChoice.LeaveAlone:
                     result.IncludeLairTreasure = false;
+                    rewardForm?.HideMonsters();
                     RuleApplicationInfo.Publish("Treasure chest left alone. In-lair treasure not collected.");
                     return result;
 
@@ -3882,6 +3884,7 @@ public sealed class CombatCoordinator
             if (openerPick.LeaveSelected)
             {
                 result.IncludeLairTreasure = false;
+                rewardForm?.HideMonsters();
                 RuleApplicationInfo.Publish("Treasure chest left alone. In-lair treasure not collected.");
                 return result;
             }

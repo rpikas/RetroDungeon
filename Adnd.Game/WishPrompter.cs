@@ -45,7 +45,7 @@ internal sealed class WishPrompter : IWishPrompter
     public Item? ChooseSpellScroll()
     {
         var spells = new SpellRepository("Data/Spells").LoadAll()
-            .Where(s => s.Level <= MaxSpellLevel)
+            .Where(s => s.Level <= MaxSpellLevel && s.Ruleset == Adnd.Core.Config.GameRulesProvider.Current.Rules)
             .Select(s => s.Name)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();

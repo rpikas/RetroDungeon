@@ -157,6 +157,9 @@ public sealed partial class CombatResolver
         if (isSilenced || isFeebleminded)
             return MonsterTurnFlow.Proceed;
 
+        if (monster.Template.Source == Sources.Wizardry)
+            return TryResolveWizardryMonsterSpell(monster, session, events) ? MonsterTurnFlow.EndTurn : MonsterTurnFlow.Proceed;
+
         foreach (var (spellLevel, tradition, cast) in MonsterSpellAttempts)
         {
             if (CanMonsterAttemptLevelSpell(monster, spellLevel, tradition, events, levelMagicUseDecisions)

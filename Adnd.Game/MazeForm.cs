@@ -172,10 +172,18 @@ public sealed partial class MazeForm : Form
 
     private readonly HashSet<(int X, int Y)> _visitedEncounterLocations = new();
 
-    public MazeForm(bool thinWalls = false)
+    private readonly bool _cityMode;
+
+    private string DungeonName => _thinWalls ? "Proving Grounds" : "Maze";
+
+    /// <summary>The window in the city: the same RetroDungeon form, showing the castle and the text menus.</summary>
+    internal static MazeForm CreateCityHost() => new(thinWalls: false, cityMode: true);
+
+    public MazeForm(bool thinWalls = false, bool cityMode = false)
     {
         _thinWalls = thinWalls;
-        Text = thinWalls ? "Proving Grounds" : "Maze";
+        _cityMode = cityMode;
+        Text = cityMode ? "RetroDungeon" : $"RetroDungeon - {DungeonName}";
         ClientSize = new Size(1200, 820);
         StartPosition = FormStartPosition.CenterScreen;
         KeyPreview = true;
@@ -189,7 +197,13 @@ public sealed partial class MazeForm : Form
             Location = savedLocation.Value;
         }
 
-        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
+
+        if (cityMode)
+        {
+            InitCityHost();
+            return;
+        }
 
         PruneUnavailablePartyMembers();
         BuildMazeForLevel(_currentDungeonLevel);

@@ -81,8 +81,10 @@ public class MainMenu
             Console.WriteLine("P)roving Grounds");
             Console.WriteLine("S)ettings");
             Console.WriteLine("L<-eave");
+            Console.ShowTownPicture = true;
 
             var (key, command) = await AwaitChoiceAsync();
+            Console.ShowTownPicture = false;
 
             // A click on the table and a key at the console arrive as the same intention, and land in the
             // same code. Anything else the viewer sends is dropped here exactly as the pump drops a word it

@@ -46,4 +46,5 @@ public class Spell
     public SpellCastContext CastContext { get; set; } = SpellCastContext.Both;
     public SpellEffectType EffectType { get; set; } = SpellEffectType.Damage;
     public string EffectDescription { get; set; } = "";
+    public Adnd.Core.Config.Ruleset Ruleset { get; set; } = Adnd.Core.Config.Ruleset.ADND;
 }

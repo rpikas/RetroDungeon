@@ -60,6 +60,7 @@ public class PartyMenu
             new HoldMonsterHandler(),
             new BlessHandler(),
             new SleepHandler(),
+            new WizardrySpellHandler(),
             new StrengthHandler(),
             new HasteHandler(),
             new SlowHandler(),
@@ -106,8 +107,8 @@ public class PartyMenu
         while (true)
         {
             var party = _partyRepo.Load();
-            var roster = _repo.GetAll().ToList();
-            // Build a lookup of roster characters and compute active (found) party members.
+            var roster = _repo.GetAll().Where(c => c.Ruleset == GameRulesProvider.Current.Rules).ToList();
+            // Only characters of the active ruleset count; others are cleaned out of the party below.
             var rosterDict = roster.ToDictionary(c => c.Name, c => c);
             var activeMembers = party.Members.Where(m => rosterDict.ContainsKey(m)).ToList();
 
@@ -140,7 +141,7 @@ public class PartyMenu
                     var levelDisplay = GetLevelDisplay(c);
                     var align = c.Alignment.ToAbbreviation();
 
-                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {align,-5} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
                 }
                 Console.WriteLine();
             }
@@ -205,7 +206,7 @@ public class PartyMenu
             var levelDisplay = GetLevelDisplay(c);
             var align = c.Alignment.ToAbbreviation();
 
-            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }
 
         Console.Write("\nChoose #: ");
@@ -1231,7 +1232,7 @@ public class PartyMenu
             var levelDisplay = GetLevelDisplay(c);
             var align = c.Alignment.ToAbbreviation();
 
-            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+            Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }
 
         Console.Write("\nChoose #: ");

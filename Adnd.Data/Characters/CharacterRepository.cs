@@ -119,6 +119,13 @@ public class CharacterRepository
     {
         foreach (var state in character.Spellcasting ?? new List<Adnd.Core.Spells.SpellcastingState>())
         {
+            if (character.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            {
+                // Wizardry characters only learn Wizardry spells; the AD&D "know every cleric spell" rule does not apply.
+                Adnd.Core.Wizardry.WizardrySpellLearning.EnsureFirstSpellOfEachCircle(character);
+                continue;
+            }
+
             if (state.SpellClass is not (Adnd.Core.Spells.SpellClass.Cleric or Adnd.Core.Spells.SpellClass.Druid))
                 continue;
 

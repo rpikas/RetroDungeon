@@ -22,7 +22,7 @@ public class CityMenu
     {
         while (true)
         {
-            var all = _repo.GetAll().ToList();
+            var all = _repo.GetAll().Where(c => c.Ruleset == GameRulesProvider.Current.Rules).ToList();
             var dualClassAvailability = GetDualClassMenuAvailability(all);
 
             Console.Clear();
@@ -44,7 +44,7 @@ public class CityMenu
                     var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
                     var levelDisplay = GetLevelDisplay(c);
 
-                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.Race.ToDisplayString(),-10} {alignment,-15} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
+                    Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {alignment,-15} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
                 }
                 Console.WriteLine();
             }
@@ -132,7 +132,7 @@ public class CityMenu
         {
             var c = eligibleCharacters[i];
             var currentClass = c.Classes.Count > 0 ? c.Classes[0] : c.Class;
-            Console.WriteLine($"{i + 1}) {c.Name} - {c.Race.ToDisplayString()} {c.Alignment.ToDisplayString()} {currentClass.ToDisplayString()} L{c.GetClassLevel(currentClass)}");
+            Console.WriteLine($"{i + 1}) {c.Name} - {c.RaceDisplayName} {c.Alignment.ToDisplayString()} {currentClass.ToDisplayString()} L{c.GetClassLevel(currentClass)}");
         }
 
         Console.Write("Character #: ");
@@ -230,6 +230,12 @@ public class CityMenu
 
     private void CreateCharacter()
     {
+        if (GameRulesProvider.Current.Rules == Ruleset.Wizardry)
+        {
+            new WizardryCharacterCreation(_repo).Run();
+            return;
+        }
+
         Console.Clear();
         Console.WriteLine("=== CREATE CHARACTER ===\n");
 

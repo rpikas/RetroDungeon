@@ -30,7 +30,7 @@ using System.Windows.Forms;
 internal class Program
 {
     [STAThread]
-    private static async Task Main(string[] args)
+    private static void Main(string[] args)
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
@@ -43,14 +43,39 @@ internal class Program
         TreasureInstaller.Install();
 
         var main = new Adnd.Game.MainMenu();
-        try
+        var host = MazeForm.CreateCityHost();
+        var finished = false;
+
+        host.Shown += async (_, _) =>
         {
-            await main.ShowAsync();
-        }
-        finally
+            try
+            {
+                await main.ShowAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                // The window was closed while a menu waited for a key.
+            }
+            finally
+            {
+                finished = true;
+                RuleApplicationInfoRuntime.Stop();
+                if (!host.IsDisposed)
+                    host.Close();
+            }
+        };
+
+        // Closing the window while a menu waits for a key ends the game.
+        host.FormClosed += (_, _) =>
         {
-            RuleApplicationInfoRuntime.Stop();
-        }
+            if (!finished)
+            {
+                RuleApplicationInfoRuntime.Stop();
+                Environment.Exit(0);
+            }
+        };
+
+        Application.Run(host);
     }
 }
 

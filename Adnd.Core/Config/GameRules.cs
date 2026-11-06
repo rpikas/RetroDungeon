@@ -50,8 +50,17 @@ public enum BoltacItemSourceOptions
     BothAdndAndWizardry
 }
 
+public enum Ruleset
+{
+    ADND,
+    Wizardry
+}
+
 public class GameRules
 {
+    // Which game system is active; characters belong to exactly one ruleset.
+    public Ruleset Rules { get; set; } = Ruleset.ADND;
+
     public double TreasureFindChance { get; set; } = 0.80;      // 0.0 - 1.0
     public double MonsterEncounterChance { get; set; } = 0.20;  // 0.0 - 1.0
     public AbilityRollMethod AbilityRollMethod { get; set; } = AbilityRollMethod.ThreeD6InOrder;
