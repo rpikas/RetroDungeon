@@ -247,6 +247,7 @@ public class CityMenu
         AbilityScores abilities;
         Race race;
 
+        Console.CityPicture = GameRulesProvider.Current.ShowCityPictures ? "AllRaces.jpg" : null;
         while (true)
         {
             gender = Random.Shared.Next(0, 2) == 0 ? Gender.Male : Gender.Female;
@@ -298,6 +299,8 @@ public class CityMenu
 
             break;
         }
+
+        Console.CityPicture = null;
 
         // Confirm race selection and apply racial modifiers, then show modified stats
         Console.WriteLine($"Selected race: {race.ToDisplayString()}");

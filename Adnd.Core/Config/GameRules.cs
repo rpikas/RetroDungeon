@@ -92,6 +92,8 @@ public class GameRules
     public bool ShowDiceRollAndRuleApplicationInfo { get; set; } = true;
     public bool ShowReferencesInRuleAndDiceInfo { get; set; } = true;
     public bool ShowToHitRoll { get; set; } = false;
+    // Wizardry only: show the town, shop, church and inn pictures.
+    public bool ShowCityPictures { get; set; } = true;
     public bool PlayerSelectsWeaponProficiencies { get; set; } = false;
     public bool PlayerSelectsLanguagesOnCreation { get; set; } = false;
     public int MaxSizeEncounter { get; set; } = 2;

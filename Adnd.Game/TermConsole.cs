@@ -27,8 +27,18 @@ internal static class TermConsole
 
     public static int Scrolled { get; set; }
 
-    /// <summary>True only while the main menu is up; any other screen clears it.</summary>
-    public static bool ShowTownPicture { get; set; }
+    /// <summary>File name in Assets\ScenPictures shown beside the text, or null for no picture.</summary>
+    public static string? CityPicture
+    {
+        get => _cityPicture;
+        set
+        {
+            _cityPicture = value;
+            _host?.Invalidate();
+        }
+    }
+
+    private static string? _cityPicture;
 
     public static void Attach(MazeForm host)
     {
@@ -154,7 +164,6 @@ internal static class TermConsole
         Lines.Clear();
         Current.Clear();
         Scrolled = 0;
-        ShowTownPicture = false;
         _host?.Invalidate();
     }
 

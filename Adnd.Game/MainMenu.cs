@@ -81,10 +81,10 @@ public class MainMenu
             Console.WriteLine("P)roving Grounds");
             Console.WriteLine("S)ettings");
             Console.WriteLine("L<-eave");
-            Console.ShowTownPicture = true;
+            Console.CityPicture = PictureFor("WizardryTown.png");
 
             var (key, command) = await AwaitChoiceAsync();
-            Console.ShowTownPicture = false;
+            Console.CityPicture = null;
 
             // A click on the table and a key at the console arrive as the same intention, and land in the
             // same code. Anything else the viewer sends is dropped here exactly as the pump drops a word it
@@ -117,7 +117,7 @@ public class MainMenu
                     }
 
                     Enter("Temple");
-                    _templeMenu.Show();
+                    ShowWithPicture(PictureFor("WizardryTemple.png", "AdndTemple.png"), _templeMenu.Show);
                     break;
 
                 case ConsoleKey.A:
@@ -128,7 +128,7 @@ public class MainMenu
                     }
 
                     Enter("AdventuresInn");
-                    _adventuresInnMenu.Show();
+                    ShowWithPicture(PictureFor("WizardryAdventuresInn.png"), _adventuresInnMenu.Show);
                     break;
 
                 case ConsoleKey.B:
@@ -139,7 +139,7 @@ public class MainMenu
                     }
 
                     Enter("Shop");
-                    _shopMenu.Show(0,10,true);
+                    ShowWithPicture(PictureFor("WizardryBoltax.png"), () => _shopMenu.Show(0, 10, true));
                     break;
 
                 case ConsoleKey.M:
@@ -282,6 +282,22 @@ public class MainMenu
     /// Deliberately the same calls the keys make, including the party check, so the table cannot get into a
     /// place the keyboard would have refused. The gate leads down, which is what the gate is for.
     /// </summary>
+    private static void ShowWithPicture(string? picture, Action show)
+    {
+        Console.CityPicture = picture;
+        try { show(); }
+        finally { Console.CityPicture = null; }
+    }
+
+    private static string? PictureFor(string wizardryFile, string? adndFile = null)
+    {
+        var rules = GameRulesProvider.Current;
+        if (!rules.ShowCityPictures)
+            return null;
+
+        return rules.Rules == Ruleset.Wizardry ? wizardryFile : adndFile;
+    }
+
     private void EnterStanding()
     {
         switch (_standing)
@@ -299,13 +315,15 @@ public class MainMenu
             case "AdventuresInn":
                 if (!HasPartyMembers()) { ShowPartyRequiredMessage(); break; }
                 Enter("AdventuresInn");
-                _adventuresInnMenu.Show();
+                Console.CityPicture = PictureFor("WizardryAdventuresInn.png");
+                try { _adventuresInnMenu.Show(); } finally { Console.CityPicture = null; }
                 break;
 
             case "Temple":
                 if (!HasPartyMembers()) { ShowPartyRequiredMessage(); break; }
                 Enter("Temple");
-                _templeMenu.Show();
+                Console.CityPicture = PictureFor("WizardryTemple.png", "AdndTemple.png");
+                try { _templeMenu.Show(); } finally { Console.CityPicture = null; }
                 break;
 
             case "Shop":
@@ -316,7 +334,8 @@ public class MainMenu
                 // have stopped a table-driven entry dead before the counter was ever published. The table asks
                 // it better anyway: every other member wears a ring at the counter, so handing the purse over is
                 // a click on the person taking it.
-                _shopMenu.Show(0, 10, selectShopper: false);
+                Console.CityPicture = PictureFor("WizardryBoltax.png");
+                try { _shopMenu.Show(0, 10, selectShopper: false); } finally { Console.CityPicture = null; }
                 break;
 
             case "EdgeOfTown":

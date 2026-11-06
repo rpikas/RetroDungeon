@@ -51,7 +51,10 @@ public class WizardryCharacterCreation
             Console.ReadKey(true);
         }
 
-        var cls = ChooseClass(eligible);
+        Console.CityPicture = GameRulesProvider.Current.ShowCityPictures ? "WizardrySelectingClass1.png" : null;
+        WizardryClass cls;
+        try { cls = ChooseClass(eligible); }
+        finally { Console.CityPicture = null; }
         var character = WizardryCharacterFactory.Create(race.Value, stats, alignment, cls, Random.Shared);
 
         Console.WriteLine();

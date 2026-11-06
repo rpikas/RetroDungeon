@@ -24,16 +24,14 @@ public sealed partial class MazeForm
         };
     }
 
-    private static Image? _townImage;
-    private static bool _townImageLoaded;
+    private static readonly Dictionary<string, Image?> CityImages = new(StringComparer.OrdinalIgnoreCase);
 
-    private static Image? TownImage()
+    private static Image? CityImage(string file)
     {
-        if (_townImageLoaded)
-            return _townImage;
+        if (CityImages.TryGetValue(file, out var cached))
+            return cached;
 
-        _townImageLoaded = true;
-        const string file = "WizardryTown.png";
+        Image? image = null;
         var candidates = new[]
         {
             Path.Combine("Assets", "ScenPictures", file),
@@ -46,7 +44,7 @@ public sealed partial class MazeForm
             try
             {
                 using var stream = File.OpenRead(path);
-                _townImage = new Bitmap(stream);
+                image = new Bitmap(stream);
                 break;
             }
             catch
@@ -55,7 +53,8 @@ public sealed partial class MazeForm
             }
         }
 
-        return _townImage;
+        CityImages[file] = image;
+        return image;
     }
 
     private void DrawCity(Graphics graphics)
@@ -68,8 +67,8 @@ public sealed partial class MazeForm
         var text = area;
         var columns = TermConsole.Columns;
 
-        // Only the main menu shows the town; every other menu gets the whole window for its text.
-        if (TermConsole.ShowTownPicture && TownImage() is { } town)
+        // Only screens that set a city picture (Wizardry town, shop, church, inn) show it; the rest get the whole window.
+        if (TermConsole.CityPicture is { } pictureFile && CityImage(pictureFile) is { } town)
         {
             var side = Math.Min(area.Height, (int)(area.Width * 0.6f));
             var scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
