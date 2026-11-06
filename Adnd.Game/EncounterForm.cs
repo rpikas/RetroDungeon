@@ -489,6 +489,12 @@ public sealed class EncounterForm : Form
     {
         base.OnShown(e);
 
+        if (!_embedded)
+            BeginInteraction();
+    }
+
+    private void BeginInteraction()
+    {
         if (_chestMode && _pickNames != null)
         {
             var vocab = new Dictionary<string, Keys>(StringComparer.OrdinalIgnoreCase) { ["back"] = Keys.B };
@@ -602,7 +608,7 @@ public sealed class EncounterForm : Form
         if (!e.Cancel && DialogResult != DialogResult.OK)
         {
             var confirm = MessageBox.Show(
-                this,
+                _embedded && _host != null ? _host : this,
                 "Closing combat now counts as trying to run away. Do you want to run away?",
                 "Run away?",
                 MessageBoxButtons.YesNo,
@@ -616,6 +622,15 @@ public sealed class EncounterForm : Form
             }
 
             DialogResult = DialogResult.Cancel;
+        }
+
+        if (_embedded && !e.Cancel)
+        {
+            // Stay alive and hand the answer to the loop in ShowEmbedded.
+            _embeddedResult = DialogResult;
+            _embeddedDone = true;
+            e.Cancel = true;
+            return;
         }
 
         base.OnFormClosing(e);
@@ -709,12 +724,12 @@ public sealed class EncounterForm : Form
         }
     }
 
-    private void ApplyWizardryLayout()
+    private void ApplyWizardryLayout(Size? embeddedClient = null)
     {
         const int margin = 8;
         const int gap = 6;
         const int inner = 12;
-        var width = 980;
+        var width = embeddedClient?.Width ?? 980;
         var frameWidth = width - 2 * margin;
         var y = margin;
 
@@ -732,6 +747,12 @@ public sealed class EncounterForm : Form
             control.SetBounds(left, top, w, h);
         }
 
+        foreach (var old in Controls.OfType<WizardryFrame>().ToList())
+        {
+            old.Controls.Clear();
+            old.Dispose();
+        }
+
         Controls.Clear();
 
         var headerFrame = NewFrame(_multipleGroups ? 110 : 64);
@@ -742,15 +763,20 @@ public sealed class EncounterForm : Form
         Place(_optionsTitleLabel, optionsFrame, inner, 8, frameWidth - 2 * inner, 36);
         Place(_optionsLegendLabel, optionsFrame, inner, 48, frameWidth - 2 * inner, 72);
 
-        var stripFrame = NewFrame(176);
+        // Embedded in the maze window the monster strip takes whatever height the party frame leaves.
+        var stripHeight = embeddedClient is { } client
+            ? Math.Max(120, client.Height - y - PartyFrameHeight - margin - gap)
+            : 176;
+        var stripFrame = NewFrame(stripHeight);
         _monsterPanel.BorderStyle = BorderStyle.None;
         Place(_monsterPanel, stripFrame, OldStyleFrame.Thickness, OldStyleFrame.Thickness,
             frameWidth - 2 * OldStyleFrame.Thickness, stripFrame.Height - 2 * OldStyleFrame.Thickness);
 
-        var partyFrame = NewFrame(236);
+        var partyFrame = NewFrame(PartyFrameHeight);
         Place(_partyList, partyFrame, inner, inner, frameWidth - 2 * inner, partyFrame.Height - 2 * inner);
 
-        ClientSize = new Size(width, y + margin - gap);
+        if (embeddedClient is null)
+            ClientSize = new Size(width, y + margin - gap);
     }
 
     // One corridor frame: the nearest wall seen straight on, like the Proving Grounds view.
@@ -3016,7 +3042,7 @@ public sealed class EncounterForm : Form
         return CombatFormation.GetFightingRank(_party, _party[partyIndex], _session);
     }
 
-    private static string GetClassCode(Character c)
+    internal static string GetClassCode(Character c)
     {
         var classes = (c.Classes != null && c.Classes.Count > 0)
             ? c.Classes
@@ -3231,8 +3257,95 @@ public sealed class EncounterForm : Form
         if (disposing)
         {
             _monsterImage?.Dispose();
+            _host?.DetachEncounter(this);
         }
 
         base.Dispose(disposing);
     }
+
+    // ---- Embedded mode: the encounter is shown inside the maze window instead of as a separate dialog. ----
+    private MazeForm? _host;
+    private bool _embedded;
+    private bool _embeddedDone;
+    private DialogResult _embeddedResult = DialogResult.None;
+
+    /// <summary>
+    /// Replaces <see cref="Form.ShowDialog(IWin32Window)"/> (hidden on purpose, so every existing call site picks
+    /// it up). When the owner is the maze, the encounter takes over the maze window's client area and waits for
+    /// the answer in a nested loop; otherwise it is an ordinary modal dialog.
+    /// </summary>
+    public new DialogResult ShowDialog(IWin32Window? owner)
+    {
+        if (owner is not MazeForm maze || maze.IsDisposed || !maze.IsHandleCreated)
+            return base.ShowDialog(owner);
+
+        return ShowEmbedded(maze);
+    }
+
+    private DialogResult ShowEmbedded(MazeForm maze)
+    {
+        if (!_embedded)
+        {
+            _embedded = true;
+            _host = maze;
+            FormBorderStyle = FormBorderStyle.None;
+            TopLevel = false;
+            maze.Controls.Add(this);
+            maze.AttachEncounter(this);
+            SizeChanged += (_, _) => RelayoutEmbedded();
+        }
+
+        Bounds = maze.ClientRectangle;
+        Dock = DockStyle.Fill;
+        RelayoutEmbedded();
+
+        _embeddedDone = false;
+        _embeddedResult = DialogResult.None;
+        DialogResult = DialogResult.None;
+
+        Show();
+        BringToFront();
+        BeginInteraction();
+        _partyList.Focus();
+
+        while (!_embeddedDone && DialogResult == DialogResult.None && !IsDisposed && !maze.IsDisposed)
+        {
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(10);
+        }
+
+        var result = _embeddedDone ? _embeddedResult : DialogResult;
+
+        _viewerControl?.Dispose();
+        _viewerControl = null;
+        _resultTimer?.Stop();
+
+        if (!IsDisposed)
+        {
+            Hide();
+            DialogResult = DialogResult.None;
+        }
+
+        return result == DialogResult.None ? DialogResult.Cancel : result;
+    }
+
+    private void RelayoutEmbedded()
+    {
+        if (!_embedded || ClientSize.Width < 200 || ClientSize.Height < 300)
+            return;
+
+        ApplyWizardryLayout(ClientSize);
+
+        for (var i = 0; i < _partyList.Columns.Count && i < PartyColumnWidths.Length; i++)
+            _partyList.Columns[i].Width = PartyColumnWidths[i];
+    }
+
+    internal static readonly int[] PartyColumnWidths = { 50, 220, 220, 80, 100, 320 };
+
+    /// <summary>Where the party list sits for a window of this size, so the maze can draw its own party table in the same place.</summary>
+    internal const int PartyFrameHeight = 236;
+    internal const int FrameMargin = 8;
+
+    internal static Rectangle PartyFrameBounds(Size client) =>
+        new(FrameMargin, client.Height - FrameMargin - PartyFrameHeight, client.Width - 2 * FrameMargin, PartyFrameHeight);
 }

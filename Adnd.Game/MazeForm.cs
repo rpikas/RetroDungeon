@@ -292,8 +292,34 @@ public sealed partial class MazeForm : Form
     /// </summary>
     internal void InjectViewerKey(Keys key) => MazeForm_KeyDown(this, new KeyEventArgs(key));
 
+    private EncounterForm? _encounterForm;
+
+    /// <summary>A fight is shown inside this window: the maze graphics give way to it until it is disposed.</summary>
+    internal void AttachEncounter(EncounterForm form)
+    {
+        _encounterForm = form;
+        Invalidate();
+    }
+
+    internal void DetachEncounter(EncounterForm form)
+    {
+        if (_encounterForm != form)
+            return;
+
+        _encounterForm = null;
+        if (!IsDisposed)
+        {
+            Invalidate();
+            Focus();
+        }
+    }
+
     private void MazeForm_KeyDown(object? sender, KeyEventArgs e)
     {
+        // Key preview sees the fight's keys first; the maze must not walk while one is on.
+        if (_encounterForm != null)
+            return;
+
         if (_partyOverlayVisible)
         {
             switch (e.KeyCode)

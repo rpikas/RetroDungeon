@@ -7490,4 +7490,14 @@ Scroll of Dilto, Scroll of Lomilwa, Scroll of Badios, Potion of Dial, Potion of 
 
 Anointed Mace should give 2d3 in damage to size S and M. L same damage as Mace
 Anointed Flail should give 1d7 in damage to size S and M. L same damage as Flail
+13,9
+___
 
+i Want the Proving grouds form/maze form to be the same form as the encounter form.
+So the look of the charaters at the bottom should remain the same when in battle. 
+Use the font and fontsize from the encounter form int the maze form and the proving grounds form.
+When walking in the maze/proving grounds that graphis is shown, but the grapics should be replaced with encoutner info as it looks 
+now when encountering monsters. The graphics should be shown again when the encounter is over.
+
+in noticed that when resizing the maze horizontal to make it wider but not higher the graphics of the first square does not 
+go in s straight line with the other squares further away. I want the line to be straight even when resizing the dungeon

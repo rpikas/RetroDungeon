@@ -34,10 +34,19 @@ public sealed partial class MazeForm
         e.Graphics.Clear(Color.Black);
         e.Graphics.SmoothingMode = SmoothingMode.None;
 
+        // A fight takes over the window; only the party table stays where it always is.
+        if (_encounterForm != null)
+        {
+            DrawPartyTable(e.Graphics);
+            return;
+        }
+
         using var pen = new Pen(GameRulesProvider.Current.DefaultColor, 2f);
-        var topHudSpace = _partyOverlayVisible ? 34f : 12f;
-        var footerSpace = _partyOverlayVisible ? 220f : 80f;
-        var viewport = new RectangleF(12f, topHudSpace, ClientSize.Width - 24f, ClientSize.Height - footerSpace - (topHudSpace - 12f));
+        var topHudSpace = _partyOverlayVisible ? 62f : 12f;
+        var viewportBottom = _partyOverlayVisible
+            ? ClientSize.Height - (EncounterForm.PartyFrameHeight + EncounterForm.FrameMargin + 6f)
+            : ClientSize.Height - 68f;
+        var viewport = new RectangleF(12f, topHudSpace, ClientSize.Width - 24f, viewportBottom - topHudSpace);
         e.Graphics.DrawRectangle(pen, viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
         InitWallCoords(viewport);
@@ -69,7 +78,7 @@ public sealed partial class MazeForm
         if (_partyOverlayVisible)
         {
             DrawOverlayLegend(e.Graphics);
-            DrawPartyInfo(e.Graphics, viewport);
+            DrawPartyTable(e.Graphics);
         }
         else
         {
@@ -413,80 +422,98 @@ public sealed partial class MazeForm
             _ => "West"
         };
 
+    // The encounter form's fonts, so the maze and the fight read the same.
+    private static readonly Font HudFont = new("Consolas", 14f, FontStyle.Bold);
+
     private void DrawStatus(Graphics graphics)
     {
         var heading = CompassHeading();
 
-        var status = $"A/D or ←/→: Turn   W or ↑: Move   Esc: Toggle full dungeon view   Level: {_currentDungeonLevel}   Pos: {PositionText}   Facing: {heading}";
-        graphics.DrawString(status, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(16f, ClientSize.Height - 54f));
+        var status = $"Level: {_currentDungeonLevel}   Pos: {PositionText}   Facing: {heading}   Esc: Party view";
+        using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
+        graphics.DrawString(status, HudFont, brush, new PointF(16f, ClientSize.Height - 54f));
     }
 
     private void DrawOverlayLegend(Graphics graphics)
     {
         var heading = CompassHeading();
 
-        var legend = $"A/D or ←/→: Turn   W or ↑: Move   C: Camp   K: Kick   Esc: Toggle full dungeon view   Level: {_currentDungeonLevel}   Pos: {PositionText}   Facing: {heading}";
-        graphics.DrawString(legend, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(16f, 8f));
+        using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
+        graphics.DrawString("A/D or ←/→: Turn   W or ↑: Move   C: Camp   K: Kick   Esc: Toggle full dungeon view", HudFont, brush, new PointF(16f, 6f));
+        graphics.DrawString($"Level: {_currentDungeonLevel}   Pos: {PositionText}   Facing: {heading}", HudFont, brush, new PointF(16f, 30f));
     }
 
-    private void DrawPartyInfo(Graphics graphics, RectangleF viewport)
+    /// <summary>
+    /// The party table at the bottom of the window, laid out like the encounter form's party list (same frame,
+    /// font and columns) so it looks the same before, during and after a fight.
+    /// </summary>
+    private void DrawPartyTable(Graphics graphics)
     {
-        float y = viewport.Bottom + 8f;
-        float x = 16f;
-        const float numberColWidth = 24f;
+        var color = GameRulesProvider.Current.DefaultColor;
+        var frame = EncounterForm.PartyFrameBounds(ClientSize);
+        OldStyleFrame.Draw(graphics, frame, color);
 
-        // Headings
-        graphics.DrawString("#", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
-        graphics.DrawString("Name", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
-        graphics.DrawString("Align", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 170f, y));
-        graphics.DrawString("Class", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 230f, y));
-        graphics.DrawString("Lvl", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 390f, y));
-        graphics.DrawString("HP", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 450f, y));
-        graphics.DrawString("AC", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 530f, y));
-        graphics.DrawString("Status", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 600f, y));
+        var list = Rectangle.Inflate(frame, -12, -12);
+        using var brush = new SolidBrush(color);
+        using var gridPen = new Pen(Color.FromArgb(64, color));
+        var widths = EncounterForm.PartyColumnWidths;
+        var headings = new[] { "#", "Character Name", "Class", "AC", "Hits", "Status" };
+        const float headerHeight = 28f;
+        const float rowHeight = 25f;
 
-        y += 18f;
-        graphics.DrawLine(new Pen(GameRulesProvider.Current.DefaultColor), x, y - 2f, viewport.Right - 8f, y - 2f);
+        float ColumnX(int index)
+        {
+            var x = list.Left;
+            for (var i = 0; i < index; i++)
+                x += widths[i];
+            return x;
+        }
+
+        for (var i = 0; i < headings.Length; i++)
+            graphics.DrawString(headings[i], HudFont, brush, ColumnX(i) + 4f, list.Top + 2f);
+
+        graphics.DrawLine(gridPen, list.Left, list.Top + headerHeight, list.Right, list.Top + headerHeight);
 
         var party = _partyRepository.Load();
         var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var y = list.Top + headerHeight + 2f;
 
         if (party.Members.Count == 0)
         {
-            graphics.DrawString("No party members.", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
+            graphics.DrawString("No party members.", HudFont, brush, list.Left + 4f, y);
             return;
         }
 
-        for (int i = 0; i < party.Members.Count; i++)
+        for (var i = 0; i < party.Members.Count; i++)
         {
             var memberName = party.Members[i];
-            if (!roster.TryGetValue(memberName, out var c))
+            string[] cells;
+
+            if (roster.TryGetValue(memberName, out var c))
             {
-                graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
-                graphics.DrawString(memberName, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
-                graphics.DrawString("--", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 170f, y));
-                graphics.DrawString("(missing)", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 230f, y));
-                y += 18f;
-                continue;
+                cells = new[]
+                {
+                    (i + 1).ToString(),
+                    c.Name,
+                    EncounterForm.GetClassCode(c),
+                    c.ArmorClass.ToString(),
+                    $"{c.CurrentHitPoints}/{c.MaxHitPoints}",
+                    GetMazeStatusDisplay(c)
+                };
+            }
+            else
+            {
+                cells = new[] { (i + 1).ToString(), memberName, "(missing)", "", "", "" };
             }
 
-            var classes = c.Classes.Count > 0
-                ? c.GetClassesDisplayText("/")
-                : c.GetClassesDisplayText("/");
+            for (var col = 0; col < cells.Length; col++)
+            {
+                var cell = new RectangleF(ColumnX(col) + 4f, y, widths[col] - 6f, rowHeight);
+                using var format = new StringFormat { Trimming = StringTrimming.EllipsisCharacter, FormatFlags = StringFormatFlags.NoWrap };
+                graphics.DrawString(cells[col], HudFont, brush, cell, format);
+            }
 
-            var status = GetMazeStatusDisplay(c);
-            var alignment = c.Alignment.ToAbbreviation();
-
-            graphics.DrawString((i + 1).ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x, y));
-            graphics.DrawString(c.Name, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth, y));
-            graphics.DrawString(alignment, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 170f, y));
-            graphics.DrawString(classes, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 230f, y));
-            graphics.DrawString(GetLevelDisplay(c), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 390f, y));
-            graphics.DrawString($"{c.CurrentHitPoints}/{c.MaxHitPoints}", Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 450f, y));
-            graphics.DrawString(c.ArmorClass.ToString(), Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 530f, y));
-            graphics.DrawString(status, Font, new SolidBrush(GameRulesProvider.Current.DefaultColor), new PointF(x + numberColWidth + 600f, y));
-
-            y += 18f;
+            y += rowHeight;
         }
     }
 
@@ -571,10 +598,16 @@ public sealed partial class MazeForm
             float u = d / (float)(maxDepth + 1);
             float t = 1f - (float)Math.Pow(1f - u, 1.5f);
 
-            float left = Lerp(viewport.Left + 160f, cx, t);
-            float right = Lerp(viewport.Right - 160f, cx, t);
-            float top = Lerp(viewport.Top + 100f, cy, t);
-            float bottom = Lerp(viewport.Bottom - 100f, cy, t);
+            // One scale for both axes, so the frame corners lie on the line from the viewport corner to the
+            // centre and the walls stay straight at any window shape.
+            float scale = 0.8f * (1f - t);
+            float halfWidth = viewport.Width / 2f * scale;
+            float halfHeight = viewport.Height / 2f * scale;
+
+            float left = cx - halfWidth;
+            float right = cx + halfWidth;
+            float top = cy - halfHeight;
+            float bottom = cy + halfHeight;
 
             frames[d] = RectangleF.FromLTRB(left, top, right, bottom);
         }
