@@ -117,6 +117,8 @@ public class ShopMenu
         if ((initialParty.Members.Count >= 2) && (startIndex == 0) && selectShopper)
             SelectShopper();
 
+        var filter = ShopFilter.None;
+
         while (true)
         {
             Console.Clear();
@@ -136,9 +138,11 @@ public class ShopMenu
             else
                 Console.WriteLine("No party members.\n");
 
-            var items = Shop.Stock(_itemRepo);
+            var items = Shop.Stock(_itemRepo, filter);
 
-            Console.WriteLine("Items available for purchase:\n");
+            Console.WriteLine(filter == ShopFilter.None
+                ? "Items available for purchase:\n"
+                : $"Items available for purchase (filter: {filter.Label()}):\n");
 
             for (int i = startIndex; ((i < items.Count) && (i < startIndex + numberOfItems)); i++)
           //      for (int i = 0; (i < items.Count && i < numberOfItems); i++)
@@ -154,7 +158,8 @@ public class ShopMenu
 
             Console.WriteLine("\nB)uy Items");
             Console.WriteLine("S)ell Items");
-            Console.WriteLine("E)quip/unequip Items");
+            Console.WriteLine("E)quip Items");
+            Console.WriteLine("U)nequip Items");
             Console.WriteLine("P)ool Gold");
             Console.WriteLine("C)hoose a Different Shopper");
             if (startIndex + numberOfItems < items.Count) Console.WriteLine("N)ext items in shop");
@@ -185,9 +190,10 @@ public class ShopMenu
                 continue;
             }
 
-            if (key == ConsoleKey.B) BuyItems(startIndex, numberOfItems);
+            if (key == ConsoleKey.B) BuyItems(startIndex, numberOfItems, filter);
             else if (key == ConsoleKey.S) SellItems();
-            else if (key == ConsoleKey.E) EquipItems();
+            else if (key == ConsoleKey.E) EquipItems(equip: true);
+            else if (key == ConsoleKey.U) EquipItems(equip: false);
             else if (key == ConsoleKey.P) PoolGoldToCurrentShopper();
             else if (key == ConsoleKey.C) SelectShopper();
             else if (key == ConsoleKey.N)
@@ -205,7 +211,12 @@ public class ShopMenu
                 startIndex = 0;
                 continue;
             }
-        //    else if (key == ConsoleKey.F) FilterItemsa();
+            else if (key == ConsoleKey.F)
+            {
+                filter = ChooseFilter(filter);
+                startIndex = 0;
+                continue;
+            }
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
 
         }
@@ -251,9 +262,23 @@ public class ShopMenu
     }
 
 
-    private void BuyItems(int startIndex, int numberOfItems)
+    private static ShopFilter ChooseFilter(ShopFilter current)
     {
-        var items = Shop.Stock(_itemRepo);
+        Console.WriteLine("\nFilter items: N)o filter, A)rmor and shields, W)eapons, O)ther");
+        Console.Write("Choose: ");
+        return Console.ReadKey(true).Key switch
+        {
+            ConsoleKey.N => ShopFilter.None,
+            ConsoleKey.A => ShopFilter.ArmorAndShields,
+            ConsoleKey.W => ShopFilter.Weapons,
+            ConsoleKey.O => ShopFilter.Other,
+            _ => current
+        };
+    }
+
+    private void BuyItems(int startIndex, int numberOfItems, ShopFilter filter)
+    {
+        var items = Shop.Stock(_itemRepo, filter);
         var party = _partyRepo.Load();
 
         if (party.Members.Count == 0)
@@ -599,7 +624,7 @@ public class ShopMenu
         Console.ReadKey(true);
     }
 
-    private void EquipItems()
+    private void EquipItems(bool equip)
     {
         var party = _partyRepo.Load();
         var c = GetCurrentShopper(party) ?? ResolvePartyCharacters(party).FirstOrDefault();
@@ -614,11 +639,11 @@ public class ShopMenu
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("=== EQUIP ITEMS ===");
+            Console.WriteLine(equip ? "=== EQUIP ITEMS ===" : "=== UNEQUIP ITEMS ===");
             Console.WriteLine($"Shopper: {c.Name} - GP: {c.GoldPieces} gp\n");
 
             Console.WriteLine("Currently equipped:");
-            foreach (var kv in c.Equipment)
+            foreach (var kv in c.Equipment.Where(e => Adnd.Core.Characters.EquipmentManager.IsSlotAvailable(e.Key)))
             {
                 var slot = kv.Key;
                 var it = kv.Value;
@@ -628,24 +653,28 @@ public class ShopMenu
                     Console.WriteLine($" - {slot}: {it.Name}");
             }
 
-            Console.WriteLine("\nE)quip from inventory");
-            Console.WriteLine("U)nequip item");
-                Console.WriteLine("L<-eave");
-
-            var key = Console.ReadKey(true).Key;
-
-            if (key == ConsoleKey.E)
+            if (equip)
             {
+                // Equip goes straight to the inventory list; Enter there cancels and leaves.
                 if (c.Inventory.Count == 0)
                 {
                     Console.WriteLine("\nInventory empty.");
                     Console.ReadKey(true);
-                    continue;
+                    break;
                 }
 
-                EquipmentHelper.PromptAndEquipItem(c, _charRepo);
+                if (!EquipmentHelper.PromptAndEquipItem(c, _charRepo))
+                    break;
+
+                continue;
             }
-            else if (key == ConsoleKey.U)
+
+            Console.WriteLine("\nU)nequip item");
+            Console.WriteLine("L<-eave");
+
+            var key = Console.ReadKey(true).Key;
+
+            if (!equip && key == ConsoleKey.U)
             {
                 var equipped = c.Equipment
                     .Where(kv => kv.Value != null)

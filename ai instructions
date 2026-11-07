@@ -8268,3 +8268,35 @@ When in Church show WizardryTemple.png
 When in Adventures in show WizardryAdventuresInn.png
 can you also show AllRaces.png when creating charaters when adnd and ShowPictures is true
 when playing adnd and show pictures is set, show AdndTemple.png in temple
+___
+Introduce an option in settings to set items, monsters and rules all to wizardry and one option to set 
+items, monsters and rules all to adnd.
+When the user selects wizardry, then the game will use wizardry items, monsters and rules. 
+When the user selects adnd, then the game will use adnd items, monsters and rules. 
+This will allow the user to play either system without having to change any other settings.
+
+in setting show AdndPlayersHandbookCover.png and WizardryStartUpSplashScreen.png if one of the tho pictures is clickon on then 
+select the corresponding ruleset and show the other picture as unselected.
+Put te settings  items, monsters and rules in a separate group on the top of the screen.
+when one of the pictures is clicked and the settings are changed, update the text also. 
+
+when monsters settings is adnd do not show the proving grounds option and when settings is wizardry do not show the
+maze option
+
+when changing from wizardry to adnd and then back again from adnd to wizardry I want the party for wizardry to be
+populated as it was last time I was in wizardry and the other way around
+
+when playing wizardry it should not be possible to equip weapons in off hand, so no need to ask what slot to equip
+weapons when playing wizardry. do not change the behaviour when rules are set to andn
+
+in the shop separate the options E)quip and U)nequip in that way you dont have to ask in the next screen if 
+you want to equip or unequip
+
+when equip has been selected from boltax, no need to ask if you want to equip from inventory or Leave,
+just asume you want to equip from inventory 
+
+when wizardry rules apply please hide Feet, Belt, Back and Ring2
+
+in the shop make it possible to filter for N)o filter, A)rmor and shileds, W)eapons, O)ther. Default is No filter
+
+

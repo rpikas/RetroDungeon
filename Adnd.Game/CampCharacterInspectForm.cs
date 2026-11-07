@@ -587,7 +587,7 @@ public sealed class CampCharacterInspectForm : Form
             lines.Insert(2, string.Empty);
         }
 
-        foreach (var kv in c.Equipment)
+        foreach (var kv in c.Equipment.Where(e => Adnd.Core.Characters.EquipmentManager.IsSlotAvailable(e.Key)))
             lines.Add(kv.Value == null ? $" - {kv.Key}: (empty)" : $" - {kv.Key}: {kv.Value.Name}");
 
         lines.Add(string.Empty);
@@ -912,7 +912,7 @@ public sealed class CampCharacterInspectForm : Form
             {
                 targetSlot = EquipmentSlot.Range;
             }
-            else if (item.IsTwoHanded)
+            else if (item.IsTwoHanded || GameRulesProvider.Current.Rules == Ruleset.Wizardry)
             {
                 targetSlot = EquipmentSlot.MainHand;
             }

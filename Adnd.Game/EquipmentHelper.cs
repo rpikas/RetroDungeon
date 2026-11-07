@@ -70,9 +70,10 @@ public static class EquipmentHelper
             {
                 targetSlot = EquipmentSlot.Range;
             }
-            else if (item.IsTwoHanded)
+            else if (item.IsTwoHanded || Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
             {
                 // Two-handed melee weapons always anchor from main hand and consume both hands.
+                // Wizardry has no off-hand weapons, so there is no slot to ask about.
                 targetSlot = EquipmentSlot.MainHand;
             }
             else

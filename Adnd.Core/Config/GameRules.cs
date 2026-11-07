@@ -73,6 +73,24 @@ public class GameRules
     public SourceOptions ItemSourceOptions { get; set; } = SourceOptions.All;
     public SourceOptions MonsterSourceOptions { get; set; } = SourceOptions.LocationBased;
 
+    // One-step switch of rules, items (incl. shop) and monsters to a single system.
+    public void ApplySystemPreset(Ruleset system)
+    {
+        var wizardry = system == Ruleset.Wizardry;
+        Rules = system;
+        ItemSourceOptions = wizardry ? SourceOptions.OnlyWizardry : SourceOptions.OnlyAdnd;
+        MonsterSourceOptions = wizardry ? SourceOptions.OnlyWizardry : SourceOptions.OnlyAdnd;
+        BoltacItemSourceFilter = wizardry ? BoltacItemSourceOptions.OnlyWizardry : BoltacItemSourceOptions.OnlyAdnd;
+    }
+
+    // The menu entries follow the monster setting: AD&D-only monsters hide the Proving Grounds, Wizardry-only hide the Maze.
+    [JsonIgnore]
+    public bool MazeAvailable => MonsterSourceOptions != SourceOptions.OnlyWizardry;
+
+    [JsonIgnore]
+    public bool ProvingGroundsAvailable => MonsterSourceOptions is not (SourceOptions.OnlyAdnd
+        or SourceOptions.OnlyAdndDMGEncounterTable or SourceOptions.AllButWizardry);
+
     // Set while the party is in the Proving Grounds (the Wizardry maps); false in the Maze and in town.
     [JsonIgnore]
     public bool InProvingGrounds { get; set; }

@@ -12,6 +12,15 @@ public class SettingsMenu
 {
     public void Show()
     {
+        Console.RulesetPictures = true;
+        try { ShowCore(); }
+        finally { Console.RulesetPictures = false; }
+    }
+
+    private string? _notice;
+
+    private void ShowCore()
+    {
         while (true)
         {
             Console.Clear();
@@ -20,21 +29,44 @@ public class SettingsMenu
             var rules = GameRulesProvider.Current;
             var properties = GetEditableProperties();
 
+            Console.WriteLine("-- Game system (click a picture, or W = Wizardry / D = AD&D) --");
             for (int i = 0; i < properties.Length; i++)
             {
+                if (i == SystemProperties.Length)
+                    Console.WriteLine("\n-- Other settings --");
+
                 var p = properties[i];
                 var value = p.GetValue(rules);
                 Console.WriteLine($"{i + 1}. {p.Name} = {FormatValue(value)}");
             }
 
+            if (_notice != null)
+            {
+                Console.WriteLine($"\n{_notice}");
+                _notice = null;
+            }
+
             Console.WriteLine("\nChoose setting # to edit (Enter to leave)");
-            Console.WriteLine("L<-eave");
+            Console.WriteLine("L↵eave");
 
             Console.Write("Choose #: ");
             var input = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(input))
                 break;
+
+            var preset = input.Trim().ToUpperInvariant();
+            if (preset == "W" || preset == "D")
+            {
+                var target = preset == "W" ? Ruleset.Wizardry : Ruleset.ADND;
+                var previous = rules.Rules;
+                rules.ApplySystemPreset(target);
+                GameRulesProvider.Current = rules;
+                GameRulesProvider.Save();
+                _notice = $"Now playing {target}: rules, items and monsters set to {target}." + SwitchParty(previous, target);
+                RuleApplicationInfo.Publish($"Settings changed: rules, items and monsters set to {target}.");
+                continue;
+            }
 
             if (int.TryParse(input.Trim(), out int selected) && selected >= 1 && selected <= properties.Length)
             {
@@ -50,7 +82,7 @@ public class SettingsMenu
                 if (!Equals(beforeValue, afterValue))
                 {
                     if (property.Name == nameof(GameRules.Rules))
-                        RemoveOtherRulesetMembersFromParty(rules.Rules);
+                        _notice = SwitchParty((Ruleset)beforeValue!, rules.Rules).Trim();
 
                     RuleApplicationInfo.Publish(
                         $"Settings changed: {property.Name} = {FormatValue(beforeValue)}; now {FormatValue(afterValue)}.");
@@ -59,33 +91,52 @@ public class SettingsMenu
         }
     }
 
-    // Party members from the other ruleset are dropped from the party; they stay in the roster.
-    private static void RemoveOtherRulesetMembersFromParty(Ruleset active)
+    // Each ruleset remembers its own party: the current party is stored under the ruleset being left, and the one
+    // last used with the new ruleset is restored (members that no longer exist or belong elsewhere are skipped).
+    private static string SwitchParty(Ruleset from, Ruleset to)
     {
+        if (from == to)
+            return "";
+
         var partyRepo = new Adnd.Data.Party.PartyRepository("Data/Party");
         var roster = new Adnd.Data.Characters.CharacterRepository("Data/Characters").GetAll()
             .ToDictionary(c => c.Name, c => c.Ruleset, StringComparer.OrdinalIgnoreCase);
 
-        var party = partyRepo.Load();
-        var kept = party.Members.Where(m => roster.TryGetValue(m, out var r) && r == active).ToList();
-        if (kept.Count == party.Members.Count)
-            return;
+        var current = partyRepo.Load();
+        new Adnd.Data.Party.PartyRepository(RememberedPartyFile(from)).Save(current);
 
-        party.Members = kept;
-        party.CurrentShopperIndex = -1;
-        partyRepo.Save(party);
-        Console.WriteLine($"\nParty cleared of characters that don't belong to the {active} rules.");
-        Console.ReadKey(true);
+        var restored = new Adnd.Data.Party.PartyRepository(RememberedPartyFile(to)).Load();
+        restored.Members = restored.Members.Where(m => roster.TryGetValue(m, out var r) && r == to).ToList();
+        restored.CurrentShopperIndex = -1;
+        partyRepo.Save(restored);
+
+        return restored.Members.Count > 0
+            ? $" Restored the {to} party: {string.Join(", ", restored.Members)}."
+            : $" No saved {to} party yet.";
     }
+
+    private static string RememberedPartyFile(Ruleset ruleset) =>
+        System.IO.Path.Combine("Data", "Party", $"party-{ruleset.ToString().ToLowerInvariant()}.json");
+
+    private static readonly string[] SystemProperties =
+    {
+        nameof(GameRules.Rules),
+        nameof(GameRules.ItemSourceOptions),
+        nameof(GameRules.BoltacItemSourceFilter),
+        nameof(GameRules.MonsterSourceOptions),
+    };
 
     private static PropertyInfo[] GetEditableProperties()
     {
-        return typeof(GameRules)
+        var all = typeof(GameRules)
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Where(p => p.CanRead && p.CanWrite)
             .Where(p => !string.Equals(p.Name, nameof(GameRules.DefaultColor), StringComparison.Ordinal))
             .Where(p => !string.Equals(p.Name, nameof(GameRules.InProvingGrounds), StringComparison.Ordinal))
-            .OrderBy(p => p.Name)
+            .ToArray();
+
+        return SystemProperties.Select(n => all.First(p => p.Name == n))
+            .Concat(all.Where(p => !SystemProperties.Contains(p.Name)).OrderBy(p => p.Name))
             .ToArray();
     }
 

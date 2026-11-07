@@ -115,11 +115,20 @@ public static class EquipmentManager
         return true;
     }
 
+    // Wizardry has no ranged weapons, ammo, boots, belts, cloaks or second ring, so those slots do not exist there.
+    public static bool IsSlotAvailable(EquipmentSlot slot) =>
+        !(slot is EquipmentSlot.Range or EquipmentSlot.Ammo or EquipmentSlot.Feet or EquipmentSlot.Belt
+              or EquipmentSlot.Back or EquipmentSlot.Ring2
+          && Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry);
+
     public static bool Equip(Character c, Item item)
     {
         EnsureEquipmentSlots(c);
 
         if (item.Slot == null)
+            return false;
+
+        if (!IsSlotAvailable(item.Slot.Value))
             return false;
 
         if (!MeetsAlignmentRequirement(c, item))

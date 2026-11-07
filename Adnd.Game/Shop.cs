@@ -88,6 +88,9 @@ public static class Shop
             .ToList(),
         GameRulesProvider.Current.BoltacItemSourceFilter);
 
+    public static List<Item> Stock(ItemRepository items, ShopFilter filter) =>
+        Stock(items).Where(i => filter.Matches(i)).ToList();
+
     private static List<Item> FilterBoltacItemsBySource(List<Item> items, BoltacItemSourceOptions sourceFilter)
     {
         return sourceFilter switch

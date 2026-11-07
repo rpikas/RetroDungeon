@@ -77,8 +77,8 @@ public class MainMenu
             Console.WriteLine("A)dventures Inn");
             Console.WriteLine("C)hurch of Chant");
             Console.WriteLine("B)oltac's Trading Post");
-            Console.WriteLine("M)aze");
-            Console.WriteLine("P)roving Grounds");
+            if (GameRulesProvider.Current.MazeAvailable) Console.WriteLine("M)aze");
+            if (GameRulesProvider.Current.ProvingGroundsAvailable) Console.WriteLine("P)roving Grounds");
             Console.WriteLine("S)ettings");
             Console.WriteLine("L<-eave");
             Console.CityPicture = PictureFor("WizardryTown.png");
@@ -93,7 +93,7 @@ public class MainMenu
             {
                 if (command.StartsWith("go:", StringComparison.Ordinal)) GoInto(command.Substring(3));
                 else if (command == "enter") EnterStanding();
-                else if (command == "maze" && HasPartyMembers()) EnterMaze();
+                else if (command == "maze" && HasPartyMembers() && GameRulesProvider.Current.MazeAvailable) EnterMaze();
                 continue;
             }
 
@@ -142,7 +142,7 @@ public class MainMenu
                     ShowWithPicture(PictureFor("WizardryBoltax.png"), () => _shopMenu.Show(0, 10, true));
                     break;
 
-                case ConsoleKey.M:
+                case ConsoleKey.M when GameRulesProvider.Current.MazeAvailable:
                     if (!HasPartyMembers())
                     {
                         ShowPartyRequiredMessage();
@@ -152,7 +152,7 @@ public class MainMenu
                     EnterMaze();
                     break;
 
-                case ConsoleKey.P:
+                case ConsoleKey.P when GameRulesProvider.Current.ProvingGroundsAvailable:
                     if (!HasPartyMembers())
                     {
                         ShowPartyRequiredMessage();
@@ -557,7 +557,7 @@ public class MainMenu
         // the party walks there first and the door is then offered by name.
         options.Add(new ViewerPromptOption("enter", "Go inside " + PlaceName(locationId)));
 
-        if (hasParty) options.Add(new ViewerPromptOption("maze", "Into the maze"));
+        if (hasParty && GameRulesProvider.Current.MazeAvailable) options.Add(new ViewerPromptOption("maze", "Into the maze"));
 
         return new ViewerPrompt("town", $"The party is at {PlaceName(locationId)}.", null, options);
     }

@@ -177,6 +177,55 @@ public class WizardryRulesTests
     public void Characters_default_to_adnd()
     {
         Assert.Equal(Ruleset.ADND, new Character().Ruleset);
-        Assert.Equal(Ruleset.ADND, new GameRules().Rules);
+    }
+
+    [Fact]
+    public void Wizardry_has_no_range_or_ammo_slots()
+    {
+        var saved = GameRulesProvider.Current;
+        try
+        {
+            GameRulesProvider.Current = new GameRules { Rules = Ruleset.Wizardry };
+            Assert.False(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Range));
+            Assert.False(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Ammo));
+            Assert.False(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Feet));
+            Assert.False(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Belt));
+            Assert.False(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Back));
+            Assert.False(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Ring2));
+            Assert.True(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Ring1));
+            Assert.True(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.MainHand));
+
+            GameRulesProvider.Current = new GameRules { Rules = Ruleset.ADND };
+            Assert.True(EquipmentManager.IsSlotAvailable(Adnd.Core.Items.EquipmentSlot.Range));
+        }
+        finally
+        {
+            GameRulesProvider.Current = saved;
+        }
+    }
+
+    [Fact]
+    public void Menu_entries_follow_the_monster_setting()
+    {
+        var rules = new GameRules();
+        rules.ApplySystemPreset(Ruleset.ADND);
+        Assert.True(rules.MazeAvailable);
+        Assert.False(rules.ProvingGroundsAvailable);
+
+        rules.ApplySystemPreset(Ruleset.Wizardry);
+        Assert.False(rules.MazeAvailable);
+        Assert.True(rules.ProvingGroundsAvailable);
+    }
+
+    [Theory]
+    [InlineData(Ruleset.ADND, SourceOptions.OnlyAdnd, BoltacItemSourceOptions.OnlyAdnd)]
+    public void System_preset_switches_rules_items_and_monsters(Ruleset system, SourceOptions source, BoltacItemSourceOptions shop)
+    {
+        var rules = new GameRules();
+        rules.ApplySystemPreset(system);
+        Assert.Equal(system, rules.Rules);
+        Assert.Equal(source, rules.ItemSourceOptions);
+        Assert.Equal(source, rules.MonsterSourceOptions);
+        Assert.Equal(shop, rules.BoltacItemSourceFilter);
     }
 }

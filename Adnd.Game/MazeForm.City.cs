@@ -22,6 +22,47 @@ public sealed partial class MazeForm
             TermConsole.Scrolled = Math.Max(0, TermConsole.Scrolled + (e.Delta > 0 ? 3 : -3));
             Invalidate();
         };
+        MouseDown += (_, e) =>
+        {
+            if (!TermConsole.RulesetPictures || e.Button != MouseButtons.Left)
+                return;
+
+            if (_adndPictureRect.Contains(e.Location))
+                TermConsole.EnqueueLine("D");
+            else if (_wizardryPictureRect.Contains(e.Location))
+                TermConsole.EnqueueLine("W");
+        };
+    }
+
+    private Rectangle _adndPictureRect;
+    private Rectangle _wizardryPictureRect;
+
+    private static void DrawChoicePicture(Graphics graphics, Image image, Rectangle slot, bool selected, Color color, out Rectangle drawn)
+    {
+        var scale = Math.Min(slot.Width / (float)image.Width, slot.Height / (float)image.Height);
+        drawn = new Rectangle(slot.X, slot.Y, (int)(image.Width * scale), (int)(image.Height * scale));
+        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+        if (selected)
+        {
+            graphics.DrawImage(image, drawn);
+            using var pen = new Pen(color, 4);
+            graphics.DrawRectangle(pen, drawn);
+            return;
+        }
+
+        // Unselected: grayscale and faded.
+        var matrix = new System.Drawing.Imaging.ColorMatrix(new[]
+        {
+            new[] { 0.3f, 0.3f, 0.3f, 0f, 0f },
+            new[] { 0.59f, 0.59f, 0.59f, 0f, 0f },
+            new[] { 0.11f, 0.11f, 0.11f, 0f, 0f },
+            new[] { 0f, 0f, 0f, 0.35f, 0f },
+            new[] { 0f, 0f, 0f, 0f, 1f },
+        });
+        using var attributes = new System.Drawing.Imaging.ImageAttributes();
+        attributes.SetColorMatrix(matrix);
+        graphics.DrawImage(image, drawn, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
     }
 
     private static readonly Dictionary<string, Image?> CityImages = new(StringComparer.OrdinalIgnoreCase);
@@ -67,10 +108,25 @@ public sealed partial class MazeForm
         var text = area;
         var columns = TermConsole.Columns;
 
-        // Only screens that set a city picture (Wizardry town, shop, church, inn) show it; the rest get the whole window.
-        if (TermConsole.CityPicture is { } pictureFile && CityImage(pictureFile) is { } town)
+        if (TermConsole.RulesetPictures
+            && CityImage("AdndPlayersHandbookCover.png") is { } adnd
+            && CityImage("WizardryStartUpSplashScreen.png") is { } wizardry)
         {
-            var side = Math.Min(area.Height, (int)(area.Width * 0.6f));
+            var width = (int)(area.Width * 0.4f);
+            var half = (area.Height - EncounterForm.FrameMargin) / 2;
+            var isWizardry = GameRulesProvider.Current.Rules == Ruleset.Wizardry;
+            DrawChoicePicture(graphics, adnd, new Rectangle(area.X, area.Y, width, half), !isWizardry, color, out _adndPictureRect);
+            DrawChoicePicture(graphics, wizardry, new Rectangle(area.X, area.Y + half + EncounterForm.FrameMargin, width, half), isWizardry, color, out _wizardryPictureRect);
+
+            var left = Math.Max(_adndPictureRect.Right, _wizardryPictureRect.Right) + EncounterForm.FrameMargin;
+            text = new Rectangle(left, area.Y, area.Right - left, area.Height);
+            columns = 48;
+        }
+        else if (TermConsole.CityPicture is { } pictureFile && CityImage(pictureFile) is { } town)
+        {
+            // Shop and temple pictures are drawn a bit smaller than the town picture.
+            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" ? 0.48f : 0.6f;
+            var side = Math.Min(area.Height, (int)(area.Width * share));
             var scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
             var picture = new Rectangle(area.X, area.Y, (int)(town.Width * scale), (int)(town.Height * scale));
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;

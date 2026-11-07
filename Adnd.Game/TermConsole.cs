@@ -34,11 +34,36 @@ internal static class TermConsole
         set
         {
             _cityPicture = value;
-            _host?.Invalidate();
+            if (_host is { IsDisposed: false, IsHandleCreated: true } host)
+            {
+                host.Invalidate();
+                host.Update();
+            }
         }
     }
 
     private static string? _cityPicture;
+
+    /// <summary>When true the window shows the two clickable ruleset pictures (AD&D and Wizardry) instead of CityPicture.</summary>
+    public static bool RulesetPictures
+    {
+        get => _rulesetPictures;
+        set
+        {
+            _rulesetPictures = value;
+            _host?.Invalidate();
+        }
+    }
+
+    private static bool _rulesetPictures;
+
+    /// <summary>Types text (and Enter) into the window as if it came from the keyboard.</summary>
+    public static void EnqueueLine(string text)
+    {
+        foreach (var c in text + "\r")
+            Pending.Enqueue(new ConsoleKeyInfo(c, c == '\r' ? ConsoleKey.Enter : KeyFromChar(c), char.IsUpper(c), false, false));
+        Scrolled = 0;
+    }
 
     public static void Attach(MazeForm host)
     {

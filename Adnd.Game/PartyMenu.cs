@@ -252,7 +252,7 @@ public class PartyMenu
             Console.WriteLine(c.ToString());
 
             Console.WriteLine("\n=== EQUIPPED ITEMS ===");
-            foreach (var kv in c.Equipment)
+            foreach (var kv in c.Equipment.Where(e => Adnd.Core.Characters.EquipmentManager.IsSlotAvailable(e.Key)))
             {
                 if (kv.Value == null)
                     Console.WriteLine($" - {kv.Key}: (empty)");
