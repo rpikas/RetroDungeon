@@ -166,13 +166,7 @@ public static class Shop
         IsUnlimitedStock(item) ? "-" : item.StockQuantity!.Value.ToString();
 
     /// <summary>Whether the shopper's class may use the item at all; items with no class list (potions, scrolls...) are open to everyone.</summary>
-    public static bool IsUsableBy(Character character, Item item)
-    {
-        if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
-            return true;
-
-        return character.Classes != null && character.Classes.Any(cls => item.AllowedClasses.Contains(cls));
-    }
+    public static bool IsUsableBy(Character character, Item item) => EquipmentManager.MeetsClassRequirement(character, item);
 
     /// <summary>
     /// Whether this character could actually wear or wield it. A hint rather than a rule: anyone may BUY
@@ -190,10 +184,7 @@ public static class Shop
         if (!EquipmentManager.MeetsAlignmentRequirement(character, item))
             return false;
 
-        if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
-            return true;
-
-        return character.Classes != null && character.Classes.Any(cls => item.AllowedClasses.Contains(cls));
+        return EquipmentManager.MeetsClassRequirement(character, item);
     }
 
     /// <summary>A copy of a shop item, so the shelf's own instance never ends up in somebody's pack.</summary>
@@ -243,7 +234,7 @@ public static class Shop
         var purchased = CopyOf(shelfItem);
 
         if (!buyer.CanCarry(purchased))
-            return $"{buyer.Name} cannot carry more weight ({buyer.CurrentCarryWeight}/{buyer.MaxCarryWeight}).";
+            return buyer.CannotCarryMessage;
 
         if (!items.TryAdjustStock(shelfItem.Name, -1))
             return $"Boltac cannot find another {shelfItem.Name}.";

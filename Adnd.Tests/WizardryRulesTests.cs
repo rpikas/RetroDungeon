@@ -255,6 +255,31 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Item_class_access_follows_wizardry_items_json()
+    {
+        var wc = Adnd.Core.Wizardry.WizardryClass.Thief;
+        Assert.False(Adnd.Core.Wizardry.WizardryItemClasses.Allows(wc, "Long Sword"));
+        Assert.True(Adnd.Core.Wizardry.WizardryItemClasses.Allows(wc, "Short Sword"));
+        Assert.True(Adnd.Core.Wizardry.WizardryItemClasses.Allows(Adnd.Core.Wizardry.WizardryClass.Samurai, "Long Sword"));
+        Assert.False(Adnd.Core.Wizardry.WizardryItemClasses.Allows(Adnd.Core.Wizardry.WizardryClass.Bishop, "Plate Mail"));
+        Assert.True(Adnd.Core.Wizardry.WizardryItemClasses.Allows(Adnd.Core.Wizardry.WizardryClass.Bishop, "Staff"));
+        Assert.Null(Adnd.Core.Wizardry.WizardryItemClasses.Allows(wc, "Unlisted Thing"));
+    }
+
+    [Fact]
+    public void Wizardry_characters_carry_at_most_eight_items_and_ignore_weight()
+    {
+        var c = new Adnd.Core.Characters.Character { Ruleset = Adnd.Core.Config.Ruleset.Wizardry };
+        var heavy = new Adnd.Core.Items.Item { Name = "Anvil", Weight = 1000000 };
+        for (var i = 0; i < 8; i++)
+        {
+            Assert.True(c.CanCarry(heavy));
+            Assert.True(c.TryReceiveItem(heavy));
+        }
+        Assert.False(c.CanCarry(heavy));
+    }
+
+    [Fact]
     public void Identify_chances_follow_bishop_level()
     {
         Assert.Equal(15, WizardryIdentification.IdentifyChancePercent(1));

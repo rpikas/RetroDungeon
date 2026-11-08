@@ -8470,3 +8470,18 @@ wizardry characters only have alignemnt Good, Neutral and Evil
 Helmet in wizardry, is id 14 in WizardryItmes.json and got a value of 100. That should be reflected in the shop.
 when inspecting a wizardry character do not show MV or languages. also shwo the wizardry stats, not the adnd stats.
 For wizardy chars only drop the SP, EP, CP, and PP fields, since Wizardry doesn't use them
+24,5
+___
+when creating charater in wizardry make the pictures smaller and font bigger, so it is as big as main menu
+
+Wizardry version of Long sword (id 1 in WizardryItems.json) should be be possible to wear by Theif according to 
+the WizardryItems.json file, Please update the code accordingly. also check the other items and make sure they 
+are consistent with WizardryItems.json for example when it comes to allowed clases for each item.
+"allowed classes": "ftsln", mean Fighter, Thief, Samurai, Lord, Ninja.
+"allowed classes": "fmptbsln", mean Fighter, Mage, Priest, Thief, Bishop, Samurai, Lord, Ninja. etc
+
+there is a limit for how much weight an adnd charaters can carry, but not for wizardry charaters, wizardry charaters
+can have max have 8 itmes in the inventory. do not show carry weight when inspecting a wizardry charater, do not
+show weapon prof when inspecting a wizardry chatater. Weapon prof should also not affect to hit for wizardry
+characters, only for adnd chars. also remove the option to show character sheet for wizardry chataters.
+

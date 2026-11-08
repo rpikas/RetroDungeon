@@ -126,6 +126,17 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 - Each attempt first risks a cursed item being equipped by accident: 35% - 3% per level (0% from level 12). It only matters if the item is cursed; the Bishop then wears it.
 - The shop identifies any item for half its value (A)ppraise Items).
 
+## 5d. Who can use which item
+
+- Class access follows WizardryItems.json ("allowed classes": f=Fighter, m=Mage, p=Priest, t=Thief, b=Bishop, s=Samurai, l=Lord, n=Ninja), so Samurai, Bishop and Ninja are told apart. Example: Long Sword is fsln (no Thief), Short Sword ftsln.
+- The table is `WizardryItemClasses` in Adnd.Core; items it does not list fall back to their AD&D class list.
+
+## 5e. Carrying and weapon skill
+
+- A character carries at most 8 items in the inventory. Weight does not matter, and carry weight is not shown.
+- Weapon proficiencies do not exist: they are not shown, and there is no to-hit penalty for an unfamiliar weapon.
+- There is no Character Sheet action; the inspect screen is all there is.
+
 ## 6. Not implemented yet
 
 Level-up, learning spells by chance on level-up, spell points per circle, hit and damage calculation, armor class, initiative, aging, statuses and temple costs.

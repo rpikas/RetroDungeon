@@ -1033,7 +1033,7 @@ public class PartyMenu
 
         if (!receiver.CanCarry(item))
         {
-            Console.WriteLine($"\n{receiver.Name} cannot carry more weight ({receiver.CurrentCarryWeight}/{receiver.MaxCarryWeight}).");
+            Console.WriteLine($"\n{receiver.CannotCarryMessage}");
             Console.ReadKey(true);
             return;
         }

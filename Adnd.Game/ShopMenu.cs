@@ -406,7 +406,7 @@ public class ShopMenu
 
                 if (!buyer.CanCarry(purchased))
                 {
-                    Console.WriteLine($"{buyer.Name} cannot carry more weight ({buyer.CurrentCarryWeight}/{buyer.MaxCarryWeight}).");
+                    Console.WriteLine(buyer.CannotCarryMessage);
                     Console.ReadKey(true);
                     return;
                 }

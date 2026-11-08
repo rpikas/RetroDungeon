@@ -31,11 +31,11 @@ public static class EquipmentHelper
 
         var item = c.Inventory[idx - 1];
 
-        if (item.AllowedClasses != null
-            && item.AllowedClasses.Count > 0
-            && (c.Classes == null || !c.Classes.Any(cls => item.AllowedClasses.Contains(cls))))
+        if (!EquipmentManager.MeetsClassRequirement(c, item))
         {
-            var required = string.Join(", ", item.AllowedClasses.Select(cls => cls.ToDisplayString()));
+            var required = item.AllowedClasses == null || item.AllowedClasses.Count == 0
+                ? "see the item"
+                : string.Join(", ", item.AllowedClasses.Select(cls => cls.ToDisplayString()));
             Console.WriteLine($"\n{c.Name} cannot equip {item.Name}. Allowed classes: {required}.");
             Console.ReadKey(true);
             return false;

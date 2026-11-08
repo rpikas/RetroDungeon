@@ -288,10 +288,7 @@ public static class WeaponProficiencyRules
 
     public static int GetNonProficiencyPenalty(Character character, Item? weapon, bool isRanged)
     {
-        if (character == null)
-            return 0;
-
-        if (weapon == null)
+        if (character == null || character.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
             return 0;
 
         var cls = character.Classes.Count > 0 ? character.Classes[0] : character.Class;

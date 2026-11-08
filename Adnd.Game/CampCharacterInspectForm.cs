@@ -250,6 +250,8 @@ public sealed class CampCharacterInspectForm : Form
         };
 
         var c = GetCharacter();
+        if (c?.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            actions.RemoveAll(a => a.Id == "characterSheet");
         if (c?.IsPaladin() == true)
             actions.Add(("layOnHands", c.LayOnHandsUsedToday ? "Lay on Hands (used today)" : "Lay on Hands"));
         if (c?.IsMonk() == true && c.GetMonkLevel() >= 7)
@@ -599,7 +601,8 @@ public sealed class CampCharacterInspectForm : Form
             for (int i = 0; i < c.Inventory.Count; i++)
                 lines.Add($"{i + 1}. {c.Inventory[i].DisplayName}");
 
-        lines.Add($"Carry Weight: {c.CurrentCarryWeight}/{c.MaxCarryWeight}");
+        if (c?.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+            lines.Add($"Carry Weight: {c!.CurrentCarryWeight}/{c.MaxCarryWeight}");
 
         lines.Add(string.Empty);
         lines.Add("=== SPELLCASTING ===");
@@ -797,8 +800,11 @@ public sealed class CampCharacterInspectForm : Form
             c.ArmorClass.ToString()));
         sb.AppendLine($"{(wiz ? "VITALITY    " : "CONSTITUTION")} {c.Abilities.Constitution,2}");
         sb.AppendLine($"{(wiz ? "LUCK        " : "CHARISMA    ")} {c.Abilities.Charisma,2}    STATUS {statusText}");
-        sb.AppendLine($"CARRY WT     {c.CurrentCarryWeight,3}/{c.MaxCarryWeight,-3}");
-        sb.AppendLine($"WEAP PROF    {c.GetWeaponProficienciesDisplay().ToUpperInvariant()}");
+        if (!wiz)
+        {
+            sb.AppendLine($"CARRY WT     {c.CurrentCarryWeight,3}/{c.MaxCarryWeight,-3}");
+            sb.AppendLine($"WEAP PROF    {c.GetWeaponProficienciesDisplay().ToUpperInvariant()}");
+        }
         var dualClassSummary = FormatDualClassSummary(c);
         if (!string.IsNullOrWhiteSpace(dualClassSummary))
             sb.AppendLine($"DUAL CLASS   {dualClassSummary.ToUpperInvariant()}");
@@ -880,7 +886,7 @@ public sealed class CampCharacterInspectForm : Form
 
         var equipable = c.Inventory
             .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue)
-            .Where(it => it.AllowedClasses.Count == 0 || c.Classes.Any(cls => it.AllowedClasses.Contains(cls)))
+            .Where(it => EquipmentManager.MeetsClassRequirement(c, it))
             .Where(it => EquipmentManager.MeetsAlignmentRequirement(c, it))
             .ToList();
 
@@ -2397,7 +2403,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (!receiver.CanCarry(item))
         {
-            SayOnBoth("Trade", $"{receiver.Name} cannot carry more weight ({receiver.CurrentCarryWeight}/{receiver.MaxCarryWeight}).");
+            SayOnBoth("Trade", receiver.CannotCarryMessage);
             return;
         }
 

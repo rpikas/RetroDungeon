@@ -121,6 +121,21 @@ public static class EquipmentManager
               or EquipmentSlot.Back or EquipmentSlot.Ring2
           && Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry);
 
+    /// <summary>Wizardry characters follow WizardryItems.json's class letters; everyone else the item's AllowedClasses (empty = anyone).</summary>
+    public static bool MeetsClassRequirement(Character c, Item item)
+    {
+        if (c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry && c.WizardryClass is { } wizardryClass
+            && Adnd.Core.Wizardry.WizardryItemClasses.Allows(wizardryClass, item.Name) is { } allowed)
+        {
+            return allowed;
+        }
+
+        if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
+            return true;
+
+        return c.Classes != null && c.Classes.Any(cls => item.AllowedClasses.Contains(cls));
+    }
+
     public static bool Equip(Character c, Item item)
     {
         EnsureEquipmentSlots(c);
@@ -134,12 +149,8 @@ public static class EquipmentManager
         if (!MeetsAlignmentRequirement(c, item))
             return false;
 
-        if (item.AllowedClasses != null
-            && item.AllowedClasses.Count > 0
-            && (c.Classes == null || !c.Classes.Any(cls => item.AllowedClasses.Contains(cls))))
-        {
+        if (!MeetsClassRequirement(c, item))
             return false;
-        }
 
         var slot = item.Slot.Value;
         var isHandSlot = slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand;

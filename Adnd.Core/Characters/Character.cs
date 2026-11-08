@@ -1823,11 +1823,21 @@ public class Character
     [JsonIgnore]
     public int CurrentCarryWeight => GetCurrentCarryWeight();
 
+    public const int WizardryMaxInventoryItems = 8;
+
+    /// <summary>Wizardry limits the number of items carried, AD&amp;D the weight.</summary>
     public bool CanCarry(Item item)
     {
+        if (Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            return Inventory.Count < WizardryMaxInventoryItems;
+
         var itemWeight = item == null ? 0 : Math.Max(0, item.Weight);
         return CurrentCarryWeight + itemWeight <= MaxCarryWeight;
     }
+
+    public string CannotCarryMessage => Ruleset == Adnd.Core.Config.Ruleset.Wizardry
+        ? $"{Name} cannot carry more than {WizardryMaxInventoryItems} items."
+        : $"{Name} cannot carry more weight ({CurrentCarryWeight}/{MaxCarryWeight}).";
 
     public bool TryReceiveItem(Item item)
     {
