@@ -4,6 +4,7 @@ using Adnd.Core.Characters;
 using Adnd.Core.Config;
 using Adnd.Core.Diagnostics;
 using Adnd.Core.Items;
+using Adnd.Core.Wizardry;
 using Adnd.Core.Characters.Progression;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
@@ -588,7 +589,7 @@ public sealed class CampCharacterInspectForm : Form
         }
 
         foreach (var kv in c.Equipment.Where(e => Adnd.Core.Characters.EquipmentManager.IsSlotAvailable(e.Key)))
-            lines.Add(kv.Value == null ? $" - {kv.Key}: (empty)" : $" - {kv.Key}: {kv.Value.Name}");
+            lines.Add(kv.Value == null ? $" - {kv.Key}: (empty)" : $" - {kv.Key}: {kv.Value.DisplayName}");
 
         lines.Add(string.Empty);
         lines.Add("=== INVENTORY ===");
@@ -596,7 +597,7 @@ public sealed class CampCharacterInspectForm : Form
             lines.Add(" (empty)");
         else
             for (int i = 0; i < c.Inventory.Count; i++)
-                lines.Add($"{i + 1}. {c.Inventory[i].Name}");
+                lines.Add($"{i + 1}. {c.Inventory[i].DisplayName}");
 
         lines.Add($"Carry Weight: {c.CurrentCarryWeight}/{c.MaxCarryWeight}");
 
@@ -888,7 +889,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var idx = PromptChoice("Equip Item", equipable.Select(i => $"{i.Name} [{GetDisplaySlot(i)}]").ToList());
+        var idx = PromptChoice("Equip Item", equipable.Select(i => $"{i.DisplayName} [{GetDisplaySlot(i)}]").ToList());
         if (!idx.HasValue)
             return;
 
@@ -1033,7 +1034,7 @@ public sealed class CampCharacterInspectForm : Form
             equipped.Select(slot =>
             {
                 var item = c.Equipment[slot];
-                return item == null ? slot.ToString() : $"{slot} ({item.Name})";
+                return item == null ? slot.ToString() : $"{slot} ({item.DisplayName})";
             }).ToList());
         if (!idx.HasValue)
             return;
@@ -1065,7 +1066,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var idx = PromptChoice("Drop Item", c.Inventory.Select(i => i.Name).ToList());
+        var idx = PromptChoice("Drop Item", c.Inventory.Select(i => i.DisplayName).ToList());
         if (!idx.HasValue)
             return;
 
@@ -2080,11 +2081,47 @@ public sealed class CampCharacterInspectForm : Form
         form.ShowDialog(this);
     }
 
+    private void WizardryIdentifyAction(Character c)
+    {
+        if (!WizardryIdentification.IsBishop(c))
+        {
+            SayOnBoth("Identify", "Only a Bishop can identify items. A shop will do it for half the item's value.");
+            return;
+        }
+
+        var unknown = c.Inventory.Where(i => !i.IsIdentified).ToList();
+        if (unknown.Count == 0)
+        {
+            SayOnBoth("Identify", "No unidentified items in the inventory.");
+            return;
+        }
+
+        var choice = PromptChoice($"Identify ({WizardryIdentification.IdentifyChancePercent(c.Level)}% chance)", unknown.Select(i => i.DisplayName).ToList());
+        if (choice is not { } idx || idx < 0 || idx >= unknown.Count)
+            return;
+
+        var item = unknown[idx];
+        var outcome = WizardryIdentification.TryBishopIdentify(c, item, Random.Shared);
+        _characterRepository.Save(c);
+        SayOnBoth("Identify", outcome switch
+        {
+            IdentifyOutcome.Identified => $"{c.Name} identifies the item: {item.Name}.",
+            IdentifyOutcome.EquippedCursed => $"Oops! {c.Name} equips {item.Name}, and it is cursed!",
+            _ => $"{c.Name} cannot identify the {item.DisplayName}."
+        });
+    }
+
     private void IdentifyAction()
     {
         var c = GetCharacter();
         if (c == null)
             return;
+
+        if (c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+        {
+            WizardryIdentifyAction(c);
+            return;
+        }
 
         var entries = new List<(string Label, Item Item)>();
         var updatedHumanControlMetadata = false;
@@ -2351,7 +2388,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var itemIdx = PromptChoice("Choose Item", giver.Inventory.Select(i => $"{i.Name} (Wt {i.Weight})").ToList());
+        var itemIdx = PromptChoice("Choose Item", giver.Inventory.Select(i => $"{i.DisplayName} (Wt {i.Weight})").ToList());
         if (!itemIdx.HasValue)
             return;
 

@@ -55,7 +55,8 @@ public static class Shop
 
         if (item.Type == ItemType.Weapon)
         {
-            if (!string.IsNullOrWhiteSpace(item.DamageVsLarge)
+            if (GameRulesProvider.Current.Rules != Ruleset.Wizardry
+                && !string.IsNullOrWhiteSpace(item.DamageVsLarge)
                 && !string.Equals(item.Damage, item.DamageVsLarge, StringComparison.OrdinalIgnoreCase))
             {
                 return $"DMG {item.Damage} (L:{item.DamageVsLarge})";
@@ -80,13 +81,42 @@ public static class Shop
     /// than Boltac admits to.
     /// </summary>
     public static List<Item> Stock(ItemRepository items) =>
-        FilterBoltacItemsBySource(
+        SortForDisplay(FilterBoltacItemsBySource(
         items.LoadAll()
             .Where(i => i.IsShopBuyable || (i.StockQuantity.HasValue && i.StockQuantity.Value > 0))
             .Where(InStock)
             .Take(9999)
             .ToList(),
-        GameRulesProvider.Current.BoltacItemSourceFilter);
+        GameRulesProvider.Current.BoltacItemSourceFilter));
+
+    /// <summary>Weapons, then armour (same slot together, lowest AC first), then the rest; plain items before magical ones.</summary>
+    public static List<Item> SortForDisplay(List<Item> items) =>
+        items
+            .OrderBy(DisplayGroup)
+            .ThenBy(i => IsArmorLike(i) ? ArmorSlotOrder(i) : 0)
+            .ThenBy(IsMagical)
+            .ThenBy(i => IsArmorLike(i) ? i.ArmorClassBonus : 0)
+            .ThenBy(i => IsArmorLike(i) ? 0 : CostInSilverPieces(i))
+            .ToList();
+
+    private static bool IsArmorLike(Item i) => i.Type == ItemType.Armor || i.Type == ItemType.Shield;
+
+    private static int DisplayGroup(Item i) => i.Type == ItemType.Weapon ? 0 : IsArmorLike(i) ? 1 : 2;
+
+    private static int ArmorSlotOrder(Item i) => i.Slot switch
+    {
+        EquipmentSlot.Body => 0,
+        EquipmentSlot.Head => 1,
+        EquipmentSlot.Hands => 2,
+        EquipmentSlot.OffHand => 3,
+        _ => 4
+    };
+
+    /// <summary>A +/- in the name or a magic bonus marks magic; Wizardry has no plain item worth 1000 gp or more.</summary>
+    public static bool IsMagical(Item i) =>
+        i.MagicBonus != 0
+        || System.Text.RegularExpressions.Regex.IsMatch(i.Name, @"[+-]\d")
+        || (IsWizardrySource(i.Source) && !IsAdndSource(i.Source) && i.Cost >= 1000);
 
     public static List<Item> Stock(ItemRepository items, ShopFilter filter) =>
         Stock(items).Where(i => filter.Matches(i)).ToList();

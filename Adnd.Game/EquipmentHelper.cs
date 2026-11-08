@@ -18,7 +18,7 @@ public static class EquipmentHelper
 
         Console.WriteLine("\nInventory:");
         for (int i = 0; i < c.Inventory.Count; i++)
-            Console.WriteLine($"{i + 1}. {c.Inventory[i].Name}");
+            Console.WriteLine($"{i + 1}. {c.Inventory[i].DisplayName}");
 
         Console.Write("\nChoose # (or Enter to cancel): ");
         var input = Console.ReadLine();

@@ -228,4 +228,85 @@ public class WizardryRulesTests
         Assert.Equal(source, rules.MonsterSourceOptions);
         Assert.Equal(shop, rules.BoltacItemSourceFilter);
     }
+
+    [Fact]
+    public void Shared_armour_is_adnd_only_and_has_wizardry_copies()
+    {
+        var dir = AppContext.BaseDirectory;
+        while (dir != null && !System.IO.Directory.Exists(System.IO.Path.Combine(dir, "Adnd.Data", "Items")))
+            dir = System.IO.Path.GetDirectoryName(dir);
+        Assert.NotNull(dir);
+
+        System.Collections.Generic.List<(string Name, string Source, int Ac)> Load(string file) =>
+            System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(System.IO.Path.Combine(dir!, "Adnd.Data", "Items", file)))
+                .RootElement.GetProperty("Items").EnumerateArray()
+                .Select(e => (e.GetProperty("Name").GetString()!,
+                    e.TryGetProperty("Source", out var s) ? s.GetString() ?? "" : "",
+                    e.TryGetProperty("ArmorClassBonus", out var a) ? a.GetInt32() : 0))
+                .ToList();
+
+        var adnd = Load("Armor.json").Concat(Load("Shields.json")).ToList();
+        var wiz = Load("Wizardry.json");
+        Assert.DoesNotContain(adnd, i => i.Source == "WizardryAndAdnd");
+
+        foreach (var (name, ac) in new[] { ("Leather Armor", 2), ("Chain Mail", 3), ("Plate Mail", 5), ("Small Shield", 2), ("Large Shield", 3),
+                     ("Shield -1", -1), ("Shield +1", 4), ("Shield +2", 5), ("Shield +3", 6), ("Evil Shield +3", 5) })
+            Assert.Contains(wiz, i => i.Name == name && i.Ac == ac && i.Source == "Wizardry");
+    }
+
+    [Fact]
+    public void Identify_chances_follow_bishop_level()
+    {
+        Assert.Equal(15, WizardryIdentification.IdentifyChancePercent(1));
+        Assert.Equal(60, WizardryIdentification.IdentifyChancePercent(10));
+        Assert.Equal(100, WizardryIdentification.IdentifyChancePercent(18));
+        Assert.Equal(32, WizardryIdentification.CursedEquipChancePercent(1));
+        Assert.Equal(5, WizardryIdentification.CursedEquipChancePercent(10));
+        Assert.Equal(0, WizardryIdentification.CursedEquipChancePercent(12));
+    }
+
+    [Fact]
+    public void Found_items_are_unidentified_and_bishop_can_identify_them()
+    {
+        var sword = new Adnd.Core.Items.Item { Name = "Long Sword +1", Type = Adnd.Core.Items.ItemType.Weapon, Cost = 10000 };
+        WizardryIdentification.MakeUnidentified(sword);
+        Assert.False(sword.IsIdentified);
+        Assert.Equal("?Sword", sword.DisplayName);
+        Assert.Equal(5000, WizardryIdentification.ShopIdentifyCost(sword));
+
+        var bishop = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Bishop, Level = 18 };
+        bishop.Inventory.Add(sword);
+        Assert.Equal(IdentifyOutcome.Identified, WizardryIdentification.TryBishopIdentify(bishop, sword, new Random(1)));
+        Assert.Equal("Long Sword +1", sword.DisplayName);
+
+        var mage = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Mage };
+        Assert.Equal(IdentifyOutcome.NotBishop, WizardryIdentification.TryBishopIdentify(mage, sword, new Random(1)));
+    }
+
+    [Fact]
+    public void Level_one_bishop_may_fail_to_identify()
+    {
+        var bishop = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Bishop, Level = 1 };
+        var outcomes = Enumerable.Range(0, 200).Select(seed =>
+        {
+            var item = new Adnd.Core.Items.Item { Name = "Dagger", Type = Adnd.Core.Items.ItemType.Weapon };
+            WizardryIdentification.MakeUnidentified(item);
+            return WizardryIdentification.TryBishopIdentify(bishop, item, new Random(seed));
+        }).ToList();
+        Assert.Contains(IdentifyOutcome.Failed, outcomes);
+        Assert.Contains(IdentifyOutcome.Identified, outcomes);
+    }
+
+    [Theory]
+    [InlineData(WizardryClass.Fighter, 1, null, 1)]
+    [InlineData(WizardryClass.Fighter, 4, null, 2)]
+    [InlineData(WizardryClass.Ninja, 12, null, 4)]
+    [InlineData(WizardryClass.Mage, 20, null, 1)]
+    [InlineData(WizardryClass.Mage, 3, "Dagger of Speed", 7)]
+    [InlineData(WizardryClass.Fighter, 20, "Long Sword +1", 6)]
+    [InlineData(WizardryClass.Fighter, 4, "Blade Cusinart", 4)]
+    public void Attacks_are_class_progression_with_weapon_swing_minimum(WizardryClass cls, int level, string weapon, int expected)
+    {
+        Assert.Equal(expected, WizardryAttacks.AttacksPerRound(cls, level, weapon));
+    }
 }

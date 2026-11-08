@@ -54,6 +54,10 @@ Long Range	upp till 30 fot	    –5 to hit*/
     public int MagicBonus { get; set; } = 0; // e.g. +1, +2, +3
     public List<string> SpecialAbilities { get; set; } = new(); // e.g. ["Flaming", "Frost", "Returning"]>
     public bool IsCursed { get; set; } = false;
+    public bool IsIdentified { get; set; } = true; // Wizardry: found items start unidentified
+    public string UnknownName { get; set; } = "";
+    [System.Text.Json.Serialization.JsonIgnore]
+    public string DisplayName => IsIdentified || string.IsNullOrEmpty(UnknownName) ? Name : "?" + UnknownName;
     public List<CharacterClass> AllowedClasses { get; set; } = new();
     public bool ScrollContentsKnown { get; set; } = false;
     public int ScrollUnreadFadeChancePercent { get; set; } = 0;

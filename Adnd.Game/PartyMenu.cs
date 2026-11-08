@@ -3,6 +3,7 @@ using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
 using Adnd.Core.Items;
+using Adnd.Core.Wizardry;
 using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
@@ -257,7 +258,7 @@ public class PartyMenu
                 if (kv.Value == null)
                     Console.WriteLine($" - {kv.Key}: (empty)");
                 else
-                    Console.WriteLine($" - {kv.Key}: {kv.Value.Name}");
+                    Console.WriteLine($" - {kv.Key}: {kv.Value.DisplayName}");
             }
 
             Console.WriteLine("\n=== INVENTORY ===");
@@ -265,7 +266,7 @@ public class PartyMenu
                 Console.WriteLine(" (empty)");
             else
                 for (int i = 0; i < c.Inventory.Count; i++)
-                    Console.WriteLine($"{i + 1}. {c.Inventory[i].Name}");
+                    Console.WriteLine($"{i + 1}. {c.Inventory[i].DisplayName}");
 
             Console.WriteLine("\n=== SPELLCASTING ===");
             if (c.Spellcasting == null || c.Spellcasting.Count == 0)
@@ -1153,7 +1154,44 @@ public class PartyMenu
 
     private void IdentifyAction(Character c)
     {
-        Console.WriteLine("\n[Identify action not yet implemented]");
+        if (c.Ruleset != Ruleset.Wizardry)
+        {
+            Console.WriteLine("\n[Identify action not yet implemented]");
+            Console.ReadKey(true);
+            return;
+        }
+
+        if (!WizardryIdentification.IsBishop(c))
+        {
+            Console.WriteLine("\nOnly a Bishop can identify items. A shop will do it for half the item's value.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var unknown = c.Inventory.Where(i => !i.IsIdentified).ToList();
+        if (unknown.Count == 0)
+        {
+            Console.WriteLine("\nNo unidentified items in the inventory.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.WriteLine($"\nIdentify which item? ({WizardryIdentification.IdentifyChancePercent(c.Level)}% chance)");
+        for (int i = 0; i < unknown.Count; i++)
+            Console.WriteLine($"{i + 1}. {unknown[i].DisplayName}");
+        Console.Write("Choose # (Enter to cancel): ");
+        if (!int.TryParse((Console.ReadLine() ?? string.Empty).Trim(), out var idx) || idx < 1 || idx > unknown.Count)
+            return;
+
+        var item = unknown[idx - 1];
+        var outcome = WizardryIdentification.TryBishopIdentify(c, item, Random.Shared);
+        _repo.Save(c);
+        Console.WriteLine(outcome switch
+        {
+            IdentifyOutcome.Identified => $"\n{c.Name} identifies the item: {item.Name}.",
+            IdentifyOutcome.EquippedCursed => $"\nOops! {c.Name} equips {item.Name}, and it is cursed!",
+            _ => $"\n{c.Name} cannot identify the {item.DisplayName}."
+        });
         Console.ReadKey(true);
     }
 

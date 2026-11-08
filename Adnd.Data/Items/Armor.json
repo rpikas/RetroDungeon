@@ -48,7 +48,7 @@
         "Monk"
       ],
       "IsShopBuyable": true,
-      "Source": "WizardryAndAdnd",
+      "Source": "Adnd",
       "StockQuantity": -1
     },
     {
@@ -125,7 +125,7 @@
         "Cleric"
       ],
       "IsShopBuyable": true,
-      "Source": "WizardryAndAdnd",
+      "Source": "Adnd",
       "StockQuantity": -1
     },
     {
@@ -179,7 +179,7 @@
         "Cleric"
       ],
       "IsShopBuyable": true,
-      "Source": "WizardryAndAdnd",
+      "Source": "Adnd",
       "StockQuantity": -1
     },
     {

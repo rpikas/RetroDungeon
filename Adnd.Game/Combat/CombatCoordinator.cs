@@ -15,6 +15,7 @@ using Adnd.Core.Spells;
 using Adnd.Core.Spells.Casting;
 using Adnd.Core.Spells.Casting.Handlers;
 using Adnd.Core.Treasure;
+using Adnd.Core.Wizardry;
 using Adnd.Data.Characters;
 using Adnd.Data.Encounters.Factories;
 using Adnd.Data.Items;
@@ -1552,6 +1553,7 @@ public sealed class CombatCoordinator
                 }
 
                 var wizardryClone = CloneItem(wizardryItem);
+                WizardryIdentification.MakeUnidentified(wizardryClone);
                 if (!TryAssignItemToSurvivors(survivors, wizardryClone, result, ref nextReceiverIndex))
                     result.UnassignedItems.Add(wizardryClone.Name + " (no one can carry)");
                 continue;
@@ -2902,6 +2904,8 @@ public sealed class CombatCoordinator
         {
             Name = source.Name,
             IsCursed = source.IsCursed,
+            IsIdentified = source.IsIdentified,
+            UnknownName = source.UnknownName,
             Type = source.Type,
             Slot = source.Slot,
             Cost = source.Cost,
@@ -2972,7 +2976,7 @@ public sealed class CombatCoordinator
         if (PotionOfHumanControl.IsPotionOfHumanControl(item))
             return $"{item.Name} [{PotionOfHumanControl.GetDisplayDescriptor(item)}]";
 
-        return item.Name;
+        return item.DisplayName;
     }
 
     private sealed class MagicAwardResult

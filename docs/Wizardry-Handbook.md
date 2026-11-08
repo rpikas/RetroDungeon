@@ -114,6 +114,18 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 - Monsters cast damage, healing, Katino and Badi (save vs spell avoids sleep and death).
 - Other spells (armor class buffs, light, detection, resurrection, teleport, divine intervention, cures) can be learned but report "not implemented" when cast.
 
+## 5b. Attacks per round
+
+- Fighter, Samurai, Lord and Ninja get 1 attack plus 1 more every 4 levels. Priest, Bishop, Mage and Thief stay at 1.
+- Many weapons have a swing count (Sword +1 = 2, Sword +2 = 3, Blade Cusinart = 4, Dagger of Speed = 7). It is a minimum: attacks = the higher of the class attacks and the weapon swings, never the sum.
+
+## 5c. Unidentified items
+
+- Items found in the Proving Grounds start unidentified and show a generic name (Sword, Staff, Armour, Shield, Helm, Potion...) marked with "?". Swings and other stats still apply.
+- A Bishop can identify an item from the Identify action. Chance = Bishop level x 5% + 10% (max 100%). A failure leaves the item unidentified and the Bishop may try again.
+- Each attempt first risks a cursed item being equipped by accident: 35% - 3% per level (0% from level 12). It only matters if the item is cursed; the Bishop then wears it.
+- The shop identifies any item for half its value (A)ppraise Items).
+
 ## 6. Not implemented yet
 
 Level-up, learning spells by chance on level-up, spell points per circle, hit and damage calculation, armor class, initiative, aging, statuses and temple costs.

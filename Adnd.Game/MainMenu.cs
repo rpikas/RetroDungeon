@@ -139,7 +139,7 @@ public class MainMenu
                     }
 
                     Enter("Shop");
-                    ShowWithPicture(PictureFor("WizardryBoltax.png"), () => _shopMenu.Show(0, 10, true));
+                    ShowWithPicture(PictureFor("WizardryBoltax.png", "AdndShop.png"), () => _shopMenu.Show(0, 26, true));
                     break;
 
                 case ConsoleKey.M when GameRulesProvider.Current.MazeAvailable:
@@ -334,8 +334,8 @@ public class MainMenu
                 // have stopped a table-driven entry dead before the counter was ever published. The table asks
                 // it better anyway: every other member wears a ring at the counter, so handing the purse over is
                 // a click on the person taking it.
-                Console.CityPicture = PictureFor("WizardryBoltax.png");
-                try { _shopMenu.Show(0, 10, selectShopper: false); } finally { Console.CityPicture = null; }
+                Console.CityPicture = PictureFor("WizardryBoltax.png", "AdndShop.png");
+                try { _shopMenu.Show(0, 26, selectShopper: false); } finally { Console.CityPicture = null; }
                 break;
 
             case "EdgeOfTown":

@@ -125,7 +125,7 @@ public sealed partial class MazeForm
         else if (TermConsole.CityPicture is { } pictureFile && CityImage(pictureFile) is { } town)
         {
             // Shop and temple pictures are drawn a bit smaller than the town picture.
-            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" ? 0.48f : 0.6f;
+            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" or "AdndShop.png" ? 0.48f : 0.6f;
             var side = Math.Min(area.Height, (int)(area.Width * share));
             var scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
             var picture = new Rectangle(area.X, area.Y, (int)(town.Width * scale), (int)(town.Height * scale));

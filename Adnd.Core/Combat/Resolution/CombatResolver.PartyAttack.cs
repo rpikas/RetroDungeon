@@ -240,7 +240,7 @@ public sealed partial class CombatResolver
 
         int attacks = useRanged && rangedWeapon != null
             ? GetRangedAttacksPerRound(rangedWeapon.FireRate, session.RoundNumber)
-            : GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
+            : Adnd.Core.Wizardry.WizardryAttacks.AttacksFor(member) ?? GetAttacksThisRound(member.NumberOfAttacks, session.RoundNumber);
 
         if (session.RoundNumber == 1
             && session.PartySurprisedRound1

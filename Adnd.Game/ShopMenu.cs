@@ -5,6 +5,7 @@ using Adnd.Data.Party;
 using Adnd.Data.Characters;
 using Adnd.Core.Characters;
 using Adnd.Core.Items;
+using Adnd.Core.Wizardry;
 
 namespace Adnd.Game;
 
@@ -160,6 +161,8 @@ public class ShopMenu
             Console.WriteLine("S)ell Items");
             Console.WriteLine("E)quip Items");
             Console.WriteLine("U)nequip Items");
+            if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
+                Console.WriteLine("A)ppraise Items (identify for half value)");
             Console.WriteLine("P)ool Gold");
             Console.WriteLine("C)hoose a Different Shopper");
             if (startIndex + numberOfItems < items.Count) Console.WriteLine("N)ext items in shop");
@@ -194,6 +197,7 @@ public class ShopMenu
             else if (key == ConsoleKey.S) SellItems();
             else if (key == ConsoleKey.E) EquipItems(equip: true);
             else if (key == ConsoleKey.U) EquipItems(equip: false);
+            else if (key == ConsoleKey.A && Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry) IdentifyItems();
             else if (key == ConsoleKey.P) PoolGoldToCurrentShopper();
             else if (key == ConsoleKey.C) SelectShopper();
             else if (key == ConsoleKey.N)
@@ -220,6 +224,52 @@ public class ShopMenu
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
 
         }
+    }
+
+    private void IdentifyItems()
+    {
+        var party = _partyRepo.Load();
+        var shopper = GetCurrentShopper(party) ?? ResolvePartyCharacters(party).FirstOrDefault();
+        if (shopper == null)
+        {
+            Console.WriteLine("No party members.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var unknown = shopper.Equipment.Values.Where(i => i != null && !i.IsIdentified).Select(i => i!)
+            .Concat(shopper.Inventory.Where(i => !i.IsIdentified)).ToList();
+
+        Console.Clear();
+        Console.WriteLine($"=== APPRAISE ITEMS ===\nShopper: {shopper.Name} - Gold: {shopper.GoldPieces} gp\n");
+        if (unknown.Count == 0)
+        {
+            Console.WriteLine("No unidentified items.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        for (int i = 0; i < unknown.Count; i++)
+            Console.WriteLine($"{i + 1}. {unknown[i].DisplayName} (identify for {WizardryIdentification.ShopIdentifyCost(unknown[i])} gp)");
+
+        Console.Write("\nChoose # (Enter to leave): ");
+        if (!int.TryParse((Console.ReadLine() ?? string.Empty).Trim(), out var idx) || idx < 1 || idx > unknown.Count)
+            return;
+
+        var item = unknown[idx - 1];
+        var cost = WizardryIdentification.ShopIdentifyCost(item);
+        if (shopper.GoldPieces < cost)
+        {
+            Console.WriteLine($"{shopper.Name} cannot afford {cost} gp.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        shopper.GoldPieces -= cost;
+        item.IsIdentified = true;
+        _charRepo.Save(shopper);
+        Console.WriteLine($"\nIdentified: {item.Name} (paid {cost} gp).");
+        Console.ReadKey(true);
     }
 
     private void PoolGoldToCurrentShopper()
@@ -516,9 +566,9 @@ public class ShopMenu
             var priceSp = Shop.SellPriceInSilverPieces(e.item);
             var priceText = Shop.FormatCostFromSilverPieces(priceSp);
             if (e.equipped)
-                Console.WriteLine($"{i + 1}. [EQUIPPED:{e.slot}] {e.item.Name} (sell {priceText})");
+                Console.WriteLine($"{i + 1}. [EQUIPPED:{e.slot}] {e.item.DisplayName} (sell {priceText})");
             else
-                Console.WriteLine($"{i + 1}. {e.item.Name} (sell {priceText})");
+                Console.WriteLine($"{i + 1}. {e.item.DisplayName} (sell {priceText})");
         }
 
         Console.WriteLine("A) Sell all unequipped items");

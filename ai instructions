@@ -8299,4 +8299,125 @@ when wizardry rules apply please hide Feet, Belt, Back and Ring2
 
 in the shop make it possible to filter for N)o filter, A)rmor and shileds, W)eapons, O)ther. Default is No filter
 
+19,9
+___
+In wizardry when finding item in the proving grounds, the items are at first unidentified. 
 
+Bishops can identify items, but the chance of success is based on their level.
+The chance of successfully identifying an item is based on the character's level in the Bishop class.
+
+Identify Chance = (Bishop Level × 5%) + 10%.
+
+Examples:
+
+Level 1 Bishop = 15%
+Level 5 Bishop = 35%
+Level 10 Bishop = 60%
+Level 15 Bishop = 85%
+Level 18 Bishop = 100% (effectively guaranteed)
+
+There's also a risk of accidentally equipping a cursed item while identifying:
+
+Curse/Equip Chance = 35% − (Level × 3%).
+
+Examples:
+
+Level 1 = 32%
+Level 5 = 20%
+Level 10 = 5%
+Level 12+ = 0% (effectively eliminated)
+
+It is possible to get an item identified in the shop, the cost is half the value of the item. 
+
+in wizardry different weapons have differnet number of attacks
+some weapons have an inherent minimum number of attacks (often called "swings") per combat round.
+
+Examples:
+
+Long Sword: 0 extra swings
+Sword +1: 2 swings
+Sword +2: 3 swings
+Blade Cusinart (Vorpal Blade): 4 swings
+Dagger of Speed: 7 swings
+
+The way it works is that a weapon's swing value acts as a minimum number of attack rolls for the wielder. 
+If the character would normally have fewer attacks, the weapon raises them to that minimum. If the character 
+already has more attacks from class and level, the weapon does not add even more beyond that minimum.
+
+Also, Fighters, Samurai, Lords, and Ninjas naturally gain additional attacks as they level up, while other 
+classes generally do not. A weapon with multiple swings is therefore especially valuable for classes like
+Mages, Priests, Bishops, and Thieves because it can give them multiple attack rolls they otherwise wouldn't get.
+
+A fun example is the Dagger of Speed: a Mage can equip it and attack up to 7 times per round, 
+making it one of the most powerful weapons in the original game
+n Wizardry I, the martial classes gain extra attacks as they level up. The basic rule is:
+
+Class	Extra attacks gained
+Fighter	+1 attack every 4 levels
+Samurai	+1 attack every 4 levels
+Lord	+1 attack every 4 levels
+Ninja	+1 attack every 4 levels
+Priest	Stays at 1 attack
+Bishop	Stays at 1 attack
+Mage	Stays at 1 attack
+Thief	Stays at 1 attack
+
+
+This table shows Name, Name Unknown,Price,Bolcac inventory,	Classes	that can use, HitMod, HitDam, SwingCount for wizardry items
+Name	Name Unknown	Price	Bolcac	Classes	HitMod	HitDam	SwingCount
+LONG SWORD	SWORD	25	Infinite	FSLN	4	1d8	0
+SHORT SWORD	SWORD	15	Infinite	FTSLN	3	1d6	0
+ANOINTED MACE	KNOBBED STICK	30	Infinite	FPBSLN	2	2d3	0
+ANOINTED FLAIL	STICK W/CHAIN	150	Infinite	FPSLN	3	1d7	0
+STAFF	STICK	10	Infinite	FMPTBSLN	0	1d5	0
+DAGGER	DAGGER	5	Infinite	FMTSLN	1	1d4	0
+LONG SWORD+1	SWORD	10000	0	FSLN	5	1d8 +1	2
+SHORT SWORD+1	SWORD	15000	2	FTSLN	4	1d6 +1	2
+MACE+1	KNOBBED STICK	12500	0	FPBSLN	3	2d4 +1	2
+STAFF OF MOGREF	STAFF	3000	1	MB	1	1d6	0
+LONG SWORD -1	SWORD	1000	0	FSLN	-1	1d8	0
+SHORT SWORD -1	SWORD	1000	2	FTSLN	-1	1d6	1
+MACE -1	KNOBBED STICK	1000	0	FPBSLN	-1	2d3	1
+STAFF +2	STICK	2500	Infinite	FMPTBSLN	2	1d4 +2	1
+DRAGON SLAYER	SWORD	10000	0	FSLN	1	1d10 +1	1
+LONG SWORD + 2	SWORD	4000	0	FSLN	6	1d10 +2	3
+SHORT SWORD +2	SWORD	4000	0	FTSLN	5	1d6 +2	3
+MACE + 2	KNOBBED STICK	4000	0	FPBSLN	4	1d8 +2	2
+WERE SLAYER	SWORD	10000	0	FSLN	5	1d10 +1	2
+MAGE MASHER	SWORD	10000	0	FTSLN	5	1d6 +1	2
+MACE PRO POISON	KNOBBED STICK	10000	0	FPBSLN	3	1d8	2
+STAFF/MONTINO	STAFF	15000	0	FMPTBSLN	1	1d5 +1	1
+BLADE CUSINART'	SWORD	15000	0	FSLN	6	1d3 +9	4
+SHORT SWORD -2	SWORD	8000	0	FTSLN	1	1d6	1
+DAGGER + 2	DAGGER	8000	0	FMTSLN	3	1d4 +2	2
+MACE -2	KNOBBED STICK	8000	0	FPBSLN	0	1d8	0
+STAFF -2	STICK	8000	0	FMPTBSLN	-2	1d4	1
+DAGGER OF SPEED	DAGGER	30000	0	MN	-1	1d4	7
+EVIL SWORD + 3	SWORD	50000	0	FSLN	7	1d10 +3	4
+EVIL SSWORD + 3	SWORD	50000	0	FTSLN	6	1d6	4
+THIEVES DAGGER	DAGGER	50000	0	TN	5	1d6	4
+MURASAMA BLADE	WEAPON	1000000	0	S	8	10d5	3
+SHURIKEN	WEAPON	50000	0	N	7	1d5 +10	3
+
+LetterClass
+FFighter
+MMage
+PPriest
+TThief
+BBishop
+SSamurai
+LLord
+NNinja
+
+can you look into WizardryItems.json at Adnd.Game\Assets\Rules to update the AC bonus for some armor?
+
+for example chain mail ac 3 is correct for wizardry but not adnd. add wizardry specific copies of the shared item, 
+and make all the shared items adnd only
+
+when showing item in the shop adjust the order show the non magical item before the magical, for example +1 then
+when showing armor, show the ones with the same slot beside each other and order them depending on ac
+
+when playing adnd and settings is to show pictures then show this picture in the shop: AdndShop.png
+
+show more items in the shop, show A-Z
+22,0
