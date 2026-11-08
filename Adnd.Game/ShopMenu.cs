@@ -148,8 +148,9 @@ public class ShopMenu
                 ? "Items available for purchase:\n"
                 : $"Items available for purchase (filter: {filter.Label()}):\n");
 
-            // With a picture the options sit under it and the item rows get the whole text area.
-            var sideMenu = TermConsole.CityPicture != null;
+            // The options go in a left column (under the picture when there is one) and the item rows get the text area.
+            var sideMenu = TermConsole.Host != null;
+            var withPicture = TermConsole.CityPicture != null;
             if (sideMenu && TermConsole.VisibleRows > 0)
                 numberOfItems = Math.Clamp(TermConsole.VisibleRows - 8, 5, 26);
 
@@ -157,12 +158,12 @@ public class ShopMenu
           //      for (int i = 0; (i < items.Count && i < numberOfItems); i++)
                 {
                     var it = items[i];
-                    var notEquipableTag = shopper != null && !IsEquipableBy(shopper, it) ? " - (Not Equipable)" : string.Empty;
+                    var notEquipableTag = shopper != null && !Shop.IsUsableBy(shopper, it) ? " - (Not Usable)" : string.Empty;
                     var stockText = GetStockDisplay(it);
                     var label = GetShopLabel(i - startIndex);
                     var statText = Shop.FormatBoltacItemStat(it);
                     var statSegment = string.IsNullOrWhiteSpace(statText) ? string.Empty : $" - {statText}";
-                    var stockSegment = sideMenu ? string.Empty : $" - Stock: {stockText}";
+                    var stockSegment = withPicture ? string.Empty : $" - Stock: {stockText}";
                     Console.WriteLine($"{label}. {it.Name}{notEquipableTag}{statSegment} - Cost: {Shop.FormatCost(it)}{stockSegment}");
             }
 
@@ -361,7 +362,7 @@ public class ShopMenu
 
         {
             var it = items[i];
-            var notEquipableTag = !IsEquipableBy(buyer, it) ? " (Not Equipable)" : string.Empty;
+            var notEquipableTag = !Shop.IsUsableBy(buyer, it) ? " (Not Usable)" : string.Empty;
             var stockText = GetStockDisplay(it);
             var label = GetShopLabel(i - startIndex);
             Console.WriteLine($"{label}. {it.Name}{notEquipableTag} ({it.Cost} gp) - Stock: {stockText}");

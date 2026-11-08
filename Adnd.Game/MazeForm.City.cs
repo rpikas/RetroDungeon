@@ -98,6 +98,8 @@ public sealed partial class MazeForm
         return image;
     }
 
+    private float? _pictureScreenFont;
+
     private void DrawCity(Graphics graphics)
     {
         var color = GameRulesProvider.Current.DefaultColor;
@@ -105,6 +107,7 @@ public sealed partial class MazeForm
         graphics.DrawString("Castle", HudFont, brush, new PointF(16f, 6f));
 
         var area = new Rectangle(12, 36, ClientSize.Width - 24, ClientSize.Height - 36 - 12);
+        _pictureScreenFont = null;
         var text = area;
         var columns = TermConsole.Columns;
 
@@ -122,30 +125,59 @@ public sealed partial class MazeForm
             text = new Rectangle(left, area.Y, area.Right - left, area.Height);
             columns = 48;
         }
+        else if (TermConsole.SideLines is { Length: > 0 } menuLines
+                 && (TermConsole.CityPicture is not { } shownFile || CityImage(shownFile) is null))
+        {
+            // No picture: the options still go in the left column, so the shop reads the same either way.
+            var share = 0.48f;
+            var fontPx = Math.Clamp((area.Width * (1 - share) - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            _pictureScreenFont = fontPx;
+            var lh = (float)Math.Ceiling(fontPx * 1.25f);
+            var left = (int)(area.Width * share);
+            using (var menuFont = new Font("Consolas", fontPx, FontStyle.Bold, GraphicsUnit.Pixel))
+            {
+                for (var i = 0; i < menuLines.Length; i++)
+                    graphics.DrawString(menuLines[i], menuFont, brush, area.X, area.Y + (i * lh), StringFormat.GenericTypographic);
+            }
+
+            text = new Rectangle(area.X + left + EncounterForm.FrameMargin, area.Y, area.Width - left - EncounterForm.FrameMargin, area.Height);
+            columns = 48;
+        }
+        else if (TermConsole.CityPicture == "AdndTown.png" && CityImage("AdndTown.png") is { } adndTown)
+        {
+            // AD&D's wide town picture goes under the options instead of beside them.
+            var fontPx = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            _pictureScreenFont = fontPx;
+            var rowsNeeded = TermConsole.Snapshot().Count + 1;
+            var textHeight = Math.Min(area.Height / 2, (int)(rowsNeeded * Math.Ceiling(fontPx * 1.25f)) + (2 * (OldStyleFrame.Thickness + 4)) + 4);
+            text = new Rectangle(area.X, area.Y, area.Width, textHeight);
+
+            var top = text.Bottom + EncounterForm.FrameMargin;
+            var available = area.Bottom - top;
+            if (available > 40)
+            {
+                var fit = Math.Min(area.Width / (float)adndTown.Width, available / (float)adndTown.Height);
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(adndTown, new Rectangle(area.X, top, (int)(adndTown.Width * fit), (int)(adndTown.Height * fit)));
+            }
+
+            columns = 48;
+        }
         else if (TermConsole.CityPicture is { } pictureFile && CityImage(pictureFile) is { } town)
         {
             // Shop and temple pictures are drawn a bit smaller than the town picture.
-            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" or "AdndShop.png" ? 0.48f : 0.6f;
+            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" or "AdndShop.png" or "WizardryTown.png" or "AdndTown.png" ? 0.48f : 0.6f;
             var side = Math.Min(area.Height, (int)(area.Width * share));
             var sideLines = TermConsole.SideLines;
-            var sideFontPixels = 16f;
-            var sideLineHeight = 0f;
-            var scale = 1f;
-            // The options use the same font as the item list; that font depends on the text width, which
-            // depends on the picture size, which depends on the room the options need, so settle it by iterating.
-            for (var pass = 0; pass < 4; pass++)
-            {
-                scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
-                var textWidth = area.Width - (int)(town.Width * scale) - EncounterForm.FrameMargin;
-                var inner = textWidth - (2 * OldStyleFrame.Thickness + 16);
-                sideFontPixels = Math.Clamp(inner / (48 * 0.55f), 10f, 20f);
-                sideLineHeight = (float)Math.Ceiling(sideFontPixels * 1.25f);
-                if (sideLines is not { Length: > 0 }) break;
-                side = Math.Max(120, Math.Min(Math.Min(area.Height, (int)(area.Width * share)),
-                    area.Height - (int)(sideLines.Length * sideLineHeight) - EncounterForm.FrameMargin));
-            }
+            // One font for every picture screen, sized from the text area the picture's share leaves, so the
+            // town menu, shop and temple read alike whatever the picture ends up measuring.
+            var sideFontPixels = Math.Clamp((area.Width * (1 - share) - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            _pictureScreenFont = sideFontPixels;
+            var sideLineHeight = (float)Math.Ceiling(sideFontPixels * 1.25f);
+            if (sideLines is { Length: > 0 })
+                side = Math.Max(120, Math.Min(side, area.Height - (int)(sideLines.Length * sideLineHeight) - EncounterForm.FrameMargin));
 
-            scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
+            var scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
             var picture = new Rectangle(area.X, area.Y, (int)(town.Width * scale), (int)(town.Height * scale));
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphics.DrawImage(town, picture);
@@ -162,6 +194,9 @@ public sealed partial class MazeForm
             columns = 48;
         }
 
+        if (_pictureScreenFont == null && columns == TermConsole.Columns)
+            _pictureScreenFont = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+
         OldStyleFrame.Draw(graphics, text, color);
         DrawTerminal(graphics, brush, text, columns);
     }
@@ -173,7 +208,7 @@ public sealed partial class MazeForm
             return;
 
         // Consolas is 0.55 em wide: size the font so a full line of columns fits across the area.
-        var fontPixels = Math.Clamp(inner.Width / (columns * 0.55f), 10f, 20f);
+        var fontPixels = _pictureScreenFont ?? Math.Clamp(inner.Width / (columns * 0.55f), 10f, 20f);
         using var font = new Font("Consolas", fontPixels, FontStyle.Bold, GraphicsUnit.Pixel);
         var lineHeight = (float)Math.Ceiling(fontPixels * 1.25f);
         var rows = Math.Max(1, (int)(inner.Height / lineHeight));

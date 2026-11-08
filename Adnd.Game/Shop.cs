@@ -165,6 +165,15 @@ public static class Shop
     public static string StockDisplay(Item item) =>
         IsUnlimitedStock(item) ? "-" : item.StockQuantity!.Value.ToString();
 
+    /// <summary>Whether the shopper's class may use the item at all; items with no class list (potions, scrolls...) are open to everyone.</summary>
+    public static bool IsUsableBy(Character character, Item item)
+    {
+        if (item.AllowedClasses == null || item.AllowedClasses.Count == 0)
+            return true;
+
+        return character.Classes != null && character.Classes.Any(cls => item.AllowedClasses.Contains(cls));
+    }
+
     /// <summary>
     /// Whether this character could actually wear or wield it. A hint rather than a rule: anyone may BUY
     /// anything, which is how you outfit the fighter with the mage's gold.

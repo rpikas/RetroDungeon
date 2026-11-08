@@ -81,7 +81,7 @@ public class MainMenu
             if (GameRulesProvider.Current.ProvingGroundsAvailable) Console.WriteLine("P)roving Grounds");
             Console.WriteLine("S)ettings");
             Console.WriteLine("Q)uit");
-            Console.CityPicture = PictureFor("WizardryTown.png");
+            Console.CityPicture = PictureFor("WizardryTown.png", "AdndTown.png");
 
             var (key, command) = await AwaitChoiceAsync();
             Console.CityPicture = null;

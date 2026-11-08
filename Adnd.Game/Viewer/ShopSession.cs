@@ -94,7 +94,7 @@ public sealed class ShopSession
         {
             var note = Shop.CostInSilverPieces(it) > (shopper.CopperPieces / 10 + shopper.SilverPieces + shopper.ElectrumPieces * 5 + shopper.GoldPieces * 10 + shopper.PlatinumPieces * 50) ? "too dear"
                      : !shopper.CanCarry(Shop.CopyOf(it)) ? "too heavy"
-                     : !Shop.IsEquipableBy(shopper, it) ? "cannot use"
+                     : !Shop.IsUsableBy(shopper, it) ? "cannot use"
                      : "";
 
             var statText = Shop.FormatBoltacItemStat(it);
