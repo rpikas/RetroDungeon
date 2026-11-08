@@ -80,7 +80,7 @@ public class MainMenu
             if (GameRulesProvider.Current.MazeAvailable) Console.WriteLine("M)aze");
             if (GameRulesProvider.Current.ProvingGroundsAvailable) Console.WriteLine("P)roving Grounds");
             Console.WriteLine("S)ettings");
-            Console.WriteLine("L<-eave");
+            Console.WriteLine("Q)uit");
             Console.CityPicture = PictureFor("WizardryTown.png");
 
             var (key, command) = await AwaitChoiceAsync();
@@ -166,11 +166,9 @@ public class MainMenu
                     _settingsMenu.Show();
                     break;
 
-                case ConsoleKey.L:
+                case ConsoleKey.Q:
                     return;
                 case ConsoleKey.Escape:
-                    return;
-                case ConsoleKey.Enter:
                     return;
             }
         }

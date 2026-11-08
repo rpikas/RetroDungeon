@@ -27,6 +27,12 @@ internal static class TermConsole
 
     public static int Scrolled { get; set; }
 
+    /// <summary>Text rows that fit in the terminal the last time it was drawn (0 until the first draw).</summary>
+    public static int VisibleRows { get; set; }
+
+    /// <summary>Lines drawn under the city picture (the shop's menu); cleared when the picture is removed.</summary>
+    public static string[]? SideLines { get; set; }
+
     /// <summary>File name in Assets\ScenPictures shown beside the text, or null for no picture.</summary>
     public static string? CityPicture
     {
@@ -34,6 +40,7 @@ internal static class TermConsole
         set
         {
             _cityPicture = value;
+            if (value == null) SideLines = null;
             if (_host is { IsDisposed: false, IsHandleCreated: true } host)
             {
                 host.Invalidate();
@@ -189,6 +196,7 @@ internal static class TermConsole
         Lines.Clear();
         Current.Clear();
         Scrolled = 0;
+        SideLines = null;
         _host?.Invalidate();
     }
 

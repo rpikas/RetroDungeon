@@ -127,10 +127,36 @@ public sealed partial class MazeForm
             // Shop and temple pictures are drawn a bit smaller than the town picture.
             var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" or "AdndShop.png" ? 0.48f : 0.6f;
             var side = Math.Min(area.Height, (int)(area.Width * share));
-            var scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
+            var sideLines = TermConsole.SideLines;
+            var sideFontPixels = 16f;
+            var sideLineHeight = 0f;
+            var scale = 1f;
+            // The options use the same font as the item list; that font depends on the text width, which
+            // depends on the picture size, which depends on the room the options need, so settle it by iterating.
+            for (var pass = 0; pass < 4; pass++)
+            {
+                scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
+                var textWidth = area.Width - (int)(town.Width * scale) - EncounterForm.FrameMargin;
+                var inner = textWidth - (2 * OldStyleFrame.Thickness + 16);
+                sideFontPixels = Math.Clamp(inner / (48 * 0.55f), 10f, 20f);
+                sideLineHeight = (float)Math.Ceiling(sideFontPixels * 1.25f);
+                if (sideLines is not { Length: > 0 }) break;
+                side = Math.Max(120, Math.Min(Math.Min(area.Height, (int)(area.Width * share)),
+                    area.Height - (int)(sideLines.Length * sideLineHeight) - EncounterForm.FrameMargin));
+            }
+
+            scale = Math.Min(side / (float)town.Width, side / (float)town.Height);
             var picture = new Rectangle(area.X, area.Y, (int)(town.Width * scale), (int)(town.Height * scale));
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphics.DrawImage(town, picture);
+
+            if (sideLines is { Length: > 0 })
+            {
+                using var sideFont = new Font("Consolas", sideFontPixels, FontStyle.Bold, GraphicsUnit.Pixel);
+                var top = picture.Bottom + EncounterForm.FrameMargin;
+                for (var i = 0; i < sideLines.Length; i++)
+                    graphics.DrawString(sideLines[i], sideFont, brush, area.X, top + (i * sideLineHeight), StringFormat.GenericTypographic);
+            }
 
             text = new Rectangle(picture.Right + EncounterForm.FrameMargin, area.Y, area.Right - picture.Right - EncounterForm.FrameMargin, area.Height);
             columns = 48;
@@ -151,6 +177,7 @@ public sealed partial class MazeForm
         using var font = new Font("Consolas", fontPixels, FontStyle.Bold, GraphicsUnit.Pixel);
         var lineHeight = (float)Math.Ceiling(fontPixels * 1.25f);
         var rows = Math.Max(1, (int)(inner.Height / lineHeight));
+        TermConsole.VisibleRows = rows;
 
         var lines = TermConsole.Snapshot();
         var maxScroll = Math.Max(0, lines.Count - rows);

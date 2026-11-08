@@ -133,6 +133,9 @@ public class ShopMenu
             // second, lower-case range to label the overflow, which made 'a' and 'A' different
             // items on the same screen. Paging reaches the rest.
             if (numberOfItems > 26) numberOfItems = 26;
+            // Fit the page to the window: everything except the item rows takes about 22 lines.
+            if (TermConsole.VisibleRows > 0)
+                numberOfItems = Math.Clamp(TermConsole.VisibleRows - 22, 5, 26);
 
             if (shopper != null)
                 Console.WriteLine($"Shopper: {shopper.Name} - GP: {shopper.GoldPieces}\n");
@@ -145,6 +148,11 @@ public class ShopMenu
                 ? "Items available for purchase:\n"
                 : $"Items available for purchase (filter: {filter.Label()}):\n");
 
+            // With a picture the options sit under it and the item rows get the whole text area.
+            var sideMenu = TermConsole.CityPicture != null;
+            if (sideMenu && TermConsole.VisibleRows > 0)
+                numberOfItems = Math.Clamp(TermConsole.VisibleRows - 8, 5, 26);
+
             for (int i = startIndex; ((i < items.Count) && (i < startIndex + numberOfItems)); i++)
           //      for (int i = 0; (i < items.Count && i < numberOfItems); i++)
                 {
@@ -154,25 +162,30 @@ public class ShopMenu
                     var label = GetShopLabel(i - startIndex);
                     var statText = Shop.FormatBoltacItemStat(it);
                     var statSegment = string.IsNullOrWhiteSpace(statText) ? string.Empty : $" - {statText}";
-                    Console.WriteLine($"{label}. {it.Name}{notEquipableTag}{statSegment} - Cost: {Shop.FormatCost(it)} - Stock: {stockText}");
+                    var stockSegment = sideMenu ? string.Empty : $" - Stock: {stockText}";
+                    Console.WriteLine($"{label}. {it.Name}{notEquipableTag}{statSegment} - Cost: {Shop.FormatCost(it)}{stockSegment}");
             }
 
-            Console.WriteLine("\nB)uy Items");
-            Console.WriteLine("S)ell Items");
-            Console.WriteLine("E)quip Items");
-            Console.WriteLine("U)nequip Items");
+            var menu = new List<string> { "B)uy Items", "S)ell Items", "E)quip Items", "U)nequip Items" };
             if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
-                Console.WriteLine("A)ppraise Items (identify for half value)");
-            Console.WriteLine("P)ool Gold");
-            Console.WriteLine("C)hoose a Different Shopper");
-            if (startIndex + numberOfItems < items.Count) Console.WriteLine("N)ext items in shop");
-            if (startIndex > 0) Console.WriteLine("G)o to previous items in shop");
-            Console.WriteLine("I)nitial items in shop");
-            Console.WriteLine("F)ilter items in shop");
-            Console.WriteLine("L<-eave");
-
+                menu.Add("A)ppraise Items (identify for half value)");
+            menu.Add("P)ool Gold");
+            menu.Add("C)hoose a Different Shopper");
+            if (startIndex + numberOfItems < items.Count) menu.Add("N)ext items in shop");
+            if (startIndex > 0) menu.Add("G)o to previous items in shop");
+            menu.Add("I)nitial items in shop");
+            menu.Add("F)ilter items in shop");
+            menu.Add("L<-eave");
             if (_viewer.Enabled)
-                Console.WriteLine("(or trade from the table)");
+                menu.Add("(or trade from the table)");
+
+            if (sideMenu)
+                TermConsole.SideLines = menu.ToArray();
+            else
+            {
+                Console.WriteLine();
+                foreach (var line in menu) Console.WriteLine(line);
+            }
 
             PublishShop();
 
