@@ -33,13 +33,25 @@ public class TempleMenu
             Console.WriteLine($"Cure feeblemind                {Temple.CureFeeblemindCost} gp");
             Console.WriteLine($"Cure disease                   {Temple.CureDiseaseCost} gp");
             Console.WriteLine($"Restore from petrification     {Temple.RestorePetrificationCost} gp");
-            Console.WriteLine();
-            Console.WriteLine("H)eal Party");
-            Console.WriteLine("R)aise Dead");
-            Console.WriteLine("E) Restoration (lost level, feeblemind)");
-            Console.WriteLine("L<-eave");
+
+            var menu = new List<string>
+            {
+                "H)eal Party",
+                "R)aise Dead",
+                "E) Restoration (lost level, feeblemind)",
+                "L<-eave",
+            };
             if (_viewer.Enabled)
-                Console.WriteLine("(or click whoever needs tending on the table)");
+                menu.Add("(or click whoever needs tending on the table)");
+
+            // With a picture the options go under the fees, with the picture beside them.
+            if (TermConsole.Host != null && TermConsole.CityPicture != null)
+                TermConsole.SideLines = menu.ToArray();
+            else
+            {
+                Console.WriteLine();
+                foreach (var line in menu) Console.WriteLine(line);
+            }
 
             PublishTemple(session);
 

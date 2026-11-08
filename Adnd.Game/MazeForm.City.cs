@@ -143,6 +143,36 @@ public sealed partial class MazeForm
             text = new Rectangle(area.X + left + EncounterForm.FrameMargin, area.Y, area.Width - left - EncounterForm.FrameMargin, area.Height);
             columns = 48;
         }
+        else if (TermConsole.SideLines is { Length: > 0 } feeMenu
+                 && TermConsole.CityPicture is "WizardryTemple.png" or "AdndTemple.png"
+                 && CityImage(TermConsole.CityPicture!) is { } templeImage)
+        {
+            // Temple: the fees run across the top, the options sit under them on the left, the picture on the right.
+            var fontPx = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            _pictureScreenFont = fontPx;
+            var lh = (float)Math.Ceiling(fontPx * 1.25f);
+            var rowsNeeded = TermConsole.Snapshot().Count + 1;
+            text = new Rectangle(area.X, area.Y, area.Width, Math.Min(area.Height / 2, (int)(rowsNeeded * lh) + (2 * (OldStyleFrame.Thickness + 4)) + 4));
+            columns = 48;
+
+            var top = text.Bottom + EncounterForm.FrameMargin;
+            var menuWidth = (int)(feeMenu.Max(l => l.Length) * fontPx * 0.55f) + EncounterForm.FrameMargin;
+            using (var menuFont = new Font("Consolas", fontPx, FontStyle.Bold, GraphicsUnit.Pixel))
+            {
+                for (var i = 0; i < feeMenu.Length; i++)
+                    graphics.DrawString(feeMenu[i], menuFont, brush, area.X, top + (i * lh), StringFormat.GenericTypographic);
+            }
+
+            var availableWidth = area.Width - menuWidth;
+            var availableHeight = area.Bottom - top;
+            if (availableWidth > 40 && availableHeight > 40)
+            {
+                var fit = Math.Min(availableWidth / (float)templeImage.Width, availableHeight / (float)templeImage.Height);
+                var w = (int)(templeImage.Width * fit);
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(templeImage, new Rectangle(area.Right - w, top, w, (int)(templeImage.Height * fit)));
+            }
+        }
         else if (TermConsole.CityPicture == "AdndTown.png" && CityImage("AdndTown.png") is { } adndTown)
         {
             // AD&D's wide town picture goes under the options instead of beside them.
