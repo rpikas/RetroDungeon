@@ -39,7 +39,7 @@ public class CityMenu
                 {
                     var c = all[i];
                     var cls = c.GetClassesDisplayText("/");
-                    var alignment = c.Alignment.ToDisplayString();
+                    var alignment = c.AlignmentDisplayName;
                     var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                     var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
                     var levelDisplay = GetLevelDisplay(c);
@@ -139,7 +139,7 @@ public class CityMenu
         {
             var c = eligibleCharacters[i];
             var currentClass = c.Classes.Count > 0 ? c.Classes[0] : c.Class;
-            Console.WriteLine($"{i + 1}) {c.Name} - {c.RaceDisplayName} {c.Alignment.ToDisplayString()} {currentClass.ToDisplayString()} L{c.GetClassLevel(currentClass)}");
+            Console.WriteLine($"{i + 1}) {c.Name} - {c.RaceDisplayName} {c.AlignmentDisplayName} {currentClass.ToDisplayString()} L{c.GetClassLevel(currentClass)}");
         }
 
         Console.Write("Character #: ");
@@ -990,8 +990,10 @@ public class CityMenu
             var c = all[sel.Value - 1];
             Console.WriteLine(c);
             Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d ({c.GetAgeCategoryDisplay()})");
-            Console.WriteLine($"Languages: {c.GetKnownLanguagesDisplay()}");
-            RuleApplicationInfo.Publish($"Inspect character: {c.Name} languages known: {c.GetKnownLanguagesDisplay()}.");
+            if (c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+                Console.WriteLine($"Languages: {c.GetKnownLanguagesDisplay()}");
+            if (c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+                RuleApplicationInfo.Publish($"Inspect character: {c.Name} languages known: {c.GetKnownLanguagesDisplay()}.");
 
             if (c.HasStatus(CharacterStatus.Out))
             {

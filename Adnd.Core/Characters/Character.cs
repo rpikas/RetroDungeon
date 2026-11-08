@@ -24,6 +24,17 @@ public class Character
     // Halflings are called Hobbits in Wizardry.
     [System.Text.Json.Serialization.JsonIgnore]
     public string RaceDisplayName => Ruleset == Adnd.Core.Config.Ruleset.Wizardry && Race == Race.Halfling ? "Hobbit" : Race.ToDisplayString();
+
+    /// <summary>Wizardry knows only Good, Neutral and Evil; the AD&D nine are shown for everyone else.</summary>
+    public string AlignmentDisplayName => Ruleset == Adnd.Core.Config.Ruleset.Wizardry ? WizardryAlignmentWord(false) : Alignment.ToDisplayString();
+
+    public string AlignmentAbbreviation => Ruleset == Adnd.Core.Config.Ruleset.Wizardry ? WizardryAlignmentWord(true) : Alignment.ToAbbreviation();
+
+    private string WizardryAlignmentWord(bool abbreviated)
+    {
+        var word = IsGoodAlignment() ? "Good" : Alignment is Alignment.ChaoticEvil or Alignment.NeutralEvil or Alignment.LawfulEvil ? "Evil" : "Neutral";
+        return abbreviated ? word.Substring(0, 1) : word;
+    }
     // Set only for Wizardry characters. Their Classes entry holds the closest AD&D class so shared systems keep working.
     public Adnd.Core.Wizardry.WizardryClass? WizardryClass { get; set; }
     // Wizardry stats are stored in Abilities: Strength, Intelligence=I.Q., Wisdom=Piety, Dexterity=Agility, Constitution=Vitality, Charisma=Luck.
@@ -814,10 +825,17 @@ public class Character
         var dualInfo = IsDualClassed && DualClass.HasValue
             ? $" (dual: {DualClass.Value.ToDisplayString()}, from {DualClassOriginalClass?.ToDisplayString() ?? "?"} L{DualClassOriginalLevel}, {DualClassState})"
             : string.Empty;
-        var alignment = Alignment.ToDisplayString();
+        var alignment = AlignmentDisplayName;
         var statusInfo = Status != CharacterStatus.None ? $" [{GetStatusDisplay()}]" : string.Empty;
 
         var levelPart = Classes.Count > 1 ? string.Empty : $"Lvl {Level}, ";
+
+        if (Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+        {
+            // Wizardry has no movement rate or languages, and its own six attributes.
+            return $"{Name} - {RaceDisplayName} {alignment} {GetClassesDisplayText("/")} (Lvl {Level}, HP {CurrentHitPoints}/{MaxHitPoints}, XP {Experience}, GP {GoldPieces}, AC {ArmorClass}, Attacks {NumberOfAttacks}, Dmg {DamageDisplay}){statusInfo}\n" +
+                   $"STR {Abilities.Strength}, IQ {Abilities.Intelligence}, PIE {Abilities.Wisdom}, VIT {Abilities.Constitution}, AGI {Abilities.Dexterity}, LUCK {Abilities.Charisma}";
+        }
 
         return $"{Name} - {Race.ToDisplayString()} {alignment} {classes}{dualInfo} ({levelPart}HP {CurrentHitPoints}/{MaxHitPoints}, XP {Experience}, GP {GoldPieces}, SP {SilverPieces}, EP {ElectrumPieces}, CP {CopperPieces}, PP {PlatinumPieces}, AC {ArmorClass}, MV {Move}, THAC0 {Thac0Display}, Attacks {NumberOfAttacks}, Dmg {DamageDisplay}, Languages {GetKnownLanguagesDisplay()}){statusInfo}{classLevels}\n" +
                $"STR {GetStrengthDisplay()}, INT {Abilities.Intelligence}, WIS {Abilities.Wisdom}, DEX {Abilities.Dexterity}, CON {Abilities.Constitution}, CHA {Abilities.Charisma}";

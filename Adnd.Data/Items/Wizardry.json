@@ -80,7 +80,7 @@
       "Name": "Helmet",
       "Type": "Armor",
       "Slot": "Head",
-      "Cost": 50,
+      "Cost": 100,
       "Weight": 50,
       "IsShopBuyable": true,
       "ArmorClassBonus": 1,

@@ -206,7 +206,7 @@ public sealed partial class MazeForm
                 graphics.DrawImage(groundsImage, new Rectangle(area.Right - w, top, w, (int)(groundsImage.Height * fit)));
             }
         }
-        else if (TermConsole.CityPicture is "GilgameshTavern.png" or "AdventuresInn.png" or "WizardryAdventuresInn.png"
+        else if (TermConsole.CityPicture is "WizardryGilgameshTavern.png" or "AdndGilgameshTavern.png" or "AdndAdventuresInn.png" or "WizardryAdventuresInn.png"
                  && CityImage(TermConsole.CityPicture!) is { } bottomImage)
         {
             // Tavern and inn: the text uses the top of the window and the picture sits along the bottom.

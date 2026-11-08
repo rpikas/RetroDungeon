@@ -8459,3 +8459,14 @@ when in GilgameshTavern and AdventuresInn show the corresponding pictures at the
 
 when in Gilgamesh tavern and adding more charaters and more than 12 charaters exist, then do not show then picture
 when showing the list of charaters so more charaters can be shown
+23,5
+___
+I renamed AdventuresInn.png to AdndAdventuresInn.png and I renamed GilgameshTavern.png to AdndGilgameshTavern.png
+that should be used for adnd, use WizardryGilgameshTavern.png when visiting GilgameshTavern in wizardry. please
+update the code accodringly
+
+wizardry characters only have alignemnt Good, Neutral and Evil
+
+Helmet in wizardry, is id 14 in WizardryItmes.json and got a value of 100. That should be reflected in the shop.
+when inspecting a wizardry character do not show MV or languages. also shwo the wizardry stats, not the adnd stats.
+For wizardy chars only drop the SP, EP, CP, and PP fields, since Wizardry doesn't use them

@@ -572,7 +572,7 @@ public sealed partial class MazeForm
             var classes = c.Classes.Count > 0
                 ? c.GetClassesDisplayText("/")
                 : c.GetClassesDisplayText("/");
-            var alignment = c.Alignment.ToAbbreviation();
+            var alignment = c.AlignmentAbbreviation;
 
             result.Add($"{c.Name}  {alignment}  {classes}  L{GetLevelDisplay(c)}  HP {c.CurrentHitPoints}/{c.MaxHitPoints}  AC {c.ArmorClass}");
         }

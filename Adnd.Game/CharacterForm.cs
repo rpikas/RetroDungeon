@@ -126,7 +126,7 @@ namespace Adnd.Game.Windows
 
             var lines = new List<string>
             {
-                $"Alignment: {_character.Alignment.ToDisplayString()}",
+                $"Alignment: {_character.AlignmentDisplayName}",
                 $"Gender: {_character.Gender}",
                 string.Empty,
                 "Saving Throws:",
@@ -173,7 +173,8 @@ namespace Adnd.Game.Windows
             lines.Add(string.Empty);
             lines.Add($"Weapon equipped: {equippedWeaponDisplay}");
             lines.Add($"Weapon proficiencies: {weaponProficiencies}");
-            lines.Add($"Languages: {knownLanguages}");
+            if (_character.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+                lines.Add($"Languages: {knownLanguages}");
 
             if (_character.IsBard())
             {

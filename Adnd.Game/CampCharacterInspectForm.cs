@@ -759,7 +759,7 @@ public sealed class CampCharacterInspectForm : Form
     {
         var classText = c.GetClassesDisplayText("/").ToUpperInvariant();
         var raceText = c.RaceDisplayName.ToUpperInvariant();
-        var alignmentText = c.Alignment.ToAbbreviation();
+        var alignmentText = c.AlignmentAbbreviation;
         var statusText = c.Status == CharacterStatus.None ? "OK" : c.Status.ToString().ToUpperInvariant();
         var levelText = c.Classes.Count > 1
             ? string.Join("/", c.Classes.Select(c.GetClassLevel))
@@ -775,6 +775,7 @@ public sealed class CampCharacterInspectForm : Form
         sb.AppendLine($"{c.Name.ToUpperInvariant(),-8} L {levelText,-3} {classText,-14} {raceText} {alignmentText}");
         sb.AppendLine();
 
+        var wiz = c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry;
         var strDisplay = c.Abilities.Strength == 18 && c.ExceptionalStrengthPercentile.HasValue
             ? $"18/{c.ExceptionalStrengthPercentile?.ToString() ?? "00"}"
             : c.Abilities.Strength.ToString();
@@ -784,18 +785,18 @@ public sealed class CampCharacterInspectForm : Form
             "LEVEL",
             levelText));
         sb.AppendLine(RowWithRightColumn(
-            $"INTELLIGENCE {c.Abilities.Intelligence,2}",
+            $"{(wiz ? "IQ          " : "INTELLIGENCE")} {c.Abilities.Intelligence,2}",
             $"XP        {c.Experience,6}",
             "AGE",
             ageText));
-        sb.AppendLine($"WISDOM       {c.Abilities.Wisdom,2}");
+        sb.AppendLine($"{(wiz ? "PIETY       " : "WISDOM      ")} {c.Abilities.Wisdom,2}");
         sb.AppendLine(RowWithRightColumn(
-            $"DEXTERITY    {c.Abilities.Dexterity,2}",
+            $"{(wiz ? "AGILITY     " : "DEXTERITY   ")} {c.Abilities.Dexterity,2}",
             $"H.P.   {c.CurrentHitPoints,3}/{c.MaxHitPoints,-3}",
             "A.C.",
             c.ArmorClass.ToString()));
-        sb.AppendLine($"CONSTITUTION {c.Abilities.Constitution,2}");
-        sb.AppendLine($"CHARISMA     {c.Abilities.Charisma,2}    STATUS {statusText}");
+        sb.AppendLine($"{(wiz ? "VITALITY    " : "CONSTITUTION")} {c.Abilities.Constitution,2}");
+        sb.AppendLine($"{(wiz ? "LUCK        " : "CHARISMA    ")} {c.Abilities.Charisma,2}    STATUS {statusText}");
         sb.AppendLine($"CARRY WT     {c.CurrentCarryWeight,3}/{c.MaxCarryWeight,-3}");
         sb.AppendLine($"WEAP PROF    {c.GetWeaponProficienciesDisplay().ToUpperInvariant()}");
         var dualClassSummary = FormatDualClassSummary(c);

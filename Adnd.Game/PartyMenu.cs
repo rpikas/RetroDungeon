@@ -140,7 +140,7 @@ public class PartyMenu
                     var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                     var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
                     var levelDisplay = GetLevelDisplay(c);
-                    var align = c.Alignment.ToAbbreviation();
+                    var align = c.AlignmentAbbreviation;
 
                     Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {align,-5} {cls,-25} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
                 }
@@ -168,18 +168,27 @@ public class PartyMenu
                     var c = _repo.GetAll().FirstOrDefault(x => x.Name == name);
                     if (c != null)
                     {
-                        ShowCharacterDetail(c, party);
+                        WithoutPicture(() => ShowCharacterDetail(c, party));
                     }
                 }
             }
             else if (key == ConsoleKey.A) AddMember(roster, party);
             else if (key == ConsoleKey.R) RemoveMember(party);
-            else if (key == ConsoleKey.I) InspectMember(party);
+            else if (key == ConsoleKey.I) WithoutPicture(() => InspectMember(party));
             else if (key == ConsoleKey.C) ChangeOrderOfMembers(party);
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
     }
 
+
+    /// <summary>Runs a screen that needs the whole window with the tavern picture hidden, and brings the picture back after.</summary>
+    private static void WithoutPicture(Action screen)
+    {
+        var shownPicture = Console.CityPicture;
+        Console.CityPicture = null;
+        try { screen(); }
+        finally { Console.CityPicture = shownPicture; }
+    }
 
     private void InspectMember(Party party)
     {
@@ -205,7 +214,7 @@ public class PartyMenu
             var hpDisplay = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
             var statusInfo = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
             var levelDisplay = GetLevelDisplay(c);
-            var align = c.Alignment.ToAbbreviation();
+            var align = c.AlignmentAbbreviation;
 
             Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }
@@ -1285,7 +1294,7 @@ public class PartyMenu
             if (party.Members.Any(m => m == c.Name))
                 statusInfo = statusInfo == "-" ? "Already in party" : $"{statusInfo}, In party";
             var levelDisplay = GetLevelDisplay(c);
-            var align = c.Alignment.ToAbbreviation();
+            var align = c.AlignmentAbbreviation;
 
             Console.WriteLine($"{i + 1,-3} {c.Name,-15} {c.RaceDisplayName,-10} {align,-5} {cls,-18} {levelDisplay,-7} {hpDisplay,7} {c.ArmorClass,3} {statusInfo,-20}");
         }

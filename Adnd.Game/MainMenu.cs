@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -106,7 +106,7 @@ public class MainMenu
 
                 case ConsoleKey.G:
                     Enter("Tavern");
-                    ShowWithPicture(PictureFor("GilgameshTavern.png", "GilgameshTavern.png"), _partyMenu.Show);
+                    ShowWithPicture(PictureFor("WizardryGilgameshTavern.png", "AdndGilgameshTavern.png"), _partyMenu.Show);
                     break;
 
                 case ConsoleKey.C:
@@ -128,7 +128,7 @@ public class MainMenu
                     }
 
                     Enter("AdventuresInn");
-                    ShowWithPicture(PictureFor("WizardryAdventuresInn.png", "AdventuresInn.png"), _adventuresInnMenu.Show);
+                    ShowWithPicture(PictureFor("WizardryAdventuresInn.png", "AdndAdventuresInn.png"), _adventuresInnMenu.Show);
                     break;
 
                 case ConsoleKey.B:
@@ -307,13 +307,13 @@ public class MainMenu
 
             case "Tavern":
                 Enter("Tavern");
-                ShowWithPicture(PictureFor("GilgameshTavern.png", "GilgameshTavern.png"), _partyMenu.Show);
+                ShowWithPicture(PictureFor("WizardryGilgameshTavern.png", "AdndGilgameshTavern.png"), _partyMenu.Show);
                 break;
 
             case "AdventuresInn":
                 if (!HasPartyMembers()) { ShowPartyRequiredMessage(); break; }
                 Enter("AdventuresInn");
-                Console.CityPicture = PictureFor("WizardryAdventuresInn.png", "AdventuresInn.png");
+                Console.CityPicture = PictureFor("WizardryAdventuresInn.png", "AdndAdventuresInn.png");
                 try { _adventuresInnMenu.Show(); } finally { Console.CityPicture = null; }
                 break;
 
