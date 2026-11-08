@@ -101,12 +101,12 @@ public class MainMenu
             {
                 case ConsoleKey.T:
                     Enter("TrainingGrounds");
-                    _cityMenu.Show();
+                    ShowWithPicture(PictureFor("WizardryTraningGrounds.png", "AdndTraningGrounds.png"), _cityMenu.Show);
                     break;
 
                 case ConsoleKey.G:
                     Enter("Tavern");
-                    _partyMenu.Show();
+                    ShowWithPicture(PictureFor("GilgameshTavern.png", "GilgameshTavern.png"), _partyMenu.Show);
                     break;
 
                 case ConsoleKey.C:
@@ -128,7 +128,7 @@ public class MainMenu
                     }
 
                     Enter("AdventuresInn");
-                    ShowWithPicture(PictureFor("WizardryAdventuresInn.png"), _adventuresInnMenu.Show);
+                    ShowWithPicture(PictureFor("WizardryAdventuresInn.png", "AdventuresInn.png"), _adventuresInnMenu.Show);
                     break;
 
                 case ConsoleKey.B:
@@ -302,18 +302,18 @@ public class MainMenu
         {
             case "TrainingGrounds":
                 Enter("TrainingGrounds");
-                _cityMenu.Show();
+                ShowWithPicture(PictureFor("WizardryTraningGrounds.png", "AdndTraningGrounds.png"), _cityMenu.Show);
                 break;
 
             case "Tavern":
                 Enter("Tavern");
-                _partyMenu.Show();
+                ShowWithPicture(PictureFor("GilgameshTavern.png", "GilgameshTavern.png"), _partyMenu.Show);
                 break;
 
             case "AdventuresInn":
                 if (!HasPartyMembers()) { ShowPartyRequiredMessage(); break; }
                 Enter("AdventuresInn");
-                Console.CityPicture = PictureFor("WizardryAdventuresInn.png");
+                Console.CityPicture = PictureFor("WizardryAdventuresInn.png", "AdventuresInn.png");
                 try { _adventuresInnMenu.Show(); } finally { Console.CityPicture = null; }
                 break;
 

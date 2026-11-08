@@ -1242,6 +1242,23 @@ public class PartyMenu
 
     private void AddMember(System.Collections.Generic.List<Character> roster, Party party)
     {
+        // A long roster needs the whole window, so the picture is hidden while it is listed.
+        var shownPicture = Console.CityPicture;
+        if (roster.Count > 12)
+            Console.CityPicture = null;
+
+        try
+        {
+            AddMemberCore(roster, party);
+        }
+        finally
+        {
+            Console.CityPicture = shownPicture;
+        }
+    }
+
+    private void AddMemberCore(System.Collections.Generic.List<Character> roster, Party party)
+    {
         // Only count members that currently resolve to roster characters
         var rosterDict = roster.ToDictionary(c => c.Name, c => c);
         var activeMembers = party.Members.Where(m => rosterDict.ContainsKey(m)).ToList();

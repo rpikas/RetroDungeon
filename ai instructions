@@ -8451,4 +8451,11 @@ extend to the right, so longer price descirptions can be shown.
 show the alternatives on the left side under the alternatives
 show the picture on the right side below the price descriptions
 
+when settings is to pictures and in traning grounds. still give the same spaca to showning the list of charaters
+as when no picture is shown, but show the picture on the below and on the right side of the screen and the 
+alternatives to the left of the picture. Pictures to use should be WizardryTraningGrounds and AdndTraningGrounds
 
+when in GilgameshTavern and AdventuresInn show the corresponding pictures at the bottom of the screen.
+
+when in Gilgamesh tavern and adding more charaters and more than 12 charaters exist, then do not show then picture
+when showing the list of charaters so more charaters can be shown

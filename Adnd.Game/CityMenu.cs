@@ -49,15 +49,22 @@ public class CityMenu
                 Console.WriteLine();
             }
 
-            Console.WriteLine("\nC)reate New Character");
-            Console.WriteLine("I)nspect Character");
-            if (dualClassAvailability.Enabled)
-                Console.WriteLine("U) Dual-class (human only)");
+            var menu = new List<string> { "C)reate New Character", "I)nspect Character" };
+            menu.Add(dualClassAvailability.Enabled
+                ? "U) Dual-class (human only)"
+                : $"U) Dual-class (unavailable: {dualClassAvailability.Reason})");
+            menu.Add("D)elete Character");
+            menu.Add("X) Delete All Characters");
+            menu.Add("L<-eave");
+
+            // With a picture the options sit to the left of it, below the character list.
+            if (TermConsole.Host != null && TermConsole.CityPicture != null)
+                TermConsole.SideLines = menu.ToArray();
             else
-                Console.WriteLine($"U) Dual-class (unavailable: {dualClassAvailability.Reason})");
-            Console.WriteLine("D)elete Character");
-            Console.WriteLine("X) Delete All Characters");
-            Console.WriteLine("L<-eave");
+            {
+                Console.WriteLine();
+                foreach (var line in menu) Console.WriteLine(line);
+            }
 
             var key = Console.ReadKey(true).Key;
 

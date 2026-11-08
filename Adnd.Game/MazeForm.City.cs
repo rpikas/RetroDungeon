@@ -173,6 +173,52 @@ public sealed partial class MazeForm
                 graphics.DrawImage(templeImage, new Rectangle(area.Right - w, top, w, (int)(templeImage.Height * fit)));
             }
         }
+        else if (TermConsole.SideLines is { Length: > 0 } groundsMenu
+                 && TermConsole.CityPicture is "WizardryTraningGrounds.png" or "AdndTraningGrounds.png"
+                 && CityImage(TermConsole.CityPicture!) is { } groundsImage)
+        {
+            // Training grounds: the character list keeps the full-width text of the no-picture screen; the options
+            // sit bottom left and the picture bottom right.
+            var fontPx = Math.Clamp((area.Width - (2 * OldStyleFrame.Thickness + 16)) / (TermConsole.Columns * 0.55f), 10f, 20f);
+            _pictureScreenFont = fontPx;
+            var lh = (float)Math.Ceiling(fontPx * 1.25f);
+            var bottomMin = Math.Max((int)(groundsMenu.Length * lh) + EncounterForm.FrameMargin, (int)(area.Height * 0.3f));
+            var rowsNeeded = TermConsole.Snapshot().Count + 1;
+            var listHeight = (int)(rowsNeeded * lh) + (2 * (OldStyleFrame.Thickness + 4)) + 4;
+            text = new Rectangle(area.X, area.Y, area.Width, Math.Max(60, Math.Min(listHeight, area.Height - bottomMin)));
+            columns = TermConsole.Columns;
+
+            var top = text.Bottom + EncounterForm.FrameMargin;
+            var menuWidth = (int)(groundsMenu.Max(l => l.Length) * fontPx * 0.55f) + EncounterForm.FrameMargin;
+            using (var menuFont = new Font("Consolas", fontPx, FontStyle.Bold, GraphicsUnit.Pixel))
+            {
+                for (var i = 0; i < groundsMenu.Length; i++)
+                    graphics.DrawString(groundsMenu[i], menuFont, brush, area.X, top + (i * lh), StringFormat.GenericTypographic);
+            }
+
+            var availableWidth = area.Width - menuWidth;
+            var availableHeight = area.Bottom - top;
+            if (availableWidth > 40 && availableHeight > 40)
+            {
+                var fit = Math.Min(availableWidth / (float)groundsImage.Width, availableHeight / (float)groundsImage.Height);
+                var w = (int)(groundsImage.Width * fit);
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(groundsImage, new Rectangle(area.Right - w, top, w, (int)(groundsImage.Height * fit)));
+            }
+        }
+        else if (TermConsole.CityPicture is "GilgameshTavern.png" or "AdventuresInn.png" or "WizardryAdventuresInn.png"
+                 && CityImage(TermConsole.CityPicture!) is { } bottomImage)
+        {
+            // Tavern and inn: the text uses the top of the window and the picture sits along the bottom.
+            _pictureScreenFont = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            columns = 48;
+            var pictureHeight = Math.Min((int)(area.Height * 0.35f), (int)(area.Width * bottomImage.Height / (float)bottomImage.Width));
+            text = new Rectangle(area.X, area.Y, area.Width, area.Height - pictureHeight - EncounterForm.FrameMargin);
+            var fit = pictureHeight / (float)bottomImage.Height;
+            var w = (int)(bottomImage.Width * fit);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.DrawImage(bottomImage, new Rectangle(area.X + ((area.Width - w) / 2), area.Bottom - pictureHeight, w, pictureHeight));
+        }
         else if (TermConsole.CityPicture == "AdndTown.png" && CityImage("AdndTown.png") is { } adndTown)
         {
             // AD&D's wide town picture goes under the options instead of beside them.
