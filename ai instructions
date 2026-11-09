@@ -8485,3 +8485,43 @@ can have max have 8 itmes in the inventory. do not show carry weight when inspec
 show weapon prof when inspecting a wizardry chatater. Weapon prof should also not affect to hit for wizardry
 characters, only for adnd chars. also remove the option to show character sheet for wizardry chataters.
 
+all fonts in the city should be the same size as the main menu currently is. For example training grounds fonts when
+showing picturea and when not showing pictures should be as big as the main menu font
+
+make the training grouds pictures smaller when creating wizardry charaters, so more text fit without making the form
+bigger.
+
+when dividing stats the WizardryTraningGrounds.png is currenlyt shown to the left of the stats, 
+if it should be shown then make the picture smaller
+
+when a priest turns an undead that is a wizardry monster then the monster disapears, it is not in state Turned.
+
+in wizardry monsters do not wake up from taking damage, they do in adnd.
+
+when a wizardry charter gains level do not choose weapon proficiencies, they do not have them and they have no effect 
+on to hit in wizardry only in adnd.
+
+In wizardry charaters does not gain level after killing a monster, they have to rest at the inn to gain level. 
+In adnd charaters gain level after killing a monster.
+
+This is applicable in wizardry only IQ and piety
+Whenever you level up, each spell that you are eligible to learn has a chance of (IQ/30) to be learned. For priest
+spells, this is (Piety/30), of course. The first spell in each circle will always be learned as soon as it is
+possible to.
+
+in wizardry there is no multiclass, but all races can change class, If you change class in wizardry, 
+your character ages by ((52 * (RANDOM 0 to 2)) + 252) weeks.
+
+changing class has some major effects:
+Your character's level resets to 1 in the new class.
+You keep the hit points (HP) you've already earned.
+You keep any spells you learned, although spell-casting capacity may be reduced depending on the version.
+Your attributes (Strength, IQ, Piety, Vitality, Agility, Luck) are reset to your racial base values in the original
+
+In wizardry the prices in the church are different than in adnd. 
+ it costs you to cure your characters' condition:
+- Paralyzed: (100 * Character Level) gold.
+- Stoned:    (200 * Character Level) gold.
+- Dead:      (250 * Character Level) gold.
+- Ashes:     (500 * Character Level) gold.
+

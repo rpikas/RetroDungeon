@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Adnd.Core.Characters;
+using Adnd.Core.Config;
+using Adnd.Core.Wizardry;
 using Adnd.Data.Characters;
 
 namespace Adnd.Game;
@@ -47,10 +49,10 @@ public static class Temple
             cost += CurePoisonCost;
 
         if (c.HasStatus(CharacterStatus.Paralyzed))
-            cost += CureParalysisCost;
+            cost += c.Ruleset == Ruleset.Wizardry ? WizardryRules.TempleCost(CharacterStatus.Paralyzed, c.Level) : CureParalysisCost;
 
         if (c.HasStatus(CharacterStatus.Petrified))
-            cost += RestorePetrificationCost;
+            cost += c.Ruleset == Ruleset.Wizardry ? WizardryRules.TempleCost(CharacterStatus.Petrified, c.Level) : RestorePetrificationCost;
 
         if (c.HasStatus(CharacterStatus.Diseased))
             cost += CureDiseaseCost;
@@ -73,6 +75,9 @@ public static class Temple
     /// <summary>Raise Dead: 1000 gp plus 500 gp per level of the target. Resurrection (from ashes) costs twice that.</summary>
     public static int CostToRaise(Character c)
     {
+        if (c.Ruleset == Ruleset.Wizardry)
+            return WizardryRules.TempleCost(c.HasStatus(CharacterStatus.Ashes) ? CharacterStatus.Ashes : CharacterStatus.Dead, c.Level);
+
         var raiseDead = RaiseDeadBaseCost + RaiseDeadCostPerLevel * Math.Max(1, c.Level);
         return c.HasStatus(CharacterStatus.Ashes) ? raiseDead * 2 : raiseDead;
     }

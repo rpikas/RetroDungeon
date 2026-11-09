@@ -16,6 +16,7 @@ Source of the numbers: https://datadrivengamer.blogspot.com/2019/08/the-not-so-b
 - Changing `Rules` removes party members of the other ruleset from the party. They stay in the roster.
 - The Training Grounds and the Party menu only list characters of the active ruleset.
 - In Wizardry, "Halfling" is shown as **Hobbit**.
+- There is no multiclassing or dual-classing. Instead the Training Grounds offers **U) Change class** (`WizardryClassChange`): level returns to 1 and XP to 0, HP and known spells are kept, stats return to the racial base plus newly rolled bonus points (the new class must meet its stat and alignment requirements), items the new class cannot use are unequipped, and the character ages (52 * random 0..2) + 252 weeks.
 
 ## 2. Creating a character
 
@@ -93,7 +94,13 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 | Thief   | 40,732 |  70,227 | 121,081 | 208,760 | 359,931 |                   260,639 |
 | Bishop  | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 |                   428,479 |
 
+**Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat.
+
+**Learning spells on level-up:** for each level gained, every unknown spell of a circle the character has slots for is learned with chance IQ/30 (Piety/30 for priest spells). The first spell of each circle is always learned.
+
 ## 4. Hit points after level 1
+
+**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees.
 
 Max HP is re-rolled at each level up (data in place, level-up not yet implemented).
 
@@ -136,6 +143,8 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 - A character carries at most 8 items in the inventory. Weight does not matter, and carry weight is not shown.
 - Weapon proficiencies do not exist: they are not shown, and there is no to-hit penalty for an unfamiliar weapon.
 - There is no Character Sheet action; the inspect screen is all there is.
+- Monsters put to sleep stay asleep when damaged (AD&D wakes them); they wake only when the sleep runs out. Hits and spells on a sleeping monster still get their sleeping bonuses.
+- Turn Undead never destroys the undead in Wizardry: a result that would disintegrate it (D) turns it instead, shown as Turned.
 
 ## 6. Not implemented yet
 

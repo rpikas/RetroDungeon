@@ -638,7 +638,9 @@ internal static class SpellDamageSaveHelper
 
         if (actual > 0)
         {
-            if (monster.HasStatus(MonsterStatus.Asleep))
+            // Wizardry monsters sleep through damage until the spell runs out.
+            if (monster.HasStatus(MonsterStatus.Asleep)
+                && Adnd.Core.Config.GameRulesProvider.Current.Rules != Adnd.Core.Config.Ruleset.Wizardry)
                 monster.SetStatus(MonsterStatus.Asleep, 0);
 
             if (monster.HasStatus(MonsterStatus.Unconscious))

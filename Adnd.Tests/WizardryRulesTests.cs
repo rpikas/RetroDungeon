@@ -309,6 +309,49 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Wizardry_levels_only_when_pending_levels_are_applied()
+    {
+        var svc = new Adnd.Core.Characters.Progression.LevelUpService();
+        var fighter = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Fighter, Level = 1 };
+        fighter.Classes.Add(CharacterClass.Fighter);
+
+        svc.ApplyExperienceAndAutoLevel(fighter, 50000, null, awardLevels: false);
+        Assert.Equal(1, fighter.Level);
+
+        var result = svc.ApplyPendingLevels(fighter);
+        Assert.True(fighter.Level > 1);
+        Assert.True(result.NewLevel > result.OldLevel);
+    }
+
+    [Fact]
+    public void Class_change_resets_level_keeps_hp_and_ages()
+    {
+        var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 14, 14, 12, 10, 10), WizardryAlignment.Good, WizardryClass.Mage, new Random(1));
+        c.MaxHitPoints = c.CurrentHitPoints = 33;
+        c.Level = 5;
+        var ageBefore = c.Age;
+
+        var weeks = WizardryClassChange.Apply(c, WizardryClass.Priest, new WizardryStats(10, 10, 14, 10, 10, 10), new Random(1));
+
+        Assert.Contains(weeks, new[] { 252, 304, 356 });
+        Assert.Equal(WizardryClass.Priest, c.WizardryClass);
+        Assert.Equal(1, c.Level);
+        Assert.Equal(0, c.Experience);
+        Assert.Equal(33, c.MaxHitPoints);
+        Assert.InRange(c.Abilities.Wisdom, 13, 15);
+        Assert.True(c.Age >= ageBefore + 4);
+    }
+
+    [Fact]
+    public void Temple_fees_scale_with_level()
+    {
+        Assert.Equal(300, WizardryRules.TempleCost(CharacterStatus.Paralyzed, 3));
+        Assert.Equal(600, WizardryRules.TempleCost(CharacterStatus.Petrified, 3));
+        Assert.Equal(750, WizardryRules.TempleCost(CharacterStatus.Dead, 3));
+        Assert.Equal(1500, WizardryRules.TempleCost(CharacterStatus.Ashes, 3));
+    }
+
+    [Fact]
     public void Level_one_bishop_may_fail_to_identify()
     {
         var bishop = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Bishop, Level = 1 };

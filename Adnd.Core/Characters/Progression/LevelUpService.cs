@@ -13,7 +13,11 @@ public sealed class LevelUpService
         _spellLearningService = spellLearningService ?? new SpellLearningService();
     }
 
-    public LevelUpResult ApplyExperienceAndAutoLevel(Character character, int gainedXp, List<Spell>? availableSpells = null)
+    /// <summary>
+    /// With <paramref name="awardLevels"/> false (Wizardry) the XP is stored but no level is gained;
+    /// <see cref="ApplyPendingLevels"/> awards it later.
+    /// </summary>
+    public LevelUpResult ApplyExperienceAndAutoLevel(Character character, int gainedXp, List<Spell>? availableSpells = null, bool awardLevels = true)
     {
         if (gainedXp < 0)
             gainedXp = 0;
@@ -34,7 +38,8 @@ public sealed class LevelUpService
         {
             var entry = character.ClassProgressions.First();
             entry.Experience += gainedXp;
-            LevelSingleClass(character, entry, ref result);
+            if (awardLevels)
+                LevelSingleClass(character, entry, ref result);
             character.Level = Math.Max(1, entry.Level);
         }
         else
@@ -85,7 +90,11 @@ public sealed class LevelUpService
 
         result.SpellSlotChanges = _spellProgressionService.RecalculateFromClassProgressions(character);
 
-        if (GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
+        if (character.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+        {
+            // Wizardry has no weapon proficiencies.
+        }
+        else if (GameRulesProvider.Current.PlayerSelectsWeaponProficiencies)
         {
             var gainedWeapons = WeaponProficiencyRules.GetLevelGainedWeapons(primaryClass, result.OldLevel, result.NewLevel);
             result.WeaponProficienciesGained = gainedWeapons.ToList();
@@ -99,13 +108,21 @@ public sealed class LevelUpService
         character.RefreshMonkProgressionStats();
 
         // Attempt to learn new spells for INT-based casters
-        if (result.LeveledUp && availableSpells != null && availableSpells.Count > 0)
+        if (result.LeveledUp && character.Ruleset == Ruleset.Wizardry)
+        {
+            result.SpellsLearned = Wizardry.WizardrySpellLearning.LearnOnLevelUp(character, result.NewLevel - result.OldLevel);
+        }
+        else if (result.LeveledUp && availableSpells != null && availableSpells.Count > 0)
         {
             result.SpellsLearned = _spellLearningService.AttemptLearnSpellsOnLevelUp(character, result.OldLevel, result.NewLevel, availableSpells);
         }
 
         return result;
     }
+
+    /// <summary>Awards every level the stored experience already pays for (the Wizardry inn).</summary>
+    public LevelUpResult ApplyPendingLevels(Character character, List<Spell>? availableSpells = null)
+        => ApplyExperienceAndAutoLevel(character, 0, availableSpells);
 
     private static void LevelSingleClass(Character character, ClassProgression entry, ref LevelUpResult result)
     {

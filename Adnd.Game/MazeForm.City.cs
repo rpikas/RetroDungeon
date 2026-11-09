@@ -108,6 +108,8 @@ public sealed partial class MazeForm
 
         var area = new Rectangle(12, 36, ClientSize.Width - 24, ClientSize.Height - 36 - 12);
         _pictureScreenFont = null;
+        // One font for every city screen: the size the main menu gets beside its picture.
+        var cityFont = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
         var text = area;
         var columns = TermConsole.Columns;
 
@@ -130,7 +132,7 @@ public sealed partial class MazeForm
         {
             // No picture: the options still go in the left column, so the shop reads the same either way.
             var share = 0.48f;
-            var fontPx = Math.Clamp((area.Width * (1 - share) - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            var fontPx = cityFont;
             _pictureScreenFont = fontPx;
             var lh = (float)Math.Ceiling(fontPx * 1.25f);
             var left = (int)(area.Width * share);
@@ -148,7 +150,7 @@ public sealed partial class MazeForm
                  && CityImage(TermConsole.CityPicture!) is { } templeImage)
         {
             // Temple: the fees run across the top, the options sit under them on the left, the picture on the right.
-            var fontPx = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            var fontPx = cityFont;
             _pictureScreenFont = fontPx;
             var lh = (float)Math.Ceiling(fontPx * 1.25f);
             var rowsNeeded = TermConsole.Snapshot().Count + 1;
@@ -179,7 +181,7 @@ public sealed partial class MazeForm
         {
             // Training grounds: the character list keeps the full-width text of the no-picture screen; the options
             // sit bottom left and the picture bottom right.
-            var fontPx = Math.Clamp((area.Width - (2 * OldStyleFrame.Thickness + 16)) / (TermConsole.Columns * 0.55f), 10f, 20f);
+            var fontPx = cityFont;
             _pictureScreenFont = fontPx;
             var lh = (float)Math.Ceiling(fontPx * 1.25f);
             var bottomMin = Math.Max((int)(groundsMenu.Length * lh) + EncounterForm.FrameMargin, (int)(area.Height * 0.3f));
@@ -210,7 +212,7 @@ public sealed partial class MazeForm
                  && CityImage(TermConsole.CityPicture!) is { } bottomImage)
         {
             // Tavern and inn: the text uses the top of the window and the picture sits along the bottom.
-            _pictureScreenFont = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            _pictureScreenFont = cityFont;
             columns = 48;
             var pictureHeight = Math.Min((int)(area.Height * 0.35f), (int)(area.Width * bottomImage.Height / (float)bottomImage.Width));
             text = new Rectangle(area.X, area.Y, area.Width, area.Height - pictureHeight - EncounterForm.FrameMargin);
@@ -222,7 +224,7 @@ public sealed partial class MazeForm
         else if (TermConsole.CityPicture == "AdndTown.png" && CityImage("AdndTown.png") is { } adndTown)
         {
             // AD&D's wide town picture goes under the options instead of beside them.
-            var fontPx = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            var fontPx = cityFont;
             _pictureScreenFont = fontPx;
             var rowsNeeded = TermConsole.Snapshot().Count + 1;
             var textHeight = Math.Min(area.Height / 2, (int)(rowsNeeded * Math.Ceiling(fontPx * 1.25f)) + (2 * (OldStyleFrame.Thickness + 4)) + 4);
@@ -242,12 +244,12 @@ public sealed partial class MazeForm
         else if (TermConsole.CityPicture is { } pictureFile && CityImage(pictureFile) is { } town)
         {
             // Shop and temple pictures are drawn a bit smaller than the town picture.
-            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" or "AdndShop.png" or "WizardryTown.png" or "AdndTown.png" or "WizardrySelectingClass1.png" ? 0.48f : 0.6f;
+            var share = pictureFile is "WizardryBoltax.png" or "WizardryTemple.png" or "AdndTemple.png" or "AdndShop.png" or "WizardryTown.png" or "AdndTown.png" ? 0.48f : pictureFile is "WizardrySelectingClass1.png" or "WizardryTraningGrounds.png" or "AdndTraningGrounds.png" ? 0.3f : 0.6f;
             var side = Math.Min(area.Height, (int)(area.Width * share));
             var sideLines = TermConsole.SideLines;
             // One font for every picture screen, sized from the text area the picture's share leaves, so the
             // town menu, shop and temple read alike whatever the picture ends up measuring.
-            var sideFontPixels = Math.Clamp((area.Width * (1 - share) - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+            var sideFontPixels = cityFont;
             _pictureScreenFont = sideFontPixels;
             var sideLineHeight = (float)Math.Ceiling(sideFontPixels * 1.25f);
             if (sideLines is { Length: > 0 })
@@ -270,8 +272,7 @@ public sealed partial class MazeForm
             columns = 48;
         }
 
-        if (_pictureScreenFont == null && columns == TermConsole.Columns)
-            _pictureScreenFont = Math.Clamp((area.Width * 0.52f - EncounterForm.FrameMargin - (2 * OldStyleFrame.Thickness + 16)) / (48 * 0.55f), 10f, 20f);
+        _pictureScreenFont = cityFont;
 
         OldStyleFrame.Draw(graphics, text, color);
         DrawTerminal(graphics, brush, text, columns);

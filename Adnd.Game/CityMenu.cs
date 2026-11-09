@@ -23,7 +23,8 @@ public class CityMenu
         while (true)
         {
             var all = _repo.GetAll().Where(c => c.Ruleset == GameRulesProvider.Current.Rules).ToList();
-            var dualClassAvailability = GetDualClassMenuAvailability(all);
+            var wizardry = GameRulesProvider.Current.Rules == Ruleset.Wizardry;
+            var dualClassAvailability = wizardry ? (Enabled: all.Count > 0, Reason: "no characters") : GetDualClassMenuAvailability(all);
 
             Console.Clear();
             Console.WriteLine("=== TRAINING GROUNDS ===");
@@ -50,7 +51,9 @@ public class CityMenu
             }
 
             var menu = new List<string> { "C)reate New Character", "I)nspect Character" };
-            menu.Add(dualClassAvailability.Enabled
+            menu.Add(wizardry
+                ? "U) Change class"
+                : dualClassAvailability.Enabled
                 ? "U) Dual-class (human only)"
                 : $"U) Dual-class (unavailable: {dualClassAvailability.Reason})");
             menu.Add("D)elete Character");
@@ -72,7 +75,11 @@ public class CityMenu
             else if (key == ConsoleKey.I) InspectCharacter(all);
             else if (key == ConsoleKey.U)
             {
-                if (!dualClassAvailability.Enabled)
+                if (wizardry)
+                {
+                    ChangeWizardryClass(all);
+                }
+                else if (!dualClassAvailability.Enabled)
                 {
                     Console.WriteLine($"Dual-class unavailable: {dualClassAvailability.Reason}");
                     Console.WriteLine("Press any key...");
@@ -87,6 +94,23 @@ public class CityMenu
             else if (key == ConsoleKey.X) DeleteAllCharacters(all);
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
+    }
+
+    private void ChangeWizardryClass(System.Collections.Generic.List<Character> all)
+    {
+        if (all.Count == 0)
+            return;
+
+        Console.WriteLine();
+        for (int i = 0; i < all.Count; i++)
+            Console.WriteLine($"{i + 1}) {all[i].Name} - {all[i].RaceDisplayName} {all[i].GetClassesDisplayText("/")} L{all[i].Level}");
+
+        Console.Write("Character # (Enter to cancel): ");
+        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
+        if (!sel.HasValue)
+            return;
+
+        new WizardryCharacterCreation(_repo).ChangeClass(all[sel.Value - 1]);
     }
 
     private (bool Enabled, string Reason) GetDualClassMenuAvailability(System.Collections.Generic.List<Character> all)

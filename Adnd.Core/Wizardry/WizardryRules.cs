@@ -194,5 +194,19 @@ public static class WizardryRules
         return points;
     }
 
+    /// <summary>Temple fee per character level: Paralyzed 100, Stoned 200, Dead 250, Ashes 500 (no doubling for ashes).</summary>
+    public static int TempleCost(CharacterStatus status, int level)
+    {
+        var perLevel = status switch
+        {
+            CharacterStatus.Paralyzed => 100,
+            CharacterStatus.Petrified => 200,
+            CharacterStatus.Dead => 250,
+            CharacterStatus.Ashes => 500,
+            _ => 0
+        };
+        return perLevel * Math.Max(1, level);
+    }
+
     public static int RollStartingGold(Random random) => random.Next(1, StartingGoldDie + 1) + StartingGoldBase;
 }

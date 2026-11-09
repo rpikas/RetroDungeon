@@ -265,7 +265,8 @@ public sealed partial class CombatResolver
         if (!monster.IsAlive)
             return;
 
-        var wokeFromAsleep = monster.HasStatus(MonsterStatus.Asleep);
+        var wokeFromAsleep = monster.HasStatus(MonsterStatus.Asleep)
+            && Adnd.Core.Config.GameRulesProvider.Current.Rules != Adnd.Core.Config.Ruleset.Wizardry;
         var wokeFromUnconscious = monster.HasStatus(MonsterStatus.Unconscious);
 
         if (!wokeFromAsleep && !wokeFromUnconscious)

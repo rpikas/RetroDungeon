@@ -1455,14 +1455,17 @@ public sealed partial class CombatResolver
                 continue;
             }
 
-            if (string.Equals(token, "D", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(token, "D", StringComparison.OrdinalIgnoreCase)
+                && actor.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
             {
                 monster.CurrentHitPoints = 0;
                 events.Add(new CombatEvent($"{monster.DisplayName} is disintegrated by holy power!"));
                 continue;
             }
 
-            if (string.Equals(token, "T", StringComparison.OrdinalIgnoreCase))
+            // Wizardry has no disintegration result: a turn that would destroy the undead leaves it turned.
+            if (string.Equals(token, "T", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(token, "D", StringComparison.OrdinalIgnoreCase))
             {
                 var rounds = _dice.Roll(10) + 2;
                 monster.SetStatus(MonsterStatus.TurnedUndead, rounds);

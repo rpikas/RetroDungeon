@@ -40,6 +40,48 @@ public static class WizardrySpellLearning
         EnsureFirstSpellOfEachCircle(character);
     }
 
+    /// <summary>
+    /// On each level gained every unknown spell of an available circle is learned with chance IQ/30
+    /// (Piety/30 for priest spells); the first spell of each circle is always learned.
+    /// </summary>
+    public static List<string> LearnOnLevelUp(Character character, int levelsGained, Random? random = null)
+    {
+        var rng = random ?? new Random();
+        var learned = new List<string>();
+
+        EnsureFirstSpellOfEachCircle(character);
+
+        foreach (var state in character.Spellcasting)
+        {
+            var stat = state.SpellClass is SpellClass.MagicUser or SpellClass.Illusionist
+                ? character.Abilities.Intelligence
+                : character.Abilities.Wisdom;
+            var chance = stat / 30.0;
+
+            for (var i = 0; i < levelsGained; i++)
+            {
+                foreach (var spell in WizardrySpells.All.Where(s =>
+                             s.SpellClass == state.SpellClass
+                             && s.Level >= 1 && s.Level <= state.SlotsPerDay.Count
+                             && state.SlotsPerDay[s.Level - 1] > 0
+                             && !state.KnownSpellIds.Contains(s.Id)).ToList())
+                {
+                    var roll = rng.NextDouble();
+                    var success = roll < chance;
+                    Diagnostics.RuleApplicationInfo.Publish(
+                        $"Wizardry spell learning: {character.Name} tries {spell.Name} (L{spell.Level}); chance {stat}/30 = {chance:P0}, rolled {roll:P0} -> {(success ? "learned" : "not learned")}.");
+                    if (success)
+                    {
+                        state.KnownSpellIds.Add(spell.Id);
+                        learned.Add($"{spell.Name} (L{spell.Level})");
+                    }
+                }
+            }
+        }
+
+        return learned;
+    }
+
     /// <summary>The first spell of each circle is always learned once the character has slots for that circle.</summary>
     public static void EnsureFirstSpellOfEachCircle(Character character)
     {

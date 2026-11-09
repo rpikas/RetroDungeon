@@ -897,7 +897,7 @@ public sealed class CombatCoordinator
             dualClassXpBlockedByCharacter[survivor.Name] = dualClassBlocked;
             gain = gatedGain;
 
-            var levelResult = _levelUpService.ApplyExperienceAndAutoLevel(survivor, gain, allSpells);
+            var levelResult = _levelUpService.ApplyExperienceAndAutoLevel(survivor, gain, allSpells, awardLevels: survivor.Ruleset != Ruleset.Wizardry);
             if (GameRulesProvider.Current.PlayerSelectsWeaponProficiencies && levelResult.WeaponProficienciesGained.Count > 0)
             {
                 var primaryClass = survivor.Classes.Count > 0 ? survivor.Classes[0] : survivor.Class;

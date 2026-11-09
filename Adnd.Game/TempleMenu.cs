@@ -24,6 +24,16 @@ public class TempleMenu
             Console.Clear();
             Console.WriteLine("=== Church of Chant ===");
             Console.WriteLine("Service / Spell                Fee");
+            if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
+            {
+                Console.WriteLine("Heal hit points                15 gp/hp");
+                Console.WriteLine("Cure paralysis                 100 gp x level");
+                Console.WriteLine("Cure stoned                    200 gp x level");
+                Console.WriteLine("Raise dead                     250 gp x level");
+                Console.WriteLine("Raise from ashes               500 gp x level");
+            }
+            else
+            {
             Console.WriteLine("Heal hit points                15 gp/hp");
             Console.WriteLine($"Neutralize poison              {Temple.CurePoisonCost} gp");
             Console.WriteLine($"Remove paralyzation            {Temple.CureParalysisCost} gp");
@@ -33,6 +43,7 @@ public class TempleMenu
             Console.WriteLine($"Cure feeblemind                {Temple.CureFeeblemindCost} gp");
             Console.WriteLine($"Cure disease                   {Temple.CureDiseaseCost} gp");
             Console.WriteLine($"Restore from petrification     {Temple.RestorePetrificationCost} gp");
+            }
 
             var menu = new List<string>
             {
@@ -154,6 +165,9 @@ public class TempleMenu
             return;
         }
 
+        if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
+            Console.WriteLine($"Healing costs: {Temple.HealCostPerHp} gp/HP, +100 gp x level (paralysis), +200 gp x level (stoned).");
+        else
         Console.WriteLine($"Healing costs: {Temple.HealCostPerHp} gp/HP, +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureDiseaseCost} gp (disease), +{Temple.CureFeeblemindCost} gp (feeblemind), +{Temple.RestorePetrificationCost} gp (restore from petrification).");
 
         var healedCount = 0;

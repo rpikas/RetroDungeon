@@ -246,6 +246,7 @@ public sealed class AdventuresInnMenu
 
                 var daysAgedPooled = weeksNeeded * 7;
                 c.AdvanceAgeByDays(daysAgedPooled);
+                GainPendingWizardryLevels(c);
 
                 _characterRepository.Save(c);
 
@@ -275,6 +276,7 @@ public sealed class AdventuresInnMenu
 
             var daysAged = weeksNeeded * 7;
             c.AdvanceAgeByDays(daysAged);
+            GainPendingWizardryLevels(c);
 
             _characterRepository.Save(c);
 
@@ -285,6 +287,23 @@ public sealed class AdventuresInnMenu
                 $"Healing rate {room.HealPerDay} HP/day. HP {beforeHpSelf}->{c.CurrentHitPoints}. GP {beforeGoldSelf}->{c.GoldPieces}. " +
                 $"Age advanced by {daysAged} day(s): {beforeAgeSelf}y {beforeAgeDaysSelf}d -> {c.Age}y {c.AgeDays}d.");
         }
+    }
+
+    /// <summary>Wizardry characters only gain the levels their experience has earned when they rest at the inn.</summary>
+    private static void GainPendingWizardryLevels(Character c)
+    {
+        if (c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+            return;
+
+        var spells = new Adnd.Data.Spells.SpellRepository("Data/Spells").LoadAll();
+        var result = new Adnd.Core.Characters.Progression.LevelUpService().ApplyPendingLevels(c, spells);
+        if (result.NewLevel <= result.OldLevel)
+            return;
+
+        Console.WriteLine($"{c.Name} reached level {result.NewLevel}! HP +{result.HitPointsGained}.");
+        if (result.SpellsLearned.Count > 0)
+            Console.WriteLine($"  Spells learned: {string.Join(", ", result.SpellsLearned)}");
+        RuleApplicationInfo.Publish($"Adventures Inn: {c.Name} rested and gained level {result.OldLevel}->{result.NewLevel} (HP +{result.HitPointsGained}).");
     }
 
     private void DistributeGoldEvenly(List<Character> partyMembers)

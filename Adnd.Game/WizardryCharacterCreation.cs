@@ -74,6 +74,47 @@ public class WizardryCharacterCreation
         Console.WriteLine("Character saved.");
     }
 
+    /// <summary>Changes the class of an existing character: stats go back to the racial base plus new bonus points.</summary>
+    public void ChangeClass(Character character)
+    {
+        Console.Clear();
+        Console.WriteLine($"=== CHANGE CLASS: {character.Name} ===\n");
+        Console.WriteLine("Level returns to 1 and XP to 0 (HP and known spells are kept),");
+        Console.WriteLine("stats return to racial base plus new bonus points, and the");
+        Console.WriteLine("character ages 252, 304 or 356 weeks.\n");
+        Console.Write("Continue? (Y/N): ");
+        if (Console.ReadKey(true).Key != ConsoleKey.Y)
+            return;
+
+        var baseStats = WizardryRules.RaceBaseStats(character.Race);
+        var bonus = WizardryRules.RollBonusPoints(Random.Shared);
+        var alignment = WizardryClassChange.AlignmentOf(character);
+        RuleApplicationInfo.Publish($"Wizardry class change: {character.Name} has {bonus} bonus points to assign.");
+
+        WizardryStats stats;
+        List<WizardryClass> targets;
+        while (true)
+        {
+            stats = AllocatePoints(character.Race, alignment, baseStats, bonus);
+            targets = WizardryClassChange.EligibleTargets(character, stats).ToList();
+            if (targets.Count > 0)
+                break;
+
+            Console.WriteLine("\nNo other class accepts these stats. Assign the points again.");
+            Console.ReadKey(true);
+        }
+
+        Console.Clear();
+        var newClass = ChooseClass(targets);
+        var weeks = WizardryClassChange.Apply(character, newClass, stats, Random.Shared);
+        _repo.Save(character);
+
+        RuleApplicationInfo.Publish($"Wizardry class change: {character.Name} became a {newClass}, level 1, aged {weeks} weeks.");
+        Console.WriteLine($"\n{character.Name} is now a level 1 {newClass} and aged {weeks} weeks.");
+        Console.WriteLine("Press any key...");
+        Console.ReadKey(true);
+    }
+
     private static Race? ChooseRace()
     {
         Console.WriteLine("Choose Race:");

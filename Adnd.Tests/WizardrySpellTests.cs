@@ -81,6 +81,24 @@ public class WizardrySpellTests
     }
 
     [Fact]
+    public void Level_up_learns_unknown_spells_with_iq_over_30_chance()
+    {
+        var smart = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(10, 30, 12, 10, 10, 10), WizardryAlignment.Good, WizardryClass.Mage, new Random(1));
+        var state = smart.Spellcasting.Single();
+        state.SlotsPerDay = new List<int> { 4 };
+        smart.Abilities.Intelligence = 30;
+        var circle1 = WizardrySpells.All.Count(s => s.SpellClass == state.SpellClass && s.Level == 1);
+
+        WizardrySpellLearning.LearnOnLevelUp(smart, 1, new Random(1));
+        Assert.Equal(circle1, state.KnownSpellIds.Count);
+
+        smart.Abilities.Intelligence = 0;
+        state.KnownSpellIds.Clear();
+        WizardrySpellLearning.LearnOnLevelUp(smart, 1, new Random(1));
+        Assert.Single(state.KnownSpellIds);
+    }
+
+    [Fact]
     public void Dios_heals_a_single_ally_and_madi_fully_heals_and_clears_statuses()
     {
         var caster = new Character { Name = "Priest", Ruleset = Ruleset.Wizardry, MaxHitPoints = 40, CurrentHitPoints = 10 };
