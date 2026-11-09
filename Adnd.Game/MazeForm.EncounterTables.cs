@@ -1015,7 +1015,7 @@ public sealed partial class MazeForm
         return string.Join(" ", parts);
     }
 
-    private static Monster? FindMonsterByName(IEnumerable<Monster> monsters, string requestedName)
+    internal static Monster? FindMonsterByName(IEnumerable<Monster> monsters, string requestedName)
     {
         if (string.IsNullOrWhiteSpace(requestedName))
             return null;

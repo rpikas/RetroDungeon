@@ -70,7 +70,7 @@ public static class MonsterImporter
             MagicResistance = magicResistance,
             MagicResistancePercent = ParseMagicResistancePercent(magicResistance),
             InLairPercent = ParsePercent(json.InLairPercent, 0),
-            Size = ParseSize(json.Size),
+            Size = ParseSource(json) == Sources.Wizardry ? MonsterSize.Medium : ParseSize(json.Size),
             HitPoints = json.HitPoints,
 
             BaseXPValue = json.BaseXPValue,

@@ -257,7 +257,25 @@ public class Character
     public string Damage { get; set; } = "1d6"; // Base damage or equipped weapon damage
 
     // Status conditions (can be combined as flags)
-    public CharacterStatus Status { get; set; } = CharacterStatus.None;
+    private CharacterStatus _status = CharacterStatus.None;
+
+    private const CharacterStatus FinalStatuses = CharacterStatus.Dead | CharacterStatus.Ashes | CharacterStatus.Lost;
+
+    /// <summary>A dead, ashes or lost character can have no other condition (poisoned, paralyzed, ...); only Out is kept.</summary>
+    public CharacterStatus Status
+    {
+        get => _status;
+        set
+        {
+            if ((value & FinalStatuses) != 0)
+            {
+                value &= FinalStatuses | CharacterStatus.Out;
+                ParalyzedRoundsRemaining = 0;
+            }
+
+            _status = value;
+        }
+    }
 
     [JsonIgnore]
     public bool HasActiveProtectionFromFire => FireProtectionRoundsRemaining > 0 || FireProtectionAbsorptionRemaining > 0;

@@ -168,7 +168,8 @@ public class PartyMenu
                     var c = _repo.GetAll().FirstOrDefault(x => x.Name == name);
                     if (c != null)
                     {
-                        WithoutPicture(() => ShowCharacterDetail(c, party));
+                        using var inspect = new CampCharacterInspectForm(c.Name, activeMembers);
+                        inspect.ShowDialog();
                     }
                 }
             }
@@ -233,7 +234,9 @@ public class PartyMenu
 
             else
             {
-                ShowCharacterDetail(c, party);
+                // Same dialog as the camp screen in the dungeon.
+                using var inspect = new CampCharacterInspectForm(c.Name, activeMembers);
+                inspect.ShowDialog();
             }
         }
         else

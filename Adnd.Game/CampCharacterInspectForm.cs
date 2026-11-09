@@ -825,6 +825,22 @@ public sealed class CampCharacterInspectForm : Form
             }
         }
 
+        if (wiz)
+        {
+            // Equipped items come first (marked *), unidentified ones carry a ?, two to a row.
+            var entries = c.Equipment.Values.Where(i => i != null).Select(i => (Item: i!, Equipped: true))
+                .Concat(c.Inventory.Select(i => (Item: i, Equipped: false)))
+                .Select((e, n) => $"{n + 1}){(e.Equipped ? "*" : e.Item.IsIdentified ? " " : "?")}{e.Item.DisplayName.ToUpperInvariant()}")
+                .ToList();
+            if (entries.Count > 0)
+            {
+                sb.AppendLine();
+                for (var i = 0; i < entries.Count; i += 2)
+                    sb.AppendLine(i + 1 < entries.Count ? $"{entries[i],-30}{entries[i + 1]}" : entries[i]);
+            }
+            sb.AppendLine();
+        }
+
         sb.AppendLine($"NEXT LVL XP {xpToNextLevelText}");
 
         return sb.ToString().TrimEnd();
@@ -880,9 +896,17 @@ public sealed class CampCharacterInspectForm : Form
 
     private void EquipAction()
     {
+        var first = true;
+        while (EquipOnce(first))
+            first = false;
+    }
+
+    /// <summary>Equips one item chosen from the list; returns false when the dialog should close (Esc or nothing left to equip).</summary>
+    private bool EquipOnce(bool first)
+    {
         var c = GetCharacter();
         if (c == null)
-            return;
+            return false;
 
         var equipable = c.Inventory
             .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue)
@@ -892,13 +916,14 @@ public sealed class CampCharacterInspectForm : Form
 
         if (equipable.Count == 0)
         {
-            SayOnBoth("Equip", "No equipable items in inventory.");
-            return;
+            if (first)
+                SayOnBoth("Equip", "No equipable items in inventory.");
+            return false;
         }
 
         var idx = PromptChoice("Equip Item", equipable.Select(i => $"{i.DisplayName} [{GetDisplaySlot(i)}]").ToList());
         if (!idx.HasValue)
-            return;
+            return false;
 
         var item = equipable[idx.Value];
 
@@ -911,7 +936,7 @@ public sealed class CampCharacterInspectForm : Form
             {
                 var grip = PromptChoice("Wield " + item.Name, new List<string> { "One hand (2d4)", "Two hands (2d4+1)" });
                 if (!grip.HasValue)
-                    return;
+                    return true;
 
                 item.IsTwoHanded = grip.Value == 1;
             }
@@ -928,7 +953,7 @@ public sealed class CampCharacterInspectForm : Form
             {
                 var slotChoice = PromptChoice("Equip Weapon To", new List<string> { "Main Hand", "Off Hand" });
                 if (!slotChoice.HasValue)
-                    return;
+                    return true;
 
                 targetSlot = slotChoice.Value == 0 ? EquipmentSlot.MainHand : EquipmentSlot.OffHand;
             }
@@ -951,7 +976,7 @@ public sealed class CampCharacterInspectForm : Form
             if (item.IsVersatileWeapon)
                 item.IsTwoHanded = false;
 
-            return;
+            return true;
         }
 
         var originalSlot = item.Slot;
@@ -975,6 +1000,8 @@ public sealed class CampCharacterInspectForm : Form
         {
             SayOnBoth("Equip", $"{c.Name} cannot equip {item.Name}.");
         }
+
+        return true;
     }
 
     private static string GetDisplaySlot(Item item)
@@ -2014,6 +2041,14 @@ public sealed class CampCharacterInspectForm : Form
         form.AcceptButton = ok;
         form.CancelButton = cancel;
         OldStyleDialog.Apply(form, list);
+        list.DoubleClick += (_, _) =>
+        {
+            if (list.SelectedIndex < 0)
+                return;
+
+            form.DialogResult = DialogResult.OK;
+            form.Close();
+        };
 
         // Nine callers come through here -- equip, unequip, drop, trade, which spell, which target -- so this is
         // the one place that has to know about the table, and all nine become answerable from it at once.
@@ -2415,7 +2450,7 @@ public sealed class CampCharacterInspectForm : Form
 
         RefreshView();
 
-        SayOnBoth("Trade", $"Traded {item.Name} from {giver.Name} to {receiver.Name}.");
+        SayOnBoth("Trade", $"Traded {item.DisplayName} from {giver.Name} to {receiver.Name}.");
     }
 
     private int? PromptNumberInput(string title, string labelText, int min, int max)

@@ -233,7 +233,7 @@ public sealed class CombatCoordinator
 
         while (session.Outcome == CombatOutcome.InProgress)
         {
-            if (!session.AliveParty.Any())
+            if (session.IsPartyDefeated)
             {
                 session.Outcome = CombatOutcome.Defeat;
                 break;
@@ -338,7 +338,7 @@ public sealed class CombatCoordinator
         
               while (session.Outcome == CombatOutcome.InProgress)
                {
-                   if (!session.AliveParty.Any())
+                   if (session.IsPartyDefeated)
                    {
                        session.Outcome = CombatOutcome.Defeat;
                        break;
@@ -423,7 +423,7 @@ public sealed class CombatCoordinator
 
         while (session.Outcome == CombatOutcome.InProgress)
         {
-            if (!session.AliveParty.Any())
+            if (session.IsPartyDefeated)
             {
                 session.Outcome = CombatOutcome.Defeat;
                 break;
@@ -3479,10 +3479,11 @@ public sealed class CombatCoordinator
         if (GameRulesProvider.Current.EffectiveMonsterSourceOptions == SourceOptions.OnlyWizardry)
         {
             var picked = WizardryEncounterTable.Pick(dungeonLevel, _random);
-            var template = _monsterRepository.GetAll().FirstOrDefault(m =>
-                m.Source == Sources.Wizardry && string.Equals(m.Name, picked, StringComparison.OrdinalIgnoreCase));
+            var template = MazeForm.FindMonsterByName(_monsterRepository.GetAll(), picked);
+            monsterName = picked;
             if (template != null)
             {
+                monsterName = template.Name;
                 var min = Math.Max(1, Math.Min(template.NumberOfAppearancesMin, template.NumberOfAppearancesMax));
                 var max = Math.Max(min, Math.Max(template.NumberOfAppearancesMin, template.NumberOfAppearancesMax));
                 count = _random.Next(min, max + 1);

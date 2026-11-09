@@ -437,6 +437,12 @@ public sealed partial class CombatResolver
 
         if (member.HasStatus(CharacterStatus.Paralyzed))
         {
+            if (member.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            {
+                events.Add(new CombatEvent($"{member.Name} is paralyzed and cannot act (until cured with Madi or Dialko)."));
+                return true;
+            }
+
             var remainingParalysis = member.TickParalysisRound();
             events.Add(new CombatEvent(remainingParalysis > 0
                 ? $"{member.Name} is paralyzed and cannot act ({remainingParalysis} round(s) remaining)."

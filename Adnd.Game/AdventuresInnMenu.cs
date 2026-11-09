@@ -54,7 +54,10 @@ public sealed class AdventuresInnMenu
             for (int i = 0; i < members.Count; i++)
             {
                 var c = members[i];
-                Console.WriteLine($"{i + 1}) {c.Name,-15} HP {c.CurrentHitPoints}/{c.MaxHitPoints}, GP {c.GoldPieces}, Age {c.Age}y {c.AgeDays}d");
+                var levelInfo = c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry
+                    ? $"Lvl {c.Level}{(Adnd.Core.Characters.Progression.LevelUpService.HasPendingLevels(c) ? " (will gain a level!)" : "")}, "
+                    : "";
+                Console.WriteLine($"{i + 1}) {c.Name,-15} {levelInfo}HP {c.CurrentHitPoints}/{c.MaxHitPoints}, GP {c.GoldPieces}, Age {c.Age}y {c.AgeDays}d");
             }
 
             Console.WriteLine("A)ll");
@@ -89,18 +92,17 @@ public sealed class AdventuresInnMenu
             var selectedIsSingleMember = selected.Count == 1;
             var selectedIsEntireParty = selected.Count == members.Count;
 
+            RoomOption? room;
             if (selectedIsSingleMember)
             {
-                var action = PromptAlternative(showPoolGold: true, showDistributeGold: false);
-                if (action == 'L')
+                (room, var pooled) = PromptRoom(allowPooling: members.Count > 1);
+                if (room == null)
                     return;
 
-                if (action == 'P')
+                if (pooled)
                     paymentMode = PaymentMode.PooledPartyGold;
             }
-
-            RoomOption? room;
-            if (selectedIsEntireParty)
+            else if (selectedIsEntireParty)
             {
                 room = PromptRoomOrSplitForWholeParty(members);
                 if (room == null)
@@ -108,7 +110,7 @@ public sealed class AdventuresInnMenu
             }
             else
             {
-                room = PromptRoom();
+                (room, _) = PromptRoom(allowPooling: false);
                 if (room == null)
                     return;
             }
@@ -118,38 +120,6 @@ public sealed class AdventuresInnMenu
             Console.WriteLine();
             Console.WriteLine("Rest completed. Press any key...");
             Console.ReadKey(true);
-        }
-    }
-
-    private static char PromptAlternative(bool showPoolGold, bool showDistributeGold)
-    {
-        while (true)
-        {
-            Console.Clear();
-            Console.WriteLine("=== ADVENTURES INN ===");
-            Console.WriteLine("Alternative options:");
-            if (showPoolGold)
-                Console.WriteLine("P)ool gold (selected character can pay from party gold)");
-            if (showDistributeGold)
-                Console.WriteLine("S)plit gold among party members");
-            Console.WriteLine("R)oom selection");
-            Console.WriteLine("L)eave the inn without resting");
-            Console.Write("Choice: ");
-
-            var key = Console.ReadKey(true);
-            var ch = char.ToUpperInvariant(key.KeyChar);
-
-            if (ch == 'L' || key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Enter)
-                return 'L';
-
-            if (ch == 'R')
-                return 'R';
-
-            if (showPoolGold && ch == 'P')
-                return 'P';
-
-            if (showDistributeGold && ch == 'S')
-                return 'S';
         }
     }
 
@@ -188,8 +158,9 @@ public sealed class AdventuresInnMenu
         }
     }
 
-    private static RoomOption? PromptRoom()
+    private static (RoomOption? Room, bool Pooled) PromptRoom(bool allowPooling)
     {
+        var pooled = false;
         while (true)
         {
             Console.Clear();
@@ -200,17 +171,25 @@ public sealed class AdventuresInnMenu
             Console.WriteLine("C)  ECONOMY ROOMS.  50 GP/WEEK Heals 6 HP per day.");
             Console.WriteLine("D)  MERCHANT SUITES.  200 GP/WEEK Heals 20 HP per day.");
             Console.WriteLine("E)  THE ROYAL SUITE.  500 GP/WEEK Heals 40 HP per day.");
+            if (allowPooling)
+                Console.WriteLine($"P)ool gold (pay from party gold): {(pooled ? "ON" : "OFF")}");
             Console.WriteLine("L)eave the inn without resting.");
             Console.Write("Room: ");
 
             var key = Console.ReadKey(true);
             var ch = char.ToUpperInvariant(key.KeyChar);
             if (ch == 'L' || key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Enter)
-                return null;
+                return (null, false);
+
+            if (allowPooling && ch == 'P')
+            {
+                pooled = !pooled;
+                continue;
+            }
 
             var room = Rooms.FirstOrDefault(r => r.Key == ch);
             if (room != null)
-                return room;
+                return (room, pooled);
         }
     }
 
@@ -296,14 +275,42 @@ public sealed class AdventuresInnMenu
             return;
 
         var spells = new Adnd.Data.Spells.SpellRepository("Data/Spells").LoadAll();
-        var result = new Adnd.Core.Characters.Progression.LevelUpService().ApplyPendingLevels(c, spells);
-        if (result.NewLevel <= result.OldLevel)
-            return;
+        var service = new Adnd.Core.Characters.Progression.LevelUpService();
 
-        Console.WriteLine($"{c.Name} reached level {result.NewLevel}! HP +{result.HitPointsGained}.");
+        // One dialog per level, so every level's stats and spells are seen.
+        while (Adnd.Core.Characters.Progression.LevelUpService.HasPendingLevels(c) && !c.HasStatus(CharacterStatus.Dead))
+        {
+            var result = service.ApplyNextPendingLevel(c, spells);
+            if (result.NewLevel <= result.OldLevel)
+                return;
+
+            ShowLevelUp(c, result);
+        }
+    }
+
+    private static void ShowLevelUp(Character c, Adnd.Core.Characters.Progression.LevelUpResult result)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"{c.Name.ToUpperInvariant()}:");
+        Console.WriteLine($"YOU MADE THE NEXT LEVEL! YOU ARE NOW LEVEL {result.NewLevel}.");
         if (result.SpellsLearned.Count > 0)
-            Console.WriteLine($"  Spells learned: {string.Join(", ", result.SpellsLearned)}");
-        RuleApplicationInfo.Publish($"Adventures Inn: {c.Name} rested and gained level {result.OldLevel}->{result.NewLevel} (HP +{result.HitPointsGained}).");
+        {
+            Console.WriteLine("YOU LEARNED NEW SPELLS!!");
+            Console.WriteLine(string.Join(", ", result.SpellsLearned));
+        }
+        foreach (var (attribute, delta) in result.AttributeChanges)
+            Console.WriteLine($"YOU {(delta > 0 ? "GAINED" : "LOST")} {attribute}");
+        Console.WriteLine($"YOU GAINED {result.HitPointsGained} HIT POINTS.");
+        if (result.DiedFromVitality)
+            Console.WriteLine("YOUR VITALITY IS GONE. YOU ARE DEAD.");
+        Console.WriteLine();
+        Console.WriteLine("↵ TO LEAVE");
+        Console.ReadKey(true);
+
+        var attributeText = result.AttributeChanges.Count == 0
+            ? "no attribute changes"
+            : string.Join(", ", result.AttributeChanges.Select(a => $"{(a.Delta > 0 ? "+" : "-")}1 {a.Attribute}"));
+        RuleApplicationInfo.Publish($"Adventures Inn: {c.Name} rested and gained level {result.OldLevel}->{result.NewLevel} (HP +{result.HitPointsGained}); age {c.Age}, peek age {Adnd.Core.Config.GameRulesProvider.Current.WizardryPeekAge}; {attributeText}.");
     }
 
     private void DistributeGoldEvenly(List<Character> partyMembers)

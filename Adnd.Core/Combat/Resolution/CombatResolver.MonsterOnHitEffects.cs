@@ -95,6 +95,13 @@ public sealed partial class CombatResolver
         }
 
         var rounds = _dice.Roll(91) + 29;
+        if (target.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+        {
+            target.ApplyParalysis(9999);
+            events.Add(new CombatEvent($"{target.Name} is paralyzed by {monster.DisplayName} until cured with Madi or Dialko! (save {saveRoll} vs {saveTarget})"));
+            return;
+        }
+
         target.ApplyParalysis(rounds);
 
         RuleApplicationInfo.Publish(

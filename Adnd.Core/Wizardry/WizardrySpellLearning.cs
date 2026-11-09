@@ -49,7 +49,7 @@ public static class WizardrySpellLearning
         var rng = random ?? new Random();
         var learned = new List<string>();
 
-        EnsureFirstSpellOfEachCircle(character);
+        learned.AddRange(EnsureFirstSpellOfEachCircle(character));
 
         foreach (var state in character.Spellcasting)
         {
@@ -83,8 +83,9 @@ public static class WizardrySpellLearning
     }
 
     /// <summary>The first spell of each circle is always learned once the character has slots for that circle.</summary>
-    public static void EnsureFirstSpellOfEachCircle(Character character)
+    public static List<string> EnsureFirstSpellOfEachCircle(Character character)
     {
+        var added = new List<string>();
         foreach (var state in character.Spellcasting)
         {
             for (var circle = 1; circle <= state.SlotsPerDay.Count; circle++)
@@ -99,7 +100,10 @@ public static class WizardrySpellLearning
                     continue;
 
                 state.KnownSpellIds.Add(circleSpells[0].Id);
+                added.Add($"{circleSpells[0].Name} (L{circleSpells[0].Level})");
             }
         }
+
+        return added;
     }
 }

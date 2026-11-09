@@ -22,6 +22,21 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Dead_ashes_or_lost_character_has_no_other_status()
+    {
+        var c = new Character { Ruleset = Ruleset.Wizardry };
+        c.AddStatus(CharacterStatus.Poisoned);
+        c.ApplyParalysis(5);
+        c.AddStatus(CharacterStatus.Dead);
+
+        Assert.Equal(CharacterStatus.Dead, c.Status);
+        Assert.Equal(0, c.ParalyzedRoundsRemaining);
+
+        c.AddStatus(CharacterStatus.Poisoned);
+        Assert.Equal(CharacterStatus.Dead, c.Status);
+    }
+
+    [Fact]
     public void Halfling_is_called_hobbit()
     {
         Assert.Equal("Hobbit", WizardryRules.RaceName(Race.Halfling));
@@ -69,14 +84,15 @@ public class WizardryRulesTests
     }
 
     [Fact]
-    public void Bonus_points_are_seven_to_ten_normally_and_never_exceed_thirty()
+    public void Bonus_points_fall_in_the_three_handbook_tiers()
     {
         var random = new Random(1234);
-        var rolls = Enumerable.Range(0, 5000).Select(_ => WizardryRules.RollBonusPoints(random)).ToList();
+        var rolls = Enumerable.Range(0, 20000).Select(_ => WizardryRules.RollBonusPoints(random)).ToList();
 
-        Assert.All(rolls, p => Assert.InRange(p, 7, 30));
-        Assert.Contains(rolls, p => p >= 17);
-        Assert.Contains(rolls, p => p <= 10);
+        Assert.All(rolls, p => Assert.True(p is >= 5 and <= 9 or >= 15 and <= 19 or >= 25 and <= 29));
+        Assert.InRange(rolls.Count(p => p <= 9), 18700, 19300);
+        Assert.InRange(rolls.Count(p => p is >= 15 and <= 19), 800, 1100);
+        Assert.Contains(rolls, p => p >= 25);
     }
 
     [Fact]
@@ -169,7 +185,7 @@ public class WizardryRulesTests
         Assert.Equal(WizardryClass.Fighter, character.WizardryClass);
         Assert.Equal(stats, character.WizardryStats);
         Assert.InRange(character.GoldPieces, 90, 189);
-        Assert.InRange(character.Age, 18, 23);
+        Assert.InRange(character.Age, 14, 17);
         Assert.Equal("Fighter", character.GetClassesDisplayText());
     }
 
@@ -349,6 +365,35 @@ public class WizardryRulesTests
         Assert.Equal(600, WizardryRules.TempleCost(CharacterStatus.Petrified, 3));
         Assert.Equal(750, WizardryRules.TempleCost(CharacterStatus.Dead, 3));
         Assert.Equal(1500, WizardryRules.TempleCost(CharacterStatus.Ashes, 3));
+    }
+
+    [Fact]
+    public void Level_up_attributes_young_gain_old_lose_and_low_vitality_kills()
+    {
+        var young = new Character { Ruleset = Ruleset.Wizardry, Age = 0, Abilities = new AbilityScores { Strength = 10, Intelligence = 10, Wisdom = 10, Constitution = 10, Dexterity = 10, Charisma = 10 } };
+        var gains = Enumerable.Range(0, 50).SelectMany(s => WizardryAttributeChanges.Roll(young, 25, new Random(s))).ToList();
+        Assert.All(gains, g => Assert.Equal(1, g.Delta));
+        Assert.NotEmpty(gains);
+        Assert.All(new[] { young.Abilities.Strength, young.Abilities.Charisma }, v => Assert.InRange(v, 10, 18));
+
+        var old = new Character { Ruleset = Ruleset.Wizardry, Age = 100, Abilities = new AbilityScores { Strength = 10, Intelligence = 10, Wisdom = 10, Constitution = 3, Dexterity = 10, Charisma = 10 } };
+        for (var s = 0; s < 20 && !old.HasStatus(CharacterStatus.Dead); s++)
+            WizardryAttributeChanges.Roll(old, 25, new Random(s));
+        Assert.True(old.HasStatus(CharacterStatus.Dead));
+        Assert.True(old.Abilities.Constitution < 3);
+    }
+
+    [Fact]
+    public void Level_up_hp_is_rerolled_total_or_plus_one()
+    {
+        // Vitality 18 (+3 per die): a level 6 fighter always rolls at least 6 * 4 = 24, never above 6 * 13 = 78.
+        for (var s = 0; s < 100; s++)
+        {
+            var hp = WizardryRules.RollLevelUpMaxHitPoints(WizardryClass.Fighter, 6, 18, 45, new Random(s));
+            Assert.True(hp == 46 || (hp > 45 && hp <= 78));
+        }
+
+        Assert.Equal(101, WizardryRules.RollLevelUpMaxHitPoints(WizardryClass.Fighter, 6, 18, 100, new Random(1)));
     }
 
     [Fact]

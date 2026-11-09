@@ -289,7 +289,8 @@ public sealed partial class CombatResolver
         if (member.CurrentHitPoints <= 0)
             return;
 
-        if (!member.HasStatus(CharacterStatus.Asleep))
+        if (!member.HasStatus(CharacterStatus.Asleep)
+            || member.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
             return;
 
         member.RemoveStatus(CharacterStatus.Asleep);

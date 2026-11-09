@@ -22,8 +22,34 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         return effect.Kind switch
         {
             WizardryEffectKind.Heal or WizardryEffectKind.FullHeal => ResolveHeal(request, spell, effect, rng),
+            WizardryEffectKind.CureParalysis => ResolveCureParalysis(request, spell),
             _ => ResolveAgainstMonsters(request, spell, effect, rng)
         };
+    }
+
+    private static SpellCastResult ResolveCureParalysis(SpellCastRequest request, Spell spell)
+    {
+        var targetRef = request.Targets.FirstOrDefault(t => t.Type == SpellCastTargetType.Ally);
+        var target = targetRef == null
+            ? request.Caster
+            : request.PartyTargets.FirstOrDefault(p => string.Equals(p.Name, targetRef.CharacterName, StringComparison.OrdinalIgnoreCase));
+
+        if (target == null)
+            return SpellCastResult.Failure("No valid ally target selected.");
+
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
+        if (target.HasStatus(CharacterStatus.Paralyzed))
+        {
+            target.ClearParalysis();
+            result.Events.Add($"{target.Name} is no longer paralyzed.");
+        }
+        else
+        {
+            result.Events.Add($"{target.Name} was not paralyzed.");
+        }
+
+        return result;
     }
 
     private static SpellCastResult ResolveHeal(SpellCastRequest request, Spell spell, WizardrySpellEffect effect, Random rng)
@@ -48,6 +74,7 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         {
             target.CurrentHitPoints = target.MaxHitPoints;
             target.Status &= CharacterStatus.Dead | CharacterStatus.Ashes | CharacterStatus.Lost;
+            target.ParalyzedRoundsRemaining = 0;
         }
         else
         {

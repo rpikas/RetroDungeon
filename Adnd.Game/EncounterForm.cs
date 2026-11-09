@@ -1124,7 +1124,8 @@ public sealed class EncounterForm : Form
         var savedHeader = _headerLabel.Text;
         _headerLabel.Text = string.Empty;
         _optionsTitleLabel.Text = string.Empty;
-        _optionsLegendLabel.Text = $"WHO (#) WILL {verb.ToUpperInvariant()} ?" + Environment.NewLine + "↵ TO LEAVE";
+        var choices = string.Join("   ", names.Select((n, i) => $"{i + 1}) {n.ToUpperInvariant()}"));
+        _optionsLegendLabel.Text = $"WHO (#) WILL {verb.ToUpperInvariant()} ?" + Environment.NewLine + choices + Environment.NewLine + "↵ TO LEAVE";
         _monsterPanel.Invalidate();
         DialogResult = DialogResult.None;
         ShowDialog(owner);

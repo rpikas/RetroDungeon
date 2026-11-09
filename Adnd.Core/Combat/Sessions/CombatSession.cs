@@ -1083,6 +1083,17 @@ public sealed class CombatSession
     }
 
     public IEnumerable<Character> AliveParty => Party.Where(p => p.CurrentHitPoints > 0 && !p.HasStatus(CharacterStatus.Dead));
+
+    /// <summary>True when no one can act any more: everyone is dead, or every survivor is permanently (Wizardry) paralyzed.</summary>
+    public bool IsPartyDefeated
+    {
+        get
+        {
+            var alive = AliveParty.ToList();
+            return alive.Count == 0
+                || alive.All(p => p.Ruleset == Adnd.Core.Config.Ruleset.Wizardry && p.HasStatus(CharacterStatus.Paralyzed));
+        }
+    }
     public IEnumerable<MonsterInstance> AliveMonsters => Monsters.Where(m => m.IsAlive);
 
     // Helper methods for group-based monster tracking

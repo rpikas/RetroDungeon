@@ -1010,65 +1010,11 @@ public class CityMenu
         var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
         if (sel.HasValue)
         {
-            Console.Clear();
             var c = all[sel.Value - 1];
-            Console.WriteLine(c);
-            Console.WriteLine($"Age: {Math.Max(0, c.Age)}y {Math.Max(0, c.AgeDays)}d ({c.GetAgeCategoryDisplay()})");
-            if (c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
-                Console.WriteLine($"Languages: {c.GetKnownLanguagesDisplay()}");
-            if (c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
-                RuleApplicationInfo.Publish($"Inspect character: {c.Name} languages known: {c.GetKnownLanguagesDisplay()}.");
-
-            if (c.HasStatus(CharacterStatus.Out))
-            {
-                Console.WriteLine($"Out position: L{c.DungeonLevel} ({c.DungeonCellX},{c.DungeonCellY})");
-                RuleApplicationInfo.Publish(
-                    $"Inspect character: {c.Name} is OUT at dungeon position L{c.DungeonLevel} ({c.DungeonCellX},{c.DungeonCellY}) with status {c.Status}.");
-            }
-
-            if (c.IsBard())
-            {
-                var bardLevel = c.GetBardLevel();
-                var bardProgress = BardRules.GetProgressForLevel(bardLevel);
-                Console.WriteLine($"Bard college: {bardProgress.College}");
-                Console.WriteLine($"Bard charm chance: {bardProgress.CharmPercentage}%");
-                Console.WriteLine($"Legend/lore & item knowledge chance: {bardProgress.LegendLoreItemKnowledgePercentage}%");
-                RuleApplicationInfo.PublishLinked(
-                    "PHB",
-                    "118BardTabeII",
-                    $"Inspect bard: {c.Name} L{bardLevel} => college {bardProgress.College}, charm {bardProgress.CharmPercentage}%, legend/lore {bardProgress.LegendLoreItemKnowledgePercentage}%, additional languages known {bardProgress.AdditionalLanguagesKnown}.");
-            }
-
-            Console.WriteLine("\n=== SPELLCASTING ===");
-            if (c.Spellcasting == null || c.Spellcasting.Count == 0)
-            {
-                Console.WriteLine(" (no spellcasting)");
-            }
-            else
-            {
-                foreach (var state in c.Spellcasting)
-                {
-                    var allSpells = _spellRepo.LoadByClass(state.SpellClass);
-                    var known = allSpells.Where(s => state.KnownSpellIds.Contains(s.Id)).ToList();
-                    Console.WriteLine($" - {state.SpellClass}: known {known.Count}, prepared {state.PreparedSpells.Sum(ps => ps.Count)}");
-
-                    for (int lvl = 0; lvl < state.SlotsPerDay.Count; lvl++)
-                    {
-                        var max = state.SlotsPerDay[lvl];
-                        if (max <= 0)
-                            continue;
-                        var used = lvl < state.SlotsUsed.Count ? state.SlotsUsed[lvl] : 0;
-                        Console.WriteLine($"   L{lvl + 1} slots: {Math.Max(0, max - used)}/{max}");
-                    }
-
-                    if (known.Count > 0)
-                    {
-                        Console.WriteLine("   Known: " + string.Join(", ", known.Select(s => $"L{s.Level} {s.Name}")));
-                    }
-                }
-            }
-
-            InspectCharacterInventory(c);
+            // Same dialog as the camp screen in the dungeon.
+            using var inspect = new CampCharacterInspectForm(c.Name, all.Select(x => x.Name).ToList());
+            inspect.ShowDialog();
+            return;
         }
         else Console.WriteLine("Invalid selection.");
 

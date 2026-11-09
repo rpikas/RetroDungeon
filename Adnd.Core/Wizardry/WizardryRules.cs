@@ -32,8 +32,8 @@ public static class WizardryRules
     public const int MaxStat = 18;
     // Level 1 characters always start with 8 HP whatever the class; hit dice apply from level 2.
     public const int StartingHitPoints = 8;
-    public const int MinStartingAge = 18;
-    public const int StartingAgeSpread = 6;
+    public const int MinStartingAge = 14;
+    public const int StartingAgeSpread = 4;
     public const int StartingGoldBase = 89;
     public const int StartingGoldDie = 100;
 
@@ -180,18 +180,24 @@ public static class WizardryRules
         _ => 0
     };
 
-    /// <summary>Bonus points to distribute at creation: 1d4+6, with up to two 1-in-11 chances of +10 (second only while under 20).</summary>
+    /// <summary>Re-rolls the whole HP total for the level; the new max HP is the roll if higher than the current max, else current + 1.</summary>
+    public static int RollLevelUpMaxHitPoints(WizardryClass cls, int level, int vitality, int currentMax, Random random)
+    {
+        var sides = HitDieSides(cls);
+        var modifier = VitalityHitPointModifier(vitality);
+        var total = 0;
+        for (var i = 0; i < HitDiceAtLevel(cls, level); i++)
+            total += Math.Max(1, random.Next(1, sides + 1) + modifier);
+
+        return total > currentMax ? total : currentMax + 1;
+    }
+
+    /// <summary>Bonus points to distribute at creation: 95% 5-9, 4.75% 15-19, 0.25% 25-29.</summary>
     public static int RollBonusPoints(Random random)
     {
-        var points = random.Next(1, 5) + 6;
-        if (random.Next(11) == 0)
-        {
-            points += 10;
-            if (points < 20 && random.Next(11) == 0)
-                points += 10;
-        }
-
-        return points;
+        var tier = random.Next(10000);
+        var bonus = tier < 9500 ? 0 : tier < 9975 ? 10 : 20;
+        return random.Next(5, 10) + bonus;
     }
 
     /// <summary>Temple fee per character level: Paralyzed 100, Stoned 200, Dead 250, Ashes 500 (no doubling for ashes).</summary>

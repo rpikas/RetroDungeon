@@ -115,6 +115,7 @@ public sealed partial class MazeForm
             }
 
             if (c.HasStatus(CharacterStatus.Paralyzed)
+                && c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry
                 && !c.HasStatus(CharacterStatus.Dead)
                 && !c.HasStatus(CharacterStatus.Ashes)
                 && !c.HasStatus(CharacterStatus.Lost)

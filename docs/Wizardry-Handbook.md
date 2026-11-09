@@ -35,8 +35,7 @@ Order: race, alignment, bonus points (with the live class list), class, name.
 
 ### Bonus points
 
-- Bonus points to assign: **1d4+6**.
-- 1 in 11 chance of **+10** more. If the total is still under 20, another 1 in 11 chance of **+10**.
+- Bonus points to assign: **95%** 5-9 points, **4.75%** 15-19 points, **0.25%** 25-29 points (`WizardryRules.RollBonusPoints`).
 - No stat can exceed **18**, and no stat can go below the race base.
 - All points must be spent before finishing (unless every stat is at 18).
 - Screen: ↵ moves the pointer (wraps from Luck to Strength), ↑ adds a point, ↓ removes one, Esc finishes.
@@ -61,7 +60,7 @@ Order: race, alignment, bonus points (with the live class list), class, name.
 
 - **HP and max HP: always 8**, whatever the class. The class hit dice work from level 2.
 - Gold: **1d100 + 89**.
-- Age: 18 to 23 years.
+- Age: 14 to 17 years.
 - AC 10. Damage 2d2 (Ninja 2d4).
 - Stats are stored in the ability fields: Strength, I.Q. = Intelligence, Piety = Wisdom, Vitality = Constitution,
   Agility = Dexterity, Luck = Charisma.
@@ -96,13 +95,19 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 
 **Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat.
 
+**Attributes on level-up** (`WizardryAttributeChanges`, `WizardryPeekAge` in game-rules.json, default 25): for each level gained and each of Strength, I.Q., Piety, Vitality, Agility and Luck there is a 75% chance it changes. Roll 0 to (2 x WizardryPeekAge) - 1. If age is higher than the roll the attribute loses 1 (at 18 there is only a 1 in 6 chance of losing 1); if age is lower and the attribute is under 18 it gains 1. A Vitality below 3 kills the character. The inn shows "YOU GAINED/LOST ..." for each change.
+
 **Learning spells on level-up:** for each level gained, every unknown spell of a circle the character has slots for is learned with chance IQ/30 (Piety/30 for priest spells). The first spell of each circle is always learned.
+
+**Monster size:** every monster from the Wizardry source is size Medium (set in `MonsterImporter`), so weapons use their normal damage (Long Sword 1d8), never the "vs Large" damage (1d12).
+
+**Paralyze attack:** a Wizardry monster's Paralyze special attack only applies to the character it actually hits (never on a miss). The paralysis does not expire, not even in town, and lasts until cured with Dialko or Madi (or by the temple).
+
+**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees. Poison needs no temple visit: it is cured automatically whenever the party is back in town (`MainMenu.CureWizardryPoisonInTown`).
 
 ## 4. Hit points after level 1
 
-**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees.
-
-Max HP is re-rolled at each level up (data in place, level-up not yet implemented).
+Max HP is re-rolled at each level up (`WizardryRules.RollLevelUpMaxHitPoints`): the whole total is rolled again for the new level; if it is higher than the current max HP that becomes the new max, otherwise the character gains only +1 HP. AD&D keeps adding one die per level.
 
 - Hit die: Fighter and Lord d10; Priest and Samurai d8; Thief, Bishop and Ninja d6; Mage d4.
 - Number of dice: the character's level. A Samurai rolls one extra.
@@ -143,8 +148,9 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 - A character carries at most 8 items in the inventory. Weight does not matter, and carry weight is not shown.
 - Weapon proficiencies do not exist: they are not shown, and there is no to-hit penalty for an unfamiliar weapon.
 - There is no Character Sheet action; the inspect screen is all there is.
-- Monsters put to sleep stay asleep when damaged (AD&D wakes them); they wake only when the sleep runs out. Hits and spells on a sleeping monster still get their sleeping bonuses.
+- Monsters put to sleep stay asleep when damaged (AD&D wakes them); they wake only when the sleep runs out. Hits and spells on a sleeping monster still get their sleeping bonuses. The same goes for sleeping Wizardry party members: damage does not wake them.
 - Turn Undead never destroys the undead in Wizardry: a result that would disintegrate it (D) turns it instead, shown as Turned.
+- A Dead, Ashes or Lost character can have no other status (poisoned, paralyzed, ...); `Character.Status` drops them. This holds for AD&D too.
 
 ## 6. Not implemented yet
 

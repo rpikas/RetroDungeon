@@ -18,7 +18,9 @@ public enum WizardryEffectKind
     /// <summary>Kills the target outright (Badi, Lakanito, Zilwan for undead).</summary>
     Kill,
     /// <summary>Reduces the target to 1d8 HP (Mabadi).</summary>
-    ReduceToD8
+    ReduceToD8,
+    /// <summary>Cures paralysis on one party member (Dialko).</summary>
+    CureParalysis
 }
 
 /// <param name="Dice">Number of dice rolled for damage or healing.</param>
@@ -55,7 +57,7 @@ public static class WizardrySpells
         ("Mahalito", SpellClass.MagicUser, 3, "Firestorm deals 4d6 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 4, 6, true, false),
         ("Molito", SpellClass.MagicUser, 3, "Energy blast deals 3d6 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 3, 6, true, false),
         ("Bamatu", SpellClass.Cleric, 3, "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
-        ("Dialko", SpellClass.Cleric, 3, "Cures paralysis and awakens sleepers.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Dialko", SpellClass.Cleric, 3, "Cures paralysis and awakens sleepers.",         SpellCastContext.Both, WizardryEffectKind.CureParalysis, 0, 0, false, false),
         ("Latumapic", SpellClass.Cleric, 3, "Identifies all opponents for the rest of the stay in the dungeon.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
         ("Lomilwa", SpellClass.Cleric, 3, "Greater light lasting until you leave the dungeon or enter a dark zone.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
 
@@ -122,7 +124,7 @@ public static class WizardrySpells
         return Table.Select(row =>
         {
             var effect = new WizardrySpellEffect(row.Kind, row.Dice, row.Sides, row.Group, row.UndeadOnly);
-            var isHeal = row.Kind is WizardryEffectKind.Heal or WizardryEffectKind.FullHeal;
+            var isHeal = row.Kind is WizardryEffectKind.Heal or WizardryEffectKind.FullHeal or WizardryEffectKind.CureParalysis;
             return new Spell
             {
                 Id = ToId(row.Name),

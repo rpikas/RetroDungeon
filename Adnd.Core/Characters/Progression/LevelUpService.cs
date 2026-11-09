@@ -17,7 +17,7 @@ public sealed class LevelUpService
     /// With <paramref name="awardLevels"/> false (Wizardry) the XP is stored but no level is gained;
     /// <see cref="ApplyPendingLevels"/> awards it later.
     /// </summary>
-    public LevelUpResult ApplyExperienceAndAutoLevel(Character character, int gainedXp, List<Spell>? availableSpells = null, bool awardLevels = true)
+    public LevelUpResult ApplyExperienceAndAutoLevel(Character character, int gainedXp, List<Spell>? availableSpells = null, bool awardLevels = true, int maxLevels = int.MaxValue)
     {
         if (gainedXp < 0)
             gainedXp = 0;
@@ -39,7 +39,7 @@ public sealed class LevelUpService
             var entry = character.ClassProgressions.First();
             entry.Experience += gainedXp;
             if (awardLevels)
-                LevelSingleClass(character, entry, ref result);
+                LevelSingleClass(character, entry, ref result, maxLevels);
             character.Level = Math.Max(1, entry.Level);
         }
         else
@@ -111,6 +111,9 @@ public sealed class LevelUpService
         if (result.LeveledUp && character.Ruleset == Ruleset.Wizardry)
         {
             result.SpellsLearned = Wizardry.WizardrySpellLearning.LearnOnLevelUp(character, result.NewLevel - result.OldLevel);
+            for (var i = 0; i < result.NewLevel - result.OldLevel && !character.HasStatus(CharacterStatus.Dead); i++)
+                result.AttributeChanges.AddRange(Wizardry.WizardryAttributeChanges.Roll(character, GameRulesProvider.Current.WizardryPeekAge, Random.Shared));
+            result.DiedFromVitality = character.HasStatus(CharacterStatus.Dead);
         }
         else if (result.LeveledUp && availableSpells != null && availableSpells.Count > 0)
         {
@@ -120,20 +123,36 @@ public sealed class LevelUpService
         return result;
     }
 
+    /// <summary>True when the stored experience already pays for a higher level than the character has.</summary>
+    public static bool HasPendingLevels(Character character)
+    {
+        character.EnsureClassProgressions();
+        var entry = character.ClassProgressions.FirstOrDefault();
+        return entry != null && ExperienceTable.GetLevelForClass(character, entry.Class, entry.Experience) > entry.Level;
+    }
+
     /// <summary>Awards every level the stored experience already pays for (the Wizardry inn).</summary>
     public LevelUpResult ApplyPendingLevels(Character character, List<Spell>? availableSpells = null)
         => ApplyExperienceAndAutoLevel(character, 0, availableSpells);
 
-    private static void LevelSingleClass(Character character, ClassProgression entry, ref LevelUpResult result)
+    /// <summary>Awards only the next pending level, so the caller can show each level on its own.</summary>
+    public LevelUpResult ApplyNextPendingLevel(Character character, List<Spell>? availableSpells = null)
+        => ApplyExperienceAndAutoLevel(character, 0, availableSpells, maxLevels: 1);
+
+    private static void LevelSingleClass(Character character, ClassProgression entry, ref LevelUpResult result, int maxLevels = int.MaxValue)
     {
         var targetLevel = ExperienceTable.GetLevelForClass(character, entry.Class, entry.Experience);
+        var awarded = 0;
 
-        while (entry.Level < targetLevel)
+        while (entry.Level < targetLevel && awarded < maxLevels)
         {
+            awarded++;
             entry.Level++;
             character.Level = entry.Level;
 
-            var gain = HitPointProgression.RollHitPointGain(character, character.Level);
+            var gain = character.Ruleset == Ruleset.Wizardry && character.WizardryClass is { } wizClass
+                ? Wizardry.WizardryRules.RollLevelUpMaxHitPoints(wizClass, character.Level, character.Abilities.Constitution, character.MaxHitPoints, Random.Shared) - character.MaxHitPoints
+                : HitPointProgression.RollHitPointGain(character, character.Level);
             result.HitPointsGained += gain;
             character.MaxHitPoints += gain;
             character.CurrentHitPoints += gain;

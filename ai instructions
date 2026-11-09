@@ -8524,4 +8524,86 @@ In wizardry the prices in the church are different than in adnd.
 - Stoned:    (200 * Character Level) gold.
 - Dead:      (250 * Character Level) gold.
 - Ashes:     (500 * Character Level) gold.
+26,3
+___
+in wizardry starting age should be between 14-17 years of age.
 
+n Wizardry I (and the classic Wizardry HP system), HP gains are not calculated like D&D where you simply add one new hit-die every level.
+
+Instead, when you level up:
+
+The game recalculates what your total HP could be at your new level.
+It rolls HP for every level you've earned, using your class's hit die and Vitality bonus.
+If the newly rolled total is higher than your current HP, your HP jumps up to that new value.
+If the newly rolled total is equal to or less than your current HP, you get only +1 HP.
+Example
+
+Suppose a Fighter has 45 HP.
+
+When reaching level 6:
+
+The game rolls something like 6d10 (plus Vitality modifiers).
+If the result is 52, HP becomes 52 (+7 gained).
+If the result is 43, HP becomes 46 (+1 only).
+
+This is why you'll often see:
+
+Level 5 -> 6  : +1 HP
+Level 6 -> 7  : +1 HP
+Level 7 -> 8  : +1 HP
+Level 8 -> 9  : +14 HP
+
+
+The game keeps rerolling your entire HP total every level, so eventually you "catch up" with a larger increase.
+
+Vitality matters
+
+Vitality modifies HP gained per level:
+
+Vitality 3: −2 HP/level
+Vitality 4-5: −1 HP/level
+Vitality 16: +1 HP/level
+Vitality 17: +2 HP/level
+Vitality 18: +3 HP/level
+Class hit dice
+
+Typical hit dice are:
+
+Fighter: d10
+Priest: d8
+Mage: d4
+
+(and other classes fall between these)
+
+in wizardry when asking who should rest, also show level and indicate if they will gain level when resting
+in wizardy poison is automaticly cured when entering town
+
+all wizardry monsters should be regared as size medium. according to WizardyItems.json Long sword should give 1d8 in
+damage, not 1d12
+
+when wizardry have special attack paralyze, it only affect the person hit by the monster and not if the attack
+misses. The wizardy paralyzation lasts until it is healed with Madi or Dialko
+
+When all party members are paralyzed, the game should not hang, but the party is defeated and show the tombe stones
+and return to town
+
+wizardry player that are asleep does not way up from damage, but adnd players do-
+
+when status is dead, ashes or lost it can not be anything else like poisoned or paralyzed. This is true both for
+adnd and wizardry
+
+i wizardry när man skapar en kraktär får man med 95% sanoliket minst 5 och max 9 i bouns poäng att fördela.
+med 4,75% sannolikhet får man minst 15 och max 19  poäng att fördela och med 
+0,25% sannolikhet får man minst 25 och max 29 poäng att fördela.
+28,0
+In the equipping dialog for both adnad wizardry, when the user double click on an item them equip it and dont 
+close the dialog util Esc is pressed.
+
+when ganing level in wizardry, if the character gain several levels at once, then the game should show the
+level up dialog for each level gained, so the user can see what stats and spells are gained for each level, 
+instead of just showing the final level gained.
+
+Both for adnd and wizardry, when inspecting a character in the town, the same dialog should be used as
+when inspecting a character in the dungeon.
+
+when an unidentified item is traded, write the unidentified name in the dialog instead of the identified name

@@ -63,6 +63,7 @@ public class MainMenu
         while (true)
         {
             RestoreDailySpellPointsInTown();
+            CureWizardryPoisonInTown();
             ExchangePartyCoinsToGoldInTown();
 
             // Back at the hub: put the party on the town board, where they last stood. Publishing on every
@@ -173,6 +174,27 @@ public class MainMenu
             }
         }
 
+    }
+
+    /// <summary>Wizardry: poison wears off by itself once the party is back in town.</summary>
+    private void CureWizardryPoisonInTown()
+    {
+        if (GameRulesProvider.Current.Rules != Ruleset.Wizardry)
+            return;
+
+        var party = _partyRepo.Load();
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var character) || character.Ruleset != Ruleset.Wizardry)
+                continue;
+            if (!character.HasStatus(CharacterStatus.Poisoned))
+                continue;
+
+            character.RemoveStatus(CharacterStatus.Poisoned);
+            _charRepo.Save(character);
+            Adnd.Core.Diagnostics.RuleApplicationInfo.Publish($"Wizardry: {character.Name}'s poison is cured automatically on entering town.");
+        }
     }
 
     private void ExchangePartyCoinsToGoldInTown()
@@ -575,7 +597,7 @@ public class MainMenu
                 changed = true;
             }
 
-            if (character.HasStatus(CharacterStatus.Paralyzed))
+            if (character.HasStatus(CharacterStatus.Paralyzed) && character.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
             {
                 character.ClearParalysis();
                 changed = true;

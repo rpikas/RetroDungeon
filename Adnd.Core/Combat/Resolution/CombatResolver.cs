@@ -479,7 +479,7 @@ public sealed partial class CombatResolver
         ApplyPoisonDamageDuringCombat(session, events);
         ApplyBleedingDamage(session, events);
 
-        if (!session.AliveParty.Any())
+        if (session.IsPartyDefeated)
         {
             session.Outcome = CombatOutcome.Defeat;
             events.Add(new CombatEvent("The party is defeated."));

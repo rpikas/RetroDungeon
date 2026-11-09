@@ -112,6 +112,8 @@ public class GameRules
     public bool ShowToHitRoll { get; set; } = false;
     // Wizardry only: show the town, shop, church and inn pictures.
     public bool ShowCityPictures { get; set; } = true;
+    // Wizardry only: age at which attribute gains on level-up stop being likely (random roll is 0 to twice this).
+    public int WizardryPeekAge { get; set; } = 25;
     public bool PlayerSelectsWeaponProficiencies { get; set; } = false;
     public bool PlayerSelectsLanguagesOnCreation { get; set; } = false;
     public int MaxSizeEncounter { get; set; } = 2;
