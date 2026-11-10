@@ -30,6 +30,12 @@ public readonly record struct WizardryStats(int Strength, int Iq, int Piety, int
 public static class WizardryRules
 {
     public const int MaxStat = 18;
+
+    /// <summary>What a spell school is called on screen: Wizardry says Mage and Priest, AD&amp;D Magic-User and Cleric.</summary>
+    public static string SpellSchoolName(Adnd.Core.Spells.SpellClass spellClass, bool wizardry) =>
+        wizardry && spellClass == Adnd.Core.Spells.SpellClass.MagicUser ? "Mage"
+        : wizardry && spellClass == Adnd.Core.Spells.SpellClass.Cleric ? "Priest"
+        : spellClass.ToString();
     // Level 1 characters always start with 8 HP whatever the class; hit dice apply from level 2.
     public const int StartingHitPoints = 8;
     public const int MinStartingAge = 14;

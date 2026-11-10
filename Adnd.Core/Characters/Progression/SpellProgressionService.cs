@@ -26,6 +26,13 @@ public sealed class SpellProgressionService
             ? classes.Where(c => c != CharacterClass.Ranger).ToList()
             : classes;
 
+        if (Adnd.Core.Wizardry.WizardryIdentification.IsBishop(character))
+        {
+            foreach (var track in SpellProgression.GetWizardryBishopTracks(character.Level))
+                allTracks[track.SpellClass] = new List<int>(track.SlotsPerDay);
+            effectiveClasses = new List<CharacterClass>();
+        }
+
         foreach (var cls in effectiveClasses)
         {
             var classLevel = character.GetClassLevel(cls);

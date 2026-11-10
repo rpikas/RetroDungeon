@@ -83,6 +83,40 @@ public class WizardryRulesTests
         Assert.Equal(allowed, WizardryRules.AlignmentAllowed(cls, alignment));
     }
 
+    [Theory]
+    [InlineData(1, 1, 0)]
+    [InlineData(2, 1, 1)]
+    [InlineData(3, 1, 1)]
+    [InlineData(4, 2, 1)]
+    [InlineData(6, 2, 2)]
+    [InlineData(8, 3, 2)]
+    [InlineData(10, 3, 3)]
+    [InlineData(14, 4, 4)]
+    [InlineData(22, 6, 6)]
+    [InlineData(24, 7, 6)]
+    [InlineData(28, 7, 7)]
+    public void Bishop_spell_circles_follow_the_handbook_table(int level, int mage, int priest)
+    {
+        Assert.Equal((mage, priest), Adnd.Core.Spells.SpellProgression.WizardryBishopCircles(level));
+    }
+
+    [Fact]
+    public void Bishop_spell_slots_are_limited_to_the_available_circles()
+    {
+        var tracks = Adnd.Core.Spells.SpellProgression.GetWizardryBishopTracks(4);
+        Assert.Equal(2, tracks.Single(t => t.SpellClass == Adnd.Core.Spells.SpellClass.MagicUser).SlotsPerDay.Count(s => s > 0));
+        Assert.Equal(1, tracks.Single(t => t.SpellClass == Adnd.Core.Spells.SpellClass.Cleric).SlotsPerDay.Count(s => s > 0));
+    }
+
+    [Fact]
+    public void Agility_does_not_change_wizardry_armor_class()
+    {
+        var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(10, 10, 10, 10, 18, 10), WizardryAlignment.Good, WizardryClass.Fighter, new Random(1));
+        Assert.Equal(0, c.DexterityArmorClassModifier);
+        c.RefreshMonkProgressionStats();
+        Assert.Equal(10, c.ArmorClass);
+    }
+
     [Fact]
     public void Bonus_points_fall_in_the_three_handbook_tiers()
     {

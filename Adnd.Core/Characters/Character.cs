@@ -1960,7 +1960,7 @@ public class Character
 
         var dexAcModifier = (isMonkPrimary && IsWearingBodyArmor())
             ? 0
-            : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+            : DexterityArmorClassModifier;
 
         var equipmentAcBonus = GetStaticEquipmentArmorClassBonusExcludingRingOfProtection();
 
@@ -1994,6 +1994,11 @@ public class Character
         return bonus;
     }
 
+    /// <summary>Dexterity adjusts AC in AD&amp;D only; Wizardry agility never does.</summary>
+    public int DexterityArmorClassModifier => Ruleset == Adnd.Core.Config.Ruleset.Wizardry
+        ? 0
+        : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+
     public void RefreshMonkProgressionStats()
     {
         EnsureClassProgressions();
@@ -2008,7 +2013,7 @@ public class Character
 
         if (!IsMonk())
         {
-            var nonMonkDexterityAcModifier = AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+            var nonMonkDexterityAcModifier = DexterityArmorClassModifier;
             ArmorClass = 10 + nonMonkDexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);
 
             if (!HasEquippedWeapon())
@@ -2024,7 +2029,7 @@ public class Character
             ? GetClassLevel(CharacterClass.Monk)
             : Math.Max(1, DualClassOriginalLevel);
 
-        var monkDexterityAcModifier = IsWearingBodyArmor() ? 0 : AbilitiesTables.DexterityACModifier(Abilities.Dexterity);
+        var monkDexterityAcModifier = IsWearingBodyArmor() ? 0 : DexterityArmorClassModifier;
         ArmorClass = GetMonkEffectiveArmorClass(effectiveLevel) + monkDexterityAcModifier - EquipmentManager.GetTotalArmorClassBonus(this);
 
         if (!HasEquippedWeapon())

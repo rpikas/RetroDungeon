@@ -20,7 +20,10 @@ public static class WizardrySpellLearning
 
         foreach (var heldClass in character.Classes)
         {
-            foreach (var track in SpellProgression.GetSpellcastingTracks(heldClass, character.Level))
+            var tracks = WizardryIdentification.IsBishop(character)
+                ? SpellProgression.GetWizardryBishopTracks(character.Level)
+                : SpellProgression.GetSpellcastingTracks(heldClass, character.Level);
+            foreach (var track in tracks)
             {
                 if (track.SlotsPerDay.All(s => s <= 0))
                     continue;

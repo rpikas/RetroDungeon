@@ -40,6 +40,33 @@ public static class SpellProgression
         return tracks;
     }
 
+    /// <summary>Highest mage and priest spell circle a Wizardry Bishop of this level can use (docs\Wizardry-Handbook.md).</summary>
+    public static (int Mage, int Priest) WizardryBishopCircles(int level)
+    {
+        static int Circle(int level, int first, int step) => level < first ? 0 : Math.Min(7, 1 + (level - first) / step);
+
+        // Mage circles open at 1, 4, 8, 12, 16, 20, 24; priest circles at 2, 6, 10, 14, 18, 22, 28.
+        var mage = level < 4 ? Circle(level, 1, 3) : Math.Min(7, 2 + (level - 4) / 4);
+        var priest = level < 2 ? 0 : level < 6 ? 1 : level >= 28 ? 7 : Math.Min(6, 2 + (level - 6) / 4);
+        return (mage, priest);
+    }
+
+    /// <summary>A Wizardry Bishop casts both mage and priest spells, each limited to its own highest circle.</summary>
+    public static List<(SpellClass SpellClass, List<int> SlotsPerDay)> GetWizardryBishopTracks(int level)
+    {
+        var (mage, priest) = WizardryBishopCircles(level);
+        var tracks = new List<(SpellClass SpellClass, List<int> SlotsPerDay)>();
+
+        List<int> Capped(Dictionary<int, int[]> table, SpellClass spellClass, int circles) =>
+            GetSlotsFromTable(table, spellClass, level).Select((slots, i) => i < circles ? Math.Max(1, slots) : 0).ToList();
+
+        if (mage > 0)
+            tracks.Add((SpellClass.MagicUser, Capped(MagicUserSlots, SpellClass.MagicUser, mage)));
+        if (priest > 0)
+            tracks.Add((SpellClass.Cleric, Capped(ClericSlots, SpellClass.Cleric, priest)));
+        return tracks;
+    }
+
     public static bool TryGetSpellClass(CharacterClass characterClass, out SpellClass spellClass)
     {
         switch (characterClass)

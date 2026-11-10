@@ -4414,7 +4414,8 @@ public sealed class CombatCoordinator
                 _ => title
             };
             using var chestImage = LairTreasureChestDialog.ResolveChestImage();
-            var pick = chestForm.ShowMemberPick(owner, chestImage, verb, selectable.Select(c => c.Name).ToList(), allowLeaveOption);
+            var slots = selectable.Select(c => session.Party.IndexOf(c)).ToList();
+            var pick = chestForm.ShowMemberPick(owner, chestImage, verb, selectable.Select(c => c.Name).ToList(), slots, allowLeaveOption);
             return (pick.Index >= 0 ? selectable[pick.Index] : null, pick.Leave);
         }
 

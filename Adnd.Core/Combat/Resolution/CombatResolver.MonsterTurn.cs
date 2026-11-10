@@ -828,7 +828,7 @@ public sealed partial class CombatResolver
         var blinkBehindAttack = TryResolveBlinkDogTeleportBehind(monster, target, events);
         if (blinkBehindAttack)
         {
-            var dexAcBonus = Math.Min(0, AbilitiesTables.DexterityACModifier(target.Abilities.Dexterity));
+            var dexAcBonus = Math.Min(0, target.DexterityArmorClassModifier);
             if (dexAcBonus < 0)
             {
                 targetAc -= dexAcBonus;

@@ -618,7 +618,7 @@ public sealed class CampCharacterInspectForm : Form
                 SyncAutoKnownSpells(c, state);
                 var all = _spellRepository.LoadByClass(state.SpellClass);
                 var known = all.Where(s => state.KnownSpellIds.Contains(s.Id)).ToList();
-                lines.Add($" - {state.SpellClass}: known {known.Count}, prepared {state.PreparedSpells.Sum(ps => ps.Count)}");
+                lines.Add($" - {(c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry ? WizardryRules.SpellSchoolName(state.SpellClass, true) : state.SpellClass.ToString())}: known {known.Count}, prepared {state.PreparedSpells.Sum(ps => ps.Count)}");
 
                 for (int lvl = 0; lvl < state.SlotsPerDay.Count; lvl++)
                 {
@@ -821,7 +821,8 @@ public sealed class CampCharacterInspectForm : Form
                     var used = i < state.SlotsUsed.Count ? state.SlotsUsed[i] : 0;
                     slots.Add(Math.Max(0, max - used).ToString());
                 }
-                sb.AppendLine($"{state.SpellClass.ToDisplayString().ToUpperInvariant(),-12} {string.Join("/", slots)}");                
+                var schoolName = wiz ? WizardryRules.SpellSchoolName(state.SpellClass, true) : state.SpellClass.ToDisplayString();
+                sb.AppendLine($"{schoolName.ToUpperInvariant(),-12} {string.Join("/", slots)}");
             }
         }
 
@@ -2097,7 +2098,7 @@ public sealed class CampCharacterInspectForm : Form
             var details = new List<string>
             {
                 $"Name: {spell.Name}",
-                $"Class: {spell.SpellClass}",
+                $"Class: {(spell.Ruleset == Adnd.Core.Config.Ruleset.Wizardry ? WizardryRules.SpellSchoolName(spell.SpellClass, true) : spell.SpellClass.ToString())}",
                 $"Level: {spell.Level}",
                 $"Cast context: {spell.CastContext}",
                 $"Range type: {spell.RangeType}",

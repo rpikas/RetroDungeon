@@ -503,8 +503,9 @@ public sealed class EncounterForm : Form
             var pickOptions = new List<ViewerPromptOption>();
             for (var i = 0; i < _pickNames.Count; i++)
             {
-                vocab[$"pick:{i + 1}"] = Keys.D1 + i;
-                pickOptions.Add(new ViewerPromptOption($"pick:{i + 1}", _pickNames[i]));
+                var slot = _pickSlots![i] + 1;
+                vocab[$"pick:{slot}"] = Keys.D1 + slot - 1;
+                pickOptions.Add(new ViewerPromptOption($"pick:{slot}", _pickNames[i]));
             }
 
             pickOptions.Add(new ViewerPromptOption("back", "Back"));
@@ -1104,17 +1105,19 @@ public sealed class EncounterForm : Form
 
     private bool _noticeMode;
     private IReadOnlyList<string>? _pickNames;
+    private IReadOnlyList<int>? _pickSlots;
     private bool _pickAllowLeave;
     private string _pickQuestion = string.Empty;
     private int _pickIndex = -1;
     private bool _pickLeave;
 
-    /// <summary>Asks "who will ...?" over the chest picture. Number picks a member; Enter or L leaves (when allowed); B or Esc goes back.</summary>
-    internal (int Index, bool Leave) ShowMemberPick(IWin32Window owner, Image? image, string verb, IReadOnlyList<string> names, bool allowLeave)
+    /// <summary>Asks "who will ...?" over the chest picture. The keys are the party's own numbers (slots are 0-based party positions of the names). Enter or L leaves (when allowed); B or Esc goes back.</summary>
+    internal (int Index, bool Leave) ShowMemberPick(IWin32Window owner, Image? image, string verb, IReadOnlyList<string> names, IReadOnlyList<int> slots, bool allowLeave)
     {
         _chestMode = true;
         _chestImage = image;
         _pickNames = names;
+        _pickSlots = slots;
         _pickAllowLeave = allowLeave;
         _pickIndex = -1;
         _pickLeave = false;
@@ -1124,8 +1127,7 @@ public sealed class EncounterForm : Form
         var savedHeader = _headerLabel.Text;
         _headerLabel.Text = string.Empty;
         _optionsTitleLabel.Text = string.Empty;
-        var choices = string.Join("   ", names.Select((n, i) => $"{i + 1}) {n.ToUpperInvariant()}"));
-        _optionsLegendLabel.Text = $"WHO (#) WILL {verb.ToUpperInvariant()} ?" + Environment.NewLine + choices + Environment.NewLine + "↵ TO LEAVE";
+        _optionsLegendLabel.Text = $"WHO (#) WILL {verb.ToUpperInvariant()} ?" + Environment.NewLine + "↵ TO LEAVE";
         _monsterPanel.Invalidate();
         DialogResult = DialogResult.None;
         ShowDialog(owner);
@@ -1175,8 +1177,9 @@ public sealed class EncounterForm : Form
     {
         if (_pickNames != null)
         {
-            if (key >= Keys.D1 && key <= Keys.D9 && key - Keys.D1 < _pickNames.Count)
-                _pickIndex = key - Keys.D1;
+            var slot = key >= Keys.D1 && key <= Keys.D9 ? _pickSlots!.ToList().IndexOf(key - Keys.D1) : -1;
+            if (slot >= 0)
+                _pickIndex = slot;
             else if (key == Keys.L && _pickAllowLeave || key == Keys.Enter && _pickAllowLeave)
                 _pickLeave = true;
             else if (key is not (Keys.B or Keys.Escape or Keys.Enter))

@@ -8607,3 +8607,20 @@ Both for adnd and wizardry, when inspecting a character in the town, the same di
 when inspecting a character in the dungeon.
 
 when an unidentified item is traded, write the unidentified name in the dialog instead of the identified name
+
+here is a list describing at what level bishops get mage and priest spells
+Bishop Level    Mage Spell Level Available    Priest Spell Level Available
+1    1    -
+2    1    1
+4    2    1
+6    2    2
+8    3    2
+10    3    3
+12    4    3
+14    4    4
+16    5    4
+18    5    5
+20    6    5
+22    6    6
+24+    7    6
+28+    7    7
