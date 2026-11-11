@@ -458,8 +458,9 @@ public sealed partial class MazeForm
     {
         var heading = CompassHeading();
 
-        var position = ShowPositionInHud ? $"   Pos: {PositionText}" : string.Empty;
-        var status = $"Level: {_currentDungeonLevel} ({DungeonName}){position}   Facing: {heading}   Esc: Party view";
+        var status = ShowPositionInHud
+            ? $"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}   Esc: Party view"
+            : "Esc: Party view";
         using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
         graphics.DrawString(status, HudFont, brush, new PointF(16f, ClientSize.Height - 54f));
     }
@@ -470,8 +471,8 @@ public sealed partial class MazeForm
 
         using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
         graphics.DrawString("A/D or ←/→: Turn   W or ↑: Move   C: Camp   K: Kick   Esc: Toggle full dungeon view", HudFont, brush, new PointF(16f, 6f));
-        var position = ShowPositionInHud ? $"   Pos: {PositionText}" : string.Empty;
-        graphics.DrawString($"Level: {_currentDungeonLevel} ({DungeonName}){position}   Facing: {heading}", HudFont, brush, new PointF(16f, 30f));
+        if (ShowPositionInHud)
+            graphics.DrawString($"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}", HudFont, brush, new PointF(16f, 30f));
     }
 
     /// <summary>

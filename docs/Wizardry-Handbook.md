@@ -120,7 +120,7 @@ Max HP is re-rolled at each level up (`WizardryRules.RollLevelUpMaxHitPoints`): 
 Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monsters only use spells of their own ruleset: Wizardry characters and monsters with source Wizardry use these spells, AD&D ones use the AD&D spells.
 
 - Mage spells (22) are cast by Mage-school characters (Mage, Bishop); Priest spells (29) by Priest-school characters (and the Bishop, see below). Circles 1-7.
-- Bishop: highest circle by level (mage / priest): L1 1/-, L2 1/1, L4 2/1, L6 2/2, L8 3/2, L10 3/3, L12 4/3, L14 4/4, L16 5/4, L18 5/5, L20 6/5, L22 6/6, L24 7/6, L28 7/7. Spell slots per open circle follow the usual Mage/Priest table, capped at that circle.
+- Bishop: casts as a Mage of half his level (at least level 1) and as a Priest of a third of his level (no priest spells below level 3). Circles and slots per day come from the normal Mage and Priest tables at those effective levels, up to circle 7. Examples: level 1 = Mage circle 1 only; level 6 = Mage level 3 (circles 1-2) and Priest level 2 (circle 1).
 - Spell slots per day still come from the AD&D memorize-and-slots system for now (Mage = Magic-User slots, Priest = Cleric slots).
 - Starting spells: Mage and Bishop know Halito and Katino; Priest knows Dios and Badios.
 - The first spell of each circle is always learned once the character has slots for that circle.

@@ -64,6 +64,23 @@ internal static class TermConsole
 
     private static bool _rulesetPictures;
 
+    /// <summary>Types text into the window as if it came from the keyboard, without pressing Enter.</summary>
+    public static void EnqueueText(string text)
+    {
+        foreach (var c in text)
+            Pending.Enqueue(new ConsoleKeyInfo(c, KeyFromChar(c), char.IsUpper(c), false, false));
+        Scrolled = 0;
+    }
+
+    /// <summary>
+    /// While a "Choose #" list is on screen, the number of characters its reader takes before it submits by
+    /// itself (0 = double-clicking a numbered row does nothing).
+    /// </summary>
+    public static int ClickableNumberDigits { get; set; }
+
+    /// <summary>While a "Choose letter" list is on screen, double-clicking a row ("B. Item") types its letter.</summary>
+    public static bool ClickableLetters { get; set; }
+
     /// <summary>Types text (and Enter) into the window as if it came from the keyboard.</summary>
     public static void EnqueueLine(string text)
     {

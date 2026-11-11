@@ -32,7 +32,40 @@ public sealed partial class MazeForm
             else if (_wizardryPictureRect.Contains(e.Location))
                 TermConsole.EnqueueLine("W");
         };
+        MouseDoubleClick += (_, e) =>
+        {
+            if ((TermConsole.ClickableNumberDigits <= 0 && !TermConsole.ClickableLetters) || e.Button != MouseButtons.Left || !_terminalInner.Contains(e.Location))
+                return;
+
+            var lines = TermConsole.Snapshot();
+            var index = _terminalFirstLine + (int)((e.Y - _terminalInner.Y) / _terminalLineHeight);
+            if (index < 0 || index >= lines.Count)
+                return;
+
+            if (TermConsole.ClickableLetters)
+            {
+                var letter = System.Text.RegularExpressions.Regex.Match(lines[index], @"^([A-Z])\.\s");
+                if (letter.Success)
+                    TermConsole.EnqueueText(letter.Groups[1].Value);
+                return;
+            }
+
+            var match = System.Text.RegularExpressions.Regex.Match(lines[index], @"^(\d+)[.)]?\s");
+            if (!match.Success)
+                return;
+
+            var digits = match.Groups[1].Value;
+            if (digits.Length > TermConsole.ClickableNumberDigits)
+                return;
+
+            // A reader that submits by itself after N characters must not be left an Enter to read later.
+            TermConsole.EnqueueText(digits.Length < TermConsole.ClickableNumberDigits ? digits + "\r" : digits);
+        };
     }
+
+    private Rectangle _terminalInner;
+    private float _terminalLineHeight = 1f;
+    private int _terminalFirstLine;
 
     private Rectangle _adndPictureRect;
     private Rectangle _wizardryPictureRect;
@@ -295,6 +328,9 @@ public sealed partial class MazeForm
         var maxScroll = Math.Max(0, lines.Count - rows);
         TermConsole.Scrolled = Math.Min(TermConsole.Scrolled, maxScroll);
         var first = Math.Max(0, lines.Count - rows - TermConsole.Scrolled);
+        _terminalInner = inner;
+        _terminalLineHeight = lineHeight;
+        _terminalFirstLine = first;
 
         var state = graphics.Save();
         graphics.SetClip(inner, CombineMode.Intersect);

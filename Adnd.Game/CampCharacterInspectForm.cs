@@ -842,10 +842,10 @@ public sealed class CampCharacterInspectForm : Form
 
         if (wiz)
         {
-            // Equipped items come first (marked *), unidentified ones carry a ?, two to a row.
+            // Equipped items come first (marked *), items the class cannot use carry a #, unidentified ones a ?, two to a row.
             var entries = c.Equipment.Values.Where(i => i != null).Select(i => (Item: i!, Equipped: true))
                 .Concat(c.Inventory.Select(i => (Item: i, Equipped: false)))
-                .Select((e, n) => $"{n + 1}){(e.Equipped ? "*" : e.Item.IsIdentified ? " " : "?")}{e.Item.DisplayName.ToUpperInvariant()}")
+                .Select((e, n) => $"{n + 1}){(e.Equipped ? "*" : !EquipmentManager.MeetsClassRequirement(c, e.Item) ? "#" : e.Item.IsIdentified ? " " : "?")}{e.Item.DisplayName.ToUpperInvariant()}")
                 .ToList();
             if (entries.Count > 0)
             {
@@ -2588,7 +2588,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var itemIdx = PromptChoice("Choose Item", giver.Inventory.Select(i => $"{i.DisplayName} (Wt {i.Weight})").ToList());
+        var itemIdx = PromptChoice("Choose Item", giver.Inventory.Select(i => giver.Ruleset == Adnd.Core.Config.Ruleset.Wizardry ? i.DisplayName : $"{i.DisplayName} (Wt {i.Weight})").ToList());
         if (!itemIdx.HasValue)
             return;
 

@@ -85,27 +85,29 @@ public class WizardryRulesTests
 
     [Theory]
     [InlineData(1, 1, 0)]
-    [InlineData(2, 1, 1)]
+    [InlineData(2, 1, 0)]
     [InlineData(3, 1, 1)]
-    [InlineData(4, 2, 1)]
-    [InlineData(6, 2, 2)]
-    [InlineData(8, 3, 2)]
-    [InlineData(10, 3, 3)]
-    [InlineData(14, 4, 4)]
-    [InlineData(22, 6, 6)]
-    [InlineData(24, 7, 6)]
-    [InlineData(28, 7, 7)]
-    public void Bishop_spell_circles_follow_the_handbook_table(int level, int mage, int priest)
+    [InlineData(4, 1, 1)]
+    [InlineData(6, 2, 1)]
+    public void Bishop_casts_as_half_level_mage_and_third_level_priest(int level, int mage, int priest)
     {
         Assert.Equal((mage, priest), Adnd.Core.Spells.SpellProgression.WizardryBishopCircles(level));
     }
 
     [Fact]
-    public void Bishop_spell_slots_are_limited_to_the_available_circles()
+    public void Bishop_level_6_has_circle_one_priest_and_circle_two_mage_spells()
     {
-        var tracks = Adnd.Core.Spells.SpellProgression.GetWizardryBishopTracks(4);
+        var tracks = Adnd.Core.Spells.SpellProgression.GetWizardryBishopTracks(6);
         Assert.Equal(2, tracks.Single(t => t.SpellClass == Adnd.Core.Spells.SpellClass.MagicUser).SlotsPerDay.Count(s => s > 0));
         Assert.Equal(1, tracks.Single(t => t.SpellClass == Adnd.Core.Spells.SpellClass.Cleric).SlotsPerDay.Count(s => s > 0));
+    }
+
+    [Fact]
+    public void Bishop_level_1_has_no_priest_spells()
+    {
+        var tracks = Adnd.Core.Spells.SpellProgression.GetWizardryBishopTracks(1);
+        Assert.DoesNotContain(tracks, t => t.SpellClass == Adnd.Core.Spells.SpellClass.Cleric);
+        Assert.Single(tracks.Single(t => t.SpellClass == Adnd.Core.Spells.SpellClass.MagicUser).SlotsPerDay, s => s > 0);
     }
 
     [Fact]

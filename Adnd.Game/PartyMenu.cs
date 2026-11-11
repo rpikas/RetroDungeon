@@ -1303,7 +1303,17 @@ public class PartyMenu
         }
 
         Console.Write("\nChoose #: ");
-        var sel = InputHelper.ReadNumber(1, roster.Count, 2, echoTypedCharacters: true);
+        Console.ClickableNumberDigits = 2;
+        int? sel;
+        try
+        {
+            sel = InputHelper.ReadNumber(1, roster.Count, 2, echoTypedCharacters: true);
+        }
+        finally
+        {
+            Console.ClickableNumberDigits = 0;
+        }
+
         if (sel.HasValue)
         {
             var chosen = roster[sel.Value - 1];

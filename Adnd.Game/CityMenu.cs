@@ -606,18 +606,27 @@ public class CityMenu
         var saveKey = Console.ReadKey(true).Key;
         if (saveKey == ConsoleKey.Y || (saveKey != ConsoleKey.N && saveKey != ConsoleKey.Y))
         {
-            Console.Write("Name: ");
-            var name = (Console.ReadLine() ?? string.Empty).Trim();
-            if (string.IsNullOrWhiteSpace(name))
-                name = "Unknown";
-
-            // Enforce max length of 15 characters
-            if (name.Length > 15)
+            var existingNames = _repo.GetAll().Select(c => c.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            string name;
+            while (true)
             {
-                name = name.Substring(0, 15);
-                Console.WriteLine($"(Name truncated to: {name})");
-            }
+                Console.Write("Name: ");
+                name = (Console.ReadLine() ?? string.Empty).Trim();
+                if (string.IsNullOrWhiteSpace(name))
+                    name = "Unknown";
 
+                // Enforce max length of 15 characters
+                if (name.Length > 15)
+                {
+                    name = name.Substring(0, 15);
+                    Console.WriteLine($"(Name truncated to: {name})");
+                }
+
+                if (name == "Unknown" || !existingNames.Contains(name))
+                    break;
+
+                Console.WriteLine("A character with that name already exists. Please enter another name.");
+            }
             character.Name = name;
             _repo.Save(character);
             Console.WriteLine("Character saved.");

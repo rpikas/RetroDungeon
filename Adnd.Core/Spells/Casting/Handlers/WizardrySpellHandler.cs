@@ -396,6 +396,8 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
 
+        var rolled = 0;
+        var augmented = false;
         if (effect.Kind == WizardryEffectKind.FullHeal)
         {
             target.CurrentHitPoints = target.MaxHitPoints;
@@ -404,14 +406,19 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         }
         else
         {
-            var heal = RollDice(effect.Dice, effect.Sides, rng);
-            if (request.CombatSession?.WizardryAugmentedMagic == true)
+            rolled = RollDice(effect.Dice, effect.Sides, rng);
+            var heal = rolled;
+            augmented = request.CombatSession?.WizardryAugmentedMagic == true;
+            if (augmented)
                 heal = (int)Math.Ceiling(heal * 1.5);
+            rolled = heal;
             target.CurrentHitPoints = Math.Min(target.MaxHitPoints, target.CurrentHitPoints + heal);
         }
 
         var actual = Math.Max(0, target.CurrentHitPoints - before);
-        result.Events.Add($"{target.Name} is healed for {actual} HP.");
+        result.Events.Add(effect.Kind == WizardryEffectKind.FullHeal
+            ? $"{target.Name} is fully healed for {actual} HP."
+            : $"{target.Name} is healed for {actual} HP (rolled {rolled} on {effect.Dice}d{effect.Sides}{(augmented ? ", augmented" : "")}).");
         result.HpChanges[target.Name] = actual;
         return result;
     }

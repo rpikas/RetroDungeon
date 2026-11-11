@@ -2397,6 +2397,43 @@ public sealed class EncounterForm : Form
         form.AcceptButton = ok;
         form.CancelButton = cancel;
         OldStyleDialog.Apply(form, promptControl, input);
+
+        // Double-clicking a numbered line ("2. Name ...") answers with that number.
+        void AnswerWithLine(string? line)
+        {
+            var match = line == null ? null : System.Text.RegularExpressions.Regex.Match(line, @"^\s*(\d+)[.)]");
+            if (match is not { Success: true } || !int.TryParse(match.Groups[1].Value, out var n) || n < min || n > max)
+                return;
+
+            input.Text = n.ToString();
+            form.DialogResult = DialogResult.OK;
+            form.Close();
+        }
+
+        if (promptControl is TextBox promptBox)
+        {
+            promptBox.DoubleClick += (_, _) =>
+            {
+                var text = promptBox.Text;
+                if (text.Length == 0)
+                    return;
+
+                var at = Math.Min(promptBox.GetCharIndexFromPosition(promptBox.PointToClient(Cursor.Position)), text.Length - 1);
+                var start = at > 0 ? text.LastIndexOf('\n', at) + 1 : 0;
+                var end = text.IndexOf('\n', at);
+                AnswerWithLine(text[start..(end < 0 ? text.Length : end)]);
+            };
+        }
+        else
+        {
+            promptControl.MouseDoubleClick += (_, e) =>
+            {
+                var lines = prompt.Split('\n');
+                var row = e.Y / Math.Max(1, promptControl.Font.Height);
+                AnswerWithLine(row >= 0 && row < lines.Length ? lines[row] : null);
+            };
+        }
+
         if (GameRulesProvider.Current.UIOldStyle && isChooseSpellDialog)
         {
             var extraSpellRows = Math.Max(0, max - min + 1 - 11);

@@ -369,7 +369,17 @@ public class ShopMenu
         }
 
         Console.Write("\nChoose letter: ");
-        var sel = ReadShopLetterIndex(startIndex, numberOfItems, items.Count);
+        Console.ClickableLetters = true;
+        int? sel;
+        try
+        {
+            sel = ReadShopLetterIndex(startIndex, numberOfItems, items.Count);
+        }
+        finally
+        {
+            Console.ClickableLetters = false;
+        }
+
         if (sel.HasValue)
         {
             var it = items[sel.Value];
@@ -516,7 +526,17 @@ public class ShopMenu
         }
 
         Console.Write("Choose #: ");
-        var sel = InputHelper.ReadNumber(1, resolvedMembers.Count);
+        Console.ClickableNumberDigits = 1;
+        int? sel;
+        try
+        {
+            sel = InputHelper.ReadNumber(1, resolvedMembers.Count);
+        }
+        finally
+        {
+            Console.ClickableNumberDigits = 0;
+        }
+
         if (sel.HasValue)
         {
             // Find the index of the selected character in the original party.Members list

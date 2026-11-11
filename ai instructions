@@ -8837,5 +8837,19 @@ Teleport enemies: all monsters will be teleported away from battle.
 
 Not impelemnted yet: Latumapic it Identifies a monster group
 
+when trading items in wizardry, do not show the weight of the item, since wizardry does not have a weight limit for characters.
+in the inventory, item not usable for the class or alignment show a # in front of them
 
+in adnd and wizardry when selecting what charater to target with a spell make them possible to select by
+doubleclicking on them
 
+when creating a charater an selecting a name that already exists, ask the user to enter another name
+
+In both adnd and wisardry when adding members to the party make it possible to double click on them to select them
+
+Bishop learn priest spells like a priest but the (bishop level)/3
+Bishop learn mage spells like a mage but the (bishop level)/2
+so for example a level 6 bishop can learn level 1 priest spells and 2 mage spells,
+a level 1 bishop can not learn priest spells and level 1 mage spells,
+
+when settings to not see position, also not shown level nor facing direction
