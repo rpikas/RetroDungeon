@@ -432,7 +432,7 @@ public sealed class CampCharacterInspectForm : Form
     private void CheckUnreadScrollFadeForCurrentCharacter()
     {
         var c = GetCharacter();
-        if (c == null)
+        if (c == null || c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
             return;
 
         var messages = new List<string>();
@@ -2389,7 +2389,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var recipientIdx = PromptChoice("Trade With", recipients.Select(r => $"{r.Name} ({r.Class})").ToList());
+        var recipientIdx = PromptChoice("Trade With", recipients.Select(r =>         $"{r.Name} ({r.GetClassesDisplayText()})").ToList());
         if (!recipientIdx.HasValue)
             return;
 

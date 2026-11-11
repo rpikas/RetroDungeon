@@ -1009,7 +1009,7 @@ public class PartyMenu
 
         Console.WriteLine("\nTrade with:");
         for (int i = 0; i < recipients.Count; i++)
-            Console.WriteLine($"{i + 1}. {recipients[i].Name} ({recipients[i].Class})");
+            Console.WriteLine($"{i + 1}. {recipients[i].Name} ({recipients[i].GetClassesDisplayText()})");
   //      Console.WriteLine($"{i + 1}. {recipients[i].Name}");
 //        var recipientIdx = PromptChoice("Trade With", recipients.Select(r => $"{r.Name} ({r.Class})").ToList());
 
@@ -1087,7 +1087,7 @@ public class PartyMenu
 
         Console.WriteLine("\nGive gold to:");
         for (int i = 0; i < recipients.Count; i++)
-            Console.WriteLine($"{i + 1}. {recipients[i].Name} ({recipients[i].Class})");
+            Console.WriteLine($"{i + 1}. {recipients[i].Name} ({recipients[i].GetClassesDisplayText()})");
 
         Console.Write("Choose #: ");
         var recipientSelection = InputHelper.ReadNumber(1, recipients.Count);

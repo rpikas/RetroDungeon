@@ -20,7 +20,9 @@ public enum WizardryEffectKind
     /// <summary>Reduces the target to 1d8 HP (Mabadi).</summary>
     ReduceToD8,
     /// <summary>Cures paralysis on one party member (Dialko).</summary>
-    CureParalysis
+    CureParalysis,
+    /// <summary>Lowers the whole party's AC for the battle; Dice holds the amount (Matu, Bamatu).</summary>
+    PartyArmorClass
 }
 
 /// <param name="Dice">Number of dice rolled for damage or healing.</param>
@@ -50,13 +52,13 @@ public static class WizardrySpells
         ("Melito", SpellClass.MagicUser, 2, "Sparks deal 1d8 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 1, 8, true, false),
         ("Sopic", SpellClass.MagicUser, 2, "Invisibility lowers the caster's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
         ("Calfo", SpellClass.Cleric, 2, "Identifies the type of trap on a chest, not always accurately.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
-        ("Matu", SpellClass.Cleric, 2, "Lowers the party's Armor Class by 2 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
+        ("Matu", SpellClass.Cleric, 2, "Lowers the party's Armor Class by 2 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 2, 0, false, false),
         ("Manifo", SpellClass.Cleric, 2, "Paralyzes an enemy group. Paralyzed targets take double damage.", SpellCastContext.Combat, WizardryEffectKind.Paralyze, 0, 0, true, false),
         ("Montino", SpellClass.Cleric, 2, "Silences an enemy group. Silenced targets cannot cast spells.", SpellCastContext.Combat, WizardryEffectKind.Silence, 0, 0, true, false),
 
         ("Mahalito", SpellClass.MagicUser, 3, "Firestorm deals 4d6 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 4, 6, true, false),
         ("Molito", SpellClass.MagicUser, 3, "Energy blast deals 3d6 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 3, 6, true, false),
-        ("Bamatu", SpellClass.Cleric, 3, "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
+        ("Bamatu", SpellClass.Cleric, 3, "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 4, 0, false, false),
         ("Dialko", SpellClass.Cleric, 3, "Cures paralysis and awakens sleepers.",         SpellCastContext.Both, WizardryEffectKind.CureParalysis, 0, 0, false, false),
         ("Latumapic", SpellClass.Cleric, 3, "Identifies all opponents for the rest of the stay in the dungeon.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
         ("Lomilwa", SpellClass.Cleric, 3, "Greater light lasting until you leave the dungeon or enter a dark zone.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
@@ -133,7 +135,7 @@ public static class WizardrySpells
                 Level = row.Circle,
                 Description = row.Description,
                 EffectDescription = row.Description,
-                RangeType = isHeal ? SpellRangeType.Ally : row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat ? SpellRangeType.Self : SpellRangeType.Enemy,
+                RangeType = isHeal ? SpellRangeType.Ally : row.Kind == WizardryEffectKind.PartyArmorClass || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
                 Targeting = effect.Group ? SpellTargeting.Multiple : SpellTargeting.Single,
                 TargetingScope = row.Name is "Tiltowait" or "Malikto" ? SpellTargetingScope.AllGroups
                     : effect.Group ? SpellTargetingScope.SingleGroup : SpellTargetingScope.SingleTarget,

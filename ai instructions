@@ -8624,3 +8624,46 @@ Bishop Level    Mage Spell Level Available    Priest Spell Level Available
 22    6    6
 24+    7    6
 28+    7    7
+
+when inspecting wizardry charaters, the spells should be called Mage and Priest instead of Magic-User and Cleric 
+as they should be called when playing ADND.
+
+dexterity affect ac in adnd but agility does not affect ac in wizardry
+___
+in wizadry only undeads disapeared if a turn is successful if not successful they are not affected at all, so dont
+write a number of turns they are turned, since that is only applicable in adnd not wizardry
+30,6
+When trading in wizardy and the trade with is shown show the wizardy names of the classes instead of the adnd
+classnames that only shoule be shown for the adnd characters.
+
+MATU and BAMATU are Priest buff spells that improve your party's Armor Class (AC), making enemies less likely to hit you.
+
+Spell	Priest Spell Level	Effect
+MATU ("Blessing")	2	Lowers the AC of the entire party by 2 for the duration of the battle.
+BAMATU	3	Lowers the AC of the entire party by 4 for the duration of the battle.
+
+In classic Wizardry, lower AC is better. So:
+
+AC 10 → AC 8 after MATU
+AC 10 → AC 6 after BAMATU
+
+These stack conceptually with equipment and other AC spells, making your front line much harder to hit.
+
+For comparison, some related protective spells are:
+
+KALKI: party AC −1 (Level 1 Priest)
+MATU: party AC −2 (Level 2 Priest)
+BAMATU: party AC −4 (Level 3 Priest)
+MAPORFIC: party AC buff that lasts for the entire expedition instead of a single combat.
+
+in wizardry this is how many attacks per round different clases should have
+Level    Fighter    Samurai    Lord    Ninja
+.01-03    1    1    1    1
+.04-07    2    1    1    1
+.08-11    3    2    2    2
+.12-15    4    3    3    3
+16-19    5    4    4    4
+20-23    6    5    5    5
+24-27    7    6    6    6
+28-31    8    7    7    7
+

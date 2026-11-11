@@ -23,8 +23,21 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         {
             WizardryEffectKind.Heal or WizardryEffectKind.FullHeal => ResolveHeal(request, spell, effect, rng),
             WizardryEffectKind.CureParalysis => ResolveCureParalysis(request, spell),
+            WizardryEffectKind.PartyArmorClass => ResolvePartyArmorClass(request, spell, effect),
             _ => ResolveAgainstMonsters(request, spell, effect, rng)
         };
+    }
+
+    private static SpellCastResult ResolvePartyArmorClass(SpellCastRequest request, Spell spell, WizardrySpellEffect effect)
+    {
+        if (request.CombatSession == null)
+            return SpellCastResult.Failure($"{spell.Name} can only be cast in combat.");
+
+        // Buffs from several casts add up; the party AC is lowered for the rest of the battle.
+        request.CombatSession.WizardryPartyArmorClassBonus += effect.Dice;
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. The party's AC improves by {effect.Dice} for this battle.");
+        return result;
     }
 
     private static SpellCastResult ResolveCureParalysis(SpellCastRequest request, Spell spell)

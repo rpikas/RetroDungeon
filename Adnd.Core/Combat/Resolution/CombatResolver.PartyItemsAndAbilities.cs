@@ -1449,6 +1449,28 @@ public sealed partial class CombatResolver
 
             token = token.Trim();
 
+            // Wizardry: a successful dispell makes the undead vanish; a failure leaves it untouched, and nothing is "turned for N rounds".
+            if (actor.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            {
+                var dispelled = false;
+                if (string.Equals(token, "T", StringComparison.OrdinalIgnoreCase) || string.Equals(token, "D", StringComparison.OrdinalIgnoreCase))
+                    dispelled = true;
+                else if (int.TryParse(token, out var wizRequired))
+                    dispelled = _dice.Roll(20) >= wizRequired;
+
+                if (dispelled)
+                {
+                    monster.CurrentHitPoints = 0;
+                    events.Add(new CombatEvent($"{monster.DisplayName} is dispelled and vanishes!"));
+                }
+                else
+                {
+                    events.Add(new CombatEvent($"{monster.DisplayName} is unaffected."));
+                }
+
+                continue;
+            }
+
             if (token == "-")
             {
                 events.Add(new CombatEvent($"{monster.DisplayName} resists the turning attempt."));

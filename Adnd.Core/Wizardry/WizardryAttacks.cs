@@ -23,10 +23,11 @@ public static class WizardryAttacks
     public static int SwingsFor(string? weaponName) =>
         weaponName != null && Swings.TryGetValue(weaponName, out var swings) ? swings : 0;
 
-    /// <summary>Fighter, Samurai, Lord and Ninja gain one attack every 4 levels; others keep one.</summary>
+    /// <summary>Fighter gains one attack every 4 levels from level 4; Samurai, Lord and Ninja gain theirs from level 8; others keep one.</summary>
     public static int ClassAttacks(WizardryClass cls, int level) => cls switch
     {
-        WizardryClass.Fighter or WizardryClass.Samurai or WizardryClass.Lord or WizardryClass.Ninja => 1 + Math.Max(0, level) / 4,
+        WizardryClass.Fighter => 1 + Math.Max(0, level) / 4,
+        WizardryClass.Samurai or WizardryClass.Lord or WizardryClass.Ninja => Math.Max(1, level / 4),
         _ => 1
     };
 

@@ -127,9 +127,17 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 - Monsters cast damage, healing, Katino and Badi (save vs spell avoids sleep and death).
 - Other spells (armor class buffs, light, detection, resurrection, teleport, divine intervention, cures) can be learned but report "not implemented" when cast.
 
+Agility never changes Armor Class in Wizardry (in AD&D, Dexterity does).
+
+Dispell Undead: a successful dispell makes the undead vanish (counts as defeated); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
+
+Matu (Priest 2) lowers the whole party's AC by 2 and Bamatu (Priest 3) by 4, for the rest of the battle only. Repeated casts add up. Implemented as `CombatSession.WizardryPartyArmorClassBonus`, applied when monsters attack.
+
 ## 5b. Attacks per round
 
-- Fighter, Samurai, Lord and Ninja get 1 attack plus 1 more every 4 levels. Priest, Bishop, Mage and Thief stay at 1.
+- Fighter: 1 attack plus 1 more every 4 levels (L1-3: 1, L4-7: 2, L8-11: 3 ... L28-31: 8).
+- Samurai, Lord and Ninja: 1 attack until level 7, then level / 4 (L8-11: 2, L12-15: 3 ... L28-31: 7).
+- Priest, Bishop, Mage and Thief stay at 1.
 - Many weapons have a swing count (Sword +1 = 2, Sword +2 = 3, Blade Cusinart = 4, Dagger of Speed = 7). It is a minimum: attacks = the higher of the class attacks and the weapon swings, never the sum.
 
 ## 5c. Unidentified items

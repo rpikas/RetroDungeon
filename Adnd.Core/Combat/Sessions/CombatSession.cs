@@ -459,6 +459,9 @@ public sealed class CombatSession
         return rounds;
     }
 
+    /// <summary>Wizardry party-wide AC improvement (Matu, Bamatu) that lasts for this battle only.</summary>
+    public int WizardryPartyArmorClassBonus { get; set; }
+
     public void SetBarkskin(string characterName, int bonus, int rounds)
     {
         if (rounds <= 0 || bonus <= 0)
