@@ -81,6 +81,7 @@ public sealed partial class MazeForm : Form
     private bool _inMagicalDarkness;
 
     private string? _centerMessage;
+    private bool _protectActive;
 
     private IReadOnlyList<DungeonDarkArea> _darkAreas = Array.Empty<DungeonDarkArea>();
 
@@ -321,6 +322,7 @@ public sealed partial class MazeForm : Form
             return;
 
         _encounterForm = null;
+        RefreshProtectSign();
         if (!IsDisposed)
         {
             Invalidate();

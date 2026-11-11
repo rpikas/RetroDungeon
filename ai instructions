@@ -8666,4 +8666,19 @@ Level    Fighter    Samurai    Lord    Ninja
 20-23    6    5    5    5
 24-27    7    6    6    6
 28-31    8    7    7    7
+___
+31,0
+when selecting a spell in wizardry, let it be possiblle to double click on the spell to select it, 
+instead of having to press enter. 
+The spell should be cast and the dialog should close when double clicking on a spell.
+Let it also be possible to type the first letter of the spell to select it, and then press enter to cast it.
 
+implement wizardy priest spell Maporfic. it gives the whole party -2 ac until they leave the dungeon. 
+while maporfic is in action, show then sign in the top of the dungeon centralized [image: copilot-image-99d091.png]
+
+when equiping from camp and shelecting who should equip, then introduce an option A)ll that goes through all 
+charaters and slot by slot where the user can chose the equiped items also. what to equip can be selected either 
+by number of by doubleclicking.
+
+when playing wizardy, and showing the party in the dungeon, CLE should be PRI, if it is a Bishop class should be BIS
+etc

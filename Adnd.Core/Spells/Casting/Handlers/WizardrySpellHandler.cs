@@ -23,9 +23,25 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         {
             WizardryEffectKind.Heal or WizardryEffectKind.FullHeal => ResolveHeal(request, spell, effect, rng),
             WizardryEffectKind.CureParalysis => ResolveCureParalysis(request, spell),
+            WizardryEffectKind.CurePoison => ResolveCurePoison(request, spell),
             WizardryEffectKind.PartyArmorClass => ResolvePartyArmorClass(request, spell, effect),
+            WizardryEffectKind.ExpeditionArmorClass => ResolveExpeditionArmorClass(request, spell, effect),
             _ => ResolveAgainstMonsters(request, spell, effect, rng)
         };
+    }
+
+    private static SpellCastResult ResolveExpeditionArmorClass(SpellCastRequest request, Spell spell, WizardrySpellEffect effect)
+    {
+        // Does not stack: a second cast only refreshes the bonus. Cleared when the party leaves the dungeon.
+        var members = request.PartyTargets.Append(request.Caster)
+            .Concat(request.CombatSession?.Party ?? Enumerable.Empty<Character>())
+            .Distinct();
+        foreach (var member in members)
+            member.TemporaryArmorClassBonusUntilDungeonExit = effect.Dice;
+
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. The party's AC improves by {effect.Dice} until it leaves the dungeon.");
+        return result;
     }
 
     private static SpellCastResult ResolvePartyArmorClass(SpellCastRequest request, Spell spell, WizardrySpellEffect effect)
@@ -37,6 +53,31 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         request.CombatSession.WizardryPartyArmorClassBonus += effect.Dice;
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. The party's AC improves by {effect.Dice} for this battle.");
+        return result;
+    }
+
+    private static SpellCastResult ResolveCurePoison(SpellCastRequest request, Spell spell)
+    {
+        var targetRef = request.Targets.FirstOrDefault(t => t.Type == SpellCastTargetType.Ally);
+        var target = targetRef == null
+            ? request.Caster
+            : request.PartyTargets.FirstOrDefault(p => string.Equals(p.Name, targetRef.CharacterName, StringComparison.OrdinalIgnoreCase));
+
+        if (target == null)
+            return SpellCastResult.Failure("No valid ally target selected.");
+
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
+        if (target.HasStatus(CharacterStatus.Poisoned))
+        {
+            target.RemoveStatus(CharacterStatus.Poisoned);
+            result.Events.Add($"{target.Name} is no longer poisoned.");
+        }
+        else
+        {
+            result.Events.Add($"{target.Name} was not poisoned.");
+        }
+
         return result;
     }
 

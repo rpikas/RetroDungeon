@@ -71,6 +71,21 @@ public sealed partial class MazeForm
             e.Graphics.FillRectangle(Brushes.Black, viewport.X + 8f, viewport.Y + 4f, size.Width + 8f, size.Height + 4f);
             e.Graphics.DrawString("Dark, you see nothing.", Font, darkBrush, new PointF(viewport.X + 12f, viewport.Y + 8f));
         }
+        if (_protectActive)
+        {
+            using var signFont = new Font("Consolas", 18f, FontStyle.Bold);
+            using var signBrush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
+            var signText = "PROTECT";
+            var signSize = e.Graphics.MeasureString(signText, signFont);
+            var signBox = new RectangleF(
+                viewport.X + ((viewport.Width - signSize.Width) / 2f) - 16f,
+                viewport.Y + 8f,
+                signSize.Width + 32f,
+                signSize.Height + 8f);
+            e.Graphics.FillRectangle(Brushes.Black, signBox);
+            e.Graphics.DrawRectangle(pen, signBox.X, signBox.Y, signBox.Width, signBox.Height);
+            e.Graphics.DrawString(signText, signFont, signBrush, signBox.X + 16f, signBox.Y + 4f);
+        }
         if (_centerMessage is not null)
         {
             using var bigFont = new Font(Font.FontFamily, _centerMessage.Length > 12 ? 30f : 48f, FontStyle.Bold);

@@ -529,6 +529,29 @@ public sealed partial class MazeForm
             prompt.AppendLine($"{i + 1}. {c.Name} ({cls})");
         }
 
+        if (startWithEquip)
+            prompt.AppendLine($"A. All (every character, slot by slot)");
+
+        if (startWithEquip)
+        {
+            var labels = activeMembers.Select(n => roster[n].Name).Append("All").ToList();
+            var answer = PromptForText("Camp - Equip", prompt.ToString(), labels, 1)?.Trim();
+            if (string.IsNullOrEmpty(answer))
+                return;
+
+            if (answer.Equals("A", StringComparison.OrdinalIgnoreCase) || answer == (activeMembers.Count + 1).ToString())
+            {
+                EquipAllFromCamp(activeMembers);
+                return;
+            }
+
+            if (!int.TryParse(answer, out var number) || number < 1 || number > activeMembers.Count)
+                return;
+
+            OpenCampInspectDialog(roster[activeMembers[number - 1]], activeMembers, startWithEquip);
+            return;
+        }
+
         var selected = PromptForNumber("Camp - Inspect", prompt.ToString(), 1, activeMembers.Count);
         if (!selected.HasValue)
             return;
@@ -536,6 +559,20 @@ public sealed partial class MazeForm
         var selectedCharacter = roster[activeMembers[selected.Value - 1]];
 
         OpenCampInspectDialog(selectedCharacter, activeMembers, startWithEquip);
+    }
+
+    private void EquipAllFromCamp(List<string> activeMembers)
+    {
+        foreach (var name in activeMembers)
+        {
+            using var inspect = new CampCharacterInspectForm(name, activeMembers, PublishTable) { StartEquipSlots = true };
+            inspect.ShowDialog(this);
+            if (inspect.EquipSlotsAborted)
+                break;
+        }
+
+        LoadLightFromParty();
+        PublishToViewer();
     }
 
     private void OpenCampInspectDialog(Character selectedCharacter, List<string> activeMembers, bool startWithEquip = false)

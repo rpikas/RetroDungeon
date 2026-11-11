@@ -133,6 +133,10 @@ Dispell Undead: a successful dispell makes the undead vanish (counts as defeated
 
 Matu (Priest 2) lowers the whole party's AC by 2 and Bamatu (Priest 3) by 4, for the rest of the battle only. Repeated casts add up. Implemented as `CombatSession.WizardryPartyArmorClassBonus`, applied when monsters attack.
 
+Maporfic (Priest 4) lowers the whole party's AC by 2 until the party leaves the dungeon (it does not stack with itself). It is stored on each member as `TemporaryArmorClassBonusUntilDungeonExit`, cleared on leaving the dungeon, and a PROTECT sign is shown at the top of the dungeon view while it is active.
+
+Latumofis (Priest 4) cures the poison of one chosen party member, in combat or in camp.
+
 ## 5b. Attacks per round
 
 - Fighter: 1 attack plus 1 more every 4 levels (L1-3: 1, L4-7: 2, L8-11: 3 ... L28-31: 8).

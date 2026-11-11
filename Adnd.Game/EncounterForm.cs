@@ -1901,17 +1901,68 @@ public sealed class EncounterForm : Form
 
     private Spell? PromptSpellSelection(Character caster, List<Spell> castable)
     {
-        var spellLines = string.Join(Environment.NewLine, castable.Select((s, i) => $"{i + 1}. L{s.Level} {s.Name}"));
-        var selected = PromptForNumber(
-            "Choose Spell",
-            $"{caster.Name} - choose spell to cast:{Environment.NewLine}{Environment.NewLine}{spellLines}",
-            1,
-            castable.Count);
+        try
+        {
+            return AskForSpell(caster, castable);
+        }
+        finally
+        {
+            UpdateHeader();
+        }
+    }
 
-        if (!selected.HasValue)
+    // A list instead of a typed number: double click casts, and typing a letter jumps to the spell starting with it.
+    private Spell? AskForSpell(Character caster, List<Spell> castable)
+    {
+        const string title = "Choose Spell";
+        using var form = new Form();
+        form.Text = title;
+        form.StartPosition = FormStartPosition.CenterParent;
+        form.FormBorderStyle = FormBorderStyle.FixedDialog;
+        form.ClientSize = new Size(620, 420);
+        form.MinimizeBox = false;
+        form.MaximizeBox = false;
+
+        var labels = castable.Select(s => $"{s.Name}  (L{s.Level})").ToList();
+        var list = new ListBox
+        {
+            Left = 12,
+            Top = 12,
+            Width = 596,
+            Height = 338,
+            Font = new Font("Consolas", 10f)
+        };
+        foreach (var label in labels)
+            list.Items.Add(label);
+        list.SelectedIndex = 0;
+
+        var ok = new Button { Text = "OK", Left = 446, Top = 358, Width = 75, DialogResult = DialogResult.OK };
+        var cancel = new Button { Text = "Cancel", Left = 527, Top = 358, Width = 75, DialogResult = DialogResult.Cancel };
+        form.Controls.Add(list);
+        form.Controls.Add(ok);
+        form.Controls.Add(cancel);
+        form.AcceptButton = ok;
+        form.CancelButton = cancel;
+        OldStyleDialog.Apply(form, list);
+
+        list.DoubleClick += (_, _) =>
+        {
+            if (list.SelectedIndex < 0)
+                return;
+
+            form.DialogResult = DialogResult.OK;
+            form.Close();
+        };
+        form.Shown += (_, _) => list.Focus();
+
+        var outcome = ViewerDialog.RunPick(form, this, title, Asking(), labels, Publish);
+        if (outcome.Picked.HasValue)
+            return castable[outcome.Picked.Value];
+
+        if (outcome.Result != DialogResult.OK || list.SelectedIndex < 0)
             return null;
 
-        return castable[selected.Value - 1];
+        return castable[list.SelectedIndex];
     }
 
     private SpellCastTarget? PromptRaiseDeadCombatTarget(Spell spell)
@@ -3084,7 +3135,11 @@ public sealed class EncounterForm : Form
         }
 
         string clsCode;
-        if (c.IsDualClassed && c.DualClassOriginalClass.HasValue)
+        if (c.Ruleset == Ruleset.Wizardry && c.WizardryClass is { } wizardryClass)
+        {
+            clsCode = wizardryClass.ToString()[..3].ToUpperInvariant();
+        }
+        else if (c.IsDualClassed && c.DualClassOriginalClass.HasValue)
         {
             var current = c.DualClass.HasValue ? ToAbbrev(c.DualClass.Value) : ToAbbrev(classes[0]);
             var former = ToAbbrev(c.DualClassOriginalClass.Value);

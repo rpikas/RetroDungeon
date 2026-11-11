@@ -21,8 +21,12 @@ public enum WizardryEffectKind
     ReduceToD8,
     /// <summary>Cures paralysis on one party member (Dialko).</summary>
     CureParalysis,
+    /// <summary>Cures poison on one party member (Latumofis).</summary>
+    CurePoison,
     /// <summary>Lowers the whole party's AC for the battle; Dice holds the amount (Matu, Bamatu).</summary>
-    PartyArmorClass
+    PartyArmorClass,
+    /// <summary>Lowers the whole party's AC by Dice until the party leaves the dungeon (Maporfic).</summary>
+    ExpeditionArmorClass
 }
 
 /// <param name="Dice">Number of dice rolled for damage or healing.</param>
@@ -67,9 +71,9 @@ public static class WizardrySpells
         ("Lahalito", SpellClass.MagicUser, 4, "Inferno deals 6d6 fire damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 6, 6, true, false),
         ("Morlis", SpellClass.MagicUser, 4, "Lesser fear: a group may flee the battle.", SpellCastContext.Combat, WizardryEffectKind.Fear, 0, 0, true, false),
         ("Badial", SpellClass.Cleric, 4, "Inflicts 2d8 damage to a single target.", SpellCastContext.Combat, WizardryEffectKind.Damage, 2, 8, false, false),
-        ("Latumofis", SpellClass.Cleric, 4, "Neutralizes poison.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Latumofis", SpellClass.Cleric, 4, "Neutralizes poison.", SpellCastContext.Both, WizardryEffectKind.CurePoison, 0, 0, false, false),
         ("Dial", SpellClass.Cleric, 4, "Heals 2d8 HP of a single target.", SpellCastContext.Both, WizardryEffectKind.Heal, 2, 8, false, false),
-        ("Maporfic", SpellClass.Cleric, 4, "Lowers the party's Armor Class by 2 for the stay in the dungeon.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Maporfic", SpellClass.Cleric, 4, "Lowers the party's Armor Class by 2 for the stay in the dungeon.", SpellCastContext.Both, WizardryEffectKind.ExpeditionArmorClass, 2, 0, false, false),
 
         ("Madalto", SpellClass.MagicUser, 5, "Arctic frost deals 8d8 freezing damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 8, 8, true, false),
         ("Makanito", SpellClass.MagicUser, 5, "Suffocates all enemies with fewer than 35 HP, killing them instantly.", SpellCastContext.Combat, WizardryEffectKind.KillWeak, 0, 0, true, false),
@@ -126,16 +130,16 @@ public static class WizardrySpells
         return Table.Select(row =>
         {
             var effect = new WizardrySpellEffect(row.Kind, row.Dice, row.Sides, row.Group, row.UndeadOnly);
-            var isHeal = row.Kind is WizardryEffectKind.Heal or WizardryEffectKind.FullHeal or WizardryEffectKind.CureParalysis;
-            return new Spell
-            {
+            var isHeal = row.Kind is WizardryEffectKind.Heal or             WizardryEffectKind.FullHeal or WizardryEffectKind.CureParalysis or WizardryEffectKind.CurePoison;
+                        return new Spell
+                        {
                 Id = ToId(row.Name),
                 Name = row.Name,
                 SpellClass = row.School,
                 Level = row.Circle,
                 Description = row.Description,
                 EffectDescription = row.Description,
-                RangeType = isHeal ? SpellRangeType.Ally : row.Kind == WizardryEffectKind.PartyArmorClass || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
+                RangeType = isHeal ? SpellRangeType.Ally : row.Kind is WizardryEffectKind.PartyArmorClass or WizardryEffectKind.ExpeditionArmorClass || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
                 Targeting = effect.Group ? SpellTargeting.Multiple : SpellTargeting.Single,
                 TargetingScope = row.Name is "Tiltowait" or "Malikto" ? SpellTargetingScope.AllGroups
                     : effect.Group ? SpellTargetingScope.SingleGroup : SpellTargetingScope.SingleTarget,

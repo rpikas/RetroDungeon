@@ -165,6 +165,7 @@ public sealed partial class MazeForm
     {
         AwardWerdnaAmuletReward();
         RestoreStrengthDrainedOnDungeonExit();
+        ClearProtectOnDungeonExit();
         RevertLycanthropeTransformationsOnDungeonExit();
         ApplyPartyAgingForDungeonExitDay();
         ApplyDiseaseProgressForDungeonExitDay();

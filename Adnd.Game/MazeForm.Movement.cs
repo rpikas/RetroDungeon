@@ -157,7 +157,32 @@ public sealed partial class MazeForm
         var party = _partyRepository.Load();
         _lightStepsRemaining = Math.Max(0, party.LightStepsRemaining);
         _continualLightActive = party.ContinualLightActive;
+        RefreshProtectSign(party);
         UpdateLighting();
+    }
+
+    // Maporfic is stored on the characters; the sign shows while any party member still has it.
+    private void RefreshProtectSign(Party? party = null)
+    {
+        party ??= _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        _protectActive = party.Members.Any(n => roster.TryGetValue(n, out var c) && c.TemporaryArmorClassBonusUntilDungeonExit > 0);
+    }
+
+    private void ClearProtectOnDungeonExit()
+    {
+        var party = _partyRepository.Load();
+        var roster = _characterRepository.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        foreach (var name in party.Members)
+        {
+            if (!roster.TryGetValue(name, out var c) || c.TemporaryArmorClassBonusUntilDungeonExit == 0)
+                continue;
+
+            c.TemporaryArmorClassBonusUntilDungeonExit = 0;
+            _characterRepository.Save(c);
+        }
+
+        _protectActive = false;
     }
 
     private void UpdateMagicSeal()

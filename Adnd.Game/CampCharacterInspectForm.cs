@@ -57,6 +57,12 @@ public sealed class CampCharacterInspectForm : Form
     /// <summary>Opens the equip chooser straight away (camp's E)QUIP).</summary>
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public bool StartWithEquip { get; init; }
+
+    /// <summary>Walk through every equipment slot of this character, then close (the camp's "equip all").</summary>
+    public bool StartEquipSlots { get; init; }
+
+    /// <summary>True when the player pressed Esc during the slot walk, meaning the rest of the party is skipped too.</summary>
+    public bool EquipSlotsAborted { get; private set; }
     public CampCharacterInspectForm(string characterName, List<string> partyMembers,
                                     Action<ViewerPrompt?>? publish = null)
     {
@@ -228,6 +234,14 @@ public sealed class CampCharacterInspectForm : Form
             StartTableMenu();
             if (StartWithEquip)
                 BeginInvoke(new Action(EquipAction));
+            if (StartEquipSlots)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    EquipAllSlots();
+                    Close();
+                }));
+            }
         };
         FormClosed += (_, _) => _tableMenu?.Dispose();
     }
@@ -1005,6 +1019,96 @@ public sealed class CampCharacterInspectForm : Form
         return true;
     }
 
+    /// <summary>Goes through every slot of the character and lets the player pick what to wear there (0 keeps what is worn).</summary>
+    private void EquipAllSlots()
+    {
+        foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
+        {
+            var c = GetCharacter();
+            if (c == null || !EquipmentManager.IsSlotAvailable(slot))
+                continue;
+
+            c.Equipment.TryGetValue(slot, out var worn);
+            if (slot == EquipmentSlot.OffHand
+                && c.Equipment.TryGetValue(EquipmentSlot.MainHand, out var main) && main?.IsTwoHanded == true)
+                continue;
+
+            var candidates = c.Inventory
+                .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue || SlotFor(it) != null)
+                .Where(it => EquipmentManager.MeetsClassRequirement(c, it) && EquipmentManager.MeetsAlignmentRequirement(c, it))
+                .Where(it => FitsSlot(it, slot))
+                .ToList();
+            if (candidates.Count == 0)
+                continue;
+
+            var options = new List<string> { $"0) Keep: {(worn == null ? "(empty)" : worn.DisplayName)}" };
+            options.AddRange(candidates.Select((it, i) => $"{i + 1}) {it.DisplayName}"));
+
+            var idx = PromptChoice($"{c.Name} - {slot}", options, numberKeys: true);
+            if (!idx.HasValue)
+            {
+                EquipSlotsAborted = true;
+                return;
+            }
+
+            if (idx.Value == 0)
+                continue;
+
+            var item = candidates[idx.Value - 1];
+            if (item.IsVersatileWeapon)
+                item.IsTwoHanded = slot == EquipmentSlot.MainHand
+                    && PromptChoice("Wield " + item.Name, new List<string> { "One hand (2d4)", "Two hands (2d4+1)" }) == 1;
+
+            var originalSlot = item.Slot;
+            item.Slot = slot;
+            var ok = EquipmentManager.Equip(c, item);
+            item.Slot = originalSlot;
+
+            if (!ok)
+            {
+                if (item.IsVersatileWeapon)
+                    item.IsTwoHanded = false;
+                SayOnBoth("Equip", $"{c.Name} cannot equip {item.Name} there.");
+                continue;
+            }
+
+            c.RefreshRingProtectionEffects();
+            c.RefreshRingWizardryEffects();
+            _characterRepository.Save(c);
+            RefreshView();
+        }
+    }
+
+    private static EquipmentSlot? SlotFor(Item item) =>
+        item.Type == ItemType.Misc && item.Quantity > 0 && !string.IsNullOrWhiteSpace(item.AmmoType) ? EquipmentSlot.Ammo : null;
+
+    private static bool FitsSlot(Item item, EquipmentSlot slot)
+    {
+        if (item.Type == ItemType.Weapon)
+        {
+            if (IsRangedWeaponForEquip(item))
+                return slot == EquipmentSlot.Range;
+
+            if (slot == EquipmentSlot.MainHand)
+                return true;
+
+            return slot == EquipmentSlot.OffHand
+                && GameRulesProvider.Current.Rules != Ruleset.Wizardry
+                && !item.IsTwoHanded;
+        }
+
+        if (item.Type == ItemType.Shield)
+            return slot == EquipmentSlot.OffHand;
+
+        if (SlotFor(item) is { } special)
+            return special == slot;
+
+        if (item.Slot is EquipmentSlot.Ring1 or EquipmentSlot.Ring2)
+            return slot is EquipmentSlot.Ring1 or EquipmentSlot.Ring2;
+
+        return item.Slot == slot;
+    }
+
     private static string GetDisplaySlot(Item item)
     {
         if (item.Type == ItemType.Weapon)
@@ -1263,7 +1367,7 @@ public sealed class CampCharacterInspectForm : Form
         if (castable.Count == 0)
             return;
 
-        var spellIdx = PromptChoice("Cast Spell", castable.Select(s => $"L{s.Level} {s.Name}").ToList());
+        var spellIdx = PromptChoice("Cast Spell", castable.Select(s => $"{s.Name}  (L{s.Level})").ToList());
         if (!spellIdx.HasValue)
             return;
 
@@ -2011,7 +2115,7 @@ public sealed class CampCharacterInspectForm : Form
         ViewerMessage.Say(null, actionName, $"[{actionName} action not yet implemented]", null);
     }
 
-    private int? PromptChoice(string title, List<string> options)
+    private int? PromptChoice(string title, List<string> options, bool numberKeys = false)
     {
         using var form = new Form();
         form.Text = title;
@@ -2050,6 +2154,25 @@ public sealed class CampCharacterInspectForm : Form
             form.DialogResult = DialogResult.OK;
             form.Close();
         };
+
+        if (numberKeys)
+        {
+            // The options are numbered by position (0 = first), so the digit key answers directly.
+            list.KeyDown += (_, e) =>
+            {
+                var digit = e.KeyCode is >= Keys.D0 and <= Keys.D9 ? e.KeyCode - Keys.D0
+                    : e.KeyCode is >= Keys.NumPad0 and <= Keys.NumPad9 ? e.KeyCode - Keys.NumPad0
+                    : -1;
+                if (digit < 0 || digit >= options.Count)
+                    return;
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                list.SelectedIndex = digit;
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            };
+        }
 
         // Nine callers come through here -- equip, unequip, drop, trade, which spell, which target -- so this is
         // the one place that has to know about the table, and all nine become answerable from it at once.
