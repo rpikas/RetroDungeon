@@ -159,6 +159,19 @@ public class WizardryRulesTests
         Assert.Equal(3, WizardryRules.LevelForXp(WizardryClass.Fighter, 2724));
     }
 
+    [Fact]
+    public void Wizardry_characters_level_with_wizardry_tables_and_no_race_cap()
+    {
+        var dwarf = WizardryCharacterFactory.Create(Race.Dwarf, new WizardryStats(12, 10, 10, 12, 10, 10), WizardryAlignment.Good, WizardryClass.Fighter, new Random(1));
+        var cls = dwarf.Classes[0];
+        var level8 = (int)WizardryRules.TotalXpForLevel(WizardryClass.Fighter, 8);
+        var level13 = (int)WizardryRules.TotalXpForLevel(WizardryClass.Fighter, 13);
+
+        Assert.Equal(8, Adnd.Core.Characters.Progression.ExperienceTable.GetLevelForClass(dwarf, cls, level8));
+        Assert.Equal(13, Adnd.Core.Characters.Progression.ExperienceTable.GetLevelForClass(dwarf, cls, level13));
+        Assert.Equal(level13, Adnd.Core.Characters.Progression.ExperienceTable.GetThresholdForLevel(dwarf, cls, 13));
+    }
+
     [Theory]
     [InlineData(WizardryClass.Fighter, 10)]
     [InlineData(WizardryClass.Lord, 10)]

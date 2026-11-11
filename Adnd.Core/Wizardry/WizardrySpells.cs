@@ -26,8 +26,32 @@ public enum WizardryEffectKind
     /// <summary>Lowers the whole party's AC for the battle; Dice holds the amount (Matu, Bamatu).</summary>
     PartyArmorClass,
     /// <summary>Lowers the whole party's AC by Dice until the party leaves the dungeon (Maporfic).</summary>
-    ExpeditionArmorClass
-}
+    ExpeditionArmorClass,
+    /// <summary>Lowers the caster's own AC for the battle; Dice holds the amount (Mogref, Sopic).</summary>
+    CasterArmorClass,
+    /// <summary>Raises an enemy group's AC (worse defence) for the battle; Dice holds the amount (Dilto).</summary>
+    GroupArmorClass,
+    /// <summary>Reports the party's position in the dungeon (Dumapic).</summary>
+    ShowPosition,
+    /// <summary>Milwa: short-lived light, like the AD&D Light spell.</summary>
+    LightShort,
+    /// <summary>Lomilwa: light that lasts until the party leaves the dungeon or enters a dark zone.</summary>
+    LightLong,
+    /// <summary>Di: raises a dead character with 1 HP; the Constitution roll decides between life and ashes.</summary>
+    Raise,
+    /// <summary>Kadorto: like AD&D Resurrection; raises a dead or ashes character at full HP, failure loses the character.</summary>
+    RaiseFull,
+    /// <summary>Loktofeit: returns the party to town, stripping all equipment and 90% of the coins.</summary>
+    Recall,
+    /// <summary>Malor: teleports the party to coordinates given as squares north/east and levels down, keeping items and gold.</summary>
+    Teleport,
+    /// <summary>Haman (Dice 0) and Mahaman (Dice 1): the caster loses a level and the gods grant a random boon.</summary>
+    Intervention,
+    /// <summary>Kandi: reports where dead party members are. Dead characters travel with the party, so that is the party's position.</summary>
+    LocateDead,
+    /// <summary>Badi: instant death like AD&D Slay Living: undead are immune; a save vs spell, death resistance and magic resistance can avoid it.</summary>
+    KillSave,
+    TrapDetect}
 
 /// <param name="Dice">Number of dice rolled for damage or healing.</param>
 /// <param name="Sides">Sides per die.</param>
@@ -42,20 +66,19 @@ public static class WizardrySpells
 
     private static readonly List<(string Name, SpellClass School, int Circle, string Description, SpellCastContext Context, WizardryEffectKind Kind, int Dice, int Sides, bool Group, bool UndeadOnly)> Table = new()
     {
-        ("Dumapic", SpellClass.MagicUser, 1, "Gives the exact current coordinates of the caster, including depth.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
+        ("Dumapic", SpellClass.MagicUser, 1, "Gives the exact current coordinates of the caster, including depth.", SpellCastContext.Exploration, WizardryEffectKind.ShowPosition, 0, 0, false, false),
         ("Halito", SpellClass.MagicUser, 1, "Fireball that deals 1d8 fire damage to a single target.", SpellCastContext.Combat, WizardryEffectKind.Damage, 1, 8, false, false),
         ("Katino", SpellClass.MagicUser, 1, "Puts one enemy group to sleep. Sleeping targets take double damage.", SpellCastContext.Combat, WizardryEffectKind.Sleep, 0, 0, true, false),
-        ("Mogref", SpellClass.MagicUser, 1, "Lowers the caster's Armor Class by 2 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
+        ("Mogref", SpellClass.MagicUser, 1, "Lowers the caster's Armor Class by 2 for one battle.", SpellCastContext.Combat, WizardryEffectKind.CasterArmorClass, 2, 0, false, false),
         ("Badios", SpellClass.Cleric, 1, "Inflicts 1d8 damage to a single target.", SpellCastContext.Combat, WizardryEffectKind.Damage, 1, 8, false, false),
         ("Dios", SpellClass.Cleric, 1, "Heals 1d8 HP of a single target.", SpellCastContext.Both, WizardryEffectKind.Heal, 1, 8, false, false),
-        ("Kalki", SpellClass.Cleric, 1, "Lowers the party's Armor Class by 1 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
-        ("Milwa", SpellClass.Cleric, 1, "Lesser light: see farther and spot secret doors for a short time.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
-        ("Porfic", SpellClass.Cleric, 1, "Lowers the caster's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
-
-        ("Dilto", SpellClass.MagicUser, 2, "Darkness raises an enemy group's Armor Class for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, true, false),
+        ("Kalki", SpellClass.Cleric, 1, "Lowers the party's Armor Class by 1 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 1, 0, false, false),
+        ("Milwa", SpellClass.Cleric, 1, "Lesser light: see one step farther for a short time.", SpellCastContext.Exploration, WizardryEffectKind.LightShort, 0, 0, false, false),
+        ("Porfic", SpellClass.Cleric, 1, "Lowers the caster's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.CasterArmorClass, 4, 0, false, false),
+        ("Dilto", SpellClass.MagicUser, 2, "Darkness raises an enemy group's Armor Class for one battle.", SpellCastContext.Combat, WizardryEffectKind.GroupArmorClass, 2, 0, true, false),
         ("Melito", SpellClass.MagicUser, 2, "Sparks deal 1d8 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 1, 8, true, false),
-        ("Sopic", SpellClass.MagicUser, 2, "Invisibility lowers the caster's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
-        ("Calfo", SpellClass.Cleric, 2, "Identifies the type of trap on a chest, not always accurately.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
+        ("Sopic", SpellClass.MagicUser, 2, "Invisibility lowers the caster's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.CasterArmorClass, 4, 0, false, false),
+        ("Calfo", SpellClass.Cleric, 2, "Identifies the type of trap on a chest, not always accurately.", SpellCastContext.Exploration, WizardryEffectKind.TrapDetect, 0, 0, false, false),
         ("Matu", SpellClass.Cleric, 2, "Lowers the party's Armor Class by 2 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 2, 0, false, false),
         ("Manifo", SpellClass.Cleric, 2, "Paralyzes an enemy group. Paralyzed targets take double damage.", SpellCastContext.Combat, WizardryEffectKind.Paralyze, 0, 0, true, false),
         ("Montino", SpellClass.Cleric, 2, "Silences an enemy group. Silenced targets cannot cast spells.", SpellCastContext.Combat, WizardryEffectKind.Silence, 0, 0, true, false),
@@ -65,7 +88,7 @@ public static class WizardrySpells
         ("Bamatu", SpellClass.Cleric, 3, "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 4, 0, false, false),
         ("Dialko", SpellClass.Cleric, 3, "Cures paralysis and awakens sleepers.",         SpellCastContext.Both, WizardryEffectKind.CureParalysis, 0, 0, false, false),
         ("Latumapic", SpellClass.Cleric, 3, "Identifies all opponents for the rest of the stay in the dungeon.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
-        ("Lomilwa", SpellClass.Cleric, 3, "Greater light lasting until you leave the dungeon or enter a dark zone.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
+        ("Lomilwa", SpellClass.Cleric, 3, "Greater light lasting until you leave the dungeon or enter a dark zone.", SpellCastContext.Exploration, WizardryEffectKind.LightLong, 0, 0, false, false),
 
         ("Dalto", SpellClass.MagicUser, 4, "Blizzard deals 6d6 freezing damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 6, 6, true, false),
         ("Lahalito", SpellClass.MagicUser, 4, "Inferno deals 6d6 fire damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 6, 6, true, false),
@@ -78,26 +101,26 @@ public static class WizardrySpells
         ("Madalto", SpellClass.MagicUser, 5, "Arctic frost deals 8d8 freezing damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 8, 8, true, false),
         ("Makanito", SpellClass.MagicUser, 5, "Suffocates all enemies with fewer than 35 HP, killing them instantly.", SpellCastContext.Combat, WizardryEffectKind.KillWeak, 0, 0, true, false),
         ("Mamorlis", SpellClass.MagicUser, 5, "Greater fear: all opponents may flee the battle.", SpellCastContext.Combat, WizardryEffectKind.Fear, 0, 0, true, false),
-        ("Badi", SpellClass.Cleric, 5, "Death magic: kills a single target instantly.", SpellCastContext.Combat, WizardryEffectKind.Kill, 0, 0, false, false),
+        ("Badi", SpellClass.Cleric, 5, "Death magic: a monster that fails its save dies instantly; undead are immune.", SpellCastContext.Combat, WizardryEffectKind.KillSave, 0, 0, false, false),
         ("Badialma", SpellClass.Cleric, 5, "Inflicts 3d8 damage to a single target.", SpellCastContext.Combat, WizardryEffectKind.Damage, 3, 8, false, false),
-        ("Di", SpellClass.Cleric, 5, "Revives a fallen comrade with 1 HP; may fail and reduce them to ashes.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Di", SpellClass.Cleric, 5, "Revives a fallen comrade with 1 HP; may fail and reduce them to ashes.", SpellCastContext.Both, WizardryEffectKind.Raise, 0, 0, false, false),
         ("Dialma", SpellClass.Cleric, 5, "Heals 3d8 HP of a single target.", SpellCastContext.Both, WizardryEffectKind.Heal, 3, 8, false, false),
-        ("Kandi", SpellClass.Cleric, 5, "Gives the location of missing or dead party members.", SpellCastContext.Exploration, WizardryEffectKind.None, 0, 0, false, false),
+        ("Kandi", SpellClass.Cleric, 5, "Gives the location of missing or dead party members.", SpellCastContext.Exploration, WizardryEffectKind.LocateDead, 0, 0, false, false),
         ("Litokan", SpellClass.Cleric, 5, "Pillar of flame deals 3d8 fire damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 3, 8, true, false),
 
-        ("Haman", SpellClass.MagicUser, 6, "Lesser divine intervention; the caster loses a level.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Haman", SpellClass.MagicUser, 6, "Lesser divine intervention; the caster loses a level.", SpellCastContext.Both, WizardryEffectKind.Intervention, 0, 0, false, false),
         ("Lakanito", SpellClass.MagicUser, 6, "Suffocates all enemies in a group regardless of HP, killing them instantly.", SpellCastContext.Combat, WizardryEffectKind.Kill, 0, 0, true, false),
-        ("Masopic", SpellClass.MagicUser, 6, "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.None, 0, 0, false, false),
+        ("Masopic", SpellClass.MagicUser, 6,         "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 4, 0, false, false),
         ("Zilwan", SpellClass.MagicUser, 6, "Instantly destroys one undead monster.", SpellCastContext.Combat, WizardryEffectKind.Kill, 0, 0, false, true),
-        ("Loktofeit", SpellClass.Cleric, 6, "Teleports the party back to town; all items and most gold are forfeited.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Loktofeit", SpellClass.Cleric, 6, "Teleports the party back to town; all items and most gold are forfeited.", SpellCastContext.Both, WizardryEffectKind.Recall, 0, 0, false, false),
         ("Lorto", SpellClass.Cleric, 6, "Ripping blades deal 6d6 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 6, 6, true, false),
         ("Mabadi", SpellClass.Cleric, 6, "Reduces a single target to 1d8 HP.", SpellCastContext.Combat, WizardryEffectKind.ReduceToD8, 0, 0, false, false),
         ("Madi", SpellClass.Cleric, 6, "Fully restores a character's HP and removes negative statuses.", SpellCastContext.Both, WizardryEffectKind.FullHeal, 0, 0, false, false),
 
-        ("Mahaman", SpellClass.MagicUser, 7, "Greater divine intervention; the caster loses a level and must relearn it.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
-        ("Malor", SpellClass.MagicUser, 7, "Teleports the party to chosen coordinates and depth.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Mahaman", SpellClass.MagicUser, 7, "Greater divine intervention; the caster loses a level and must relearn it.", SpellCastContext.Both, WizardryEffectKind.Intervention, 1, 0, false, false),
+        ("Malor", SpellClass.MagicUser, 7, "Teleports the party to chosen coordinates and depth.", SpellCastContext.Exploration, WizardryEffectKind.Teleport, 0, 0, false, false),
         ("Tiltowait", SpellClass.MagicUser, 7, "Deals 10d10 damage to all enemies.", SpellCastContext.Combat, WizardryEffectKind.Damage, 10, 10, true, false),
-        ("Kadorto", SpellClass.Cleric, 7, "Revives a fallen comrade with full HP, even from ashes; failure loses them forever.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Kadorto", SpellClass.Cleric, 7, "Revives a fallen comrade with full HP, even from ashes; failure loses them forever.", SpellCastContext.Both, WizardryEffectKind.RaiseFull, 0, 0, false, false),
         ("Malikto", SpellClass.Cleric, 7, "Deals 12d6 damage to all enemies.", SpellCastContext.Combat, WizardryEffectKind.Damage, 12, 6, true, false),
     };
 
@@ -130,7 +153,7 @@ public static class WizardrySpells
         return Table.Select(row =>
         {
             var effect = new WizardrySpellEffect(row.Kind, row.Dice, row.Sides, row.Group, row.UndeadOnly);
-            var isHeal = row.Kind is WizardryEffectKind.Heal or             WizardryEffectKind.FullHeal or WizardryEffectKind.CureParalysis or WizardryEffectKind.CurePoison;
+            var isHeal = row.Kind is WizardryEffectKind.Heal or WizardryEffectKind.FullHeal or WizardryEffectKind.CureParalysis or WizardryEffectKind.CurePoison or WizardryEffectKind.Raise or WizardryEffectKind.RaiseFull;
                         return new Spell
                         {
                 Id = ToId(row.Name),
@@ -139,7 +162,7 @@ public static class WizardrySpells
                 Level = row.Circle,
                 Description = row.Description,
                 EffectDescription = row.Description,
-                RangeType = isHeal ? SpellRangeType.Ally : row.Kind is WizardryEffectKind.PartyArmorClass or WizardryEffectKind.ExpeditionArmorClass || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
+                RangeType = isHeal ? SpellRangeType.Ally : row.Kind is WizardryEffectKind.PartyArmorClass or WizardryEffectKind.ExpeditionArmorClass or WizardryEffectKind.CasterArmorClass or WizardryEffectKind.ShowPosition or WizardryEffectKind.TrapDetect or WizardryEffectKind.LightShort or WizardryEffectKind.LightLong or WizardryEffectKind.LocateDead or WizardryEffectKind.Recall or WizardryEffectKind.Teleport or WizardryEffectKind.Intervention || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
                 Targeting = effect.Group ? SpellTargeting.Multiple : SpellTargeting.Single,
                 TargetingScope = row.Name is "Tiltowait" or "Malikto" ? SpellTargetingScope.AllGroups
                     : effect.Group ? SpellTargetingScope.SingleGroup : SpellTargetingScope.SingleTarget,

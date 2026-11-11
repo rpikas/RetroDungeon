@@ -462,6 +462,12 @@ public sealed class CombatSession
     /// <summary>Wizardry party-wide AC improvement (Matu, Bamatu) that lasts for this battle only.</summary>
     public int WizardryPartyArmorClassBonus { get; set; }
 
+    /// <summary>Haman/Mahaman "augmented magic": Wizardry damage and healing spells hit 50% harder for the rest of the battle.</summary>
+    public bool WizardryAugmentedMagic { get; set; }
+
+    /// <summary>Wizardry single-character AC improvement (Mogref, Sopic) for this battle, by character name.</summary>
+    public Dictionary<string, int> WizardryCasterArmorClassBonus { get; } = new(StringComparer.OrdinalIgnoreCase);
+
     public void SetBarkskin(string characterName, int bonus, int rounds)
     {
         if (rounds <= 0 || bonus <= 0)

@@ -766,7 +766,7 @@ public sealed partial class CombatResolver
         events.Add(new CombatEvent($"{target.Name} fails save vs energy drain ({saveRoll} vs {saveTarget}) and loses 1 level ({oldLevel}->{newLevel})."));
     }
 
-    private static bool TryDrainOneLevel(Character target, out int oldLevel, out int newLevel)
+    internal static bool TryDrainOneLevel(Character target, out int oldLevel, out int newLevel)
     {
         target.EnsureClassProgressions();
 
@@ -797,7 +797,7 @@ public sealed partial class CombatResolver
         progression.Level = newLevel;
         progression.Experience = Math.Min(
             progression.Experience,
-            Math.Max(0, ExperienceTable.GetThresholdForLevel(primaryClass, newLevel)));
+            Math.Max(0, ExperienceTable.GetThresholdForLevel(target, primaryClass, newLevel)));
 
         SyncAfterLevelChange(target, primaryClass, newLevel);
         return true;

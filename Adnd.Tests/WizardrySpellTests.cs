@@ -119,7 +119,7 @@ public class WizardrySpellTests
     public void Unimplemented_wizardry_spells_have_no_handler()
     {
         var handler = new WizardrySpellHandler();
-        Assert.False(handler.CanHandle(WizardrySpells.ToId("Malor")));
+        Assert.False(handler.CanHandle(WizardrySpells.ToId("Latumapic")));
         Assert.True(handler.CanHandle(WizardrySpells.ToId("Halito")));
         Assert.False(handler.CanHandle("magic_missile"));
     }

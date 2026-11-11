@@ -207,7 +207,7 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         return transformed;
     }
 
-    private static int SystemShockSurvivalChance(int constitution)
+    internal static int SystemShockSurvivalChance(int constitution)
     {
         return constitution switch
         {
@@ -232,5 +232,5 @@ public sealed class RaiseDeadHandler : ISpellEffectHandler
         };
     }
 
-    private static int ChanceToD20SaveTarget(int chancePercent) => Math.Clamp((int)Math.Ceiling(chancePercent / 5.0), 1, 20);
+    internal static int ChanceToD20SaveTarget(int chancePercent) => Math.Clamp((int)Math.Ceiling(chancePercent / 5.0), 1, 20);
 }

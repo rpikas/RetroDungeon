@@ -185,6 +185,8 @@ public sealed partial class MazeForm : Form
         _thinWalls = thinWalls;
         _cityMode = cityMode;
         Text = cityMode ? "RetroDungeon" : $"RetroDungeon - {DungeonName}";
+        if (!cityMode)
+            Adnd.Core.Spells.WizardryDungeonPosition.Provider = () => $"You are at {PositionText} on dungeon level {_currentDungeonLevel}, facing {CompassHeading()}.";
         ClientSize = new Size(1200, 820);
         StartPosition = FormStartPosition.CenterScreen;
         KeyPreview = true;

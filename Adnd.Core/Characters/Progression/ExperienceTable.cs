@@ -90,8 +90,24 @@ public static class ExperienceTable
 
     public static int GetLevelForClass(Character character, CharacterClass cls, int experience)
     {
+        if (IsWizardry(character))
+            return Math.Max(1, Wizardry.WizardryRules.LevelForXp(character.WizardryClass!.Value, experience));
+
         var uncapped = GetLevelForClass(cls, experience);
         return RaceClassLevelLimits.ApplyCap(character, cls, uncapped);
+    }
+
+    private static bool IsWizardry(Character character)
+        => character.Ruleset == Config.Ruleset.Wizardry && character.WizardryClass.HasValue;
+
+    /// <summary>Total XP at which the character reaches <paramref name="level"/>; Wizardry characters use the Wizardry tables.</summary>
+    public static int GetThresholdForLevel(Character character, CharacterClass cls, int level)
+    {
+        if (!IsWizardry(character))
+            return GetThresholdForLevel(cls, level);
+
+        var total = Wizardry.WizardryRules.TotalXpForLevel(character.WizardryClass!.Value, Math.Max(1, level));
+        return (int)Math.Min(int.MaxValue, total);
     }
 
     public static int GetLevelForClass(CharacterClass cls, int experience)

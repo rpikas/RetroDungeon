@@ -821,7 +821,9 @@ public sealed partial class CombatResolver
             ? target.PotionInvulnerabilityArmorClassBonus
             : 0;
         var targetAc = (target.ArmorClass - invulnerabilityAcBonus) + (parrying.Contains(target.Name) ? 2 : 0);
-        targetAc -= session.WizardryPartyArmorClassBonus + target.TemporaryArmorClassBonusUntilDungeonExit;
+        targetAc -= session.WizardryPartyArmorClassBonus;
+        if (session.WizardryCasterArmorClassBonus.TryGetValue(target.Name, out var wizardryCasterBonus))
+            targetAc -= wizardryCasterBonus;
         var defenderAcBonus = GetDefenderArmorClassBonus(target, attack);
         if (defenderAcBonus > 0)
             targetAc += defenderAcBonus;

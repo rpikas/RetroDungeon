@@ -25,6 +25,9 @@ public sealed class SpellCastRequest
     public string? SourceItemName { get; set; }
     public int? EffectiveCasterLevel { get; set; }
 
+    /// <summary>Asks for the Malor destination and teleports the party; supplied by the game window. Returns whether it worked.</summary>
+    public Func<(bool Teleported, string Message)>? MalorTeleport { get; set; }
+
     /// <summary>Set when the spell is cast on an item instead of a character (Remove Curse).</summary>
     public Adnd.Core.Items.Item? TargetItem { get; set; }
 }

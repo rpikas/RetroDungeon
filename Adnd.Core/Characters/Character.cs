@@ -103,6 +103,13 @@ public class Character
     public int TemporaryStrengthBonus { get; set; }
     public int TemporaryStrengthRoundsRemaining { get; set; }
     public int TemporaryArmorClassBonusUntilDungeonExit { get; set; }
+
+    /// <summary>Sets the AC improvement that lasts until the dungeon is left (Maporfic), keeping <see cref="ArmorClass"/> in step.</summary>
+    public void SetTemporaryArmorClassBonusUntilDungeonExit(int bonus)
+    {
+        ArmorClass += TemporaryArmorClassBonusUntilDungeonExit - bonus;
+        TemporaryArmorClassBonusUntilDungeonExit = bonus;
+    }
     public int FireProtectionRoundsRemaining { get; set; }
     public int FireProtectionAbsorptionRemaining { get; set; }
     public int FireProtectionSaveBonusVsFire { get; set; }
@@ -1964,7 +1971,7 @@ public class Character
 
         var equipmentAcBonus = GetStaticEquipmentArmorClassBonusExcludingRingOfProtection();
 
-        ArmorClass = baseAc + dexAcModifier - equipmentAcBonus;
+        ArmorClass = baseAc + dexAcModifier - equipmentAcBonus - TemporaryArmorClassBonusUntilDungeonExit;
 
         // Ring of Protection AC is profile-driven and handled dynamically.
         RingProtectionArmorClassBonusApplied = 0;

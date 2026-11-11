@@ -9,7 +9,7 @@ public static class RaceClassLevelLimits
 
         var abilities = character.Abilities ?? new AbilityScores();
 
-        if (character.Race == Race.Human)
+        if (character.Race == Race.Human || character.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
             return int.MaxValue;
 
         return character.Race switch

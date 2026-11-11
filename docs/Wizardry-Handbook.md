@@ -95,6 +95,8 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 
 **Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat.
 
+**Level tables:** Wizardry characters always level with the table above (`ExperienceTable` defers to `WizardryRules`), with no AD&D racial level limits and no AD&D XP table, so a Fighter keeps advancing past level 7 up to level 13 and beyond.
+
 **Attributes on level-up** (`WizardryAttributeChanges`, `WizardryPeekAge` in game-rules.json, default 25): for each level gained and each of Strength, I.Q., Piety, Vitality, Agility and Luck there is a 75% chance it changes. Roll 0 to (2 x WizardryPeekAge) - 1. If age is higher than the roll the attribute loses 1 (at 18 there is only a 1 in 6 chance of losing 1); if age is lower and the attribute is under 18 it gains 1. A Vitality below 3 kills the character. The inn shows "YOU GAINED/LOST ..." for each change.
 
 **Learning spells on level-up:** for each level gained, every unknown spell of a circle the character has slots for is learned with chance IQ/30 (Piety/30 for priest spells). The first spell of each circle is always learned.
@@ -124,6 +126,7 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 - The first spell of each circle is always learned once the character has slots for that circle.
 - Monsters with "Level N Mage/Priest spells" can cast every Wizardry spell of that school up to circle N, always (100%).
 - Implemented effects: damage (single target, group, all enemies; a successful save halves it; sleeping or paralyzed targets take double), healing (Dios, Dial, Dialma, Madi), sleep (Katino), paralyze (Manifo), silence (Montino), fear (Morlis, Mamorlis), Makanito (kills enemies below 35 HP), Badi and Lakanito (instant kill), Zilwan (kills one undead), Mabadi (reduces to 1d8 HP).
+- Badi (Priest 5) works like AD&D Slay Living on one monster: undead are unaffected; otherwise the monster rolls a save vs spell (1d20, needs the save number or higher) to survive. If it fails, a monster with Death Resistance gets that percentage chance to survive, and magic resistance can negate the spell; otherwise it dies instantly. Monsters casting Badi at the party still use their own rules.
 - Monsters cast damage, healing, Katino and Badi (save vs spell avoids sleep and death).
 - Other spells (armor class buffs, light, detection, resurrection, teleport, divine intervention, cures) can be learned but report "not implemented" when cast.
 
@@ -131,7 +134,9 @@ Agility never changes Armor Class in Wizardry (in AD&D, Dexterity does).
 
 Dispell Undead: a successful dispell makes the undead vanish (counts as defeated); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
 
-Matu (Priest 2) lowers the whole party's AC by 2 and Bamatu (Priest 3) by 4, for the rest of the battle only. Repeated casts add up. Implemented as `CombatSession.WizardryPartyArmorClassBonus`, applied when monsters attack.
+Matu (Priest 2) lowers the whole party's AC by 2 and Bamatu (Priest 3) by 4, and Kalki (Priest 1) by 1, for the rest of the battle only. Repeated casts add up. Implemented as `CombatSession.WizardryPartyArmorClassBonus`, applied when monsters attack.
+
+Mogref (Mage 1, caster AC -2) and Sopic (Mage 2, caster AC -4) improve only the caster's AC for the battle (`CombatSession.WizardryCasterArmorClassBonus`). Dilto (Mage 2) hits an enemy group with darkness: their AC worsens by 2 for the battle. Dumapic (Mage 1, camp) reports the level, coordinates and facing.
 
 Maporfic (Priest 4) lowers the whole party's AC by 2 until the party leaves the dungeon (it does not stack with itself). It is stored on each member as `TemporaryArmorClassBonusUntilDungeonExit`, cleared on leaving the dungeon, and a PROTECT sign is shown at the top of the dungeon view while it is active.
 

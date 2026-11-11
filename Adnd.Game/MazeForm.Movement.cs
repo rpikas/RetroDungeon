@@ -178,7 +178,7 @@ public sealed partial class MazeForm
             if (!roster.TryGetValue(name, out var c) || c.TemporaryArmorClassBonusUntilDungeonExit == 0)
                 continue;
 
-            c.TemporaryArmorClassBonusUntilDungeonExit = 0;
+            c.SetTemporaryArmorClassBonusUntilDungeonExit(0);
             _characterRepository.Save(c);
         }
 

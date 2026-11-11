@@ -991,7 +991,7 @@ public sealed class CombatCoordinator
                         if (maxLevel != int.MaxValue && classLevel >= maxLevel)
                             return $"{cls.ToDisplayString()}: has {classXp} XP, max level {maxLevel} reached";
 
-                        var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, classLevel + 1);
+                        var nextThreshold = ExperienceTable.GetThresholdForLevel(survivor, cls, classLevel + 1);
                         var need = Math.Max(0, nextThreshold - classXp);
                         return $"{cls.ToDisplayString()}: has {classXp} XP, needs {need} XP";
                     });
@@ -1008,7 +1008,9 @@ public sealed class CombatCoordinator
                 }
                 else
                 {
-                    var nextLevelThreshold = ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1);
+                    var nextLevelThreshold = survivor == null
+                        ? ExperienceTable.GetThresholdForLevel(classForProgress, r.NewLevel + 1)
+                        : ExperienceTable.GetThresholdForLevel(survivor, classForProgress, r.NewLevel + 1);
                     var xpToNextLevel = Math.Max(0, nextLevelThreshold - r.ExperienceAfter);
                     sb.AppendLine($"- {r.CharacterName}: +{gain} XP (combat {baseGain} + class bonus {bonusGain} [{xpModifierPercent:+#;-#;0}%] + treasure XP {goldXpGain}; total {r.ExperienceAfter}; need {xpToNextLevel} XP for next level)");
                 }
@@ -3080,11 +3082,80 @@ public sealed class CombatCoordinator
                 .Select(e => e.Message)
                 .Where(m => !System.Text.RegularExpressions.Regex.IsMatch(
                     m, @"THAC0|\bto[- ]hit\b|\bto hit\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase));
-            wizardryForm.PlayResults(owner, visible);
+            wizardryForm.PlayResults(owner, MergeMultipleAttacks(visible.ToList()));
             return;
         }
 
         Say(owner, "Combat Round", sb.ToString(), session);
+    }
+
+    private static readonly System.Text.RegularExpressions.Regex HitLine = new(
+        @"^(?<who>.+?) hits (?<target>.+?) with .+ for (?<dmg>\d+) damage\. HP \S+\.$",
+        System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    private static readonly System.Text.RegularExpressions.Regex MissLine = new(
+        @"^(?<who>.+?) misses (?<target>.+?)\.$",
+        System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    private static readonly System.Text.RegularExpressions.Regex DestroyedLine = new(
+        @"^(?<target>.+?) is destroyed\.$",
+        System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    /// <summary>Wizardry style: several attacks by one character on one target become a single message.</summary>
+    private static List<string> MergeMultipleAttacks(List<string> lines)
+    {
+        var result = new List<string>();
+        var i = 0;
+        while (i < lines.Count)
+        {
+            var first = HitLine.Match(lines[i]);
+            if (!first.Success)
+            {
+                result.Add(lines[i++]);
+                continue;
+            }
+
+            var who = first.Groups["who"].Value;
+            var target = first.Groups["target"].Value;
+            var hits = 0;
+            var total = 0;
+            var end = i;
+            while (end < lines.Count)
+            {
+                var hit = HitLine.Match(lines[end]);
+                if (hit.Success && hit.Groups["who"].Value == who && hit.Groups["target"].Value == target)
+                {
+                    hits++;
+                    total += int.Parse(hit.Groups["dmg"].Value);
+                }
+                else
+                {
+                    var miss = MissLine.Match(lines[end]);
+                    if (!miss.Success || miss.Groups["who"].Value != who || miss.Groups["target"].Value != target)
+                        break;
+                }
+
+                end++;
+            }
+
+            if (hits < 2)
+            {
+                result.Add(lines[i++]);
+                continue;
+            }
+
+            var text = $"{who} thrusts violently at {target}{Environment.NewLine}and hits {hits} times for {total} damage";
+            if (end < lines.Count && DestroyedLine.Match(lines[end]) is { Success: true } destroyed && destroyed.Groups["target"].Value == target)
+            {
+                text += $"{Environment.NewLine}{target} is killed!";
+                end++;
+            }
+
+            result.Add(text);
+            i = end;
+        }
+
+        return result;
     }
 
     private void HandleTelekinesisPrompts(IWin32Window owner, CombatSession session, List<CombatEvent> roundEvents)
@@ -3919,12 +3990,13 @@ public sealed class CombatCoordinator
         if (caster == null)
             return false;
 
+        var isWizardry = caster.WizardryClass != null;
         var findTrapsSpell = _spellRepository.LoadAll()
-            .FirstOrDefault(s => string.Equals(s.Name, "Find Traps", StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(s => string.Equals(s.Name, isWizardry ? "Calfo" : "Find Traps", StringComparison.OrdinalIgnoreCase));
 
         if (findTrapsSpell == null)
         {
-            Say(owner, "Treasure Chest", "Find Traps spell is not available in spell data.", session);
+            Say(owner, "Treasure Chest", $"{(isWizardry ? "Calfo" : "Find Traps")} spell is not available in spell data.", session);
             return true;
         }
 
@@ -3938,13 +4010,22 @@ public sealed class CombatCoordinator
             MonsterTargets = new List<MonsterInstance>()
         });
 
+        var spellName = isWizardry ? "Calfo" : "Find Traps";
         if (!cast.Success)
         {
-            Say(owner, "Treasure Chest", $"{caster.Name} fails to cast Find Traps.{Environment.NewLine}{string.Join(Environment.NewLine, cast.Events)}", session);
+            Say(owner, "Treasure Chest", $"{caster.Name} fails to cast {spellName}.{Environment.NewLine}{string.Join(Environment.NewLine, cast.Events)}", session);
             return true;
         }
 
-        Say(owner, "Treasure Chest", $"{caster.Name} casts Find Traps and detects: {FormatTrapName(result.TrapType)}.", session);
+        var detected = result.TrapType;
+        if (isWizardry && _random.Next(100) >= 95)
+        {
+            var all = Enum.GetValues<ChestTrapType>().Where(t => t != result.TrapType).ToArray();
+            detected = all[_random.Next(all.Length)];
+            RuleApplicationInfo.Publish($"Calfo misjudged the trap (5%): reports {FormatTrapName(detected)}.");
+        }
+
+        Say(owner, "Treasure Chest", $"{caster.Name} casts {spellName} and detects: {FormatTrapName(detected)}.", session);
         result.TrapFound = result.TrapType != ChestTrapType.None;
         RuleApplicationInfo.Publish($"Find Traps spell result: trap {(result.TrapFound ? "found" : "not found")} ({FormatTrapName(result.TrapType)}).");
 

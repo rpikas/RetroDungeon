@@ -8681,4 +8681,161 @@ charaters and slot by slot where the user can chose the equiped items also. what
 by number of by doubleclicking.
 
 when playing wizardy, and showing the party in the dungeon, CLE should be PRI, if it is a Bishop class should be BIS
-etc
+etc. 31,7
+___
+introduce a setting: ShowPositionInDungeonWizardry, default true.
+When true, show the current position in the dungeon in the top left corner of the screen when playing wizardry. 
+(as it is done in adnd and right now). When false, do not show the position in the dungeon.
+
+in wizardy and a bishop selects read, the options should be Priest and Mage, not celeric and Magic user
+
+when a party member got several attacks per round do not separate them in the message, show it like this
+
+I noticed that figheters did not adavnce after level 7, follow this table
+         |                      EXPERIENCE REQUIRED                       |
+| CLASS   |   8    |    9    |   10    |   11    |   12    | 13 AND BEYOND |
+| FIGHTER | 45,275 |  78,060 | 134,586 | 232,044 | 400,075 | 289,709/LEVEL |
+
+if kalki not implemented do that: KALKI reduces the AC (Armor Class) of all party members by one point,
+
+Level 1 Mage Spells
+Spell	Translation	Cast When	Affects	Description
+HALITO	Little Fire	Combat	1 Monster	Hurls a baseball-sized fireball that inflicts 1-8 points of damage.
+MOGREF	Body Iron	Combat	Caster	Lowers the caster's AC by 2 points for the duration of the encounter.
+KATINO	Bad Air	Combat	1 Group	Puts most monsters in a group to sleep. Works only on normal animal or humanoid 
+monsters. Sleeping enemies are easier to hit and take double damage.
+DUMAPIC	Clarity	Camp	Entire Party	Reveals the party's exact location relative to the castle stairs and the
+direction the party is facing.
+Level 2 Mage Spells
+Spell	Translation	Cast When	Affects	Description
+DILTO	Darkness	Combat	1 Group	Envelops a group of monsters in darkness, reducing their ability to defend 
+themselves.
+SOPIC	Glass	Combat	Caster	Makes the caster transparent, effectively reducing AC by 4 points for the rest
+of the encounter.
+Level 3 Mage Spells
+Spell	Translation	Cast When	Affects	Description
+MAHALITO	Big Fire	Combat	1 Group	Creates a fiery explosion that deals 4-24 points of damage to a
+monster group.
+MOLITO	Sparks	Combat	1 Group	Deals 3-18 points of damage to roughly half the monsters in a group. 
+Useful against enemies resistant to fire.
+Level 4 Mage Spells
+Spell	Translation	Cast When	Affects	Description
+MORLIS	Fear	Combat	1 Group	Causes a monster group to fear the party, reducing the effectiveness of 
+their attacks. Comparable to a double-strength DILTO.
+DALTO	Blizzard	Combat	1 Group	Cold-based version of MAHALITO, dealing 6-36 points of damage.
+LAHALITO	Torch	Combat	1 Group	Stronger version of MAHALITO, dealing 6-36 points of fire damage.
+
+¤ Level 5 ¤
+5	MADALTO	Frost	Attack	Monster Group	Causes 8d8 (8-64) points of cold damage to a monster group
+5	MAKANITO	Deadly Air	Attack	All Monsters	Kills all monsters with 7 or fewer hit point dice
+5	MAMORLIS	Terror	Disable	All Monsters	Attempts to frighten and disperse all monsters
+¤ Level 6 ¤
+6	HAMAN	Change	Support/disable	Variable	Has random effects; drains the caster one experience 
+level (see "HAMAN and MAHAMAN" section below)
+6	LAKANITO	Suffocation	Attack	Monster Group	Kills a monster group; may be resisted at rate of 
+6% per monster hit point die
+6	MASOPIC	Big Glass	Support	Party	Reduces the armor class of all party members by 4 for the 
+duration of the combat
+6	ZILWAN	Dispel	Attack	One Monster	Kills an undead monster
+¤ Level 7 ¤
+7	MAHAMAN	Great Change	Support/disable	Variable	Has random effects with more options than HAMAN; 
+drains the caster one experience level and is forgotten when cast (see "HAMAN and MAHAMAN" section below)
+7	MALOR	Apport	Field/support	Party	Teleports the party to a random location in the current 
+dungeon level when used in combat; teleports the party to a selected dungeon level and location when
+used in camp; if a party teleports into stone it is lost forever, so the spell is best used in 
+conjunction with DUMAPIC
+7	TILTOWAIT	Explosion	Attack	All Monsters	Causes 10d15 (10-150) points of damage to all 
+monsters
+
+Priest Spells
+L	Name	Translation	Type	Target	Description
+1	BADIOS	Harm	Attack	One Monster	Causes 1d8 (1-8) points of damage to a monster
+1	DIOS	Heal	Healing	One Character	Restores 1d8 (1-8) hit points to a party member
+1	KALKI	Blessings	Support	Party	Reduces the armor class of all party members by 1 for the 
+duration of the combat
+1	MILWA	Light	Field/support	Party	Summons a softly glowing light that increases vision and 
+reveals secret doors
+1	PORFIC	Shield	Support	Caster	Reduces the armor class of the caster by 4 for the duration of the 
+combat
+¤ Level 2 ¤
+2	CALFO	X-ray Vision	Field	Caster	Determines the type of trap on a chest with 95% accuracy
+2	MANIFO	Statue	Disable	Monster Group	Attempts to paralyze a monster group
+2	MATU	Blessing	Support	Party	Reduces the armor class of all party members by 2 for the
+duration of the combat
+2	MONTINO	Still Air	Disable	Monster Group	Attempts to silence a monster group, making it 
+impossible for them to cast spells
+¤ Level 3 ¤
+
+3	BAMATU	Prayer	Support	Party	Reduces the armor class of all party members by 4 for the duration 
+of the combat
+3	DIALKO	Softness	Healing	One Character	Cures paralysis and sleep for a party member
+3	LATUMAPIC	Identification	Disable	Monster Group	Identifies a monster group
+3	LOMILWA	More Light	Field/support	Party	More powerful MILWA spell that lasts for the entire 
+expedition, but is terminated in darkness areas
+¤ Level 4 ¤
+4	BADIAL	More Hurt	Attack	One Monster	Causes 2d8 (2-16) points of damage to a monster
+4	DIAL	More Heal	Healing	One Character	Restores 2d8 (2-16) hit points to a party member
+4	LATUMOFIS	Cure Poison	Healing	One Character	Cures poison for a party member
+4	MAPORFIC	Big Shield	Support	Party	Reduces the armor class of all party members by 2 for the 
+entire expedition
+¤ Level 5 ¤
+5	BADI	Death	Attack	One Monster	Attempts to kill a monster
+5	BADIALMA	Great Hurt	Attack	One Monster	Causes 3d8 (3-24) points of damage to a monster
+5	DI	Life	Healing/field	One Character	Attempts to resurrect a dead party member; if it works, 
+the dead character is revived with only 1 hit point and decreased Vitality; if it fails, the dead 
+character is turned to ashes
+5	DIALMA	Great Heal	Healing	One Character	Restores 3d8 (3-24) hit points to a party member
+
+5	KANDI	Locate Soul	Field	Caster	Identifies the location of missing/dead party members in the
+dungeon
+5	LITOKAN	Flame Tower	Attack	Monster Group	Causes 3d8 (3-24) points of fire damage to a monster 
+group
+¤ Level 6 ¤
+6	LOKTOFEIT	Recall	Field	Party	Causes all party members to be transported back to town, 
+minus all of their equipment and most of their gold
+6	LORTO	Blades	Attack	Monster Group	Causes 6d6 (6-36) points of damage to a monster group
+6	MABADI	Harming	Attack	One Monster	Causes all but 1d8 (1-8) hit points to be removed from a monster
+6	MADI	Healing	Healing	One Character	Restores all hit points and cures all conditions except 
+death for a party member
+¤ Level 7 ¤
+7	KADORTO	Resurrection	Healing/field	One Character	Attempts to resurrect a dead party member, 
+even if the dead character has been turned to ashes; if it works, the dead character is revived with 
+all hit points; if it fails, the dead character is permanently lost
+7	MALIKTO	Word of Death	Attack	All Monsters	Causes 12d6 (12-72) points of damage to all monsters
+
+Milwa, Calfo, Latumapic, Lomilwa, Di, Kandi, Loktofeit and Kadorto. Each needs new game mechanics 
+(light, trap identification, monster identification, resurrection, locating dead party members, and town recall).
+
+Do Milwa and Lomilwa, should be similar as Light in Adnd
+implement Di, like Raise dead in adnd
+implement badi, likde slay in andn, document how it works in wizardry manual
+implement kandi: Identifies the location of missing/dead party members in the dungeon
+
+all wizardry spells should be documented but maybe more in a players handbook style
+
+implement Kadorto, that should work like Adnd Resurection
+
+Implement Loktofeit: Causes all party members to be transported back to town, minus all of their equipment and most
+of their gold
+
+I think Malor should work like the Helm of Malor usage, tell directions to teleport the group, keep items and gold
+
+implement masopic: Reduces the armor class of all party members by 4 for the duration of the combat
+
+HAMAN and MAHAMAN
+These spells can only be cast by a character whose level is 13 or higher. The caster appeals to the gods for help, consuming 1 experience level. If the gods respond, one of many things can happen:
+
+Target the party:
+Augmented magic: spells cast by the party will cause (or heal) more damage.
+Cure party: cures all party members of all conditions.
+Heal party: MADI is cast on all party members.
+Protect party (MAHAMAN only): reduces the armor class of all party members by 20 for the duration of the combat.
+Raise the dead (MAHAMAN only): all dead characters are resurrected with the DI spell.
+Target the enemies:
+Silence enemies: all monsters will be silenced.
+Teleport enemies: all monsters will be teleported away from battle.
+
+Not impelemnted yet: Latumapic it Identifies a monster group
+
+
+

@@ -16,6 +16,7 @@
   "DelayInbetweenCombatMessages": 1000,
   "WizardryMonstersWillLeaveYouAloneChanse": 10,
   "WizardryPeekAge": 25,
+  "ShowPositionInDungeonWizardry": true,
   "ShowDiceRollAndRuleApplicationInfo": true,
   "ShowReferencesInRuleAndDiceInfo": true,
   "ShowToHitRoll": false,

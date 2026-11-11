@@ -873,7 +873,7 @@ public sealed class CampCharacterInspectForm : Form
             var cls = c.Classes[0];
             var currentClassXp = Math.Max(0, c.GetClassExperience(cls));
             var currentLevel = Math.Max(1, c.GetClassLevel(cls));
-            var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, currentLevel + 1);
+            var nextThreshold = ExperienceTable.GetThresholdForLevel(c, cls, currentLevel + 1);
             var needed = Math.Max(0, nextThreshold - currentClassXp);
             return needed.ToString();
         }
@@ -883,7 +883,7 @@ public sealed class CampCharacterInspectForm : Form
         {
             var currentClassXp = Math.Max(0, c.GetClassExperience(cls));
             var currentLevel = Math.Max(1, c.GetClassLevel(cls));
-            var nextThreshold = ExperienceTable.GetThresholdForLevel(cls, currentLevel + 1);
+            var nextThreshold = ExperienceTable.GetThresholdForLevel(c, cls, currentLevel + 1);
             var needed = Math.Max(0, nextThreshold - currentClassXp);
             parts.Add($"{cls.ToDisplayString().ToUpperInvariant()}:{needed}");
         }
@@ -1260,7 +1260,7 @@ public sealed class CampCharacterInspectForm : Form
         if (states == null || states.Count == 0)
             return;
 
-        var stateIdx = states.Count == 1 ? 0 : PromptChoice("Spellcasting Type", states.Select(s => s.SpellClass.ToString()).ToList());
+        var stateIdx = states.Count == 1 ? 0 : PromptChoice("Spellcasting Type", states.Select(s =>         SpellClassLabel(s.SpellClass)).ToList());
         if (!stateIdx.HasValue)
             return;
 
@@ -1332,7 +1332,7 @@ public sealed class CampCharacterInspectForm : Form
         if (states == null || states.Count == 0)
             return;
 
-        var stateIdx = states.Count == 1 ? 0 : PromptChoice("Spellcasting Type", states.Select(s => s.SpellClass.ToString()).ToList());
+        var stateIdx = states.Count == 1 ? 0 : PromptChoice("Spellcasting Type", states.Select(s =>         SpellClassLabel(s.SpellClass)).ToList());
         if (!stateIdx.HasValue)
             return;
 
@@ -1437,6 +1437,7 @@ public sealed class CampCharacterInspectForm : Form
             Targets = targets,
             TargetItem = removeCurseItem,
             PartyTargets = partyMembers,
+            MalorTeleport = spell.Id == "wiz_malor" ? PromptAndTeleport : null,
             MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
         });
 
@@ -1459,8 +1460,31 @@ public sealed class CampCharacterInspectForm : Form
                 Close();
                 return;
             }
+            if (spell.Id == "wiz_malor")
+            {
+                Close();
+                return;
+            }
             RefreshView();
         }
+    }
+
+    private (bool Teleported, string Message) PromptAndTeleport()
+    {
+        if (MalorTeleport == null)
+            return (false, "Malor only works in the dungeon.");
+
+        var north = PromptNumberInput("Malor", "Squares north (negative = south)", -99, 99);
+        if (!north.HasValue)
+            return (false, "The spell is not cast.");
+        var east = PromptNumberInput("Malor", "Squares east (negative = west)", -99, 99);
+        if (!east.HasValue)
+            return (false, "The spell is not cast.");
+        var down = PromptNumberInput("Malor", "Levels down (negative = up)", -MaxMalorLevels, MaxMalorLevels);
+        if (!down.HasValue)
+            return (false, "The spell is not cast.");
+
+        return MalorTeleport(north.Value, east.Value, down.Value);
     }
     /*
     public void ShowCharaterSheet(Character character)
@@ -2113,6 +2137,16 @@ public sealed class CampCharacterInspectForm : Form
     private static void NotImplemented(string actionName)
     {
         ViewerMessage.Say(null, actionName, $"[{actionName} action not yet implemented]", null);
+    }
+
+    private string SpellClassLabel(SpellClass spellClass)
+    {
+        if (GetCharacter()?.WizardryClass is not null)
+        {
+            if (spellClass == SpellClass.MagicUser) return "Mage";
+            if (spellClass == SpellClass.Cleric) return "Priest";
+        }
+        return spellClass.ToString();
     }
 
     private int? PromptChoice(string title, List<string> options, bool numberKeys = false)
