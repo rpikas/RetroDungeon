@@ -169,6 +169,7 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Monsters put to sleep stay asleep when damaged (AD&D wakes them); they wake only when the sleep runs out. Hits and spells on a sleeping monster still get their sleeping bonuses. The same goes for sleeping Wizardry party members: damage does not wake them.
 - Turn Undead never destroys the undead in Wizardry: a result that would disintegrate it (D) turns it instead, shown as Turned.
 - A Dead, Ashes or Lost character can have no other status (poisoned, paralyzed, ...); `Character.Status` drops them. This holds for AD&D too.
+- The Priest Blaster chest trap hurts and paralyzes Priests and Bishops (AD&D: Clerics and Druids). Only the Priest Blaster changes; the Mage Blaster is unchanged.
 
 ## 6. Not implemented yet
 

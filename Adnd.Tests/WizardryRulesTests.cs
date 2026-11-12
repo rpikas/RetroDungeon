@@ -22,6 +22,18 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Priest_blaster_hits_priests_and_bishops_in_wizardry()
+    {
+        var priest = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Priest };
+        var bishop = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Bishop };
+        var mage = new Character { Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Mage };
+
+        Assert.True(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster(priest));
+        Assert.True(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster(bishop));
+        Assert.False(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster(mage));
+    }
+
+    [Fact]
     public void Dead_ashes_or_lost_character_has_no_other_status()
     {
         var c = new Character { Ruleset = Ruleset.Wizardry };

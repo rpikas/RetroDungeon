@@ -139,6 +139,10 @@ public sealed partial class MazeForm
         framePanel.Controls.Add(optionsLabel);
         form.Controls.Add(framePanel);
 
+        YesNoClick.Attach(optionsLabel, optionsLabel.Text, optionsLabel.Font, () => optionsLabel.ClientRectangle, StringAlignment.Center,
+            () => { form.DialogResult = DialogResult.Yes; form.Close(); },
+            () => { form.DialogResult = DialogResult.No; form.Close(); });
+
         var prompt = new ViewerPrompt("choice", question, null, new[]
         {
             new ViewerPromptOption("yes", "Yes"),
@@ -198,6 +202,10 @@ public sealed partial class MazeForm
                 form.Close();
             }
         };
+
+        YesNoClick.Attach(form, line, font, () => new RectangleF(0, 0, form.ClientSize.Width, form.ClientSize.Height), StringAlignment.Center,
+            () => { form.DialogResult = DialogResult.Yes; form.Close(); },
+            () => { form.DialogResult = DialogResult.No; form.Close(); });
 
         var prompt = new ViewerPrompt("choice", tableQuestion, null, new[]
         {
@@ -265,6 +273,10 @@ public sealed partial class MazeForm
                 form.Close();
             }
         };
+
+        YesNoClick.Attach(form, line2, font, () => new RectangleF(0, (form.ClientSize.Height / 2f) - 4, form.ClientSize.Width, (form.ClientSize.Height / 2f) - 8), StringAlignment.Center,
+            () => { form.DialogResult = DialogResult.Yes; form.Close(); },
+            () => { form.DialogResult = DialogResult.No; form.Close(); });
 
         var prompt = new ViewerPrompt("choice", up ? "Stairs up, take them?" : "Stairs down, take them?", null, new[]
         {

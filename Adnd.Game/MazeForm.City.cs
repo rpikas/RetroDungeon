@@ -32,25 +32,93 @@ public sealed partial class MazeForm
             else if (_wizardryPictureRect.Contains(e.Location))
                 TermConsole.EnqueueLine("W");
         };
-        MouseDoubleClick += (_, e) =>
+        MouseClick += (_, e) => HandleCityClick(e);
+    }
+
+    private readonly List<(Rectangle Bounds, string Line)> _sideLineRects = new();
+    private float _terminalCharWidth = 7f;
+
+    private void AddSideLineRects(string[] lines, float x, float top, float lineHeight, float fontPixels)
+    {
+        for (var i = 0; i < lines.Length; i++)
         {
-            if ((TermConsole.ClickableNumberDigits <= 0 && !TermConsole.ClickableLetters) || e.Button != MouseButtons.Left || !_terminalInner.Contains(e.Location))
-                return;
+            var width = (int)(lines[i].Length * fontPixels * 0.55f) + 4;
+            _sideLineRects.Add((new Rectangle((int)x, (int)(top + (i * lineHeight)), width, (int)lineHeight), lines[i]));
+        }
+    }
 
-            var lines = TermConsole.Snapshot();
-            var index = _terminalFirstLine + (int)((e.Y - _terminalInner.Y) / _terminalLineHeight);
-            if (index < 0 || index >= lines.Count)
-                return;
+    // The key a menu line answers to: "T)raining", "A)  Stables", "B. Item", "[C] Item", "L<-eave".
+    private static string? MenuKeyOf(string line)
+    {
+        var match = System.Text.RegularExpressions.Regex.Match(line,         @"^\s*(?:\[([A-Za-z0-9])\]|([A-Za-z0-9])\)|(\d)\.\s|([A-Za-z])<-|(\d)\s{2,}\S)");
+        if (!match.Success)
+            return null;
 
-            if (TermConsole.ClickableLetters)
+                for (var g = 1; g <= 5; g++)
+        {
+            if (match.Groups[g].Success)
+                return match.Groups[g].Value;
+        }
+
+        return null;
+    }
+
+    private void HandleCityClick(MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left || TermConsole.RulesetPictures)
+            return;
+
+        if (TermConsole.WaitingForKey && TermConsole.PressAnyKeyShown())
+        {
+            TermConsole.EnqueueText("\r");
+            return;
+        }
+
+        foreach (var (bounds, line) in _sideLineRects)
+        {
+            if (!bounds.Contains(e.Location))
+                continue;
+
+            if (TermConsole.WaitingForKey && MenuKeyOf(line) is { } sideKey)
+                TermConsole.EnqueueText(sideKey);
+            return;
+        }
+
+        if (!_terminalInner.Contains(e.Location))
+            return;
+
+        var lines = TermConsole.Snapshot();
+        var index = _terminalFirstLine + (int)((e.Y - _terminalInner.Y) / _terminalLineHeight);
+        if (index < 0 || index >= lines.Count)
+            return;
+
+        var text = lines[index];
+
+        if (TermConsole.WaitingForKey)
+        {
+            var yn = text.IndexOf("Y/N", StringComparison.OrdinalIgnoreCase);
+            if (yn >= 0)
             {
-                var letter = System.Text.RegularExpressions.Regex.Match(lines[index], @"^([A-Z])\.\s");
-                if (letter.Success)
-                    TermConsole.EnqueueText(letter.Groups[1].Value);
+                var column = (int)((e.X - _terminalInner.X) / _terminalCharWidth);
+                if (column >= yn - 1 && column <= yn + 1)
+                    TermConsole.EnqueueText("Y");
+                else if (column >= yn + 2 && column <= yn + 3)
+                    TermConsole.EnqueueText("N");
                 return;
             }
+        }
 
-            var match = System.Text.RegularExpressions.Regex.Match(lines[index], @"^(\d+)[.)]?\s");
+        if (TermConsole.ClickableLetters)
+        {
+            var letter = System.Text.RegularExpressions.Regex.Match(text, @"^([A-Z])\.\s");
+            if (letter.Success)
+                TermConsole.EnqueueText(letter.Groups[1].Value);
+            return;
+        }
+
+        if (TermConsole.ClickableNumberDigits > 0)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(text, @"^(\d+)[.)]?\s");
             if (!match.Success)
                 return;
 
@@ -60,7 +128,11 @@ public sealed partial class MazeForm
 
             // A reader that submits by itself after N characters must not be left an Enter to read later.
             TermConsole.EnqueueText(digits.Length < TermConsole.ClickableNumberDigits ? digits + "\r" : digits);
-        };
+            return;
+        }
+
+        if (TermConsole.WaitingForKey && MenuKeyOf(text) is { } key)
+            TermConsole.EnqueueText(key);
     }
 
     private Rectangle _terminalInner;
@@ -136,6 +208,7 @@ public sealed partial class MazeForm
     private void DrawCity(Graphics graphics)
     {
         var color = GameRulesProvider.Current.DefaultColor;
+        _sideLineRects.Clear();
         using var brush = new SolidBrush(color);
         graphics.DrawString("Castle", HudFont, brush, new PointF(16f, 6f));
 
@@ -171,6 +244,7 @@ public sealed partial class MazeForm
             var left = (int)(area.Width * share);
             using (var menuFont = new Font("Consolas", fontPx, FontStyle.Bold, GraphicsUnit.Pixel))
             {
+                AddSideLineRects(menuLines, area.X, area.Y, lh, fontPx);
                 for (var i = 0; i < menuLines.Length; i++)
                     graphics.DrawString(menuLines[i], menuFont, brush, area.X, area.Y + (i * lh), StringFormat.GenericTypographic);
             }
@@ -194,6 +268,7 @@ public sealed partial class MazeForm
             var menuWidth = (int)(feeMenu.Max(l => l.Length) * fontPx * 0.55f) + EncounterForm.FrameMargin;
             using (var menuFont = new Font("Consolas", fontPx, FontStyle.Bold, GraphicsUnit.Pixel))
             {
+                AddSideLineRects(feeMenu, area.X, top, lh, fontPx);
                 for (var i = 0; i < feeMenu.Length; i++)
                     graphics.DrawString(feeMenu[i], menuFont, brush, area.X, top + (i * lh), StringFormat.GenericTypographic);
             }
@@ -227,6 +302,7 @@ public sealed partial class MazeForm
             var menuWidth = (int)(groundsMenu.Max(l => l.Length) * fontPx * 0.55f) + EncounterForm.FrameMargin;
             using (var menuFont = new Font("Consolas", fontPx, FontStyle.Bold, GraphicsUnit.Pixel))
             {
+                AddSideLineRects(groundsMenu, area.X, top, lh, fontPx);
                 for (var i = 0; i < groundsMenu.Length; i++)
                     graphics.DrawString(groundsMenu[i], menuFont, brush, area.X, top + (i * lh), StringFormat.GenericTypographic);
             }
@@ -297,6 +373,7 @@ public sealed partial class MazeForm
             {
                 using var sideFont = new Font("Consolas", sideFontPixels, FontStyle.Bold, GraphicsUnit.Pixel);
                 var top = picture.Bottom + EncounterForm.FrameMargin;
+                AddSideLineRects(sideLines, area.X, top, sideLineHeight, sideFontPixels);
                 for (var i = 0; i < sideLines.Length; i++)
                     graphics.DrawString(sideLines[i], sideFont, brush, area.X, top + (i * sideLineHeight), StringFormat.GenericTypographic);
             }
@@ -330,6 +407,7 @@ public sealed partial class MazeForm
         var first = Math.Max(0, lines.Count - rows - TermConsole.Scrolled);
         _terminalInner = inner;
         _terminalLineHeight = lineHeight;
+        _terminalCharWidth = fontPixels * 0.55f;
         _terminalFirstLine = first;
 
         var state = graphics.Save();

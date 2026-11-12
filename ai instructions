@@ -8853,3 +8853,29 @@ so for example a level 6 bishop can learn level 1 priest spells and 2 mage spell
 a level 1 bishop can not learn priest spells and level 1 mage spells,
 
 when settings to not see position, also not shown level nor facing direction
+34,6
+___
+in proving grounds facing south at 10,8 at level 2 there should be a wall
+in proving grounds, pos 9,10 and pos 9,9 level 2 there should be a 90% chanse to encounter mobs
+
+Bishops can dispel undead as a priest from level 4. Their capability will be like priest but bishoplevel-3
+
+when selecting a person to cast a spel on, it should be enough to click once
+
+also when selecting other things in lists like what spell to cast and other list where now double click is required, 
+change that to single click
+
+also texts in menues in the city and lists of items in shop should be clickable to select. also when enter or esc 
+will close a window click any where should close it. and Y/N questions, the Y and N should bli clickable to select
+
+in gilgamesh or when camping and clicking a character inspect should open just like when pressing a number 1-6
+
+when hitting a mob and the mob is killed, show the damage and then show the message 
+that the mob is killed in the same message.
+
+in the church keep the options to heal the whole party, but also have the option to heal only one party member, 
+so show the party in the church
+
+
+
+

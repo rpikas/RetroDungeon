@@ -15,6 +15,8 @@
     { "X": 2, "Y": 10, "ChancePercent": 80 },
     { "X": 3, "Y": 18, "ChancePercent": 80 },
     { "X": 0, "Y": 14, "ChancePercent": 80 },
-    { "X": 1, "Y": 18, "ChancePercent": 80 }
+    { "X": 1, "Y": 18, "ChancePercent": 80 },
+    { "X": 10, "Y": 9, "ChancePercent": 90 },
+    { "X": 9, "Y": 9, "ChancePercent": 90 }
   ]
 }

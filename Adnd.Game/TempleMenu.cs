@@ -45,9 +45,20 @@ public class TempleMenu
             Console.WriteLine($"Restore from petrification     {Temple.RestorePetrificationCost} gp");
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Party:");
+            var members = PartyCharacters(party);
+            for (var i = 0; i < members.Count; i++)
+            {
+                var m = members[i];
+                var state = m.HasStatus(CharacterStatus.Ashes) ? "Ashes" : m.HasStatus(CharacterStatus.Dead) ? "Dead" : $"{m.Status}";
+                Console.WriteLine($"{i + 1}. {m.Name,-14} HP {m.CurrentHitPoints}/{m.MaxHitPoints}  {state}  {m.GoldPieces} gp");
+            }
+
             var menu = new List<string>
             {
                 "H)eal Party",
+                "O) Heal One member",
                 "R)aise Dead",
                 "E) Restoration (lost level, feeblemind)",
                 "L<-eave",
@@ -85,6 +96,7 @@ public class TempleMenu
             }
 
             if (key == ConsoleKey.H) HealParty(party);
+            else if (key == ConsoleKey.O) HealOne(party);
             else if (key == ConsoleKey.R) RaiseDead(party);
             else if (key == ConsoleKey.E) Restoration(party);
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
@@ -145,7 +157,41 @@ public class TempleMenu
         }
     }
 
-    private void HealParty(Party party)
+    private void HealOne(Party party)
+    {
+        var partyCharacters = PartyCharacters(party);
+        var candidates = partyCharacters.Where(Temple.NeedsHealing).ToList();
+
+        if (candidates.Count == 0)
+        {
+            Console.WriteLine(partyCharacters.Count == 0 ? "No party members found." : "No one needs healing.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.Clear();
+        Console.WriteLine("=== HEAL ONE MEMBER ===");
+        Console.WriteLine();
+        Console.WriteLine("Who needs healing?");
+        for (var i = 0; i < candidates.Count; i++)
+        {
+            var c = candidates[i];
+            Console.WriteLine($"{i + 1}. {c.Name} (HP {c.CurrentHitPoints}/{c.MaxHitPoints}, Cost {Temple.CostToHeal(c)} gp)");
+        }
+
+        Console.Write("Choose #: ");
+        var selection = InputHelper.ReadNumber(1, candidates.Count);
+        if (!selection.HasValue)
+        {
+            Console.WriteLine("Invalid selection.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        HealParty(party, candidates[selection.Value - 1]);
+    }
+
+    private void HealParty(Party party, Character? only = null)
     {
         var partyCharacters = PartyCharacters(party);
 
@@ -157,6 +203,8 @@ public class TempleMenu
         }
 
         var needHealing = partyCharacters.Where(Temple.NeedsHealing).ToList();
+        if (only != null)
+            needHealing = needHealing.Where(c => c.Name == only.Name).ToList();
 
         if (needHealing.Count == 0)
         {

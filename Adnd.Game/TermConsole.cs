@@ -140,9 +140,32 @@ internal static class TermConsole
             if (!Hosted)
                 return Console_.KeyAvailable;
 
+            _lastPoll = Environment.TickCount64;
             Application.DoEvents();
             return Pending.Count > 0;
         }
+    }
+
+    private static long _lastPoll;
+    private static bool _reading;
+    private static int _lineDepth;
+
+    /// <summary>True while the console is waiting for a single key (not a typed line), so a click may stand in for it.</summary>
+    public static bool WaitingForKey => Hosted && Pending.Count == 0 && _lineDepth == 0 && (_reading || Environment.TickCount64 - _lastPoll < 2000);
+
+    /// <summary>True when the last text on screen is a "Press any key" style prompt.</summary>
+    public static bool PressAnyKeyShown()
+    {
+        var lines = Snapshot();
+        for (var i = lines.Count - 1; i >= 0 && i >= lines.Count - 3; i--)
+        {
+            if (lines[i].Length == 0)
+                continue;
+
+            return System.Text.RegularExpressions.Regex.IsMatch(lines[i], @"(?i)press (any key|enter|a key)");
+        }
+
+        return false;
     }
 
     public static ConsoleKeyInfo ReadKey(bool intercept = false)
@@ -150,16 +173,25 @@ internal static class TermConsole
         if (!Hosted)
             return Console_.ReadKey(intercept);
 
-        while (Pending.Count == 0)
+        _reading = true;
+        try
         {
-            if (!Hosted)
-                throw new OperationCanceledException("The RetroDungeon window was closed.");
+            while (Pending.Count == 0)
+            {
+                if (!Hosted)
+                    throw new OperationCanceledException("The RetroDungeon window was closed.");
 
-            Application.DoEvents();
-            Thread.Sleep(5);
+                Application.DoEvents();
+                Thread.Sleep(5);
+            }
+        }
+        finally
+        {
+            _reading = false;
         }
 
         var key = Pending.Dequeue();
+        _lastPoll = 0;
         if (!intercept && key.KeyChar != '\0' && !char.IsControl(key.KeyChar))
             Write(key.KeyChar.ToString());
 
@@ -171,6 +203,19 @@ internal static class TermConsole
         if (!Hosted)
             return Console_.ReadLine();
 
+        _lineDepth++;
+        try
+        {
+            return ReadLineCore();
+        }
+        finally
+        {
+            _lineDepth--;
+        }
+    }
+
+    private static string? ReadLineCore()
+    {
         var text = new StringBuilder();
         while (true)
         {

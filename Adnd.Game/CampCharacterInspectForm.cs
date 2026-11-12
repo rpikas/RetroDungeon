@@ -59,6 +59,7 @@ public sealed class CampCharacterInspectForm : Form
     public bool StartWithEquip { get; init; }
 
     /// <summary>Walk through every equipment slot of this character, then close (the camp's "equip all").</summary>
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public bool StartEquipSlots { get; init; }
 
     /// <summary>True when the player pressed Esc during the slot walk, meaning the rest of the party is skipped too.</summary>
@@ -217,6 +218,35 @@ public sealed class CampCharacterInspectForm : Form
         Controls.Add(_detailsBox);
         Controls.Add(_buttonsPanel);
         Controls.Add(_oldStyleFooterLabel);
+
+        // Old style: the footer's words answer to a click as their keys do.
+        _oldStyleFooterLabel.MouseClick += (_, e) =>
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            var lines = _oldStyleFooterLabel.Text.Split('\n');
+            var font = _oldStyleFooterLabel.Font;
+            var lineHeight = font.Height;
+            var charWidth = TextRenderer.MeasureText("MM", font, Size.Empty, TextFormatFlags.NoPadding).Width / 2f;
+            var top = (_oldStyleFooterLabel.ClientSize.Height - (lines.Length * lineHeight)) / 2;
+            var row = (e.Y - top) / lineHeight;
+            if (row < 0 || row >= lines.Length || charWidth <= 0)
+                return;
+
+            var column = (int)(e.X / charWidth);
+            var markers = System.Text.RegularExpressions.Regex.Matches(lines[row], @"[A-Z][)↵]");
+            for (var i = 0; i < markers.Count; i++)
+            {
+                var end = i + 1 < markers.Count ? markers[i + 1].Index : lines[row].TrimEnd().Length;
+                if (column < markers[i].Index || column >= end)
+                    continue;
+
+                var key = markers[i].Value[1] == '↵' ? Keys.Escape : (Keys)markers[i].Value[0];
+                CampCharacterInspectForm_KeyDown(this, new KeyEventArgs(key));
+                return;
+            }
+        };
 
         ApplyUiStyleMode();
         CheckUnreadScrollFadeForCurrentCharacter();
@@ -1393,7 +1423,7 @@ public sealed class CampCharacterInspectForm : Form
             {
                 var status = FormatStatus(p);
                 return $"{p.Name} (HP {p.CurrentHitPoints}/{p.MaxHitPoints}, Status: {status})";
-            }).ToList());
+            }).ToList(), singleClick: true);
             if (!targetIdx.HasValue)
                 return;
 
@@ -1780,8 +1810,7 @@ public sealed class CampCharacterInspectForm : Form
             {
                 var status = FormatStatus(p);
                 return $"{p.Name} (HP {p.CurrentHitPoints}/{p.MaxHitPoints}, Status: {status})";
-            }).ToList());
-
+            }).ToList(), singleClick: true);
             if (!targetIdx.HasValue)
                 return;
 
@@ -2149,7 +2178,7 @@ public sealed class CampCharacterInspectForm : Form
         return spellClass.ToString();
     }
 
-    private int? PromptChoice(string title, List<string> options, bool numberKeys = false)
+    private int? PromptChoice(string title, List<string> options, bool numberKeys = false, bool singleClick = true)
     {
         using var form = new Form();
         form.Text = title;
@@ -2188,6 +2217,19 @@ public sealed class CampCharacterInspectForm : Form
             form.DialogResult = DialogResult.OK;
             form.Close();
         };
+
+        if (singleClick)
+        {
+            list.MouseClick += (_, e) =>
+            {
+                if (e.Button != MouseButtons.Left || list.IndexFromPoint(e.Location) < 0)
+                    return;
+
+                list.SelectedIndex = list.IndexFromPoint(e.Location);
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            };
+        }
 
         if (numberKeys)
         {

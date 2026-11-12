@@ -243,6 +243,25 @@ public static class ViewerMessage
 
         AttachCloseKeys(form, form);
 
+        // The boxes that close on Enter or Escape also close on a click anywhere in them.
+        void AttachCloseClicks(Control control)
+        {
+            control.MouseClick += (_, e) =>
+            {
+                if (e.Button != MouseButtons.Left)
+                    return;
+
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            };
+
+            foreach (Control child in control.Controls)
+                AttachCloseClicks(child);
+        }
+
+        if (!isCombatRewards && !isCombatRound)
+            AttachCloseClicks(form);
+
         // Registered only while this dialog is up, and unregistered by Dispose on the way out, so the
         // fight underneath goes back to receiving the table's commands the moment this closes.
         ViewerControlPump? pump = null;

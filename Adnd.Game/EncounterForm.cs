@@ -1945,11 +1945,12 @@ public sealed class EncounterForm : Form
         form.CancelButton = cancel;
         OldStyleDialog.Apply(form, list);
 
-        list.DoubleClick += (_, _) =>
+        list.MouseClick += (_, e) =>
         {
-            if (list.SelectedIndex < 0)
+            if (e.Button != MouseButtons.Left || list.IndexFromPoint(e.Location) < 0)
                 return;
 
+            list.SelectedIndex = list.IndexFromPoint(e.Location);
             form.DialogResult = DialogResult.OK;
             form.Close();
         };
@@ -2410,8 +2411,25 @@ public sealed class EncounterForm : Form
             form.Close();
         }
 
+        // Picking a person to cast on needs only one click.
+        var singleClick = true;
+
         if (promptControl is TextBox promptBox)
         {
+            promptBox.MouseUp += (_, e) =>
+            {
+                if (!singleClick || e.Button != MouseButtons.Left || promptBox.SelectionLength > 0)
+                    return;
+
+                var text = promptBox.Text;
+                if (text.Length == 0)
+                    return;
+
+                var at = Math.Min(promptBox.GetCharIndexFromPosition(e.Location), text.Length - 1);
+                var start = at > 0 ? text.LastIndexOf('\n', at) + 1 : 0;
+                var end = text.IndexOf('\n', at);
+                AnswerWithLine(text[start..(end < 0 ? text.Length : end)]);
+            };
             promptBox.DoubleClick += (_, _) =>
             {
                 var text = promptBox.Text;
@@ -2426,12 +2444,16 @@ public sealed class EncounterForm : Form
         }
         else
         {
-            promptControl.MouseDoubleClick += (_, e) =>
+            void AnswerAtPoint(MouseEventArgs e)
             {
                 var lines = prompt.Split('\n');
                 var row = e.Y / Math.Max(1, promptControl.Font.Height);
                 AnswerWithLine(row >= 0 && row < lines.Length ? lines[row] : null);
-            };
+            }
+
+            promptControl.MouseDoubleClick += (_, e) => AnswerAtPoint(e);
+            if (singleClick)
+                promptControl.MouseClick += (_, e) => AnswerAtPoint(e);
         }
 
         if (GameRulesProvider.Current.UIOldStyle && isChooseSpellDialog)

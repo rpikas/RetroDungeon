@@ -116,6 +116,35 @@ public sealed partial class MazeForm
             int? quickInspectIndex = null;
             var startWithEquip = false;
 
+            // Each line of the menu answers to a click as it does to its key.
+            menuLabel.MouseClick += (_, e) =>
+            {
+                if (e.Button != MouseButtons.Left)
+                    return;
+
+                var row = e.Y / Math.Max(1, menuLabel.Font.Height);
+                switch (row)
+                {
+                    case 0:
+                        form.DialogResult = DialogResult.Yes;
+                        break;
+                    case 1:
+                        form.DialogResult = DialogResult.No;
+                        break;
+                    case 2:
+                        startWithEquip = true;
+                        form.DialogResult = DialogResult.Yes;
+                        break;
+                    case 3:
+                        form.DialogResult = DialogResult.Cancel;
+                        break;
+                    default:
+                        return;
+                }
+
+                form.Close();
+            };
+
             form.KeyDown += (_, e) =>
             {
                 if (e.KeyCode == Keys.R)
@@ -809,6 +838,44 @@ public sealed partial class MazeForm
         {
             OldStyleDialog.Apply(form, label, input);
             form.Shown += (_, _) => input.Focus();
+        }
+
+        if (tableOptions != null)
+        {
+            // Clicking a numbered or lettered line ("2. Name", "A. All") answers with it, as typing it would.
+            void AnswerWithLine(string line)
+            {
+                var match = System.Text.RegularExpressions.Regex.Match(line, @"^\s*(\d+|[A-Za-z])[.)]\s");
+                if (!match.Success)
+                    return;
+
+                input.Text = match.Groups[1].Value;
+                form.DialogResult = DialogResult.OK;
+                form.Close();
+            }
+
+            label.MouseClick += (_, e) =>
+            {
+                if (e.Button != MouseButtons.Left)
+                    return;
+
+                if (label is TextBox box)
+                {
+                    if (box.SelectionLength > 0 || box.TextLength == 0)
+                        return;
+
+                    var at = Math.Min(box.GetCharIndexFromPosition(e.Location), box.TextLength - 1);
+                    var start = at > 0 ? box.Text.LastIndexOf('\n', at) + 1 : 0;
+                    var end = box.Text.IndexOf('\n', at);
+                    AnswerWithLine(box.Text[start..(end < 0 ? box.TextLength : end)]);
+                    return;
+                }
+
+                var lines = text.Split('\n');
+                var row = e.Y / Math.Max(1, label.Font.Height);
+                if (row >= 0 && row < lines.Length)
+                    AnswerWithLine(lines[row]);
+            };
         }
 
         if (tableOptions is null)

@@ -3140,6 +3140,15 @@ public sealed class CombatCoordinator
 
             if (hits < 2)
             {
+                // A single hit that kills: the damage and the kill read as one message.
+                if (hits == 1 && end == i + 1 && end < lines.Count
+                    && DestroyedLine.Match(lines[end]) is { Success: true } killed && killed.Groups["target"].Value == target)
+                {
+                    result.Add($"{lines[i]}{Environment.NewLine}{target} is killed!");
+                    i = end + 1;
+                    continue;
+                }
+
                 result.Add(lines[i++]);
                 continue;
             }
@@ -4216,7 +4225,7 @@ public sealed class CombatCoordinator
 
             case ChestTrapType.PriestBlaster:
                 var priestDeaths = new List<string>();
-                foreach (var c in survivors.Where(IsClericOrDruid))
+                foreach (var c in survivors.Where(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster))
                 {
                     var d = _dice.Roll(6);
                     if (ApplyTrapDamageAndMarkDeath(c, d))
@@ -4229,7 +4238,9 @@ public sealed class CombatCoordinator
                     }
                 }
 
-                var priestOutcome = "Clerics and druids are blasted and paralyzed.";
+                var priestOutcome = GameRulesProvider.Current.Rules == Ruleset.Wizardry
+                    ? "Priests and bishops are blasted and paralyzed."
+                    : "Clerics and druids are blasted and paralyzed.";
                 if (priestDeaths.Count > 0)
                     priestOutcome += Environment.NewLine + $"Died: {string.Join(", ", priestDeaths)}.";
 
@@ -4645,9 +4656,6 @@ public sealed class CombatCoordinator
 
     private static bool IsMageOrIllusionist(Character c)
         => c.Classes.Contains(CharacterClass.MagicUser) || c.Classes.Contains(CharacterClass.Illusionist);
-
-    private static bool IsClericOrDruid(Character c)
-        => c.Classes.Contains(CharacterClass.Cleric) || c.Classes.Contains(CharacterClass.Druid);
 
     private static string FormatTrapName(ChestTrapType trap)
     {
