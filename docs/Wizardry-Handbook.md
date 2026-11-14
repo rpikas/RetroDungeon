@@ -170,6 +170,7 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Turn Undead never destroys the undead in Wizardry: a result that would disintegrate it (D) turns it instead, shown as Turned.
 - A Dead, Ashes or Lost character can have no other status (poisoned, paralyzed, ...); `Character.Status` drops them. This holds for AD&D too.
 - The Priest Blaster chest trap hurts and paralyzes Priests and Bishops (AD&D: Clerics and Druids). Only the Priest Blaster changes; the Mage Blaster is unchanged.
+- The temple has no Restoration in Wizardry (it is AD&D only); its menu option and key are hidden.
 
 ## 6. Not implemented yet
 

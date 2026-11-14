@@ -55,14 +55,16 @@ public class TempleMenu
                 Console.WriteLine($"{i + 1}. {m.Name,-14} HP {m.CurrentHitPoints}/{m.MaxHitPoints}  {state}  {m.GoldPieces} gp");
             }
 
+            var isWiz = Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry;
             var menu = new List<string>
             {
                 "H)eal Party",
-                "O) Heal One member",
+                "(or press 1-6 / click a member to heal only them)",
                 "R)aise Dead",
-                "E) Restoration (lost level, feeblemind)",
-                "L<-eave",
             };
+            if (!isWiz)
+                menu.Add("E) Restoration (lost level, feeblemind)");
+            menu.Add("L<-eave");
             if (_viewer.Enabled)
                 menu.Add("(or click whoever needs tending on the table)");
 
@@ -96,9 +98,10 @@ public class TempleMenu
             }
 
             if (key == ConsoleKey.H) HealParty(party);
-            else if (key == ConsoleKey.O) HealOne(party);
+            else if (key >= ConsoleKey.D1 && key <= ConsoleKey.D6) HealMember(party, key - ConsoleKey.D1);
+            else if (key >= ConsoleKey.NumPad1 && key <= ConsoleKey.NumPad6) HealMember(party, key - ConsoleKey.NumPad1);
             else if (key == ConsoleKey.R) RaiseDead(party);
-            else if (key == ConsoleKey.E) Restoration(party);
+            else if (key == ConsoleKey.E && !isWiz) Restoration(party);
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
         }
     }
@@ -157,38 +160,38 @@ public class TempleMenu
         }
     }
 
-    private void HealOne(Party party)
+    private void HealMember(Party party, int index)
     {
         var partyCharacters = PartyCharacters(party);
-        var candidates = partyCharacters.Where(Temple.NeedsHealing).ToList();
+        if (index < 0 || index >= partyCharacters.Count)
+            return;
 
-        if (candidates.Count == 0)
+        var target = partyCharacters[index];
+        if (!Temple.NeedsHealing(target))
         {
-            Console.WriteLine(partyCharacters.Count == 0 ? "No party members found." : "No one needs healing.");
+            Console.WriteLine($"{target.Name} does not need healing.");
             Console.ReadKey(true);
             return;
         }
 
         Console.Clear();
-        Console.WriteLine("=== HEAL ONE MEMBER ===");
+        Console.WriteLine($"=== HEAL {target.Name.ToUpperInvariant()} ===");
         Console.WriteLine();
-        Console.WriteLine("Who needs healing?");
-        for (var i = 0; i < candidates.Count; i++)
+        Console.WriteLine($"HP {target.CurrentHitPoints}/{target.MaxHitPoints}");
+        Console.WriteLine($"Cost to heal: {Temple.CostToHeal(target)} gp");
+        Console.WriteLine();
+        Console.WriteLine("Heal? (Y/N)");
+
+        while (true)
         {
-            var c = candidates[i];
-            Console.WriteLine($"{i + 1}. {c.Name} (HP {c.CurrentHitPoints}/{c.MaxHitPoints}, Cost {Temple.CostToHeal(c)} gp)");
+            var key = Console.ReadKey(true).Key;
+            if (key == ConsoleKey.Y)
+                break;
+            if (key == ConsoleKey.N || key == ConsoleKey.Escape)
+                return;
         }
 
-        Console.Write("Choose #: ");
-        var selection = InputHelper.ReadNumber(1, candidates.Count);
-        if (!selection.HasValue)
-        {
-            Console.WriteLine("Invalid selection.");
-            Console.ReadKey(true);
-            return;
-        }
-
-        HealParty(party, candidates[selection.Value - 1]);
+        HealParty(party, target);
     }
 
     private void HealParty(Party party, Character? only = null)

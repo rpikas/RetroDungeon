@@ -531,12 +531,12 @@ public sealed class EncounterForm : Form
             _viewerControl = ViewerControlPump.Start(this, Adnd.Game.Combat.LairTreasureChestDialog.Vocabulary, HandleChestKey);
             ViewerPromptChanged?.Invoke(new ViewerPrompt(
                 "choice",
-                "Treasure chest: O)pen, C)ast Find Traps, L)eave, I)nspect, B)ack",
+                IsWizardryStyle ? "Treasure chest: O)pen, C)alfo, L)eave, I)nspect, B)ack" : "Treasure chest: O)pen, C)ast Find Traps, L)eave, I)nspect, B)ack",
                 null,
                 new[]
                 {
                     new ViewerPromptOption("open", "Open"),
-                    new ViewerPromptOption("cast", "Cast Find Traps"),
+                    new ViewerPromptOption("cast", IsWizardryStyle ? "Calfo" : "Cast Find Traps"),
                     new ViewerPromptOption("leave", "Leave"),
                     new ViewerPromptOption("inspect", "Inspect"),
                     new ViewerPromptOption("back", "Back")
@@ -577,7 +577,7 @@ public sealed class EncounterForm : Form
         {
             if (_wizardryStyle)
             {
-                _resultLines = new List<string> { "The monsters are surprised!" };
+                _resultLines = new List<string> { "** You surprised the monsters! **" };
                 _afterResults = () =>
                 {
                     _resultLines = null;
@@ -762,7 +762,8 @@ public sealed class EncounterForm : Form
 
         var optionsFrame = NewFrame(128);
         Place(_optionsTitleLabel, optionsFrame, inner, 8, frameWidth - 2 * inner, 36);
-        Place(_optionsLegendLabel, optionsFrame, inner, 48, frameWidth - 2 * inner, 72);
+        Place(_optionsLegendLabel, optionsFrame, inner, 22, frameWidth - 2 * inner, 98);
+        _optionsLegendLabel.Padding = new Padding(28, 0, 28, 0);
 
         // Embedded in the maze window the monster strip takes whatever height the party frame leaves.
         var stripHeight = embeddedClient is { } client
@@ -1093,7 +1094,7 @@ public sealed class EncounterForm : Form
         _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
         _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
         _optionsTitleLabel.Text = "A CHEST!  YOU MAY:";
-        _optionsLegendLabel.Text = "O)PEN   C)AST FIND TRAPS   L)EAVE ALONE" + Environment.NewLine + "I)NSPECT   B)ACK";
+        _optionsLegendLabel.Text = "O)PEN   C)ALFO   L)EAVE ALONE" + Environment.NewLine + "I)NSPECT   B)ACK";
         _monsterPanel.Invalidate();
         DialogResult = DialogResult.None;
         ShowDialog(owner);
@@ -1162,6 +1163,14 @@ public sealed class EncounterForm : Form
     }
 
     private Image? _heldImage;
+
+    /// <summary>Puts a picture in the monster strip without waiting; the results that follow play over it.</summary>
+    internal void HoldPicture(Image image)
+    {
+        _heldImage?.Dispose();
+        _heldImage = new Bitmap(image);
+        _monsterPanel.Invalidate();
+    }
 
     private bool _monstersHidden;
 
@@ -1943,6 +1952,7 @@ public sealed class EncounterForm : Form
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+        SpellListInput.Attach(form, list, ok, castable.Select(s => s.Name).ToList());
         OldStyleDialog.Apply(form, list);
 
         list.MouseClick += (_, e) =>

@@ -1067,11 +1067,13 @@ public sealed class CampCharacterInspectForm : Form
                 .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue || SlotFor(it) != null)
                 .Where(it => EquipmentManager.MeetsClassRequirement(c, it) && EquipmentManager.MeetsAlignmentRequirement(c, it))
                 .Where(it => FitsSlot(it, slot))
+                .Where(it => !ReferenceEquals(it, worn))
                 .ToList();
             if (candidates.Count == 0)
                 continue;
 
-            var options = new List<string> { $"0) Keep: {(worn == null ? "(empty)" : worn.DisplayName)}" };
+            // The worn item is the first entry, so keeping it is just picking it from the list like any other.
+            var options = new List<string> { worn == null ? "0) Keep: (empty)" : $"0) {worn.DisplayName} (equipped)" };
             options.AddRange(candidates.Select((it, i) => $"{i + 1}) {it.DisplayName}"));
 
             var idx = PromptChoice($"{c.Name} - {slot}", options, numberKeys: true);
@@ -1313,7 +1315,7 @@ public sealed class CampCharacterInspectForm : Form
             return;
         }
 
-        var spellIdx = PromptChoice("Memorize Spell", knownSpells.Select(s => $"L{s.Level} {s.Name}").ToList());
+        var spellIdx = PromptChoice("Memorize Spell", knownSpells.Select(s => $"L{s.Level} {s.Name}").ToList(), spellNames: knownSpells.Select(s => s.Name).ToList());
         if (!spellIdx.HasValue)
             return;
 
@@ -1397,7 +1399,7 @@ public sealed class CampCharacterInspectForm : Form
         if (castable.Count == 0)
             return;
 
-        var spellIdx = PromptChoice("Cast Spell", castable.Select(s => $"{s.Name}  (L{s.Level})").ToList());
+        var spellIdx = PromptChoice("Cast Spell", castable.Select(s => $"{s.Name}  (L{s.Level})").ToList(), spellNames: castable.Select(s => s.Name).ToList());
         if (!spellIdx.HasValue)
             return;
 
@@ -2178,7 +2180,7 @@ public sealed class CampCharacterInspectForm : Form
         return spellClass.ToString();
     }
 
-    private int? PromptChoice(string title, List<string> options, bool numberKeys = false, bool singleClick = true)
+    private int? PromptChoice(string title, List<string> options, bool numberKeys = false, bool singleClick = true, List<string>? spellNames = null)
     {
         using var form = new Form();
         form.Text = title;
@@ -2208,6 +2210,8 @@ public sealed class CampCharacterInspectForm : Form
         form.Controls.Add(cancel);
         form.AcceptButton = ok;
         form.CancelButton = cancel;
+        if (spellNames != null)
+            SpellListInput.Attach(form, list, ok, spellNames);
         OldStyleDialog.Apply(form, list);
         list.DoubleClick += (_, _) =>
         {

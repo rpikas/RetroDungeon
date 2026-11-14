@@ -8876,6 +8876,40 @@ that the mob is killed in the same message.
 in the church keep the options to heal the whole party, but also have the option to heal only one party member, 
 so show the party in the church
 
+in Church Instead of Having O) Heal one member, let the user select the member to heal by clicking on them or pressing the 
+number 1-6, 
+and then show the cost to heal that member.
+
+The Restoration option in the church should only be avaliable in adnd, not wizardry.
+
+In the area where you write the text on moonsters aand chataters hitting and missing, mov out the text a bit
+
+when finding a chest in wizardry, change the message Cast find traps to Calfo.
+
+in adnd and wizardy after successfully disarming a trap, the chest is automatically opend, do not as who should open it.
+
+in adnd and wizardy show the message Tresure found at the same time as you show what teasure is found, do not seperate the
+messages.
+
+when choosing spells to cast in adnd and wizardry I want to keep the options to you arrowkeys and enter and also to click 
+on the spell, but besides that I want two more options also: show number in fron of the spells that you can selct or typ 
+in the begning of a spellname and press enter
+
+if defeting monster without a chest and showing how much gp you find, then also show the treasure picture
+
+when surprising the monsters, show a message like this:
+
+Randomly vary the hitting messages with Thruts violently, Stabs, Leaps, like these messages: 
+
+can you have a look at the wording around names like "an orc"
+
+Both in adndn and wizardy, when encountering monsters show a message like this
+
+when selecting what to equip in a slot and there are several option show all options in the list including the currenlty 
+equiped item
+
+if the monster or the party is surprised and can not act, there is no need to write that
+
 
 
 

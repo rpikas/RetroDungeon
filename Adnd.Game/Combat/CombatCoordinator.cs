@@ -1166,6 +1166,7 @@ public sealed class CombatCoordinator
         // (AD&D, with or without a chest) keeps the full Combat Rewards dialog.
         if (!isWizardryEncounter || rewardForm is not { IsWizardryStyle: true })
         {
+            _treasureFoundAnnounce = false;
             Say(owner, "Combat Rewards", sb.ToString(), session);
             return;
         }
@@ -1173,6 +1174,11 @@ public sealed class CombatCoordinator
         RuleApplicationInfo.Publish($"Combat Rewards:\n{sb}");
 
         var summary = new List<string>();
+        var announce = _treasureFoundAnnounce ? "Treasure found! " : string.Empty;
+        var showPicture = !_treasureFoundAnnounce && effectiveTreasure.GoldPieces > 0;
+        _treasureFoundAnnounce = false;
+        if (showPicture && rewardForm != null)
+            HoldTreasurePicture(rewardForm);
         var goldEach = survivors.Count > 0 ? effectiveTreasure.GoldPieces / survivors.Count : 0;
         var found = new List<string>();
         if (goldEach > 0)
@@ -1180,7 +1186,7 @@ public sealed class CombatCoordinator
         var xpEachShown = levelUpResults.Count > 0 ? levelUpResults.Max(r => r.ExperienceAfter - r.ExperienceBefore) : 0;
         var itemParts = magicAward.AssignedItems.Select(a => $"{a.ReceiverName} found {AddArticle(a.ItemName)}").ToList();
         var xpText = $"You got {xpEachShown} xp each";
-        summary.Add(string.Join(" ", found.Append(itemParts.Count > 0
+        summary.Add(announce + string.Join(" ", found.Append(itemParts.Count > 0
             ? $"{xpText} and {JoinWithAnd(itemParts)}."
             : $"{xpText}.")));
         foreach (var r in levelUpResults.Where(r => r.NewLevel > r.OldLevel))
@@ -2329,6 +2335,8 @@ public sealed class CombatCoordinator
 
     private bool ConfirmAttackEncounterSleepingMonsters(IWin32Window owner, CombatSession session)
     {
+        EncounterBanner.Show(owner);
+
         var sleepingAlive = session.AliveMonsters
             .Where(m => session.EncounterSleepingMonstersRound1.Contains(m.DisplayName))
             .Select(m => m.DisplayName)
@@ -3080,6 +3088,10 @@ public sealed class CombatCoordinator
             RuleApplicationInfo.Publish($"Combat Round:\n{sb}");
             var visible = events
                 .Select(e => e.Message)
+                .Where(m => !System.Text.RegularExpressions.Regex.IsMatch(m, @"^\s*--\s*Round \d+\s*--\s*$"))
+                .Where(m => !m.EndsWith(" parries.", StringComparison.Ordinal))
+                .Where(m => !m.StartsWith("Initiative:", StringComparison.Ordinal))
+                .Where(m => !m.EndsWith(" is surprised and cannot act in round 1.", StringComparison.Ordinal))
                 .Where(m => !System.Text.RegularExpressions.Regex.IsMatch(
                     m, @"THAC0|\bto[- ]hit\b|\bto hit\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase));
             wizardryForm.PlayResults(owner, MergeMultipleAttacks(visible.ToList()));
@@ -3100,6 +3112,29 @@ public sealed class CombatCoordinator
     private static readonly System.Text.RegularExpressions.Regex DestroyedLine = new(
         @"^(?<target>.+?) is destroyed\.$",
         System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    /// <summary>Wizardry style: "Orc #3" is spoken of as "an orc" (or "the orc" once it is dead).</summary>
+    private static string SpokenMonster(string target, bool definite)
+    {
+        var name = System.Text.RegularExpressions.Regex.Replace(target, @"\s+#\d+(\s+\(Group [^)]*\))?\s*$", string.Empty)
+            .Trim().ToLowerInvariant();
+        if (name.Length == 0)
+            return target;
+
+        return definite ? $"the {name}" : $"{(("aeiou".Contains(name[0])) ? "an" : "a")} {name}";
+    }
+
+    /// <summary>Wizardry style: a randomly chosen way of describing an attack on a target.</summary>
+    private static string AttackPhrase(string who, string target)
+    {
+        var spoken = SpokenMonster(target, definite: false);
+        return Random.Shared.Next(3) switch
+        {
+            0 => $"{who} thrusts violently at {spoken}",
+            1 => $"{who} leaps at {spoken}",
+            _ => $"{who} tries to stab {spoken}"
+        };
+    }
 
     /// <summary>Wizardry style: several attacks by one character on one target become a single message.</summary>
     private static List<string> MergeMultipleAttacks(List<string> lines)
@@ -3140,12 +3175,19 @@ public sealed class CombatCoordinator
 
             if (hits < 2)
             {
-                // A single hit that kills: the damage and the kill read as one message.
-                if (hits == 1 && end == i + 1 && end < lines.Count
-                    && DestroyedLine.Match(lines[end]) is { Success: true } killed && killed.Groups["target"].Value == target)
+                if (hits == 1 && end == i + 1)
                 {
-                    result.Add($"{lines[i]}{Environment.NewLine}{target} is killed!");
-                    i = end + 1;
+                    var single = $"{AttackPhrase(who, target)}{Environment.NewLine}and hits once for {total} damage";
+                    // A single hit that kills: the damage and the kill read as one message.
+                    if (end < lines.Count
+                        && DestroyedLine.Match(lines[end]) is { Success: true } killed && killed.Groups["target"].Value == target)
+                    {
+                        single += $"{Environment.NewLine}{SpokenMonster(target, definite: true)} is killed!";
+                        end++;
+                    }
+
+                    result.Add(single);
+                    i = end;
                     continue;
                 }
 
@@ -3153,10 +3195,10 @@ public sealed class CombatCoordinator
                 continue;
             }
 
-            var text = $"{who} thrusts violently at {target}{Environment.NewLine}and hits {hits} times for {total} damage";
+            var text = $"{AttackPhrase(who, target)}{Environment.NewLine}and hits {hits} times for {total} damage";
             if (end < lines.Count && DestroyedLine.Match(lines[end]) is { Success: true } destroyed && destroyed.Groups["target"].Value == target)
             {
-                text += $"{Environment.NewLine}{target} is killed!";
+                text += $"{Environment.NewLine}{SpokenMonster(target, definite: true)} is killed!";
                 end++;
             }
 
@@ -3965,6 +4007,12 @@ public sealed class CombatCoordinator
             if (choice != LairChestChoice.Open && choice != LairChestChoice.CastFindTraps && choice != LairChestChoice.Inspect)
                 continue;
 
+            if (result.TrapDisarmed)
+            {
+                ShowTreasureFoundDialog(owner, session, rewardForm);
+                return result;
+            }
+
             var openerPick = PromptSelectPartyMember(owner, session, survivors, "Open chest", "Choose who opens the chest:", allowLeaveOption: true);
             if (openerPick.LeaveSelected)
             {
@@ -3995,7 +4043,8 @@ public sealed class CombatCoordinator
 
     private bool HandleCastFindTraps(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, LairChestResolutionResult result)
     {
-        var caster = PromptSelectPartyMember(owner, session, survivors, "Cast Find Traps", "Choose who casts Find Traps:", includeClassInList: true).Character;
+        var wizPrompt = GameRulesProvider.Current.Rules == Ruleset.Wizardry;
+        var caster = PromptSelectPartyMember(owner, session, survivors, wizPrompt ? "Calfo" : "Cast Find Traps", wizPrompt ? "Choose who casts Calfo:" : "Choose who casts Find Traps:", includeClassInList: true).Character;
         if (caster == null)
             return false;
 
@@ -4350,109 +4399,34 @@ public sealed class CombatCoordinator
         ViewerPromptChanged?.Invoke(session, null);
     }
 
+    // Set when a chest has been opened, so the rewards that follow announce "Treasure found!" in the same message.
+    private bool _treasureFoundAnnounce;
+
     private void ShowTreasureFoundDialog(IWin32Window owner, CombatSession session, EncounterForm? rewardForm = null)
+    {
+        _treasureFoundAnnounce = true;
+
+        if (rewardForm is not { IsWizardryStyle: true })
+            return;
+
+        HoldTreasurePicture(rewardForm);
+    }
+
+    private static void HoldTreasurePicture(EncounterForm rewardForm)
     {
         var imagePath = ResolveFindingTreasureImagePath();
         if (string.IsNullOrWhiteSpace(imagePath) || !File.Exists(imagePath))
             return;
 
-        if (rewardForm is { IsWizardryStyle: true })
-        {
-            try
-            {
-                using var src = Image.FromFile(imagePath);
-                using var image = new Bitmap(src);
-                rewardForm.ShowPictureNotice(owner, image, "TREASURE FOUND!", "PRESS ↵ TO CONTINUE");
-                return;
-            }
-            catch (Exception ex) when (ex is ExternalException || ex is OutOfMemoryException || ex is ArgumentException)
-            {
-                return;
-            }
-        }
-
-        using var form = new Form
-        {
-            Text = "Treasure Found",
-            FormBorderStyle = FormBorderStyle.None,
-            StartPosition = FormStartPosition.CenterParent,
-            MinimizeBox = false,
-            MaximizeBox = false,
-            ShowInTaskbar = false,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            KeyPreview = true,
-            ClientSize = new Size(760, 500),
-        };
-
-        var frame = new OldStyleFramePanel
-        {
-            Left = 4,
-            Top = 4,
-            Width = form.ClientSize.Width - 8,
-            Height = form.ClientSize.Height - 8,
-            BackColor = Color.Black
-        };
-
-        var title = new Label
-        {
-            Left = 0,
-            Top = 10,
-            Width = frame.ClientSize.Width,
-            Height = 36,
-            Text = "TREASURE FOUND",
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Black,
-            ForeColor = GameRulesProvider.Current.DefaultColor,
-            Font = new Font("Consolas", 22f, FontStyle.Bold)
-        };
-
-        var picture = new PictureBox
-        {
-            Left = 20,
-            Top = 56,
-            Width = frame.ClientSize.Width - 40,
-            Height = frame.ClientSize.Height - 76,
-            SizeMode = PictureBoxSizeMode.Zoom,
-            BackColor = Color.Black
-        };
-
         try
         {
             using var src = Image.FromFile(imagePath);
-            picture.Image = new Bitmap(src);
+            using var image = new Bitmap(src);
+            rewardForm.HoldPicture(image);
         }
         catch (Exception ex) when (ex is ExternalException || ex is OutOfMemoryException || ex is ArgumentException)
         {
-            return;
         }
-
-        form.KeyDown += (_, e) =>
-        {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
-            {
-                form.DialogResult = DialogResult.OK;
-                form.Close();
-            }
-        };
-
-        frame.Controls.Add(title);
-        frame.Controls.Add(picture);
-        form.Controls.Add(frame);
-
-        var prompt = new ViewerPrompt(
-            "choice",
-            "Treasure found.",
-            null,
-            new[] { new ViewerPromptOption("continue", "Continue") });
-
-        var answers = new Dictionary<string, DialogResult>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["continue"] = DialogResult.OK
-        };
-
-        ViewerDialog.RunModal(form, owner, prompt, answers, p => ViewerPromptChanged?.Invoke(session, p));
-        ViewerPromptChanged?.Invoke(session, null);
     }
 
     private static string? ResolveFindingTreasureImagePath()
