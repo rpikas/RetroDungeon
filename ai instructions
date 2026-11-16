@@ -8909,7 +8909,7 @@ when selecting what to equip in a slot and there are several option show all opt
 equiped item
 
 if the monster or the party is surprised and can not act, there is no need to write that
-
-
+39,2
+when there is no surprise, there is no need to write that in parenhsis after the monster name.
 
 

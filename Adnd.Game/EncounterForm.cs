@@ -762,7 +762,8 @@ public sealed class EncounterForm : Form
 
         var optionsFrame = NewFrame(128);
         Place(_optionsTitleLabel, optionsFrame, inner, 8, frameWidth - 2 * inner, 36);
-        Place(_optionsLegendLabel, optionsFrame, inner, 22, frameWidth - 2 * inner, 98);
+        Place(_optionsLegendLabel, optionsFrame, inner, 10, frameWidth - 2 * inner, 108);
+        _optionsLegendLabel.BringToFront();
         _optionsLegendLabel.Padding = new Padding(28, 0, 28, 0);
 
         // Embedded in the maze window the monster strip takes whatever height the party frame leaves.
@@ -2605,6 +2606,7 @@ public sealed class EncounterForm : Form
         var surpriseText = _session != null
             && _session.RoundNumber == 1
             && !string.IsNullOrWhiteSpace(_session.SurpriseSummary)
+            && !string.Equals(_session.SurpriseSummary, "No surprise", StringComparison.OrdinalIgnoreCase)
         //    ? $"  (SURPRISE: {_session.SurpriseSummary!.ToUpperInvariant()})"
             ? $"  ({_session.SurpriseSummary!.ToUpperInvariant()})"
             : string.Empty;
