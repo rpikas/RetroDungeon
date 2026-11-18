@@ -493,7 +493,7 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
             }
             case WizardryEffectKind.KillWeak:
                 if (monster.CurrentHitPoints < WizardryRulesLimits.MakanitoHitPointLimit)
-                    Kill(monster, spell, result);
+                    Kill(monster, spell, rng, result);
                 else
                     result.Events.Add($"{monster.DisplayName} has too many hit points to be suffocated.");
                 break;
@@ -501,7 +501,7 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
                 ResolveBadi(monster, spell, rng, result);
                 break;
             case WizardryEffectKind.Kill:
-                Kill(monster, spell, result);
+                Kill(monster, spell, rng, result);
                 break;
             case WizardryEffectKind.ReduceToD8:
             {
@@ -592,8 +592,19 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         AddHpChange(result, monster, -before);
     }
 
-    private static void Kill(MonsterInstance monster, Spell spell, SpellCastResult result)
+    private static void Kill(MonsterInstance monster, Spell spell, Random rng, SpellCastResult result)
     {
+        var deathResistance = SpellDamageSaveHelper.GetDeathResistancePercent(monster);
+        if (deathResistance > 0)
+        {
+            var resistRoll = rng.Next(1, 101);
+            if (resistRoll <= deathResistance)
+            {
+                result.Events.Add($"{monster.DisplayName} resists death ({resistRoll} on 1d100 vs {deathResistance}%).");
+                return;
+            }
+        }
+
         var before = monster.CurrentHitPoints;
         monster.CurrentHitPoints = 0;
         result.Events.Add($"{monster.DisplayName} is destroyed by {spell.Name}.");

@@ -220,5 +220,8 @@ public static class WizardryRules
         return perLevel * Math.Max(1, level);
     }
 
+    /// <summary>The Wizardry temple never heals hit points (only status ailments and the dead); AD&D's does.</summary>
+    public static bool TempleHealsHitPoints(Character c) => c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry;
+
     public static int RollStartingGold(Random random) => random.Next(1, StartingGoldDie + 1) + StartingGoldBase;
 }

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -178,11 +178,16 @@ public sealed class EncounterForm : Form
         Controls.Add(_headerLabel);
         Controls.Add(_optionsTitleLabel);
         Controls.Add(_optionsLegendLabel);
+        _optionsLegendLabel.MouseClick += OptionsLegend_MouseClick;
         Controls.Add(_monsterPanel);
         Controls.Add(_partyList);
 
         KeyDown += EncounterForm_KeyDown;
 
+        _currentIndex = FindNextActionableIndex(-1);
+        UpdateHeader();
+        UpdatePartyList();
+    
         _currentIndex = FindNextActionableIndex(-1);
         UpdateHeader();
         UpdatePartyList();
@@ -456,6 +461,7 @@ public sealed class EncounterForm : Form
         Controls.Add(_headerLabel);
         Controls.Add(_optionsTitleLabel);
         Controls.Add(_optionsLegendLabel);
+        _optionsLegendLabel.MouseClick += OptionsLegend_MouseClick;
         Controls.Add(_monsterPanel);
         Controls.Add(_partyList);
 
@@ -479,6 +485,60 @@ public sealed class EncounterForm : Form
     /// </summary>
     internal void InjectViewerKey(Keys key) => EncounterForm_KeyDown(this, new KeyEventArgs(key));
 
+    // Clicking a character picks them while the chest asks "who (#) will ...?".
+    private void PartyList_MouseClick(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left || !_chestMode || _pickNames == null || _pickSlots == null)
+            return;
+
+        var item = _partyList.GetItemAt(e.X, e.Y) ?? _partyList.GetItemAt(0, e.Y);
+        if (item == null)
+            return;
+
+        var slot = _partyList.Items.IndexOf(item);
+        if (slot >= 0 && slot <= 8 && _pickSlots.Contains(slot))
+            HandleChestKey(Keys.D1 + slot);
+    }
+
+    // Clicking an option such as F)IGHT presses its letter.
+    private void OptionsLegend_MouseClick(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left || _resultLines != null || _noticeMode || _pickNames != null)
+            return;
+
+        var lines = _optionsLegendLabel.Text.Split('\n');
+        var font = _optionsLegendLabel.Font;
+        var charWidth = TextRenderer.MeasureText("MMMMMMMMMM", font, Size.Empty, TextFormatFlags.NoPadding).Width / 10f;
+        var lineHeight = (float)font.Height;
+        var top = _optionsLegendLabel.TextAlign is ContentAlignment.MiddleLeft or ContentAlignment.MiddleCenter or ContentAlignment.MiddleRight
+            ? (_optionsLegendLabel.Height - (lines.Length * lineHeight)) / 2f
+            : 0f;
+        var lineIndex = (int)Math.Floor((e.Y - top) / lineHeight);
+        if (lineIndex < 0 || lineIndex >= lines.Length)
+            return;
+
+        var line = lines[lineIndex].TrimEnd('\r');
+        var left = (float)_optionsLegendLabel.Padding.Left;
+        if (_optionsLegendLabel.TextAlign is ContentAlignment.TopCenter or ContentAlignment.MiddleCenter or ContentAlignment.BottomCenter)
+            left += (_optionsLegendLabel.Width - _optionsLegendLabel.Padding.Horizontal - (line.Length * charWidth)) / 2f;
+
+        var column = (int)Math.Floor((e.X - left) / charWidth);
+        foreach (System.Text.RegularExpressions.Match item in System.Text.RegularExpressions.Regex.Matches(line, @"\S+(?: \S+)*"))
+        {
+            if (column < item.Index || column >= item.Index + item.Length)
+                continue;
+
+            if (item.Length > 1 && item.Value[1] is ')' or '↵' && Enum.TryParse<Keys>(char.ToUpperInvariant(item.Value[0]).ToString(), out var key))
+            {
+                if (_chestMode)
+                    HandleChestKey(key);
+                else
+                    InjectViewerKey(key);
+            }
+            return;
+        }
+    }
+
     /// <summary>
     /// Viewer hooks live here rather than in a constructor for two reasons: this form has two
     /// constructors and both need them, and the first prompt has to go out AFTER whoever opened the
@@ -488,6 +548,8 @@ public sealed class EncounterForm : Form
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
+        _partyList.MouseClick -= PartyList_MouseClick;
+        _partyList.MouseClick += PartyList_MouseClick;
 
         if (!_embedded)
             BeginInteraction();
@@ -702,6 +764,11 @@ public sealed class EncounterForm : Form
         _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
         _optionsLegendLabel.TextAlign = ContentAlignment.MiddleCenter;
         _resultTimer ??= new System.Windows.Forms.Timer();
+        if (!_resultClicksHooked)
+        {
+            _resultClicksHooked = true;
+            HookResultClicks(this);
+        }
         _resultTimer.Interval = Math.Max(1, GameRulesProvider.Current.DelayInbetweenCombatMessages);
         _resultTimer.Tick -= ResultTimer_Tick;
         _resultTimer.Tick += ResultTimer_Tick;
@@ -709,6 +776,24 @@ public sealed class EncounterForm : Form
     }
 
     private void ResultTimer_Tick(object? sender, EventArgs e) => ShowResultLine();
+
+    private bool _resultClicksHooked;
+
+    // A click anywhere in the encounter means Enter while messages are being shown.
+    private void HookResultClicks(Control root)
+    {
+        root.MouseClick += ResultAreaClick;
+        foreach (Control child in root.Controls)
+            HookResultClicks(child);
+    }
+
+    private void ResultAreaClick(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left || _resultLines == null || _chestMode)
+            return;
+
+        ShowResultLine();
+    }
 
     private sealed class WizardryFrame : Panel
     {
@@ -764,6 +849,9 @@ public sealed class EncounterForm : Form
         Place(_optionsTitleLabel, optionsFrame, inner, 8, frameWidth - 2 * inner, 36);
         Place(_optionsLegendLabel, optionsFrame, inner, 10, frameWidth - 2 * inner, 108);
         _optionsLegendLabel.BringToFront();
+        _optionsTitleLabel.TextChanged -= FitLegendBelowTitle;
+        _optionsTitleLabel.TextChanged += FitLegendBelowTitle;
+        FitLegendBelowTitle(null, EventArgs.Empty);
         _optionsLegendLabel.Padding = new Padding(28, 0, 28, 0);
 
         // Embedded in the maze window the monster strip takes whatever height the party frame leaves.
@@ -1057,7 +1145,7 @@ public sealed class EncounterForm : Form
         if (rank is < 1 or > 3)
             options.Add(new ViewerPromptOption("confirm", "Auto: parry"));
 
-        if (!isLycanthropeTransformed)
+        if (!isLycanthropeTransformed && !(IsWizardryStyle && _session is { RoundNumber: 1, MonstersSurprisedRound1: true }))
             options.Add(new ViewerPromptOption("spell", "Cast a spell"));
         if (!isLycanthropeTransformed && CanUseDispellUndead(character))
             options.Add(new ViewerPromptOption("dispellUndead", "Dispell undead"));
@@ -1813,6 +1901,12 @@ public sealed class EncounterForm : Form
         var caster = _party[_currentIndex];
         if (!IsActionable(caster))
             return;
+
+        if (IsWizardryStyle && _session is { RoundNumber: 1, MonstersSurprisedRound1: true })
+        {
+            SayOnBoth("Spell", "The party cannot cast spells in the surprise round.");
+            return;
+        }
 
         var castable = GetCastableCombatSpells(caster);
         if (castable.Count == 0)
@@ -2670,36 +2764,70 @@ public sealed class EncounterForm : Form
             parryText = "P)ARRY";
         }
 
-        var secondLine = showLayOnHands
-            ? $"S)PELL   L)AY HANDS  {parryText}      T)AKE BACK"
-            : $"S)PELL   {parryText}      T)AKE BACK";
+        var hasParty = _currentIndex >= 0 && _currentIndex < _party.Count;
+        var canDispel = hasParty && CanUseDispellUndead(_party[_currentIndex]);
+        var surpriseNoSpells = IsWizardryStyle && _session is { RoundNumber: 1, MonstersSurprisedRound1: true };
 
-        if (showMonkBodyHeal)
-            secondLine = $"S)PELL   H)EAL BODY  {parryText}      T)AKE BACK";
+        var wizardry = IsWizardryStyle;
+        var fightHidden = wizardry && rank is >= 4 and <= 6 && hasParty && !CanUseRanged(_party[_currentIndex]);
 
-        if (showBardCharm)
-            secondLine = $"S)PELL   C)HARM      {parryText}      T)AKE BACK";
+        var spellParryBack = new List<string>();
+        if (!surpriseNoSpells)
+            spellParryBack.Add("S)PELL");
+        spellParryBack.Add(parryText);
+        spellParryBack.Add("T)AKE BACK");
 
-        if (_currentIndex >= 0 && _currentIndex < _party.Count && CanUseDispellUndead(_party[_currentIndex]))
-            secondLine = $"S)PELL   D)ISPELL UNDEAD  {parryText}      T)AKE BACK";
-
-        if (_currentIndex >= 0 && _currentIndex < _party.Count && showBardCharm && CanUseDispellUndead(_party[_currentIndex]))
-            secondLine = $"S)PELL   C)HARM  D)ISPELL UNDEAD  {parryText}";
-
-        if (_currentIndex >= 0 && _currentIndex < _party.Count && showLayOnHands && CanUseDispellUndead(_party[_currentIndex]))
-            secondLine = $"S)PELL   D)ISPELL UNDEAD  L)AY HANDS  {parryText}";
-
-        if (_currentIndex >= 0 && _currentIndex < _party.Count && showMonkBodyHeal && CanUseDispellUndead(_party[_currentIndex]))
-            secondLine = $"S)PELL   D)ISPELL UNDEAD  H)EAL BODY  {parryText}";
-
+        var otherActions = new List<string> { "U)SE ITEM", "R)UN" };
         if (_multipleGroups)
+            otherActions.Add("G)ROUP");
+        if (showBardCharm && !wizardry)
+            otherActions.Add("C)HARM");
+        if (canDispel)
+            otherActions.Add("D)ISPELL UNDEAD");
+        if (showLayOnHands && !wizardry)
+            otherActions.Add("L)AY HANDS");
+        if (showMonkBodyHeal && !wizardry)
+            otherActions.Add("H)EAL BODY");
+        otherActions.Add("I)NFO");
+
+        List<string> firstRow, secondRow;
+        if (fightHidden)
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}   G)ROUP   I)NFO";
+            // Without Fight the rows swap and everything moves left, as in the Wizardry original.
+            firstRow = spellParryBack;
+            secondRow = otherActions;
         }
         else
         {
-            _optionsLegendLabel.Text = $"{fightText}   U)SE ITEM   R)UN\n{secondLine}   I)NFO";
+            firstRow = new List<string> { fightText, "U)SE ITEM", "R)UN" };
+            if (_multipleGroups)
+                firstRow.Add("G)ROUP");
+            secondRow = new List<string>(spellParryBack);
+            secondRow.AddRange(otherActions.Skip(_multipleGroups ? 3 : 2));
         }
+        // Pad every column to its widest entry so the shortcut letters line up under each other.
+        string FormatRow(List<string> row) => string.Join(string.Empty, row.Select((item, i) =>
+            i == row.Count - 1 ? item : item.PadRight(Math.Max(
+                i < firstRow.Count ? firstRow[i].Length : 0,
+                i < secondRow.Count ? secondRow[i].Length : 0) + 3)));
+
+        _optionsLegendLabel.Text = FormatRow(firstRow) + "\n" + FormatRow(secondRow);
+        if (IsWizardryStyle)
+        {
+            _optionsTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
+            _optionsLegendLabel.TextAlign = ContentAlignment.MiddleLeft;
+        }
+    }
+
+    // The legend box is tall for the 3-line hit messages; with a title ("GANDALF'S OPTIONS") it must stay below it.
+    private void FitLegendBelowTitle(object? sender, EventArgs e)
+    {
+        if (!IsWizardryStyle)
+            return;
+
+        var hasTitle = !string.IsNullOrEmpty(_optionsTitleLabel.Text);
+        _optionsLegendLabel.Top = hasTitle ? 42 : 10;
+        _optionsLegendLabel.Height = hasTitle ? 80 : 108;
     }
 
     private void ShowEncounterInfoWindow()
@@ -3416,6 +3544,16 @@ public sealed class EncounterForm : Form
         }
 
         base.Dispose(disposing);
+    }
+
+    // The encounter is embedded in the maze window: end the fight at once as if it were abandoned.
+    internal bool IsAborted { get; private set; }
+
+    internal void AbortEmbedded()
+    {
+        IsAborted = true;
+        _embeddedResult = DialogResult.Cancel;
+        _embeddedDone = true;
     }
 
     // ---- Embedded mode: the encounter is shown inside the maze window instead of as a separate dialog. ----

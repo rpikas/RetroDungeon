@@ -169,6 +169,7 @@ public sealed partial class MazeForm
         RevertLycanthropeTransformationsOnDungeonExit();
         ApplyPartyAgingForDungeonExitDay();
         ApplyDiseaseProgressForDungeonExitDay();
+        _closeApproved = true;
         Close();
     }
 }

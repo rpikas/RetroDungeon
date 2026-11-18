@@ -30,8 +30,10 @@ public static class Temple
     public const int RaiseDeadBaseCost = 1000;
     public const int RaiseDeadCostPerLevel = 500;
 
+    private static bool HealsHitPoints(Character c) => WizardryRules.TempleHealsHitPoints(c);
+
     public static bool NeedsHealing(Character c) =>
-        c.CurrentHitPoints < c.MaxHitPoints
+        (HealsHitPoints(c) && c.CurrentHitPoints < c.MaxHitPoints)
         || c.HasStatus(CharacterStatus.Poisoned)
         || c.HasStatus(CharacterStatus.Paralyzed)
         || c.HasStatus(CharacterStatus.Petrified)
@@ -42,7 +44,7 @@ public static class Temple
     {
         var cost = 0;
 
-        if (c.CurrentHitPoints < c.MaxHitPoints)
+        if (HealsHitPoints(c) && c.CurrentHitPoints < c.MaxHitPoints)
             cost += (c.MaxHitPoints - c.CurrentHitPoints) * HealCostPerHp;
 
         if (c.HasStatus(CharacterStatus.Poisoned))
@@ -173,7 +175,8 @@ public static class Temple
 
     private static void ApplyHealing(Character target)
     {
-        target.CurrentHitPoints = target.MaxHitPoints;
+        if (HealsHitPoints(target))
+            target.CurrentHitPoints = target.MaxHitPoints;
         target.RemoveStatus(CharacterStatus.Poisoned);
         target.ClearParalysis();
         target.RemoveStatus(CharacterStatus.Petrified);

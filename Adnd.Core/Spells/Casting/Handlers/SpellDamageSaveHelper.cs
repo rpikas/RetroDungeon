@@ -614,8 +614,8 @@ internal static class SpellDamageSaveHelper
             adjustedRolledDamage = Math.Max(0, adjustedRolledDamage / 2);
 
         // Wizardry "Fire Resistance" / "Cold Resistance" abilities halve damage from that element.
-        if ((IsFireOrHeatSpell(spellName ?? string.Empty) && HasAbility(monster, "Fire Resistance"))
-            || (IsColdSpell(spellName ?? string.Empty) && HasAbility(monster, "Cold Resistance")))
+        if ((IsWizardryFireSpell(spellName) && HasAbility(monster, "Fire Resistance"))
+            || (IsWizardryColdSpell(spellName) && HasAbility(monster, "Cold Resistance")))
             adjustedRolledDamage /= 2;
 
         if (HasImmunityToSomeAttacks(monster) && IsColdSpell(spellName))
@@ -673,6 +673,15 @@ internal static class SpellDamageSaveHelper
             resistance.HasResistance ? resistance.Roll : null,
             resistance.HasResistance ? resistance.ChancePercent : null);
     }
+
+    private static readonly string[] WizardryFireSpells = { "halito", "mahalito", "lahalito", "litokan" };
+    private static readonly string[] WizardryColdSpells = { "dalto", "madalto" };
+
+    private static bool IsWizardryFireSpell(string? spellIdOrName)
+        => IsFireOrHeatSpell(spellIdOrName ?? string.Empty) || WizardryFireSpells.Contains((spellIdOrName ?? string.Empty).Trim().ToLowerInvariant());
+
+    private static bool IsWizardryColdSpell(string? spellIdOrName)
+        => IsColdSpell(spellIdOrName ?? string.Empty) || WizardryColdSpells.Contains((spellIdOrName ?? string.Empty).Trim().ToLowerInvariant());
 
     private static bool IsFireOrHeatSpell(string spellIdOrName)
     {

@@ -10,6 +10,14 @@ namespace Adnd.Tests;
 // Each test guards a rule in docs\Wizardry-Handbook.md.
 public class WizardryRulesTests
 {
+    [Fact]
+    public void Murphys_ghost_is_one_in_a_thousand_on_level_one()
+    {
+        var random = new Random(12345);
+        var ghosts = Enumerable.Range(0, 100_000)
+            .Count(_ => Adnd.Core.Monsters.WizardryEncounterTable.Pick(1, random) == "Murphy's Ghost");
+        Assert.InRange(ghosts, 50, 160);
+    }
     [Theory]
     [InlineData(Race.Human, 8, 8, 5, 8, 8, 9)]
     [InlineData(Race.Elf, 7, 10, 10, 6, 9, 6)]
@@ -417,6 +425,13 @@ public class WizardryRulesTests
         Assert.Equal(33, c.MaxHitPoints);
         Assert.InRange(c.Abilities.Wisdom, 13, 15);
         Assert.True(c.Age >= ageBefore + 4);
+    }
+
+    [Fact]
+    public void Temple_heals_hit_points_only_in_adnd()
+    {
+        Assert.False(WizardryRules.TempleHealsHitPoints(new Character { Ruleset = Ruleset.Wizardry }));
+        Assert.True(WizardryRules.TempleHealsHitPoints(new Character { Ruleset = Ruleset.ADND }));
     }
 
     [Fact]

@@ -99,6 +99,24 @@ internal static class OldStyleDialog
         if (input != null)
             input.PreviewKeyDown += PreviewSelectionKeys;
 
+        void Select()
+        {
+            if (onSelect != null)
+            {
+                onSelect();
+                return;
+            }
+
+            form.DialogResult = DialogResult.OK;
+            form.Close();
+        }
+
+        void Back()
+        {
+            form.DialogResult = DialogResult.Cancel;
+            form.Close();
+        }
+
         form.KeyDown += (_, e) =>
         {
             if (e.KeyCode != Keys.Enter && e.KeyCode != Keys.Escape)
@@ -106,14 +124,27 @@ internal static class OldStyleDialog
 
             e.Handled = true;
             e.SuppressKeyPress = true;
-            if (e.KeyCode == Keys.Enter && onSelect != null)
-            {
-                onSelect();
-                return;
-            }
+            if (e.KeyCode == Keys.Enter)
+                Select();
+            else
+                Back();
+        };
 
-            form.DialogResult = e.KeyCode == Keys.Enter ? DialogResult.OK : DialogResult.Cancel;
-            form.Close();
+        // The "↵ SELECT" and "ESC BACK" texts answer to a click like their keys.
+        hint.MouseClick += (_, e) =>
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            var charWidth = TextRenderer.MeasureText("MMMMMMMMMM", hint.Font, Size.Empty, TextFormatFlags.NoPadding).Width / 10f;
+            var start = (hint.Width - (hint.Text.Length * charWidth)) / 2f;
+            var column = (int)Math.Floor((e.X - start) / charWidth);
+            var backStart = hint.Text.IndexOf("ESC", StringComparison.Ordinal);
+            var selectEnd = backStart - 4;
+            if (column >= 0 && column < selectEnd)
+                Select();
+            else if (column >= backStart && column < hint.Text.Length)
+                Back();
         };
     }
 }

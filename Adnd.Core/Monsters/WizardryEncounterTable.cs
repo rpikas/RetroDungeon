@@ -72,9 +72,22 @@ public static class WizardryEncounterTable
     public static IReadOnlyList<string> GetMonsters(int dungeonLevel)
         => Levels[Math.Clamp(dungeonLevel, MinLevel, MaxLevel)];
 
+    public const int MurphysGhostLevel1Odds = 1000;
+    private const string MurphysGhost = "Murphy's Ghost";
+
     public static string Pick(int dungeonLevel, Random random)
     {
         var list = GetMonsters(dungeonLevel);
-        return list[random.Next(list.Count)];
+        if (Math.Clamp(dungeonLevel, MinLevel, MaxLevel) != 1)
+            return list[random.Next(list.Count)];
+
+        // On level 1 Murphy's Ghost is a 1 in 1000 rarity instead of an equal share of the table.
+        if (random.Next(MurphysGhostLevel1Odds) == 0)
+            return MurphysGhost;
+
+        string pick;
+        do pick = list[random.Next(list.Count)];
+        while (pick == MurphysGhost);
+        return pick;
     }
 }

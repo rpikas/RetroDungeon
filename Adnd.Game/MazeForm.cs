@@ -213,7 +213,7 @@ public sealed partial class MazeForm : Form
         LoadEncounterLocationsForLevel(_currentDungeonLevel);
         LoadLightFromParty();
         KeyDown += MazeForm_KeyDown;
-
+        MouseClick += MazeForm_LegendClick;
         // Follow the fight. These are observers: combat neither waits for them nor changes course.
         _combatCoordinator.EncounterStarted += session =>
         {
@@ -399,6 +399,7 @@ public sealed partial class MazeForm : Form
         // One call covers moving, turning and anything else a key changed. Overlay toggles publish
         // an identical snapshot, which the viewer simply reconciles to no change.
         PublishToViewer();
+        FinishClosingAfterBattle();
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)

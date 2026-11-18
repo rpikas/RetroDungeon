@@ -554,6 +554,7 @@ public sealed partial class MazeForm
         partyData.CurrentShopperIndex = -1;
         _partyRepository.Save(partyData);
 
+        _closeApproved = true;
         Close();
     }
 

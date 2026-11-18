@@ -2328,7 +2328,6 @@ public sealed class CombatCoordinator
         HandleTelekinesisPrompts(owner, session, roundEvents);
         ApplyShriekReinforcements(session, roundEvents, dungeonLevel);
         RoundResolved?.Invoke(session);
-        ShowRoundEvents(owner, roundEvents, session);
 
         MoveDeadPartyMembersToEnd(session.Party);
     }
@@ -3079,6 +3078,9 @@ public sealed class CombatCoordinator
     private void ShowRoundEvents(IWin32Window owner, IEnumerable<Adnd.Core.Combat.Events.CombatEvent> events,
                                  CombatSession session, EncounterForm? wizardryForm = null)
     {
+        if (wizardryForm is { IsAborted: true })
+            return;
+
         var sb = new StringBuilder();
         foreach (var e in events)
             sb.AppendLine(e.Message);
@@ -3346,6 +3348,8 @@ public sealed class CombatCoordinator
 
     private DialogResult AskYesNoOnBoth(IWin32Window owner, CombatSession session, string title, string question)
     {
+        question = System.Text.RegularExpressions.Regex.Replace(question ?? string.Empty, @"\s*\(Y/N\)\s*(?=\?|$)", string.Empty,
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim();
         var oldStyle = GameRulesProvider.Current.UIOldStyle;
         using var form = new Form
         {
@@ -3422,6 +3426,10 @@ public sealed class CombatCoordinator
                 form.Close();
             }
         };
+
+        YesNoClick.Attach(hintLabel, hintLabel.Text, hintLabel.Font, () => hintLabel.ClientRectangle, StringAlignment.Center,
+            () => { form.DialogResult = DialogResult.Yes; form.Close(); },
+            () => { form.DialogResult = DialogResult.No; form.Close(); });
 
         framePanel.Controls.Add(titleLabel);
         framePanel.Controls.Add(questionLabel);
@@ -4103,20 +4111,23 @@ public sealed class CombatCoordinator
 
     private bool HandleInspectTrap(IWin32Window owner, CombatSession session, List<Character> survivors, int dungeonLevel, LairChestResolutionResult result, HashSet<string> failedTrapInspectors)
     {
-        var inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true).Character;
-        if (inspector == null)
-            return false;
-
-        if (failedTrapInspectors.Contains(inspector.Name))
+        Character? inspector;
+        while (true)
         {
-            Say(owner, "Treasure Chest", $"{inspector.Name} already failed to find the trap and cannot inspect again.", session);
-            return false;
-        }
+            inspector = PromptSelectPartyMember(owner, session, survivors, "Inspect chest", "Choose who inspects the chest:", includeClassInList: true).Character;
+            if (inspector == null)
+                return false;
 
-        if (!IsThiefClass(inspector))
-        {
+            if (failedTrapInspectors.Contains(inspector.Name))
+            {
+                Say(owner, "Treasure Chest", $"{inspector.Name} already failed to find the trap and cannot inspect again.", session);
+                return false;
+            }
+
+            if (IsThiefClass(inspector))
+                break;
+
             Say(owner, "Treasure Chest", $"{inspector.Name} is not a thief class and cannot inspect for traps effectively.", session);
-            return true;
         }
 
         if (_dualClassService.IsThiefBackstabFromOriginalClass(inspector))

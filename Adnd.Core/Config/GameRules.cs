@@ -56,10 +56,20 @@ public enum Ruleset
     Wizardry
 }
 
+public enum ClosingDungeonViewPenalty
+{
+    NoPenalty,
+    AgeOneYear,
+    PartyLost
+}
+
 public class GameRules
 {
     // Which game system is active; characters belong to exactly one ruleset.
     public Ruleset Rules { get; set; } = Ruleset.ADND;
+
+    // What it costs to close the dungeon window (the X) while walking or in a battle: nothing, one year of age for the party, or the party stays lost in the dungeon.
+    public ClosingDungeonViewPenalty PenaltyClosingDungeonView { get; set; } = ClosingDungeonViewPenalty.NoPenalty;
 
     public double TreasureFindChance { get; set; } = 0.80;      // 0.0 - 1.0
     public double MonsterEncounterChance { get; set; } = 0.20;  // 0.0 - 1.0

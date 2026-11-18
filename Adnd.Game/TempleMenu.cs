@@ -20,13 +20,19 @@ public class TempleMenu
         while (true)
         {
             var party = _partyRepo.Load();
+            var members = PartyCharacters(party);
+            var isWiz = Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry;
+            var listed = isWiz ? members.Where(m => Temple.NeedsHealing(m) || Temple.CanBeRaised(m)).ToList() : members;
+            var nobodyNeedsHelp = isWiz && listed.Count == 0;
 
             Console.Clear();
             Console.WriteLine("=== Church of Chant ===");
-            Console.WriteLine("Service / Spell                Fee");
-            if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
+            if (nobodyNeedsHelp)
             {
-                Console.WriteLine("Heal hit points                15 gp/hp");
+            }
+            else if (isWiz)
+            {
+                Console.WriteLine("Service / Spell                Fee");
                 Console.WriteLine("Cure paralysis                 100 gp x level");
                 Console.WriteLine("Cure stoned                    200 gp x level");
                 Console.WriteLine("Raise dead                     250 gp x level");
@@ -34,6 +40,7 @@ public class TempleMenu
             }
             else
             {
+            Console.WriteLine("Service / Spell                Fee");
             Console.WriteLine("Heal hit points                15 gp/hp");
             Console.WriteLine($"Neutralize poison              {Temple.CurePoisonCost} gp");
             Console.WriteLine($"Remove paralyzation            {Temple.CureParalysisCost} gp");
@@ -45,27 +52,35 @@ public class TempleMenu
             Console.WriteLine($"Restore from petrification     {Temple.RestorePetrificationCost} gp");
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Party:");
-            var members = PartyCharacters(party);
-            for (var i = 0; i < members.Count; i++)
+            if (!nobodyNeedsHelp)
             {
-                var m = members[i];
+                Console.WriteLine();
+                Console.WriteLine("Party:");
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+            if (nobodyNeedsHelp)
+                Console.WriteLine("Nobody needs healing.");
+            for (var i = 0; i < listed.Count; i++)
+            {
+                var m = listed[i];
                 var state = m.HasStatus(CharacterStatus.Ashes) ? "Ashes" : m.HasStatus(CharacterStatus.Dead) ? "Dead" : $"{m.Status}";
                 Console.WriteLine($"{i + 1}. {m.Name,-14} HP {m.CurrentHitPoints}/{m.MaxHitPoints}  {state}  {m.GoldPieces} gp");
             }
 
-            var isWiz = Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry;
-            var menu = new List<string>
+            var menu = new List<string>();
+            if (!nobodyNeedsHelp)
             {
-                "H)eal Party",
-                "(or press 1-6 / click a member to heal only them)",
-                "R)aise Dead",
-            };
+                menu.Add(isWiz ? "C)ure Party (status ailments)" : "H)eal Party");
+                menu.Add(isWiz ? "(or press 1-6 / click a member to cure only them)" : "(or press 1-6 / click a member to heal only them)");
+                menu.Add("R)aise Dead");
+            }
             if (!isWiz)
                 menu.Add("E) Restoration (lost level, feeblemind)");
             menu.Add("L<-eave");
-            if (_viewer.Enabled)
+            if (_viewer.Enabled && !nobodyNeedsHelp)
                 menu.Add("(or click whoever needs tending on the table)");
 
             // With a picture the options go under the fees, with the picture beside them.
@@ -97,9 +112,9 @@ public class TempleMenu
                 continue;
             }
 
-            if (key == ConsoleKey.H) HealParty(party);
-            else if (key >= ConsoleKey.D1 && key <= ConsoleKey.D6) HealMember(party, key - ConsoleKey.D1);
-            else if (key >= ConsoleKey.NumPad1 && key <= ConsoleKey.NumPad6) HealMember(party, key - ConsoleKey.NumPad1);
+            if (key == ConsoleKey.H || (isWiz && key == ConsoleKey.C)) HealParty(party);
+            else if (key >= ConsoleKey.D1 && key <= ConsoleKey.D6) HealMember(party, listed, key - ConsoleKey.D1);
+            else if (key >= ConsoleKey.NumPad1 && key <= ConsoleKey.NumPad6) HealMember(party, listed, key - ConsoleKey.NumPad1);
             else if (key == ConsoleKey.R) RaiseDead(party);
             else if (key == ConsoleKey.E && !isWiz) Restoration(party);
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
@@ -160,9 +175,8 @@ public class TempleMenu
         }
     }
 
-    private void HealMember(Party party, int index)
+    private void HealMember(Party party, List<Character> partyCharacters, int index)
     {
-        var partyCharacters = PartyCharacters(party);
         if (index < 0 || index >= partyCharacters.Count)
             return;
 

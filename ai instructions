@@ -8910,6 +8910,95 @@ equiped item
 
 if the monster or the party is surprised and can not act, there is no need to write that
 39,2
+___
 when there is no surprise, there is no need to write that in parenhsis after the monster name.
+39,3
+___
+murphys ghost should be very uncommon to encounter on level 1. the probability should be 1/1000
+in wizardry and the party is surprising the mobs then the party should not be able to cast spells during the
+surprising round.
 
+yes hide S)PELL legend first round when party is surprising mobs
+
+Wizardry SpecialAbilities:  Fire Resistance (Resistant to fire.) Cold Resistance (Resistant to cold.) should reduce damage from
+wizardry spells fire/cold with 50%.
+These spells i wizardry are cold/fire
+Fire spells 🔥
+Spell	Level	Damage	Target
+HALITO	Mage 1	1d8	One monster
+MAHALITO	Mage 3	4d6 (4-24)	One monster group
+LAHALITO	Mage 4	6d6 (6-36)	One monster group
+LITOKAN	Priest 5	3d8 (3-24)	One monster group
+Cold/Ice spells ❄️
+Spell	Level	Damage	Target
+DALTO	Mage 4	6d6 (6-36) cold damage	One monster group
+MADALTO	Mage 5	8d8 (8-64) cold damage	One monster group
+
+when a wizardry monster got SpecialAbilities: "Death Resistance",
+          "Description": "Death resistant (24%)." then that means there is a 24% chanse the monster resists the
+following spells
+BADI (Priest level 5) - "coronary attack"; may instantly kill a target.
+MAKANITO (Mage level 5) - kills enemies below a hit point threshold by suffocation.
+LAKANITO (Mage level 6) - suffocates an entire monster group, killing them instantly.
+
+when the fight options are presented I want to see the name of the charater that got the options centralized
+Then I wnat the options to be Aligned so the short cut charters are under each other like in the picture
+
+the extra options should only be left out when playing wizardry, not adnd. The option D)ispell should not be left
+out when surprising
+
+The following json fields are not needed when playing wizardy, and should be removed from the wizardry json only
+if needed you can asume the followin default values:
+  Movement: Unknown
+  %InLair: 50
+  TreasureType: None
+  IndividualTreasure: None
+  Intelligence: Unknown
+  Size: Medium
+  XPValuePerHitPoint: 0
+  Alignment: Unknown
+
+  Introduce a setting PenenltyClosingDungeonView default set to NoPenelty. Other options are AgeOneYear and PartyLost.
+when clicking the x in the top right corner in the view, when walking in the dungeon or in the middle of a battle
+then Depending of the PeneltyClosingDungeonView is show a popup, for example "Are you sure? This action will return
+the Everyone in the party will be 1 year older if you close this windows. (Y/N)" if answering Y return to town and
+all party to town but members age will increase one year. If answer is N, then dont close it. If PenetlyClosingDungeo
+nView is NoPenelty then just return to town
+
+when closing the combat windown with x, do not show the Combat Round dialog.
+
+when creating charater and selecting a name that allready exists, ask for a new name and dont create the charater
+until a new uniquie name has been selected
+
+when equip has been selected and one of several options are presened where the firest is 0)Keep: (empty) then make option 1) 
+that is not empyt selected per default. So the user can just confirme with Enter key
+
+after the message that a person can not inspect because the class can not do it, go back to the previous menu (Who should inspect) instead of 
+showing who should open.
+
+when selecting trade type, let Item be selected as default that can be confirmed with enter. and when choosing item,
+let the first option be selected as default, can be confermed with enter
+
+when a charater has enough xp to gain several levels, then in the inn after first level is gained, offer two
+options, gain another level or leave the inn
+The enter arrow is before the LEAVE text even if more levels will be gained when enter is pressed, wheen that is the
+then update the text from Leave to Gain one more level until no more level can be gained, then change back to Leave
+
+only when playing adnd che church shoul offer healing hp, in wizardry you can not heal hp in the church
+
+in wizardry chruch only show the party members that need healing, if no one needs healing say that
+
+when in the dugeon make the Legend texts in the header be click able like A, D, Arrows, W, C, K, Esc
+
+in wizardry and adndn During an encouter also let a click mean the same thing as enter when it comes to show the next message
+
+When shwing the options Like F)ight P)arry etc also let the texts be clickable
+
+in wizardry and andn When choosing spell to cast and similar dialogs are show, besides having the altertives
+clickable also let the Select and Back alternatvies be clickable
+
+When chosing actions when finding a chest should be clickable in adnd and wizardry. also when selcting who should inspect, 
+disarm, open and cast calfo, it should be possible to select by clicking on a char in in the party
+
+When ever ther is an Y/N queestion, for example do you want to disarm it the y and n should be clickable
 

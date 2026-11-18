@@ -254,10 +254,10 @@ public class WizardryCharacterCreation
             if (name.Length > 15)
                 name = name[..15];
 
-            if (!existing.Contains(name) || name == "Unknown")
+            if (!existing.Contains(name))
                 return name;
 
-            Console.WriteLine("A character with that name already exists.");
+            Console.WriteLine("A character with that name already exists. Please enter another name.");
         }
     }
 }

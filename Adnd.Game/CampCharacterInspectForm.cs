@@ -1076,7 +1076,7 @@ public sealed class CampCharacterInspectForm : Form
             var options = new List<string> { worn == null ? "0) Keep: (empty)" : $"0) {worn.DisplayName} (equipped)" };
             options.AddRange(candidates.Select((it, i) => $"{i + 1}) {it.DisplayName}"));
 
-            var idx = PromptChoice($"{c.Name} - {slot}", options, numberKeys: true);
+            var idx = PromptChoice($"{c.Name} - {slot}", options, numberKeys: true, defaultIndex: worn == null ? 1 : 0);
             if (!idx.HasValue)
             {
                 EquipSlotsAborted = true;
@@ -2180,7 +2180,7 @@ public sealed class CampCharacterInspectForm : Form
         return spellClass.ToString();
     }
 
-    private int? PromptChoice(string title, List<string> options, bool numberKeys = false, bool singleClick = true, List<string>? spellNames = null)
+    private int? PromptChoice(string title, List<string> options, bool numberKeys = false, bool singleClick = true, List<string>? spellNames = null, int defaultIndex = 0)
     {
         using var form = new Form();
         form.Text = title;
@@ -2213,6 +2213,12 @@ public sealed class CampCharacterInspectForm : Form
         if (spellNames != null)
             SpellListInput.Attach(form, list, ok, spellNames);
         OldStyleDialog.Apply(form, list);
+        if (defaultIndex >= 0 && defaultIndex < options.Count)
+            form.Shown += (_, _) =>
+            {
+                list.SelectedIndex = defaultIndex;
+                list.Focus();
+            };
         list.DoubleClick += (_, _) =>
         {
             if (list.SelectedIndex < 0)

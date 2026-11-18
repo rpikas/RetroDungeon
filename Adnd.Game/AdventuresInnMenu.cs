@@ -115,7 +115,11 @@ public sealed class AdventuresInnMenu
                     return;
             }
 
+            _leaveInn = false;
             ApplyRest(selected, members, room, paymentMode);
+
+            if (_leaveInn)
+                return;
 
             Console.WriteLine();
             Console.WriteLine("Rest completed. Press any key...");
@@ -197,6 +201,9 @@ public sealed class AdventuresInnMenu
     {
         foreach (var c in selectedMembers)
         {
+            if (_leaveInn)
+                return;
+
             var hpMissing = Math.Max(0, c.MaxHitPoints - c.CurrentHitPoints);
             var healPerWeek = Math.Max(1, room.HealPerDay * 7);
             var weeksNeeded = hpMissing <= 0 ? 0 : (int)Math.Ceiling(hpMissing / (double)healPerWeek);
@@ -269,7 +276,9 @@ public sealed class AdventuresInnMenu
     }
 
     /// <summary>Wizardry characters only gain the levels their experience has earned when they rest at the inn.</summary>
-    private static void GainPendingWizardryLevels(Character c)
+    private bool _leaveInn;
+
+    private void GainPendingWizardryLevels(Character c)
     {
         if (c.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
             return;
@@ -284,11 +293,20 @@ public sealed class AdventuresInnMenu
             if (result.NewLevel <= result.OldLevel)
                 return;
 
-            ShowLevelUp(c, result);
+            var morePending = Adnd.Core.Characters.Progression.LevelUpService.HasPendingLevels(c) && !c.HasStatus(CharacterStatus.Dead);
+            var gainAnother = ShowLevelUp(c, result, morePending);
+            _characterRepository.Save(c);
+
+            if (morePending && !gainAnother)
+            {
+                _leaveInn = true;
+                return;
+            }
         }
     }
 
-    private static void ShowLevelUp(Character c, Adnd.Core.Characters.Progression.LevelUpResult result)
+
+    private static bool ShowLevelUp(Character c, Adnd.Core.Characters.Progression.LevelUpResult result, bool morePending)
     {
         Console.WriteLine();
         Console.WriteLine($"{c.Name.ToUpperInvariant()}:");
@@ -304,13 +322,35 @@ public sealed class AdventuresInnMenu
         if (result.DiedFromVitality)
             Console.WriteLine("YOUR VITALITY IS GONE. YOU ARE DEAD.");
         Console.WriteLine();
-        Console.WriteLine("↵ TO LEAVE");
-        Console.ReadKey(true);
+        var gainAnother = false;
+        if (morePending)
+        {
+            Console.WriteLine("↵ TO GAIN ANOTHER LEVEL");
+            Console.WriteLine("L TO LEAVE THE INN");
+            while (true)
+            {
+                var key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    gainAnother = true;
+                    break;
+                }
+
+                if (key.Key == ConsoleKey.L || key.Key == ConsoleKey.Escape)
+                    break;
+            }
+        }
+        else
+        {
+            Console.WriteLine("↵ TO LEAVE");
+            Console.ReadKey(true);
+        }
 
         var attributeText = result.AttributeChanges.Count == 0
             ? "no attribute changes"
             : string.Join(", ", result.AttributeChanges.Select(a => $"{(a.Delta > 0 ? "+" : "-")}1 {a.Attribute}"));
         RuleApplicationInfo.Publish($"Adventures Inn: {c.Name} rested and gained level {result.OldLevel}->{result.NewLevel} (HP +{result.HitPointsGained}); age {c.Age}, peek age {Adnd.Core.Config.GameRulesProvider.Current.WizardryPeekAge}; {attributeText}.");
+        return gainAnother;
     }
 
     private void DistributeGoldEvenly(List<Character> partyMembers)

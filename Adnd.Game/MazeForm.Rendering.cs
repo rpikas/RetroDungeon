@@ -465,14 +465,54 @@ public sealed partial class MazeForm
         graphics.DrawString(status, HudFont, brush, new PointF(16f, ClientSize.Height - 54f));
     }
 
+    private readonly List<(RectangleF Bounds, Keys Key)> _legendKeyRects = new();
+    private static readonly Font HudLinkFont = new("Consolas", 14f, FontStyle.Bold | FontStyle.Underline);
+
     private void DrawOverlayLegend(Graphics graphics)
     {
         var heading = CompassHeading();
 
         using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
-        graphics.DrawString("A/D or ←/→: Turn   W or ↑: Move   C: Camp   K: Kick   Esc: Toggle full dungeon view", HudFont, brush, new PointF(16f, 6f));
+        var pieces = new (string Text, Keys? Key)[]
+        {
+            ("A", Keys.A), ("/", null), ("D", Keys.D), (" or ", null), ("←", Keys.Left), ("/", null), ("→", Keys.Right), (": Turn   ", null),
+            ("W", Keys.W), (" or ", null), ("↑", Keys.Up), (": Move   ", null),
+            ("C", Keys.C), (": Camp   ", null),
+            ("K", Keys.K), (": Kick   ", null),
+            ("Esc", Keys.Escape), (": Toggle full dungeon view", null)
+        };
+
+        _legendKeyRects.Clear();
+        using var format = (StringFormat)StringFormat.GenericTypographic.Clone();
+        format.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+        var x = 16f;
+        foreach (var (text, key) in pieces)
+        {
+            var font = key.HasValue ? HudLinkFont : HudFont;
+            var width = graphics.MeasureString(text, font, PointF.Empty, format).Width;
+            graphics.DrawString(text, font, brush, new PointF(x, 6f), format);
+            if (key.HasValue)
+                _legendKeyRects.Add((new RectangleF(x, 4f, width, font.Height + 2f), key.Value));
+            x += width;
+        }
+
         if (ShowPositionInHud)
             graphics.DrawString($"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}", HudFont, brush, new PointF(16f, 30f));
+    }
+
+    private void MazeForm_LegendClick(object? sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left || !_partyOverlayVisible || _encounterForm != null)
+            return;
+
+        foreach (var (bounds, key) in _legendKeyRects)
+        {
+            if (bounds.Contains(e.Location))
+            {
+                MazeForm_KeyDown(this, new KeyEventArgs(key));
+                return;
+            }
+        }
     }
 
     /// <summary>

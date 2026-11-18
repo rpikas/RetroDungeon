@@ -52,6 +52,9 @@ public sealed partial class MazeForm
     /// </summary>
     private DialogResult AskOnBoth(string title, string question)
     {
+        // The dialog shows its own (Y/N) line, so keep it out of the question text.
+        question = System.Text.RegularExpressions.Regex.Replace(question ?? string.Empty, @"\s*\(Y/N\)\s*(?=\?|$)", string.Empty,
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim();
         var questionText = string.IsNullOrWhiteSpace(question) ? "(Y/N)?" : question.ToUpperInvariant();
         var questionFont = new Font("Consolas", 18f, FontStyle.Bold);
         var questionSize = TextRenderer.MeasureText(questionText, questionFont, new Size(800, int.MaxValue),

@@ -93,7 +93,7 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 | Thief   | 40,732 |  70,227 | 121,081 | 208,760 | 359,931 |                   260,639 |
 | Bishop  | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 |                   428,479 |
 
-**Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat.
+**Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat. When several levels are pending, the inn gains one level, and while more are pending the level screen shows "↵ TO GAIN ANOTHER LEVEL" (or L to leave the inn), switching back to "↵ TO LEAVE" on the last one; leaving keeps the remaining experience for the next rest.
 
 **Level tables:** Wizardry characters always level with the table above (`ExperienceTable` defers to `WizardryRules`), with no AD&D racial level limits and no AD&D XP table, so a Fighter keeps advancing past level 7 up to level 13 and beyond.
 
@@ -105,7 +105,7 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 
 **Paralyze attack:** a Wizardry monster's Paralyze special attack only applies to the character it actually hits (never on a miss). The paralysis does not expire, not even in town, and lasts until cured with Dialko or Madi (or by the temple).
 
-**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees. Poison needs no temple visit: it is cured automatically whenever the party is back in town (`MainMenu.CureWizardryPoisonInTown`).
+**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees. The Wizardry temple never heals hit points (`WizardryRules.TempleHealsHitPoints`): there is no HP fee or healing, and the menu only offers curing status ailments; resting at the Adventures Inn restores HP. The Wizardry temple's party list only shows members who need a cure or a raise (numbered by that list), and says "Nobody needs healing." when there are none. Poison needs no temple visit: it is cured automatically whenever the party is back in town (`MainMenu.CureWizardryPoisonInTown`).
 
 ## 4. Hit points after level 1
 
@@ -170,7 +170,11 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Turn Undead never destroys the undead in Wizardry: a result that would disintegrate it (D) turns it instead, shown as Turned.
 - A Dead, Ashes or Lost character can have no other status (poisoned, paralyzed, ...); `Character.Status` drops them. This holds for AD&D too.
 - The Priest Blaster chest trap hurts and paralyzes Priests and Bishops (AD&D: Clerics and Druids). Only the Priest Blaster changes; the Mage Blaster is unchanged.
+- Monsters with Death Resistance (N%) have an N% chance to resist the instant-kill spells: Badi (after a failed save), Makanito and Lakanito.
+- Monsters with Fire Resistance take half damage from the fire spells Halito, Mahalito, Lahalito and Litokan; monsters with Cold Resistance take half damage from the cold spells Dalto and Madalto (before the save for half).
 - The temple has no Restoration in Wizardry (it is AD&D only); its menu option and key are hidden.
+- When the party surprises the monsters in Wizardry, its members cannot cast spells in round 1 (the surprise round); they can still fight, use items and run.
+- Murphy's Ghost is very rare on dungeon level 1: 1 in 1000 per random encounter (not an equal share of the level 1 table). Its fixed encounter at Murphy's shrine is unchanged.
 
 ## 6. Not implemented yet
 

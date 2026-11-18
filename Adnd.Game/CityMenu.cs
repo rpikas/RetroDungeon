@@ -622,7 +622,7 @@ public class CityMenu
                     Console.WriteLine($"(Name truncated to: {name})");
                 }
 
-                if (name == "Unknown" || !existingNames.Contains(name))
+                if (!existingNames.Contains(name))
                     break;
 
                 Console.WriteLine("A character with that name already exists. Please enter another name.");
