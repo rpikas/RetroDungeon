@@ -1396,7 +1396,7 @@ public sealed class EncounterForm : Form
                 var rank = GetActionableRank(_currentIndex);
                 if (rank is >= 1 and <= 3 || (rank is >= 4 and <= 6 && CanUseRanged(_party[_currentIndex])))
                     ChooseAction(CombatActionType.Fight);
-                else
+                else if (!IsWizardryStyle)
                     SayOnBoth("Action not allowed", "Rows 4-6 need equipped ranged weapon and ammo to fight.");
                 break;
             }

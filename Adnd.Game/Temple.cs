@@ -30,7 +30,7 @@ public static class Temple
     public const int RaiseDeadBaseCost = 1000;
     public const int RaiseDeadCostPerLevel = 500;
 
-    private static bool HealsHitPoints(Character c) => WizardryRules.TempleHealsHitPoints(c);
+    public static bool HealsHitPoints(Character c) => WizardryRules.TempleHealsHitPoints(c);
 
     public static bool NeedsHealing(Character c) =>
         (HealsHitPoints(c) && c.CurrentHitPoints < c.MaxHitPoints)

@@ -80,6 +80,39 @@ public static class SpellProgression
         return tracks;
     }
 
+    /// <summary>Highest mage circle a Wizardry Samurai can use: circle 1 at level 4, then one more every 4 levels, up to 7.</summary>
+    public static int WizardrySamuraiMageCircle(int level) => Math.Clamp(level / 4, 0, 7);
+
+    /// <summary>A Wizardry Samurai casts mage spells only; slots are those of the Mage who first reaches the same circle.</summary>
+    public static List<(SpellClass SpellClass, List<int> SlotsPerDay)> GetWizardrySamuraiTracks(int level)
+    {
+        var tracks = new List<(SpellClass SpellClass, List<int> SlotsPerDay)>();
+        var circle = WizardrySamuraiMageCircle(level);
+        if (circle <= 0)
+            return tracks;
+
+        var slots = GetSlotsFromTable(MagicUserSlots, SpellClass.MagicUser, circle * 2 - 1).Take(7).ToList();
+        if (slots.Any(s => s > 0))
+            tracks.Add((SpellClass.MagicUser, slots));
+
+        return tracks;
+    }
+
+    /// <summary>A Wizardry Lord casts priest spells only, on the same schedule as the Samurai's mage circles.</summary>
+    public static List<(SpellClass SpellClass, List<int> SlotsPerDay)> GetWizardryLordTracks(int level)
+    {
+        var tracks = new List<(SpellClass SpellClass, List<int> SlotsPerDay)>();
+        var circle = WizardrySamuraiMageCircle(level);
+        if (circle <= 0)
+            return tracks;
+
+        var slots = GetSlotsFromTable(ClericSlots, SpellClass.Cleric, circle * 2 - 1).Take(7).ToList();
+        if (slots.Any(s => s > 0))
+            tracks.Add((SpellClass.Cleric, slots));
+
+        return tracks;
+    }
+
     public static bool TryGetSpellClass(CharacterClass characterClass, out SpellClass spellClass)
     {
         switch (characterClass)

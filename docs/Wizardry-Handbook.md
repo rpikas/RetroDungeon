@@ -93,7 +93,7 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 | Thief   | 40,732 |  70,227 | 121,081 | 208,760 | 359,931 |                   260,639 |
 | Bishop  | 61,356 | 107,642 | 188,845 | 331,307 | 581,240 |                   428,479 |
 
-**Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat. When several levels are pending, the inn gains one level, and while more are pending the level screen shows "↵ TO GAIN ANOTHER LEVEL" (or L to leave the inn), switching back to "↵ TO LEAVE" on the last one; leaving keeps the remaining experience for the next rest.
+**Gaining levels:** killing monsters only adds experience. A Wizardry character gains the earned level(s) (HP, spell slots) only when resting at the Adventures Inn. AD&D characters still level straight after combat. When several levels are pending, the inn gains one level, and while more are pending the level screen shows "↵ TO GAIN ANOTHER LEVEL" (or L to leave the inn), switching back to "↵ TO LEAVE" on the last one, and these lines can be clicked as well as typed; leaving keeps the remaining experience for the next rest.
 
 **Level tables:** Wizardry characters always level with the table above (`ExperienceTable` defers to `WizardryRules`), with no AD&D racial level limits and no AD&D XP table, so a Fighter keeps advancing past level 7 up to level 13 and beyond.
 
@@ -121,6 +121,8 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 
 - Mage spells (22) are cast by Mage-school characters (Mage, Bishop); Priest spells (29) by Priest-school characters (and the Bishop, see below). Circles 1-7.
 - Bishop: casts as a Mage of half his level (at least level 1) and as a Priest of a third of his level (no priest spells below level 3). Circles and slots per day come from the normal Mage and Priest tables at those effective levels, up to circle 7. Examples: level 1 = Mage circle 1 only; level 6 = Mage level 3 (circles 1-2) and Priest level 2 (circle 1).
+- Samurai: casts Mage spells only, from level 4. Highest circle = level / 4 (L4 circle 1, L8 circle 2, L12 circle 3, L16 circle 4, L20 circle 5, L24 circle 6, L28 circle 7). Slots per day are those of the Mage who first reaches that circle (circle N = Mage level 2N-1).
+- Lord: casts Priest spells only, on the same schedule as the Samurai (circle = level / 4, up to 7). Slots per day are those of the Priest who first reaches that circle (circle N = Priest level 2N-1). Lords do not use the AD&D Paladin spell table.
 - Spell slots per day still come from the AD&D memorize-and-slots system for now (Mage = Magic-User slots, Priest = Cleric slots).
 - Starting spells: Mage and Bishop know Halito and Katino; Priest knows Dios and Badios.
 - The first spell of each circle is always learned once the character has slots for that circle.

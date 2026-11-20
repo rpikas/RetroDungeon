@@ -438,6 +438,8 @@ public class ShopMenu
         }
         else Console.WriteLine("Invalid.");
 
+        Console.WriteLine();
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey(true);
     }
 
@@ -644,6 +646,8 @@ public class ShopMenu
             Console.WriteLine($"Gold after: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
             _charRepo.Save(seller);
             _partyRepo.Save(party);
+            Console.WriteLine();
+            Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
             return;
         }
@@ -705,6 +709,8 @@ public class ShopMenu
         }
         else Console.WriteLine("Invalid.");
 
+        Console.WriteLine();
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey(true);
     }
 

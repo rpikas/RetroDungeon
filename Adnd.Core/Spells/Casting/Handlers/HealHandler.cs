@@ -41,13 +41,11 @@ public sealed class HealHandler : ISpellEffectHandler
         var healed = Math.Max(0, target.CurrentHitPoints - beforeHp);
 
         var result = new SpellCastResult { Success = true };
-        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
         var healLine = healed > 0
             ? $"{target.Name} is fully healed for {healed} HP."
             : $"{target.Name} is already at full health.";
-        result.Events.Add(healLine);
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription} {healLine} {target.Name} is cured of blindness, disease (with Constitution restored), feeblemind, poison, slow, and petrification.");
         Diagnostics.RuleApplicationInfo.Publish($"{spell.Name}: {healLine}");
-        result.Events.Add($"{target.Name} is cured of blindness, disease (with Constitution restored), feeblemind, poison, slow, and petrification.");
         result.HpChanges[target.Name] = healed;
 
         return result;

@@ -130,6 +130,37 @@ public class WizardryRulesTests
         Assert.Single(tracks.Single(t => t.SpellClass == Adnd.Core.Spells.SpellClass.MagicUser).SlotsPerDay, s => s > 0);
     }
 
+    [Theory]
+    [InlineData(3, 0)]
+    [InlineData(4, 1)]
+    [InlineData(7, 1)]
+    [InlineData(8, 2)]
+    [InlineData(12, 3)]
+    [InlineData(16, 4)]
+    [InlineData(20, 5)]
+    [InlineData(24, 6)]
+    [InlineData(28, 7)]
+    [InlineData(40, 7)]
+    public void Samurai_learns_mage_circle_every_four_levels(int level, int circle)
+    {
+        var tracks = Adnd.Core.Spells.SpellProgression.GetWizardrySamuraiTracks(level);
+        var highest = tracks.Count == 0 ? 0 : tracks.Single().SlotsPerDay.FindLastIndex(s => s > 0) + 1;
+        Assert.Equal(circle, highest);
+        Assert.All(tracks, t => Assert.Equal(Adnd.Core.Spells.SpellClass.MagicUser, t.SpellClass));
+    }
+
+    [Fact]
+    public void Lord_learns_priest_circle_every_four_levels()
+    {
+        foreach (var (level, circle) in new[] { (3, 0), (4, 1), (8, 2), (12, 3), (16, 4), (20, 5), (24, 6), (28, 7), (40, 7) })
+        {
+            var tracks = Adnd.Core.Spells.SpellProgression.GetWizardryLordTracks(level);
+            var highest = tracks.Count == 0 ? 0 : tracks.Single().SlotsPerDay.FindLastIndex(s => s > 0) + 1;
+            Assert.Equal(circle, highest);
+            Assert.All(tracks, t => Assert.Equal(Adnd.Core.Spells.SpellClass.Cleric, t.SpellClass));
+        }
+    }
+
     [Fact]
     public void Agility_does_not_change_wizardry_armor_class()
     {

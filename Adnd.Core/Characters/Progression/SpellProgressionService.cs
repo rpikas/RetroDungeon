@@ -32,6 +32,18 @@ public sealed class SpellProgressionService
                 allTracks[track.SpellClass] = new List<int>(track.SlotsPerDay);
             effectiveClasses = new List<CharacterClass>();
         }
+        else if (Adnd.Core.Wizardry.WizardryIdentification.IsLord(character))
+        {
+            foreach (var track in SpellProgression.GetWizardryLordTracks(character.Level))
+                allTracks[track.SpellClass] = new List<int>(track.SlotsPerDay);
+            effectiveClasses = new List<CharacterClass>();
+        }
+        else if (Adnd.Core.Wizardry.WizardryIdentification.IsSamurai(character))
+        {
+            foreach (var track in SpellProgression.GetWizardrySamuraiTracks(character.Level))
+                allTracks[track.SpellClass] = new List<int>(track.SlotsPerDay);
+            effectiveClasses = new List<CharacterClass>();
+        }
 
         foreach (var cls in effectiveClasses)
         {

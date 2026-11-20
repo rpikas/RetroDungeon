@@ -458,11 +458,29 @@ public sealed partial class MazeForm
     {
         var heading = CompassHeading();
 
-        var status = ShowPositionInHud
-            ? $"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}   Esc: Party view"
-            : "Esc: Party view";
+        var prefix = ShowPositionInHud
+            ? $"Level: {_currentDungeonLevel} ({DungeonName})   Pos: {PositionText}   Facing: {heading}   "
+            : string.Empty;
         using var brush = new SolidBrush(GameRulesProvider.Current.DefaultColor);
-        graphics.DrawString(status, HudFont, brush, new PointF(16f, ClientSize.Height - 54f));
+        using var format = (StringFormat)StringFormat.GenericTypographic.Clone();
+        format.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+        var y = ClientSize.Height - 54f;
+        var x = 16f;
+        var pieces = new (string Text, Keys? Key)[] { (prefix, null), ("Esc", Keys.Escape), (": Party view", null) };
+
+        _legendKeyRects.Clear();
+        foreach (var (text, key) in pieces)
+        {
+            if (text.Length == 0)
+                continue;
+
+            var font = key.HasValue ? HudLinkFont : HudFont;
+            var width = graphics.MeasureString(text, font, PointF.Empty, format).Width;
+            graphics.DrawString(text, font, brush, new PointF(x, y), format);
+            if (key.HasValue)
+                _legendKeyRects.Add((new RectangleF(x, y - 2f, width, font.Height + 2f), key.Value));
+            x += width;
+        }
     }
 
     private readonly List<(RectangleF Bounds, Keys Key)> _legendKeyRects = new();
@@ -502,7 +520,7 @@ public sealed partial class MazeForm
 
     private void MazeForm_LegendClick(object? sender, MouseEventArgs e)
     {
-        if (e.Button != MouseButtons.Left || !_partyOverlayVisible || _encounterForm != null)
+        if (e.Button != MouseButtons.Left || _encounterForm != null)
             return;
 
         foreach (var (bounds, key) in _legendKeyRects)

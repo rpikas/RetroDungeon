@@ -44,11 +44,10 @@ public sealed class CureSeriousWoundsHandler : ISpellEffectHandler
         var actual = Math.Max(0, target.CurrentHitPoints - before);
 
         var result = new SpellCastResult { Success = true };
-        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription}");
         var healLine = actual > 0
             ? $"{target.Name} is healed for {actual} HP (rolled {heal} on 2d8+1)."
             : $"{target.Name} is already at full health (rolled {heal} on 2d8+1).";
-        result.Events.Add(healLine);
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {spell.EffectDescription} {healLine}");
         Diagnostics.RuleApplicationInfo.Publish($"{spell.Name}: {healLine}");
         result.HpChanges[target.Name] = actual;
         return result;

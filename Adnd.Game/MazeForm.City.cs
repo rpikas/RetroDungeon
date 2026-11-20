@@ -94,6 +94,23 @@ public sealed partial class MazeForm
 
         var text = lines[index];
 
+        // The inn's level-up screen: "↵ TO GAIN ANOTHER LEVEL" / "↵ TO LEAVE" answer to Enter, "L TO LEAVE THE INN" to L.
+        if (TermConsole.WaitingForKey)
+        {
+            var trimmed = text.TrimStart();
+            if (trimmed.StartsWith("↵ TO ", StringComparison.Ordinal))
+            {
+                TermConsole.EnqueueText("\r");
+                return;
+            }
+
+            if (trimmed.StartsWith("L TO LEAVE", StringComparison.Ordinal))
+            {
+                TermConsole.EnqueueText("L");
+                return;
+            }
+        }
+
         if (TermConsole.WaitingForKey)
         {
             var yn = text.IndexOf("Y/N", StringComparison.OrdinalIgnoreCase);
@@ -120,7 +137,11 @@ public sealed partial class MazeForm
         {
             var match = System.Text.RegularExpressions.Regex.Match(text, @"^(\d+)[.)]?\s");
             if (!match.Success)
+            {
+                if (text.StartsWith("S)hare", StringComparison.Ordinal))
+                    TermConsole.EnqueueText("S");
                 return;
+            }
 
             var digits = match.Groups[1].Value;
             if (digits.Length > TermConsole.ClickableNumberDigits)

@@ -9002,3 +9002,35 @@ disarm, open and cast calfo, it should be possible to select by clicking on a ch
 
 When ever ther is an Y/N queestion, for example do you want to disarm it the y and n should be clickable
 
+When toggeling back to not full screen with Esc I want the Esc text to be clickable
+
+Trap triggered message should disappear when mouse is clicked, or after 3 sec
+
+In adnd and wizardry make the label Gain another level clickable when it appears.
+
+Lords learn priest spells and samurais learn mage spells like this
+ Level	Expected  Spell Level
+4	Level 1
+8	Level 2
+12	Level 3
+16	Level 4
+20	Level 5
+24	Level 6
+28	Level 7
+
+in wizardry and adnd if you have several items that fitts into one slot and the user decided what to equip, 
+then dont keep asking for the same slot again.
+
+if i have 2 chianmails and 1 breastplate and i am wearing a chainmail and i want to equip the breastplate, then after i have selected the breastplate,
+i dont want to immedeltuy be asked about the chainmail, since i have just already selected what to equip in that slot. 
+
+When healing a party member in wizardry, then heal and informa baout for example paralysis but not about 15gp/hp and do not heal hp damage in wizardry temple, only in adnd
+
+when you can not afford healing make it possible to click on the person you want to pay. When selecting who should pay it is enough to enter on number then
+enter should be hit automatically.
+
+in wizadry and adnd after getting information on who paied how much, clicking any where on the screen will have the same affect as pressing enter.
+
+after buying something and the confirmation text is shown then let clicking anywhere mean the same thing as enter
+45,5
+___

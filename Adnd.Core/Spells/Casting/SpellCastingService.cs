@@ -184,6 +184,12 @@ public sealed class SpellCastingService
         if (Adnd.Core.Wizardry.WizardryIdentification.IsBishop(caster) && !classes.Contains(CharacterClass.Cleric))
             classes = new List<CharacterClass>(classes) { CharacterClass.Cleric };
 
+        if (Adnd.Core.Wizardry.WizardryIdentification.IsLord(caster))
+            classes = new List<CharacterClass> { CharacterClass.Cleric };
+
+        if (Adnd.Core.Wizardry.WizardryIdentification.IsSamurai(caster) && !classes.Contains(CharacterClass.MagicUser))
+            classes = new List<CharacterClass>(classes) { CharacterClass.MagicUser };
+
         return caster.IsExRanger()
             ? classes.Where(c => c != CharacterClass.Ranger).ToList()
             : classes;

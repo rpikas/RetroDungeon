@@ -56,6 +56,12 @@ public static class WizardryIdentification
     public static bool IsBishop(Character c) =>
         c.Ruleset == Ruleset.Wizardry && c.WizardryClass == WizardryClass.Bishop;
 
+    public static bool IsSamurai(Character c) =>
+        c.Ruleset == Ruleset.Wizardry && c.WizardryClass == WizardryClass.Samurai;
+
+    public static bool IsLord(Character c) =>
+        c.Ruleset == Ruleset.Wizardry && c.WizardryClass == WizardryClass.Lord;
+
     public static int IdentifyChancePercent(int bishopLevel) => Math.Clamp(bishopLevel * 5 + 10, 0, 100);
 
     public static int CursedEquipChancePercent(int bishopLevel) => Math.Clamp(35 - bishopLevel * 3, 0, 100);

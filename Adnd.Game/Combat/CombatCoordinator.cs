@@ -4395,6 +4395,26 @@ public sealed class CombatCoordinator
         framePanel.Controls.Add(detailsLabel);
         form.Controls.Add(framePanel);
 
+        void Dismiss()
+        {
+            if (form.IsDisposed || !form.Visible)
+                return;
+
+            form.DialogResult = DialogResult.OK;
+            form.Close();
+        }
+
+        foreach (var control in new Control[] { form, framePanel, titleLabel, detailsLabel })
+            control.MouseClick += (_, _) => Dismiss();
+
+        using var autoClose = new System.Windows.Forms.Timer { Interval = 3000 };
+        autoClose.Tick += (_, _) =>
+        {
+            autoClose.Stop();
+            Dismiss();
+        };
+        form.Shown += (_, _) => autoClose.Start();
+
         var prompt = new ViewerPrompt(
             "choice",
             $"Trap triggered: {trapName}. {outcome}",

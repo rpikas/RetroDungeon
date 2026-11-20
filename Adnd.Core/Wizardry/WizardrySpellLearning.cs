@@ -22,7 +22,11 @@ public static class WizardrySpellLearning
         {
             var tracks = WizardryIdentification.IsBishop(character)
                 ? SpellProgression.GetWizardryBishopTracks(character.Level)
-                : SpellProgression.GetSpellcastingTracks(heldClass, character.Level);
+                : WizardryIdentification.IsLord(character)
+                    ? SpellProgression.GetWizardryLordTracks(character.Level)
+                : WizardryIdentification.IsSamurai(character)
+                    ? SpellProgression.GetWizardrySamuraiTracks(character.Level)
+                    : SpellProgression.GetSpellcastingTracks(heldClass, character.Level);
             foreach (var track in tracks)
             {
                 if (track.SlotsPerDay.All(s => s <= 0))

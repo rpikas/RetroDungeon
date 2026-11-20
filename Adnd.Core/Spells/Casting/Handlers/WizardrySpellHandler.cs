@@ -416,9 +416,10 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         }
 
         var actual = Math.Max(0, target.CurrentHitPoints - before);
-        result.Events.Add(effect.Kind == WizardryEffectKind.FullHeal
+        var healText = effect.Kind == WizardryEffectKind.FullHeal
             ? $"{target.Name} is fully healed for {actual} HP."
-            : $"{target.Name} is healed for {actual} HP (rolled {rolled} on {effect.Dice}d{effect.Sides}{(augmented ? ", augmented" : "")}).");
+            : $"{target.Name} is healed for {actual} HP (rolled {rolled} on {effect.Dice}d{effect.Sides}{(augmented ? ", augmented" : "")}).";
+        result.Events[0] = $"{result.Events[0]} {healText}";
         result.HpChanges[target.Name] = actual;
         return result;
     }

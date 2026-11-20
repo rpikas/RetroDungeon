@@ -942,21 +942,25 @@ public sealed class CampCharacterInspectForm : Form
     private void EquipAction()
     {
         var first = true;
-        while (EquipOnce(first))
+        var decided = new HashSet<EquipmentSlot>();
+        while (EquipOnce(first, decided))
             first = false;
     }
 
     /// <summary>Equips one item chosen from the list; returns false when the dialog should close (Esc or nothing left to equip).</summary>
-    private bool EquipOnce(bool first)
+    private bool EquipOnce(bool first, HashSet<EquipmentSlot> decided)
     {
         var c = GetCharacter();
         if (c == null)
             return false;
 
+        // A slot the player has just filled is settled: the item that was swapped out is not offered again.
         var equipable = c.Inventory
             .Where(it => it.Type == ItemType.Weapon || it.Type == ItemType.Shield || it.Slot.HasValue)
             .Where(it => EquipmentManager.MeetsClassRequirement(c, it))
             .Where(it => EquipmentManager.MeetsAlignmentRequirement(c, it))
+            .Where(it => decided.Count == 0
+                || Enum.GetValues<EquipmentSlot>().Any(s => FitsSlot(it, s) && !decided.Contains(s)))
             .ToList();
 
         if (equipable.Count == 0)
@@ -1036,6 +1040,7 @@ public sealed class CampCharacterInspectForm : Form
 
         if (ok)
         {
+            decided.Add(targetSlot.Value);
             c.RefreshRingProtectionEffects();
             c.RefreshRingWizardryEffects();
             _characterRepository.Save(c);
@@ -1052,6 +1057,7 @@ public sealed class CampCharacterInspectForm : Form
     /// <summary>Goes through every slot of the character and lets the player pick what to wear there (0 keeps what is worn).</summary>
     private void EquipAllSlots()
     {
+        var declined = new HashSet<Item>(ReferenceEqualityComparer.Instance);
         foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
         {
             var c = GetCharacter();
@@ -1068,6 +1074,7 @@ public sealed class CampCharacterInspectForm : Form
                 .Where(it => EquipmentManager.MeetsClassRequirement(c, it) && EquipmentManager.MeetsAlignmentRequirement(c, it))
                 .Where(it => FitsSlot(it, slot))
                 .Where(it => !ReferenceEquals(it, worn))
+                .Where(it => !declined.Contains(it))
                 .ToList();
             if (candidates.Count == 0)
                 continue;
@@ -1084,7 +1091,11 @@ public sealed class CampCharacterInspectForm : Form
             }
 
             if (idx.Value == 0)
+            {
+                // Declined items are not offered again for a sibling slot (second ring, off hand).
+                declined.UnionWith(candidates);
                 continue;
+            }
 
             var item = candidates[idx.Value - 1];
             if (item.IsVersatileWeapon)

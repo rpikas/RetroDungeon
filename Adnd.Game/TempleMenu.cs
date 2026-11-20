@@ -191,7 +191,10 @@ public class TempleMenu
         Console.Clear();
         Console.WriteLine($"=== HEAL {target.Name.ToUpperInvariant()} ===");
         Console.WriteLine();
-        Console.WriteLine($"HP {target.CurrentHitPoints}/{target.MaxHitPoints}");
+        if (Temple.HealsHitPoints(target))
+            Console.WriteLine($"HP {target.CurrentHitPoints}/{target.MaxHitPoints}");
+        else
+            Console.WriteLine($"Status: {target.Status}");
         Console.WriteLine($"Cost to heal: {Temple.CostToHeal(target)} gp");
         Console.WriteLine();
         Console.WriteLine("Heal? (Y/N)");
@@ -231,9 +234,9 @@ public class TempleMenu
         }
 
         if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
-            Console.WriteLine($"Healing costs: {Temple.HealCostPerHp} gp/HP, +100 gp x level (paralysis), +200 gp x level (stoned).");
+            Console.WriteLine("Cure costs: 100 gp x level (paralysis), 200 gp x level (stoned).");
         else
-        Console.WriteLine($"Healing costs: {Temple.HealCostPerHp} gp/HP, +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureDiseaseCost} gp (disease), +{Temple.CureFeeblemindCost} gp (feeblemind), +{Temple.RestorePetrificationCost} gp (restore from petrification).");
+            Console.WriteLine($"Healing costs: {Temple.HealCostPerHp} gp/HP, +{Temple.CurePoisonCost} gp (poison), +{Temple.CureParalysisCost} gp (paralysis), +{Temple.CureDiseaseCost} gp (disease), +{Temple.CureFeeblemindCost} gp (feeblemind), +{Temple.RestorePetrificationCost} gp (restore from petrification).");
 
         var healedCount = 0;
         var skipped = new List<string>();
@@ -275,7 +278,25 @@ public class TempleMenu
             Console.WriteLine("S)hare costs");
 
             Console.Write("Choose # or S: ");
-            var payerChoice = Console.ReadLine()?.Trim();
+            // A single key answers: a digit (typed or clicked) picks the payer, S shares; anything else skips.
+            Console.ClickableNumberDigits = 1;
+            var payerChoice = string.Empty;
+            while (true)
+            {
+                var keyInfo = Console.ReadKey(true);
+                if (keyInfo.Key == ConsoleKey.S)
+                    payerChoice = "S";
+                else if (keyInfo.KeyChar >= '1' && keyInfo.KeyChar <= '9' && keyInfo.KeyChar - '0' <= partyCharacters.Count)
+                    payerChoice = keyInfo.KeyChar.ToString();
+                else if (keyInfo.Key is ConsoleKey.Enter or ConsoleKey.Escape)
+                    payerChoice = string.Empty;
+                else
+                    continue;
+
+                break;
+            }
+            Console.ClickableNumberDigits = 0;
+            Console.WriteLine(payerChoice);
             if (string.Equals(payerChoice, "S", StringComparison.OrdinalIgnoreCase))
             {
                 if (Temple.HealShared(c, partyCharacters, _charRepo, out var sharedPaymentLines))
@@ -321,6 +342,8 @@ public class TempleMenu
         if (skipped.Count > 0)
             Console.WriteLine($"Could not afford healing: {string.Join(", ", skipped)}");
 
+        Console.WriteLine();
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey(true);
     }
 
@@ -387,6 +410,8 @@ public class TempleMenu
         foreach (var line in Temple.Restore(target, partyCharacters[payerSelection.Value - 1], _charRepo))
             Console.WriteLine(line);
 
+        Console.WriteLine();
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey(true);
     }
 
@@ -451,6 +476,8 @@ public class TempleMenu
             foreach (var line in Temple.RaiseShared(target, partyCharacters, _charRepo))
                 Console.WriteLine(line);
 
+            Console.WriteLine();
+            Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
             return;
         }
@@ -468,6 +495,8 @@ public class TempleMenu
         foreach (var line in Temple.Raise(target, partyCharacters[payerIndex - 1], _charRepo))
             Console.WriteLine(line);
 
+        Console.WriteLine();
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey(true);
     }
 
