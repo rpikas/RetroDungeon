@@ -1710,6 +1710,9 @@ public sealed partial class CombatResolver
             return;
         }
 
+        if (TryPoisonInsteadOfDeath(monster, target, events, "hair asps", saveRoll, saveTarget))
+            return;
+
         target.CurrentHitPoints = 0;
         target.AddStatus(CharacterStatus.Dead);
         events.Add(new CombatEvent($"{target.Name} is bitten by {monster.DisplayName}'s hair asps and dies from the poison! (save {saveRoll} vs {saveTarget})"));

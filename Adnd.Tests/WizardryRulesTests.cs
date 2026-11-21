@@ -77,6 +77,51 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Ninja_is_only_available_through_class_change()
+    {
+        var stats = new WizardryStats(17, 17, 17, 17, 17, 17);
+        Assert.DoesNotContain(WizardryClass.Ninja, WizardryRules.EligibleClasses(stats, WizardryAlignment.Evil));
+        Assert.Contains(WizardryClass.Ninja, WizardryRules.EligibleClasses(stats, WizardryAlignment.Evil, classChange: true));
+    }
+
+    [Fact]
+    public void Lord_is_only_available_through_class_change()
+    {
+        var stats = new WizardryStats(15, 12, 12, 15, 14, 15);
+        Assert.DoesNotContain(WizardryClass.Lord, WizardryRules.EligibleClasses(stats, WizardryAlignment.Good));
+        Assert.Contains(WizardryClass.Lord, WizardryRules.EligibleClasses(stats, WizardryAlignment.Good, classChange: true));
+    }
+
+    [Theory]
+    [InlineData(3, -1)]
+    [InlineData(4, -1)]
+    [InlineData(5, 0)]
+    [InlineData(14, 0)]
+    [InlineData(15, 1)]
+    [InlineData(17, 2)]
+    [InlineData(18, 3)]
+    public void Luck_bonus_to_saving_throws(int luck, int bonus)
+        => Assert.Equal(bonus, WizardryRules.SaveLuckBonus(luck));
+
+    [Fact]
+    public void Luck_improves_every_save_for_wizardry_but_not_adnd()
+    {
+        var service = new Adnd.Core.Characters.CharacterSavingThrowService();
+        Adnd.Core.Characters.Character Make(Adnd.Core.Config.Ruleset rs, int luck) => new()
+        {
+            Name = "T", Classes = [Adnd.Core.Characters.CharacterClass.Fighter], Level = 1, Ruleset = rs,
+            Abilities = new Adnd.Core.Characters.AbilityScores { Charisma = luck }
+        };
+
+        foreach (var type in Enum.GetValues<Adnd.Core.Characters.SaveThrowType>())
+        {
+            var plain = service.GetSaveTarget(Make(Adnd.Core.Config.Ruleset.Wizardry, 10), type, false);
+            Assert.Equal(plain - 2, service.GetSaveTarget(Make(Adnd.Core.Config.Ruleset.Wizardry, 17), type, false));
+            Assert.Equal(plain, service.GetSaveTarget(Make(Adnd.Core.Config.Ruleset.ADND, 17), type, false));
+        }
+    }
+
+    [Fact]
     public void Class_needs_its_minimum_stat()
     {
         var stats = new WizardryStats(10, 5, 5, 5, 5, 5);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -85,11 +85,11 @@ namespace Adnd.Game.Windows
 
         private void ShowMoreInfoDialog()
         {
-            var saveVsParalyzation = _savingThrowService.GetSaveTarget(_character, SaveThrowType.ParalyzationPoisonDeath);
-            var saveVsPetrification = _savingThrowService.GetSaveTarget(_character, SaveThrowType.PetrificationPolymorph);
-            var saveVsRodStaffWand = _savingThrowService.GetSaveTarget(_character, SaveThrowType.RodStaffWand);
-            var saveVsBreath = _savingThrowService.GetSaveTarget(_character, SaveThrowType.BreathWeapon);
-            var saveVsSpell = _savingThrowService.GetSaveTarget(_character, SaveThrowType.Spell);
+            var saveVsParalyzation = _savingThrowService.GetSaveTarget(_character, SaveThrowType.ParalyzationPoisonDeath, logLuck: false);
+            var saveVsPetrification = _savingThrowService.GetSaveTarget(_character, SaveThrowType.PetrificationPolymorph, logLuck: false);
+            var saveVsRodStaffWand = _savingThrowService.GetSaveTarget(_character, SaveThrowType.RodStaffWand, logLuck: false);
+            var saveVsBreath = _savingThrowService.GetSaveTarget(_character, SaveThrowType.BreathWeapon, logLuck: false);
+            var saveVsSpell = _savingThrowService.GetSaveTarget(_character, SaveThrowType.Spell, logLuck: false);
             var thac0FromTable = _character.Thac0;
             var thac0StrengthModifier = _character.Thac0StrengthModifier;
             var thac0ItemModifier = _character.Thac0ItemModifier;

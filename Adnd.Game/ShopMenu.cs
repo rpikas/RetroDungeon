@@ -115,8 +115,8 @@ public class ShopMenu
         // If entering shop and there are at least two party members,
         // always ask which member should enter the shop.
         var initialParty = _partyRepo.Load();
-        if ((initialParty.Members.Count >= 2) && (startIndex == 0) && selectShopper)
-            SelectShopper();
+        if ((initialParty.Members.Count >= 2) && (startIndex == 0) && selectShopper && !SelectShopper())
+            return;
 
         var filter = ShopFilter.None;
 
@@ -488,14 +488,15 @@ public class ShopMenu
         return idx;
     }
 
-    private void SelectShopper()
+    /// <summary>Returns false when the player chose to leave instead of picking a shopper.</summary>
+    private bool SelectShopper()
     {
         var party = _partyRepo.Load();
         if (party.Members.Count == 0)
         {
             Console.WriteLine("No party members.");
             Console.ReadKey(true);
-            return;
+            return true;
         }
 
         Console.Clear();
@@ -514,7 +515,7 @@ public class ShopMenu
         {
             Console.WriteLine("No valid party members found.");
             Console.ReadKey(true);
-            return;
+            return true;
         }
 
         for (int i = 0; i < resolvedMembers.Count; i++)
@@ -527,12 +528,24 @@ public class ShopMenu
             Console.WriteLine($"{i + 1}. {member.Name} ({cls}) - GP: {member.GoldPieces}");
         }
 
-        Console.Write("Choose #: ");
+        Console.WriteLine("\nL)eave");
+        Console.Write("Choose # or L: ");
         Console.ClickableNumberDigits = 1;
-        int? sel;
+        int? sel = null;
         try
         {
-            sel = InputHelper.ReadNumber(1, resolvedMembers.Count);
+            while (true)
+            {
+                var keyInfo = Console.ReadKey(true);
+                if (keyInfo.Key is ConsoleKey.L or ConsoleKey.Escape or ConsoleKey.Enter)
+                    return false;
+
+                if (keyInfo.KeyChar >= '1' && keyInfo.KeyChar <= '9' && keyInfo.KeyChar - '0' <= resolvedMembers.Count)
+                {
+                    sel = keyInfo.KeyChar - '0';
+                    break;
+                }
+            }
         }
         finally
         {
@@ -552,6 +565,8 @@ public class ShopMenu
             Console.WriteLine("Invalid.");
             Console.ReadKey(true);
         }
+
+        return true;
     }
 
     private void SellItems()
@@ -749,6 +764,7 @@ public class ShopMenu
                 if (c.Inventory.Count == 0)
                 {
                     Console.WriteLine("\nInventory empty.");
+                    Console.WriteLine("\nL)eave");
                     Console.ReadKey(true);
                     break;
                 }

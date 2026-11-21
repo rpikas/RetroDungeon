@@ -214,9 +214,24 @@ public sealed partial class CombatResolver
             return false;
         }
 
+        if (TryPoisonInsteadOfDeath(monster, target, events, "poison spit", saveRoll, saveTarget))
+            return true;
+
         target.CurrentHitPoints = 0;
         target.AddStatus(CharacterStatus.Dead);
         events.Add(new CombatEvent($"{target.Name} is killed by {monster.DisplayName}'s poison spit! (save {saveRoll} vs {saveTarget})"));
+        return true;
+    }
+
+    // Wizardry: monster poison never kills outright; it poisons the victim, who then loses HP over time like from a trap.
+    private static bool TryPoisonInsteadOfDeath(MonsterInstance monster, Character target, List<CombatEvent> events, string source, int saveRoll, int saveTarget)
+    {
+        if (target.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+            return false;
+
+        if (!target.HasStatus(CharacterStatus.Poisoned))
+            target.AddStatus(CharacterStatus.Poisoned);
+        events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}'s {source}! (save {saveRoll} vs {saveTarget})"));
         return true;
     }
 
@@ -404,6 +419,9 @@ public sealed partial class CombatResolver
 
         if (!saved)
         {
+            if (TryPoisonInsteadOfDeath(monster, target, events, "venom", saveRoll, saveTarget))
+                return true;
+
             target.CurrentHitPoints = 0;
             target.AddStatus(CharacterStatus.Dead);
             events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) and dies from {monster.DisplayName}'s venom!"));

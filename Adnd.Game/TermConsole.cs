@@ -78,6 +78,9 @@ internal static class TermConsole
     /// </summary>
     public static int ClickableNumberDigits { get; set; }
 
+    /// <summary>When set, gets first look at a click on a terminal line (its text and character column); returns true if it handled it.</summary>
+    public static Func<string, int, bool>? ClickHandler { get; set; }
+
     /// <summary>While a "Choose letter" list is on screen, double-clicking a row ("B. Item") types its letter.</summary>
     public static bool ClickableLetters { get; set; }
 
@@ -127,9 +130,11 @@ internal static class TermConsole
         Scrolled = 0;
     }
 
-    private static ConsoleKey KeyFromChar(char c) => char.IsLetter(c)
-        ? (ConsoleKey)char.ToUpperInvariant(c)
-        : char.IsDigit(c) ? (ConsoleKey)c : ConsoleKey.Spacebar;
+    private static ConsoleKey KeyFromChar(char c) => c == '\r'
+        ? ConsoleKey.Enter
+        : char.IsLetter(c)
+            ? (ConsoleKey)char.ToUpperInvariant(c)
+            : char.IsDigit(c) ? (ConsoleKey)c : ConsoleKey.Spacebar;
 
     // -- Console surface --------------------------------------------------------------------------------
 

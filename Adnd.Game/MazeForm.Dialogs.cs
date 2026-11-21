@@ -1,4 +1,4 @@
-﻿using Adnd.Core.Characters;
+using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
@@ -342,7 +342,7 @@ public sealed partial class MazeForm
             Top = 50,
             Width = framePanel.ClientSize.Width - 24,
             Height = 62,
-            Text = $"A group of {(ignoreAlignment ? string.Empty : "neutral ")}{encounterName} is approaching.{Environment.NewLine}Do you L)eave them alone or A)ttack?",
+            Text = $"A group of {(ignoreAlignment ? string.Empty : "neutral ")}{encounterName} is approaching.",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -367,6 +367,7 @@ public sealed partial class MazeForm
 
         framePanel.Controls.Add(titleLabel);
         framePanel.Controls.Add(messageLabel);
+        AddLeaveAttackLinks(form, framePanel);
         form.Controls.Add(framePanel);
 
         var prompt = new ViewerPrompt("choice", $"{(ignoreAlignment ? string.Empty : "Neutral ")}{encounterName} approach. Leave alone or attack?", null, new[]
@@ -384,6 +385,32 @@ public sealed partial class MazeForm
         var result = ViewerDialog.RunModal(form, this, prompt, answers, PublishTable);
         PublishToViewer();
         return result;
+    }
+
+    private static void AddLeaveAttackLinks(Form form, Control framePanel)
+    {
+        Label Link(string text, int left, DialogResult result)
+        {
+            var l = new Label
+            {
+                Left = left,
+                Top = 104,
+                Width = 200,
+                Height = 30,
+                Text = text,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Black,
+                ForeColor = GameRulesProvider.Current.DefaultColor,
+                Font = new Font("Consolas", 14f, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            l.Click += (_, _) => { form.DialogResult = result; form.Close(); };
+            return l;
+        }
+
+        int mid = framePanel.ClientSize.Width / 2;
+        framePanel.Controls.Add(Link("L)eave them alone", mid - 220, DialogResult.No));
+        framePanel.Controls.Add(Link("A)ttack", mid + 20, DialogResult.Yes));
     }
 
     private DialogResult AskFriendlyEncounterOnBoth(string encounterName)
@@ -430,7 +457,7 @@ public sealed partial class MazeForm
             Top = 50,
             Width = framePanel.ClientSize.Width - 24,
             Height = 62,
-            Text = $"A group of friendly {encounterName} is approaching.{Environment.NewLine}Do you L)eave them alone or A)ttack?",
+            Text = $"A group of friendly {encounterName} is approaching.",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,
@@ -455,6 +482,7 @@ public sealed partial class MazeForm
 
         framePanel.Controls.Add(titleLabel);
         framePanel.Controls.Add(messageLabel);
+        AddLeaveAttackLinks(form, framePanel);
         form.Controls.Add(framePanel);
 
         var prompt = new ViewerPrompt("choice", $"Friendly {encounterName} approach. Leave alone or attack?", null, new[]

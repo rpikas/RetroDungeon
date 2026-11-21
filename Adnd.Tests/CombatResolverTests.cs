@@ -82,6 +82,30 @@ public class CombatResolverTests
     }
 
     [Fact]
+    public void WizardryMonsterPoison_PoisonsInsteadOfKilling()
+    {
+        var hero = Fighter();
+        hero.Ruleset = Adnd.Core.Config.Ruleset.Wizardry;
+        var monster = Brute(hitDice: 30);
+        monster.Template.THAC0 = 0;
+        monster.Template.SpecialAbilities.Add(new MonsterSpecialAbility { Name = "Poison spit" });
+        var session = new CombatSession([hero], [monster]);
+        var resolver = new CombatResolver(new ConstantDice(2));
+
+        resolver.ResolveRound(session, Fight(hero));
+
+        Assert.True(hero.HasStatus(CharacterStatus.Poisoned));
+        Assert.False(hero.HasStatus(CharacterStatus.Dead));
+    }
+
+    private sealed class ConstantDice(int value) : IDice
+    {
+        public int Roll(int sides) => Math.Min(value, sides);
+        public int RollMany(int sides, int count) => Roll(sides) * count;
+        public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => 0;
+    }
+
+    [Fact]
     public void TimeStop_CasterActsAndMonstersDoNot()
     {
         var hero = Fighter();

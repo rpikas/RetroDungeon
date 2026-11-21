@@ -1076,7 +1076,7 @@ public sealed partial class CombatResolver
                     events.Add(new CombatEvent(resistMessage));
                     RuleApplicationInfo.PublishLinked("DMG", "79 Savethrow", resistMessage);
                 }
-                else if (hasDeadlyPoison)
+                else if (hasDeadlyPoison && !TryPoisonInsteadOfDeath(monster, target, events, "deadly poison", saveRoll, saveTarget))
                 {
                     var beforeHp = target.CurrentHitPoints;
                     target.CurrentHitPoints = 0;

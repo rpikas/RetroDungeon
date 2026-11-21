@@ -106,8 +106,20 @@ public static class WizardryRules
     public static bool MeetsRequirements(WizardryClass cls, WizardryStats stats, WizardryAlignment alignment)
         => MeetsStatRequirements(cls, stats) && AlignmentAllowed(cls, alignment);
 
-    public static IEnumerable<WizardryClass> EligibleClasses(WizardryStats stats, WizardryAlignment alignment)
-        => Enum.GetValues<WizardryClass>().Where(c => MeetsRequirements(c, stats, alignment));
+    /// <summary>Luck's bonus to every saving throw (lowers the number needed): Luck 3-4 = -1, 5-14 = 0, 15-16 = +1, 17 = +2, 18 = +3.</summary>
+    public static int SaveLuckBonus(int luck) => luck switch
+    {
+        <= 4 => -1,
+        <= 14 => 0,
+        <= 16 => 1,
+        17 => 2,
+        _ => 3
+    };
+
+    /// <summary>Lord and Ninja can only be reached through Change Class, so new characters never get them.</summary>
+    public static IEnumerable<WizardryClass> EligibleClasses(WizardryStats stats, WizardryAlignment alignment, bool classChange = false)
+        => Enum.GetValues<WizardryClass>()
+            .Where(c => (classChange || c is not (WizardryClass.Ninja or WizardryClass.Lord)) && MeetsRequirements(c, stats, alignment));
 
     // XP needed to advance from level 1..12 to the next level; index 0 is level 1.
     private static readonly Dictionary<WizardryClass, int[]> XpToAdvance = new()

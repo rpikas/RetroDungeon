@@ -252,7 +252,7 @@ public sealed partial class CombatResolver
             {
                 events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s poisonous bite (save {saveRoll} vs {saveTarget})."));
             }
-            else
+            else if (!TryPoisonInsteadOfDeath(monster, target, events, "poisonous bite", saveRoll, saveTarget))
             {
                 KillCharacter(target);
                 events.Add(new CombatEvent($"{target.Name} fails save ({saveRoll} vs {saveTarget}) against {monster.DisplayName}'s poison and dies."));

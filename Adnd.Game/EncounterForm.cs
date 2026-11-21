@@ -3349,9 +3349,7 @@ public sealed class EncounterForm : Form
             clsCode = string.Join("/", classes.Select(ToAbbrev));
         }
 
-        var raceCode = c.Race.ToDisplayString();
-        raceCode = raceCode.Length > 0 ? raceCode[..1].ToUpperInvariant() : "?";
-        return $"{raceCode}-{clsCode}";
+        return $"{c.AlignmentAbbreviation}-{clsCode}";
     }
 
     private void MonsterPanel_Paint(object? sender, PaintEventArgs e)

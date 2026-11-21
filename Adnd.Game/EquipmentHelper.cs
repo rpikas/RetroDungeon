@@ -20,10 +20,20 @@ public static class EquipmentHelper
         for (int i = 0; i < c.Inventory.Count; i++)
             Console.WriteLine($"{i + 1}. {c.Inventory[i].DisplayName}");
 
+        Console.WriteLine("\nL)eave");
         Console.Write("\nChoose # (or Enter to cancel): ");
-        var input = Console.ReadLine();
+        Console.ClickableNumberDigits = 2;
+        string? input;
+        try
+        {
+            input = Console.ReadLine();
+        }
+        finally
+        {
+            Console.ClickableNumberDigits = 0;
+        }
 
-        if (string.IsNullOrWhiteSpace(input))
+        if (string.IsNullOrWhiteSpace(input) || input.Trim().Equals("L", StringComparison.OrdinalIgnoreCase))
             return false;
 
         if (!int.TryParse(input, out int idx) || idx < 1 || idx > c.Inventory.Count)

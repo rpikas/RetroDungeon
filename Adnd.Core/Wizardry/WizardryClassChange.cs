@@ -21,7 +21,7 @@ public static class WizardryClassChange
 
     /// <summary>Classes the character could switch to with the given (racial base + bonus) stats.</summary>
     public static IEnumerable<WizardryClass> EligibleTargets(Character c, WizardryStats stats)
-        => WizardryRules.EligibleClasses(stats, AlignmentOf(c)).Where(k => k != c.WizardryClass);
+        => WizardryRules.EligibleClasses(stats, AlignmentOf(c), classChange: true).Where(k => k != c.WizardryClass);
 
     /// <summary>
     /// Level 1 and 0 XP in the new class; hit points kept; known spells kept; stats set to <paramref name="newStats"/>;

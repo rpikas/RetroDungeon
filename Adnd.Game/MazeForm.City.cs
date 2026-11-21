@@ -94,6 +94,10 @@ public sealed partial class MazeForm
 
         var text = lines[index];
 
+        if (TermConsole.ClickHandler is { } clickHandler
+            && clickHandler(text, (int)((e.X - _terminalInner.X) / _terminalCharWidth)))
+            return;
+
         // The inn's level-up screen: "↵ TO GAIN ANOTHER LEVEL" / "↵ TO LEAVE" answer to Enter, "L TO LEAVE THE INN" to L.
         if (TermConsole.WaitingForKey)
         {
@@ -140,6 +144,8 @@ public sealed partial class MazeForm
             {
                 if (text.StartsWith("S)hare", StringComparison.Ordinal))
                     TermConsole.EnqueueText("S");
+                else if (text.StartsWith("L)eave", StringComparison.Ordinal))
+                    TermConsole.EnqueueText(TermConsole.ClickableNumberDigits == 1 ? "L" : "L\r");
                 return;
             }
 

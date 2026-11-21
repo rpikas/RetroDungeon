@@ -9034,3 +9034,33 @@ in wizadry and adnd after getting information on who paied how much, clicking an
 after buying something and the confirmation text is shown then let clicking anywhere mean the same thing as enter
 45,5
 ___
+When equipping items in the shop, it should be possible to click on the items you want to equip
+
+when clicking on an item to equip also automaticly hit enter
+in adnd and wizardry when equipping in the shop, show the text L)eave and when that is clicked is should have the
+same affect as pressing L key
+
+In adnd and wizardry Choose who show should enter the shop view should also show an L->eave option that is clickable
+
+In adnd and wizardry When encountering a group of monsters and you are offereed to L)eave them alone or A)ttack them, then let the L)eave 
+and A)ttack be clickable
+
+in adnd and wizardry when showing the party list in the dungeon, instead of showing letter for the race, show 
+letter/letters for the alignment
+
+poison from monsters in wizardy should not instantly kill the party members but make them loose hp just like when poisoned from a trap
+
+In the wizardry verion only of create charater view wher you can add stats to abbiliites, keep the existing functionality and keyboard navigation, 
+but also make have + and - buttons beside each ability so you can click on the + or - buttons to change the value. when it is not possible to 
+increase or decrease the value, then disable the button. make the clases tha appear to the right clickable to select when all points are distributed.
+Show clearly how many points are left to distribute and when all points are distributed, show a button to confirm the selection.
+
+Update this excel when rules changes. Implement that you can only be ninja after class change
+
+In adnd and wizardry when creating a charater and asking for name, do not create a charater with name unknown instead inform that name is mandatory 
+and ask for name again.
+
+In wizardry let luck affect the save throw for everything, not just for magic. write in the manual how much luck affects the save throw. 
+also when rolling save throw write that in the log and how it is affected by luck.
+
+

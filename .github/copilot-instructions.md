@@ -24,3 +24,5 @@
 
 ## Artwork Filenames
 - When resolving monster artwork filenames, also try variants with commas removed from monster names (e.g., 'Ape, Carnevourus' -> 'ApeCarnevourus').
+## General Rules
+- When an implementation change affects the Wizardry comparison Excel (Adnd.Game\Assets\Rules\Wixardry rules\Wizardry-vs-RetroDungeon.xlsx), update the Excel in the same change.

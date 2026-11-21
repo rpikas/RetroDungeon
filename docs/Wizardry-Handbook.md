@@ -43,7 +43,7 @@ Order: race, alignment, bonus points (with the live class list), class, name.
 
 ### Class requirements
 
-`--` means no minimum.
+`--` means no minimum. **Lord and Ninja are not offered when creating a character**; they can only be chosen through Training Grounds **U) Change class** (`WizardryRules.EligibleClasses`, `classChange` flag).
 
 | Class   | STR | IQ | PIE | VIT | AGI | LUC | Alignment       |
 |---------|----:|---:|----:|----:|----:|----:|-----------------|
@@ -99,13 +99,15 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 
 **Attributes on level-up** (`WizardryAttributeChanges`, `WizardryPeekAge` in game-rules.json, default 25): for each level gained and each of Strength, I.Q., Piety, Vitality, Agility and Luck there is a 75% chance it changes. Roll 0 to (2 x WizardryPeekAge) - 1. If age is higher than the roll the attribute loses 1 (at 18 there is only a 1 in 6 chance of losing 1); if age is lower and the attribute is under 18 it gains 1. A Vitality below 3 kills the character. The inn shows "YOU GAINED/LOST ..." for each change.
 
+**Luck and saving throws** (`WizardryRules.SaveLuckBonus`, applied in `CharacterSavingThrowService.GetSaveTarget`): Luck modifies every saving throw of a Wizardry character (death, petrification, wand, breath and spell), not only saves vs spells. The bonus lowers the number the d20 must reach: Luck 3-4 gives -1 (worse, the number goes up by 1), Luck 5-14 gives 0, Luck 15-16 gives +1, Luck 17 gives +2 and Luck 18 gives +3 (the save target never drops below 1). Each save in combat writes a log line such as "Luck 17 gives +2 to the save, so the target changes from 12 to 10", plus the usual roll against the target.
+
 **Learning spells on level-up:** for each level gained, every unknown spell of a circle the character has slots for is learned with chance IQ/30 (Piety/30 for priest spells). The first spell of each circle is always learned.
 
 **Monster size:** every monster from the Wizardry source is size Medium (set in `MonsterImporter`), so weapons use their normal damage (Long Sword 1d8), never the "vs Large" damage (1d12).
 
 **Paralyze attack:** a Wizardry monster's Paralyze special attack only applies to the character it actually hits (never on a miss). The paralysis does not expire, not even in town, and lasts until cured with Dialko or Madi (or by the temple).
 
-**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees. The Wizardry temple never heals hit points (`WizardryRules.TempleHealsHitPoints`): there is no HP fee or healing, and the menu only offers curing status ailments; resting at the Adventures Inn restores HP. The Wizardry temple's party list only shows members who need a cure or a raise (numbered by that list), and says "Nobody needs healing." when there are none. Poison needs no temple visit: it is cured automatically whenever the party is back in town (`MainMenu.CureWizardryPoisonInTown`).
+**Temple fees** (`WizardryRules.TempleCost`, used by `Temple`): cure paralysis 100 gp x level, cure stoned 200 gp x level, raise dead 250 gp x level, raise from ashes 500 gp x level. Other temple services keep the AD&D fees. The Wizardry temple never heals hit points (`WizardryRules.TempleHealsHitPoints`): there is no HP fee or healing, and the menu only offers curing status ailments; resting at the Adventures Inn restores HP. The Wizardry temple's party list only shows members who need a cure or a raise (numbered by that list), and says "Nobody needs healing." when there are none. Poison needs no temple visit: it is cured automatically whenever the party is back in town (`MainMenu.CureWizardryPoisonInTown`). Monster poison never kills a Wizardry character outright (spit, snake venom, deadly poison, poisonous bite, hair asps, poison attacks): a failed save only sets the Poisoned status, so the victim loses HP over time exactly as after a poison needle trap.
 
 ## 4. Hit points after level 1
 

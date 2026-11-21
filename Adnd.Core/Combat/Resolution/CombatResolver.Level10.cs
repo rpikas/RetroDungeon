@@ -408,6 +408,12 @@ public sealed partial class CombatResolver
         {
             if (SaveVsSpell(target, -4, SaveThrowType.ParalyzationPoisonDeath))
                 events.Add(new CombatEvent($"{target.Name} resists {monster.DisplayName}'s poison."));
+            else if (target.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            {
+                if (!target.HasStatus(CharacterStatus.Poisoned))
+                    target.AddStatus(CharacterStatus.Poisoned);
+                events.Add(new CombatEvent($"{target.Name} is poisoned by {monster.DisplayName}!"));
+            }
             else
             {
                 KillCharacter(target);

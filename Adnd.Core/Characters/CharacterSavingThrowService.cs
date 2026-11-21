@@ -20,7 +20,7 @@ public sealed class CharacterSavingThrowService
         _table = new Lazy<Dictionary<CharacterClass, List<SaveThrowProgression>>>(LoadTable);
     }
 
-    public int GetSaveTarget(Character c, SaveThrowType type)
+    public int GetSaveTarget(Character c, SaveThrowType type, bool logLuck = true)
     {
         if (c.Classes == null || c.Classes.Count == 0)
             return 20;
@@ -33,7 +33,32 @@ public sealed class CharacterSavingThrowService
             targets.Add(target);
         }
 
-        return targets.Count == 0 ? 20 : Math.Max(1, targets.Min() - GetEquippedPoisonSaveBonus(c, type));
+        if (targets.Count == 0)
+            return 20;
+
+        var result = Math.Max(1, targets.Min() - GetEquippedPoisonSaveBonus(c, type));
+
+        // Wizardry: Luck (stored as Charisma) helps every saving throw, not only saves vs spells.
+        if (c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+        {
+            var luck = c.Abilities.Charisma;
+            var luckBonus = Adnd.Core.Wizardry.WizardryRules.SaveLuckBonus(luck);
+            if (luckBonus != 0)
+            {
+                var adjusted = Math.Max(1, result - luckBonus);
+                if (logLuck)
+                    Adnd.Core.Diagnostics.RuleApplicationInfo.Publish(
+                        $"{c.Name}'s save vs {type}: Luck {luck} gives {luckBonus:+#;-#} to the save, so the target changes from {result} to {adjusted}.");
+                result = adjusted;
+            }
+            else if (logLuck)
+            {
+                Adnd.Core.Diagnostics.RuleApplicationInfo.Publish(
+                    $"{c.Name}'s save vs {type}: Luck {luck} gives no modifier to the save (target {result}).");
+            }
+        }
+
+        return result;
     }
 
     // Wielded or worn items with an ability such as "+3 to saves vs. poison" lower the target number.

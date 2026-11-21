@@ -36,13 +36,14 @@ public class WizardryCharacterCreation
 
         WizardryStats stats;
         List<WizardryClass> eligible;
+        WizardryClass? picked;
 
         var alignment = ChooseAlignment();
         Console.Clear();
 
         while (true)
         {
-            stats = AllocatePoints(race.Value, alignment, baseStats, bonus);
+            stats = AllocatePoints(race.Value, alignment, baseStats, bonus, out picked);
             eligible = WizardryRules.EligibleClasses(stats, alignment).ToList();
             if (eligible.Count > 0)
                 break;
@@ -53,7 +54,7 @@ public class WizardryCharacterCreation
 
         Console.CityPicture = GameRulesProvider.Current.ShowCityPictures ? "WizardrySelectingClass1.png" : null;
         WizardryClass cls;
-        try { cls = ChooseClass(eligible); }
+        try { cls = picked is { } p && eligible.Contains(p) ? p : ChooseClass(eligible); }
         finally { Console.CityPicture = null; }
         var character = WizardryCharacterFactory.Create(race.Value, stats, alignment, cls, Random.Shared);
 
@@ -93,9 +94,10 @@ public class WizardryCharacterCreation
 
         WizardryStats stats;
         List<WizardryClass> targets;
+        WizardryClass? picked;
         while (true)
         {
-            stats = AllocatePoints(character.Race, alignment, baseStats, bonus);
+            stats = AllocatePoints(character.Race,             alignment, baseStats, bonus, out picked, classChange: true);
             targets = WizardryClassChange.EligibleTargets(character, stats).ToList();
             if (targets.Count > 0)
                 break;
@@ -105,7 +107,7 @@ public class WizardryCharacterCreation
         }
 
         Console.Clear();
-        var newClass = ChooseClass(targets);
+        var newClass = picked is { } chosen && targets.Contains(chosen) ? chosen : ChooseClass(targets);
         var weeks = WizardryClassChange.Apply(character, newClass, stats, Random.Shared);
         _repo.Save(character);
 
@@ -132,7 +134,7 @@ public class WizardryCharacterCreation
         return index.HasValue ? WizardryRules.Races[index.Value] : null;
     }
 
-    private static WizardryStats AllocatePoints(Race race, WizardryAlignment alignment, WizardryStats baseStats, int bonus)
+    private static WizardryStats AllocatePoints(Race race, WizardryAlignment alignment,     WizardryStats baseStats, int bonus, out WizardryClass? picked, bool classChange = false)
     {
         var values = new[] { baseStats.Strength, baseStats.Iq, baseStats.Piety, baseStats.Vitality, baseStats.Agility, baseStats.Luck };
         var floor = (int[])values.Clone();
@@ -140,48 +142,120 @@ public class WizardryCharacterCreation
 
         var pointer = 0;
         var message = "";
+        WizardryClass? selected = null;
 
-        while (true)
+        bool Done() => left == 0 || values.All(v => v >= WizardryRules.MaxStat);
+
+        // Clicks on the +/- buttons, the classes and the confirm button are typed as keys the loop below understands.
+        bool OnClick(string text, int column)
         {
-            var current = new WizardryStats(values[0], values[1], values[2], values[3], values[4], values[5]);
-            var classes = Enum.GetValues<WizardryClass>()
-                .Where(c => WizardryRules.MeetsRequirements(c, current, alignment))
-                .ToList();
-
-            DrawAllocation(race, alignment, values, pointer, left, classes, message);
-            message = "";
-
-            var key = Console.ReadKey(true).Key;
-            switch (key)
+            if (text.Contains("[ CONFIRM ]", StringComparison.Ordinal))
             {
-                case ConsoleKey.Enter:
-                    pointer = (pointer + 1) % values.Length;
-                    break;
-                case ConsoleKey.UpArrow:
-                    if (left > 0 && values[pointer] < WizardryRules.MaxStat)
-                    {
-                        values[pointer]++;
-                        left--;
-                    }
-                    break;
-                case ConsoleKey.DownArrow:
-                    if (values[pointer] > floor[pointer])
-                    {
-                        values[pointer]--;
-                        left++;
-                    }
-                    break;
-                case ConsoleKey.Escape:
-                    if (left == 0 || values.All(v => v >= WizardryRules.MaxStat))
-                        return current;
+                if (Done())
+                    TermConsole.EnqueueText("*");
+                return true;
+            }
 
-                    message = "SPEND ALL BONUS POINTS FIRST.";
-                    break;
+            for (var i = 0; i < StatKeys.Length; i++)
+            {
+                if (!text.Contains($"│ {StatKeys[i].Label.ToUpperInvariant(),9}", StringComparison.Ordinal))
+                    continue;
+
+                if (column >= 15 && column <= 19)
+                    TermConsole.EnqueueText($"{i + 1}-");
+                else if (column >= 20 && column <= 24)
+                    TermConsole.EnqueueText($"{i + 1}+");
+                return true;
+            }
+
+            var cls = System.Text.RegularExpressions.Regex.Match(text, @"││[► ]([A-H])\) ");
+            if (cls.Success && column >= 24)
+            {
+                if (Done())
+                    TermConsole.EnqueueText(cls.Groups[1].Value);
+                return true;
+            }
+
+            return false;
+        }
+
+        TermConsole.ClickHandler = OnClick;
+        try
+        {
+            while (true)
+            {
+                var current = new WizardryStats(values[0], values[1], values[2], values[3], values[4], values[5]);
+                var classes = WizardryRules.EligibleClasses(current, alignment, classChange).ToList();
+                if (selected.HasValue && (!Done() || !classes.Contains(selected.Value)))
+                    selected = null;
+
+                DrawAllocation(race, alignment, values, floor, pointer, left, classes, selected, Done(), message);
+                message = "";
+
+                var info = Console.ReadKey(true);
+                switch (info.Key)
+                {
+                    case ConsoleKey.Enter:
+                        pointer = (pointer + 1) % values.Length;
+                        continue;
+                    case ConsoleKey.UpArrow:
+                        TryChange(+1);
+                        continue;
+                    case ConsoleKey.DownArrow:
+                        TryChange(-1);
+                        continue;
+                    case ConsoleKey.Escape:
+                        if (Done())
+                        {
+                            picked = selected;
+                            return current;
+                        }
+
+                        message = "SPEND ALL BONUS POINTS FIRST.";
+                        continue;
+                }
+
+                var ch = info.KeyChar;
+                if (ch is >= '1' and <= '6')
+                    pointer = ch - '1';
+                else if (ch == '+')
+                    TryChange(+1);
+                else if (ch == '-')
+                    TryChange(-1);
+                else if (ch == '*' && Done())
+                {
+                    picked = selected;
+                    return current;
+                }
+                else if (Done() && char.ToUpperInvariant(ch) is >= 'A' and <= 'H')
+                {
+                    var i = char.ToUpperInvariant(ch) - 'A';
+                    if (i < classes.Count)
+                        selected = classes[i];
+                }
+            }
+        }
+        finally
+        {
+            TermConsole.ClickHandler = null;
+        }
+
+        void TryChange(int delta)
+        {
+            if (delta > 0 && left > 0 && values[pointer] < WizardryRules.MaxStat)
+            {
+                values[pointer]++;
+                left--;
+            }
+            else if (delta < 0 && values[pointer] > floor[pointer])
+            {
+                values[pointer]--;
+                left++;
             }
         }
     }
 
-    private static void DrawAllocation(Race race, WizardryAlignment alignment, int[] values, int pointer, int left, List<WizardryClass> classes, string message)
+    private static void DrawAllocation(Race race, WizardryAlignment alignment, int[] values, int[] floor, int pointer, int left, List<WizardryClass> classes, WizardryClass? selected, bool done, string message)
     {
         const int leftWidth = 22;
         const int rightWidth = 24;
@@ -191,29 +265,45 @@ public class WizardryCharacterCreation
         Console.WriteLine($"│ {"NEW CHARACTER",-17} L  1  {alignment.ToString()[0]}-???  {WizardryRules.RaceName(race).ToUpperInvariant(),-10}{"",-5}│");
         Console.WriteLine($"└{new string('─', leftWidth + rightWidth + 1)}┘");
         Console.WriteLine();
+        Console.WriteLine(done ? "ALL POINTS DISTRIBUTED." : $"POINTS LEFT TO DISTRIBUTE: {left}");
+        Console.WriteLine();
 
         var rows = new List<(string Left, string Right)>();
         for (var i = 0; i < 8; i++)
         {
             string leftText;
             if (i < StatKeys.Length)
-                leftText = $"{StatKeys[i].Label.ToUpperInvariant(),9}{(i == pointer ? "◄" : " ")}{values[i],2}";
+            {
+                var minus = values[i] > floor[i] ? "[-]" : " - ";
+                var plus = left > 0 && values[i] < WizardryRules.MaxStat ? "[+]" : " + ";
+                leftText = $"{StatKeys[i].Label.ToUpperInvariant(),9}{(i == pointer ? "◄" : " ")}{values[i],2}  {minus} {plus}";
+            }
             else if (i == 7)
                 leftText = $"{"BONUS",9} {left,2}";
             else
                 leftText = "";
 
-            var rightText = i < classes.Count ? $"{(char)('A' + i)}) {classes[i].ToString().ToUpperInvariant()}" : "";
+            var rightText = i < classes.Count
+                ? $"{(classes[i] == selected ? "►" : " ")}{(char)('A' + i)}) {classes[i].ToString().ToUpperInvariant()}"
+                : "";
             rows.Add((leftText, rightText));
         }
 
         Console.WriteLine($"┌{new string('─', leftWidth)}┐┌{new string('─', rightWidth)}┐");
         foreach (var (l, r) in rows)
-            Console.WriteLine($"│ {l.PadRight(leftWidth - 1)}││ {r.PadRight(rightWidth - 1)}│");
+            Console.WriteLine($"│ {l.PadRight(leftWidth - 1)}││{r.PadRight(rightWidth)}│");
         Console.WriteLine($"└{new string('─', leftWidth)}┘└{new string('─', rightWidth)}┘");
 
         Console.WriteLine();
-        Console.WriteLine("↵ MOVES POINTER, ↑ AND ↓ ALTER SCORES. PRESS (ESC) WHEN FINISHED.");
+        if (done)
+        {
+            Console.WriteLine("CLICK OR PRESS A CLASS LETTER TO SELECT IT.");
+            Console.WriteLine();
+            Console.WriteLine("[ CONFIRM ]");
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("↵ MOVES POINTER, ↑ AND ↓ (OR + AND -) ALTER SCORES. PRESS (ESC) WHEN FINISHED.");
         if (message.Length > 0)
             Console.WriteLine(message);
     }
@@ -250,7 +340,10 @@ public class WizardryCharacterCreation
             Console.Write("Name: ");
             var name = (Console.ReadLine() ?? string.Empty).Trim();
             if (name.Length == 0)
-                name = "Unknown";
+            {
+                Console.WriteLine("Name is mandatory. Please enter a name.");
+                continue;
+            }
             if (name.Length > 15)
                 name = name[..15];
 

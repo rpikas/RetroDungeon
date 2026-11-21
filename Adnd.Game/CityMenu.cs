@@ -613,7 +613,10 @@ public class CityMenu
                 Console.Write("Name: ");
                 name = (Console.ReadLine() ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(name))
-                    name = "Unknown";
+                {
+                    Console.WriteLine("Name is mandatory. Please enter a name.");
+                    continue;
+                }
 
                 // Enforce max length of 15 characters
                 if (name.Length > 15)
