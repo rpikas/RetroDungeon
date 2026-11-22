@@ -796,8 +796,10 @@ public sealed class CombatCoordinator
                 xpPerHp = xpCalculator.GetHpXp(first.HitDice, 1);
             int totalHp = monsters.Sum(m => m.MaxHitPoints);
 
-            int totalXp = monsters.Sum(m =>
-                Math.Max(0, m.Template.BaseXPValue + xpPerHp * m.MaxHitPoints));
+            var noXpCount = monsters.Count(m => !session.MonsterGivesXp(m));
+            int totalXp = monsters
+                .Where(session.MonsterGivesXp)
+                .Sum(m => Math.Max(0, m.Template.BaseXPValue + xpPerHp * m.MaxHitPoints));
 
             return new
             {
@@ -807,7 +809,7 @@ public sealed class CombatCoordinator
                 XPPerHP = xpPerHp,
                 TotalHP = totalHp,
                 TotalXP = totalXp,
-                NoXpReason = string.Empty
+                NoXpReason = noXpCount > 0 ? "Dispelled or fled monsters give no XP" : string.Empty
             };
         }).ToList();
 

@@ -6,13 +6,13 @@ namespace Adnd.Game;
 
 public class DungeonMenu
 {
-    public void Show(bool thinWalls = false)
+    public void Show(bool thinWalls = false, OutPartyStart? restartAt = null)
     {
         // Drives the LocationBased monster source option: Proving Grounds = Wizardry monsters, Maze = AD&D.
         GameRulesProvider.Current.InProvingGrounds = thinWalls;
         try
         {
-            ShowMaze(thinWalls);
+            ShowMaze(thinWalls, restartAt);
         }
         finally
         {
@@ -20,9 +20,11 @@ public class DungeonMenu
         }
     }
 
-    private static void ShowMaze(bool thinWalls)
+    private static void ShowMaze(bool thinWalls, OutPartyStart? restartAt)
     {
         using var maze = new MazeForm(thinWalls);
+        if (restartAt != null)
+            maze.StartAt(restartAt.Level, new System.Drawing.Point(restartAt.X, restartAt.Y));
         var host = TermConsole.Host;
 
         // The same window as the city: it opens where the city window is, at the same size.

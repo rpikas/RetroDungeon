@@ -1461,6 +1461,7 @@ public sealed partial class CombatResolver
                 if (dispelled)
                 {
                     monster.CurrentHitPoints = 0;
+                    session.DispelledMonsters.Add(monster);
                     events.Add(new CombatEvent($"{monster.DisplayName} is dispelled and vanishes!"));
                 }
                 else

@@ -176,7 +176,7 @@ public sealed partial class CombatResolver
         var session = state.Session;
         var events = state.Events;
 
-        if (TryResolveWizardryRun(monster, events))
+        if (TryResolveWizardryRun(session, monster, events))
             return MonsterTurnFlow.EndTurn;
 
         if (TryResolveWizardryHelp(session, monster, events))

@@ -413,6 +413,20 @@ public sealed partial class MazeForm
         return (true, $"The party is teleported to ({target.X},{target.Y}) on dungeon level {level}.");
     }
 
+    /// <summary>Places the party where an OUT party was left, before the form is shown.</summary>
+    internal void StartAt(int level, Point position)
+    {
+        if (level < 1)
+            return;
+
+        _currentDungeonLevel = level;
+        BuildMazeForLevel(level);
+        LoadEncounterLocationsForLevel(level);
+        if (_maze[position.X, position.Y] == CellType.Floor)
+            _position = position;
+        UpdateLighting();
+    }
+
     private void JumpToDungeonLevel(int level, Point position)
     {
         _currentDungeonLevel = level;

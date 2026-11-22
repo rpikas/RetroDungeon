@@ -11,6 +11,85 @@ namespace Adnd.Tests;
 public class WizardryRulesTests
 {
     [Fact]
+    public void Dispelled_monster_is_recorded_so_it_gives_no_xp_in_wizardry_only()
+    {
+        Adnd.Core.Combat.Sessions.CombatSession Run(Ruleset ruleset)
+        {
+            var priest = new Character { Name = "Pri", Ruleset = ruleset, Level = 14, MaxHitPoints = 40, CurrentHitPoints = 40, ArmorClass = 10, Damage = "1d6" };
+            priest.Classes.Add(CharacterClass.Cleric);
+            var skeleton = new Adnd.Core.Combat.Sessions.MonsterInstance(
+                new Adnd.Core.Monsters.Monster { Name = "Skeleton", HitDice = 1, ArmorClass = 10, Type = Adnd.Core.Monsters.MonsterType.Undead }, 0);
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([priest], [skeleton]);
+            var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+            {
+                [priest.Name] = Adnd.Core.Combat.Actions.CombatActionType.DispellUndead
+            };
+            new Adnd.Core.Combat.Resolution.CombatResolver(new MaxDice()).ResolveRound(session, actions);
+            return session;
+        }
+
+        Assert.Single(Run(Ruleset.Wizardry).DispelledMonsters);
+        Assert.Empty(Run(Ruleset.ADND).DispelledMonsters);
+    }
+
+    [Fact]
+    public void Fled_monster_gives_xp_in_adnd_but_not_in_wizardry()
+    {
+        bool GivesXp(Ruleset ruleset)
+        {
+            var hero = new Character { Name = "H", Ruleset = ruleset };
+            var monster = new Adnd.Core.Combat.Sessions.MonsterInstance(
+                new Adnd.Core.Monsters.Monster { Name = "Orc", HitDice = 1, ArmorClass = 10 }, 0);
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([hero], [monster]);
+            monster.HasFled = true;
+            monster.CurrentHitPoints = 0;
+            return session.MonsterGivesXp(monster);
+        }
+
+        Assert.False(GivesXp(Ruleset.Wizardry));
+        Assert.True(GivesXp(Ruleset.ADND));
+    }
+
+    [Fact]
+    public void Only_run_ability_monsters_flee_and_only_when_demoralized()
+    {
+        (bool fled, bool demoralized) Run(bool hasRun, int partyLevel, int monsterHitDice)
+        {
+            var hero = new Character { Name = "H", Ruleset = Ruleset.Wizardry, Level = partyLevel, MaxHitPoints = 100, CurrentHitPoints = 100, ArmorClass = 10, Damage = "1d4" };
+            var template = new Adnd.Core.Monsters.Monster { Name = "Kobold", HitDice = monsterHitDice, ArmorClass = 10 };
+            if (hasRun)
+                template.SpecialAbilities.Add(new Adnd.Core.Monsters.MonsterSpecialAbility { Name = "Run" });
+            var monster = new Adnd.Core.Combat.Sessions.MonsterInstance(template, 0);
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([hero], [monster]);
+            var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+            {
+                [hero.Name] = Adnd.Core.Combat.Actions.CombatActionType.Parry
+            };
+            var demoralized = session.AreMonstersDemoralized();
+            new Adnd.Core.Combat.Resolution.CombatResolver(new LowDice()).ResolveRound(session, actions);
+            return (monster.HasFled, demoralized);
+        }
+
+        Assert.Equal((true, true), Run(hasRun: true, partyLevel: 10, monsterHitDice: 2));
+        Assert.Equal((false, true), Run(hasRun: false, partyLevel: 10, monsterHitDice: 2));
+        Assert.Equal((false, false), Run(hasRun: true, partyLevel: 2, monsterHitDice: 2));
+    }
+
+    private sealed class LowDice : Adnd.Core.Dices.IDice
+    {
+        public int Roll(int sides) => 1;
+        public int RollMany(int sides, int count) => count;
+        public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => 0;
+    }
+
+    private sealed class MaxDice : Adnd.Core.Dices.IDice
+    {
+        public int Roll(int sides) => sides;
+        public int RollMany(int sides, int count) => sides * count;
+        public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => numberOfTries;
+    }
+
+    [Fact]
     public void Murphys_ghost_is_one_in_a_thousand_on_level_one()
     {
         var random = new Random(12345);

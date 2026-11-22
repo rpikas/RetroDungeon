@@ -13,25 +13,27 @@ public sealed partial class CombatResolver
     private const string WizardryHelpGroupPrefix = "help-";
     private const int WizardryDecapitateChancePercentPerHitDie = 2;
     private const int WizardryAutokillChancePercent = 2;
+    private const int WizardryDemoralizedRunChancePercent = 65;
 
     private readonly HashSet<MonsterInstance> _wizardryHelpCalled = new(ReferenceEqualityComparer.Instance as IEqualityComparer<MonsterInstance>);
 
-    // "May Run Away": a badly wounded monster (25% HP or less) has a 50% chance to flee each turn.
-    private bool TryResolveWizardryRun(MonsterInstance monster, List<CombatEvent> events)
+    // "May Run Away": only monsters with the Run ability ever flee. Once the monsters are demoralized
+    // (party total level > sum of monster level * healthy monsters over all groups) they have a 65% chance per turn.
+    private bool TryResolveWizardryRun(CombatSession session, MonsterInstance monster, List<CombatEvent> events)
     {
         if (!HasSpecialAbility(monster, "Run") || monster.MaxHitPoints <= 0)
             return false;
 
-        if (monster.CurrentHitPoints * 4 > monster.MaxHitPoints)
+        if (!session.AreMonstersDemoralized())
             return false;
 
         var roll = _dice.Roll(100);
-        if (roll > 50)
+        if (roll > WizardryDemoralizedRunChancePercent)
             return false;
 
         monster.HasFled = true;
         monster.CurrentHitPoints = 0;
-        events.Add(new CombatEvent($"{monster.DisplayName} is badly hurt and runs away!"));
+        events.Add(new CombatEvent($"{monster.DisplayName} is demoralized and runs away!"));
         return true;
     }
 

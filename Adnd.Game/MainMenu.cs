@@ -22,6 +22,7 @@ public class MainMenu
     private readonly ShopMenu _shopMenu = new();
     private readonly DungeonMenu _dungeonMenu = new();
     private readonly SettingsMenu _settingsMenu = new();
+    private readonly UtilitiesMenu _utilitiesMenu = new();
     private readonly PartyRepository _partyRepo = new("Data/Party");
     private readonly CharacterRepository _charRepo = new("Data/Characters");
     private readonly SpellRepository _spellRepo = new("Data/Spells");
@@ -80,6 +81,7 @@ public class MainMenu
             Console.WriteLine("B)oltac's Trading Post");
             if (GameRulesProvider.Current.MazeAvailable) Console.WriteLine("M)aze");
             if (GameRulesProvider.Current.ProvingGroundsAvailable) Console.WriteLine("P)roving Grounds");
+            Console.WriteLine("U)tilities");
             Console.WriteLine("S)ettings");
             Console.WriteLine("Q)uit");
             Console.CityPicture = PictureFor("WizardryTown.png", "AdndTown.png");
@@ -161,6 +163,17 @@ public class MainMenu
                     }
 
                     EnterMaze(thinWalls: true);
+                    break;
+
+                case ConsoleKey.U:
+                    var restart = _utilitiesMenu.Show();
+                    if (restart != null)
+                    {
+                        var proving = GameRulesProvider.Current.ProvingGroundsAvailable
+                                      && (!GameRulesProvider.Current.MazeAvailable || AskProvingGrounds());
+                        EnterMaze(proving, restart);
+                    }
+
                     break;
 
                 case ConsoleKey.S:
@@ -369,7 +382,7 @@ public class MainMenu
     /// Down into the maze. Offered from anywhere in town, as the hub's M key always has been, but they leave
     /// from the gate -- that is where the stair is, and it is where they come back up to.
     /// </summary>
-    private void EnterMaze(bool thinWalls = false)
+    private void EnterMaze(bool thinWalls = false, OutPartyStart? restartAt = null)
     {
         if (!ConfirmEarSeekerRiskBeforeDungeonEntry())
             return;
@@ -378,7 +391,7 @@ public class MainMenu
 
         ApplyEarSeekerDungeonEntryDeaths();
         RecalculatePartyCombatStateOnDungeonEntry();
-        _dungeonMenu.Show(thinWalls);
+        _dungeonMenu.Show(thinWalls, restartAt);
 
         // A new day starts only after the party leaves the maze.
         var party = _partyRepo.Load();
@@ -723,6 +736,20 @@ public class MainMenu
 
         var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
         return party.Members.Any(name => roster.ContainsKey(name));
+    }
+
+    private static bool AskProvingGrounds()
+    {
+        Console.Clear();
+        Console.WriteLine("Where was the party lost?\n");
+        Console.WriteLine("M)aze");
+        Console.WriteLine("P)roving Grounds");
+        while (true)
+        {
+            var key = Console.ReadKey(true).Key;
+            if (key == ConsoleKey.M) return false;
+            if (key == ConsoleKey.P) return true;
+        }
     }
 
     private static void ShowPartyRequiredMessage()

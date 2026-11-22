@@ -136,7 +136,11 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 
 Agility never changes Armor Class in Wizardry (in AD&D, Dexterity does).
 
-Dispell Undead: a successful dispell makes the undead vanish (counts as defeated); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
+Dispell Undead: a successful dispell makes the undead vanish (counts as defeated, but a dispelled monster gives no XP; in AD&D dispelled/disintegrated undead still give XP); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
+
+Fled monsters: a monster that runs away (Run ability, panic, banished) gives no XP in Wizardry; in AD&D players still get its XP (`CombatSession.MonsterGivesXp`).
+
+Monster fleeing: in Wizardry only monsters with the "May Run Away" (Run) ability ever flee. Monsters are demoralized when the party's total level exceeds the combined morale of all monster groups (each group's morale = monster level * number of healthy monsters in it). While demoralized, each monster with Run has a 65% chance per turn to flee (`CombatSession.AreMonstersDemoralized`, `CombatResolver.TryResolveWizardryRun`). This replaces the earlier "flees at 25% HP" rule.
 
 Matu (Priest 2) lowers the whole party's AC by 2 and Bamatu (Priest 3) by 4, and Kalki (Priest 1) by 1, for the rest of the battle only. Repeated casts add up. Implemented as `CombatSession.WizardryPartyArmorClassBonus`, applied when monsters attack.
 

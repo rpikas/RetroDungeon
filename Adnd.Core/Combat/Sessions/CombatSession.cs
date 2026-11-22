@@ -100,6 +100,28 @@ public sealed class CombatSession
     public Dictionary<string, List<int>> MonsterWoundingRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> MonsterWoundingUnhealableDamage { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NoXpMonsterGroupIds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    // Wizardry: monsters are demoralized when the party's total level exceeds the combined morale
+    // of all monster groups (monster level * number of healthy monsters in the group).
+    public bool AreMonstersDemoralized()
+    {
+        var partyLevel = Party.Where(c => c.CurrentHitPoints > 0).Sum(c => c.Level);
+        var monsterMorale = Monsters
+            .Where(m => m.IsAlive && !m.HasFled)
+            .Sum(m => Math.Max(1, m.InstanceHitDice));
+        return partyLevel > monsterMorale;
+    }
+
+    // Wizardry only: monsters removed by Dispell Undead give no XP.
+    public HashSet<MonsterInstance> DispelledMonsters { get; } = new();
+
+    // Wizardry: dispelled or fled monsters give no XP. AD&D: they still do.
+    public bool MonsterGivesXp(MonsterInstance monster)
+    {
+        if (DispelledMonsters.Contains(monster))
+            return false;
+
+        return !(monster.HasFled && Party.Any(c => c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry));
+    }
     public HashSet<string> MaceOfDisruptionBacklashApplied { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> CloakOfDisplacementFirstMissUsed { get; } = new(StringComparer.OrdinalIgnoreCase);
     public int Level1PriestSpellCastsUsed { get; set; }
