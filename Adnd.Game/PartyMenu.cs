@@ -863,6 +863,10 @@ public class PartyMenu
             user.Inventory.RemoveAt(selected.index);
             Console.WriteLine($"\n{item.Name} is consumed.");
         }
+        else if (spell != null && Adnd.Core.Wizardry.WizardryRules.TryBreakItemAfterUse(user, item, sides => Random.Shared.Next(1, sides + 1)))
+        {
+            Console.WriteLine($"\n{item.Name} crumbles and breaks!");
+        }
 
         if (grantsRegenerationUntilDungeonExit
             && !user.Inventory.Any(inv => ItemSpecialAbilityParser.HasSpecialAbility(inv, "Regeneration (Potion)")))

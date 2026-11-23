@@ -1,5 +1,6 @@
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
+using Adnd.Core.Items;
 
 namespace Adnd.Core.Wizardry;
 
@@ -15,6 +16,18 @@ public static class WizardryClassChange
         Alignment.LawfulEvil or Alignment.NeutralEvil or Alignment.ChaoticEvil => WizardryAlignment.Evil,
         _ => WizardryAlignment.Neutral
     };
+
+    /// <summary>Wizardry items bound to an alignment: equipping one with the wrong alignment curses it.</summary>
+    public static WizardryAlignment? ItemAlignment(string? itemName) => itemName switch
+    {
+        "Evil Sword +3" or "Evil S-Sword +3" or "Evil Chain +2" or "Evil Shield +3" or "Helm +2 (E)" or "Evil Plate +3" => WizardryAlignment.Evil,
+        "Neutral Plate +2" => WizardryAlignment.Neutral,
+        _ => null
+    };
+
+    /// <summary>True when a Wizardry character equips an alignment-bound item of another alignment (it becomes cursed).</summary>
+    public static bool EquipCursesItem(Character c, Item item)
+        => c.Ruleset == Ruleset.Wizardry && ItemAlignment(item.Name) is { } required && required != AlignmentOf(c);
 
     /// <summary>Weeks of aging: (52 * random 0..2) + 252.</summary>
     public static int RollAgingWeeks(Random random) => (WeeksPerStep * random.Next(0, 3)) + BaseWeeks;

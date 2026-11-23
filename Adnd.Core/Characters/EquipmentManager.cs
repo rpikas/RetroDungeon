@@ -45,9 +45,12 @@ public static class EquipmentManager
                || name.Contains("HandAxe", StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>Items with the "Evil Only" ability can only be equipped by evil-aligned characters.</summary>
+    /// <summary>Items with the "Evil Only" ability can only be equipped by evil-aligned characters (Wizardry equips them but curses them instead).</summary>
     public static bool MeetsAlignmentRequirement(Character c, Item item)
     {
+        if (c.Ruleset == Adnd.Core.Config.Ruleset.Wizardry)
+            return true;
+
         if (item?.SpecialAbilities == null
             || !item.SpecialAbilities.Any(a => string.Equals(a?.Trim(), "Evil Only", StringComparison.OrdinalIgnoreCase)))
             return true;
@@ -192,6 +195,9 @@ public static class EquipmentManager
 
         c.ArmorClass -= GetEffectiveArmorClassBonusForEquip(item);
         c.Inventory.Remove(item);
+
+        if (Adnd.Core.Wizardry.WizardryClassChange.EquipCursesItem(c, item))
+            item.IsCursed = true;
 
         c.RefreshRingProtectionEffects();
         c.RefreshRingWizardryEffects();

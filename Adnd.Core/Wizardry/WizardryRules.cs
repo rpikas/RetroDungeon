@@ -1,4 +1,4 @@
-using Adnd.Core.Characters;
+﻿using Adnd.Core.Characters;
 
 namespace Adnd.Core.Wizardry;
 
@@ -239,6 +239,32 @@ public static class WizardryRules
         ("PRIVATE ROOM", 200, 7),
         ("THE ROYAL SUITE", 500, 10)
     ];
+
+    /// <summary>Wizardry: chance (percent) that a spell-casting item breaks after being used (Porfic ring 5, Manifo ring 10, Mahalito rod 10, Makanito ring 5).</summary>
+    public static int ItemBreakChancePercent(string? itemName) => itemName switch
+    {
+        "Ring of Shielding" => 5,
+        "Ring of Rigidity" => 10,
+        "Rod of Flame" => 10,
+        "Ring of Suffocation" => 5,
+        _ => 0
+    };
+
+    /// <summary>Rolls the breakage chance after a successful use. A broken item is removed from the character. Returns true when it broke.</summary>
+    public static bool TryBreakItemAfterUse(Character user, Adnd.Core.Items.Item item, Func<int, int> rollDie)
+    {
+        if (user.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+            return false;
+
+        var chance = ItemBreakChancePercent(item.Name);
+        if (chance <= 0 || rollDie(100) > chance)
+            return false;
+
+        user.Inventory.Remove(item);
+        foreach (var slot in user.Equipment.Where(e => ReferenceEquals(e.Value, item)).Select(e => e.Key).ToList())
+            user.Equipment[slot] = null;
+        return true;
+    }
 
     /// <summary>Bonus points to distribute at creation: 95% 5-9, 4.75% 15-19, 0.25% 25-29.</summary>
     public static int RollBonusPoints(Random random)

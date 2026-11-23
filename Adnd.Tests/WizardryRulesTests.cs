@@ -737,6 +737,45 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Spell_items_may_break_after_use_in_wizardry_only()
+    {
+        Assert.Equal(5, WizardryRules.ItemBreakChancePercent("Ring of Shielding"));
+        Assert.Equal(10, WizardryRules.ItemBreakChancePercent("Ring of Rigidity"));
+        Assert.Equal(10, WizardryRules.ItemBreakChancePercent("Rod of Flame"));
+        Assert.Equal(5, WizardryRules.ItemBreakChancePercent("Ring of Suffocation"));
+        Assert.Equal(0, WizardryRules.ItemBreakChancePercent("Potion of Dios"));
+
+        var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 10, 10, 12, 10, 10), WizardryAlignment.Neutral, WizardryClass.Mage, new Random(1));
+        var rod = new Adnd.Core.Items.Item { Name = "Rod of Flame", Type = Adnd.Core.Items.ItemType.MagicItem };
+        c.Inventory.Add(rod);
+
+        Assert.False(WizardryRules.TryBreakItemAfterUse(c, rod, _ => 11));
+        Assert.Contains(rod, c.Inventory);
+        Assert.True(WizardryRules.TryBreakItemAfterUse(c, rod, _ => 10));
+        Assert.DoesNotContain(rod, c.Inventory);
+    }
+
+    [Fact]
+    public void Equipping_an_item_of_the_wrong_alignment_curses_it()
+    {
+        var good = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 10, 10, 12, 10, 10), WizardryAlignment.Good, WizardryClass.Fighter, new Random(1));
+        var evil = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 10, 10, 12, 10, 10), WizardryAlignment.Evil, WizardryClass.Fighter, new Random(1));
+        Adnd.Core.Items.Item Sword() => new() { Name = "Evil Sword +3", Type = Adnd.Core.Items.ItemType.Weapon, Slot = Adnd.Core.Items.EquipmentSlot.MainHand };
+
+        var wrong = Sword();
+        good.Inventory.Add(wrong);
+        Assert.True(EquipmentManager.Equip(good, wrong));
+        Assert.True(wrong.IsCursed);
+        Assert.False(EquipmentManager.Unequip(good, Adnd.Core.Items.EquipmentSlot.MainHand));
+
+        var right = Sword();
+        evil.Inventory.Add(right);
+        Assert.True(EquipmentManager.Equip(evil, right));
+        Assert.False(right.IsCursed);
+        Assert.Equal(WizardryAlignment.Neutral, WizardryClassChange.ItemAlignment("Neutral Plate +2"));
+    }
+
+    [Fact]
     public void Class_change_from_bishop_to_mage_keeps_known_priest_spells()
     {
         var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(10, 14, 14, 10, 10, 10), WizardryAlignment.Good, WizardryClass.Bishop, new Random(1));

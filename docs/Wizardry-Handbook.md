@@ -178,6 +178,8 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Each attempt first risks a cursed item being equipped by accident: 35% - 3% per level (0% from level 12). It only matters if the item is cursed; the Bishop then wears it.
 - The shop identifies any item for half its value (A)ppraise Items).
 - A cursed item cannot be unequipped (or sold while worn) until it is uncursed. The shop lifts the curse on an equipped item for half the item's value (R) Remove curse, `WizardryIdentification.ShopUncurseCost`); the Remove Curse spell also works.
+- **Breakage:** after a successful use these items may break and are lost: Ring of Shielding (Porfic) 5%, Ring of Rigidity (Manifo) 10%, Rod of Flame (Mahalito) 10%, Ring of Suffocation (Makanito) 5% (`WizardryRules.ItemBreakChancePercent`, `TryBreakItemAfterUse`; combat, camp and party menu).
+- **Alignment mismatch:** Evil Sword +3, Evil S-Sword +3, Evil Chain +2, Evil Shield +3, Helm +2 (E), Evil Plate +3 (Evil) and Neutral Plate +2 (Neutral) can be equipped by anyone, but equipping one with the wrong alignment makes it cursed (`WizardryClassChange.EquipCursesItem`), so it stays on until uncursed.
 
 ## 5d. Who can use which item
 

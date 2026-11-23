@@ -1,4 +1,4 @@
-using Adnd.Core.Assassination;
+﻿using Adnd.Core.Assassination;
 using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
@@ -731,6 +731,9 @@ public sealed partial class CombatResolver
         events.Add(new CombatEvent($"{user.Name} uses {item.Name}."));
         foreach (var message in result.Events)
             events.Add(new CombatEvent(message));
+
+        if (Adnd.Core.Wizardry.WizardryRules.TryBreakItemAfterUse(user, item, _dice.Roll))
+            events.Add(new CombatEvent($"{item.Name} crumbles and breaks!"));
     }
 
     private void ResolveWandOfFearUse(CombatSession session, Character user, CombatAction action, Item wand, List<CombatEvent> events)

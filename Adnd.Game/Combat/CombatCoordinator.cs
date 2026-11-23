@@ -1549,7 +1549,7 @@ public sealed class CombatCoordinator
         if (allItems.Count == 0)
             return result;
 
-        var nextReceiverIndex = 0;
+        var nextReceiverIndex = Random.Shared.Next(Math.Max(1, survivors.Count));
 
         foreach (var placeholder in placeholders)
         {
@@ -1670,7 +1670,7 @@ public sealed class CombatCoordinator
                     ItemName = GetInventoryDisplayNameForTreasureLog(item)
                     });
 
-                    nextReceiverIndex = (idx + 1) % survivors.Count;
+                    nextReceiverIndex = Random.Shared.Next(survivors.Count);
                     assigned = true;
                     break;
                 }
@@ -2404,7 +2404,7 @@ public sealed class CombatCoordinator
         if (allItems.Count == 0)
             return result;
 
-        var nextReceiverIndex = 0;
+        var nextReceiverIndex = Random.Shared.Next(Math.Max(1, survivors.Count));
 
         foreach (var monster in session.Monsters)
         {
@@ -2492,7 +2492,7 @@ public sealed class CombatCoordinator
         if (allItems.Count == 0)
             return result;
 
-        var nextReceiverIndex = 0;
+        var nextReceiverIndex = Random.Shared.Next(Math.Max(1, survivors.Count));
 
         for (int i = 0; i < numberOfItems; i++)
         {
@@ -2515,7 +2515,7 @@ public sealed class CombatCoordinator
                         ItemName = GetInventoryDisplayNameForTreasureLog(item)
                 });
 
-                nextReceiverIndex = (idx + 1) % survivors.Count;
+                nextReceiverIndex = Random.Shared.Next(survivors.Count);
                 assigned = true;
                 break;
             }
@@ -2902,7 +2902,7 @@ public sealed class CombatCoordinator
                 ItemName = GetInventoryDisplayNameForTreasureLog(item)
             });
 
-            nextReceiverIndex = (idx + 1) % survivors.Count;
+            nextReceiverIndex = Random.Shared.Next(survivors.Count);
             return true;
         }
 

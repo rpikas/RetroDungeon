@@ -1933,6 +1933,10 @@ public sealed class CampCharacterInspectForm : Form
             user.Inventory.RemoveAt(selected.index);
             result.Events.Add($"{selected.item.Name} is consumed.");
         }
+        else if (spell != null && Adnd.Core.Wizardry.WizardryRules.TryBreakItemAfterUse(user, selected.item, sides => Random.Shared.Next(1, sides + 1)))
+        {
+            result.Events.Add($"{selected.item.Name} crumbles and breaks!");
+        }
 
         if (grantsRegenerationUntilDungeonExit
             && !user.Inventory.Any(item => Adnd.Core.Items.ItemSpecialAbilityParser.HasSpecialAbility(item, "Regeneration (Potion)")))
