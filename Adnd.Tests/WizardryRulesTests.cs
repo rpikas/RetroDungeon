@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Core.Config;
@@ -30,6 +30,101 @@ public class WizardryRulesTests
 
         Assert.Single(Run(Ruleset.Wizardry).DispelledMonsters);
         Assert.Empty(Run(Ruleset.ADND).DispelledMonsters);
+    }
+
+    [Fact]
+    public void Lord_dispells_undead_from_level_4_as_priest_three_levels_lower()
+    {
+        Assert.Equal(0, WizardryIdentification.LordDispellLevel(3));
+        Assert.Equal(1, WizardryIdentification.LordDispellLevel(4));
+        Assert.Equal(7, WizardryIdentification.LordDispellLevel(10));
+
+        bool Dispels(int level)
+        {
+            var lord = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(15, 12, 12, 15, 14, 15), WizardryAlignment.Good, WizardryClass.Lord, new Random(1));
+            lord.Level = level;
+            lord.MaxHitPoints = lord.CurrentHitPoints = 40;
+            var skeleton = new Adnd.Core.Combat.Sessions.MonsterInstance(
+                new Adnd.Core.Monsters.Monster { Name = "Skeleton", HitDice = 1, ArmorClass = 10, Type = Adnd.Core.Monsters.MonsterType.Undead }, 0);
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([lord], [skeleton]);
+            var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+            {
+                [lord.Name] = Adnd.Core.Combat.Actions.CombatActionType.DispellUndead
+            };
+            new Adnd.Core.Combat.Resolution.CombatResolver(new MaxDice()).ResolveRound(session, actions);
+            return session.DispelledMonsters.Count == 1;
+        }
+
+        Assert.False(Dispels(3));
+        Assert.True(Dispels(4));
+    }
+
+    [Fact]
+    public void Cursed_item_stays_equipped_until_uncursed_for_half_its_value()
+    {
+        var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(15, 12, 12, 15, 14, 15), WizardryAlignment.Good, WizardryClass.Fighter, new Random(1));
+        var helmet = new Adnd.Core.Items.Item { Name = "Cursed Helmet -2", Type = Adnd.Core.Items.ItemType.Armor, Slot = Adnd.Core.Items.EquipmentSlot.Head, IsCursed = true, Cost = 300 };
+        c.Equipment[Adnd.Core.Items.EquipmentSlot.Head] = helmet;
+
+        Assert.False(EquipmentManager.Unequip(c, Adnd.Core.Items.EquipmentSlot.Head));
+        Assert.Equal(150, WizardryIdentification.ShopUncurseCost(helmet));
+
+        EquipmentManager.RemoveCurse(helmet);
+        Assert.True(EquipmentManager.Unequip(c, Adnd.Core.Items.EquipmentSlot.Head));
+    }
+
+    [Fact]
+    public void Inn_rooms_use_wizardry_hit_points_and_fees_per_week()
+    {
+        Assert.Equal([0, 1, 3, 7, 10], WizardryRules.InnRooms.Select(r => r.HitPointsPerWeek));
+        Assert.Equal([0, 10, 50, 200, 500], WizardryRules.InnRooms.Select(r => r.FeePerWeek));
+    }
+
+    [Fact]
+    public void Good_and_evil_cannot_party_together_but_neutral_can_join_anyone()
+    {
+        Character Make(WizardryAlignment a) => WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 12, 12, 12, 12, 12), a, WizardryClass.Fighter, new Random(1));
+        var good = Make(WizardryAlignment.Good);
+        var evil = Make(WizardryAlignment.Evil);
+        var neutral = Make(WizardryAlignment.Neutral);
+
+        Assert.False(WizardryRules.CanJoinParty(evil, [good]));
+        Assert.False(WizardryRules.CanJoinParty(good, [neutral, evil]));
+        Assert.True(WizardryRules.CanJoinParty(neutral, [good, evil]));
+        Assert.True(WizardryRules.CanJoinParty(good, [neutral, good]));
+        Assert.True(WizardryRules.CanJoinParty(evil, []));
+    }
+
+    [Fact]
+    public void Ninja_critical_chance_and_monster_avoidance()
+    {
+        Assert.Equal(2, WizardryRules.NinjaCriticalChancePercent(1));
+        Assert.Equal(20, WizardryRules.NinjaCriticalChancePercent(10));
+        Assert.Equal(50, WizardryRules.NinjaCriticalChancePercent(40));
+
+        Assert.True(WizardryRules.MonsterAvoidsNinjaCritical(5, 15));
+        Assert.False(WizardryRules.MonsterAvoidsNinjaCritical(5, 16));
+        Assert.True(WizardryRules.MonsterAvoidsNinjaCritical(24, 34));
+    }
+
+    [Fact]
+    public void Ninja_critical_kills_a_hit_monster_instantly()
+    {
+        var ninja = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(17, 17, 17, 17, 17, 17), WizardryAlignment.Evil, WizardryClass.Ninja, new Random(1));
+        ninja.Level = 25;
+        ninja.MaxHitPoints = ninja.CurrentHitPoints = 80;
+        var ogre = new Adnd.Core.Combat.Sessions.MonsterInstance(
+            new Adnd.Core.Monsters.Monster { Name = "Ogre", HitDice = 1, ArmorClass = 10 }, 0);
+        ogre.CurrentHitPoints = 500;
+        var session = new Adnd.Core.Combat.Sessions.CombatSession([ninja], [ogre]);
+        var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+        {
+            [ninja.Name] = Adnd.Core.Combat.Actions.CombatActionType.Fight
+        };
+
+        new Adnd.Core.Combat.Resolution.CombatResolver(new CritDice()).ResolveRound(session, actions);
+
+        Assert.True(ogre.CurrentHitPoints <= 0);
     }
 
     [Fact]
@@ -75,6 +170,76 @@ public class WizardryRulesTests
         Assert.Equal((false, false), Run(hasRun: true, partyLevel: 2, monsterHitDice: 2));
     }
 
+    [Fact]
+    public void Monster_xp_depends_on_hit_points_in_adnd_but_not_in_wizardry()
+    {
+        int Xp(Adnd.Core.Config.Sources source)
+        {
+            var template = new Adnd.Core.Monsters.Monster { Name = "Orc", HitDice = 3, ArmorClass = 10, BaseXPValue = 100, Source = source };
+            return Adnd.Core.Combat.Sessions.CombatSession.GetMonsterXp(new Adnd.Core.Combat.Sessions.MonsterInstance(template, 0), 5);
+        }
+
+        Assert.Equal(100, Xp(Adnd.Core.Config.Sources.Wizardry));
+        Assert.True(Xp(Adnd.Core.Config.Sources.Adnd) > 100);
+    }
+
+    [Fact]
+    public void Montino_from_a_monster_priest_silences_party_members_who_fail_their_save()
+    {
+        var hero = new Character { Name = "H", Ruleset = Ruleset.Wizardry, Level = 1, MaxHitPoints = 100, CurrentHitPoints = 100, ArmorClass = 10, Damage = "1d4" };
+        var template = new Adnd.Core.Monsters.Monster { Name = "Priest", HitDice = 3, ArmorClass = 10, Source = Adnd.Core.Config.Sources.Wizardry };
+        template.SpecialAbilities.Add(new Adnd.Core.Monsters.MonsterSpecialAbility { Name = "Level 2 Priest spells", Description = "Level 2 Priest spells" });
+        var session = new Adnd.Core.Combat.Sessions.CombatSession([hero], [new Adnd.Core.Combat.Sessions.MonsterInstance(template, 0)]);
+        var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+        {
+            [hero.Name] = Adnd.Core.Combat.Actions.CombatActionType.Parry
+        };
+
+        // Constant 2: picks the last castable spell (Montino) and fails the save.
+        new Adnd.Core.Combat.Resolution.CombatResolver(new FixedValueDice(2)).ResolveRound(session, actions);
+
+        Assert.True(session.IsPartySilenced(hero.Name));
+    }
+
+    [Fact]
+    public void Bishop_spell_points_follow_half_level_mage_circles_after_refresh()
+    {
+        var bishop = new Character { Name = "B", Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Bishop, Level = 5 };
+        bishop.Classes.Add(CharacterClass.MagicUser);
+        bishop.Spellcasting.Add(new Adnd.Core.Spells.SpellcastingState
+        {
+            SpellClass = Adnd.Core.Spells.SpellClass.MagicUser,
+            SlotsPerDay = [2],
+            SlotsUsed = [0]
+        });
+
+        bishop.RefreshRingWizardryEffects();
+
+        var slots = bishop.Spellcasting.Single(s => s.SpellClass == Adnd.Core.Spells.SpellClass.MagicUser).SlotsPerDay;
+        var highestCircle = slots.FindLastIndex(s => s > 0) + 1;
+        Assert.Equal(Adnd.Core.Spells.SpellProgression.WizardryBishopCircles(5).Mage, highestCircle);
+        Assert.True(highestCircle < 3);
+    }
+
+    private sealed class FixedValueDice(int value) : Adnd.Core.Dices.IDice
+    {
+        public int Roll(int sides) => Math.Min(value, sides);
+        public int RollMany(int sides, int count) => Roll(sides) * count;
+        public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => 0;
+    }
+
+    [Fact]
+    public void Silenced_party_member_cannot_cast_and_silence_wears_off()
+    {
+        var session = new Adnd.Core.Combat.Sessions.CombatSession([new Character { Name = "H" }], []);
+        session.SetPartySilenced("H", 2);
+        Assert.True(session.IsPartySilenced("H"));
+        session.TickPartySilenced();
+        Assert.True(session.IsPartySilenced("H"));
+        session.TickPartySilenced();
+        Assert.False(session.IsPartySilenced("H"));
+    }
+
     private sealed class LowDice : Adnd.Core.Dices.IDice
     {
         public int Roll(int sides) => 1;
@@ -85,6 +250,14 @@ public class WizardryRulesTests
     private sealed class MaxDice : Adnd.Core.Dices.IDice
     {
         public int Roll(int sides) => sides;
+        public int RollMany(int sides, int count) => sides * count;
+        public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => numberOfTries;
+    }
+
+    // Maximum rolls, except d100 which rolls 1 so percentage chances always succeed.
+    private sealed class CritDice : Adnd.Core.Dices.IDice
+    {
+        public int Roll(int sides) => sides == 100 ? 1 : sides;
         public int RollMany(int sides, int count) => sides * count;
         public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => numberOfTries;
     }
@@ -564,6 +737,26 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Class_change_from_bishop_to_mage_keeps_known_priest_spells()
+    {
+        var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(10, 14, 14, 10, 10, 10), WizardryAlignment.Good, WizardryClass.Bishop, new Random(1));
+        c.Spellcasting.Add(new Adnd.Core.Spells.SpellcastingState
+        {
+            SpellClass = Adnd.Core.Spells.SpellClass.Cleric,
+            SlotsPerDay = [1],
+            SlotsUsed = [0],
+            KnownSpellIds = ["wiz_priest_test"]
+        });
+        var priestSpells = c.Spellcasting.Where(s => s.SpellClass != Adnd.Core.Spells.SpellClass.MagicUser).SelectMany(s => s.KnownSpellIds).ToList();
+        Assert.NotEmpty(priestSpells);
+
+        WizardryClassChange.Apply(c, WizardryClass.Mage, new WizardryStats(10, 14, 10, 10, 10, 10), new Random(1));
+
+        var kept = c.Spellcasting.Where(s => s.SpellClass != Adnd.Core.Spells.SpellClass.MagicUser).SelectMany(s => s.KnownSpellIds).ToList();
+        Assert.All(priestSpells, id => Assert.Contains(id, kept));
+    }
+
+    [Fact]
     public void Class_change_resets_level_keeps_hp_and_ages()
     {
         var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 14, 14, 12, 10, 10), WizardryAlignment.Good, WizardryClass.Mage, new Random(1));
@@ -580,6 +773,20 @@ public class WizardryRulesTests
         Assert.Equal(33, c.MaxHitPoints);
         Assert.InRange(c.Abilities.Wisdom, 13, 15);
         Assert.True(c.Age >= ageBefore + 4);
+    }
+
+    [Fact]
+    public void Class_change_targets_are_evaluated_on_current_stats_before_reset()
+    {
+        var strong = new WizardryStats(17, 17, 17, 17, 17, 17);
+        var c = WizardryCharacterFactory.Create(Race.Human, strong, WizardryAlignment.Good, WizardryClass.Fighter, new Random(1));
+        var current = new WizardryStats(c.Abilities.Strength, c.Abilities.Intelligence, c.Abilities.Wisdom, c.Abilities.Constitution, c.Abilities.Dexterity, c.Abilities.Charisma);
+
+        var targets = WizardryClassChange.EligibleTargets(c, current).ToList();
+
+        Assert.DoesNotContain(WizardryClass.Fighter, targets);
+        Assert.Contains(WizardryClass.Lord, targets);
+        Assert.Empty(WizardryClassChange.EligibleTargets(c, WizardryRules.RaceBaseStats(Race.Human)).Where(t => t == WizardryClass.Lord));
     }
 
     [Fact]

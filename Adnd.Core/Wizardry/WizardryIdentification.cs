@@ -62,12 +62,21 @@ public static class WizardryIdentification
     public static bool IsLord(Character c) =>
         c.Ruleset == Ruleset.Wizardry && c.WizardryClass == WizardryClass.Lord;
 
+    public static bool IsNinja(Character c) =>
+        c.Ruleset == Ruleset.Wizardry && c.WizardryClass == WizardryClass.Ninja;
+
+    /// <summary>A Wizardry Lord dispells undead from level 4, as a Priest three levels lower.</summary>
+    public static int LordDispellLevel(int lordLevel) => Math.Max(0, lordLevel - 3);
+
     public static int IdentifyChancePercent(int bishopLevel) => Math.Clamp(bishopLevel * 5 + 10, 0, 100);
 
     public static int CursedEquipChancePercent(int bishopLevel) => Math.Clamp(35 - bishopLevel * 3, 0, 100);
 
     /// <summary>Gold a temple/shop charges to identify an item: half its value.</summary>
     public static int ShopIdentifyCost(Item item) => item.Cost / 2;
+
+    /// <summary>A shop lifts the curse on an equipped item for half the item's value.</summary>
+    public static int ShopUncurseCost(Item item) => item.Cost / 2;
 
     /// <summary>
     /// A Bishop examines an item. First the curse risk: a cursed item is accidentally equipped.

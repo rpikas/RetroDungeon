@@ -16,7 +16,8 @@ Source of the numbers: https://datadrivengamer.blogspot.com/2019/08/the-not-so-b
 - Changing `Rules` removes party members of the other ruleset from the party. They stay in the roster.
 - The Training Grounds and the Party menu only list characters of the active ruleset.
 - In Wizardry, "Halfling" is shown as **Hobbit**.
-- There is no multiclassing or dual-classing. Instead the Training Grounds offers **U) Change class** (`WizardryClassChange`): level returns to 1 and XP to 0, HP and known spells are kept, stats return to the racial base plus newly rolled bonus points (the new class must meet its stat and alignment requirements), items the new class cannot use are unequipped, and the character ages (52 * random 0..2) + 252 weeks.
+- Party alignment: Good and Evil characters cannot be in the same party; Neutral characters can party with any alignment (`WizardryRules.CanJoinParty`). The Party menu refuses the character, and the tavern does not offer or auto-pick conflicting ones.
+- There is no multiclassing or dual-classing. Instead the Training Grounds offers **U) Change class** (`WizardryClassChange`): level returns to 1 and XP to 0, HP and known spells are kept, stats drop to the racial base and no bonus points are rolled or distributed (the classes offered are evaluated on the character's current stats, before they are reset, plus alignment; if none qualify, the change is refused), items the new class cannot use are unequipped, and the character ages (52 * random 0..2) + 252 weeks.
 
 ## 2. Creating a character
 
@@ -97,6 +98,8 @@ XP needed to go from level N to the next level. Level 13 and beyond needs the sa
 
 **Level tables:** Wizardry characters always level with the table above (`ExperienceTable` defers to `WizardryRules`), with no AD&D racial level limits and no AD&D XP table, so a Fighter keeps advancing past level 7 up to level 13 and beyond.
 
+**Inn rooms** (`WizardryRules.InnRooms`, per week): Stables 0 HP / free, Barracks 1 HP / 10 gp, Double Occupancy 3 HP / 50 gp, Private Room 7 HP / 200 gp, Royal Suite 10 HP / 500 gp. The Stables heal nothing and cost nothing. AD&D keeps its own rooms.
+
 **Attributes on level-up** (`WizardryAttributeChanges`, `WizardryPeekAge` in game-rules.json, default 25): for each level gained and each of Strength, I.Q., Piety, Vitality, Agility and Luck there is a 75% chance it changes. Roll 0 to (2 x WizardryPeekAge) - 1. If age is higher than the roll the attribute loses 1 (at 18 there is only a 1 in 6 chance of losing 1); if age is lower and the attribute is under 18 it gains 1. A Vitality below 3 kills the character. The inn shows "YOU GAINED/LOST ..." for each change.
 
 **Luck and saving throws** (`WizardryRules.SaveLuckBonus`, applied in `CharacterSavingThrowService.GetSaveTarget`): Luck modifies every saving throw of a Wizardry character (death, petrification, wand, breath and spell), not only saves vs spells. The bonus lowers the number the d20 must reach: Luck 3-4 gives -1 (worse, the number goes up by 1), Luck 5-14 gives 0, Luck 15-16 gives +1, Luck 17 gives +2 and Luck 18 gives +3 (the save target never drops below 1). Each save in combat writes a log line such as "Luck 17 gives +2 to the save, so the target changes from 12 to 10", plus the usual roll against the target.
@@ -136,10 +139,16 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 
 Agility never changes Armor Class in Wizardry (in AD&D, Dexterity does).
 
-Dispell Undead: a successful dispell makes the undead vanish (counts as defeated, but a dispelled monster gives no XP; in AD&D dispelled/disintegrated undead still give XP); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
+Dispell Undead: a Priest dispells at his level; a Lord can dispell from level 4, as a Priest three levels lower (`WizardryIdentification.LordDispellLevel`). A successful dispell makes the undead vanish (counts as defeated, but a dispelled monster gives no XP; in AD&D dispelled/disintegrated undead still give XP); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
 
 Fled monsters: a monster that runs away (Run ability, panic, banished) gives no XP in Wizardry; in AD&D players still get its XP (`CombatSession.MonsterGivesXp`).
+
+Montino: when an encountered priest casts Montino, each party member must save vs spell or be silenced for 2-5 rounds and cannot cast spells (`CombatSession.SilencedPartyRounds`, applied in `CombatResolver.ApplyWizardrySpellToCharacter`; the silence ticks down at the end of each round).
 
+Bishop spell points: a Bishop's mage and priest spell points always follow the effective caster levels (mage = half level, priest = a third), also after equipping or inspecting rings (`Character.RefreshRingWizardryEffects` no longer uses the full level for a Bishop). A level 5 Bishop therefore has mage circle 1 only, not circle 3.
+
+Monster XP: a Wizardry monster is worth its fixed XP value from the monster list (chapter 13); its hit points never change it. In AD&D the XP is base value plus XP per hit point (`CombatSession.GetMonsterXp`).
+
 Monster fleeing: in Wizardry only monsters with the "May Run Away" (Run) ability ever flee. Monsters are demoralized when the party's total level exceeds the combined morale of all monster groups (each group's morale = monster level * number of healthy monsters in it). While demoralized, each monster with Run has a 65% chance per turn to flee (`CombatSession.AreMonstersDemoralized`, `CombatResolver.TryResolveWizardryRun`). This replaces the earlier "flees at 25% HP" rule.
 
 Matu (Priest 2) lowers the whole party's AC by 2 and Bamatu (Priest 3) by 4, and Kalki (Priest 1) by 1, for the rest of the battle only. Repeated casts add up. Implemented as `CombatSession.WizardryPartyArmorClassBonus`, applied when monsters attack.
@@ -157,12 +166,18 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Priest, Bishop, Mage and Thief stay at 1.
 - Many weapons have a swing count (Sword +1 = 2, Sword +2 = 3, Blade Cusinart = 4, Dagger of Speed = 7). It is a minimum: attacks = the higher of the class attacks and the weapon swings, never the sum.
 
-## 5c. Unidentified items
+## 5c. Ninja critical hit
+
+- After a successful melee hit a Ninja has a 2% x level chance (maximum 50%) of a critical (`WizardryRules.NinjaCriticalChancePercent`). The critical is an instant kill (decapitation), not extra damage.
+- The monster avoids it when (monster level + 10) >= a roll of 0-34 (`WizardryRules.MonsterAvoidsNinjaCritical`); monsters above about level 24 can never be critically hit. Monster level is its hit dice.
+
+## 5d. Unidentified items
 
 - Items found in the Proving Grounds start unidentified and show a generic name (Sword, Staff, Armour, Shield, Helm, Potion...) marked with "?". Swings and other stats still apply.
 - A Bishop can identify an item from the Identify action. Chance = Bishop level x 5% + 10% (max 100%). A failure leaves the item unidentified and the Bishop may try again.
 - Each attempt first risks a cursed item being equipped by accident: 35% - 3% per level (0% from level 12). It only matters if the item is cursed; the Bishop then wears it.
 - The shop identifies any item for half its value (A)ppraise Items).
+- A cursed item cannot be unequipped (or sold while worn) until it is uncursed. The shop lifts the curse on an equipped item for half the item's value (R) Remove curse, `WizardryIdentification.ShopUncurseCost`); the Remove Curse spell also works.
 
 ## 5d. Who can use which item
 

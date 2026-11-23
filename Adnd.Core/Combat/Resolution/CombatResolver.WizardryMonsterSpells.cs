@@ -12,7 +12,8 @@ public sealed partial class CombatResolver
         WizardryEffectKind.Damage,
         WizardryEffectKind.Heal,
         WizardryEffectKind.Sleep,
-        WizardryEffectKind.Kill
+        WizardryEffectKind.Kill,
+        WizardryEffectKind.Silence
     ];
 
     /// <summary>Wizardry monsters cast Wizardry spells of their listed circle and lower; AD&D monsters never reach this.</summary>
@@ -119,6 +120,17 @@ public sealed partial class CombatResolver
                 target.CurrentHitPoints = 0;
                 target.AddStatus(CharacterStatus.Dead);
                 events.Add(new CombatEvent($"{target.Name} is slain by {spell.Name}! {saveText}"));
+                break;
+            case WizardryEffectKind.Silence:
+                if (saved)
+                {
+                    events.Add(new CombatEvent($"{target.Name} resists {spell.Name} {saveText}."));
+                    break;
+                }
+
+                var silenceRounds = _dice.Roll(4) + 1;
+                session.SetPartySilenced(target.Name, silenceRounds);
+                events.Add(new CombatEvent($"{target.Name} is silenced for {silenceRounds} round(s) and cannot cast spells {saveText}."));
                 break;
         }
     }

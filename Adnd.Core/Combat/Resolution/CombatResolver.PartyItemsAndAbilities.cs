@@ -34,6 +34,12 @@ public sealed partial class CombatResolver
             return;
         }
 
+        if (session.IsPartySilenced(caster.Name))
+        {
+            events.Add(new CombatEvent($"{caster.Name} is silenced and cannot cast spells."));
+            return;
+        }
+
         if (caster.BreakRingInaudibilityForSpeaking())
             events.Add(new CombatEvent($"{caster.Name} speaks and loses ring inaudibility."));
 
@@ -1518,6 +1524,9 @@ public sealed partial class CombatResolver
 
     private static int GetEffectiveTurnUndeadLevel(Character actor)
     {
+        if (Adnd.Core.Wizardry.WizardryIdentification.IsLord(actor))
+            return Adnd.Core.Wizardry.WizardryIdentification.LordDispellLevel(actor.Level);
+
         var clericLevel = actor.Classes.Contains(CharacterClass.Cleric)
             ? actor.GetClassLevel(CharacterClass.Cleric)
             : 0;

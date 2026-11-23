@@ -791,15 +791,15 @@ public sealed class CombatCoordinator
                 };
             }
 
-            int xpPerHp = first.XPValuePerHitPoint;
-            if (xpPerHp == 0)
+            int xpPerHp = first.Source == Sources.Wizardry ? 0 : first.XPValuePerHitPoint;
+            if (xpPerHp == 0 && first.Source != Sources.Wizardry)
                 xpPerHp = xpCalculator.GetHpXp(first.HitDice, 1);
             int totalHp = monsters.Sum(m => m.MaxHitPoints);
 
             var noXpCount = monsters.Count(m => !session.MonsterGivesXp(m));
             int totalXp = monsters
                 .Where(session.MonsterGivesXp)
-                .Sum(m => Math.Max(0, m.Template.BaseXPValue + xpPerHp * m.MaxHitPoints));
+                .Sum(m => CombatSession.GetMonsterXp(m, xpPerHp));
 
             return new
             {
@@ -4569,7 +4569,7 @@ public sealed class CombatCoordinator
                     ? $" ({string.Join("/", c.Classes.Select(cls => cls.ToDisplayString()))})"
                     : string.Empty;
                 return $"{i + 1}) {c.Name}{classText}";
-            })) + Environment.NewLine + Environment.NewLine + (allowLeaveOption ? "B)ack   L)eave" : "B)ack"),
+            })) + Environment.NewLine + Environment.NewLine + (allowLeaveOption ? "B)ack   L↵eave" : "B)ack"),
             TextAlign = ContentAlignment.TopLeft,
             BackColor = Color.Black,
             ForeColor = GameRulesProvider.Current.DefaultColor,

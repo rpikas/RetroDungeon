@@ -9057,10 +9057,74 @@ Show clearly how many points are left to distribute and when all points are dist
 
 Update this excel when rules changes. Implement that you can only be ninja after class change
 
-In adnd and wizardry when creating a charater and asking for name, do not create a charater with name unknown instead inform that name is mandatory 
+In adnd and wizardry when creating a character and asking for name, do not create a character with name unknown instead inform that name is mandatory 
 and ask for name again.
 
 In wizardry let luck affect the save throw for everything, not just for magic. write in the manual how much luck affects the save throw. 
 also when rolling save throw write that in the log and how it is affected by luck.
 48,1
+___
+in adnd number of hp should affect xp but in wizardry it should not
+
+in wizardry if a encountered priest cast a montino characters in party save vs spell or they will be scilenced
+
+my bishop turned level 5 and got level 3 magic user spells points, the spell points should correspond with the level of spells he knows
+
+in wizardry and adnd when clicking on a character in training grounds then inspect it. 
+and if changing character class it should be possible to click on the class to change to it, enter key should be pressed automaticly when 
+clicking on a class to change to it.
+
+when changing class in wizardy stats are droped to the race minimun and you do not get the chanse to distribute bonus points.
+
+For Wizardry I: Proving Grounds of the Mad Overlord, a "critical hit" is not extra damage like in many RPGs. A successful Ninja critical is an 
+instant kill (decapitation). The enemy dies regardless of remaining HP.
+
+The original game code formulas indicate:
+
+If a Ninja hits successfully, the chance to trigger a critical is 2% × Ninja Level.
+This is capped at 50%. So:
+Level 1 Ninja = 2%
+Level 10 Ninja = 20%
+Level 20 Ninja = 40%
+Level 25+ Ninja = 50% (cap)
+
+However, monsters get a saving roll against the instant kill:
+
+Monster avoids the critical if (Monster Level + 10) is greater than or equal to a random roll from 0–34.
+As a result, high-level monsters become increasingly resistant.
+Monsters above about Level 23 cannot be critically hit at all under the original formula.
+
+So for a Level 10 Ninja fighting a low-level monster:
+
+Hit the monster.
+20% chance to trigger a critical.
+Monster then gets its resistance check.
+If it fails that check, it dies instantly.
+
+In short:
+
+Ninja Level	Critical Chance After a Hit
+1	2%
+5	10%
+10	20%
+15	30%
+20	40%
+25+	50% (max)
+
+And the critical is not bonus damage, it's an instant kill effect.
+
+in wizardy good can not party with evil. Neutral can party with any alignment
+
+when I try to change class I get the message no other class accepts the radical base stats, but evauating what class you can change 
+to should be done before updating the stats
+
+in wizardy when quipping an item with an alignemetn that is wrong then it bocomes cursed.
+These wizardry items got alignment
+Evil Sword +3
+Evil Short Sword +3
+Evil Chain Mail +2
+Evil Shield +3
+Helm +2 (Evil)
+Evil Plate +3
+Neutral Plate Mail +2
 

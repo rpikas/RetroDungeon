@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Adnd.Core.Characters;
 using Adnd.Core.Diagnostics;
@@ -9,21 +9,38 @@ namespace Adnd.Game;
 
 public sealed class AdventuresInnMenu
 {
-    private sealed record RoomOption(char Key, string Name, int CostPerWeek, int HealPerDay);
+    private sealed record RoomOption(char Key, string Name, int CostPerWeek, int HealPerWeek);
     private enum PaymentMode
     {
         Individual,
         PooledPartyGold
     }
 
-    private static readonly RoomOption[] Rooms =
+    private static readonly RoomOption[] AdndRooms =
     [
-        new('A', "THE STABLES", 0, 1),
-        new('B', "A COT", 10, 2),
-        new('C', "ECONOMY ROOMS", 50, 6),
-        new('D', "MERCHANT SUITES", 200, 20),
-        new('E', "THE ROYAL SUITE", 500, 40)
+        new('A', "THE STABLES", 0, 7),
+        new('B', "A COT", 10, 14),
+        new('C', "ECONOMY ROOMS", 50, 42),
+        new('D', "MERCHANT SUITES", 200, 140),
+        new('E', "THE ROYAL SUITE", 500, 280)
     ];
+
+    private static readonly RoomOption[] WizardryRooms = Adnd.Core.Wizardry.WizardryRules.InnRooms
+        .Select((r, i) => new RoomOption((char)('A' + i), r.Name, r.FeePerWeek, r.HitPointsPerWeek))
+        .ToArray();
+
+    private static RoomOption[] Rooms =>
+        Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry ? WizardryRooms : AdndRooms;
+
+    private static void WriteRoomLines()
+    {
+        foreach (var r in Rooms)
+        {
+            var fee = r.CostPerWeek == 0 ? "(FREE!)" : $"{r.CostPerWeek} GP/WEEK";
+            var heal = r.HealPerWeek == 0 ? "No healing." : $"Heals {r.HealPerWeek} HP per week.";
+            Console.WriteLine($"{r.Key})  {r.Name} {fee} {heal}");
+        }
+    }
 
     private readonly PartyRepository _partyRepository = new("Data/Party");
     private readonly CharacterRepository _characterRepository = new("Data/Characters");
@@ -61,7 +78,7 @@ public sealed class AdventuresInnMenu
             }
 
             Console.WriteLine("A)ll");
-            Console.WriteLine("L)eave the inn without resting");
+            Console.WriteLine("L↵eave the inn without resting");
             Console.Write("Choice: ");
 
             var whoKey = Console.ReadKey(true);
@@ -134,13 +151,9 @@ public sealed class AdventuresInnMenu
             Console.Clear();
             Console.WriteLine("=== ADVENTURES INN ===");
             Console.WriteLine("Choose room for the whole party:");
-            Console.WriteLine("A)  THE STABLES (FREE!) Heals 1 HP per day.");
-            Console.WriteLine("B)  A COT.  10 GP/WEEK Heals 2 HP per day.");
-            Console.WriteLine("C)  ECONOMY ROOMS.  50 GP/WEEK Heals 6 HP per day.");
-            Console.WriteLine("D)  MERCHANT SUITES.  200 GP/WEEK Heals 20 HP per day.");
-            Console.WriteLine("E)  THE ROYAL SUITE.  500 GP/WEEK Heals 40 HP per day.");
+            WriteRoomLines();
             Console.WriteLine("S)plit gold among party members");
-            Console.WriteLine("L)eave the inn without resting.");
+            Console.WriteLine("L↵eave the inn without resting.");
             Console.Write("Choice: ");
 
             var key = Console.ReadKey(true);
@@ -170,14 +183,10 @@ public sealed class AdventuresInnMenu
             Console.Clear();
             Console.WriteLine("=== ADVENTURES INN ===");
             Console.WriteLine("Choose room:");
-            Console.WriteLine("A)  THE STABLES (FREE!) Heals 1 HP per day.");
-            Console.WriteLine("B)  A COT.  10 GP/WEEK Heals 2 HP per day.");
-            Console.WriteLine("C)  ECONOMY ROOMS.  50 GP/WEEK Heals 6 HP per day.");
-            Console.WriteLine("D)  MERCHANT SUITES.  200 GP/WEEK Heals 20 HP per day.");
-            Console.WriteLine("E)  THE ROYAL SUITE.  500 GP/WEEK Heals 40 HP per day.");
+            WriteRoomLines();
             if (allowPooling)
                 Console.WriteLine($"P)ool gold (pay from party gold): {(pooled ? "ON" : "OFF")}");
-            Console.WriteLine("L)eave the inn without resting.");
+            Console.WriteLine("L↵eave the inn without resting.");
             Console.Write("Room: ");
 
             var key = Console.ReadKey(true);
@@ -205,8 +214,8 @@ public sealed class AdventuresInnMenu
                 return;
 
             var hpMissing = Math.Max(0, c.MaxHitPoints - c.CurrentHitPoints);
-            var healPerWeek = Math.Max(1, room.HealPerDay * 7);
-            var weeksNeeded = hpMissing <= 0 ? 0 : (int)Math.Ceiling(hpMissing / (double)healPerWeek);
+            var healPerWeek = room.HealPerWeek;
+            var weeksNeeded = hpMissing <= 0 || healPerWeek <= 0 ? 0 : (int)Math.Ceiling(hpMissing / (double)healPerWeek);
             var totalCost = room.CostPerWeek * weeksNeeded;
             var usePooledPartyGold = paymentMode == PaymentMode.PooledPartyGold && selectedMembers.Count == 1;
 
@@ -240,7 +249,7 @@ public sealed class AdventuresInnMenu
 
                 RuleApplicationInfo.Publish(
                     $"Adventures Inn: {c.Name} selected {room.Name}. Cost {totalCost} gp pooled from party ({room.CostPerWeek} gp/week x {weeksNeeded} week(s)). " +
-                    $"Healing rate {room.HealPerDay} HP/day. HP {beforeHp}->{c.CurrentHitPoints}. Party GP {beforePartyGold}->{afterPartyGold}. " +
+                    $"Healing rate {room.HealPerWeek} HP/week. HP {beforeHp}->{c.CurrentHitPoints}. Party GP {beforePartyGold}->{afterPartyGold}. " +
                     $"Age advanced by {daysAgedPooled} day(s): {beforeAge}y {beforeAgeDays}d -> {c.Age}y {c.AgeDays}d.");
                 continue;
             }
@@ -270,7 +279,7 @@ public sealed class AdventuresInnMenu
 
             RuleApplicationInfo.Publish(
                 $"Adventures Inn: {c.Name} selected {room.Name}. Cost {totalCost} gp ({room.CostPerWeek} gp/week x {weeksNeeded} week(s)). " +
-                $"Healing rate {room.HealPerDay} HP/day. HP {beforeHpSelf}->{c.CurrentHitPoints}. GP {beforeGoldSelf}->{c.GoldPieces}. " +
+                $"Healing rate {room.HealPerWeek} HP/week. HP {beforeHpSelf}->{c.CurrentHitPoints}. GP {beforeGoldSelf}->{c.GoldPieces}. " +
                 $"Age advanced by {daysAged} day(s): {beforeAgeSelf}y {beforeAgeDaysSelf}d -> {c.Age}y {c.AgeDays}d.");
         }
     }

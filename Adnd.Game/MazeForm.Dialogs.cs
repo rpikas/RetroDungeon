@@ -1,4 +1,4 @@
-using Adnd.Core.Characters;
+﻿using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Config;
@@ -409,7 +409,7 @@ public sealed partial class MazeForm
         }
 
         int mid = framePanel.ClientSize.Width / 2;
-        framePanel.Controls.Add(Link("L)eave them alone", mid - 220, DialogResult.No));
+        framePanel.Controls.Add(Link("L↵eave them alone", mid - 220, DialogResult.No));
         framePanel.Controls.Add(Link("A)ttack", mid + 20, DialogResult.Yes));
     }
 

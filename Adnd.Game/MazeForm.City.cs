@@ -1,4 +1,4 @@
-using Adnd.Core.Config;
+﻿using Adnd.Core.Config;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -47,14 +47,17 @@ public sealed partial class MazeForm
         }
     }
 
-    // The key a menu line answers to: "T)raining", "A)  Stables", "B. Item", "[C] Item", "L<-eave".
+    // The key a menu line answers to: "T)raining", "A)  Stables", "B. Item", "[C] Item", "L↵eave".
     private static string? MenuKeyOf(string line)
     {
-        var match = System.Text.RegularExpressions.Regex.Match(line,         @"^\s*(?:\[([A-Za-z0-9])\]|([A-Za-z0-9])\)|(\d)\.\s|([A-Za-z])<-|(\d)\s{2,}\S)");
+        if (line.TrimStart().StartsWith("↵)", StringComparison.Ordinal))
+            return "\r";
+
+        var match = System.Text.RegularExpressions.Regex.Match(line, @"^\s*(?:\[([A-Za-z0-9])\]|([A-Za-z0-9])\)|(\d)\.\s|([A-Za-z])(?:<-|↵)|(\d)\s{2,}\S)");
         if (!match.Success)
             return null;
 
-                for (var g = 1; g <= 5; g++)
+        for (var g = 1; g <= 5; g++)
         {
             if (match.Groups[g].Success)
                 return match.Groups[g].Value;
@@ -144,7 +147,7 @@ public sealed partial class MazeForm
             {
                 if (text.StartsWith("S)hare", StringComparison.Ordinal))
                     TermConsole.EnqueueText("S");
-                else if (text.StartsWith("L)eave", StringComparison.Ordinal))
+                else if (text.StartsWith("L↵eave", StringComparison.Ordinal) || text.StartsWith("L)eave", StringComparison.Ordinal))
                     TermConsole.EnqueueText(TermConsole.ClickableNumberDigits == 1 ? "L" : "L\r");
                 return;
             }

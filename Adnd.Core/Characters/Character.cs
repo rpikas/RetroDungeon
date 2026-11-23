@@ -489,7 +489,11 @@ public class Character
             return;
 
         var magicUserLevel = Math.Max(1, GetClassLevel(CharacterClass.MagicUser));
-        var baseSlots = SpellProgression.GetSlotsPerDay(SpellClass.MagicUser, magicUserLevel);
+        // A Wizardry Bishop casts as a Mage of half his level, not at his full level.
+        var baseSlots = Adnd.Core.Wizardry.WizardryIdentification.IsBishop(this)
+            ? SpellProgression.GetWizardryBishopTracks(Level).FirstOrDefault(t => t.SpellClass == SpellClass.MagicUser).SlotsPerDay
+                ?? new List<int>()
+            : SpellProgression.GetSlotsPerDay(SpellClass.MagicUser, magicUserLevel);
         var desiredSlots = new List<int>(baseSlots);
         var profileKeyApplied = string.Empty;
 

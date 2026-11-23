@@ -1,4 +1,4 @@
-// The vocabulary the viewer speaks, and the keys each word stands for.
+﻿// The vocabulary the viewer speaks, and the keys each word stands for.
 //
 // These ids are the contract. They name INTENTIONS, not keys, for two reasons: the viewer should
 // not have to know that turning left happens to be "A" here, and a headset offering a pointer or a
@@ -104,13 +104,13 @@ public static class ViewerCommands
         ["pool"] = Keys.P,
         ["memorize"] = Keys.M,
         ["cast"] = Keys.C,
-        ["close"] = Keys.L,          // L<-eave, as the console prints it
+        ["close"] = Keys.L,          // L↵eave, as the console prints it
     };
 
     /// <summary>The Church of Chant. Its own two services, plus the way out.</summary>
     public static readonly IReadOnlyDictionary<string, Keys> Temple = new Dictionary<string, Keys>
     {
-        ["back"] = Keys.L,               // L<-eave, as the console prints it
+        ["back"] = Keys.L,               // L↵eave, as the console prints it
         ["cancel"] = Keys.Escape,
     };
 
@@ -126,7 +126,7 @@ public static class ViewerCommands
 
     /// <summary>
     /// Gilgamash's, where the party is picked. The roster is pointed at rather than named, so these are the
-    /// standing three; L<-eave is the console's own letter for the menu this replaces.
+    /// standing three; L↵eave is the console's own letter for the menu this replaces.
     /// </summary>
     public static readonly IReadOnlyDictionary<string, Keys> Tavern = new Dictionary<string, Keys>
     {

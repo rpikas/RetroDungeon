@@ -82,6 +82,25 @@ public sealed class CombatSession
     public Dictionary<string, int> DrainBloodDieSides { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, string> DrainBloodEffectNames { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> AsleepPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+    // Wizardry Montino: silenced party members cannot cast spells.
+    public Dictionary<string, int> SilencedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    public void SetPartySilenced(string characterName, int rounds)
+    {
+        if (rounds <= 0)
+            SilencedPartyRounds.Remove(characterName);
+        else
+            SilencedPartyRounds[characterName] = rounds;
+    }
+
+    public bool IsPartySilenced(string characterName) =>
+        SilencedPartyRounds.TryGetValue(characterName, out var rounds) && rounds > 0;
+
+    public void TickPartySilenced()
+    {
+        foreach (var name in SilencedPartyRounds.Keys.ToList())
+            SetPartySilenced(name, SilencedPartyRounds[name] - 1);
+    }
     public Dictionary<string, int> WebbedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, int> ConfusedPartyRounds { get; } = new(StringComparer.OrdinalIgnoreCase);
     public HashSet<string> NauseaExposedMonsterGroups { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -109,6 +128,15 @@ public sealed class CombatSession
             .Where(m => m.IsAlive && !m.HasFled)
             .Sum(m => Math.Max(1, m.InstanceHitDice));
         return partyLevel > monsterMorale;
+    }
+
+    // AD&D: base XP plus XP per hit point rolled. Wizardry: the fixed base XP only; HP never matters.
+    public static int GetMonsterXp(MonsterInstance monster, int xpPerHitPoint)
+    {
+        if (monster.Template.Source == Adnd.Core.Config.Sources.Wizardry)
+            return Math.Max(0, monster.Template.BaseXPValue);
+
+        return Math.Max(0, monster.Template.BaseXPValue + xpPerHitPoint * monster.MaxHitPoints);
     }
 
     // Wizardry only: monsters removed by Dispell Undead give no XP.

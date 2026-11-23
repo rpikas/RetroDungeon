@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Adnd.Data.Items;
 using Adnd.Data.Party;
@@ -170,13 +170,14 @@ public class ShopMenu
             var menu = new List<string> { "B)uy Items", "S)ell Items", "E)quip Items", "U)nequip Items" };
             if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
                 menu.Add("A)ppraise Items (identify for half value)");
+            menu.Add("R) Remove curse from equipped item (half value)");
             menu.Add("P)ool Gold");
             menu.Add("C)hoose a Different Shopper");
             if (startIndex + numberOfItems < items.Count) menu.Add("N)ext items in shop");
             if (startIndex > 0) menu.Add("G)o to previous items in shop");
             menu.Add("I)nitial items in shop");
             menu.Add("F)ilter items in shop");
-            menu.Add("L<-eave");
+            menu.Add("L↵eave");
             if (_viewer.Enabled)
                 menu.Add("(or trade from the table)");
 
@@ -212,6 +213,7 @@ public class ShopMenu
             else if (key == ConsoleKey.E) EquipItems(equip: true);
             else if (key == ConsoleKey.U) EquipItems(equip: false);
             else if (key == ConsoleKey.A && Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry) IdentifyItems();
+            else if (key == ConsoleKey.R) UncurseItems();
             else if (key == ConsoleKey.P) PoolGoldToCurrentShopper();
             else if (key == ConsoleKey.C) SelectShopper();
             else if (key == ConsoleKey.N)
@@ -238,6 +240,51 @@ public class ShopMenu
             else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter) break;
 
         }
+    }
+
+    private void UncurseItems()
+    {
+        var party = _partyRepo.Load();
+        var shopper = GetCurrentShopper(party) ?? ResolvePartyCharacters(party).FirstOrDefault();
+        if (shopper == null)
+        {
+            Console.WriteLine("No party members.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var cursed = shopper.Equipment.Values.Where(i => i != null && i.IsCursed).Select(i => i!).Distinct().ToList();
+
+        Console.Clear();
+        Console.WriteLine($"=== REMOVE CURSE ===\nShopper: {shopper.Name} - Gold: {shopper.GoldPieces} gp\n");
+        if (cursed.Count == 0)
+        {
+            Console.WriteLine("No equipped item is cursed.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        for (int i = 0; i < cursed.Count; i++)
+            Console.WriteLine($"{i + 1}. {cursed[i].DisplayName} (uncurse for {WizardryIdentification.ShopUncurseCost(cursed[i])} gp)");
+
+        Console.Write("\nChoose # (Enter to leave): ");
+        if (!int.TryParse((Console.ReadLine() ?? string.Empty).Trim(), out var idx) || idx < 1 || idx > cursed.Count)
+            return;
+
+        var item = cursed[idx - 1];
+        var cost = WizardryIdentification.ShopUncurseCost(item);
+        if (shopper.GoldPieces < cost)
+        {
+            Console.WriteLine($"{shopper.Name} cannot afford {cost} gp.");
+            Console.ReadKey(true);
+            return;
+        }
+
+        shopper.GoldPieces -= cost;
+        EquipmentManager.RemoveCurse(item);
+        _charRepo.Save(shopper);
+        Console.WriteLine($"\nThe curse on {item.Name} is lifted (paid {cost} gp). It can be unequipped now.");
+        Console.ReadKey(true);
     }
 
     private void IdentifyItems()
@@ -528,7 +575,7 @@ public class ShopMenu
             Console.WriteLine($"{i + 1}. {member.Name} ({cls}) - GP: {member.GoldPieces}");
         }
 
-        Console.WriteLine("\nL)eave");
+        Console.WriteLine("\nL↵eave");
         Console.Write("Choose # or L: ");
         Console.ClickableNumberDigits = 1;
         int? sel = null;
@@ -695,6 +742,13 @@ public class ShopMenu
                     return;
                 }
 
+                if (equippedItem.IsCursed)
+                {
+                    Console.WriteLine($"{equippedItem.Name} is cursed and cannot be taken off. Have the curse removed first.");
+                    Console.ReadKey(true);
+                    return;
+                }
+
                 EquipmentManager.Unequip(seller, slot);
 
                 Console.WriteLine($"Unequipped {equippedItem.Name} to inventory. Sell for {sellPriceText}? (Y/N)");
@@ -764,7 +818,7 @@ public class ShopMenu
                 if (c.Inventory.Count == 0)
                 {
                     Console.WriteLine("\nInventory empty.");
-                    Console.WriteLine("\nL)eave");
+                    Console.WriteLine("\nL↵eave");
                     Console.ReadKey(true);
                     break;
                 }
@@ -776,7 +830,7 @@ public class ShopMenu
             }
 
             Console.WriteLine("\nU)nequip item");
-            Console.WriteLine("L<-eave");
+            Console.WriteLine("L↵eave");
 
             var key = Console.ReadKey(true).Key;
 
@@ -805,6 +859,13 @@ public class ShopMenu
                     continue;
 
                 var slot = equipped[sel.Value - 1].Key;
+                if (equipped[sel.Value - 1].Value!.IsCursed)
+                {
+                    Console.WriteLine("\nThat item is cursed and cannot be taken off until the curse is removed.");
+                    Console.ReadKey(true);
+                    continue;
+                }
+
                 if (EquipmentManager.Unequip(c, slot))
                     _charRepo.Save(c);
             }

@@ -1,4 +1,4 @@
-using Adnd.Core.Characters;
+﻿using Adnd.Core.Characters;
 using Adnd.Core.Items;
 using Adnd.Data.Characters;
 using Adnd.Data.Party;
@@ -20,7 +20,7 @@ public static class EquipmentHelper
         for (int i = 0; i < c.Inventory.Count; i++)
             Console.WriteLine($"{i + 1}. {c.Inventory[i].DisplayName}");
 
-        Console.WriteLine("\nL)eave");
+        Console.WriteLine("\nL↵eave");
         Console.Write("\nChoose # (or Enter to cancel): ");
         Console.ClickableNumberDigits = 2;
         string? input;

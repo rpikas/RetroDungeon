@@ -50,7 +50,17 @@ public static class WizardryClassChange
         {
             var state = c.Spellcasting.FirstOrDefault(s => s.SpellClass == old.SpellClass);
             if (state == null)
+            {
+                // The new class has no slots for this spell class, but the spells stay known.
+                c.Spellcasting.Add(new Adnd.Core.Spells.SpellcastingState
+                {
+                    SpellClass = old.SpellClass,
+                    SlotsPerDay = old.SlotsPerDay.Select(_ => 0).ToList(),
+                    SlotsUsed = old.SlotsPerDay.Select(_ => 0).ToList(),
+                    KnownSpellIds = old.KnownSpellIds.ToList()
+                });
                 continue;
+            }
             foreach (var id in old.KnownSpellIds.Where(id => !state.KnownSpellIds.Contains(id)))
                 state.KnownSpellIds.Add(id);
         }

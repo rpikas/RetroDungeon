@@ -194,7 +194,7 @@ internal sealed class LairTreasureChestDialog : Form
 
         _publish?.Invoke(new ViewerPrompt(
             "choice",
-            "Treasure chest: O)pen, C)ast Find Traps, L)eave, I)nspect, B)ack",
+            "Treasure chest: O)pen, C)ast Find Traps, L↵eave, I)nspect, B)ack",
             null,
             new[]
             {

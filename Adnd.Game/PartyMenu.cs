@@ -152,7 +152,7 @@ public class PartyMenu
             Console.WriteLine("I)nspect Member");
             Console.WriteLine("C)hange order of Member");
             Console.WriteLine("T)avern on the tabletop");
-            Console.WriteLine("L<-eave");
+            Console.WriteLine("L↵eave");
 
             var key = Console.ReadKey(true).Key;
 
@@ -326,7 +326,7 @@ public class PartyMenu
                 Console.WriteLine(c.LayOnHandsUsedToday ? "L)ay on Hands (used today)" : "L)ay on Hands");
             if (c.IsMonk() && c.GetMonkLevel() >= 7)
                 Console.WriteLine(c.MonkBodyHealUsedToday ? "H)eal Body (used today)" : "H)eal Body");
-            Console.WriteLine(c.IsPaladin() ? "↵)Leave" : "L<-eave");
+            Console.WriteLine(c.IsPaladin() ? "↵)Leave" : "L↵eave");
 
             var key = Console.ReadKey(true).Key;
 
@@ -967,10 +967,15 @@ public class PartyMenu
             return;
 
         var slot = equipped[idx - 1].Key;
-        if (EquipmentManager.Unequip(c, slot))
+        if (equipped[idx - 1].Value!.IsCursed)
         {
-            _repo.Save(c);
+            Console.WriteLine("That item is cursed and cannot be taken off until the curse is removed.");
+            Console.ReadKey(true);
+            return;
         }
+
+        if (EquipmentManager.Unequip(c, slot))
+            _repo.Save(c);
     }
 
     private void TradeAction(Character c, Party party)
@@ -1332,6 +1337,13 @@ public class PartyMenu
                     return;
                 }
 
+                if (!WizardryRules.CanJoinParty(chosen, roster.Where(c => party.Members.Contains(c.Name))))
+                {
+                    Console.WriteLine("Good and Evil characters cannot be in the same party.");
+                    Console.ReadKey(true);
+                    return;
+                }
+
                 party.Members.Add(chosen.Name);
                 _partyRepo.Save(party);
                 // No confirmation message; return directly to party menu
@@ -1442,7 +1454,7 @@ public class PartyMenu
 
             Console.WriteLine();
             Console.WriteLine("R)eorder");
-            Console.WriteLine("L<-eave");
+            Console.WriteLine("L↵eave");
 
             var key = Console.ReadKey(true).Key;
             if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter)

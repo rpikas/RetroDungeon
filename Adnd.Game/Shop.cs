@@ -289,6 +289,9 @@ public static class Shop
             if (equipped == null)
                 return $"{item.Name} is not in {equippedIn.Value} after all.";
 
+            if (equipped.IsCursed)
+                return $"{equipped.Name} is cursed and cannot be taken off. Have the curse removed first.";
+
             EquipmentManager.Unequip(seller, equippedIn.Value);
             seller.Inventory.Remove(equipped);
         }

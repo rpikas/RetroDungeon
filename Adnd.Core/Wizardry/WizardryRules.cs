@@ -210,6 +210,36 @@ public static class WizardryRules
         return total > currentMax ? total : currentMax + 1;
     }
 
+    /// <summary>Wizardry parties: Good and Evil cannot be in the same party; Neutral gets along with everyone.</summary>
+    public static bool AlignmentsCanShareParty(WizardryAlignment a, WizardryAlignment b)
+        => a == WizardryAlignment.Neutral || b == WizardryAlignment.Neutral || a == b;
+
+    public static bool CanJoinParty(Character candidate, IEnumerable<Character> members)
+    {
+        if (candidate.Ruleset != Adnd.Core.Config.Ruleset.Wizardry)
+            return true;
+
+        var alignment = WizardryClassChange.AlignmentOf(candidate);
+        return members.All(m => m.Ruleset != Adnd.Core.Config.Ruleset.Wizardry
+            || AlignmentsCanShareParty(alignment, WizardryClassChange.AlignmentOf(m)));
+    }
+
+    /// <summary>A Wizardry Ninja critical hit chance after a successful hit: 2% per level, capped at 50%.</summary>
+    public static int NinjaCriticalChancePercent(int ninjaLevel) => Math.Clamp(ninjaLevel * 2, 0, 50);
+
+    /// <summary>A monster avoids the Ninja critical when (monster level + 10) is at least a 0..34 roll.</summary>
+    public static bool MonsterAvoidsNinjaCritical(int monsterLevel, int roll0To34) => monsterLevel + 10 >= roll0To34;
+
+    /// <summary>Wizardry inn rooms (name, fee per week in gp, hit points healed per week).</summary>
+    public static readonly (string Name, int FeePerWeek, int HitPointsPerWeek)[] InnRooms =
+    [
+        ("THE STABLES", 0, 0),
+        ("BARRACKS", 10, 1),
+        ("DOUBLE OCCUPANCY", 50, 3),
+        ("PRIVATE ROOM", 200, 7),
+        ("THE ROYAL SUITE", 500, 10)
+    ];
+
     /// <summary>Bonus points to distribute at creation: 95% 5-9, 4.75% 15-19, 0.25% 25-29.</summary>
     public static int RollBonusPoints(Random random)
     {

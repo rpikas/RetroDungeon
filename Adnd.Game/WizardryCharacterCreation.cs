@@ -81,34 +81,28 @@ public class WizardryCharacterCreation
         Console.Clear();
         Console.WriteLine($"=== CHANGE CLASS: {character.Name} ===\n");
         Console.WriteLine("Level returns to 1 and XP to 0 (HP and known spells are kept),");
-        Console.WriteLine("stats return to racial base plus new bonus points, and the");
+        Console.WriteLine("stats return to the racial base (no bonus points), and the");
         Console.WriteLine("character ages 252, 304 or 356 weeks.\n");
         Console.Write("Continue? (Y/N): ");
         if (Console.ReadKey(true).Key != ConsoleKey.Y)
             return;
 
         var baseStats = WizardryRules.RaceBaseStats(character.Race);
-        var bonus = WizardryRules.RollBonusPoints(Random.Shared);
-        var alignment = WizardryClassChange.AlignmentOf(character);
-        RuleApplicationInfo.Publish($"Wizardry class change: {character.Name} has {bonus} bonus points to assign.");
-
-        WizardryStats stats;
-        List<WizardryClass> targets;
-        WizardryClass? picked;
-        while (true)
+        var current = new WizardryStats(
+            character.Abilities.Strength, character.Abilities.Intelligence, character.Abilities.Wisdom,
+            character.Abilities.Constitution, character.Abilities.Dexterity, character.Abilities.Charisma);
+        var targets = WizardryClassChange.EligibleTargets(character, current).ToList();
+        if (targets.Count == 0)
         {
-            stats = AllocatePoints(character.Race,             alignment, baseStats, bonus, out picked, classChange: true);
-            targets = WizardryClassChange.EligibleTargets(character, stats).ToList();
-            if (targets.Count > 0)
-                break;
-
-            Console.WriteLine("\nNo other class accepts these stats. Assign the points again.");
+            Console.WriteLine("\nNo other class accepts your current stats.");
+            Console.WriteLine("Press any key...");
             Console.ReadKey(true);
+            return;
         }
 
         Console.Clear();
-        var newClass = picked is { } chosen && targets.Contains(chosen) ? chosen : ChooseClass(targets);
-        var weeks = WizardryClassChange.Apply(character, newClass, stats, Random.Shared);
+        var newClass = ChooseClass(targets);
+        var weeks = WizardryClassChange.Apply(character, newClass, baseStats, Random.Shared);
         _repo.Save(character);
 
         RuleApplicationInfo.Publish($"Wizardry class change: {character.Name} became a {newClass}, level 1, aged {weeks} weeks.");
@@ -172,7 +166,7 @@ public class WizardryCharacterCreation
             if (cls.Success && column >= 24)
             {
                 if (Done())
-                    TermConsole.EnqueueText(cls.Groups[1].Value);
+                    TermConsole.EnqueueText(cls.Groups[1].Value + "*");
                 return true;
             }
 
@@ -328,7 +322,18 @@ public class WizardryCharacterCreation
             Console.WriteLine($"{(char)('A' + i)}) {eligible[i]}");
 
         Console.Write("Class: ");
-        var index = InputHelper.ReadLetterIndex(eligible.Count);
+        TermConsole.ClickHandler = (text, _) =>
+        {
+            var m = System.Text.RegularExpressions.Regex.Match(text, @"^([A-H])\) ");
+            if (!m.Success)
+                return false;
+
+            TermConsole.EnqueueText(m.Groups[1].Value);
+            return true;
+        };
+        int? index;
+        try { index = InputHelper.ReadLetterIndex(eligible.Count); }
+        finally { TermConsole.ClickHandler = null; }
         return eligible[index ?? 0];
     }
 

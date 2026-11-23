@@ -58,7 +58,7 @@ public class CityMenu
                 : $"U) Dual-class (unavailable: {dualClassAvailability.Reason})");
             menu.Add("D)elete Character");
             menu.Add("X) Delete All Characters");
-            menu.Add("L<-eave");
+            menu.Add("L↵eave");
 
             // With a picture the options sit to the left of it, below the character list.
             if (TermConsole.Host != null && TermConsole.CityPicture != null)
@@ -69,7 +69,21 @@ public class CityMenu
                 foreach (var line in menu) Console.WriteLine(line);
             }
 
-            var key = Console.ReadKey(true).Key;
+            // Clicking a character row inspects that character.
+            TermConsole.ClickHandler = (text, _) =>
+            {
+                var row = System.Text.RegularExpressions.Regex.Match(text, @"^\s*(\d{1,2})\s+\S");
+                if (!row.Success || !int.TryParse(row.Groups[1].Value, out var n) || n < 1 || n > all.Count)
+                    return false;
+
+                var digits = row.Groups[1].Value;
+                TermConsole.EnqueueText("I" + (digits.Length < 2 ? digits + "\r" : digits));
+                return true;
+            };
+
+            ConsoleKey key;
+            try { key = Console.ReadKey(true).Key; }
+            finally { TermConsole.ClickHandler = null; }
 
             if (key == ConsoleKey.C) CreateCharacter();
             else if (key == ConsoleKey.I) InspectCharacter(all);
@@ -1054,7 +1068,7 @@ public class CityMenu
             }
 
             Console.WriteLine("\nD)rop item");
-            Console.WriteLine("L<-eave inventory");
+            Console.WriteLine("L↵eave inventory");
             var key = Console.ReadKey(true).Key;
 
             if (key == ConsoleKey.L || key == ConsoleKey.Enter || key == ConsoleKey.Escape)

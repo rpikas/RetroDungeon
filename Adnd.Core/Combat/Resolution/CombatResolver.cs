@@ -511,7 +511,10 @@ public sealed partial class CombatResolver
             ClearBoneDevilEffects();
         }
         if (session.Outcome == CombatOutcome.InProgress)
+        {
+            session.TickPartySilenced();
             session.RoundNumber++;
+        }
 
         return events;
     }

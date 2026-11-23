@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -593,7 +593,7 @@ public sealed class EncounterForm : Form
             _viewerControl = ViewerControlPump.Start(this, Adnd.Game.Combat.LairTreasureChestDialog.Vocabulary, HandleChestKey);
             ViewerPromptChanged?.Invoke(new ViewerPrompt(
                 "choice",
-                IsWizardryStyle ? "Treasure chest: O)pen, C)alfo, L)eave, I)nspect, B)ack" : "Treasure chest: O)pen, C)ast Find Traps, L)eave, I)nspect, B)ack",
+                IsWizardryStyle ? "Treasure chest: O)pen, C)alfo, L↵eave, I)nspect, B)ack" : "Treasure chest: O)pen, C)ast Find Traps, L↵eave, I)nspect, B)ack",
                 null,
                 new[]
                 {
@@ -1909,6 +1909,12 @@ public sealed class EncounterForm : Form
         }
 
         var castable = GetCastableCombatSpells(caster);
+        if (_session?.IsPartySilenced(caster.Name) == true)
+        {
+            SayOnBoth("Spell", $"{caster.Name} is silenced and cannot cast spells.");
+            return;
+        }
+
         if (castable.Count == 0)
         {
             SayOnBoth("Spell", $"{caster.Name} has no castable spells.");
@@ -2224,6 +2230,9 @@ public sealed class EncounterForm : Form
 
     private static bool CanUseDispellUndead(Character c)
     {
+        if (Adnd.Core.Wizardry.WizardryIdentification.IsLord(c))
+            return Adnd.Core.Wizardry.WizardryIdentification.LordDispellLevel(c.Level) >= 1;
+
         var clericLevel = c.Classes.Contains(CharacterClass.Cleric) ? c.GetClassLevel(CharacterClass.Cleric) : 0;
         var paladinLevel = c.Classes.Contains(CharacterClass.Paladin) ? c.GetClassLevel(CharacterClass.Paladin) : 0;
         var paladinAsCleric = paladinLevel >= 3 ? paladinLevel - 2 : 0;

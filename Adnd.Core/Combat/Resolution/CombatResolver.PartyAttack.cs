@@ -600,6 +600,9 @@ public sealed partial class CombatResolver
                 }
             }
 
+            if (!useRanged && TryApplyWizardryNinjaCritical(member, target, events))
+                break;
+
             if (wasNaturalTwenty
                 && IsSwordPlusTwoNineLivesStealer(mainHand)
                 && TryResolveNineLivesStealerEffect(mainHand, target, events))

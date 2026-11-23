@@ -79,7 +79,7 @@ public class TempleMenu
             }
             if (!isWiz)
                 menu.Add("E) Restoration (lost level, feeblemind)");
-            menu.Add("L<-eave");
+            menu.Add("L↵eave");
             if (_viewer.Enabled && !nobodyNeedsHelp)
                 menu.Add("(or click whoever needs tending on the table)");
 

@@ -101,6 +101,42 @@ public sealed partial class CombatResolver
         return 0;
     }
 
+    // A hitting Wizardry Ninja has 2% per level (max 50%) to decapitate; the monster avoids it when (level + 10) >= 0..34.
+    private bool TryApplyWizardryNinjaCritical(Character ninja, MonsterInstance target, List<CombatEvent> events)
+    {
+        if (!Adnd.Core.Wizardry.WizardryIdentification.IsNinja(ninja) || !target.IsAlive)
+            return false;
+
+        var chancePercent = Adnd.Core.Wizardry.WizardryRules.NinjaCriticalChancePercent(ninja.Level);
+        var roll = _dice.Roll(100);
+        var triggered = roll <= chancePercent;
+        RuleApplicationInfo.Publish("Wizardry", "Ninja critical",
+            $"{ninja.Name} critical chance vs {target.DisplayName}",
+            "A Ninja hit has a 2% x level chance (max 50%) to decapitate; the critical is an instant kill, not extra damage.",
+            "1", "100", roll.ToString(),
+            triggered ? $"Rolled {roll} <= {chancePercent}%: critical." : $"Rolled {roll} > {chancePercent}%: normal hit.");
+        if (!triggered)
+            return false;
+
+        var monsterLevel = Math.Max(0, target.InstanceHitDice);
+        var resistRoll = _dice.Roll(35) - 1;
+        var avoided = Adnd.Core.Wizardry.WizardryRules.MonsterAvoidsNinjaCritical(monsterLevel, resistRoll);
+        RuleApplicationInfo.Publish("Wizardry", "Ninja critical",
+            $"{target.DisplayName} resists the critical",
+            "The monster avoids the critical when (monster level + 10) is at least a roll of 0-34.",
+            "0", "34", resistRoll.ToString(),
+            avoided ? $"{monsterLevel} + 10 >= {resistRoll}: avoided." : $"{monsterLevel} + 10 < {resistRoll}: decapitated.");
+        if (avoided)
+        {
+            events.Add(new CombatEvent($"{ninja.Name} scores a critical hit on {target.DisplayName}, but it avoids the killing blow."));
+            return false;
+        }
+
+        target.CurrentHitPoints = 0;
+        events.Add(new CombatEvent($"{ninja.Name} decapitates {target.DisplayName}!"));
+        return true;
+    }
+
     private void TryApplyWizardryDecapitate(MonsterInstance monster, Character target, List<CombatEvent> events)
     {
         if (!HasSpecialAbility(monster, "Decapitate") || !IsAlive(target))

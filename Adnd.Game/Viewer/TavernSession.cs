@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Adnd.Core.Characters;
+using Adnd.Core.Wizardry;
 using Adnd.Data.Characters;
 using Adnd.Data.Party;
 
@@ -117,6 +118,7 @@ public sealed class TavernSession
         if (!Roster().TryGetValue(name, out var character)) return false;
         if (character.HasStatus(CharacterStatus.Out)) return false;
         if (Party().Count >= PartySlots) return false;   // full; the table shows six slots and no more
+        if (!WizardryRules.CanJoinParty(character, Party())) return false;
 
         // Appended, so the order figurines are picked up in is the order they march in.
         _party.Members.Add(character.Name);
@@ -134,13 +136,17 @@ public sealed class TavernSession
     /// </summary>
     private bool PickStrongest()
     {
-        var chosen = _characters.GetAll()
-            .Where(c => !IsUnfitForDuty(c))
-            .OrderByDescending(Strength)
-            .ThenBy(c => c.Name, StringComparer.OrdinalIgnoreCase)
-            .Take(PartySlots)
-            .Select(c => c.Name)
-            .ToList();
+        var picked = new List<Character>();
+        foreach (var c in _characters.GetAll()
+                     .Where(c => !IsUnfitForDuty(c))
+                     .OrderByDescending(Strength)
+                     .ThenBy(c => c.Name, StringComparer.OrdinalIgnoreCase))
+        {
+            if (picked.Count >= PartySlots) break;
+            if (WizardryRules.CanJoinParty(c, picked)) picked.Add(c);
+        }
+
+        var chosen = picked.Select(c => c.Name).ToList();
 
         if (chosen.Count == 0) return false;
         if (chosen.SequenceEqual(_party.Members, StringComparer.OrdinalIgnoreCase)) return false;
@@ -205,7 +211,7 @@ public sealed class TavernSession
         // everywhere else here is that only legal options are ever drawn.
         if (!full)
         {
-            foreach (var c in Bench())
+            foreach (var c in Bench().Where(b => WizardryRules.CanJoinParty(b, inParty)))
                 options.Add(new ViewerPromptOption("toggle:" + c.Name, c.Name, ViewerIds.Character(c.Name)));
         }
 
