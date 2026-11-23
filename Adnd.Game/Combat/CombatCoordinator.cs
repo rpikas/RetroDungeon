@@ -256,7 +256,7 @@ public sealed class CombatCoordinator
             var monsterTemplate = aliveMonsters.FirstOrDefault()?.Template;
             using var encounterForm = hasMultipleGroups
                 ? new EncounterForm(session, dungeonLevel)
-                : new EncounterForm(monsterName, aliveMonsters.Count, asleepMonsters, heldMonstersLegacy, entangledMonsters, panickedMonsters,
+                : new EncounterForm(aliveMonsters.FirstOrDefault()?.ShownName ?? monsterName, aliveMonsters.Count, asleepMonsters, heldMonstersLegacy, entangledMonsters, panickedMonsters,
                     fearedMonsters, turnedMonsters, blindedMonsters, confusedMonsters, stunnedMonsters, slowedMonsters, paralyzedMonsters, unconsciousMonsters,
                     session.Party, session.RoundNumber, dungeonLevel, monsterTemplate, session);
             //    public EncounterForm(string monsterName, int monsterCount, int asleepMonsterCount, int heldMonsterCount, int entangledMonsterCount, int panickedMonsterCount,

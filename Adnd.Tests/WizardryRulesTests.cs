@@ -57,6 +57,27 @@ public class WizardryRulesTests
 
         Assert.False(Dispels(3));
         Assert.True(Dispels(4));
+
+        bool BishopDispels(int level)
+        {
+            var bishop = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(10, 14, 14, 12, 12, 12), WizardryAlignment.Good, WizardryClass.Bishop, new Random(1));
+            bishop.EnsureClassProgressions();
+            bishop.Level = level;
+            foreach (var p in bishop.ClassProgressions) p.Level = level;
+            bishop.MaxHitPoints = bishop.CurrentHitPoints = 40;
+            var skeleton = new Adnd.Core.Combat.Sessions.MonsterInstance(
+                new Adnd.Core.Monsters.Monster { Name = "Skeleton", HitDice = 1, ArmorClass = 10, Type = Adnd.Core.Monsters.MonsterType.Undead }, 0);
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([bishop], [skeleton]);
+            var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+            {
+                [bishop.Name] = Adnd.Core.Combat.Actions.CombatActionType.DispellUndead
+            };
+            new Adnd.Core.Combat.Resolution.CombatResolver(new MaxDice()).ResolveRound(session, actions);
+            return session.DispelledMonsters.Count == 1;
+        }
+
+        Assert.False(BishopDispels(3));
+        Assert.True(BishopDispels(4));
     }
 
     [Fact]
@@ -226,6 +247,31 @@ public class WizardryRulesTests
         public int Roll(int sides) => Math.Min(value, sides);
         public int RollMany(int sides, int count) => Roll(sides) * count;
         public int GetNumberOfSuccesses(int numberOfTries, float probabilityEachTry) => 0;
+    }
+
+    [Fact]
+    public void Monsters_stay_unidentified_until_a_character_identifies_the_group()
+    {
+        var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(10, 14, 14, 12, 12, 12), WizardryAlignment.Good, WizardryClass.Bishop, new Random(1));
+        c.Level = 8;
+        c.MaxHitPoints = c.CurrentHitPoints = 40;
+        Assert.Equal(c.Abilities.Intelligence + c.Abilities.Wisdom + 8, WizardryRules.MonsterIdentifyChancePercent(c));
+
+        var template = new Adnd.Core.Monsters.Monster { Name = "Bubbly Slime", UnidentifiedName = "Animal", HitDice = 1, ArmorClass = 10 };
+        var monster = new Adnd.Core.Combat.Sessions.MonsterInstance(template, 1);
+        Assert.Equal("Animal #1", monster.DisplayName);
+
+        var session = new Adnd.Core.Combat.Sessions.CombatSession([c], [monster]);
+        var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+        {
+            [c.Name] = Adnd.Core.Combat.Actions.CombatActionType.Parry
+        };
+        new Adnd.Core.Combat.Resolution.CombatResolver(new FixedValueDice(100)).ResolveRound(session, actions);
+        Assert.False(monster.IsIdentified);
+
+        new Adnd.Core.Combat.Resolution.CombatResolver(new LowDice()).ResolveRound(session, actions);
+        Assert.True(monster.IsIdentified);
+        Assert.Equal("Bubbly Slime #1", monster.DisplayName);
     }
 
     [Fact]
@@ -734,6 +780,25 @@ public class WizardryRulesTests
         var result = svc.ApplyPendingLevels(fighter);
         Assert.True(fighter.Level > 1);
         Assert.True(result.NewLevel > result.OldLevel);
+    }
+
+    [Fact]
+    public void Parry_lowers_armor_class_by_two_so_monsters_hit_less_often_in_wizardry()
+    {
+        int Hits(Adnd.Core.Combat.Actions.CombatActionType action)
+        {
+            var hero = new Character { Name = "H", Ruleset = Ruleset.Wizardry, Level = 1, MaxHitPoints = 1000, CurrentHitPoints = 1000, ArmorClass = 2, Damage = "1d4" };
+            var template = new Adnd.Core.Monsters.Monster { Name = "Orc", HitDice = 5, ArmorClass = 10, Source = Adnd.Core.Config.Sources.Wizardry };
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([hero], [new Adnd.Core.Combat.Sessions.MonsterInstance(template, 0)]);
+            var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType> { [hero.Name] = action };
+            // THAC0 16: AC 2 needs 14 and hits on a constant 14; AC 0 (parrying) needs 16 and misses.
+            new Adnd.Core.Combat.Resolution.CombatResolver(new FixedValueDice(14)).ResolveRound(session, actions);
+            return hero.CurrentHitPoints < 1000 ? 1 : 0;
+        }
+
+        Assert.Equal(1, Hits(Adnd.Core.Combat.Actions.CombatActionType.Fight));
+        Assert.Equal(0, Hits(Adnd.Core.Combat.Actions.CombatActionType.Parry));
+        Assert.Equal(2, WizardryRules.ParryArmorClassBonus);
     }
 
     [Fact]

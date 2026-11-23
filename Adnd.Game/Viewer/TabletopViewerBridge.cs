@@ -1,4 +1,4 @@
-// Optional bridge to the Wizardry tabletop viewer, which draws the crawl as physical miniatures
+﻿// Optional bridge to the Wizardry tabletop viewer, which draws the crawl as physical miniatures
 // on a table (1 inch per dungeon cell, print-scale figures) instead of a first-person view.
 //
 // Two rules hold this together:
@@ -435,7 +435,7 @@ public sealed class TabletopViewerBridge
         foreach (var m in monsters)
         {
             byGroup.TryGetValue(m.GroupId, out var acc);
-            var name = acc.Name ?? m.Name;
+            var name = acc.Name ?? m.ShownName;
             var asleep = acc.Asleep + (m.IsAlive && m.HasStatus(MonsterStatus.Asleep) ? 1 : 0);
             byGroup[m.GroupId] = (name, acc.Total + 1, acc.Alive + (m.IsAlive ? 1 : 0), asleep);
         }

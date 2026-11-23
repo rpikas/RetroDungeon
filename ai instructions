@@ -9129,3 +9129,63 @@ Evil Plate +3
 Neutral Plate Mail +2
 
 when finding a item in the dungon it should be random who finds it. When I tested only the first person finds items is that a coninsidece?
+
+in wizardy only 
+the original Wizardry I, Parry reduces your Armor Class (AC) by 2 for that combat round only.
+The chance for a monster to hit you in melee is:
+Hit Chance = (Monster Level + Your AC) × 5%
+Since parrying lowers your AC by 2, it reduces the monster's hit chance by:
+2 × 5% = 10 percentage points
+Examples
+Situation	Hit Chance
+Monster Lv 5 vs AC 2	(5 + 2) × 5% = 35%
+Monster Lv 5 vs AC 0 (after Parry)	(5 + 0) × 5% = 25%
+So parrying reduced the chance to be hit from 35% to 25%, which is about a 29% reduction in incoming hits (10 percentage points less)
+
+In Wizardry I, a Bishop gains the ability to Dispel undead at Level 4, when they gain access to priest spellcasting.
+
+in wizardy only first do not show the real name for monsters when encoutners.
+use the Unidentified tag in the MOnsters/Wizardy.json before the monsters are identified
+every combat round, for every character:
+Each round each character has (IQ + Piety + Level)% chance of identifying one group of monsters correctly.
+And in the monster section:
+Each character has (IQ + Piety + Level)% chance to identify monsters correctly.
+Example: One character
+Suppose your Bishop has:
+IQ = 16
+Piety = 18
+Level = 8
+
+Then:
+16 + 18 + 8 = 42%
+So each round he has a 42% chance to identify a monster group.
+The probability that the group is identified by a given round is:
+Round	Chance Revealed By End Of Round
+1	42.0%
+2	66.4%
+3	80.5%
+4	88.7%
+5	93.4%
+That's because the check repeats each round if it hasn't succeeded yet.
+Example: Strong character
+A Level 13 Bishop with IQ 18 and Piety 18 has:
+18 + 18 + 13 = 49% chance per round.
+Round	Chance Revealed By End Of Round
+1	49.0%
+2	74.0%
+3	86.7%
+4	93.2%
+5	96.5%
+Whole party
+The interesting part is that every character gets a check.
+If your party had six characters each with a modest 25% chance:
+Chance one character fails = 75%
+Chance all six fail = 0.75⁶ ≈ 17.8%
+Chance at least one succeeds = 82.2% in the first round
+So in a mid-level party monster identities are often revealed almost immediately.
+If you're recreating Wizardry's mechanics in RetroDungeon, the authentic implementation is:
+Plain Text
+Every combat round:
+For each conscious character:
+if Random(0..99) < IQ + Piety + Level
+identify one monster group

@@ -1527,8 +1527,8 @@ public sealed partial class CombatResolver
 
     private static int GetEffectiveTurnUndeadLevel(Character actor)
     {
-        if (Adnd.Core.Wizardry.WizardryIdentification.IsLord(actor))
-            return Adnd.Core.Wizardry.WizardryIdentification.LordDispellLevel(actor.Level);
+        if (Adnd.Core.Wizardry.WizardryIdentification.HybridDispellLevel(actor) is { } hybridLevel)
+            return hybridLevel;
 
         var clericLevel = actor.Classes.Contains(CharacterClass.Cleric)
             ? actor.GetClassLevel(CharacterClass.Cleric)

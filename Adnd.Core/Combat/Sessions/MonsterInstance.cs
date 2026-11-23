@@ -26,6 +26,7 @@ public sealed class MonsterInstance
         CurrentHitPoints = rolledHitPoints;
         BaseArmorClass = template.ArmorClass;
         IsInLair = true;
+        IsIdentified = string.IsNullOrWhiteSpace(template.UnidentifiedName);
     }
 
     private static int RollHitPoints(int hitDice, int hitDiceType = 8, int extraHitPoints = 0)
@@ -58,8 +59,17 @@ public sealed class MonsterInstance
     public bool HasFled { get; set; }
     public bool IsAlive => CurrentHitPoints > 0;
 
-    public string DisplayName => $"{Name} #{Index}";
-    public string DisplayNameWithGroup => $"{Name} #{Index} (Group {GroupId})";
+    /// <summary>Wizardry monsters stay unidentified (shown by their Unidentified name) until the party identifies the group.</summary>
+    public bool IsIdentified { get; set; }
+
+    public bool CanBeUnidentified => !string.IsNullOrWhiteSpace(Template.UnidentifiedName)
+        && !string.Equals(Template.UnidentifiedName.Trim(), Name?.Trim(), StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>The name the party sees: the real name once identified, otherwise the Unidentified name.</summary>
+    public string ShownName => IsIdentified || !CanBeUnidentified ? Name : Template.UnidentifiedName.Trim();
+
+    public string DisplayName => $"{ShownName} #{Index}";
+    public string DisplayNameWithGroup => $"{ShownName} #{Index} (Group {GroupId})";
 
     public bool HasStatus(MonsterStatus status)
     {

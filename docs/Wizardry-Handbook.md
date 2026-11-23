@@ -139,7 +139,7 @@ Spells are tagged Wizardry and kept apart from AD&D spells. Characters and monst
 
 Agility never changes Armor Class in Wizardry (in AD&D, Dexterity does).
 
-Dispell Undead: a Priest dispells at his level; a Lord can dispell from level 4, as a Priest three levels lower (`WizardryIdentification.LordDispellLevel`). A successful dispell makes the undead vanish (counts as defeated, but a dispelled monster gives no XP; in AD&D dispelled/disintegrated undead still give XP); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
+Dispell Undead: a Priest dispells at his level; a Lord or Bishop can dispell from level 4 (when priest spellcasting starts), as a Priest three levels lower (`WizardryIdentification.LordDispellLevel`, `BishopDispellLevel`). A successful dispell makes the undead vanish (counts as defeated, but a dispelled monster gives no XP; in AD&D dispelled/disintegrated undead still give XP); a failure leaves it completely unaffected. There is no "turned for N rounds" state (that is AD&D only).
 
 Fled monsters: a monster that runs away (Run ability, panic, banished) gives no XP in Wizardry; in AD&D players still get its XP (`CombatSession.MonsterGivesXp`).
 
@@ -165,6 +165,15 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Samurai, Lord and Ninja: 1 attack until level 7, then level / 4 (L8-11: 2, L12-15: 3 ... L28-31: 7).
 - Priest, Bishop, Mage and Thief stay at 1.
 - Many weapons have a swing count (Sword +1 = 2, Sword +2 = 3, Blade Cusinart = 4, Dagger of Speed = 7). It is a minimum: attacks = the higher of the class attacks and the weapon swings, never the sum.
+
+## 5b-2. Parry
+
+- Parry lowers the character's Armor Class by 2 for that combat round only (`WizardryRules.ParryArmorClassBonus`). A monster's melee hit chance is (monster level + AC) x 5%, so parrying cuts it by 10 percentage points (level 5 vs AC 2: 35% becomes 25%).
+
+## 5c-0. Monster identification
+
+- Wizardry monsters are shown by their `Unidentified` name (Monsters\Wizardry.json, e.g. "Man in Robes") in the encounter dialog, group lists and combat log until the group is identified.
+- At the end of every combat round each conscious character has (IQ + Piety + Level)% to identify one still-hidden monster group (`WizardryRules.MonsterIdentifyChancePercent`). A level 8 character with IQ 16 and Piety 18 has 42% per round; the checks repeat each round, and every party member gets a check. Identified groups show their real name from then on.
 
 ## 5c. Ninja critical hit
 

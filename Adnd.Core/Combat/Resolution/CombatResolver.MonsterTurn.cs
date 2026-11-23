@@ -820,7 +820,8 @@ public sealed partial class CombatResolver
         var invulnerabilityAcBonus = target.HasActivePotionInvulnerability
             ? target.PotionInvulnerabilityArmorClassBonus
             : 0;
-        var targetAc = (target.ArmorClass - invulnerabilityAcBonus) + (parrying.Contains(target.Name) ? 2 : 0);
+        var parryAcChange = !parrying.Contains(target.Name) ? 0 : target.Ruleset == Ruleset.Wizardry ? -Adnd.Core.Wizardry.WizardryRules.ParryArmorClassBonus : 2;
+        var targetAc = (target.ArmorClass - invulnerabilityAcBonus) + parryAcChange;
         targetAc -= session.WizardryPartyArmorClassBonus;
         if (session.WizardryCasterArmorClassBonus.TryGetValue(target.Name, out var wizardryCasterBonus))
             targetAc -= wizardryCasterBonus;

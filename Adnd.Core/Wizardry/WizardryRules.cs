@@ -210,6 +210,13 @@ public static class WizardryRules
         return total > currentMax ? total : currentMax + 1;
     }
 
+    /// <summary>Wizardry: parrying lowers the character's AC by 2 (10 percentage points fewer hits) for that round only.</summary>
+    public const int ParryArmorClassBonus = 2;
+
+    /// <summary>Wizardry: each round every conscious character has (IQ + Piety + Level)% to identify one monster group.</summary>
+    public static int MonsterIdentifyChancePercent(Character c)
+        => Math.Clamp(c.Abilities.Intelligence + c.Abilities.Wisdom + c.Level, 0, 100);
+
     /// <summary>Wizardry parties: Good and Evil cannot be in the same party; Neutral gets along with everyone.</summary>
     public static bool AlignmentsCanShareParty(WizardryAlignment a, WizardryAlignment b)
         => a == WizardryAlignment.Neutral || b == WizardryAlignment.Neutral || a == b;

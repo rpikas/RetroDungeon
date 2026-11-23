@@ -217,7 +217,7 @@ public sealed class EncounterForm : Form
             if (monstersInGroup.Count == 0)
                 return null;
 
-            var name = monstersInGroup.First().Name;
+            var name = monstersInGroup.First().ShownName;
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var entangledCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Entangled));
@@ -263,7 +263,7 @@ public sealed class EncounterForm : Form
                 if (monstersInGroup.Count == 0)
                     return null;
 
-                var name = monstersInGroup.First().Name;
+                var name = monstersInGroup.First().ShownName;
                 var count = monstersInGroup.Count;
                 bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
                 var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
@@ -289,7 +289,7 @@ public sealed class EncounterForm : Form
             var monstersInGroup = session.GetAliveMonstersByGroup(groupId).ToList();
             if (monstersInGroup.Count == 0)
                 return null;
-            var name = monstersInGroup.First().Name;
+            var name = monstersInGroup.First().ShownName;
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
             var heldCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Paralyzed));
@@ -2230,8 +2230,8 @@ public sealed class EncounterForm : Form
 
     private static bool CanUseDispellUndead(Character c)
     {
-        if (Adnd.Core.Wizardry.WizardryIdentification.IsLord(c))
-            return Adnd.Core.Wizardry.WizardryIdentification.LordDispellLevel(c.Level) >= 1;
+        if (Adnd.Core.Wizardry.WizardryIdentification.HybridDispellLevel(c) is { } hybridLevel)
+            return hybridLevel >= 1;
 
         var clericLevel = c.Classes.Contains(CharacterClass.Cleric) ? c.GetClassLevel(CharacterClass.Cleric) : 0;
         var paladinLevel = c.Classes.Contains(CharacterClass.Paladin) ? c.GetClassLevel(CharacterClass.Paladin) : 0;
@@ -2282,7 +2282,7 @@ public sealed class EncounterForm : Form
         {
             var groupId = groups[i];
             var monstersInGroup = _session.GetAliveMonstersByGroup(groupId).ToList();
-            var name = monstersInGroup.First().Name;
+            var name = monstersInGroup.First().ShownName;
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
             groupDescriptions.Add($"{i + 1}. {groupId}: {count} {name}" + (asleepCount > 0 ? $" ({asleepCount} asleep)" : ""));
@@ -2322,7 +2322,7 @@ public sealed class EncounterForm : Form
         {
             var groupId = groups[i];
             var monstersInGroup = _session.GetAliveMonstersByGroup(groupId).ToList();
-            var name = monstersInGroup.First().Name;
+            var name = monstersInGroup.First().ShownName;
             var count = monstersInGroup.Count;
             var asleepCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Asleep));
             groupDescriptions.Add($"{i + 1}. {groupId}: {count} {name}" + (asleepCount > 0 ? $" ({asleepCount} asleep)" : ""));
@@ -3289,7 +3289,7 @@ public sealed class EncounterForm : Form
                 var groupMonsters = _session.GetMonstersByGroup(action.TargetGroupId).ToList();
                 if (groupMonsters.Any())
                 {
-                    var monsterName = groupMonsters.First().Name;
+                    var monsterName = groupMonsters.First().ShownName;
                     baseAction += $" -> {monsterName}";
                 }
             }

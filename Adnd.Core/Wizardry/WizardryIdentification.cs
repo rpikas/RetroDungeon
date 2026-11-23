@@ -68,6 +68,13 @@ public static class WizardryIdentification
     /// <summary>A Wizardry Lord dispells undead from level 4, as a Priest three levels lower.</summary>
     public static int LordDispellLevel(int lordLevel) => Math.Max(0, lordLevel - 3);
 
+    /// <summary>A Wizardry Bishop dispells undead from level 4 (when priest spellcasting starts), as a Priest three levels lower.</summary>
+    public static int BishopDispellLevel(int bishopLevel) => Math.Max(0, bishopLevel - 3);
+
+    /// <summary>The Priest level a Wizardry Lord or Bishop turns undead at, or null for other characters.</summary>
+    public static int? HybridDispellLevel(Character c)
+        => IsLord(c) ? LordDispellLevel(c.Level) : IsBishop(c) ? BishopDispellLevel(c.Level) : null;
+
     public static int IdentifyChancePercent(int bishopLevel) => Math.Clamp(bishopLevel * 5 + 10, 0, 100);
 
     public static int CursedEquipChancePercent(int bishopLevel) => Math.Clamp(35 - bishopLevel * 3, 0, 100);

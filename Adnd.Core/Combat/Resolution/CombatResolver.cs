@@ -512,11 +512,42 @@ public sealed partial class CombatResolver
         }
         if (session.Outcome == CombatOutcome.InProgress)
         {
+            RollMonsterIdentification(session, events);
             session.TickPartySilenced();
             session.RoundNumber++;
         }
 
         return events;
+    }
+
+    private void RollMonsterIdentification(CombatSession session, List<CombatEvent> events)
+    {
+        foreach (var member in session.AliveParty.ToList())
+        {
+            if (member.Ruleset != Adnd.Core.Config.Ruleset.Wizardry
+                || member.HasStatus(CharacterStatus.Paralyzed)
+                || member.HasStatus(CharacterStatus.Asleep))
+                continue;
+
+            var hidden = session.AliveMonsters
+                .Where(m => !m.IsIdentified && m.CanBeUnidentified)
+                .Select(m => m.GroupId)
+                .Distinct()
+                .ToList();
+            if (hidden.Count == 0)
+                return;
+
+            var chance = Adnd.Core.Wizardry.WizardryRules.MonsterIdentifyChancePercent(member);
+            if (_dice.Roll(100) > chance)
+                continue;
+
+            var groupId = hidden[_dice.Roll(hidden.Count) - 1];
+            var group = session.Monsters.Where(m => m.GroupId == groupId).ToList();
+            var shown = group[0].ShownName;
+            foreach (var m in group)
+                m.IsIdentified = true;
+            events.Add(new CombatEvent($"{member.Name} identifies the {shown} as {group[0].Name}!"));
+        }
     }
 
     private int GetAttacksThisRound(float attacksPerRound, int roundNumber)
