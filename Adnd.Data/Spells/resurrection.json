@@ -7,7 +7,7 @@
   "RangeType": "Ally",
   "Targeting": "Single",
   "TargetingScope": "SingleTarget",
-  "CastContext": "Both",
+  "CastContext": "Exploration",
   "EffectType": "Heal",
   "EffectDescription": "Restores one ally from ashes to full HP and reduces Constitution by 1. If system shock save fails, the target becomes Lost."
 }

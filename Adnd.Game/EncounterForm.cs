@@ -93,7 +93,7 @@ public sealed class EncounterForm : Form
 
         // Check if we should use Wizardry suffix
         bool useWizSuffix = monsterTemplate != null && ShouldUseWizardrySuffix(monsterTemplate);
-        _monsterImage = TryLoadMonsterImage(monsterName, dungeonLevel, useWizSuffix);
+        _monsterImage = TryLoadMonsterImage(monsterTemplate?.Name ?? monsterName, dungeonLevel, useWizSuffix);
 
         Text = "Encounter";
         StartPosition = FormStartPosition.CenterParent;
@@ -232,7 +232,7 @@ public sealed class EncounterForm : Form
             var unconsciousCount = monstersInGroup.Count(m => m.HasStatus(MonsterStatus.Unconscious));
 
             bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
-            var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
+            var image = TryLoadMonsterImage(monstersInGroup.First().Name, dungeonLevel, useWizSuffix);
             _monsterImages.Add((name, image));
 
             var statusBits = new List<string>();
@@ -266,7 +266,7 @@ public sealed class EncounterForm : Form
                 var name = monstersInGroup.First().ShownName;
                 var count = monstersInGroup.Count;
                 bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
-                var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
+                var image = TryLoadMonsterImage(monstersInGroup.First().Name, dungeonLevel, useWizSuffix);
                 _monsterImages.Add((name, image));
 
                 var statusBits = new List<string>();
@@ -308,7 +308,7 @@ public sealed class EncounterForm : Form
             bool useWizSuffix = ShouldUseWizardrySuffix(monstersInGroup.First().Template);
 
             // Load image for this monster type
-            var image = TryLoadMonsterImage(name, dungeonLevel, useWizSuffix);
+            var image = TryLoadMonsterImage(monstersInGroup.First().Name, dungeonLevel, useWizSuffix);
             _monsterImages.Add((name, image));
 
             var statusBits = new List<string>();

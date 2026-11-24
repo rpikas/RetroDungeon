@@ -39,14 +39,14 @@ public class WizardryRulesTests
         Assert.Equal(1, WizardryIdentification.LordDispellLevel(4));
         Assert.Equal(7, WizardryIdentification.LordDispellLevel(10));
 
-        bool Dispels(int level)
+        bool Dispels(int level, bool monstersSurprised = false)
         {
             var lord = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(15, 12, 12, 15, 14, 15), WizardryAlignment.Good, WizardryClass.Lord, new Random(1));
             lord.Level = level;
             lord.MaxHitPoints = lord.CurrentHitPoints = 40;
             var skeleton = new Adnd.Core.Combat.Sessions.MonsterInstance(
                 new Adnd.Core.Monsters.Monster { Name = "Skeleton", HitDice = 1, ArmorClass = 10, Type = Adnd.Core.Monsters.MonsterType.Undead }, 0);
-            var session = new Adnd.Core.Combat.Sessions.CombatSession([lord], [skeleton]);
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([lord], [skeleton]) { MonstersSurprisedRound1 = monstersSurprised };
             var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
             {
                 [lord.Name] = Adnd.Core.Combat.Actions.CombatActionType.DispellUndead
@@ -78,6 +78,8 @@ public class WizardryRulesTests
 
         Assert.False(BishopDispels(3));
         Assert.True(BishopDispels(4));
+
+        Assert.True(Dispels(4, monstersSurprised: true));
     }
 
     [Fact]
@@ -223,6 +225,27 @@ public class WizardryRulesTests
     }
 
     [Fact]
+    public void Monsters_that_surprise_the_party_do_not_cast_in_the_surprise_round()
+    {
+        bool Silenced(bool partySurprised)
+        {
+            var hero = new Character { Name = "H", Ruleset = Ruleset.Wizardry, Level = 1, MaxHitPoints = 100, CurrentHitPoints = 100, ArmorClass = 10, Damage = "1d4" };
+            var template = new Adnd.Core.Monsters.Monster { Name = "Priest", HitDice = 3, ArmorClass = 10, Source = Adnd.Core.Config.Sources.Wizardry };
+            template.SpecialAbilities.Add(new Adnd.Core.Monsters.MonsterSpecialAbility { Name = "Level 2 Priest spells", Description = "Level 2 Priest spells" });
+            var session = new Adnd.Core.Combat.Sessions.CombatSession([hero], [new Adnd.Core.Combat.Sessions.MonsterInstance(template, 0)]) { PartySurprisedRound1 = partySurprised };
+            var actions = new System.Collections.Generic.Dictionary<string, Adnd.Core.Combat.Actions.CombatActionType>
+            {
+                [hero.Name] = Adnd.Core.Combat.Actions.CombatActionType.Parry
+            };
+
+            new Adnd.Core.Combat.Resolution.CombatResolver(new FixedValueDice(2)).ResolveRound(session, actions);
+            return session.IsPartySilenced(hero.Name);
+        }
+
+        Assert.True(Silenced(false));
+        Assert.False(Silenced(true));
+    }
+    [Fact]
     public void Bishop_spell_points_follow_half_level_mage_circles_after_refresh()
     {
         var bishop = new Character { Name = "B", Ruleset = Ruleset.Wizardry, WizardryClass = WizardryClass.Bishop, Level = 5 };
@@ -272,6 +295,107 @@ public class WizardryRulesTests
         new Adnd.Core.Combat.Resolution.CombatResolver(new LowDice()).ResolveRound(session, actions);
         Assert.True(monster.IsIdentified);
         Assert.Equal("Bubbly Slime #1", monster.DisplayName);
+    }
+
+    [Fact]
+    public void Latumapic_reveals_all_hidden_monster_groups_in_the_battle()
+    {
+        var caster = new Character { Name = "Priest", Ruleset = Adnd.Core.Config.Ruleset.Wizardry, MaxHitPoints = 20, CurrentHitPoints = 20 };
+        var template = new Adnd.Core.Monsters.Monster { Name = "Bubbly Slime", UnidentifiedName = "Animal", HitDice = 1, ArmorClass = 10 };
+        var monster = new Adnd.Core.Combat.Sessions.MonsterInstance(template, 1);
+        var session = new Adnd.Core.Combat.Sessions.CombatSession([caster], [monster]);
+        var spell = Adnd.Core.Spells.WizardrySpells.All.Single(s => s.Name == "Latumapic");
+        Adnd.Core.Spells.Casting.SpellCastRequest Request(Adnd.Core.Combat.Sessions.CombatSession? s) => new()
+        {
+            Caster = caster,
+            SpellId = spell.Id,
+            Spell = spell,
+            Context = s == null ? Adnd.Core.Spells.Casting.SpellUseContext.Exploration : Adnd.Core.Spells.Casting.SpellUseContext.Combat,
+            CombatSession = s
+        };
+
+        var handler = new Adnd.Core.Spells.Casting.Handlers.WizardrySpellHandler();
+        Assert.False(handler.Resolve(Request(null)).Success);
+        Assert.False(monster.IsIdentified);
+        Assert.True(handler.Resolve(Request(session)).Success);
+        Assert.True(monster.IsIdentified);
+        Assert.Equal("Bubbly Slime #1", monster.DisplayName);
+    }
+
+    [Fact]
+    public void Kandi_reports_the_chosen_out_character_with_level_and_coordinates()
+    {
+        var spell = Adnd.Core.Spells.WizardrySpells.All.Single(s => s.Name == "Kandi");
+        Adnd.Core.Spells.WizardryDungeonPosition.Provider = () => "You are at (1,1) on dungeon level 1.";
+        try
+        {
+            var result = new Adnd.Core.Spells.Casting.Handlers.WizardrySpellHandler().Resolve(new Adnd.Core.Spells.Casting.SpellCastRequest
+            {
+                Caster = new Character { Name = "Priest", Ruleset = Adnd.Core.Config.Ruleset.Wizardry },
+                SpellId = spell.Id,
+                Spell = spell,
+                Context = Adnd.Core.Spells.Casting.SpellUseContext.Exploration,
+                LocateReport = "Bob is on dungeon level 3 at (4,7)."
+            });
+            Assert.Contains("Bob is on dungeon level 3 at (4,7).", result.Events);
+        }
+        finally { Adnd.Core.Spells.WizardryDungeonPosition.Provider = null; }
+    }
+
+    [Fact]
+    public void Kadorto_is_camp_only_and_a_failure_turns_dead_to_ashes_but_ashes_to_lost()
+    {
+        var kadorto = Adnd.Core.Spells.WizardrySpells.All.Single(s => s.Name == "Kadorto");
+        Assert.Equal(Adnd.Core.Spells.SpellCastContext.Exploration, kadorto.CastContext);
+
+        Character Failed(Adnd.Core.Characters.CharacterStatus start)
+        {
+            for (var seed = 0; seed < 200; seed++)
+            {
+                var target = new Character { Name = "T", Ruleset = Ruleset.Wizardry, MaxHitPoints = 30 };
+                target.Abilities.Constitution = 3;
+                target.AddStatus(start);
+                var result = new Adnd.Core.Spells.Casting.Handlers.WizardrySpellHandler().Resolve(new Adnd.Core.Spells.Casting.SpellCastRequest
+                {
+                    Caster = new Character { Name = "Priest", Ruleset = Ruleset.Wizardry },
+                    SpellId = kadorto.Id,
+                    Spell = kadorto,
+                    Context = Adnd.Core.Spells.Casting.SpellUseContext.Exploration,
+                    Rng = new Random(seed),
+                    Targets = new List<Adnd.Core.Spells.Casting.SpellCastTarget> { Adnd.Core.Spells.Casting.SpellCastTarget.Ally(target) },
+                    PartyTargets = new List<Character> { target }
+                });
+                if (result.Events.Any(e => e.Contains("fails"))) return target;
+            }
+            throw new InvalidOperationException("No failing roll found.");
+        }
+
+        var fromDead = Failed(Adnd.Core.Characters.CharacterStatus.Dead);
+        Assert.True(fromDead.HasStatus(Adnd.Core.Characters.CharacterStatus.Ashes));
+        Assert.False(fromDead.HasStatus(Adnd.Core.Characters.CharacterStatus.Lost));
+        var fromAshes = Failed(Adnd.Core.Characters.CharacterStatus.Ashes);
+        Assert.True(fromAshes.HasStatus(Adnd.Core.Characters.CharacterStatus.Lost));
+    }
+
+    [Fact]
+    public void Locate_object_reports_the_chosen_characters_position_and_needs_a_choice()
+    {
+        var handler = new Adnd.Core.Spells.Casting.Handlers.LocateObjectHandler();
+        Assert.True(handler.CanHandle("locate_object"));
+        Assert.True(handler.CanHandle("locate_object_magic_user"));
+
+        Adnd.Core.Spells.Casting.SpellCastRequest Request(string? report) => new()
+        {
+            Caster = new Character { Name = "Mage" },
+            SpellId = "locate_object",
+            Context = Adnd.Core.Spells.Casting.SpellUseContext.Exploration,
+            LocateReport = report
+        };
+
+        Assert.False(handler.Resolve(Request(null)).Success);
+        var result = handler.Resolve(Request("Bob's belongings are on dungeon level 3 at (4,7)."));
+        Assert.True(result.Success);
+        Assert.Contains("Bob's belongings are on dungeon level 3 at (4,7).", result.Events);
     }
 
     [Fact]
@@ -337,6 +461,16 @@ public class WizardryRulesTests
         Assert.True(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster(priest));
         Assert.True(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster(bishop));
         Assert.False(Adnd.Core.Treasure.ChestTrapTargets.IsHitByPriestBlaster(mage));
+    }
+
+    [Fact]
+    public void Mage_blaster_hits_mages_and_samurais_in_wizardry()
+    {
+        Character Make(WizardryClass c) => new() { Ruleset = Ruleset.Wizardry, WizardryClass = c };
+        Assert.True(Adnd.Core.Treasure.ChestTrapTargets.IsHitByMageBlaster(Make(WizardryClass.Mage)));
+        Assert.True(Adnd.Core.Treasure.ChestTrapTargets.IsHitByMageBlaster(Make(WizardryClass.Samurai)));
+        Assert.False(Adnd.Core.Treasure.ChestTrapTargets.IsHitByMageBlaster(Make(WizardryClass.Priest)));
+        Assert.False(Adnd.Core.Treasure.ChestTrapTargets.IsHitByMageBlaster(Make(WizardryClass.Fighter)));
     }
 
     [Fact]
@@ -840,6 +974,29 @@ public class WizardryRulesTests
         Assert.Equal(WizardryAlignment.Neutral, WizardryClassChange.ItemAlignment("Neutral Plate +2"));
     }
 
+    [Fact]
+    public void Wizardry_weapons_ignore_the_two_handed_flag_so_a_shield_can_stay_on()
+    {
+        var saved = GameRulesProvider.Current;
+        try
+        {
+            GameRulesProvider.Current = new GameRules { Rules = Ruleset.Wizardry };
+            var c = WizardryCharacterFactory.Create(Race.Human, new WizardryStats(12, 10, 10, 12, 10, 10), WizardryAlignment.Good, WizardryClass.Fighter, new Random(1));
+            var shield = new Adnd.Core.Items.Item { Name = "Small Shield", Type = Adnd.Core.Items.ItemType.Shield, Slot = Adnd.Core.Items.EquipmentSlot.OffHand };
+            var staff = new Adnd.Core.Items.Item { Name = "Staff", Type = Adnd.Core.Items.ItemType.Weapon, Slot = Adnd.Core.Items.EquipmentSlot.MainHand, IsTwoHanded = true };
+            c.Inventory.Add(shield);
+            c.Inventory.Add(staff);
+
+            Assert.True(EquipmentManager.Equip(c, shield));
+            Assert.True(EquipmentManager.Equip(c, staff));
+            Assert.Same(staff, c.Equipment[Adnd.Core.Items.EquipmentSlot.MainHand]);
+            Assert.Same(shield, c.Equipment[Adnd.Core.Items.EquipmentSlot.OffHand]);
+        }
+        finally
+        {
+            GameRulesProvider.Current = saved;
+        }
+    }
     [Fact]
     public void Class_change_from_bishop_to_mage_keeps_known_priest_spells()
     {

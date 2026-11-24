@@ -8973,8 +8973,8 @@ until a new uniquie name has been selected
 when equip has been selected and one of several options are presened where the firest is 0)Keep: (empty) then make option 1) 
 that is not empyt selected per default. So the user can just confirme with Enter key
 
-after the message that a person can not inspect because the class can not do it, go back to the previous menu (Who should inspect) instead of 
-showing who should open.
+after the message that a person can not inspect because the class can not do it, go back to the previous menu (Who should inspect) 
+instead of showing who should open.
 
 when selecting trade type, let Item be selected as default that can be confirmed with enter. and when choosing item,
 let the first option be selected as default, can be confermed with enter
@@ -9021,15 +9021,19 @@ Lords learn priest spells and samurais learn mage spells like this
 in wizardry and adnd if you have several items that fitts into one slot and the user decided what to equip, 
 then dont keep asking for the same slot again.
 
-if i have 2 chianmails and 1 breastplate and i am wearing a chainmail and i want to equip the breastplate, then after i have selected the breastplate,
+if i have 2 chianmails and 1 breastplate and i am wearing a chainmail and i want to equip the breastplate, then after i have 
+selected the breastplate,
 i dont want to immedeltuy be asked about the chainmail, since i have just already selected what to equip in that slot. 
 
-When healing a party member in wizardry, then heal and informa baout for example paralysis but not about 15gp/hp and do not heal hp damage in wizardry temple, only in adnd
+When healing a party member in wizardry, then heal and informa baout for example paralysis but not about 15gp/hp and do 
+not heal hp damage in wizardry temple, only in adnd
 
-when you can not afford healing make it possible to click on the person you want to pay. When selecting who should pay it is enough to enter on number then
+when you can not afford healing make it possible to click on the person you want to pay. When selecting who should pay 
+it is enough to enter on number then
 enter should be hit automatically.
 
-in wizadry and adnd after getting information on who paied how much, clicking any where on the screen will have the same affect as pressing enter.
+in wizadry and adnd after getting information on who paied how much, clicking any where on the screen will have the 
+same affect as pressing enter.
 
 after buying something and the confirmation text is shown then let clicking anywhere mean the same thing as enter
 45,5
@@ -9042,13 +9046,15 @@ same affect as pressing L key
 
 In adnd and wizardry Choose who show should enter the shop view should also show an L->eave option that is clickable
 
-In adnd and wizardry When encountering a group of monsters and you are offereed to L)eave them alone or A)ttack them, then let the L)eave 
+In adnd and wizardry When encountering a group of monsters and you are offereed to L)eave them alone or A)ttack them, 
+then let the L)eave 
 and A)ttack be clickable
 
 in adnd and wizardry when showing the party list in the dungeon, instead of showing letter for the race, show 
 letter/letters for the alignment
 
-poison from monsters in wizardy should not instantly kill the party members but make them loose hp just like when poisoned from a trap
+poison from monsters in wizardy should not instantly kill the party members but make them loose hp just like when
+poisoned from a trap
 
 In the wizardry verion only of create charater view wher you can add stats to abbiliites, keep the existing functionality and keyboard navigation, 
 but also make have + and - buttons beside each ability so you can click on the + or - buttons to change the value. when it is not possible to 
@@ -9189,3 +9195,223 @@ Every combat round:
 For each conscious character:
 if Random(0..99) < IQ + Piety + Level
 identify one monster group
+
+in wizardry and adnd when reordering it should also be possible to select the order by clicking on the charaters
+
+even if the monsters are unidentified, still use the picture from the identified monster
+
+dispell should be possible in adnd and wizardry when monsters are surprised. Only in adnd spell casting is possible 
+when monsters are surprised round.
+
+The wizardry spell kandi gives the chanse to select a charater that is out and you want the exact x,y, dungeon level 
+cordiantes off.
+
+impelement adnd spell Locate Object (Magic-User level 2, Cleric level 3) that will ask for a person whos object you 
+want to locate besides that question, 
+it will work like the wizardy sepll Kandi
+
+implement latumapic that reveales monsters real names
+
+when selecting a charater in traning grouds by clicking on it automaticly also press enter after number is entered
+
+in wizardy when inspecting char only show 7 levels like MAGE 4/4/4/3/2/1/0/ but in adnd for magic user continues to 
+show the 9 levels 4/4/4/3/2/1/0/0/0
+
+no, the thing is that when using w to walk forward in the dungeon and walking into the elevator it happends often 
+that i press one w to much and it ends 
+up in the floor selection input, to avoid that, filer away that charater from that input, but only in the elevator
+
+in wizardy there are no two handed items, so all weapons are equiped in main hand and all shields in off hand, so 
+when equping a weapon dont write
+mainhand/offhand but only mainhand
+
+in wizardy, charaters should not get xp bonus based on their stats, that rule id for adndn only
+
+när monster överraskar ett party ska de inte kunna kasta spells i första överraskningsrundan
+
+create a dungeon floor 6 with doors and rooms and thin walls when needed in the adnd maze using same techniqe as 
+when creating the 
+proving grounds for wizardry. But use the algroritm from adnd dugson master guide. skip the 45 degree coridors, 
+just 90 degree truns for now. 
+start area, but make the 45 degree be 90 degree if possible
+TABLE I.: PERIODIC CHECK (d20) 
+Die 
+1-2 
+3-5 
+6-10 
+11-13 
+14-16 
+17 
+18 
+19 
+20 
+Result 
+Continue straight - check again in 60' (this table) 
+Door (see TABLE 11.) 
+Side Passage (see TABLE Ill.) -check again in 30' (this table) 
+Passage Turns (see TABLE IV., check width on TABLE Ill.) -check again in 30' (this table) 
+Chamber (see TABLE V.) -check 30' after leaving (this table) 
+Stairs (see TABLE VI.) 
+Dead End (walls left, right, and ahead can be checked for Secret 
+Doors, see TABLE V.D., footnote) 
+trick/trap (see TABLE VII.), passage continues- check again in 
+30' (this table) 
+Wandering Monster, check again immediately to see what lies 
+ahead so direction of monster's approach can be deter- 
+mined. 
+TABLE 11.: DOORS* (d20) 
+Location of Door: 
+Die 
+Result 
+1-6 
+7-12 
+Left 
+Right 
+Space Beyond Door Is: 
+Die 
+1-4 
+5-8 
+Result 
+Parallel passage**, or 10' x 10' room if 
+door is straight ahead 
+Passage straight ahead 
+13-20 
+Ahead 
+9 
+10 
+11-18 
+19-20 
+Passage 45 degrees ahead/behind*** 
+Passage 45 degrees behind/ahead*** 
+Room (gotoTABLEV.) 
+Chamber (go to TABLE V.) 
+Always check width of passage 
+(TABLE Ill. A,) 
+*Check again immediately on TABLE I. unless door is straight ahead; if 
+another door is not indicated, then ignore the result and check again 
+30' past the door. If a room or chamber is beyond a door, go to TABLE V. 
+**Extends 30' in both directions. 
+***The direction will be appropriate to existing circumstances, but use the 
+direction before the slash in preference to the other. 
+TABLE 111.: SIDE PASSAGES (d20) 
+Die 
+1-2 
+3-4 
+5 
+6 
+7 
+8 
+9 
+10 
+11-13 
+14-15 
+16-19 
+20 
+Result 
+left 90 degrees 
+right 90 degrees 
+left 45 degrees ahead 
+right 45 degrees ahead 
+left 45 degrees behind (left 135 degrees) 
+right 45 degrees behind (right 135 degrees) 
+left curve 45 degrees ahead 
+right curve 45 degrees ahead 
+passage "T"s 
+passage "Y's 
+four-way intersection 
+passage "X"s (if present passage is horizontal or vertical it 
+forms a fifth passage into the "X") 
+TABLE 111. A.: PASSAGE WIDTH (d20) 
+Die 
+1-12 
+13-16 
+17 
+18 
+19-20 
+Result 
+10' 
+20' 
+30' 
+5' 
+SPECIAL PASSAGE (TABLE Ill. B. below) 
+APPENDIX A: RANDOM DUNGEON GENERATION 
+TABLE 111. B.: SPECIAL PASSAGE (d20) 
+Result 
+Die 
+1-4 
+5-7 
+6-10 
+11-12 
+13-1 5 
+16-17 
+18 
+19 
+20 
+40', columns down center 
+40'. double row of columns 
+50'. double raw of columns 
+50', columns 10' right and left support 10' wide upper galleries 
+20' above* 
+10' stream** 
+20' river*** 
+40'river*** 
+60' river*** 
+20', chusm**** 
+Stairs up to gallery will be at end of passage (1-15) or at beginning 
+(16-20). In the former case if a stairway is indicated in or adjacent to 
+the passage it will replace the end stairs 50% (1-10) of the time and 
+supplement 50% (1 1-20) of the time. 
+** Streams bisect the passage. They will be bridged 75% (1-15) of the 
+time and be an obstacle 25% (16-20) of the time. 
+*** Rivers bisect the passage. They will be bridged 50% (1-10) of the 
+time, have a boat 25% (11-15) of the time (50% chance for either 
+bank), and be an obstacle 25% of the time. 
+**** Chasms bisect the passage. They are 150' to 200' deep. They will be 
+bridged 50% (1-10) of the time, have a jumping place 5'-10' wide 
+25% (1 1-15) of the time, and be an obstacle 25% (16-20) of the time. 
+TABLE IV.: TURNS (d20) 
+Die 
+1-8 
+9 
+10 
+11-18 
+19 
+20 
+Result (check on width of passage on TABLE 111. A.) 
+left 90 degrees 
+left 45 degrees ahead 
+left 45 degrees behind (left 135 degrees) 
+right90degrees 
+right 45 degrees ahead 
+right 45 degrees behind (right 135 degrees) 
+TABLE V.: CHAMBERS AND ROOMS SHAPE AND SIZE (d20) 
+(Roll for Shape, Size, and Exits: then' Contents, Treasure, and how the 
+latter is contained, if applicable.) 
+Die 
+1-2 
+Chamber Shape and Area 
+Room Shape and Area 
+Square,20'x20'.. ................. Square,10'x10' 
+3-4 
+5-6 
+7-8 
+9-10 
+11-13 
+14-15 
+16-17 
+18-20 
+Square, 20' x 20'. .................. Square, 20' x 20' 
+Square, 30' x 30'. .................. Square, 30' x 30' 
+Square, 40' x 40'. .................. Square, 40' x 40' 
+Rectangular, 20' x 30'. .............. Rectangular, 10' x 20' 
+Rectangular, 20' x 30'. .............. Rectangular, 20' x 30' 
+Rectangular, 30' x 50'. .............. Rectangular, 20' x 40' 
+Rectangular, 40' x 60'. .............. Rectangular, 
+
+generate all level 7-16 in a similar was as level 6 was generated in the adnd maze
+
+he area around the elevator look the same on levels 6-16, can you make them all different
+
+can you in about 5-15 places on each floor find room like areas if possible and make monster enounter 90% in these squares. 
+also introduce a setting AdndMinimap that if true drwas a minimap of the whole floor in the bottom right corner beside the 
+charater list. introduce some secret doors, traps and one way doors all marked on the mini map

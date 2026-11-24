@@ -628,6 +628,13 @@ public sealed partial class MazeForm
 
         int? selected = null;
 
+        // A stray extra W (walk forward) from entering the elevator must not end up in the floor input.
+        input.KeyPress += (_, e) =>
+        {
+            if (e.KeyChar is 'w' or 'W')
+                e.Handled = true;
+        };
+
         form.KeyDown += (_, e) =>
         {
             if (e.KeyCode == Keys.Escape)

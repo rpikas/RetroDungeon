@@ -1,4 +1,4 @@
-using Adnd.Core.Characters;
+﻿using Adnd.Core.Characters;
 using Adnd.Core.Config;
 using Adnd.Core.Wizardry;
 
@@ -12,4 +12,10 @@ public static class ChestTrapTargets
         c.Ruleset == Ruleset.Wizardry
             ? c.WizardryClass is WizardryClass.Priest or WizardryClass.Bishop
             : c.Classes.Contains(CharacterClass.Cleric) || c.Classes.Contains(CharacterClass.Druid);
+
+    /// <summary>Mage Blaster: Mages and Samurais in Wizardry, Magic-Users and Illusionists in AD&amp;D.</summary>
+    public static bool IsHitByMageBlaster(Character c) =>
+        c.Ruleset == Ruleset.Wizardry
+            ? c.WizardryClass is WizardryClass.Mage or WizardryClass.Samurai
+            : c.Classes.Contains(CharacterClass.MagicUser) || c.Classes.Contains(CharacterClass.Illusionist);
 }

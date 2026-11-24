@@ -1,4 +1,4 @@
-# Wizardry Spell Handbook
+﻿# Wizardry Spell Handbook
 
 A player's guide to the Wizardry Mage and Priest spells in RetroDungeon. The Mage and Priest each have seven spell circles. Cast from camp (exploration spells) or in combat (combat spells). The table is defined in `Adnd.Core\Wizardry\WizardrySpells.cs`; this guide describes what each spell does in the game.
 
@@ -122,7 +122,7 @@ The gods always respond once the level is paid (no failure chance was specified)
 |---|---|---|---|
 | **Bamatu** | C | Party AC −4 for the battle. | ✔ |
 | **Dialko** | B | Cures paralysis and wakes a sleeping character. | ✔ |
-| **Latumapic** | B | Identifies monsters. | ✘ |
+| **Latumapic** | B | Identifies monsters: in combat, reveals the real names of every monster group in the battle. Cannot be cast outside combat. | ✔ |
 | **Lomilwa** | E | More light: the party sees two steps further until it leaves the dungeon or enters a dark zone. Like the AD&D Continual Light spell. | ✔ |
 
 ### Circle 4
@@ -142,7 +142,7 @@ The gods always respond once the level is paid (no failure chance was specified)
 | **Badialma** | C | 3d8 damage to one monster. | ✔ |
 | **Di** | B | Life: raises a dead character, like AD&D Raise Dead. The target rolls a d20 against its Constitution survival chance. Success: back with 1 HP and −1 Constitution. Failure: turned to ashes. Cannot target ashes or lost characters. | ✔ |
 | **Dialma** | B | Restores 3d8 HP to one character. | ✔ |
-| **Kandi** | E | Locate soul: lists dead, ashes and lost party members and their location. Dead members travel with the party, so the location is the party's current position, level and facing. Dungeon only. | ✔ |
+| **Kandi** | E | Locate soul: when characters are left OUT in the maze, the caster picks one and is told its exact dungeon level and (x,y) square. It also lists dead, ashes and lost party members and their location. Dead members travel with the party, so the location is the party's current position, level and facing. Dungeon only. | ✔ |
 | **Litokan** | C | Flame tower: 3d8 fire damage to a group. | ✔ |
 
 ### Circle 6
@@ -158,5 +158,5 @@ The gods always respond once the level is paid (no failure chance was specified)
 
 | Spell | Where | Effect | Status |
 |---|---|---|---|
-| **Kadorto** | B | Resurrection: like AD&D Resurrection, on a dead or ashes character. Same Constitution roll as Di. Success: back at full HP and −1 Constitution. Failure: the character is lost forever. Lost characters and those who died of old age cannot be restored. | ✔ |
+| **Kadorto** | B | Resurrection (camp only, not in combat): like AD&D Resurrection, on a dead or ashes character. Same Constitution roll as Di. Success: back at full HP and −1 Constitution. Failure: a dead character turns to ashes; a character already in ashes is lost forever. Lost characters and those who died of old age cannot be restored. | ✔ |
 | **Malikto** | C | Word of death: 12d6 damage to all enemies. | ✔ |

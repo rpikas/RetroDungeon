@@ -438,11 +438,25 @@ public sealed partial class MazeForm
         PublishToViewer();
     }
 
+    // Traps of the generated AD&D floors go off once per visit to the floor.
+    private void ProcessGeneratedTrapStep()
+    {
+        if (_dmgLevel is null || !_dmgLevel.Traps.Contains((_position.X, _position.Y)) || !_triggeredTraps.Add((_position.X, _position.Y)))
+            return;
+
+        FallIntoPit(() => _random.Next(1, 7) + _random.Next(1, 7));
+    }
+
     private void ProcessPitStep()
     {
         if (!_thinWalls || !DungeonPits.TryGetValue(_currentDungeonLevel, out var pits) || !pits.Contains(_position))
             return;
 
+        FallIntoPit(() => _currentDungeonLevel == 2 ? _random.Next(1, 9) : _random.Next(1, 7) + _random.Next(1, 7));
+    }
+
+    private void FallIntoPit(Func<int> rollDamage)
+    {
         var party = _partyRepository.Load();
         var roster = _characterRepository.GetAllCached().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
         var messages = new List<string> { "YOU FALL INTO A PIT!" };
@@ -452,7 +466,7 @@ public sealed partial class MazeForm
             if (!roster.TryGetValue(name, out var c) || c.CurrentHitPoints <= 0 || c.HasStatus(CharacterStatus.Dead))
                 continue;
 
-            var damage = _currentDungeonLevel == 2 ? _random.Next(1, 9) : _random.Next(1, 7) + _random.Next(1, 7);
+            var damage = rollDamage();
             var before = c.CurrentHitPoints;
             c.CurrentHitPoints = Math.Max(0, before - damage);
             messages.Add($"{c.Name} takes {before - c.CurrentHitPoints} damage. HP {before}->{c.CurrentHitPoints}.");

@@ -1,0 +1,13 @@
+{
+  "Id": "locate_object_magic_user",
+  "Name": "Locate Object",
+  "Class": "MagicUser",
+  "Level": 2,
+  "Description": "Reveals where the belongings of a chosen character are.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Heal",
+  "EffectDescription": "The caster chooses a character left in the dungeon and learns the exact dungeon level and square of that character's belongings."
+}

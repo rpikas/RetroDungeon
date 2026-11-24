@@ -49,6 +49,7 @@ public class PartyMenu
             new EntangleHandler(),
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
+            new LocateObjectHandler(),
             new LightHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
@@ -1168,9 +1169,6 @@ public class PartyMenu
 
         receiver.GoldPieces += pooled;
         _repo.Save(receiver);
-
-        Console.WriteLine($"\nPooled {pooled} gp to {receiver.Name}. New total: {receiver.GoldPieces} gp");
-        Console.ReadKey(true);
     }
 
     private void IdentifyAction(Character c)
@@ -1500,8 +1498,8 @@ public class PartyMenu
 
                 Console.WriteLine();
                 Console.WriteLine("New order (building):");
-                Console.WriteLine($"{"#",-3} {"Name",-15} {"Class",-18} {"HP",-8} {"AC",-4} {"Status",-20}");
-                Console.WriteLine(new string('-', 74));
+                Console.WriteLine($"  {"#",-3} {"Name",-15} {"Class",-18} {"HP",-8} {"AC",-4} {"Status",-20}");
+                Console.WriteLine("  " + new string('-', 74));
 
                 if (picked.Count == 0)
                 {
@@ -1519,11 +1517,24 @@ public class PartyMenu
                         var hp = $"{c.CurrentHitPoints}/{c.MaxHitPoints}";
                         var status = c.Status != CharacterStatus.None ? GetStatusDisplay(c) : "-";
 
-                        Console.WriteLine($"{i + 1,-3} {c.Name,-15} {cls,-18} {hp,-8} {c.ArmorClass,-4} {status,-20}");
+                        Console.WriteLine($"  {i + 1,-3} {c.Name,-15} {cls,-18} {hp,-8} {c.ArmorClass,-4} {status,-20}");
                     }
                 }
 
-                var inputKey = Console.ReadKey(true);
+                // Clicking a row of the old order picks that member, like typing its number.
+                Console.ClickHandler = (text, _) =>
+                {
+                    var row = System.Text.RegularExpressions.Regex.Match(text, @"^(\d)\s+\S");
+                    if (!row.Success || !int.TryParse(row.Groups[1].Value, out var n) || n < 1 || n > members.Count)
+                        return false;
+
+                    Console.EnqueueText(row.Groups[1].Value);
+                    return true;
+                };
+
+                ConsoleKeyInfo inputKey;
+                try { inputKey = Console.ReadKey(true); }
+                finally { Console.ClickHandler = null; }
 
                 if (inputKey.Key == ConsoleKey.L || inputKey.Key == ConsoleKey.Escape)
                     break;

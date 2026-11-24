@@ -1,0 +1,13 @@
+{
+  "Id": "locate_object",
+  "Name": "Locate Object",
+  "Class": "Cleric",
+  "Level": 3,
+  "Description": "Reveals where the belongings of a chosen character are.",
+  "RangeType": "Self",
+  "Targeting": "Single",
+  "TargetingScope": "SingleTarget",
+  "CastContext": "Exploration",
+  "EffectType": "Heal",
+  "EffectDescription": "The caster chooses a character left in the dungeon and learns the exact dungeon level and square of that character's belongings."
+}

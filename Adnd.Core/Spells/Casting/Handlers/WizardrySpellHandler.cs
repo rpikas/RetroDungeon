@@ -1,4 +1,4 @@
-using Adnd.Core.Characters;
+﻿using Adnd.Core.Characters;
 using Adnd.Core.Combat.Resolution;
 using Adnd.Core.Combat.Sessions;
 using Adnd.Core.Monsters;
@@ -32,6 +32,7 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
             WizardryEffectKind.Raise => ResolveRaise(request, spell, rng),
             WizardryEffectKind.RaiseFull => ResolveRaise(request, spell, rng, full: true),
             WizardryEffectKind.LocateDead => ResolveLocateDead(request, spell),
+            WizardryEffectKind.IdentifyMonsters => ResolveIdentifyMonsters(request, spell),
             WizardryEffectKind.Recall => ResolveRecall(request, spell),
             WizardryEffectKind.Teleport => ResolveTeleport(request, spell),
             WizardryEffectKind.Intervention => ResolveIntervention(request, spell, effect.Dice > 0, rng),
@@ -201,9 +202,12 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}.");
+        if (!string.IsNullOrWhiteSpace(request.LocateReport))
+            result.Events.Add(request.LocateReport);
         if (fallen.Count == 0)
         {
-            result.Events.Add("No party member is dead or missing.");
+            if (string.IsNullOrWhiteSpace(request.LocateReport))
+                result.Events.Add("No party member is dead or missing.");
             return result;
         }
 
@@ -242,6 +246,7 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         var roll = rng.Next(1, 21);
         result.Events.Add($"Saving throw (d20) for {target.Name}: CON {constitution} gives {chance}% survival (needs {saveTarget} or less). Rolled {roll}.");
 
+        var wasAshes = target.HasStatus(CharacterStatus.Ashes);
         target.RemoveStatus(CharacterStatus.Dead);
         target.RemoveStatus(CharacterStatus.Ashes);
         if (roll <= saveTarget)
@@ -258,7 +263,7 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
         }
 
         target.CurrentHitPoints = 0;
-        if (full)
+        if (full && wasAshes)
         {
             target.AddStatus(CharacterStatus.Lost);
             result.Events.Add($"{spell.Name} fails. {target.Name} is lost forever.");
@@ -299,6 +304,25 @@ public sealed class WizardrySpellHandler : ISpellEffectHandler
 
         var result = new SpellCastResult { Success = true };
         result.Events.Add($"{request.Caster.Name} casts {spell.Name}. {position}");
+        return result;
+    }
+
+    private static SpellCastResult ResolveIdentifyMonsters(SpellCastRequest request, Spell spell)
+    {
+        if (request.CombatSession == null)
+            return SpellCastResult.Failure($"{spell.Name} can only be cast in combat.");
+
+        var result = new SpellCastResult { Success = true };
+        result.Events.Add($"{request.Caster.Name} casts {spell.Name}.");
+        foreach (var group in request.CombatSession.Monsters.Where(m => !m.IsIdentified && m.CanBeUnidentified).GroupBy(m => m.GroupId).ToList())
+        {
+            var shown = group.First().ShownName;
+            foreach (var m in group)
+                m.IsIdentified = true;
+            result.Events.Add($"The {shown} are revealed as {group.First().Name}!");
+        }
+        if (result.Events.Count == 1)
+            result.Events.Add("All monsters are already identified.");
         return result;
     }
 

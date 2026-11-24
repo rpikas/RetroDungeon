@@ -1,4 +1,4 @@
-# Wizardry Player's Handbook
+﻿# Wizardry Player's Handbook
 
 Rules for characters when **Rules = Wizardry** in Settings. AD&D characters and rules are not affected.
 Each rule names the code that implements it and the test that guards it. When a Wizardry rule is added or changed,
@@ -173,7 +173,7 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 ## 5c-0. Monster identification
 
 - Wizardry monsters are shown by their `Unidentified` name (Monsters\Wizardry.json, e.g. "Man in Robes") in the encounter dialog, group lists and combat log until the group is identified.
-- At the end of every combat round each conscious character has (IQ + Piety + Level)% to identify one still-hidden monster group (`WizardryRules.MonsterIdentifyChancePercent`). A level 8 character with IQ 16 and Piety 18 has 42% per round; the checks repeat each round, and every party member gets a check. Identified groups show their real name from then on.
+- At the end of every combat round each conscious character has (IQ + Piety + Level)% to identify one still-hidden monster group (`WizardryRules.MonsterIdentifyChancePercent`). A level 8 character with IQ 16 and Piety 18 has 42% per round; the checks repeat each round, and every party member gets a check. Identified groups show their real name from then on. The priest spell Latumapic (combat only) reveals every hidden group in the battle at once.
 
 ## 5c. Ninja critical hit
 
@@ -187,6 +187,7 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Each attempt first risks a cursed item being equipped by accident: 35% - 3% per level (0% from level 12). It only matters if the item is cursed; the Bishop then wears it.
 - The shop identifies any item for half its value (A)ppraise Items).
 - A cursed item cannot be unequipped (or sold while worn) until it is uncursed. The shop lifts the curse on an equipped item for half the item's value (R) Remove curse, `WizardryIdentification.ShopUncurseCost`); the Remove Curse spell also works.
+- **No two-handed weapons:** every weapon (staves included) is wielded in the main hand and every shield sits in the off hand, so a weapon never blocks a shield (EquipmentManager.IsTwoHandedItem). The inspect screen lists weapons as MainHand only.
 - **Breakage:** after a successful use these items may break and are lost: Ring of Shielding (Porfic) 5%, Ring of Rigidity (Manifo) 10%, Rod of Flame (Mahalito) 10%, Ring of Suffocation (Makanito) 5% (`WizardryRules.ItemBreakChancePercent`, `TryBreakItemAfterUse`; combat, camp and party menu).
 - **Alignment mismatch:** Evil Sword +3, Evil S-Sword +3, Evil Chain +2, Evil Shield +3, Helm +2 (E), Evil Plate +3 (Evil) and Neutral Plate +2 (Neutral) can be equipped by anyone, but equipping one with the wrong alignment makes it cursed (`WizardryClassChange.EquipCursesItem`), so it stays on until uncursed.
 
@@ -203,11 +204,12 @@ Latumofis (Priest 4) cures the poison of one chosen party member, in combat or i
 - Monsters put to sleep stay asleep when damaged (AD&D wakes them); they wake only when the sleep runs out. Hits and spells on a sleeping monster still get their sleeping bonuses. The same goes for sleeping Wizardry party members: damage does not wake them.
 - Turn Undead never destroys the undead in Wizardry: a result that would disintegrate it (D) turns it instead, shown as Turned.
 - A Dead, Ashes or Lost character can have no other status (poisoned, paralyzed, ...); `Character.Status` drops them. This holds for AD&D too.
-- The Priest Blaster chest trap hurts and paralyzes Priests and Bishops (AD&D: Clerics and Druids). Only the Priest Blaster changes; the Mage Blaster is unchanged.
+- The Priest Blaster chest trap hurts and paralyzes Priests and Bishops (AD&D: Clerics and Druids). The Mage Blaster hurts and paralyzes Mages and Samurais (AD&D: Magic-Users and Illusionists); its message reads "Mages and Samurais are blasted and paralyzed."
 - Monsters with Death Resistance (N%) have an N% chance to resist the instant-kill spells: Badi (after a failed save), Makanito and Lakanito.
 - Monsters with Fire Resistance take half damage from the fire spells Halito, Mahalito, Lahalito and Litokan; monsters with Cold Resistance take half damage from the cold spells Dalto and Madalto (before the save for half).
 - The temple has no Restoration in Wizardry (it is AD&D only); its menu option and key are hidden.
 - When the party surprises the monsters in Wizardry, its members cannot cast spells in round 1 (the surprise round); they can still fight, use items and run.
+- When the monsters surprise the party, they cannot cast spells in round 1 either; they can only attack and use their other abilities.
 - Murphy's Ghost is very rare on dungeon level 1: 1 in 1000 per random encounter (not an equal share of the level 1 table). Its fixed encounter at Murphy's shrine is unchanged.
 
 ## 6. Not implemented yet

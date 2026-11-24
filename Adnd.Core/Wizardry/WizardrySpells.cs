@@ -1,4 +1,4 @@
-using Adnd.Core.Config;
+﻿using Adnd.Core.Config;
 
 namespace Adnd.Core.Spells;
 
@@ -39,7 +39,7 @@ public enum WizardryEffectKind
     LightLong,
     /// <summary>Di: raises a dead character with 1 HP; the Constitution roll decides between life and ashes.</summary>
     Raise,
-    /// <summary>Kadorto: like AD&D Resurrection; raises a dead or ashes character at full HP, failure loses the character.</summary>
+    /// <summary>Kadorto: like AD&D Resurrection; Camp only; raises a dead or ashes character at full HP. Failure turns a dead character to ashes and loses an ashes character.</summary>
     RaiseFull,
     /// <summary>Loktofeit: returns the party to town, stripping all equipment and 90% of the coins.</summary>
     Recall,
@@ -51,7 +51,9 @@ public enum WizardryEffectKind
     LocateDead,
     /// <summary>Badi: instant death like AD&D Slay Living: undead are immune; a save vs spell, death resistance and magic resistance can avoid it.</summary>
     KillSave,
-    TrapDetect}
+    TrapDetect,
+    /// <summary>Latumapic: reveals the real names of every monster group in the current battle.</summary>
+    IdentifyMonsters}
 
 /// <param name="Dice">Number of dice rolled for damage or healing.</param>
 /// <param name="Sides">Sides per die.</param>
@@ -87,7 +89,7 @@ public static class WizardrySpells
         ("Molito", SpellClass.MagicUser, 3, "Energy blast deals 3d6 damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 3, 6, true, false),
         ("Bamatu", SpellClass.Cleric, 3, "Lowers the party's Armor Class by 4 for one battle.", SpellCastContext.Combat, WizardryEffectKind.PartyArmorClass, 4, 0, false, false),
         ("Dialko", SpellClass.Cleric, 3, "Cures paralysis and awakens sleepers.",         SpellCastContext.Both, WizardryEffectKind.CureParalysis, 0, 0, false, false),
-        ("Latumapic", SpellClass.Cleric, 3, "Identifies all opponents for the rest of the stay in the dungeon.", SpellCastContext.Both, WizardryEffectKind.None, 0, 0, false, false),
+        ("Latumapic", SpellClass.Cleric, 3, "Reveals the real names of all monsters in the current battle.", SpellCastContext.Combat, WizardryEffectKind.IdentifyMonsters, 0, 0, false, false),
         ("Lomilwa", SpellClass.Cleric, 3, "Greater light lasting until you leave the dungeon or enter a dark zone.", SpellCastContext.Exploration, WizardryEffectKind.LightLong, 0, 0, false, false),
 
         ("Dalto", SpellClass.MagicUser, 4, "Blizzard deals 6d6 freezing damage to each member of an enemy group.", SpellCastContext.Combat, WizardryEffectKind.Damage, 6, 6, true, false),
@@ -120,7 +122,7 @@ public static class WizardrySpells
         ("Mahaman", SpellClass.MagicUser, 7, "Greater divine intervention; the caster loses a level and must relearn it.", SpellCastContext.Both, WizardryEffectKind.Intervention, 1, 0, false, false),
         ("Malor", SpellClass.MagicUser, 7, "Teleports the party to chosen coordinates and depth.", SpellCastContext.Exploration, WizardryEffectKind.Teleport, 0, 0, false, false),
         ("Tiltowait", SpellClass.MagicUser, 7, "Deals 10d10 damage to all enemies.", SpellCastContext.Combat, WizardryEffectKind.Damage, 10, 10, true, false),
-        ("Kadorto", SpellClass.Cleric, 7, "Revives a fallen comrade with full HP, even from ashes; failure loses them forever.", SpellCastContext.Both, WizardryEffectKind.RaiseFull, 0, 0, false, false),
+        ("Kadorto", SpellClass.Cleric, 7, "Revives a fallen comrade with full HP, even from ashes; failure loses them forever.", SpellCastContext.Exploration, WizardryEffectKind.RaiseFull, 0, 0, false, false),
         ("Malikto", SpellClass.Cleric, 7, "Deals 12d6 damage to all enemies.", SpellCastContext.Combat, WizardryEffectKind.Damage, 12, 6, true, false),
     };
 
@@ -162,7 +164,7 @@ public static class WizardrySpells
                 Level = row.Circle,
                 Description = row.Description,
                 EffectDescription = row.Description,
-                RangeType = isHeal ? SpellRangeType.Ally : row.Kind is WizardryEffectKind.PartyArmorClass or WizardryEffectKind.ExpeditionArmorClass or WizardryEffectKind.CasterArmorClass or WizardryEffectKind.ShowPosition or WizardryEffectKind.TrapDetect or WizardryEffectKind.LightShort or WizardryEffectKind.LightLong or WizardryEffectKind.LocateDead or WizardryEffectKind.Recall or WizardryEffectKind.Teleport or WizardryEffectKind.Intervention || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
+                RangeType = isHeal ? SpellRangeType.Ally : row.Kind is WizardryEffectKind.PartyArmorClass or WizardryEffectKind.ExpeditionArmorClass or WizardryEffectKind.CasterArmorClass or WizardryEffectKind.ShowPosition or WizardryEffectKind.TrapDetect or WizardryEffectKind.LightShort or WizardryEffectKind.LightLong or WizardryEffectKind.LocateDead or WizardryEffectKind.IdentifyMonsters or WizardryEffectKind.Recall or WizardryEffectKind.Teleport or WizardryEffectKind.Intervention || (row.Kind == WizardryEffectKind.None && row.Context != SpellCastContext.Combat) ? SpellRangeType.Self : SpellRangeType.Enemy,
                 Targeting = effect.Group ? SpellTargeting.Multiple : SpellTargeting.Single,
                 TargetingScope = row.Name is "Tiltowait" or "Malikto" ? SpellTargetingScope.AllGroups
                     : effect.Group ? SpellTargetingScope.SingleGroup : SpellTargetingScope.SingleTarget,

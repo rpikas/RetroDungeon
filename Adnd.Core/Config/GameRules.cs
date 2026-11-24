@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Text.Json.Serialization;
 
 namespace Adnd.Core.Config;
@@ -124,6 +124,8 @@ public class GameRules
     public bool ShowCityPictures { get; set; } = true;
     // Wizardry only: show the party's position in the dungeon in the top left corner.
     public bool ShowPositionInDungeonWizardry { get; set; } = true;
+    // AD&D Maze only: draw a minimap of the whole floor (with traps, secret and one-way doors) beside the party list.
+    public bool AdndMinimap { get; set; } = true;
     // Wizardry only: age at which attribute gains on level-up stop being likely (random roll is 0 to twice this).
     public int WizardryPeekAge { get; set; } = 25;
     public bool PlayerSelectsWeaponProficiencies { get; set; } = false;

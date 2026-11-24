@@ -169,8 +169,8 @@ public class ShopMenu
 
             var menu = new List<string> { "B)uy Items", "S)ell Items", "E)quip Items", "U)nequip Items" };
             if (Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry)
-                menu.Add("A)ppraise Items (identify for half value)");
-            menu.Add("R) Remove curse from equipped item (half value)");
+                menu.Add("A)ppraise Items");
+            menu.Add("R)emove curse");
             menu.Add("P)ool Gold");
             menu.Add("C)hoose a Different Shopper");
             if (startIndex + numberOfItems < items.Count) menu.Add("N)ext items in shop");
@@ -367,9 +367,6 @@ public class ShopMenu
         shopper.GoldPieces += pooled;
         _charRepo.Save(shopper);
 
-        Console.WriteLine($"\nPooled {pooled} gp to {shopper.Name}. New total: {shopper.GoldPieces} gp");
-        Console.WriteLine("Press any key...");
-        Console.ReadKey(true);
     }
 
 
@@ -688,7 +685,7 @@ public class ShopMenu
             }
 
             var totalSp = toSell.Sum(Shop.SellPriceInSilverPieces);
-            Console.WriteLine($"Sell all unequipped items ({toSell.Count} item(s)) for {Shop.FormatCostFromSilverPieces(totalSp)}? (Y/N)");
+            Console.WriteLine($"Sell {toSell.Count} items for {Shop.FormatCostFromSilverPieces(totalSp)}? (Y/N)");
             var confirmAll = Console.ReadKey(true).Key;
             if (confirmAll != ConsoleKey.Y)
             {
@@ -704,8 +701,8 @@ public class ShopMenu
                 _itemRepo.TryAdjustStock(item.Name, +1);
             }
 
-            Console.WriteLine($"Sold {toSell.Count} unequipped item(s) for {Shop.FormatCostFromSilverPieces(totalSp)}.");
-            Console.WriteLine($"Gold after: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
+            Console.WriteLine($"Sold {toSell.Count} items for {Shop.FormatCostFromSilverPieces(totalSp)}.");
+            Console.WriteLine($"Gold after: {Shop.FormatPurse(seller)}");
             _charRepo.Save(seller);
             _partyRepo.Save(party);
             Console.WriteLine();
@@ -718,7 +715,7 @@ public class ShopMenu
         {
             var entry = entries[idx - 1];
             var it = entry.item;
-            Console.WriteLine($"Gold before: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
+            Console.WriteLine($"Gold before: {Shop.FormatPurse(seller)}");
             var sellPriceSp = Shop.SellPriceInSilverPieces(it);
             var sellPriceText = Shop.FormatCostFromSilverPieces(sellPriceSp);
 
@@ -772,7 +769,7 @@ public class ShopMenu
             Shop.AddSilverPieces(seller, sellPriceSp);
             _itemRepo.TryAdjustStock(it.Name, +1);
             Console.WriteLine($"Sold {it.Name} for {sellPriceText}.");
-            Console.WriteLine($"Gold after: {seller.GoldPieces} gp, {seller.SilverPieces} sp");
+            Console.WriteLine($"Gold after: {Shop.FormatPurse(seller)}");
             _charRepo.Save(seller);
             _partyRepo.Save(party);
         }
@@ -829,50 +826,43 @@ public class ShopMenu
                 continue;
             }
 
-            Console.WriteLine("\nU)nequip item");
-            Console.WriteLine("L↵eave");
+            // Unequip goes straight to the list of equipped items; Enter there cancels and leaves.
+            var equipped = c.Equipment
+                .Where(kv => kv.Value != null)
+                .ToList();
 
-            var key = Console.ReadKey(true).Key;
-
-            if (!equip && key == ConsoleKey.U)
+            if (equipped.Count == 0)
             {
-                var equipped = c.Equipment
-                    .Where(kv => kv.Value != null)
-                    .ToList();
-
-                if (equipped.Count == 0)
-                {
-                    Console.WriteLine("\nNo equipped items to unequip.");
-                    Console.ReadKey(true);
-                    continue;
-                }
-
-                Console.WriteLine("\nUnequip from:");
-                for (int i = 0; i < equipped.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {equipped[i].Key} ({equipped[i].Value!.Name})");
-                }
-
-                Console.Write("Choose #: ");
-                var sel = InputHelper.ReadNumber(1, equipped.Count);
-                if (!sel.HasValue)
-                    continue;
-
-                var slot = equipped[sel.Value - 1].Key;
-                if (equipped[sel.Value - 1].Value!.IsCursed)
-                {
-                    Console.WriteLine("\nThat item is cursed and cannot be taken off until the curse is removed.");
-                    Console.ReadKey(true);
-                    continue;
-                }
-
-                if (EquipmentManager.Unequip(c, slot))
-                    _charRepo.Save(c);
-            }
-            else if (key == ConsoleKey.L || key == ConsoleKey.Escape || key == ConsoleKey.Enter)
-            {
+                Console.WriteLine("\nNo equipped items to unequip.");
+                Console.WriteLine("\nL↵eave");
+                Console.ReadKey(true);
                 break;
             }
+
+            Console.WriteLine("\nUnequip from:");
+            for (int i = 0; i < equipped.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {equipped[i].Key} ({equipped[i].Value!.Name})");
+            }
+
+            Console.Write("Choose # (Enter to leave): ");
+            Console.ClickableNumberDigits = 1;
+            int? sel;
+            try { sel = InputHelper.ReadNumber(1, equipped.Count); }
+            finally { Console.ClickableNumberDigits = 0; }
+            if (!sel.HasValue)
+                break;
+
+            var slotToClear = equipped[sel.Value - 1].Key;
+            if (equipped[sel.Value - 1].Value!.IsCursed)
+            {
+                Console.WriteLine("\nThat item is cursed and cannot be taken off until the curse is removed.");
+                Console.ReadKey(true);
+                continue;
+            }
+
+            if (EquipmentManager.Unequip(c, slotToClear))
+                _charRepo.Save(c);
         }
     }
 

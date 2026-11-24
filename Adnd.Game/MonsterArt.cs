@@ -1,4 +1,4 @@
-// Where the old UI's monster artwork lives, and how a monster's name finds it.
+﻿// Where the old UI's monster artwork lives, and how a monster's name finds it.
 //
 // Lifted out of EncounterForm so the tabletop viewer can be told about the same file. The search is fussy --
 // three spellings of the name, six extensions, an optional _Wiz variant, a level folder first and then every
@@ -34,10 +34,28 @@ public static class MonsterArt
         return monster.Source == Sources.WizardryAndAdnd && sourceOption == SourceOptions.OnlyWizardry;
     }
 
+    private static readonly Regex ManInLeather = new(@"^(Lvl\s*\d+\s+|Master\s+)?Thief(\s*\(.*\))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    private static readonly Regex WizardryGiant = new(@"^(Fire|Frost|Earth|Poison)\s+Giant$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    private static readonly Regex WizardryPriest = new(@"^((Lvl\s*\d+|High)\s+)?Priest(ess)?(\s*\(.*\))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
     /// <summary>The artwork file for a monster, or null when nothing on disk answers to that name.</summary>
     public static string? FindPath(string monsterName, int? dungeonLevel = null, bool useWizardrySuffix = false)
     {
         if (string.IsNullOrWhiteSpace(monsterName)) return null;
+
+        // Every Wizardry "Man in Leather" (the Thief family) is drawn with the Rogue picture.
+        if (useWizardrySuffix && ManInLeather.IsMatch(monsterName.Trim()))
+            monsterName = "Rogue";
+
+        // The Wizardry giants (and their unidentified name "Giant") share one picture.
+        if (useWizardrySuffix && WizardryGiant.IsMatch(monsterName.Trim()))
+            monsterName = "Giant";
+
+        // Every Wizardry priest (Lvl N Priest, High Priest, Priestess) shares the Priest picture.
+        if (useWizardrySuffix && WizardryPriest.IsMatch(monsterName.Trim()))
+            monsterName = "Priest";
 
         var trimmedName = monsterName.Trim();
         var slug = trimmedName.ToLowerInvariant().Replace(" ", "_");

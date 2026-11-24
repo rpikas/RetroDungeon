@@ -110,6 +110,14 @@ public class CityMenu
         }
     }
 
+    // Clicking a listed character types its number and presses Enter by itself.
+    private static int? ReadCharacterNumber(int max)
+    {
+        Console.ClickableNumberDigits = 2;
+        try { return InputHelper.ReadNumber(1, max, 2, echoTypedCharacters: true); }
+        finally { Console.ClickableNumberDigits = 0; }
+    }
+
     private void ChangeWizardryClass(System.Collections.Generic.List<Character> all)
     {
         if (all.Count == 0)
@@ -120,7 +128,7 @@ public class CityMenu
             Console.WriteLine($"{i + 1}) {all[i].Name} - {all[i].RaceDisplayName} {all[i].GetClassesDisplayText("/")} L{all[i].Level}");
 
         Console.Write("Character # (Enter to cancel): ");
-        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
+        var sel = ReadCharacterNumber(all.Count);
         if (!sel.HasValue)
             return;
 
@@ -181,7 +189,7 @@ public class CityMenu
         }
 
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, eligibleCharacters.Count, 2, echoTypedCharacters: true);
+        var sel = ReadCharacterNumber(eligibleCharacters.Count);
         if (!sel.HasValue)
         {
             Console.WriteLine("Invalid selection.");
@@ -1033,7 +1041,7 @@ public class CityMenu
     private void InspectCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, all.Count, 2, echoTypedCharacters: true);
+        var sel = ReadCharacterNumber(all.Count);
         if (sel.HasValue)
         {
             var c = all[sel.Value - 1];
@@ -1107,7 +1115,7 @@ public class CityMenu
     private void DeleteCharacter(System.Collections.Generic.List<Character> all)
     {
         Console.Write("Character #: ");
-        var sel = InputHelper.ReadNumber(1, all.Count, autoSubmitAfterCharacters: 2, echoTypedCharacters: true);
+        var sel = ReadCharacterNumber(all.Count);
         Console.WriteLine();
         if (sel.HasValue)
         {

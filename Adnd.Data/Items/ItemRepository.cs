@@ -74,21 +74,29 @@ public class ItemRepository
 
     public bool TryAdjustStock(string itemName, int delta)
     {
-        var file = FindItemFile(itemName);
-        if (file == null)
-            return false;
+        // The same name can live in several files (e.g. Shield +1 in Armor, Shields and Wizardry); only a buyable entry counts.
+        foreach (var file in FindItemFiles(itemName))
+        {
+            var result = TryAdjustStockInFile(file, itemName, delta);
+            if (result.HasValue)
+                return result.Value;
+        }
 
+        return false;
+    }
+
+    /// <summary>Null when the file's entry for the item is not shop-buyable (try the next file).</summary>
+    private static bool? TryAdjustStockInFile(string file, string itemName, int delta)
+    {
         var json = File.ReadAllText(file);
+        var options = new JsonSerializerOptions { WriteIndented = true };
 
         var grouped = JsonSerializer.Deserialize<ItemCategoryJsonModel>(json);
         if (grouped?.Items != null && grouped.Items.Count > 0)
         {
-            var target = grouped.Items.FirstOrDefault(i => string.Equals(i.Name, itemName, StringComparison.OrdinalIgnoreCase));
+            var target = grouped.Items.FirstOrDefault(i => string.Equals(i.Name, itemName, StringComparison.OrdinalIgnoreCase) && i.IsShopBuyable);
             if (target == null)
-                return false;
-
-            if (!target.IsShopBuyable)
-                return false;
+                return null;
 
             if (target.StockQuantity is >= 0)
             {
@@ -97,21 +105,15 @@ public class ItemRepository
                     return false;
 
                 target.StockQuantity = next;
-
-                var updatedGrouped = JsonSerializer.Serialize(grouped, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(file, updatedGrouped);
-                return true;
+                File.WriteAllText(file, JsonSerializer.Serialize(grouped, options));
             }
 
             return true;
         }
 
         var single = JsonSerializer.Deserialize<ItemJsonModel>(json);
-        if (single == null)
-            return false;
-
-        if (!single.IsShopBuyable)
-            return false;
+        if (single == null || !string.Equals(single.Name, itemName, StringComparison.OrdinalIgnoreCase) || !single.IsShopBuyable)
+            return null;
 
         if (single.StockQuantity is >= 0)
         {
@@ -120,33 +122,35 @@ public class ItemRepository
                 return false;
 
             single.StockQuantity = next;
-
-            var updated = JsonSerializer.Serialize(single, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(file, updated);
-            return true;
+            File.WriteAllText(file, JsonSerializer.Serialize(single, options));
         }
 
         return true;
     }
 
-    private string? FindItemFile(string itemName)
+    // Files holding the item, the ones that belong to the current rule set first.
+    private IEnumerable<string> FindItemFiles(string itemName)
     {
+        var wizardry = Adnd.Core.Config.GameRulesProvider.Current.Rules == Adnd.Core.Config.Ruleset.Wizardry;
+        var matches = new List<string>();
         foreach (var file in Directory.GetFiles(_folder, "*.json"))
         {
             var json = File.ReadAllText(file);
 
             var grouped = JsonSerializer.Deserialize<ItemCategoryJsonModel>(json);
             if (grouped?.Items != null && grouped.Items.Any(i => string.Equals(i.Name, itemName, StringComparison.OrdinalIgnoreCase)))
-                return file;
+            {
+                matches.Add(file);
+                continue;
+            }
 
             var model = JsonSerializer.Deserialize<ItemJsonModel>(json);
             if (model != null && string.Equals(model.Name, itemName, StringComparison.OrdinalIgnoreCase))
-                return file;
+                matches.Add(file);
         }
 
-        return null;
+        return matches.OrderBy(file => Path.GetFileName(file).Contains("wizardry", StringComparison.OrdinalIgnoreCase) == wizardry ? 0 : 1);
     }
-
     private Item? ToItem(ItemJsonModel model)
     {
         if (string.IsNullOrWhiteSpace(model.Name) || string.IsNullOrWhiteSpace(model.Type))

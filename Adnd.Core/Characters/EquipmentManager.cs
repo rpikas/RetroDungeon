@@ -34,6 +34,10 @@ public static class EquipmentManager
         }
     }
 
+    // Wizardry has no two-handed weapons: every weapon goes in the main hand and a shield can always be carried with it.
+    private static bool IsTwoHandedItem(Item? item) =>
+        item?.IsTwoHanded == true && Adnd.Core.Config.GameRulesProvider.Current.Rules != Adnd.Core.Config.Ruleset.Wizardry;
+
     private static bool IsAllowedOffHandWeapon(Item item)
     {
         if (item == null || item.Type != ItemType.Weapon)
@@ -163,9 +167,9 @@ public static class EquipmentManager
             return false;
 
         if (isHandSlot
-            && (c.Equipment[EquipmentSlot.MainHand]?.IsTwoHanded == true
-                || c.Equipment[EquipmentSlot.OffHand]?.IsTwoHanded == true
-                || (item.IsTwoHanded
+            && (IsTwoHandedItem(c.Equipment[EquipmentSlot.MainHand])
+                || IsTwoHandedItem(c.Equipment[EquipmentSlot.OffHand])
+                || (IsTwoHandedItem(item)
                     && (c.Equipment[EquipmentSlot.MainHand] != null
                         || c.Equipment[EquipmentSlot.OffHand] != null))))
         {
@@ -181,7 +185,7 @@ public static class EquipmentManager
 
         var movedItems = new System.Collections.Generic.HashSet<Item>();
 
-        if (isHandSlot && item.IsTwoHanded)
+        if (isHandSlot && IsTwoHandedItem(item))
         {
             // Two-handed weapon occupies both hands.
             c.Equipment[EquipmentSlot.MainHand] = item;
@@ -221,7 +225,7 @@ public static class EquipmentManager
             return false;
 
         var movedItems = new System.Collections.Generic.HashSet<Item>();
-        if ((slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand) && equipped.IsTwoHanded)
+        if ((slot == EquipmentSlot.MainHand || slot == EquipmentSlot.OffHand) && IsTwoHandedItem(equipped))
         {
             // Clearing either hand for a two-handed weapon clears both.
             UnequipSlotToInventory(c, EquipmentSlot.MainHand, movedItems);
@@ -255,7 +259,7 @@ public static class EquipmentManager
         var offHandWeapon = c.Equipment[EquipmentSlot.OffHand];
 
         // Legacy safety: if a two-handed weapon is only in off-hand, treat it as primary.
-        if (mainHandWeapon == null && offHandWeapon != null && offHandWeapon.IsTwoHanded)
+        if (mainHandWeapon == null && offHandWeapon != null && IsTwoHandedItem(offHandWeapon))
             mainHandWeapon = offHandWeapon;
 
         var mainDamage = mainHandWeapon != null
@@ -267,7 +271,7 @@ public static class EquipmentManager
         var sameTwoHandedWeaponInBothHands = mainHandWeapon != null
                                              && offHandWeapon != null
                                              && ReferenceEquals(mainHandWeapon, offHandWeapon)
-                                             && mainHandWeapon.IsTwoHanded;
+                                             && IsTwoHandedItem(mainHandWeapon);
 
         var hasOffHandWeapon = !sameTwoHandedWeaponInBothHands
                                && offHandWeapon != null

@@ -1,4 +1,4 @@
-using Adnd.Core.Assassination;
+﻿using Adnd.Core.Assassination;
 using Adnd.Core.Characters;
 using Adnd.Core.Combat.Actions;
 using Adnd.Core.Combat.Events;
@@ -156,6 +156,15 @@ public sealed partial class CombatResolver
 
         if (isSilenced || isFeebleminded)
             return MonsterTurnFlow.Proceed;
+
+        // Monsters that catch the party by surprise only get to attack in that round, not cast.
+        if (session.RoundNumber == 1 && session.PartySurprisedRound1)
+        {
+            if (HasAnyMonsterSpellcastingAbility(monster))
+                events.Add(new CombatEvent($"{monster.DisplayName} cannot cast spells in the surprise round."));
+
+            return MonsterTurnFlow.Proceed;
+        }
 
         if (monster.Template.Source == Sources.Wizardry)
             return TryResolveWizardryMonsterSpell(monster, session, events) ? MonsterTurnFlow.EndTurn : MonsterTurnFlow.Proceed;

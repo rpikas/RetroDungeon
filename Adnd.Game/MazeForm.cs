@@ -164,6 +164,8 @@ public sealed partial class MazeForm : Form
     private readonly bool _thinWalls;
 
     private WallGrid? _walls;
+    private DmgDungeonLevel? _dmgLevel;
+    private readonly HashSet<(int X, int Y)> _triggeredTraps = new();
 
     private HashSet<(int Depth, int Position)>? _visibleCells;
 

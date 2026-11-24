@@ -106,6 +106,7 @@ public sealed partial class MazeForm
         {
             DrawOverlayLegend(e.Graphics);
             DrawPartyTable(e.Graphics);
+            DrawAdndMinimap(e.Graphics);
         }
         else
         {
@@ -533,6 +534,130 @@ public sealed partial class MazeForm
         }
     }
 
+    /// <summary>
+    /// AD&D Maze minimap of the whole floor, drawn to the right of the party table. Traps (T), hidden secret
+    /// doors (S) and one-way doors (an arrow showing the way through) are marked.
+    /// </summary>
+    private void DrawAdndMinimap(Graphics graphics)
+    {
+        if (_thinWalls || !GameRulesProvider.Current.AdndMinimap)
+            return;
+
+        const int cell = 7;
+        // The hand-carved floors 1-5 have no thin walls, so their map is derived from the carved squares.
+        var walls = _walls ?? WallGrid.FromFloors(_maze.GetLength(0), _maze.GetLength(1), (x, y) => _maze[x, y] == CellType.Floor);
+        var size = cell * walls.Width;
+        var frame = EncounterForm.PartyFrameBounds(ClientSize);
+        var color = GameRulesProvider.Current.DefaultColor;
+        var origin = new Point(frame.Right - 10 - size, frame.Top + 14);
+
+        using var wallPen = new Pen(color, 1f);
+        using var doorPen = new Pen(Color.DeepSkyBlue, 2f);
+        using var floorBrush = new SolidBrush(Color.FromArgb(48, 48, 48));
+        using var trapPen = new Pen(Color.Red, 2f);
+        using var secretBrush = new SolidBrush(Color.Orange);
+        using var arrowBrush = new SolidBrush(Color.Yellow);
+        using var font = new Font("Consolas", 7f, FontStyle.Bold);
+
+        graphics.FillRectangle(Brushes.Black, origin.X - 1, origin.Y - 1, size + 2, size + 2);
+
+        for (var y = 0; y < walls.Height; y++)
+        {
+            for (var x = 0; x < walls.Width; x++)
+            {
+                if (walls.IsSolid(x, y))
+                    continue;
+
+                var left = origin.X + x * cell;
+                var top = origin.Y + y * cell;
+                graphics.FillRectangle(floorBrush, left, top, cell, cell);
+
+                foreach (var side in new[] { WallSide.North, WallSide.East, WallSide.South, WallSide.West })
+                {
+                    var (x1, y1, x2, y2) = side switch
+                    {
+                        WallSide.North => (left, top, left + cell, top),
+                        WallSide.East => (left + cell, top, left + cell, top + cell),
+                        WallSide.South => (left, top + cell, left + cell, top + cell),
+                        _ => (left, top, left, top + cell)
+                    };
+
+                    if (walls.HasDoor(x, y, side))
+                        graphics.DrawLine(doorPen, x1, y1, x2, y2);
+                    else if (walls.HasWall(x, y, side))
+                        graphics.DrawLine(wallPen, x1, y1, x2, y2);
+                }
+            }
+        }
+
+        foreach (var (tx, ty) in _dmgLevel?.Traps ?? Array.Empty<(int X, int Y)>())
+        {
+            var left = origin.X + tx * cell;
+            var top = origin.Y + ty * cell;
+            graphics.DrawLine(trapPen, left + 1, top + 1, left + cell - 1, top + cell - 1);
+            graphics.DrawLine(trapPen, left + cell - 1, top + 1, left + 1, top + cell - 1);
+        }
+
+        foreach (var (sx, sy, side) in _dmgLevel?.SecretDoors ?? Array.Empty<(int X, int Y, WallSide Side)>())
+        {
+            if (!walls.IsSecretDoor(sx, sy, side))
+                continue;
+
+            var (mx, my) = EdgeMidpoint(origin, cell, sx, sy, side);
+            graphics.FillEllipse(secretBrush, mx - 2, my - 2, 5, 5);
+        }
+
+        foreach (var (ox, oy, side) in _dmgLevel?.OneWayDoors ?? Array.Empty<(int X, int Y, WallSide Side)>())
+        {
+            var (mx, my) = EdgeMidpoint(origin, cell, ox, oy, side);
+            var (dx, dy) = side switch
+            {
+                WallSide.North => (0, -1),
+                WallSide.East => (1, 0),
+                WallSide.South => (0, 1),
+                _ => (-1, 0)
+            };
+            graphics.FillPolygon(arrowBrush, new[]
+            {
+                new PointF(mx + dx * 4, my + dy * 4),
+                new PointF(mx - dx * 2 - dy * 3, my - dy * 2 + dx * 3),
+                new PointF(mx - dx * 2 + dy * 3, my - dy * 2 - dx * 3)
+            });
+        }
+
+        var px = origin.X + _position.X * cell + cell / 2f;
+        var py = origin.Y + _position.Y * cell + cell / 2f;
+        var (fx, fy) = _direction switch
+        {
+            Direction.North => (0, -1),
+            Direction.East => (1, 0),
+            Direction.South => (0, 1),
+            _ => (-1, 0)
+        };
+        graphics.FillPolygon(Brushes.Lime, new[]
+        {
+            new PointF(px + fx * 5, py + fy * 5),
+            new PointF(px - fx * 3 - fy * 3.5f, py - fy * 3 + fx * 3.5f),
+            new PointF(px - fx * 3 + fy * 3.5f, py - fy * 3 - fx * 3.5f)
+        });
+
+        using var textBrush = new SolidBrush(color);
+        graphics.DrawString("Floor " + _currentDungeonLevel, font, textBrush, origin.X, frame.Top + 2);
+        graphics.DrawString("X trap o secret > 1-way", font, textBrush, origin.X, origin.Y + size + 4);
+    }
+
+    private static (float X, float Y) EdgeMidpoint(Point origin, int cell, int x, int y, WallSide side)
+    {
+        var left = origin.X + x * cell;
+        var top = origin.Y + y * cell;
+        return side switch
+        {
+            WallSide.North => (left + cell / 2f, top),
+            WallSide.East => (left + cell, top + cell / 2f),
+            WallSide.South => (left + cell / 2f, top + cell),
+            _ => (left, top + cell / 2f)
+        };
+    }
     /// <summary>
     /// The party table at the bottom of the window, laid out like the encounter form's party list (same frame,
     /// font and columns) so it looks the same before, during and after a fight.

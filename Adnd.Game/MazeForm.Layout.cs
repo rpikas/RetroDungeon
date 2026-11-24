@@ -31,6 +31,26 @@ public sealed partial class MazeForm
     {
         if (!_thinWalls)
         {
+            // AD&D floors 6-16 are generated with the DMG random dungeon tables (seed = level, so each floor is always the same map).
+            if (level is >= 6 and <= 16)
+            {
+                _dmgLevel = DmgDungeonGenerator.GenerateLevel(level, corridorsOnly: true);
+                var generated = _dmgLevel.Walls;
+                _walls = generated;
+                foreach (var (revealedLevel, rx, ry, rside) in _revealedSecretDoors)
+                {
+                    if (revealedLevel == level)
+                        generated.RevealSecretDoor(rx, ry, rside);
+                }
+                _maze = new CellType[generated.Width, generated.Height];
+                for (var y = 0; y < generated.Height; y++)
+                    for (var x = 0; x < generated.Width; x++)
+                        _maze[x, y] = generated.IsSolid(x, y) ? CellType.Wall : CellType.Floor;
+                return;
+            }
+
+            _walls = null;
+            _dmgLevel = null;
             BuildCarvedMazeForLevel(level);
             return;
         }

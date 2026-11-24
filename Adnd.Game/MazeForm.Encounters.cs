@@ -239,9 +239,6 @@ public sealed partial class MazeForm
     // entering the floor. Returns true when the square is such a location (and so was not visited before).
     private bool TryEncounterAtFixedLocation()
     {
-        if (!_thinWalls)
-            return false;
-
         var location = _encounterLocations.FirstOrDefault(l => l.X == _position.X && l.Y == _position.Y);
         if (location is null || !_visitedEncounterLocations.Add((location.X, location.Y)))
             return false;
@@ -269,7 +266,10 @@ public sealed partial class MazeForm
     private void LoadEncounterLocationsForLevel(int level)
     {
         _visitedEncounterLocations.Clear();
-        _encounterLocations = _thinWalls ? _dungeonLayouts.LoadEncounterLocations(level) : Array.Empty<DungeonEncounterLocation>();
+        _triggeredTraps.Clear();
+        _encounterLocations = _thinWalls ? _dungeonLayouts.LoadEncounterLocations(level)
+            : _dmgLevel?.EncounterSquares.Select(s => new DungeonEncounterLocation { X = s.X, Y = s.Y, ChancePercent = 90 }).ToList()
+                ?? (IReadOnlyList<DungeonEncounterLocation>)Array.Empty<DungeonEncounterLocation>();
         _darkAreas = _thinWalls ? _dungeonLayouts.LoadDarkAreas(level) : Array.Empty<DungeonDarkArea>();
     }
 
@@ -582,7 +582,7 @@ public sealed partial class MazeForm
     {
         var foundSomething = false;
 
-        if (_thinWalls && _walls is not null)
+        if (_walls is not null)
         {
             var chance = GetViewerParty().Any(c => c.Race is Race.Elf or Race.HalfElf && !c.HasStatus(CharacterStatus.Dead)) ? 2 : 1;
             foreach (var side in _walls.HiddenSecretDoorSides(_position.X, _position.Y).ToList())

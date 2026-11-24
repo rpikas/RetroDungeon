@@ -1,4 +1,4 @@
-// What Boltac sells, what he pays, and what happens when a deal goes through.
+﻿// What Boltac sells, what he pays, and what happens when a deal goes through.
 //
 // Lifted out of ShopMenu for the reason the temple's rules were: the console and the tabletop both trade here,
 // and stock is the kind of thing two implementations get wrong in a way nobody notices until an item has been
@@ -29,9 +29,17 @@ public static class Shop
             : Math.Max(0, item.Cost * 10);
     }
 
+    // Wizardry only has gold; silver is an AD&D coin.
+    private static bool GoldOnly => GameRulesProvider.Current.Rules == Ruleset.Wizardry;
+
+    public static string FormatPurse(Character c)
+        => GoldOnly ? $"{c.GoldPieces} gp" : $"{c.GoldPieces} gp, {c.SilverPieces} sp";
+
     public static string FormatCostFromSilverPieces(int totalSp)
     {
         totalSp = Math.Max(0, totalSp);
+        if (GoldOnly)
+            return $"{(totalSp + 5) / 10} gp";
 
         if (totalSp < 10)
             return $"{totalSp} sp";
@@ -85,9 +93,13 @@ public static class Shop
         items.LoadAll()
             .Where(i => i.IsShopBuyable || (i.StockQuantity.HasValue && i.StockQuantity.Value > 0))
             .Where(InStock)
+            .Where(i => !IsCursedItem(i))
             .Take(9999)
             .ToList(),
         GameRulesProvider.Current.BoltacItemSourceFilter));
+
+    // Cursed gear is never on the shelves: flagged items and negatively enchanted ones such as Short Sword -1.
+    private static bool IsCursedItem(Item i) => i.IsCursed || System.Text.RegularExpressions.Regex.IsMatch(i.Name, @"\s-\d+$");
 
     /// <summary>Weapons, then armour (same slot together, lowest AC first), then the rest; plain items before magical ones.</summary>
     public static List<Item> SortForDisplay(List<Item> items) =>

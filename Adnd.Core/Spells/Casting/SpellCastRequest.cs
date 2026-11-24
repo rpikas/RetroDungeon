@@ -28,6 +28,9 @@ public sealed class SpellCastRequest
     /// <summary>Asks for the Malor destination and teleports the party; supplied by the game window. Returns whether it worked.</summary>
     public Func<(bool Teleported, string Message)>? MalorTeleport { get; set; }
 
+    /// <summary>Kandi: the report for the OUT character the caster chose ("Name is on dungeon level 3 at (4,7)."); supplied by the game window.</summary>
+    public string? LocateReport { get; set; }
+
     /// <summary>Set when the spell is cast on an item instead of a character (Remove Curse).</summary>
     public Adnd.Core.Items.Item? TargetItem { get; set; }
 }

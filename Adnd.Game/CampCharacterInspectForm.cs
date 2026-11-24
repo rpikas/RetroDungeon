@@ -52,6 +52,10 @@ public sealed class CampCharacterInspectForm : Form
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public Func<int, int, int, (bool Teleported, string Message)>? MalorTeleport { get; init; }
 
+    /// <summary>Formats a dungeon square the way the maze shows positions (the axes swap with thin walls).</summary>
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    public Func<int, int, string>? CellTextProvider { get; init; }
+
     private const int MaxMalorLevels = 16;
 
     /// <summary>Opens the equip chooser straight away (camp's E)QUIP).</summary>
@@ -99,6 +103,7 @@ public sealed class CampCharacterInspectForm : Form
             new EntangleHandler(),
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
+            new LocateObjectHandler(),
             new LightHandler(),
             new FaerieFireHandler(),
             new BladeBarrierHandler(),
@@ -859,7 +864,7 @@ public sealed class CampCharacterInspectForm : Form
             foreach (var state in c.Spellcasting)
             {
                 var slots = new List<string>();
-                for (int i = 0; i < state.SlotsPerDay.Count; i++)
+                for (int i = 0; i < state.SlotsPerDay.Count && (!wiz || i < 7); i++)
                 {
                     var max = state.SlotsPerDay[i];
                     var used = i < state.SlotsUsed.Count ? state.SlotsUsed[i] : 0;
@@ -1161,7 +1166,7 @@ public sealed class CampCharacterInspectForm : Form
             if (isRangedWeapon)
                 return "Range";
 
-            return "MainHand/OffHand";
+            return GameRulesProvider.Current.Rules == Ruleset.Wizardry ? "MainHand" : "MainHand/OffHand";
         }
 
         if (item.Type == ItemType.Misc && item.Quantity > 0 && !string.IsNullOrWhiteSpace(item.AmmoType))
@@ -1425,6 +1430,36 @@ public sealed class CampCharacterInspectForm : Form
 
         var targets = new List<SpellCastTarget>();
         Adnd.Core.Items.Item? removeCurseItem = null;
+        string? locateReport = null;
+
+        if (spell.Id is "wiz_kandi" or "locate_object" or "locate_object_magic_user")
+        {
+            // Kandi and Locate Object find a character left OUT in the maze and give the exact level and square.
+            var isLocateObject = spell.Id != "wiz_kandi";
+            var inParty = new HashSet<string>(partyMembers.Select(p => p.Name), StringComparer.OrdinalIgnoreCase);
+            var outCharacters = _characterRepository.GetAll()
+                .Where(o => o.HasStatus(CharacterStatus.Out) && !inParty.Contains(o.Name))
+                .OrderBy(o => o.Name, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            if (isLocateObject && outCharacters.Count == 0)
+            {
+                SayOnBoth("Locate Object", "No character has been left in the dungeon.");
+                return;
+            }
+
+            if (outCharacters.Count > 0)
+            {
+                var pick = PromptChoice(isLocateObject ? "Locate Object - whose belongings?" : "Kandi - find which character?", outCharacters.Select(o => o.Name).ToList());
+                if (!pick.HasValue)
+                    return;
+
+                var found = outCharacters[pick.Value];
+                var cell = CellTextProvider?.Invoke(found.DungeonCellX, found.DungeonCellY) ?? $"({found.DungeonCellX},{found.DungeonCellY})";
+                locateReport = isLocateObject
+                    ? $"{found.Name}'s belongings are on dungeon level {found.DungeonLevel} at {cell}."
+                    : $"{found.Name} is on dungeon level {found.DungeonLevel} at {cell}.";
+            }
+        }
 
         if (spell.RangeType == SpellRangeType.Self || spell.Id == "dispel_magic")
         {
@@ -1481,6 +1516,7 @@ public sealed class CampCharacterInspectForm : Form
             TargetItem = removeCurseItem,
             PartyTargets = partyMembers,
             MalorTeleport = spell.Id == "wiz_malor" ? PromptAndTeleport : null,
+            LocateReport = locateReport,
             MonsterTargets = new List<Adnd.Core.Combat.Sessions.MonsterInstance>()
         });
 

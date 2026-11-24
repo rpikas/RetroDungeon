@@ -134,6 +134,7 @@ public sealed class CombatCoordinator
             new EntangleHandler(),
             new Silence15RadiusHandler(),
             new FindTrapsHandler(),
+            new LocateObjectHandler(),
             new LightHandler(),
             new FaerieFireHandler(),
             new CharmPersonOrMammalHandler(),
@@ -741,7 +742,7 @@ public sealed class CombatCoordinator
         session.MirrorImageRounds.Clear();
     }
    
-    private CombatSession? _rewardedSession;
+    private readonly HashSet<CombatSession> _rewardedSessions = new(ReferenceEqualityComparer.Instance);
 
     private void RewardInsideEncounterForm(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel, EncounterForm form)
     {
@@ -751,11 +752,13 @@ public sealed class CombatCoordinator
 
     private void ApplyVictoryRewards(IWin32Window owner, CombatSession session, CharacterRepository characterRepository, int? dungeonLevel, EncounterForm? rewardForm = null)
     {
-        if (ReferenceEquals(_rewardedSession, session))
+        // A nested alarm encounter rewards its own session first; each session may only be rewarded once.
+        if (!_rewardedSessions.Add(session))
             return;
-        _rewardedSession = session;
 
         var isWizardryEncounter = session.Monsters.Count > 0 && session.Monsters.All(m => m.Template.Source == Sources.Wizardry);
+        // Monsters shared with AD&D are not Wizardry-only, so the rule set decides the XP rules too.
+        var wizardryXpRules = isWizardryEncounter || GameRulesProvider.Current.Rules == Ruleset.Wizardry;
 
         var survivors = session.Party
             .Where(c => c.CurrentHitPoints > 0 && !c.HasStatus(CharacterStatus.Dead))
@@ -848,6 +851,13 @@ public sealed class CombatCoordinator
 
         var effectiveTreasure = BuildEffectiveTreasure(treasure, chestResolution.IncludeLairTreasure);
 
+        // The alarm fight starts only after this victory has been fully rewarded, so the chest view and its summary stay intact.
+        void RunChestAlarm()
+        {
+            if (chestResolution.TriggeredAlarmEncounter)
+                TriggerAlarmEncounter(owner, session, characterRepository, dungeonLevel);
+        }
+
         // --- XP-fördelning ---
         var xpMultiplier = GameRulesProvider.Current.XpMultiplier;
         int xpEach = (int)Math.Round(totalMonsterXp * xpMultiplier / survivors.Count);
@@ -855,7 +865,7 @@ public sealed class CombatCoordinator
         int gemJewelryXpPool = Math.Max(0, effectiveTreasure.TotalGemValueGp + effectiveTreasure.TotalJewelryValueGp);
         int magicItemXpPool = Math.Max(0, effectiveTreasure.MagicPlaceholders.Sum(m => Math.Max(0, m.ExperienceValue) * Math.Max(1, m.Count)));
         // Wizardry has no XP for treasure and no prime requisite XP bonus.
-        int goldXpPool = isWizardryEncounter ? 0 : Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool + magicItemXpPool;
+        int goldXpPool = wizardryXpRules ? 0 : Math.Max(0, effectiveTreasure.GoldPieces) + gemJewelryXpPool + magicItemXpPool;
         int goldXpEach = goldXpPool / survivors.Count;
         int goldXpRemainder = goldXpPool % survivors.Count;
 
@@ -878,7 +888,7 @@ public sealed class CombatCoordinator
             var baseGain = xpEach + (i < xpRemainder ? 1 : 0);
             var goldXpGain = goldXpEach + (i < goldXpRemainder ? 1 : 0);
             var xpModifierPercent = XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
-            var individualBonus = isWizardryEncounter
+            var individualBonus = wizardryXpRules
                 ? 0
                 : (int)Math.Round(baseGain * (xpModifierPercent / 100.0), MidpointRounding.AwayFromZero);
 
@@ -939,11 +949,6 @@ public sealed class CombatCoordinator
             ? new MagicAwardResult()
             : AwardRandomItemsAfterCombat(survivors, dungeonLevel);
 
-        if (chestResolution.TriggeredAlarmEncounter)
-        {
-            TriggerAlarmEncounter(owner, session, characterRepository, dungeonLevel);
-        }
-
         // --- Logg ---
         var sb = new StringBuilder();
         sb.AppendLine("Victory Rewards");
@@ -976,7 +981,7 @@ public sealed class CombatCoordinator
         {
             var gain = r.ExperienceAfter - r.ExperienceBefore;
             var survivor = survivors.FirstOrDefault(s => string.Equals(s.Name, r.CharacterName, StringComparison.OrdinalIgnoreCase));
-            var xpModifierPercent = survivor == null ? 0 : XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
+            var xpModifierPercent = survivor == null || wizardryXpRules ? 0 : XpBonusCalculator.GetXpModifier(survivor.Class, survivor.Abilities);
             baseXpByCharacter.TryGetValue(r.CharacterName, out var baseGain);
             bonusXpByCharacter.TryGetValue(r.CharacterName, out var bonusGain);
             goldXpByCharacter.TryGetValue(r.CharacterName, out var goldXpGain);
@@ -1024,7 +1029,9 @@ public sealed class CombatCoordinator
 
         sb.AppendLine();
         sb.AppendLine("Treasure found:");
-        sb.AppendLine($"- Coins: {effectiveTreasure.CopperPieces} cp, {effectiveTreasure.SilverPieces} sp, {effectiveTreasure.ElectrumPieces} ep, {effectiveTreasure.GoldPieces} gp, {effectiveTreasure.PlatinumPieces} pp");
+        sb.AppendLine(GameRulesProvider.Current.Rules == Ruleset.Wizardry
+            ? $"- Coins: {effectiveTreasure.GoldPieces} gp"
+            : $"- Coins: {effectiveTreasure.CopperPieces} cp, {effectiveTreasure.SilverPieces} sp, {effectiveTreasure.ElectrumPieces} ep, {effectiveTreasure.GoldPieces} gp, {effectiveTreasure.PlatinumPieces} pp");
         sb.AppendLine($"- XP from treasure: {goldXpPool} XP total (1 XP per GP value + magic-item XP; {effectiveTreasure.GoldPieces} from GP coins + {gemJewelryXpPool} from gem/jewelry value + {magicItemXpPool} from magic items)");
 
         if (effectiveTreasure.Gems.Count > 0)
@@ -1170,6 +1177,7 @@ public sealed class CombatCoordinator
         {
             _treasureFoundAnnounce = false;
             Say(owner, "Combat Rewards", sb.ToString(), session);
+            RunChestAlarm();
             return;
         }
 
@@ -1196,6 +1204,7 @@ public sealed class CombatCoordinator
 
         // Hold the final XP/gold line a few extra seconds (or until a key is pressed).
         rewardForm?.PlayResults(owner, summary, extraHoldOnLastLineMs: 4000);
+        RunChestAlarm();
     }
 
     private static string AddArticle(string name)
@@ -4265,7 +4274,7 @@ public sealed class CombatCoordinator
 
             case ChestTrapType.MageBlaster:
                 var mageDeaths = new List<string>();
-                foreach (var c in survivors.Where(IsMageOrIllusionist))
+                foreach (var c in survivors.Where(Adnd.Core.Treasure.ChestTrapTargets.IsHitByMageBlaster))
                 {
                     var d = _dice.Roll(6);
                     if (ApplyTrapDamageAndMarkDeath(c, d))
@@ -4278,7 +4287,7 @@ public sealed class CombatCoordinator
                     }
                 }
 
-                var mageOutcome = "Magic-users and illusionists are blasted and paralyzed.";
+                var mageOutcome = (survivors.Any(s => s.Ruleset == Ruleset.Wizardry) ? "Mages and Samurais" : "Magic-users and illusionists") + " are blasted and paralyzed.";
                 if (mageDeaths.Count > 0)
                     mageOutcome += Environment.NewLine + $"Died: {string.Join(", ", mageDeaths)}.";
 

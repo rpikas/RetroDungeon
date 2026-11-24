@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Adnd.Core.Characters;
@@ -116,10 +116,10 @@ public class WizardrySpellTests
     }
 
     [Fact]
-    public void Unimplemented_wizardry_spells_have_no_handler()
+    public void Wizardry_spells_have_a_handler_and_other_spells_do_not()
     {
         var handler = new WizardrySpellHandler();
-        Assert.False(handler.CanHandle(WizardrySpells.ToId("Latumapic")));
+        Assert.True(handler.CanHandle(WizardrySpells.ToId("Latumapic")));
         Assert.True(handler.CanHandle(WizardrySpells.ToId("Halito")));
         Assert.False(handler.CanHandle("magic_missile"));
     }

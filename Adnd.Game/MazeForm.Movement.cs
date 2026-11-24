@@ -90,6 +90,7 @@ public sealed partial class MazeForm
         var ambushed = ProcessLevelFourAmbushStep();
 
         ProcessPitStep();
+        ProcessGeneratedTrapStep();
         ProcessTurnTableStep();
         var alarm = ProcessSquareMessageStep();
         if (ProcessLevelOneScriptStep())
