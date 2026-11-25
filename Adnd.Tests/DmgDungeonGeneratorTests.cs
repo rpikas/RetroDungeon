@@ -81,7 +81,20 @@ public class DmgDungeonGeneratorTests
         Assert.Equal(starts.Count, starts.Distinct().Count());
     }
 
+    [Fact]
+    public void Floor_one_start_room_covers_the_stairs_up_and_the_elevator()
+    {
+        var level = DmgDungeonGenerator.GenerateLevel(1, corridorsOnly: true, startAtOrigin: true);
+
+        Assert.False(level.Walls.IsSolid(0, 0));
+        Assert.Contains(DmgDungeonGenerator.Start, Reachable(level.Walls, (0, 0)));
+    }
+
     [Theory]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
     [InlineData(6)]
     [InlineData(7)]
     [InlineData(8)]

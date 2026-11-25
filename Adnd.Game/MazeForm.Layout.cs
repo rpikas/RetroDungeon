@@ -31,10 +31,10 @@ public sealed partial class MazeForm
     {
         if (!_thinWalls)
         {
-            // AD&D floors 6-16 are generated with the DMG random dungeon tables (seed = level, so each floor is always the same map).
-            if (level is >= 6 and <= 16)
+            // AD&D floors 1-16 are generated with the DMG random dungeon tables (seed = level, so each floor is always the same map).
+            if (level is >= 1 and <= 16)
             {
-                _dmgLevel = DmgDungeonGenerator.GenerateLevel(level, corridorsOnly: true);
+                _dmgLevel = DmgDungeonGenerator.GenerateLevel(level, corridorsOnly: true, startAtOrigin: level == 1);
                 var generated = _dmgLevel.Walls;
                 _walls = generated;
                 foreach (var (revealedLevel, rx, ry, rside) in _revealedSecretDoors)

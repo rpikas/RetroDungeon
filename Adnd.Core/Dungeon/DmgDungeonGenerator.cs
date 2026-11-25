@@ -37,10 +37,12 @@ public sealed class DmgDungeonGenerator
     public static WallGrid Generate(int seed) => GenerateLevel(seed).Walls;
 
     /// <param name="corridorsOnly">Every passage is a single-square corridor; no wide passages or galleries.</param>
-    public static DmgDungeonLevel GenerateLevel(int seed, bool corridorsOnly = false)
-        => new DmgDungeonGenerator(seed) { _corridorsOnly = corridorsOnly }.Build();
+    /// <param name="startAtOrigin">The start room also covers square (0,0), where floor 1 has the stairs up.</param>
+    public static DmgDungeonLevel GenerateLevel(int seed, bool corridorsOnly = false, bool startAtOrigin = false)
+        => new DmgDungeonGenerator(seed) { _corridorsOnly = corridorsOnly, _startAtOrigin = startAtOrigin }.Build();
 
     private bool _corridorsOnly;
+    private bool _startAtOrigin;
 
     private readonly List<List<(int X, int Y)>> _rooms = new();
     private readonly Dictionary<(int X, int Y), int> _roomOf = new();
@@ -250,7 +252,7 @@ public sealed class DmgDungeonGenerator
             for (var depth = 2; depth <= 4; depth++)
                 for (var x = 0; x <= 1; x++)
                     for (var y = 0; y <= 2; y++)
-                        if (x + across > Start.X && y + depth > Start.Y)
+                        if (x + across > Start.X && y + depth > Start.Y && (!_startAtOrigin || (x == 0 && y == 0)))
                             variants.Add((across, depth, x, y));
 
         var order = new Random(12345);
@@ -321,7 +323,7 @@ public sealed class DmgDungeonGenerator
             }
             else if (roll <= 16)
             {
-                Chamber(x, y, dir, chamber: true);
+                Chamber(x, y, dir, chamber: true, door: _random.Next(10) != 0);
                 return;
             }
             else if (roll == 18)
@@ -584,7 +586,7 @@ public sealed class DmgDungeonGenerator
 
             var width = RollWidth() > 2 ? 2 : 1;
             Carve(nx, ny);
-            OpenEdge(cx, cy, side, door: _random.Next(4) != 0);
+            OpenEdge(cx, cy, side, door: _random.Next(10) != 0);
             CarveWidth(nx, ny, side, width);
             _walkers.Enqueue(new Walker(nx, ny, side, width, 3));
         }

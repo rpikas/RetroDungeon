@@ -161,6 +161,21 @@ public static class MonsterArt
             AddCandidates(sourceFolder2, noComma, useWizardrySuffix);
         }
 
+        // Overland creatures that have no dungeon-level picture live in the Outdoor folder.
+        foreach (var outdoorFolder in new[]
+                 {
+                     Path.Combine(baseDir, "Assets", "Monsters", "Outdoor"),
+                     Path.Combine("Adnd.Game", "Assets", "Monsters", "Outdoor"),
+                     Path.Combine("Assets", "Monsters", "Outdoor")
+                 })
+        {
+            AddCandidates(outdoorFolder, slug, useWizardrySuffix);
+            AddCandidates(outdoorFolder, camelCase, useWizardrySuffix);
+            AddCandidates(outdoorFolder, noCommaSlug, useWizardrySuffix);
+            AddCandidates(outdoorFolder, noCommaCamelCase, useWizardrySuffix);
+            AddCandidates(outdoorFolder, monsterName, useWizardrySuffix);
+            AddCandidates(outdoorFolder, noComma, useWizardrySuffix);
+        }
         // Character portrait fallback: Lvl 11-16 class art falls back to Lvl10 class art.
         // Example: "Lvl 15 Assassin" -> "Lvl10Assassin" in Assets/Monsters/Level10.
         var match = Regex.Match(trimmedName, @"^Lvl\s*(\d+)\s+(.+)$", RegexOptions.IgnoreCase);

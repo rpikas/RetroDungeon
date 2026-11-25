@@ -9395,7 +9395,7 @@ Square,20'x20'.. ................. Square,10'x10'
 3-4 
 5-6 
 7-8 
-9-10 
+9x-10 
 11-13 
 14-15 
 16-17 
@@ -9415,3 +9415,23 @@ he area around the elevator look the same on levels 6-16, can you make them all 
 can you in about 5-15 places on each floor find room like areas if possible and make monster enounter 90% in these squares. 
 also introduce a setting AdndMinimap that if true drwas a minimap of the whole floor in the bottom right corner beside the 
 charater list. introduce some secret doors, traps and one way doors all marked on the mini map
+
+update adnd maze floor 1-5 in the same way as other floors, also in most rooms have doors and 90% chans of encounter monsters that are inlair
+
+I plan to create a new landscape for adnd named Eldoria. i want to use the three.js framework to produce a fantasy jrr tolkien style world,
+I want the party with 1-6 charaters to be able to move around in the landscape and encounter monsters, that they fight and find treasures, 
+how do you suggest I go about to plan this?
+
+more realistic, Free walking, procedurally generated maps, a new menu entry, as a third location only avaliable for adnd
+58,4
+make the party move in formation where the first 3 goes in one line first and next 3 chars in a line behind. also depening on 
+the class, gender, equipment and race of the chars draw them differently and i higher resolution
+
+i want the charaters to randomly encounter monsters. the probablity is defined in Adnd.Game\Assets\Rules\OutdoorEncounter depdends on the terrain. 
+if the monster can not be found in a json reroll show the roll results in the log
+58,8 
+make the numlock key make the paryt walking forward until any other key is pressed. make the monster encounter much more frequent, 
+i played for a while without encounter. When encounter, show the monsters and enter a turn based battle like in the adnd maze
+
+make the encounters high resolution draw for example wolfs like wolfs look like and dragons like dragson look like etc
+

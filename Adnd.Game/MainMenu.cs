@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,6 +81,7 @@ public class MainMenu
             Console.WriteLine("B)oltac's Trading Post");
             if (GameRulesProvider.Current.MazeAvailable) Console.WriteLine("M)aze");
             if (GameRulesProvider.Current.ProvingGroundsAvailable) Console.WriteLine("P)roving Grounds");
+            if (GameRulesProvider.Current.EldoriaAvailable) Console.WriteLine("E)ldoria");
             Console.WriteLine("U)tilities");
             Console.WriteLine("S)ettings");
             Console.WriteLine("Q)uit");
@@ -97,6 +98,7 @@ public class MainMenu
                 if (command.StartsWith("go:", StringComparison.Ordinal)) GoInto(command.Substring(3));
                 else if (command == "enter") EnterStanding();
                 else if (command == "maze" && HasPartyMembers() && GameRulesProvider.Current.MazeAvailable) EnterMaze();
+                else if (command == "eldoria" && HasPartyMembers() && GameRulesProvider.Current.EldoriaAvailable) EnterEldoria();
                 continue;
             }
 
@@ -153,6 +155,16 @@ public class MainMenu
                     }
 
                     EnterMaze();
+                    break;
+
+                case ConsoleKey.E when GameRulesProvider.Current.EldoriaAvailable:
+                    if (!HasPartyMembers())
+                    {
+                        ShowPartyRequiredMessage();
+                        break;
+                    }
+
+                    EnterEldoria();
                     break;
 
                 case ConsoleKey.P when GameRulesProvider.Current.ProvingGroundsAvailable:
@@ -436,6 +448,30 @@ public class MainMenu
         }
     }
 
+    private void EnterEldoria()
+    {
+        var party = _partyRepo.Load();
+        var roster = _charRepo.GetAll().ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+        var members = party.Members.Where(roster.ContainsKey).Select(n => roster[n]).ToList();
+        if (members.Count == 0)
+            return;
+
+        Enter("EdgeOfTown");
+        using var form = new EldoriaForm(members);
+        var host = TermConsole.Host;
+        if (host != null)
+        {
+            form.StartPosition = FormStartPosition.Manual;
+            form.Location = host.Location;
+            form.ClientSize = host.ClientSize;
+            if (host.WindowState == FormWindowState.Maximized)
+                form.WindowState = FormWindowState.Maximized;
+        }
+
+        form.ShowDialog(host);
+        host?.Activate();
+    }
+
     private bool ConfirmEarSeekerRiskBeforeDungeonEntry()
     {
         var party = _partyRepo.Load();
@@ -591,6 +627,7 @@ public class MainMenu
         options.Add(new ViewerPromptOption("enter", "Go inside " + PlaceName(locationId)));
 
         if (hasParty && GameRulesProvider.Current.MazeAvailable) options.Add(new ViewerPromptOption("maze", "Into the maze"));
+        if (hasParty && GameRulesProvider.Current.EldoriaAvailable) options.Add(new ViewerPromptOption("eldoria", "Out into Eldoria"));
 
         return new ViewerPrompt("town", $"The party is at {PlaceName(locationId)}.", null, options);
     }

@@ -97,6 +97,10 @@ public class GameRules
     [JsonIgnore]
     public bool MazeAvailable => MonsterSourceOptions != SourceOptions.OnlyWizardry;
 
+    /// <summary>Eldoria, the three.js overland, is an AD&D-only location.</summary>
+    [JsonIgnore]
+    public bool EldoriaAvailable => Rules == Ruleset.ADND;
+
     [JsonIgnore]
     public bool ProvingGroundsAvailable => MonsterSourceOptions is not (SourceOptions.OnlyAdnd
         or SourceOptions.OnlyAdndDMGEncounterTable or SourceOptions.AllButWizardry);
