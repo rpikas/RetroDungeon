@@ -670,23 +670,26 @@ public sealed class EncounterForm : Form
         // Ask for confirmation for Escape, title-bar close, Alt+F4, etc.
         if (!e.Cancel && DialogResult != DialogResult.OK)
         {
-            var confirm = MessageBox.Show(
-                _embedded && _host != null ? _host : this,
-                "Closing combat now counts as trying to run away. Do you want to run away?",
-                "Run away?",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning,
-                MessageBoxDefaultButton.Button2);
+            IWin32Window parent = _embedded && _host != null ? _host : this;
+            var choice = GameRulesProvider.Current.Rules == Ruleset.ADND
+                ? AskCloseChoice(parent)
+                : MessageBox.Show(
+                    parent,
+                    "Closing combat now counts as trying to run away. Do you want to run away?",
+                    "Run away?",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button2) == DialogResult.Yes ? EncounterExit.None : (EncounterExit?)null;
 
-            if (confirm != DialogResult.Yes)
+            if (choice == null)
             {
                 e.Cancel = true;
                 return;
             }
 
+            RequestedExit = choice.Value;
             DialogResult = DialogResult.Cancel;
         }
-
         if (_embedded && !e.Cancel)
         {
             // Stay alive and hand the answer to the loop in ShowEmbedded.
@@ -699,6 +702,56 @@ public sealed class EncounterForm : Form
         base.OnFormClosing(e);
     }
 
+    /// <summary>Set when the player chose Teleport to town or Quit game in the close dialog.</summary>
+    internal EncounterExit RequestedExit { get; private set; }
+
+    // Cancel keeps fighting (null), Run is the old close-means-run (None), the others leave the encounter.
+    private static EncounterExit? AskCloseChoice(IWin32Window owner)
+    {
+        using var dialog = new Form
+        {
+            Text = "Leave the encounter?",
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MaximizeBox = false,
+            MinimizeBox = false,
+            ShowInTaskbar = false,
+            ClientSize = new Size(440, 120),
+            BackColor = Color.Black,
+            ForeColor = GameRulesProvider.Current.DefaultColor
+        };
+        dialog.Controls.Add(new Label
+        {
+            Text = "Closing combat now counts as trying to run away. What do you want to do?",
+            Left = 12, Top = 12, Width = 416, Height = 40
+        });
+
+        EncounterExit? result = null;
+        var options = new (string Text, EncounterExit? Value)[]
+        {
+            ("Cancel", null), ("Run", EncounterExit.None), ("Teleport to town", EncounterExit.TeleportToTown), ("Quit game", EncounterExit.QuitGame)
+        };
+        var x = 12;
+        Button? cancel = null;
+        foreach (var (text, value) in options)
+        {
+            var button = new Button
+            {
+                Text = text, Left = x, Top = 70, Width = text.Length > 8 ? 130 : 80, Height = 32,
+                FlatStyle = FlatStyle.Flat, ForeColor = GameRulesProvider.Current.DefaultColor
+            };
+            button.Click += (_, _) => { result = value; dialog.DialogResult = DialogResult.OK; };
+            dialog.Controls.Add(button);
+            cancel ??= button;
+            x += button.Width + 8;
+        }
+
+        dialog.AcceptButton = cancel;
+        dialog.CancelButton = cancel;
+        dialog.ClientSize = new Size(Math.Max(440, x + 4), 120);
+        dialog.ShowDialog(owner);
+        return dialog.DialogResult == DialogResult.OK ? result : null;
+    }
     // Wizardry monsters get the Proving Grounds look: framed panels and a small monster over the maze view.
     private bool _wizardryStyle;
     private List<string>? _resultLines;
@@ -2140,11 +2193,57 @@ public sealed class EncounterForm : Form
         allies = allies.Where(a => !a.HasStatus(CharacterStatus.Swallowed)).ToList();
         if (allies.Count == 0)
             return null;
-        var allyLines = string.Join(Environment.NewLine, allies.Select((a, i) =>
-            $"{i + 1}. {a.Name} (HP {a.CurrentHitPoints}/{a.MaxHitPoints}, Status: {FormatStatus(a)})"));
-        var prompt = $"Casting: {spell.Name}{Environment.NewLine}{Environment.NewLine}{allyLines}";
-        var selected = PromptForNumber("Choose Ally Target", prompt, 1, allies.Count);
-        return selected.HasValue ? allies[selected.Value - 1] : null;
+        var labels = allies.Select(a =>
+            $"{a.Name}  (HP {a.CurrentHitPoints}/{a.MaxHitPoints}, Status: {FormatStatus(a)})").ToList();
+        var picked = PickFromList("Choose Ally Target", $"Casting: {spell.Name} - click who to target", labels);
+        return picked.HasValue ? allies[picked.Value] : null;
+    }
+
+    private int? PickFromList(string title, string heading, IReadOnlyList<string> items)
+    {
+        try
+        {
+            using var form = new Form
+            {
+                Text = title,
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                ClientSize = new Size(520, 120 + items.Count * 22),
+                MinimizeBox = false,
+                MaximizeBox = false
+            };
+            var label = new Label { Left = 12, Top = 12, Width = 496, Height = 24, Text = heading };
+            var list = new ListBox
+            {
+                Left = 12,
+                Top = 40,
+                Width = 496,
+                Height = items.Count * 22 + 8,
+                IntegralHeight = false
+            };
+            list.Items.AddRange(items.Cast<object>().ToArray());
+            list.SelectedIndex = 0;
+            var ok = new Button { Text = "OK", Left = 328, Top = form.ClientSize.Height - 40, Width = 85, DialogResult = DialogResult.OK };
+            var cancel = new Button { Text = "Cancel", Left = 423, Top = form.ClientSize.Height - 40, Width = 85, DialogResult = DialogResult.Cancel };
+            list.DoubleClick += (_, _) =>
+            {
+                if (list.SelectedIndex >= 0)
+                    form.DialogResult = DialogResult.OK;
+            };
+            list.MouseUp += (_, e) =>
+            {
+                if (list.IndexFromPoint(e.Location) >= 0 && list.SelectedIndex >= 0)
+                    form.DialogResult = DialogResult.OK;
+            };
+            form.Controls.AddRange(new Control[] { label, list, ok, cancel });
+            form.AcceptButton = ok;
+            form.CancelButton = cancel;
+            return form.ShowDialog(this) == DialogResult.OK && list.SelectedIndex >= 0 ? list.SelectedIndex : null;
+        }
+        finally
+        {
+            UpdateHeader();
+        }
     }
 
     private void ChooseLayOnHandsAction()
@@ -3648,4 +3747,12 @@ public sealed class EncounterForm : Form
 
     internal static Rectangle PartyFrameBounds(Size client) =>
         new(FrameMargin, client.Height - FrameMargin - PartyFrameHeight, client.Width - 2 * FrameMargin, PartyFrameHeight);
+}
+
+/// <summary>How the player left an encounter through the close dialog.</summary>
+public enum EncounterExit
+{
+    None,
+    TeleportToTown,
+    QuitGame
 }

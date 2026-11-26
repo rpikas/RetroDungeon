@@ -377,6 +377,6 @@ export function buildFigure(T, info, index) {
   }
 
   fig.scale.setScalar(race.height);
-  fig.userData = { legs, arms, body, armed: wKind === 'staff' || wKind === 'spear' || wKind === 'bow' };
+  fig.userData = { legs, arms, body, armed: wKind === 'staff' || wKind === 'spear' || wKind === 'bow', weaponArm: rightArm, weaponKind: wKind };
   return fig;
 }

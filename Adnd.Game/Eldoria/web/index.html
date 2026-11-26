@@ -13,11 +13,23 @@
          background: rgba(20, 14, 6, 0.7); border: 1px solid #8a7340; border-radius: 4px; font: 12px/1.4 Consolas, monospace; }
   #help { position: absolute; right: 12px; bottom: 12px; padding: 6px 10px; background: rgba(20, 14, 6, 0.55);
           border: 1px solid #8a7340; border-radius: 4px; font-size: 12px; }
+  #fxbar { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); display: flex; gap: 6px; align-items: center;
+           padding: 6px 10px; background: rgba(20, 14, 6, 0.8); border: 1px solid #8a7340; border-radius: 4px; font-size: 13px; }
+  #fxbar button { background: #3a2c12; color: #f0e6c8; border: 1px solid #8a7340; border-radius: 3px; padding: 3px 10px; cursor: pointer; font: inherit; }
+  #fxbar button:hover { background: #55411a; }
+  #fxbar.idle { opacity: 0.55; }
 </style>
 </head>
 <body>
 <div id="hud"><h1>ELDORIA</h1><div id="party"></div><div id="pos"></div></div>
 <div id="log"></div>
+<div id="fxbar" class="idle">Battle simulation
+  <button id="fxSlow" title="Slower ( [ )">&#9664;&#9664; Slower</button>
+  <span id="fxSpeed">1x</span>
+  <button id="fxFast" title="Faster ( ] )">Faster &#9654;&#9654;</button>
+  <button id="fxSkip" title="Skip ( Space )">Skip &#9197;</button>
+  <button id="fxToggle" title="Show or hide the simulation ( V )">Show: on</button>
+</div>
 <div id="help">W/A/S/D move &middot; Shift run &middot; drag mouse to look &middot; wheel zoom &middot; Esc leave Eldoria</div>
 <script type="module" src="./main.js"></script>
 </body>

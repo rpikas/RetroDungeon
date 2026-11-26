@@ -88,6 +88,8 @@ public static class MonsterArt
         }
 
         // Pictures that belong only to Wizardry monsters (and the _Wiz variants) live in their own folder.
+        void AddWizardryFolder()
+        {
         foreach (var wizFolder in new[]
                  {
                      Path.Combine(baseDir, "Assets", "Monsters", "Wizardry"),
@@ -102,6 +104,11 @@ public static class MonsterArt
             AddCandidates(wizFolder, monsterName, useWizardrySuffix);
             AddCandidates(wizFolder, noComma, useWizardrySuffix);
         }
+        }
+
+        // Wizardry pictures win in Wizardry; in AD&D they are only a last resort after the level folders.
+        if (useWizardrySuffix)
+            AddWizardryFolder();
 
         // If dungeonLevel is provided, search in level-specific folder first
         if (dungeonLevel.HasValue)
@@ -176,6 +183,9 @@ public static class MonsterArt
             AddCandidates(outdoorFolder, monsterName, useWizardrySuffix);
             AddCandidates(outdoorFolder, noComma, useWizardrySuffix);
         }
+        if (!useWizardrySuffix)
+            AddWizardryFolder();
+
         // Character portrait fallback: Lvl 11-16 class art falls back to Lvl10 class art.
         // Example: "Lvl 15 Assassin" -> "Lvl10Assassin" in Assets/Monsters/Level10.
         var match = Regex.Match(trimmedName, @"^Lvl\s*(\d+)\s+(.+)$", RegexOptions.IgnoreCase);

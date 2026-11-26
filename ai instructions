@@ -9435,3 +9435,30 @@ i played for a while without encounter. When encounter, show the monsters and en
 
 make the encounters high resolution draw for example wolfs like wolfs look like and dragons like dragson look like etc
 
+
+when drawing monsters do it more in detail. For example Bugbear looks like bears but they should look more humanoid, 
+find insperation in the picture shown in the encounter dialog when drawing the encounter outdoor
+60,5
+
+make the battles more detailed and realistic, for example show how the weapons are used when slashing and piercing from different angles, 
+vary angle where stiking from, also let the monsters and the party more around a bit during battle and let several attacks be shown at the same time
+
+
+after one round has been completed, simulate that in the Eldoria view, show what monsters are hitting or missing what char and show what char 
+is hitting and missing what mob. Also show spell effects such as plauge instcts, fire wall and blade barrier
+the wall of fire spell effect i want to be very visibel with high flames all over the area where the monsters are.
+The blade barrier spell effect i want to be a row of spinning sharp blades hurting the monsters
+
+the wall of fire and other spells lasting should conitnue to burn in the simualtion until duration of spell ends. I did not the the whole 
+text wall of fire in the simulation
+
+i want the monsters of the same kind to slightly different from each other
+
+when numlock has been pressed dont stop walkning util another key has been pressed or you have waited 10 minutes
+
+make sure spell effects healing charaters are visible and that the person casting the healing spell (for example Curel light wounds, 
+cure sersious wounds etc) touches the charater he wants to heal while showing the spell effect. the stonger the heal, the bigger spell 
+effect you can show. that goes for all spell effects. For example metior swarm is much more visible then magic missile
+61,0
+Show dead chataters beeing dragged.
+

@@ -49,6 +49,9 @@ public sealed class CombatCoordinator
         get => _monsterFactory.ForceInLair;
         set => _monsterFactory.ForceInLair = value;
     }
+    /// <summary>Set when the encounter was left through the close dialog (teleport to town or quit); the caller acts on it and clears it.</summary>
+    public EncounterExit RequestedExit { get; set; }
+
     /// <summary>When set, encounters started from now on cannot be run away from.</summary>
     public bool CannotRun { get; set; }
 
@@ -88,6 +91,12 @@ public sealed class CombatCoordinator
     /// nothing structured can be recovered from it.
     /// </summary>
     public event Action<CombatSession>? RoundResolved;
+
+    /// <summary>
+    /// Raised with the narrated events of a round just before they are shown to the player.
+    /// Handlers may block (for instance to play an animation); combat continues afterwards.
+    /// </summary>
+    public event Action<CombatSession, IReadOnlyList<Adnd.Core.Combat.Events.CombatEvent>>? RoundNarrated;
 
     /// <summary>
     /// Raised when the open choice inside a fight changes -- a different character is up, or the legal
@@ -269,6 +278,13 @@ public sealed class CombatCoordinator
             if (dialogResult != DialogResult.OK)
             {
                 // Closing the dialog is a run attempt, resolved by the normal run rules.
+                if (encounterForm.RequestedExit != EncounterExit.None)
+                {
+                    RequestedExit = encounterForm.RequestedExit;
+                    session.Outcome = CombatOutcome.Escaped;
+                    continue;
+                }
+
                 ResolveCloseAsRun(owner, session, characterRepository, dungeonLevel);
                 continue;
             }
@@ -350,6 +366,13 @@ public sealed class CombatCoordinator
                    var dialogResult = encounterForm.ShowDialog(owner);
                    if (dialogResult != DialogResult.OK)
                    {
+                       if (encounterForm.RequestedExit != EncounterExit.None)
+                       {
+                           RequestedExit = encounterForm.RequestedExit;
+                           session.Outcome = CombatOutcome.Escaped;
+                           continue;
+                       }
+
                        ResolveCloseAsRun(owner, session, characterRepository, dungeonLevel);
                        continue;
                    }
@@ -435,6 +458,13 @@ public sealed class CombatCoordinator
             var dialogResult = encounterForm.ShowDialog(owner);
             if (dialogResult != DialogResult.OK)
             {
+                if (encounterForm.RequestedExit != EncounterExit.None)
+                {
+                    RequestedExit = encounterForm.RequestedExit;
+                    session.Outcome = CombatOutcome.Escaped;
+                    continue;
+                }
+
                 ResolveCloseAsRun(owner, session, characterRepository, dungeonLevel);
                 continue;
             }
@@ -3091,6 +3121,9 @@ public sealed class CombatCoordinator
     {
         if (wizardryForm is { IsAborted: true })
             return;
+
+        events = events.ToList();
+        RoundNarrated?.Invoke(session, (IReadOnlyList<Adnd.Core.Combat.Events.CombatEvent>)events);
 
         var sb = new StringBuilder();
         foreach (var e in events)

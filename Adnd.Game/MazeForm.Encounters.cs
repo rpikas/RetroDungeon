@@ -511,6 +511,22 @@ public sealed partial class MazeForm
                 dungeonDay: _partyRepository.Load().DungeonDaysElapsed);
         }
 
+        var requestedExit = _combatCoordinator.RequestedExit;
+        _combatCoordinator.RequestedExit = EncounterExit.None;
+        if (requestedExit == EncounterExit.TeleportToTown)
+        {
+            PublishToViewer();
+            LeaveDungeonForTown();
+            return;
+        }
+
+        if (requestedExit == EncounterExit.QuitGame)
+        {
+            ApplyClosingPenalty();
+            RuleApplicationInfoRuntime.Stop();
+            Environment.Exit(0);
+        }
+
         if (outcome == CombatOutcome.Defeat)
             HandlePartyDefeatAtCurrentCell();
 
